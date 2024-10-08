@@ -1,13 +1,15 @@
-import { useAuth } from '@frontend/modules/auth';
-import { route } from '@frontend/route';
-import { Button, Stack } from '@frontend/shared/design-system';
+import { Heading, Image } from '@chakra-ui/react'
 
-import { RouterNavLink } from '../atoms';
+import { useAuth } from '@frontend/modules/auth'
+import { route } from '@frontend/route'
+import { Button, Stack } from '@frontend/shared/design-system'
+
+import { RouterNavLink } from '../atoms'
 
 export function TopNavigation() {
-  const { user, signOut } = useAuth();
+  const { user, signOut } = useAuth()
   return (
-    <Stack bg="gray.200" p="4" direction="row" spacing="0" alignItems="center">
+    <Stack direction="row" spacing="0" alignItems="center" color="primary.900">
       <RouterNavLink to={route.home()}>Home</RouterNavLink>
       {user === null ? (
         <>
@@ -20,5 +22,5 @@ export function TopNavigation() {
         </Button>
       )}
     </Stack>
-  );
+  )
 }
