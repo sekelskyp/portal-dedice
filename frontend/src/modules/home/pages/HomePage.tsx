@@ -1,19 +1,19 @@
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client'
 
-import { gql } from '@frontend/gql';
-import { useAuth } from '@frontend/modules/auth';
-import { Box } from '@frontend/shared/design-system';
-import { TopNavigation } from '@frontend/shared/navigation/organisms/TopNavigation';
+import { gql } from '@frontend/gql'
+import { useAuth } from '@frontend/modules/auth'
+import { Box } from '@frontend/shared/design-system'
+import { TopNavigation } from '@frontend/shared/navigation/organisms/TopNavigation'
 
 const EMPTY_QUERY = gql(/* GraphQL */ `
   query Quacks {
     _empty
   }
-`);
+`)
 
 export function HomePage() {
-  const { user } = useAuth();
-  const queryState = useQuery(EMPTY_QUERY);
+  const { user } = useAuth()
+  const queryState = useQuery(EMPTY_QUERY)
 
   return (
     <Box>
@@ -26,5 +26,5 @@ export function HomePage() {
         </Box>
       </Box>
     </Box>
-  );
+  )
 }
