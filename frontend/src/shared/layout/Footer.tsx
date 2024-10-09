@@ -70,7 +70,7 @@ export const Footer = () => {
             ))}
           </Stack>
           <Heading as="h4" size="h4" m={4} textAlign="center">
-            2024 by VŠE, Applifting
+            2024 by VŠE, Applifting.
           </Heading>
           <Heading as="h4" size="h4" mb={4} textAlign="center">
             © 2024 Portál dědice. Všechna práva vyhrazena.
