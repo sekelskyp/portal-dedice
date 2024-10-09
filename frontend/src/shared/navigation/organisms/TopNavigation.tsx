@@ -11,6 +11,8 @@ export function TopNavigation() {
   return (
     <Stack direction="row" spacing="0" alignItems="center" color="primary.900">
       <RouterNavLink to={route.home()}>Home</RouterNavLink>
+      <RouterNavLink to={route.guide()}>How to use</RouterNavLink>
+      <RouterNavLink to={route.about()}>About us</RouterNavLink>
       {user === null ? (
         <>
           <RouterNavLink to={route.signIn()}>Sign In</RouterNavLink>
