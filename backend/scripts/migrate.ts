@@ -1,18 +1,18 @@
-import 'dotenv/config';
+import 'dotenv/config'
 
-import { migrate } from 'drizzle-orm/mysql2/migrator';
+import { migrate } from 'drizzle-orm/mysql2/migrator'
 
-import { getConnection } from '../src/db/db';
+import { getConnection } from '../src/db/db'
 
 async function runMigrations() {
-  const connection = await getConnection();
+  const connection = await getConnection()
   try {
     // This will run migrations on the database, skipping the ones already applied
-    await migrate(connection.db, { migrationsFolder: './drizzle' });
+    await migrate(connection.db, { migrationsFolder: './drizzle' })
   } finally {
     // Don't forget to close the connection, otherwise the script will hang
-    await connection.connection.end();
+    await connection.connection.end()
   }
 }
 
-runMigrations().catch(console.error);
+runMigrations().catch(console.error)

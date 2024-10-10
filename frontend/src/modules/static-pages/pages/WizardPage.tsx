@@ -46,7 +46,8 @@ export function WizardPage() {
     mode: 'onBlur',
   })
 
-  const onSubmit = (data: z.infer<typeof schema>) => alert(JSON.stringify(data, null, 2))
+  const onSubmit = (data: z.infer<typeof schema>) =>
+    alert(JSON.stringify(data, null, 2))
 
   const { activeStep } = useSteps({
     index: 1,
