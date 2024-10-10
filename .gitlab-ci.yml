@@ -5,6 +5,7 @@ stages:
   - lint
   - test
   - build
+  - deploy
 
 variables:
   YARN_CACHE_FOLDER: '$CI_PROJECT_DIR/cache/yarn'
@@ -99,3 +100,15 @@ build-backend:
     policy: pull
   script:
     - yarn backend build
+
+pull-changes:
+  stage: deploy
+  interruptible: true
+  script:
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -  # Add private SSH key
+    - mkdir -p ~/.ssh
+    - echo -e "Host remote_machine\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config  # Disable strict host key checking
+    - ssh team03@vse.handson.pro "cd code/project && git pull"
+  only:
+    - main  # This will run only on the 'main' branch
+
