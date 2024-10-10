@@ -48,14 +48,22 @@ export function TopNavigation() {
         <Menu>
           <MenuButton as={IconButton} icon={<FiMenu />} />
           <MenuList>
-            {user === null ? (
-              <>
-                <RouterMenuItem to={route.signIn()}>Přihlášení</RouterMenuItem>
-                <RouterMenuItem to={route.signUp()}>Registrace</RouterMenuItem>
-              </>
-            ) : (
-              <MenuItem onClick={() => signOut()}>Odhlásit se</MenuItem>
-            )}
+            <RouterMenuItem to={route.home()}>Home</RouterMenuItem>
+            <MenuGroup title="Login">
+              {user === null ? (
+                <>
+                  <RouterMenuItem to={route.signIn()}>
+                    Přihlášení
+                  </RouterMenuItem>
+                  <RouterMenuItem to={route.signUp()}>
+                    Registrace
+                  </RouterMenuItem>
+                </>
+              ) : (
+                <MenuItem onClick={() => signOut()}>Odhlásit se</MenuItem>
+              )}
+            </MenuGroup>
+
             <MenuGroup title="Help">
               <RouterMenuItem to={route.guide()}>How to use</RouterMenuItem>
               <RouterMenuItem to={route.about()}>About us</RouterMenuItem>
