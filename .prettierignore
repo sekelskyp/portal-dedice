@@ -1,4 +1,5 @@
 package.json
+.gitlab-ci.yml
 
 /backend/schema.graphql
 /backend/dist
