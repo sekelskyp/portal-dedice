@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client'
-import { Container, Heading } from '@chakra-ui/react'
+import { Container, Heading, useDisclosure } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, useForm } from 'react-hook-form'
 import { InputControl, SubmitButton } from 'react-hook-form-chakra'
@@ -12,6 +12,7 @@ import { Box, Flex, Spacer } from '@frontend/shared/design-system'
 import { Page } from '@frontend/shared/layout'
 
 import { passwordSchema } from '../passwordSchema'
+import { SignUpModal } from '../SignUpModal'
 
 const SIGNUP_MUTATION = gql(/* GraphQL */ `
   mutation SignUp($email: String!, $name: String!, $password: String!) {
@@ -60,6 +61,7 @@ export function SignUpPage() {
     resolver: zodResolver(schema),
     mode: 'onBlur',
   })
+
   const onSubmit = (data: z.infer<typeof schema>) => {
     signUpRequest({
       variables: {
@@ -68,7 +70,10 @@ export function SignUpPage() {
         password: data.password,
       },
     })
+    onOpen()
   }
+
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
     <Page>
@@ -79,6 +84,7 @@ export function SignUpPage() {
             gap={5}
             as="form"
             onSubmit={methods.handleSubmit(onSubmit)}
+            noValidate
           >
             <Heading>Registrace</Heading>
             <InputControl
@@ -118,6 +124,7 @@ export function SignUpPage() {
           </Flex>
         </Container>
       </FormProvider>
+      <SignUpModal isOpen={isOpen} onClose={onClose} />
       {signUpRequestState.error ? (
         <Box color="red">{signUpRequestState.error.message}</Box>
       ) : null}
