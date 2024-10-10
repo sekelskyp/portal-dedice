@@ -40,7 +40,7 @@ const schema = z
     if (confirmPassword !== password) {
       ctx.addIssue({
         code: 'custom',
-        message: 'Hesla jse nezhodují',
+        message: 'Hesla se neshodují',
         path: ['confirmPassword'],
       })
     }
