@@ -1,18 +1,18 @@
-import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 
 export function ScrollToTop() {
-  const { pathname } = useLocation();
+  const { pathname } = useLocation()
 
   useEffect(
     function scrollToTopOnPathnameChange() {
       if (import.meta.env.NODE_ENV === 'test') {
-        return;
+        return
       }
-      window.scrollTo(0, 0);
+      window.scrollTo(0, 0)
     },
-    [pathname],
-  );
+    [pathname]
+  )
 
-  return null;
+  return null
 }

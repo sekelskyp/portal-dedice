@@ -1,4 +1,4 @@
-import { CodegenConfig } from '@graphql-codegen/cli';
+import { CodegenConfig } from '@graphql-codegen/cli'
 
 const config: CodegenConfig = {
   schema: './schema.graphql',
@@ -13,6 +13,6 @@ const config: CodegenConfig = {
   },
   ignoreNoDocuments: true,
   hooks: { afterAllFileWrite: ['prettier --write'] },
-};
+}
 
-export default config;
+export default config

@@ -1,28 +1,18 @@
-import {
-  Link as ChakraLink,
-  type LinkProps as ChakraLinkProps,
-} from '@chakra-ui/react';
+import { Button, ButtonProps } from '@chakra-ui/react'
 
-export type NavLinkProps = ChakraLinkProps;
+export type NavLinkProps = ButtonProps
 
 export function NavLink(props: NavLinkProps) {
   return (
-    <ChakraLink
+    <Button
+      variant="ghost"
       fontSize="sm"
-      px="4"
-      py="3"
       display="flex"
       alignItems="center"
-      _hover={{
-        bg: 'blackAlpha.400',
-      }}
-      _activeLink={{
-        bg: 'blackAlpha.300',
-        _hover: {
-          bg: 'blackAlpha.400',
-        },
-      }}
+      color="primary.900"
+      _activeLink={{ bg: 'primary.100' }}
+      _hover={{ textDecoration: 'underline' }}
       {...props}
     />
-  );
+  )
 }

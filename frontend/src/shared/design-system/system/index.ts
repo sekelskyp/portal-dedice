@@ -4,4 +4,4 @@ export {
   ChakraProvider,
   forwardRef,
   keyframes,
-} from '@chakra-ui/react';
+} from '@chakra-ui/react'
