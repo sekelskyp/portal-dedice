@@ -55,6 +55,7 @@ export function TopNavigation() {
             Menu
           </MenuButton>
           <MenuList>
+            <RouterNavLink to={route.home()}>Home</RouterNavLink>
             <MenuGroup title="Login">
               {user === null ? (
                 <>
