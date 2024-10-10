@@ -1,4 +1,4 @@
-import { Heading, Image } from '@chakra-ui/react'
+import { Heading, Image, Menu, MenuButton, MenuList } from '@chakra-ui/react'
 
 import { useAuth } from '@frontend/modules/auth'
 import { route } from '@frontend/route'
@@ -13,10 +13,32 @@ export function TopNavigation() {
       <RouterNavLink to={route.home()}>Home</RouterNavLink>
       <RouterNavLink to={route.guide()}>How to use</RouterNavLink>
       <RouterNavLink to={route.about()}>About us</RouterNavLink>
+      <RouterNavLink to={route.blog()}>Blog</RouterNavLink>
       {user === null ? (
         <>
-          <RouterNavLink to={route.signIn()}>Sign In</RouterNavLink>
-          <RouterNavLink to={route.signUp()}>Sign Up</RouterNavLink>
+        <Menu>
+          <MenuButton 
+          px="4"
+          py="3" 
+          fontSize="sm"
+          ml="2"
+          _hover={{
+            bg: 'blackAlpha.400',
+          }}
+          _activeLink={{
+            bg: 'blackAlpha.300',
+            _hover: {
+              bg: 'blackAlpha.400',
+            },
+          }}
+          >
+            Login
+          </MenuButton>
+          <MenuList>
+            <RouterNavLink to={route.signIn()}>Sign In</RouterNavLink>
+            <RouterNavLink to={route.signUp()}>Sign Up</RouterNavLink>
+          </MenuList>
+        </Menu>
         </>
       ) : (
         <Button ml="2" onClick={() => signOut()}>
