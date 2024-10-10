@@ -1,5 +1,5 @@
-export { Link, type LinkProps } from './Link';
-export { NavLink, type NavLinkProps } from './NavLink';
+export { Link, type LinkProps } from './Link'
+export { NavLink, type NavLinkProps } from './NavLink'
 export {
   Alert,
   AlertDescription,
@@ -59,4 +59,4 @@ export {
   Textarea,
   type TextareaProps,
   UnorderedList,
-} from '@chakra-ui/react';
+} from '@chakra-ui/react'

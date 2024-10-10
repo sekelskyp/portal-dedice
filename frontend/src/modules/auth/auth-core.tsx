@@ -5,24 +5,24 @@ import {
   useContext,
   useMemo,
   useState,
-} from 'react';
+} from 'react'
 
 type AuthState = {
-  token: string | null;
-  user: AuthUser | null;
-};
+  token: string | null
+  user: AuthUser | null
+}
 
 export type AuthUser = {
-  id: string;
-  name: string;
-};
+  id: string
+  name: string
+}
 
-const LOCAL_STORAGE_AUTH_KEY = 'project-auth';
+const LOCAL_STORAGE_AUTH_KEY = 'project-auth'
 
 const initialState: AuthState = {
   token: null,
   user: null,
-};
+}
 
 const AuthContext = createContext(
   createContextValue({
@@ -30,29 +30,29 @@ const AuthContext = createContext(
     user: initialState.user,
     setState: () =>
       console.error('You are using AuthContext without AuthProvider!'),
-  }),
-);
+  })
+)
 
 // eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
-  return useContext(AuthContext);
+  return useContext(AuthContext)
 }
 
 type Props = {
-  children: ReactNode;
-};
+  children: ReactNode
+}
 
 export function AuthProvider({ children }: Props) {
-  const [state, setState] = usePersistedAuth(initialState);
+  const [state, setState] = usePersistedAuth(initialState)
 
   const contextValue = useMemo(() => {
-    const { token, user } = state;
-    return createContextValue({ token, user, setState });
-  }, [state, setState]);
+    const { token, user } = state
+    return createContextValue({ token, user, setState })
+  }, [state, setState])
 
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
-  );
+  )
 }
 
 function createContextValue({
@@ -60,54 +60,54 @@ function createContextValue({
   user,
   setState,
 }: AuthState & {
-  setState: (newState: AuthState) => void;
+  setState: (newState: AuthState) => void
 }) {
   return {
     token,
     user,
     signIn: ({ token, user }: AuthState) => setState({ token, user }),
     signOut: () => setState({ token: null, user: null }),
-  };
+  }
 }
 
 function usePersistedAuth(
-  defaultState: AuthState,
+  defaultState: AuthState
 ): [AuthState, (newState: AuthState) => void] {
-  const [state, setStateRaw] = useState(() => getStorageState(defaultState));
+  const [state, setStateRaw] = useState(() => getStorageState(defaultState))
 
   const setState = useCallback((newState: AuthState) => {
-    setStateRaw(newState);
-    setStorageState(newState);
-  }, []);
+    setStateRaw(newState)
+    setStorageState(newState)
+  }, [])
 
-  return [state, setState];
+  return [state, setState]
 }
 
 function getStorageState(defaultState: AuthState): AuthState {
   if (!window.localStorage) {
-    return defaultState;
+    return defaultState
   }
 
-  const rawData = window.localStorage.getItem(LOCAL_STORAGE_AUTH_KEY);
+  const rawData = window.localStorage.getItem(LOCAL_STORAGE_AUTH_KEY)
   if (!rawData) {
-    return defaultState;
+    return defaultState
   }
 
   try {
-    const { user, token } = JSON.parse(rawData);
+    const { user, token } = JSON.parse(rawData)
 
     if (token && user && user.id && user.name) {
-      return { token, user };
+      return { token, user }
     }
   } catch {}
 
-  return defaultState;
+  return defaultState
 }
 
 function setStorageState(newState: AuthState) {
   if (!window.localStorage) {
-    return;
+    return
   }
 
-  window.localStorage.setItem(LOCAL_STORAGE_AUTH_KEY, JSON.stringify(newState));
+  window.localStorage.setItem(LOCAL_STORAGE_AUTH_KEY, JSON.stringify(newState))
 }

@@ -1,107 +1,107 @@
 /* eslint-disable */
-import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type Maybe<T> = T | null;
-export type InputMaybe<T> = Maybe<T>;
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core'
+export type Maybe<T> = T | null
+export type InputMaybe<T> = Maybe<T>
 export type Exact<T extends { [key: string]: unknown }> = {
-  [K in keyof T]: T[K];
-};
+  [K in keyof T]: T[K]
+}
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]?: Maybe<T[SubKey]>;
-};
+  [SubKey in K]?: Maybe<T[SubKey]>
+}
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]: Maybe<T[SubKey]>;
-};
+  [SubKey in K]: Maybe<T[SubKey]>
+}
 export type MakeEmpty<
   T extends { [key: string]: unknown },
   K extends keyof T,
-> = { [_ in K]?: never };
+> = { [_ in K]?: never }
 export type Incremental<T> =
   | T
   | {
-      [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never;
-    };
+      [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never
+    }
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string };
-  String: { input: string; output: string };
-  Boolean: { input: boolean; output: boolean };
-  Int: { input: number; output: number };
-  Float: { input: number; output: number };
-};
+  ID: { input: string; output: string }
+  String: { input: string; output: string }
+  Boolean: { input: boolean; output: boolean }
+  Int: { input: number; output: number }
+  Float: { input: number; output: number }
+}
 
 export type AuthInfo = {
-  __typename?: 'AuthInfo';
-  token: Scalars['String']['output'];
-  user: User;
-};
+  __typename?: 'AuthInfo'
+  token: Scalars['String']['output']
+  user: User
+}
 
 export type Mutation = {
-  __typename?: 'Mutation';
-  signIn: AuthInfo;
-  signUp: AuthInfo;
-};
+  __typename?: 'Mutation'
+  signIn: AuthInfo
+  signUp: AuthInfo
+}
 
 export type MutationSignInArgs = {
-  email: Scalars['String']['input'];
-  password: Scalars['String']['input'];
-};
+  email: Scalars['String']['input']
+  password: Scalars['String']['input']
+}
 
 export type MutationSignUpArgs = {
-  email: Scalars['String']['input'];
-  name: Scalars['String']['input'];
-  password: Scalars['String']['input'];
-};
+  email: Scalars['String']['input']
+  name: Scalars['String']['input']
+  password: Scalars['String']['input']
+}
 
 export type Query = {
-  __typename?: 'Query';
-  _empty: Scalars['String']['output'];
-  user?: Maybe<User>;
-  users: Array<User>;
-};
+  __typename?: 'Query'
+  _empty: Scalars['String']['output']
+  user?: Maybe<User>
+  users: Array<User>
+}
 
 export type QueryUserArgs = {
-  id: Scalars['String']['input'];
-};
+  id: Scalars['String']['input']
+}
 
 export type User = {
-  __typename?: 'User';
-  email: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
-  name: Scalars['String']['output'];
-};
+  __typename?: 'User'
+  email: Scalars['String']['output']
+  id: Scalars['ID']['output']
+  name: Scalars['String']['output']
+}
 
 export type SignInMutationVariables = Exact<{
-  email: Scalars['String']['input'];
-  password: Scalars['String']['input'];
-}>;
+  email: Scalars['String']['input']
+  password: Scalars['String']['input']
+}>
 
 export type SignInMutation = {
-  __typename?: 'Mutation';
+  __typename?: 'Mutation'
   signIn: {
-    __typename?: 'AuthInfo';
-    token: string;
-    user: { __typename?: 'User'; id: string; name: string; email: string };
-  };
-};
+    __typename?: 'AuthInfo'
+    token: string
+    user: { __typename?: 'User'; id: string; name: string; email: string }
+  }
+}
 
 export type SignUpMutationVariables = Exact<{
-  email: Scalars['String']['input'];
-  name: Scalars['String']['input'];
-  password: Scalars['String']['input'];
-}>;
+  email: Scalars['String']['input']
+  name: Scalars['String']['input']
+  password: Scalars['String']['input']
+}>
 
 export type SignUpMutation = {
-  __typename?: 'Mutation';
+  __typename?: 'Mutation'
   signUp: {
-    __typename?: 'AuthInfo';
-    token: string;
-    user: { __typename?: 'User'; id: string; name: string; email: string };
-  };
-};
+    __typename?: 'AuthInfo'
+    token: string
+    user: { __typename?: 'User'; id: string; name: string; email: string }
+  }
+}
 
-export type QuacksQueryVariables = Exact<{ [key: string]: never }>;
+export type QuacksQueryVariables = Exact<{ [key: string]: never }>
 
-export type QuacksQuery = { __typename?: 'Query'; _empty: string };
+export type QuacksQuery = { __typename?: 'Query'; _empty: string }
 
 export const SignInDocument = {
   kind: 'Document',
@@ -187,7 +187,7 @@ export const SignInDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<SignInMutation, SignInMutationVariables>;
+} as unknown as DocumentNode<SignInMutation, SignInMutationVariables>
 export const SignUpDocument = {
   kind: 'Document',
   definitions: [
@@ -291,7 +291,7 @@ export const SignUpDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<SignUpMutation, SignUpMutationVariables>;
+} as unknown as DocumentNode<SignUpMutation, SignUpMutationVariables>
 export const QuacksDocument = {
   kind: 'Document',
   definitions: [
@@ -307,4 +307,4 @@ export const QuacksDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<QuacksQuery, QuacksQueryVariables>;
+} as unknown as DocumentNode<QuacksQuery, QuacksQueryVariables>

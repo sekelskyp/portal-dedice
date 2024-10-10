@@ -8,12 +8,11 @@ export const Header = () => {
     <Box bg="gray.100">
       <Container
         maxW="container.xl"
+        p={4}
         as={Stack}
         direction="row"
         gap={4}
         alignItems="center"
-        p={2}
-        px={4}
         justifyContent="space-between"
       >
         <AppLink />
@@ -27,9 +26,7 @@ const AppLink = () => {
   return (
     <HStack as={Link} to={'/'} gap={4}>
       <Image h={10} src="/logo-nkcr.png" />
-      <Heading as="h1" size="h1" color={'primary.900'}>
-        Portál dědice
-      </Heading>
+      <Heading as="h4">Portál dědice</Heading>
     </HStack>
   )
 }

@@ -1,8 +1,8 @@
-import { route } from '@frontend/route';
-import { Box } from '@frontend/shared/design-system';
+import { route } from '@frontend/route'
+import { Box } from '@frontend/shared/design-system'
 
-import { RouterLink } from '../atoms';
-import { TopNavigation } from '../organisms/TopNavigation';
+import { RouterLink } from '../atoms'
+import { TopNavigation } from '../organisms/TopNavigation'
 
 export function NotFoundPage() {
   return (
@@ -15,5 +15,5 @@ export function NotFoundPage() {
         </Box>
       </Box>
     </Box>
-  );
+  )
 }

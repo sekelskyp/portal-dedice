@@ -1,30 +1,30 @@
-import path from 'path';
-import uniqueSlug from 'unique-slug';
+import path from 'path'
+import uniqueSlug from 'unique-slug'
 
-import { FRONTEND_PUBLIC_FOLDER } from '@backend/config';
+import { FRONTEND_PUBLIC_FOLDER } from '@backend/config'
 
 function safeFilenameString(rawFilename: string): string {
-  return rawFilename.replaceAll(/[^A-Za-z0-9]/g, '-');
+  return rawFilename.replaceAll(/[^A-Za-z0-9]/g, '-')
 }
 
 export const getPublicStorageFilePath = ({
   filename,
   relativeDirectory,
 }: {
-  filename: string;
-  relativeDirectory: string;
+  filename: string
+  relativeDirectory: string
 }) => {
-  const { name, ext } = path.parse(filename);
+  const { name, ext } = path.parse(filename)
 
   const uniqueFilename = `${safeFilenameString(name).slice(
     0,
-    50,
-  )}-${safeFilenameString(uniqueSlug())}${ext}`;
+    50
+  )}-${safeFilenameString(uniqueSlug())}${ext}`
 
   const fileDirectoryPath = path.resolve(
     FRONTEND_PUBLIC_FOLDER,
-    relativeDirectory,
-  );
+    relativeDirectory
+  )
 
   return {
     fileDirectoryPath,
@@ -33,5 +33,5 @@ export const getPublicStorageFilePath = ({
       .join(relativeDirectory, uniqueFilename)
       .split(path.sep)
       .join('/')}`,
-  };
-};
+  }
+}
