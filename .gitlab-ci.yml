@@ -105,12 +105,12 @@ pull-changes:
   stage: deploy
   interruptible: true
   before_script:
+    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - chmod 400 "$SSH_PRIVATE_KEY"
+    - ssh-add "$SSH_PRIVATE_KEY"
     - mkdir -p ~/.ssh
-    # Store the SSH private key in a file and set appropriate permissions
-    - echo "$SSH_PRIVATE_KEY_FILE" > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa
-    # Disable strict host key checking
-    - echo -e "Host remote_machine\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+    - chmod 700 ~/.ssh
   script:
     - ssh -oStrictHostKeyChecking=no team03@vse.handson.pro "cd code/project && git pull"
   only:
