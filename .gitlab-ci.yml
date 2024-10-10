@@ -104,10 +104,14 @@ build-backend:
 pull-changes:
   stage: deploy
   interruptible: true
-  script:
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -  # Add private SSH key
+  before_script:
     - mkdir -p ~/.ssh
-    - echo -e "Host remote_machine\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config  # Disable strict host key checking
+    # Store the SSH private key in a file and set appropriate permissions
+    - echo "$SSH_PRIVATE_KEY_FILE" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    # Disable strict host key checking
+    - echo -e "Host remote_machine\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+  script:
     - ssh team03@vse.handson.pro "cd code/project && git pull"
   only:
     - main  # This will run only on the 'main' branch
