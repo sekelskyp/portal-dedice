@@ -112,7 +112,7 @@ pull-changes:
     # Disable strict host key checking
     - echo -e "Host remote_machine\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
   script:
-    - ssh team03@vse.handson.pro "cd code/project && git pull"
+    - ssh -oStrictHostKeyChecking=no team03@vse.handson.pro "cd code/project && git pull"
   only:
     - main  # This will run only on the 'main' branch
 
