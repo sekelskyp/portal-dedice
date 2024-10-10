@@ -78,15 +78,18 @@ export function SignUpPage() {
   return (
     <Page>
       <FormProvider {...methods}>
-        <Container maxW={'container.md'}>
+        <Container>
           <Flex
             direction={'column'}
+            textAlign={'center'}
             gap={5}
             as="form"
             onSubmit={methods.handleSubmit(onSubmit)}
             noValidate
           >
-            <Heading>Registrace</Heading>
+            <Heading as="h2" my={4}>
+              Registrace
+            </Heading>
             <InputControl
               name="firstName"
               label="Jméno"

@@ -59,14 +59,17 @@ export function SignInPage() {
   return (
     <Page>
       <FormProvider {...methods}>
-        <Container maxW={'container.md'}>
+        <Container p={0}>
           <Flex
             direction={'column'}
+            textAlign={'center'}
             gap={5}
             as="form"
             onSubmit={methods.handleSubmit(onSubmit)}
           >
-            <Heading>Přihlášení</Heading>
+            <Heading as="h2" my={4}>
+              Přihlášení
+            </Heading>
             <InputControl
               name="email"
               label="Emailová adresa"
@@ -80,10 +83,10 @@ export function SignInPage() {
             ></InputControl>
             <Spacer></Spacer>
             <SubmitButton>Přihlasit se</SubmitButton>
-            <Text>Nebo</Text>
+            <Text>nebo</Text>
             <SubmitButton isDisabled={true}>BankID</SubmitButton>
             <SubmitButton isDisabled={true}>Jednorazová SMS</SubmitButton>
-            <Text>Nebo</Text>
+            <Text>nebo</Text>
             <Button onClick={() => navigate('/auth/signup')}>
               Zaregistrujte se
             </Button>

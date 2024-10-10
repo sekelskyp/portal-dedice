@@ -2,10 +2,12 @@ import {
   Box,
   Container,
   Heading,
+  Image,
   Link,
   List,
   ListItem,
   Stack,
+  Text,
 } from '@chakra-ui/react'
 
 const footerLinks = [
@@ -34,11 +36,9 @@ const FooterList = ({
   links: { id: number; title: string; link: string }[]
 }) => {
   return (
-    <Stack direction="column">
-      <Heading as="h2" size="h2">
-        {title}
-      </Heading>
-      <List textAlign="center">
+    <Stack direction="column" textAlign={{ base: 'center', md: 'left' }}>
+      <Heading as="h6">{title}</Heading>
+      <List>
         {links.map((link) => (
           <ListItem key={link.id}>
             <Link href={link.link}>{link.title}</Link>
@@ -51,16 +51,19 @@ const FooterList = ({
 
 export const Footer = () => {
   return (
-    <Box bg="gray.300">
-      <Container maxW="container.xl">
-        <Stack
-          direction="column"
-          spacing={2}
-          align="center"
-          justify="space-between"
-          pt={4}
-        >
-          <Stack direction={{ base: 'column', md: 'row' }} spacing={12} pt={2}>
+    <Box bg="gray.200">
+      <Container as={Stack} gap={8} maxW="container.xl" p={8} pb={4}>
+        <Stack gap={16} direction="row" alignItems="start">
+          <Stack gap={4} display={{ base: 'none', md: 'flex' }}>
+            <Heading as="h4" whiteSpace="nowrap">
+              Portál dědice
+            </Heading>
+            <Image src="/logo-nkcr.png" alt="logo" />
+          </Stack>
+          <Stack
+            direction={{ base: 'column', md: 'row' }}
+            spacing={{ base: 4, md: 12 }}
+          >
             {footerLinks.map((footerLink) => (
               <FooterList
                 key={footerLink.id}
@@ -69,13 +72,10 @@ export const Footer = () => {
               />
             ))}
           </Stack>
-          <Heading as="h4" size="h4" m={4} textAlign="center">
-            2024 by VŠE, Applifting.
-          </Heading>
-          <Heading as="h4" size="h4" mb={4} textAlign="center">
-            © 2024 Portál dědice. Všechna práva vyhrazena.
-          </Heading>
         </Stack>
+        <Text fontSize="sm">
+          © 2024 Vytvořeno na VŠE v rámci předmětu 4IT580
+        </Text>
       </Container>
     </Box>
   )

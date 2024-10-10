@@ -1,16 +1,20 @@
 import {
+  Flex,
+  IconButton,
   Menu,
   MenuButton,
   MenuGroup,
+  MenuItem,
   MenuList,
   useMediaQuery,
 } from '@chakra-ui/react'
+import { FiMenu } from 'react-icons/fi'
 
 import { useAuth } from '@frontend/modules/auth'
 import { route } from '@frontend/route'
-import { Button, Stack } from '@frontend/shared/design-system'
+import { NavLink, Stack } from '@frontend/shared/design-system'
 
-import { RouterNavLink } from '../atoms'
+import { RouterMenuItem, RouterNavLink } from '../atoms'
 
 export function TopNavigation() {
   const [isMobile] = useMediaQuery('(max-width: 768px)')
@@ -20,7 +24,7 @@ export function TopNavigation() {
   return (
     <Stack direction="row" spacing="0" alignItems="center" color="primary.900">
       {!isMobile && (
-        <>
+        <Flex gap={2}>
           <RouterNavLink to={route.home()}>Home</RouterNavLink>
           <RouterNavLink to={route.guide()}>How to use</RouterNavLink>
           <RouterNavLink to={route.about()}>About us</RouterNavLink>
@@ -28,16 +32,7 @@ export function TopNavigation() {
           {user === null ? (
             <>
               <Menu>
-                <MenuButton
-                  px="4"
-                  py="3"
-                  fontSize="sm"
-                  ml="2"
-                  _hover={{ bg: 'blackAlpha.400' }}
-                  _activeLink={{ bg: 'blackAlpha.300' }}
-                >
-                  Login
-                </MenuButton>
+                <NavLink as={MenuButton}>Login</NavLink>
                 <MenuList>
                   <RouterNavLink to={route.signIn()}>Sign In</RouterNavLink>
                   <RouterNavLink to={route.signUp()}>Sign Up</RouterNavLink>
@@ -45,30 +40,26 @@ export function TopNavigation() {
               </Menu>
             </>
           ) : (
-            <Button onClick={() => signOut()}>Sign Out</Button>
+            <NavLink onClick={() => signOut()}>Sign Out</NavLink>
           )}
-        </>
+        </Flex>
       )}
       {isMobile && (
         <Menu>
-          <MenuButton px="4" py="3" fontSize="sm" ml="2">
-            Menu
-          </MenuButton>
+          <MenuButton as={IconButton} icon={<FiMenu />} />
           <MenuList>
-            <MenuGroup title="Login">
-              {user === null ? (
-                <>
-                  <RouterNavLink to={route.signIn()}>Sign In</RouterNavLink>
-                  <RouterNavLink to={route.signUp()}>Sign Up</RouterNavLink>
-                </>
-              ) : (
-                <Button onClick={() => signOut()}>Sign Out</Button>
-              )}
-            </MenuGroup>
+            {user === null ? (
+              <>
+                <RouterMenuItem to={route.signIn()}>Přihlášení</RouterMenuItem>
+                <RouterMenuItem to={route.signUp()}>Registrace</RouterMenuItem>
+              </>
+            ) : (
+              <MenuItem onClick={() => signOut()}>Odhlásit se</MenuItem>
+            )}
             <MenuGroup title="Help">
-              <RouterNavLink to={route.guide()}>How to use</RouterNavLink>
-              <RouterNavLink to={route.about()}>About us</RouterNavLink>
-              <RouterNavLink to={route.blog()}>Blog</RouterNavLink>
+              <RouterMenuItem to={route.guide()}>How to use</RouterMenuItem>
+              <RouterMenuItem to={route.about()}>About us</RouterMenuItem>
+              <RouterMenuItem to={route.blog()}>Blog</RouterMenuItem>
             </MenuGroup>
           </MenuList>
         </Menu>
