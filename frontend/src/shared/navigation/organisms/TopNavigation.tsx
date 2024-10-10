@@ -1,4 +1,4 @@
-import { Heading, Image, Menu, MenuGroup, MenuButton, MenuList, useMediaQuery } from '@chakra-ui/react'
+import { Heading, Image, Menu, MenuButton, MenuGroup, MenuList, useMediaQuery } from '@chakra-ui/react'
 
 import { useAuth } from '@frontend/modules/auth'
 import { route } from '@frontend/route'
@@ -24,6 +24,28 @@ export function TopNavigation() {
           <RouterNavLink to={route.guide()}>How to use</RouterNavLink>
           <RouterNavLink to={route.about()}>About us</RouterNavLink>
           <RouterNavLink to={route.blog()}>Blog</RouterNavLink>
+          {user === null ? (
+              <>
+                <Menu>
+                  <MenuButton
+                    px="4"
+                    py="3"
+                    fontSize="sm"
+                    ml="2"
+                    _hover={{ bg: 'blackAlpha.400' }}
+                    _activeLink={{ bg: 'blackAlpha.300'}}
+                  >
+                    Login
+                  </MenuButton>
+                  <MenuList>
+                    <RouterNavLink to={route.signIn()}>Sign In</RouterNavLink>
+                    <RouterNavLink to={route.signUp()}>Sign Up</RouterNavLink>
+                  </MenuList>
+              </Menu>
+              </>
+            ) : (
+              <Button onClick={() => signOut()}>Sign Out</Button>
+            )}
         </>
       )}
       {isMobile && (
@@ -54,29 +76,6 @@ export function TopNavigation() {
             </MenuGroup>
           </MenuList>
         </Menu>
-      )}
-      {!isMobile && user === null && (
-        <Menu>
-          <MenuButton
-            px="4"
-            py="3"
-            fontSize="sm"
-            ml="2"
-            _hover={{ bg: 'blackAlpha.400' }}
-            _activeLink={{ bg: 'blackAlpha.300', _hover: { bg: 'blackAlpha.400' } }}
-          >
-            Login
-          </MenuButton>
-          <MenuList>
-            <RouterNavLink to={route.signIn()}>Sign In</RouterNavLink>
-            <RouterNavLink to={route.signUp()}>Sign Up</RouterNavLink>
-          </MenuList>
-        </Menu>
-      )}
-      {!isMobile && user !== null && (
-        <Button ml="2" onClick={() => signOut()}>
-          Sign Out 
-        </Button>
       )}
     </Stack>
   )
