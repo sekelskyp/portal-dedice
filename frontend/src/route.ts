@@ -5,4 +5,5 @@ export const route = {
   about: () => `/about`,
   guide: () => `/guide`,
   blog: () => `/blog`,
+  wizard: () => `/wizard`,
 };
