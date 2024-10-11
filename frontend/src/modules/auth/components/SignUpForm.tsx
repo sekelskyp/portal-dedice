@@ -40,9 +40,7 @@ export function SignUpForm({ onSubmit }: SignUpFormProps) {
   return (
     <Form onSubmit={onSubmit} resolver={zodResolver(schema)} noValidate>
       <Flex direction={'column'} textAlign={'center'} gap={5}>
-        <Heading as="h2">
-          Registrace
-        </Heading>
+        <Heading as="h2">Registrace</Heading>
         <InputControl name="firstName" label="Jméno" isRequired></InputControl>
         <InputControl
           name="lastName"

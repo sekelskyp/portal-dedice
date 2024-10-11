@@ -40,7 +40,7 @@ export function SignInForm({ onSubmit }: SignInFormProps) {
           <Spacer></Spacer>
           <SubmitButton>Přihlasit se</SubmitButton>
           <Spacer></Spacer>
-          <Text as='b'>Nemáte účet?</Text>
+          <Text as="b">Nemáte účet?</Text>
           <RouterLink to={route.home()}>Zaregistrujte se</RouterLink>
         </Stack>
       </Container>
