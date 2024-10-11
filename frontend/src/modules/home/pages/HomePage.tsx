@@ -1,47 +1,45 @@
-import { useQuery } from '@apollo/client'
-import { Flex, Heading, Stack, Text } from '@chakra-ui/react'
+import { Heading, Stack, Text } from '@chakra-ui/react'
+import { Link } from 'react-router-dom'
 
-import { gql } from '@frontend/gql'
 import { useAuth } from '@frontend/modules/auth'
 import { route } from '@frontend/route'
-import { Box, Button } from '@frontend/shared/design-system'
+import { Button } from '@frontend/shared/design-system'
+import { SimpleCentered } from '@frontend/shared/design-system/atoms/CTA/SimpleCentered'
+import { SplitWithImage } from '@frontend/shared/design-system/atoms/CTA/SplitWithImage'
 import { Page } from '@frontend/shared/layout'
-import { RouterLink } from '@frontend/shared/navigation/atoms/RouterLink'
-
-const EMPTY_QUERY = gql(/* GraphQL */ `
-  query Quacks {
-    _empty
-  }
-`)
 
 export function HomePage() {
   const { user } = useAuth()
-  const queryState = useQuery(EMPTY_QUERY)
 
   return (
     <Page as={Stack} gap={10} justifyContent={'space-between'} h={'full'}>
-      <Stack gap={8}>
-        <Heading as="h2">Hledáte pomoc při dědickém řízení?</Heading>
-        <Text>Využijte náš interaktivní nástroj pro řízení pozůstalosti</Text>
-        <RouterLink to={route.wizard()}>Pojďme na to!</RouterLink>
-      </Stack>
-      <Box>Hello: {user ? user.name : '(not logged in)'}</Box>
-      <Box pt="4">GraphQL query result:</Box>
-      <Box as="pre" fontFamily="mono">
-        {JSON.stringify(queryState.data)}
-      </Box>
-      <Flex gap={2}>
-        <Button>Primary</Button>
-        <Button colorScheme="gray">Gray</Button>
-      </Flex>
-      <Box>
-        <Heading as="h1">Heading 1</Heading>
-        <Heading as="h2">Heading 2</Heading>
-        <Heading as="h3">Heading 3</Heading>
-        <Heading as="h4">Heading 4</Heading>
-        <Heading as="h5">Heading 5</Heading>
-        <Heading as="h6">Heading 6</Heading>
-      </Box>
+      {user && (
+        <SimpleCentered bg="none">
+          <Heading size="3xl">Vítejte, {user.name}!</Heading>
+        </SimpleCentered>
+      )}
+      <SplitWithImage
+        imageSrc="https://images.unsplash.com/photo-1525130413817-d45c1d127c42?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=750&q=80"
+        imageAlt="Lidé hledající pomoc"
+      >
+        <Heading as="h3">Hledáte pomoc při dědickém řízení?</Heading>
+        <Text>Využijte náš interaktivní nástroj pro řízení pozůstalosti.</Text>
+        <Button as={Link} to={route.wizard()}>
+          Pojďme na to!
+        </Button>
+      </SplitWithImage>
+      {!user && (
+        <SimpleCentered maxW="container.xl">
+          <Heading>Řešíte předběžné šetření?</Heading>
+          <Text>
+            Komunikujte s notářem a ostatními dědici v řešení pro předběžné
+            šetření. Zaregistujte se a získejte přístup k nástroji.
+          </Text>
+          <Button as={Link} size="lg" to={route.signUp()}>
+            Vyřešit online
+          </Button>
+        </SimpleCentered>
+      )}
     </Page>
   )
 }

@@ -9,7 +9,7 @@ export function NavLink(props: NavLinkProps) {
       fontSize="sm"
       display="flex"
       alignItems="center"
-      color="primary.900"
+      color={props.variant === 'solid' ? 'white' : 'primary.900'}
       _activeLink={{ bg: 'primary.100' }}
       _hover={{ textDecoration: 'underline' }}
       {...props}

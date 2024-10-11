@@ -11,7 +11,7 @@ export const Header = () => {
         p={4}
         as={Stack}
         direction="row"
-        gap={4}
+        gap={12}
         alignItems="center"
         justifyContent="space-between"
       >
@@ -26,7 +26,9 @@ const AppLink = () => {
   return (
     <HStack as={Link} to={'/'} gap={4}>
       <Image h={10} src="/logo-nkcr.png" />
-      <Heading as="h4">Portál dědice</Heading>
+      <Heading size="lg" whiteSpace="nowrap">
+        Portál dědice
+      </Heading>
     </HStack>
   )
 }
