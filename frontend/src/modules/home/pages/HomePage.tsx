@@ -14,8 +14,8 @@ export function HomePage() {
   return (
     <Page as={Stack} gap={10} justifyContent={'space-between'} h={'full'}>
       {user && (
-        <SimpleCentered>
-          <Heading>Vítejte, {user.name}!</Heading>
+        <SimpleCentered bg="none">
+          <Heading size="3xl">Vítejte, {user.name}!</Heading>
         </SimpleCentered>
       )}
       <SplitWithImage
@@ -29,7 +29,7 @@ export function HomePage() {
         </Button>
       </SplitWithImage>
       {!user && (
-        <SimpleCentered>
+        <SimpleCentered maxW="container.xl">
           <Heading>Řešíte předběžné šetření?</Heading>
           <Text>
             Komunikujte s notářem a ostatními dědici v řešení pro předběžné
