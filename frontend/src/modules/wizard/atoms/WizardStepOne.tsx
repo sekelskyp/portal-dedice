@@ -8,21 +8,15 @@ import {
 } from 'react-hook-form-chakra'
 import { z } from 'zod'
 
+import { WizardStepProps } from '../stepper_props'
+
 const schema = z.object({
   sex: z.string().min(1, 'Pohlaví je povinné'),
   birthDate: z.string().min(1, 'Datum narození je povinné'),
   address: z.string().min(1, 'Adresa bydliště je povinná'),
 })
 
-interface WizardStepOneProps {
-  activeStep: number
-  setActiveStep: (step: number) => void
-}
-
-export function WizardStepOne({
-  activeStep,
-  setActiveStep,
-}: WizardStepOneProps) {
+export function WizardStepOne({ activeStep, setActiveStep }: WizardStepProps) {
   const methods = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     mode: 'onBlur',

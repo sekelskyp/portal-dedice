@@ -2,9 +2,9 @@ import { Container, Stack, useSteps } from '@chakra-ui/react'
 
 import { Page } from '@frontend/shared/layout'
 
-import { WizardStepOne } from '../components/WizardStepOne'
-import { WizardStepper } from '../components/WizardStepper'
-import { WizardStepTwo } from '../components/WizardStepTwo'
+import { WizardStepOne } from '../atoms/WizardStepOne'
+import { WizardStepper } from '../atoms/WizardStepper'
+import { WizardStepTwo } from '../atoms/WizardStepTwo'
 import { steps } from '../steps'
 
 export function WizardPage() {
@@ -23,7 +23,12 @@ export function WizardPage() {
             setActiveStep={setActiveStep}
           />
         )}
-        {activeStep === 1 && <WizardStepTwo />}
+        {activeStep === 1 && (
+          <WizardStepTwo
+            activeStep={activeStep}
+            setActiveStep={setActiveStep}
+          />
+        )}
       </Container>
     </Page>
   )
