@@ -26,7 +26,7 @@ const AppLink = () => {
   return (
     <HStack as={Link} to={'/'} gap={4}>
       <Image h={10} src="/logo-nkcr.png" />
-      <Heading as="h4" whiteSpace="nowrap">
+      <Heading size="lg" whiteSpace="nowrap">
         Portál dědice
       </Heading>
     </HStack>
