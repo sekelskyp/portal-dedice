@@ -13,7 +13,7 @@ export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
 }
 export type MakeEmpty<
   T extends { [key: string]: unknown },
-  K extends keyof T,
+  K extends keyof T
 > = { [_ in K]?: never }
 export type Incremental<T> =
   | T
@@ -48,6 +48,8 @@ export type MutationSignInArgs = {
 
 export type MutationSignUpArgs = {
   email: Scalars['String']['input']
+  firstName: Scalars['String']['input']
+  lastName: Scalars['String']['input']
   name: Scalars['String']['input']
   password: Scalars['String']['input']
 }
@@ -66,7 +68,9 @@ export type QueryUserArgs = {
 export type User = {
   __typename?: 'User'
   email: Scalars['String']['output']
+  firstName?: Maybe<Scalars['String']['output']>
   id: Scalars['ID']['output']
+  lastName?: Maybe<Scalars['String']['output']>
   name: Scalars['String']['output']
 }
 
@@ -85,8 +89,10 @@ export type SignInMutation = {
 }
 
 export type SignUpMutationVariables = Exact<{
-  email: Scalars['String']['input']
+  firstName: Scalars['String']['input']
+  lastName: Scalars['String']['input']
   name: Scalars['String']['input']
+  email: Scalars['String']['input']
   password: Scalars['String']['input']
 }>
 
@@ -200,7 +206,21 @@ export const SignUpDocument = {
           kind: 'VariableDefinition',
           variable: {
             kind: 'Variable',
-            name: { kind: 'Name', value: 'email' },
+            name: { kind: 'Name', value: 'firstName' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'lastName' },
           },
           type: {
             kind: 'NonNullType',
@@ -213,6 +233,20 @@ export const SignUpDocument = {
         {
           kind: 'VariableDefinition',
           variable: { kind: 'Variable', name: { kind: 'Name', value: 'name' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'email' },
+          },
           type: {
             kind: 'NonNullType',
             type: {
@@ -245,10 +279,18 @@ export const SignUpDocument = {
             arguments: [
               {
                 kind: 'Argument',
-                name: { kind: 'Name', value: 'email' },
+                name: { kind: 'Name', value: 'firstName' },
                 value: {
                   kind: 'Variable',
-                  name: { kind: 'Name', value: 'email' },
+                  name: { kind: 'Name', value: 'firstName' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'lastName' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'lastName' },
                 },
               },
               {
@@ -257,6 +299,14 @@ export const SignUpDocument = {
                 value: {
                   kind: 'Variable',
                   name: { kind: 'Name', value: 'name' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'email' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'email' },
                 },
               },
               {
