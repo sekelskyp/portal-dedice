@@ -2,7 +2,11 @@ import { useMutation } from '@apollo/client'
 import { Container, Heading, useDisclosure } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, useForm } from 'react-hook-form'
-import { InputControl, SubmitButton } from 'react-hook-form-chakra'
+import {
+  InputControl,
+  SelectControl,
+  SubmitButton,
+} from 'react-hook-form-chakra'
 import { useNavigate } from 'react-router-dom'
 import * as z from 'zod'
 
@@ -122,6 +126,14 @@ export function SignUpPage() {
               label="Přezdívka"
               isRequired
             ></InputControl>
+            <SelectControl
+              name="gender"
+              label="Pohlaví"
+              selectProps={{ placeholder: 'Zvolte pohlaví' }}
+            >
+              <option value="male">Muž</option>
+              <option value="female">Žena</option>
+            </SelectControl>
             <InputControl
               name="email"
               label="Emailová adresa"
