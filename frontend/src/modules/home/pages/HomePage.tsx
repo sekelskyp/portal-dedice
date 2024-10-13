@@ -25,7 +25,7 @@ export function HomePage() {
         <Text>Využijte náš interaktivní nástroj pro řízení pozůstalosti</Text>
         <RouterLink to={route.wizard()}>Pojďme na to!</RouterLink>
       </Stack>
-      <Box>Hello: {user ? user.name : '(not logged in)'}</Box>
+      <Box>Hello: {user ? user.login : '(not logged in)'}</Box>
       <Box pt="4">GraphQL query result:</Box>
       <Box as="pre" fontFamily="mono">
         {JSON.stringify(queryState.data)}
