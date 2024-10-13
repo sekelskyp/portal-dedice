@@ -48,9 +48,7 @@
       "compositePrimaryKeys": {
         "Asset_id": {
           "name": "Asset_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
@@ -85,9 +83,7 @@
       "compositePrimaryKeys": {
         "Beneficiary_id": {
           "name": "Beneficiary_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
@@ -115,17 +111,13 @@
       "compositePrimaryKeys": {
         "BeneficiaryDeceasedRelation_id": {
           "name": "BeneficiaryDeceasedRelation_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {
         "BeneficiaryDeceasedRelation_familyRelation_unique": {
           "name": "BeneficiaryDeceasedRelation_familyRelation_unique",
-          "columns": [
-            "familyRelation"
-          ]
+          "columns": ["familyRelation"]
         }
       }
     },
@@ -221,9 +213,7 @@
       "compositePrimaryKeys": {
         "Chat_id": {
           "name": "Chat_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
@@ -265,9 +255,7 @@
       "compositePrimaryKeys": {
         "ChatMessage_id": {
           "name": "ChatMessage_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
@@ -330,9 +318,7 @@
       "compositePrimaryKeys": {
         "Contact_id": {
           "name": "Contact_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
@@ -403,9 +389,7 @@
       "compositePrimaryKeys": {
         "Document_id": {
           "name": "Document_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
@@ -462,9 +446,7 @@
       "compositePrimaryKeys": {
         "FAQ_id": {
           "name": "FAQ_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
@@ -499,9 +481,7 @@
       "compositePrimaryKeys": {
         "InheritanceProcedure_id": {
           "name": "InheritanceProcedure_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
@@ -550,9 +530,7 @@
       "compositePrimaryKeys": {
         "Meeting_id": {
           "name": "Meeting_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
@@ -587,9 +565,7 @@
       "compositePrimaryKeys": {
         "Notary_id": {
           "name": "Notary_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
@@ -617,17 +593,13 @@
       "compositePrimaryKeys": {
         "ProcedureState_id": {
           "name": "ProcedureState_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {
         "ProcedureState_state_unique": {
           "name": "ProcedureState_state_unique",
-          "columns": [
-            "state"
-          ]
+          "columns": ["state"]
         }
       }
     },
@@ -689,9 +661,7 @@
       "compositePrimaryKeys": {
         "Task_id": {
           "name": "Task_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
@@ -719,17 +689,13 @@
       "compositePrimaryKeys": {
         "TaskState_id": {
           "name": "TaskState_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {
         "TaskState_state_unique": {
           "name": "TaskState_state_unique",
-          "columns": [
-            "state"
-          ]
+          "columns": ["state"]
         }
       }
     },
@@ -763,17 +729,13 @@
       "compositePrimaryKeys": {
         "TaskType_id": {
           "name": "TaskType_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {
         "TaskType_name_unique": {
           "name": "TaskType_name_unique",
-          "columns": [
-            "name"
-          ]
+          "columns": ["name"]
         }
       }
     },
@@ -814,9 +776,7 @@
       "compositePrimaryKeys": {
         "User_id": {
           "name": "User_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}

@@ -51,7 +51,7 @@ export class UserResolver {
       .from(user)
       .where(eq(user.contactId, contactRecord[0].id))
 
-      console.log(userRecord.length)
+    console.log(userRecord.length)
 
     if (userRecord.length === 0) {
       throw new GraphQLError('Unauthorized.')
