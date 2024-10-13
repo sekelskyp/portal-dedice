@@ -1,5 +1,5 @@
 import * as argon2 from 'argon2'
-import { eq, inArray } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 import { GraphQLError } from 'graphql/error'
 import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 
@@ -37,14 +37,21 @@ export class UserResolver {
     @Arg('password') password: string,
     @Ctx() { db }: CustomContext
   ): Promise<AuthInfo> {
-    const contactQuery = db
+    const contactRecord = await db
       .select()
       .from(contact)
       .where(eq(contact.email, email))
+
+    if (contactRecord.length === 0) {
+      throw new GraphQLError('Unauthorized.')
+    }
+
     const userRecord = await db
       .select()
       .from(user)
-      .where(inArray(user.id, contactQuery))
+      .where(eq(user.contactId, contactRecord[0].id))
+
+      console.log(userRecord.length)
 
     if (userRecord.length === 0) {
       throw new GraphQLError('Unauthorized.')
@@ -74,7 +81,6 @@ export class UserResolver {
     @Ctx() { db }: CustomContext
   ): Promise<AuthInfo> {
     /* VALIDATION */
-    console.log(email)
 
     const userByEmail = await db
       .select()
@@ -87,8 +93,6 @@ export class UserResolver {
 
     /** PASSWORD HASHING */
     const passwordHash = await argon2.hash(password)
-
-    console.log(passwordHash)
 
     /** CONTACT INSERT */
     const insertContact = await db
