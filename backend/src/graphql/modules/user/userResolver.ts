@@ -88,6 +88,8 @@ export class UserResolver {
     /** PASSWORD HASHING */
     const passwordHash = await argon2.hash(password)
 
+    console.log(passwordHash)
+
     /** CONTACT INSERT */
     const insertContact = await db
       .insert(contact)

@@ -15,7 +15,7 @@ export const user = mysqlTable('User', {
   id: int('id').primaryKey().autoincrement(),
   contactId: int('contactId').notNull(),
   login: varchar('login', { length: 100 }).notNull(),
-  password: varchar('password', { length: 25 }).notNull(),
+  password: varchar('password', { length: 255 }).notNull(),
 })
 
 // Define Contact Table
