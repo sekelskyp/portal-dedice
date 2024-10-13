@@ -1,24 +1,21 @@
-import {
-    Box,
-    Button,
-    Container,
-    Heading,
-    Stack,
-  } from '@chakra-ui/react'
+import { Box, Button, Container, Heading, Stack } from '@chakra-ui/react'
 
-  import { WizardStepProps } from '../stepper_props'
-  
-  export function WizardStepFive({ activeStep, setActiveStep }: WizardStepProps) {
-    return (
-      <Box>
-        <Stack spacing={4} alignItems="center">
-          <Container maxWidth="container.sm">
-            <Heading as={"h3"} size='lg' py={6} px={12} textAlign={'center'}>Notář nařizuje předběžné šetření, jehož cílem je zjistit majetek zůstavitele a jeho osobní poměry ke dni úmrtí.</Heading>
-          </Container>
-        <Stack direction={"row"}>
+import { WizardStepProps } from '../stepper_props'
+
+export function WizardStepFive({ activeStep, setActiveStep }: WizardStepProps) {
+  return (
+    <Box>
+      <Stack spacing={4} alignItems="center">
+        <Container maxWidth="container.sm">
+          <Heading as={'h3'} size="lg" py={6} px={12} textAlign={'center'}>
+            Notář nařizuje předběžné šetření, jehož cílem je zjistit majetek
+            zůstavitele a jeho osobní poměry ke dni úmrtí.
+          </Heading>
+        </Container>
+        <Stack direction={'row'}>
           <Button
-          colorScheme="red"
-          onClick={() => setActiveStep(activeStep - 1)}
+            colorScheme="red"
+            onClick={() => setActiveStep(activeStep - 1)}
           >
             Zpět
           </Button>
@@ -26,10 +23,10 @@ import {
             colorScheme="primary"
             onClick={() => setActiveStep(activeStep + 1)}
           >
-          Kdy PŠ nařídí?
+            Kdy PŠ nařídí?
           </Button>
         </Stack>
       </Stack>
     </Box>
-    )
-  }
+  )
+}
