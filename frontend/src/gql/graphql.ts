@@ -89,11 +89,9 @@ export type SignInMutation = {
 }
 
 export type SignUpMutationVariables = Exact<{
-  firstName: Scalars['String']['input']
-  lastName: Scalars['String']['input']
-  name: Scalars['String']['input']
   email: Scalars['String']['input']
   gender: Scalars['String']['input']
+  name: Scalars['String']['input']
   surname: Scalars['String']['input']
   userName: Scalars['String']['input']
   password: Scalars['String']['input']
@@ -107,10 +105,6 @@ export type SignUpMutation = {
     user: { __typename?: 'User'; id: string; login: string }
   }
 }
-
-export type QuacksQueryVariables = Exact<{ [key: string]: never }>
-
-export type QuacksQuery = { __typename?: 'Query'; _empty: string }
 
 export const SignInDocument = {
   kind: 'Document',
@@ -247,20 +241,6 @@ export const SignUpDocument = {
           kind: 'VariableDefinition',
           variable: {
             kind: 'Variable',
-            name: { kind: 'Name', value: 'email' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'String' },
-            },
-          },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
             name: { kind: 'Name', value: 'surname' },
           },
           type: {
@@ -333,14 +313,6 @@ export const SignUpDocument = {
               },
               {
                 kind: 'Argument',
-                name: { kind: 'Name', value: 'email' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'email' },
-                },
-              },
-              {
-                kind: 'Argument',
                 name: { kind: 'Name', value: 'surname' },
                 value: {
                   kind: 'Variable',
@@ -387,19 +359,3 @@ export const SignUpDocument = {
     },
   ],
 } as unknown as DocumentNode<SignUpMutation, SignUpMutationVariables>
-export const QuacksDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'Quacks' },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          { kind: 'Field', name: { kind: 'Name', value: '_empty' } },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<QuacksQuery, QuacksQueryVariables>
