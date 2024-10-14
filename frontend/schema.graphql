@@ -6,11 +6,12 @@ type AuthInfo {
 type Mutation {
   signIn(email: String!, password: String!): AuthInfo!
   signUp(
-    firstName: String!
-    lastName: String!
-    name: String!
     email: String!
+    gender: String!
+    name: String!
     password: String!
+    surname: String!
+    userName: String!
   ): AuthInfo!
 }
 
@@ -21,9 +22,8 @@ type Query {
 }
 
 type User {
+  contactId: Float!
   id: ID!
-  firstName: String
-  lastName: String
-  name: String!
-  email: String!
+  login: String!
+  password: String!
 }

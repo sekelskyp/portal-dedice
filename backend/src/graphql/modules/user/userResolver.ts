@@ -3,7 +3,7 @@ import { eq } from 'drizzle-orm'
 import { GraphQLError } from 'graphql/error'
 import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 
-import { user } from '@backend/db/schema'
+import { contact, user } from '@backend/db/schema'
 import { createToken } from '@backend/libs/jwt'
 import { type CustomContext } from '@backend/types/types'
 
@@ -37,7 +37,21 @@ export class UserResolver {
     @Arg('password') password: string,
     @Ctx() { db }: CustomContext
   ): Promise<AuthInfo> {
-    const userRecord = await db.select().from(user).where(eq(user.email, email))
+    const contactRecord = await db
+      .select()
+      .from(contact)
+      .where(eq(contact.email, email))
+
+    if (contactRecord.length === 0) {
+      throw new GraphQLError('Unauthorized.')
+    }
+
+    const userRecord = await db
+      .select()
+      .from(user)
+      .where(eq(user.contactId, contactRecord[0].id))
+
+    console.log(userRecord.length)
 
     if (userRecord.length === 0) {
       throw new GraphQLError('Unauthorized.')
@@ -61,31 +75,45 @@ export class UserResolver {
     @Arg('email') email: string,
     @Arg('password') password: string,
     @Arg('name') name: string,
+    @Arg('userName') login: string,
+    @Arg('surname') surname: string,
+    @Arg('gender') gender: string,
     @Ctx() { db }: CustomContext
   ): Promise<AuthInfo> {
     /* VALIDATION */
 
     const userByEmail = await db
       .select()
-      .from(user)
-      .where(eq(user.email, email))
+      .from(contact)
+      .where(eq(contact.email, email))
 
     if (userByEmail.length > 0) {
       throw new GraphQLError('Email already registered')
     }
 
     /** PASSWORD HASHING */
-
     const passwordHash = await argon2.hash(password)
 
+    /** CONTACT INSERT */
+    const insertContact = await db
+      .insert(contact)
+      .values({
+        email,
+        name,
+        surname,
+        gender,
+      })
+      .$returningId()
+
+    const contactId = insertContact[0].id
     /* DATABASE INSERT */
 
     const insertResult = await db
       .insert(user)
       .values({
-        email,
+        contactId,
+        login,
         password: passwordHash,
-        name,
       })
       .$returningId()
 
@@ -97,8 +125,9 @@ export class UserResolver {
 
     const userObject = {
       id,
-      email,
-      name,
+      login,
+      contactId,
+      password,
     }
 
     return { user: userObject, token: token }

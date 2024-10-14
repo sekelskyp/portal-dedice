@@ -13,6 +13,22 @@ import { SignUpModal } from '../components/SignUpModal'
 
 const SIGNUP_MUTATION = gql(/* GraphQL */ `
   mutation SignUp(
+    $email: String!
+    $gender: String!
+    $name: String!
+    $surname: String!
+    $userName: String!
+    $password: String!
+  ) {
+    signUp(
+      email: $email
+      gender: $gender
+      name: $name
+      surname: $surname
+      userName: $userName
+      password: $password
+    ) {
+  mutation SignUp(
     $firstName: String!
     $lastName: String!
     $name: String!
@@ -28,8 +44,7 @@ const SIGNUP_MUTATION = gql(/* GraphQL */ `
     ) {
       user {
         id
-        name
-        email
+        login
       }
       token
     }

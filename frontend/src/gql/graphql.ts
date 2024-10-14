@@ -48,10 +48,11 @@ export type MutationSignInArgs = {
 
 export type MutationSignUpArgs = {
   email: Scalars['String']['input']
-  firstName: Scalars['String']['input']
-  lastName: Scalars['String']['input']
+  gender: Scalars['String']['input']
   name: Scalars['String']['input']
   password: Scalars['String']['input']
+  surname: Scalars['String']['input']
+  userName: Scalars['String']['input']
 }
 
 export type Query = {
@@ -67,11 +68,10 @@ export type QueryUserArgs = {
 
 export type User = {
   __typename?: 'User'
-  email: Scalars['String']['output']
-  firstName?: Maybe<Scalars['String']['output']>
+  contactId: Scalars['Float']['output']
   id: Scalars['ID']['output']
-  lastName?: Maybe<Scalars['String']['output']>
-  name: Scalars['String']['output']
+  login: Scalars['String']['output']
+  password: Scalars['String']['output']
 }
 
 export type SignInMutationVariables = Exact<{
@@ -84,7 +84,7 @@ export type SignInMutation = {
   signIn: {
     __typename?: 'AuthInfo'
     token: string
-    user: { __typename?: 'User'; id: string; name: string; email: string }
+    user: { __typename?: 'User'; id: string; login: string }
   }
 }
 
@@ -93,6 +93,9 @@ export type SignUpMutationVariables = Exact<{
   lastName: Scalars['String']['input']
   name: Scalars['String']['input']
   email: Scalars['String']['input']
+  gender: Scalars['String']['input']
+  surname: Scalars['String']['input']
+  userName: Scalars['String']['input']
   password: Scalars['String']['input']
 }>
 
@@ -101,7 +104,7 @@ export type SignUpMutation = {
   signUp: {
     __typename?: 'AuthInfo'
     token: string
-    user: { __typename?: 'User'; id: string; name: string; email: string }
+    user: { __typename?: 'User'; id: string; login: string }
   }
 }
 
@@ -180,8 +183,7 @@ export const SignInDocument = {
                     kind: 'SelectionSet',
                     selections: [
                       { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'login' } },
                     ],
                   },
                 },
@@ -206,7 +208,7 @@ export const SignUpDocument = {
           kind: 'VariableDefinition',
           variable: {
             kind: 'Variable',
-            name: { kind: 'Name', value: 'firstName' },
+            name: { kind: 'Name', value: 'email' },
           },
           type: {
             kind: 'NonNullType',
@@ -220,7 +222,7 @@ export const SignUpDocument = {
           kind: 'VariableDefinition',
           variable: {
             kind: 'Variable',
-            name: { kind: 'Name', value: 'lastName' },
+            name: { kind: 'Name', value: 'gender' },
           },
           type: {
             kind: 'NonNullType',
@@ -259,6 +261,34 @@ export const SignUpDocument = {
           kind: 'VariableDefinition',
           variable: {
             kind: 'Variable',
+            name: { kind: 'Name', value: 'surname' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'userName' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
             name: { kind: 'Name', value: 'password' },
           },
           type: {
@@ -279,18 +309,18 @@ export const SignUpDocument = {
             arguments: [
               {
                 kind: 'Argument',
-                name: { kind: 'Name', value: 'firstName' },
+                name: { kind: 'Name', value: 'email' },
                 value: {
                   kind: 'Variable',
-                  name: { kind: 'Name', value: 'firstName' },
+                  name: { kind: 'Name', value: 'email' },
                 },
               },
               {
                 kind: 'Argument',
-                name: { kind: 'Name', value: 'lastName' },
+                name: { kind: 'Name', value: 'gender' },
                 value: {
                   kind: 'Variable',
-                  name: { kind: 'Name', value: 'lastName' },
+                  name: { kind: 'Name', value: 'gender' },
                 },
               },
               {
@@ -307,6 +337,22 @@ export const SignUpDocument = {
                 value: {
                   kind: 'Variable',
                   name: { kind: 'Name', value: 'email' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'surname' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'surname' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'userName' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'userName' },
                 },
               },
               {
@@ -328,8 +374,7 @@ export const SignUpDocument = {
                     kind: 'SelectionSet',
                     selections: [
                       { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'login' } },
                     ],
                   },
                 },
