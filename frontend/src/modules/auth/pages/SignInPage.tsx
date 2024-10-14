@@ -23,8 +23,7 @@ const SIGNIN_MUTATION = gql(/* GraphQL */ `
     signIn(email: $email, password: $password) {
       user {
         id
-        name
-        email
+        login
       }
       token
     }

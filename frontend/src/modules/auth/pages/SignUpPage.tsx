@@ -2,7 +2,11 @@ import { useMutation } from '@apollo/client'
 import { Container, Heading, useDisclosure } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, useForm } from 'react-hook-form'
-import { InputControl, SubmitButton } from 'react-hook-form-chakra'
+import {
+  InputControl,
+  SelectControl,
+  SubmitButton,
+} from 'react-hook-form-chakra'
 import { useNavigate } from 'react-router-dom'
 import * as z from 'zod'
 
@@ -15,12 +19,25 @@ import { passwordSchema } from '../passwordSchema'
 import { SignUpModal } from '../SignUpModal'
 
 const SIGNUP_MUTATION = gql(/* GraphQL */ `
-  mutation SignUp($email: String!, $name: String!, $password: String!) {
-    signUp(email: $email, name: $name, password: $password) {
+  mutation SignUp(
+    $email: String!
+    $gender: String!
+    $name: String!
+    $surname: String!
+    $userName: String!
+    $password: String!
+  ) {
+    signUp(
+      email: $email
+      gender: $gender
+      name: $name
+      surname: $surname
+      userName: $userName
+      password: $password
+    ) {
       user {
         id
-        name
-        email
+        login
       }
       token
     }
@@ -31,6 +48,7 @@ const schema = z
   .object({
     firstName: z.string().min(1, 'Jméno je povinné'),
     lastName: z.string().min(1, 'Příjmení je povinné'),
+    gender: z.string().min(1, 'Pohlaví je povinné'),
     userName: z.string().min(1, 'Přezdívka je povinná'),
     email: z.string().email('Zadejte validní emailovou adresu'),
     password: passwordSchema,
@@ -65,8 +83,11 @@ export function SignUpPage() {
   const onSubmit = (data: z.infer<typeof schema>) => {
     signUpRequest({
       variables: {
-        name: data.userName,
+        userName: data.userName,
         email: data.email,
+        gender: data.gender,
+        surname: data.lastName,
+        name: data.firstName,
         password: data.password,
       },
     })
@@ -105,6 +126,14 @@ export function SignUpPage() {
               label="Přezdívka"
               isRequired
             ></InputControl>
+            <SelectControl
+              name="gender"
+              label="Pohlaví"
+              selectProps={{ placeholder: 'Zvolte pohlaví' }}
+            >
+              <option value="male">Muž</option>
+              <option value="female">Žena</option>
+            </SelectControl>
             <InputControl
               name="email"
               label="Emailová adresa"
