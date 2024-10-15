@@ -34,7 +34,7 @@ export function SignUpPage() {
         .catch((error) => {
           toast({
             title: 'Verifikace zlyhala',
-            description: error.message,
+            description: 'Zkuste to později nebo kontaktujte správce systému',
             status: 'error',
             duration: 10000,
             position: 'top',
