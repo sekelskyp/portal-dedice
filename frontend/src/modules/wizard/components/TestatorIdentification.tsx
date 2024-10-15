@@ -8,22 +8,24 @@ import {
 } from 'react-hook-form-chakra'
 import { z } from 'zod'
 
-import { WizardStepProps } from '../stepper_props'
-
 const schema = z.object({
   sex: z.string().min(1, 'Pohlaví je povinné'),
   birthDate: z.string().min(1, 'Datum narození je povinné'),
   address: z.string().min(1, 'Adresa bydliště je povinná'),
 })
 
-export function WizardStepOne({ activeStep, setActiveStep }: WizardStepProps) {
+type NextStepProps = {
+  nextStep: () => void
+}
+
+export function TestatorIdentification({ nextStep }: NextStepProps) {
   const methods = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     mode: 'onBlur',
   })
 
   const onSubmit = (data: z.infer<typeof schema>) => {
-    setActiveStep(activeStep + 1)
+    nextStep()
   }
 
   return (

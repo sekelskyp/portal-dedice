@@ -1,51 +1,98 @@
-import { Container, Stack, useSteps } from '@chakra-ui/react'
+import { Box, Button, Text } from '@chakra-ui/react'
 
-import { Page } from '@frontend/shared/layout'
-
-import { WizardStepEight } from '../atoms/WizardStepEight'
-import { WizardStepEleven } from '../atoms/WizardStepEleven'
-import { WizardStepFive } from '../atoms/WizardStepFive'
-import { WizardStepFour } from '../atoms/WizardStepFour'
-import { WizardStepNine } from '../atoms/WizardStepNine'
-import { WizardStepOne } from '../atoms/WizardStepOne'
-import { WizardStepper } from '../atoms/WizardStepper'
-import { WizardStepSeven } from '../atoms/WizardStepSeven'
-import { WizardStepSix } from '../atoms/WizardStepSix'
-import { WizardStepTen } from '../atoms/WizardStepTen'
-import { WizardStepThree } from '../atoms/WizardStepThree'
-import { WizardStepTwelve } from '../atoms/WizardStepTwelve'
-import { WizardStepTwo } from '../atoms/WizardStepTwo'
-import { steps } from '../steps'
+import { NotaryAssignment } from '../components/NotaryAssignment'
+import { QuestionStep } from '../components/QuestionStep'
+import { StepperProgress } from '../components/StepperProgress'
+import { TestatorIdentification } from '../components/TestatorIdentification'
+import { useWizardSteps } from '../hooks/useWizardSteps'
 
 export function WizardPage() {
-  const { activeStep, setActiveStep } = useSteps({
-    index: 0,
-    count: steps.length,
-  })
+  const { step, questionsProgress, treeProgress, nextStep, previousStep } =
+    useWizardSteps()
+
+  const data = [
+    {
+      id: 1,
+      heading: 'Question 1',
+    },
+    {
+      id: 2,
+      heading: 'Question 2',
+    },
+    {
+      id: 3,
+      heading: 'Question 3',
+    },
+    {
+      id: 4,
+      heading: 'Question 4',
+    },
+    {
+      id: 5,
+      heading: 'Question 5',
+    },
+    {
+      id: 6,
+      heading: 'Question 6',
+    },
+    {
+      id: 7,
+      heading: 'Question 7',
+    },
+    {
+      id: 8,
+      heading: 'Question 8',
+    },
+    {
+      id: 9,
+      heading: 'Question 9',
+    },
+    {
+      id: 10,
+      heading: 'Question 10',
+    },
+  ]
 
   return (
-    <Page>
-      <Container maxW={'container.lg'} as={Stack} gap={12}>
-        <WizardStepper activeStep={activeStep} steps={steps} />
-        {activeStep === 0 && (
-          <WizardStepOne
-            activeStep={activeStep}
-            setActiveStep={setActiveStep}
-          />
+    <Box width="60%" mx="auto" mt="4">
+      <StepperProgress
+        step={step}
+        questionsProgress={questionsProgress}
+        treeProgress={treeProgress}
+      />
+      <Box textAlign="center" mb="8">
+        {step === 1 && (
+          <Box>
+            <Text fontSize="lg">Identifikace zůstavitele (Step 1)</Text>
+            <TestatorIdentification nextStep={nextStep} />
+          </Box>
         )}
-        {activeStep === 1 && (
-          <WizardStepTwo
-            activeStep={activeStep}
-            setActiveStep={setActiveStep}
-          />
+        {step === 2 && (
+          <Box>
+            <Text fontSize="lg">Vyhledání notáře (Step 2)</Text>
+            {questionsProgress === 0 ? (
+              <NotaryAssignment />
+            ) : (
+              <QuestionStep
+                progress={questionsProgress}
+                heading={data[questionsProgress / 10].heading}
+              />
+            )}
+          </Box>
         )}
-        {activeStep === 2 && (
-          <WizardStepTwelve
-            activeStep={activeStep}
-            setActiveStep={setActiveStep}
-          />
+        {step === 3 && <Text fontSize="lg">Průvodce řízením (Step 3)</Text>}
+        {step === 4 && (
+          <Text fontSize="lg">Konec, tady máte výsledek nachytřovadla.</Text>
         )}
-      </Container>
-    </Page>
+      </Box>
+      <Box display="flex" justifyContent="space-between" mt="8">
+        <Button onClick={previousStep} isDisabled={step === 1}>
+          Previous
+        </Button>
+        <Button onClick={nextStep} isDisabled={step === 4}>
+          Next
+        </Button>
+      </Box>
+    </Box>
   )
 }

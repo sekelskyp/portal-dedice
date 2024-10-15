@@ -1,14 +1,11 @@
 import {
   Avatar,
   Box,
-  Button,
   Container,
   Heading,
   Stack,
   WrapItem,
 } from '@chakra-ui/react'
-
-import { WizardStepProps } from '../stepper_props'
 
 import { AccordionHelper } from './AccordionHelper'
 import { ContactInfo } from './ContactInfo'
@@ -35,7 +32,7 @@ const mock_data = {
   address: 'Sudoměřská 32/1293, 130 00 Praha 3',
 }
 
-export function WizardStepTwo({ activeStep, setActiveStep }: WizardStepProps) {
+export function NotaryAssignment() {
   return (
     <Box>
       <Stack spacing={4} alignItems="center">
@@ -57,20 +54,6 @@ export function WizardStepTwo({ activeStep, setActiveStep }: WizardStepProps) {
         <Container maxWidth="container.sm">
           <AccordionHelper items={dummy_data} />
         </Container>
-        <Stack direction="row">
-          <Button
-            colorScheme="red"
-            onClick={() => setActiveStep(activeStep - 1)}
-          >
-            Zpět
-          </Button>
-          <Button
-            colorScheme="primary"
-            onClick={() => setActiveStep(activeStep + 1)}
-          >
-            Pokračuj
-          </Button>
-        </Stack>
       </Stack>
     </Box>
   )
