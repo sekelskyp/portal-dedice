@@ -22,7 +22,7 @@ export function SignUpPage() {
       signUpRequest({ variables })
         .then(() =>
           toast({
-            title: 'Verifikace emailové adresy',
+            title: 'Ověření emailové adresy',
             description:
               'Pro dokončení registrace prosím klikněte na odkaz, který jsme Vám zaslali mailem',
             status: 'loading',
@@ -31,9 +31,9 @@ export function SignUpPage() {
             isClosable: false,
           })
         )
-        .catch((error) => {
+        .catch(() => {
           toast({
-            title: 'Verifikace zlyhala',
+            title: 'Ověření selhalo',
             description: 'Zkuste to později nebo kontaktujte správce systému',
             status: 'error',
             duration: 10000,
