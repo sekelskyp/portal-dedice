@@ -1,162 +1,53 @@
-import { useMutation } from '@apollo/client'
-import { Container, Heading, useDisclosure } from '@chakra-ui/react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { FormProvider, useForm } from 'react-hook-form'
-import {
-  InputControl,
-  SelectControl,
-  SubmitButton,
-} from 'react-hook-form-chakra'
-import { useNavigate } from 'react-router-dom'
-import * as z from 'zod'
+import { useCallback } from 'react'
+import { useToast } from '@chakra-ui/react'
 
-import { gql } from '@frontend/gql'
-import { useAuth } from '@frontend/modules/auth'
-import { Box, Flex, Spacer } from '@frontend/shared/design-system'
+import { Box } from '@frontend/shared/design-system'
 import { Page } from '@frontend/shared/layout'
 
-import { passwordSchema } from '../passwordSchema'
-import { SignUpModal } from '../SignUpModal'
-
-const SIGNUP_MUTATION = gql(/* GraphQL */ `
-  mutation SignUp(
-    $email: String!
-    $gender: String!
-    $name: String!
-    $surname: String!
-    $userName: String!
-    $password: String!
-  ) {
-    signUp(
-      email: $email
-      gender: $gender
-      name: $name
-      surname: $surname
-      userName: $userName
-      password: $password
-    ) {
-      user {
-        id
-        login
-      }
-      token
-    }
-  }
-`)
-
-const schema = z
-  .object({
-    firstName: z.string().min(1, 'Jméno je povinné'),
-    lastName: z.string().min(1, 'Příjmení je povinné'),
-    gender: z.string().min(1, 'Pohlaví je povinné'),
-    userName: z.string().min(1, 'Přezdívka je povinná'),
-    email: z.string().email('Zadejte validní emailovou adresu'),
-    password: passwordSchema,
-    confirmPassword: z.string(),
-  })
-  .superRefine(({ password, confirmPassword }, ctx) => {
-    if (confirmPassword !== password) {
-      ctx.addIssue({
-        code: 'custom',
-        message: 'Hesla se neshodují',
-        path: ['confirmPassword'],
-      })
-    }
-  })
+import { SignUpForm } from '../components/SignUpForm'
+import { useSignUp } from '../hooks/useSignUp'
 
 export function SignUpPage() {
-  const auth = useAuth()
-  const navigate = useNavigate()
-  const [signUpRequest, signUpRequestState] = useMutation(SIGNUP_MUTATION, {
-    onCompleted: ({ signUp: { user, token } }) => {
-      auth.signIn({ token, user })
-      navigate('/')
+  const [signUpRequest, signUpRequestState] = useSignUp()
+  const toast = useToast()
+
+  const handleSignUpFormSubmit = useCallback(
+    (variables: {
+      email: string
+      gender: string
+      name: string
+      surname: string
+      password: string
+    }) => {
+      signUpRequest({ variables })
+        .then(() =>
+          toast({
+            title: 'Ověření emailové adresy',
+            description:
+              'Pro dokončení registrace prosím klikněte na odkaz, který jsme Vám zaslali mailem',
+            status: 'loading',
+            duration: 10000,
+            position: 'top',
+            isClosable: false,
+          })
+        )
+        .catch(() => {
+          toast({
+            title: 'Ověření selhalo',
+            description: 'Zkuste to později nebo kontaktujte správce systému',
+            status: 'error',
+            duration: 10000,
+            position: 'top',
+            isClosable: true,
+          })
+        })
     },
-    onError: () => {},
-  })
-
-  const methods = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
-    mode: 'onBlur',
-  })
-
-  const onSubmit = (data: z.infer<typeof schema>) => {
-    signUpRequest({
-      variables: {
-        userName: data.userName,
-        email: data.email,
-        gender: data.gender,
-        surname: data.lastName,
-        name: data.firstName,
-        password: data.password,
-      },
-    })
-    onOpen()
-  }
-
-  const { isOpen, onOpen, onClose } = useDisclosure()
+    [signUpRequest, toast]
+  )
 
   return (
     <Page>
-      <FormProvider {...methods}>
-        <Container>
-          <Flex
-            direction={'column'}
-            textAlign={'center'}
-            gap={5}
-            as="form"
-            onSubmit={methods.handleSubmit(onSubmit)}
-            noValidate
-          >
-            <Heading as="h2" my={4}>
-              Registrace
-            </Heading>
-            <InputControl
-              name="firstName"
-              label="Jméno"
-              isRequired
-            ></InputControl>
-            <InputControl
-              name="lastName"
-              label="Příjmení"
-              isRequired
-            ></InputControl>
-            <InputControl
-              name="userName"
-              label="Přezdívka"
-              isRequired
-            ></InputControl>
-            <SelectControl
-              name="gender"
-              label="Pohlaví"
-              selectProps={{ placeholder: 'Zvolte pohlaví' }}
-            >
-              <option value="male">Muž</option>
-              <option value="female">Žena</option>
-            </SelectControl>
-            <InputControl
-              name="email"
-              label="Emailová adresa"
-              isRequired
-            ></InputControl>
-            <InputControl
-              name="password"
-              label="Heslo"
-              inputProps={{ type: 'password' }}
-              isRequired
-            ></InputControl>
-            <InputControl
-              name="confirmPassword"
-              label="Potvrdit heslo"
-              inputProps={{ type: 'password' }}
-              isRequired
-            ></InputControl>
-            <Spacer></Spacer>
-            <SubmitButton>Vytvořit účet</SubmitButton>
-          </Flex>
-        </Container>
-      </FormProvider>
-      <SignUpModal isOpen={isOpen} onClose={onClose} />
+      <SignUpForm onSubmit={handleSignUpFormSubmit}></SignUpForm>
       {signUpRequestState.error ? (
         <Box color="red">{signUpRequestState.error.message}</Box>
       ) : null}

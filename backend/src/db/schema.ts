@@ -1,4 +1,6 @@
+import { SQL, sql } from 'drizzle-orm'
 import {
+  AnyMySqlColumn,
   binary,
   char,
   date,
@@ -7,27 +9,40 @@ import {
   mysqlTable,
   text,
   timestamp,
+  uniqueIndex,
   varchar,
 } from 'drizzle-orm/mysql-core'
 
 // Define User Table
-export const user = mysqlTable('User', {
-  id: int('id').primaryKey().autoincrement(),
-  contactId: int('contactId').notNull(),
-  login: varchar('login', { length: 100 }).notNull(),
-  password: varchar('password', { length: 255 }).notNull(),
-})
+export const user = mysqlTable(
+  'User',
+  {
+    id: int('id').primaryKey().autoincrement(),
+    contactId: int('contactId').notNull(),
+    login: varchar('login', { length: 255 }).notNull(),
+    password: varchar('password', { length: 255 }).notNull(),
+  },
+  (table) => ({
+    loginUniqueIndex: uniqueIndex('loginUniqueIndex').on(lower(table.login)),
+  })
+)
 
 // Define Contact Table
-export const contact = mysqlTable('Contact', {
-  id: int('id').primaryKey().autoincrement(),
-  name: varchar('name', { length: 255 }).notNull(),
-  surname: varchar('surname', { length: 255 }).notNull(),
-  dateOfBirth: date('dateOfBirth'),
-  gender: varchar('gender', { length: 50 }).notNull(),
-  phone: char('phone', { length: 15 }),
-  email: char('email', { length: 100 }),
-})
+export const contact = mysqlTable(
+  'Contact',
+  {
+    id: int('id').primaryKey().autoincrement(),
+    name: varchar('name', { length: 255 }).notNull(),
+    surname: varchar('surname', { length: 255 }).notNull(),
+    dateOfBirth: date('dateOfBirth'),
+    gender: varchar('gender', { length: 50 }).notNull(),
+    phone: char('phone', { length: 15 }),
+    email: varchar('email', { length: 255 }).notNull(),
+  },
+  (table) => ({
+    emailUniqueIndex: uniqueIndex('emailUniqueIndex').on(lower(table.email)),
+  })
+)
 
 // Define Notary Table
 export const notary = mysqlTable('Notary', {
@@ -166,4 +181,8 @@ export const beneficiaryTaskRel = mysqlTable('BeneficiaryTaskRel', {
   taskId: int('taskId').notNull(),
 })
 
-//
+// Custom lower function
+// https://orm.drizzle.team/docs/guides/unique-case-insensitive-email
+export function lower(email: AnyMySqlColumn): SQL {
+  return sql`(lower(${email}))`
+}
