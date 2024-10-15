@@ -19,17 +19,28 @@ export function SignUpPage() {
       surname: string
       password: string
     }) => {
-      signUpRequest({ variables }).then(() =>
-        toast({
-          title: 'Verifikace emailové adresy',
-          description:
-            'Pro dokončení registrace prosím klikněte na odkaz, který jsme Vám zaslali mailem',
-          status: 'loading',
-          duration: 10000,
-          position: 'top',
-          isClosable: false,
+      signUpRequest({ variables })
+        .then(() =>
+          toast({
+            title: 'Verifikace emailové adresy',
+            description:
+              'Pro dokončení registrace prosím klikněte na odkaz, který jsme Vám zaslali mailem',
+            status: 'loading',
+            duration: 10000,
+            position: 'top',
+            isClosable: false,
+          })
+        )
+        .catch((error) => {
+          toast({
+            title: 'Verifikace zlyhala',
+            description: error.message,
+            status: 'error',
+            duration: 10000,
+            position: 'top',
+            isClosable: true,
+          })
         })
-      )
     },
     [signUpRequest, toast]
   )
