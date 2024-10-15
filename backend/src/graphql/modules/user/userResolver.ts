@@ -3,7 +3,7 @@ import { eq } from 'drizzle-orm'
 import { GraphQLError } from 'graphql/error'
 import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 
-import { contact, user } from '@backend/db/schema'
+import { contact, lower, user } from '@backend/db/schema'
 import { createToken } from '@backend/libs/jwt'
 import { type CustomContext } from '@backend/types/types'
 
@@ -37,10 +37,13 @@ export class UserResolver {
     @Arg('password') password: string,
     @Ctx() { db }: CustomContext
   ): Promise<AuthInfo> {
-    const userRecord = await db.select().from(user).where(eq(user.login, email))
+    const userRecord = await db
+      .select()
+      .from(user)
+      .where(eq(lower(user.login), email.toLowerCase()))
 
     if (userRecord.length === 0) {
-      throw new GraphQLError('Unauthorized.')
+      throw new GraphQLError('Nesprávný email nebo heslo')
     }
 
     const foundUser = userRecord[0]
@@ -52,7 +55,7 @@ export class UserResolver {
         token,
       }
     } else {
-      throw new GraphQLError('Unauthorized.')
+      throw new GraphQLError('Nesprávný email nebo heslo')
     }
   }
 
