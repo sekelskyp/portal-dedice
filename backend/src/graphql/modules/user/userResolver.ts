@@ -37,19 +37,7 @@ export class UserResolver {
     @Arg('password') password: string,
     @Ctx() { db }: CustomContext
   ): Promise<AuthInfo> {
-    const contactRecord = await db
-      .select()
-      .from(contact)
-      .where(eq(contact.email, email))
-
-    if (contactRecord.length === 0) {
-      throw new GraphQLError('Unauthorized.')
-    }
-
-    const userRecord = await db
-      .select()
-      .from(user)
-      .where(eq(user.contactId, contactRecord[0].id))
+    const userRecord = await db.select().from(user).where(eq(user.login, email))
 
     if (userRecord.length === 0) {
       throw new GraphQLError('Unauthorized.')
@@ -73,13 +61,12 @@ export class UserResolver {
     @Arg('email') email: string,
     @Arg('password') password: string,
     @Arg('name') name: string,
-    @Arg('userName') login: string,
+    @Arg('email') login: string,
     @Arg('surname') surname: string,
     @Arg('gender') gender: string,
     @Ctx() { db }: CustomContext
   ): Promise<AuthInfo> {
     /* VALIDATION */
-
     const userByEmail = await db
       .select()
       .from(contact)
@@ -104,8 +91,8 @@ export class UserResolver {
       .$returningId()
 
     const contactId = insertContact[0].id
-    /* DATABASE INSERT */
 
+    /* DATABASE INSERT */
     const insertResult = await db
       .insert(user)
       .values({
@@ -116,7 +103,6 @@ export class UserResolver {
       .$returningId()
 
     /* ASSEMBLE MUTATION RESPONSE */
-
     const id = insertResult[0].id
 
     const token = createToken({ id })

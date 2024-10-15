@@ -11,7 +11,6 @@ const SIGNUP_MUTATION = gql(/* GraphQL */ `
     $gender: String!
     $name: String!
     $surname: String!
-    $userName: String!
     $password: String!
   ) {
     signUp(
@@ -19,7 +18,6 @@ const SIGNUP_MUTATION = gql(/* GraphQL */ `
       gender: $gender
       name: $name
       surname: $surname
-      userName: $userName
       password: $password
     ) {
       user {

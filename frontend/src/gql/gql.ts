@@ -15,7 +15,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
   '\n  mutation SignIn($email: String!, $password: String!) {\n    signIn(email: $email, password: $password) {\n      user {\n        id\n        login\n      }\n      token\n    }\n  }\n':
     types.SignInDocument,
-  '\n  mutation SignUp(\n    $email: String!\n    $gender: String!\n    $name: String!\n    $surname: String!\n    $userName: String!\n    $password: String!\n  ) {\n    signUp(\n      email: $email\n      gender: $gender\n      name: $name\n      surname: $surname\n      userName: $userName\n      password: $password\n    ) {\n      user {\n        id\n        login\n      }\n      token\n    }\n  }\n':
+  '\n  mutation SignUp(\n    $email: String!\n    $gender: String!\n    $name: String!\n    $surname: String!\n    $password: String!\n  ) {\n    signUp(\n      email: $email\n      gender: $gender\n      name: $name\n      surname: $surname\n      password: $password\n    ) {\n      user {\n        id\n        login\n      }\n      token\n    }\n  }\n':
     types.SignUpDocument,
 }
 
@@ -43,8 +43,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  mutation SignUp(\n    $email: String!\n    $gender: String!\n    $name: String!\n    $surname: String!\n    $userName: String!\n    $password: String!\n  ) {\n    signUp(\n      email: $email\n      gender: $gender\n      name: $name\n      surname: $surname\n      userName: $userName\n      password: $password\n    ) {\n      user {\n        id\n        login\n      }\n      token\n    }\n  }\n'
-): (typeof documents)['\n  mutation SignUp(\n    $email: String!\n    $gender: String!\n    $name: String!\n    $surname: String!\n    $userName: String!\n    $password: String!\n  ) {\n    signUp(\n      email: $email\n      gender: $gender\n      name: $name\n      surname: $surname\n      userName: $userName\n      password: $password\n    ) {\n      user {\n        id\n        login\n      }\n      token\n    }\n  }\n']
+  source: '\n  mutation SignUp(\n    $email: String!\n    $gender: String!\n    $name: String!\n    $surname: String!\n    $password: String!\n  ) {\n    signUp(\n      email: $email\n      gender: $gender\n      name: $name\n      surname: $surname\n      password: $password\n    ) {\n      user {\n        id\n        login\n      }\n      token\n    }\n  }\n'
+): (typeof documents)['\n  mutation SignUp(\n    $email: String!\n    $gender: String!\n    $name: String!\n    $surname: String!\n    $password: String!\n  ) {\n    signUp(\n      email: $email\n      gender: $gender\n      name: $name\n      surname: $surname\n      password: $password\n    ) {\n      user {\n        id\n        login\n      }\n      token\n    }\n  }\n']
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {}

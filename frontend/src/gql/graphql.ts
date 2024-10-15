@@ -52,7 +52,6 @@ export type MutationSignUpArgs = {
   name: Scalars['String']['input']
   password: Scalars['String']['input']
   surname: Scalars['String']['input']
-  userName: Scalars['String']['input']
 }
 
 export type Query = {
@@ -93,7 +92,6 @@ export type SignUpMutationVariables = Exact<{
   gender: Scalars['String']['input']
   name: Scalars['String']['input']
   surname: Scalars['String']['input']
-  userName: Scalars['String']['input']
   password: Scalars['String']['input']
 }>
 
@@ -255,20 +253,6 @@ export const SignUpDocument = {
           kind: 'VariableDefinition',
           variable: {
             kind: 'Variable',
-            name: { kind: 'Name', value: 'userName' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'String' },
-            },
-          },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
             name: { kind: 'Name', value: 'password' },
           },
           type: {
@@ -317,14 +301,6 @@ export const SignUpDocument = {
                 value: {
                   kind: 'Variable',
                   name: { kind: 'Name', value: 'surname' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'userName' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'userName' },
                 },
               },
               {

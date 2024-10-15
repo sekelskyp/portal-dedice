@@ -17,7 +17,6 @@ export function SignUpPage() {
       gender: string
       name: string
       surname: string
-      userName: string
       password: string
     }) => {
       signUpRequest({ variables }).then(() =>

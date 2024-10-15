@@ -16,7 +16,6 @@ const schema = z
     gender: z.string().min(1, 'Pohlaví je povinné'),
     name: z.string().min(1, 'Jméno je povinné'),
     surname: z.string().min(1, 'Příjmení je povinné'),
-    userName: z.string().min(1, 'Přezdívka je povinná'),
     password: passwordSchema,
     confirmPassword: z.string(),
   })
@@ -37,7 +36,6 @@ export type SignUpFormProps = {
     gender: string
     name: string
     surname: string
-    userName: string
     password: string
   }) => void
 }
@@ -52,11 +50,6 @@ export function SignUpForm({ onSubmit }: SignUpFormProps) {
           <InputControl
             name="surname"
             label="Příjmení"
-            isRequired
-          ></InputControl>
-          <InputControl
-            name="userName"
-            label="Přezdívka"
             isRequired
           ></InputControl>
           <SelectControl
