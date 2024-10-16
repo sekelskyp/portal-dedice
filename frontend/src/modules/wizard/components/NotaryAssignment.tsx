@@ -7,8 +7,8 @@ import {
   WrapItem,
 } from '@chakra-ui/react'
 
-import { AccordionHelper } from './AccordionHelper'
-import { ContactInfo } from './ContactInfo'
+import { AccordionHelper } from './accordion/AccordionHelper'
+import { ContactInfo } from './contact/ContactInfo'
 
 // TO BE DELETED SOON
 const dummy_data = [

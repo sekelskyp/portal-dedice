@@ -1,5 +1,4 @@
 import {
-  Accordion,
   AccordionButton,
   AccordionIcon,
   AccordionItem,
@@ -8,22 +7,18 @@ import {
   Link,
 } from '@chakra-ui/react'
 
-interface AccordionHelperProps {
-  items: AccordionHelperItemProps[]
-}
-
-interface AccordionHelperItemProps {
+export interface AccordionHelperItemProps {
   title: string
   description: string
 }
 
-const AccordionHelperItem = ({
+export function AccordionHelperItem({
   title,
   description,
-}: AccordionHelperItemProps) => {
+}: AccordionHelperItemProps) {
   const renderDescription = (text: string) => {
-    const urlRegex = /(https?:\/\/[^\s]+)/g
-    const parts = text.split(urlRegex)
+    const urlRegex: RegExp = /(https?:\/\/[^\s]+)/g
+    const parts: string[] = text.split(urlRegex)
 
     return parts.map((part, index) =>
       urlRegex.test(part) ? (
@@ -66,15 +61,5 @@ const AccordionHelperItem = ({
         {renderDescription(description)}
       </AccordionPanel>
     </AccordionItem>
-  )
-}
-
-export function AccordionHelper({ items }: AccordionHelperProps) {
-  return (
-    <Accordion allowMultiple py={4}>
-      {items.map((item) => (
-        <AccordionHelperItem key={item.title} {...item} />
-      ))}
-    </Accordion>
   )
 }

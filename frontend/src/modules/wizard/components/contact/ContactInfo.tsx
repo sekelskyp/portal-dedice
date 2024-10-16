@@ -1,6 +1,7 @@
-import { Container, Stack, Text } from '@chakra-ui/react'
+import { Container } from '@chakra-ui/react'
 import { FiMail, FiMapPin, FiPhone } from 'react-icons/fi'
-import { Link } from 'react-router-dom'
+
+import { ContactInfoItem, ContactInfoItemProps } from './ContactInfoItem'
 
 interface ContactInfoProps {
   contactInfo: {
@@ -10,30 +11,8 @@ interface ContactInfoProps {
   }
 }
 
-interface ContactInfoItemProps {
-  icon: JSX.Element
-  text: string
-}
-
-function ContactInfoItem({ icon, text }: ContactInfoItemProps) {
-  const isEmail = text.includes('@')
-
-  return (
-    <Stack direction="row" align="center" spacing={4} py={2}>
-      {icon}
-      {isEmail ? (
-        <Link to={`mailto:${text}`}>
-          <Text _hover={{ textDecoration: 'underline' }}>{text}</Text>
-        </Link>
-      ) : (
-        <Text>{text}</Text>
-      )}
-    </Stack>
-  )
-}
-
 export function ContactInfo({ contactInfo }: ContactInfoProps) {
-  const contactIcons = [
+  const contactIcons: ContactInfoItemProps[] = [
     {
       icon: <FiPhone size={24} />,
       text: contactInfo.phone,

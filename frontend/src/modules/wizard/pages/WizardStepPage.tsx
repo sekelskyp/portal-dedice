@@ -2,14 +2,19 @@ import { Box, Button, Text } from '@chakra-ui/react'
 
 import { NotaryAssignment } from '../components/NotaryAssignment'
 import { QuestionStep } from '../components/QuestionStep'
-import { StepperProgress } from '../components/StepperProgress'
+import { StepperProgress } from '../components/stepper/StepperProgress'
 import { TestatorIdentification } from '../components/TestatorIdentification'
 import { useWizardSteps } from '../hooks/useWizardSteps'
 import questionData from '../questions.json'
 
 export function WizardPage() {
-  const { step, questionsProgress, treeProgress, nextStep, previousStep } =
-    useWizardSteps()
+  const {
+    step,
+    questionsProgress,
+    treeProgress,
+    setNextStep,
+    setPreviousStep,
+  } = useWizardSteps()
 
   const data = questionData
 
@@ -24,7 +29,7 @@ export function WizardPage() {
         {step === 1 && (
           <Box>
             <Text fontSize="lg">Identifikace zůstavitele (Step 1)</Text>
-            <TestatorIdentification nextStep={nextStep} />
+            <TestatorIdentification nextStep={setNextStep} />
           </Box>
         )}
         {step === 2 && (
@@ -40,8 +45,8 @@ export function WizardPage() {
               />
             )}
             <Box display="flex" justifyContent="space-between" mt="8" mb="8">
-              <Button onClick={previousStep}>Zpět</Button>
-              <Button onClick={nextStep}>
+              <Button onClick={setPreviousStep}>Zpět</Button>
+              <Button onClick={setNextStep}>
                 {data[questionsProgress / 10].button}
               </Button>
             </Box>

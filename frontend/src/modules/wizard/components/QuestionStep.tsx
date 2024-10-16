@@ -1,6 +1,6 @@
 import { Box, Container, Heading, Stack } from '@chakra-ui/react'
 
-import { AccordionHelper } from './AccordionHelper'
+import { AccordionHelper } from './accordion/AccordionHelper'
 
 export type WizardStepxProps = {
   heading: string
