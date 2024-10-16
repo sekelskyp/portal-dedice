@@ -15,14 +15,30 @@ export function QuestionStep({
 }: WizardStepxProps) {
   return (
     <Box>
-      <Stack spacing={4} alignItems="center">
-        <Container maxWidth="container.sm">
-          <Heading as={'h3'} size="lg" py={6} px={12} textAlign={'center'}>
+      <Stack
+        spacing={4}
+        alignItems="center"
+        direction={{ base: 'column', md: 'row' }}
+      >
+        <Container maxWidth={{ base: '90%', md: '50%' }}>
+          <Heading
+            as={'h3'}
+            size="lg"
+            py={6}
+            px={12}
+            textAlign={{ base: 'justify', md: 'center' }}
+          >
             {heading}
           </Heading>
-          <AccordionHelper items={questions} />
         </Container>
-        <Stack direction={'row'}>{progress}...</Stack>
+        {questions.length > 0 && (
+          <>
+            <Container maxWidth={{ base: '90%', md: '50%' }}>
+              <AccordionHelper items={questions} />
+            </Container>
+            <Stack direction={'row'}>{progress}...</Stack>
+          </>
+        )}
       </Stack>
     </Box>
   )
