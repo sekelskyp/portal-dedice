@@ -1,4 +1,4 @@
-import { Box, Button, Text } from '@chakra-ui/react'
+import { Box, Button, Heading } from '@chakra-ui/react'
 
 import { NotaryAssignment } from '../components/NotaryAssignment'
 import { QuestionStep } from '../components/QuestionStep'
@@ -28,13 +28,19 @@ export function WizardPage() {
       <Box textAlign="center" mb="8">
         {step === 1 && (
           <Box>
-            <Text fontSize="lg">Identifikace zůstavitele (Step 1)</Text>
+            <Heading as={'h3'} size="xl">
+              Identifikace zůstavitele{' '}
+            </Heading>
             <TestatorIdentification nextStep={setNextStep} />
           </Box>
         )}
         {step === 2 && (
           <Box>
-            <Text fontSize="lg">Vyhledání notáře (Step 2)</Text>
+            <Heading as={'h3'} size="xl">
+              {questionsProgress === 0
+                ? 'Přiřazení notáře'
+                : 'Průvodce pozůstalostním řízením'}
+            </Heading>
             {questionsProgress === 0 ? (
               <NotaryAssignment />
             ) : (
@@ -53,9 +59,15 @@ export function WizardPage() {
           </Box>
         )}
 
-        {step === 3 && <Text fontSize="lg">Průvodce řízením (Step 3)</Text>}
+        {step === 3 && (
+          <Heading as={'h3'} size="xl">
+            Rozhodovací strom...
+          </Heading>
+        )}
         {step === 4 && (
-          <Text fontSize="lg">Konec, tady máte výsledek nachytřovadla.</Text>
+          <Heading as={'h3'} size="xl">
+            Výstup nachytřovadla...
+          </Heading>
         )}
       </Box>
     </Box>
