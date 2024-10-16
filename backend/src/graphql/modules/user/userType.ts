@@ -6,10 +6,13 @@ export class User {
   id!: number
 
   @Field()
-  name!: string
+  contactId!: number
 
   @Field()
-  email!: string
+  login!: string
+
+  @Field()
+  password!: string
 }
 
 @ObjectType()

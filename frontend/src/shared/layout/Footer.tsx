@@ -37,7 +37,7 @@ const FooterList = ({
 }) => {
   return (
     <Stack direction="column" textAlign={{ base: 'center', md: 'left' }}>
-      <Heading as="h6">{title}</Heading>
+      <Heading size="md">{title}</Heading>
       <List>
         {links.map((link) => (
           <ListItem key={link.id}>
@@ -54,11 +54,15 @@ export const Footer = () => {
     <Box bg="gray.200">
       <Container as={Stack} gap={8} maxW="container.xl" p={8} pb={4}>
         <Stack gap={16} direction="row" alignItems="start">
-          <Stack gap={4} display={{ base: 'none', md: 'flex' }}>
-            <Heading as="h4" whiteSpace="nowrap">
+          <Stack
+            gap={4}
+            display={{ base: 'none', md: 'flex' }}
+            alignItems="center"
+          >
+            <Heading size="lg" whiteSpace="nowrap">
               Portál dědice
             </Heading>
-            <Image src="/logo-nkcr.png" alt="logo" />
+            <Image h={16} src="/logo-nkcr.png" alt="logo" />
           </Stack>
           <Stack
             direction={{ base: 'column', md: 'row' }}
