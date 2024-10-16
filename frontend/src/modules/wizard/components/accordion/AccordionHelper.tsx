@@ -11,7 +11,7 @@ interface AccordionHelperProps {
 
 export function AccordionHelper({ items }: AccordionHelperProps) {
   return (
-    <Accordion allowMultiple py={4}>
+    <Accordion allowMultiple py={4} textAlign="left">
       {items.map((item) => (
         <AccordionHelperItem key={item.title} {...item} />
       ))}

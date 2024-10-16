@@ -35,14 +35,14 @@ const mock_data = {
 export function NotaryAssignment() {
   return (
     <Box>
-      <Stack spacing={4} alignItems="center">
-        <Heading as="h2" size="h2" textAlign="center">
-          Váš notář
-        </Heading>
+      <Heading as="h4" size="h4" textAlign="center">
+        Na základě vyplněného dotazníku vám byl přidělen následující notář:
+      </Heading>
+      <Stack alignItems="center">
         <WrapItem>
           <Avatar
             size="2xl"
-            name="Segun Adebayo"
+            name="Placeholder"
             src="https://bit.ly/dan-abramov"
             my={6}
           />
@@ -50,6 +50,8 @@ export function NotaryAssignment() {
         <Heading as="h3" size="h3" textAlign="center">
           JUDr. Zdeněk Kratochvíl
         </Heading>
+      </Stack>
+      <Stack alignItems="center" direction="row" pt={8}>
         <ContactInfo contactInfo={mock_data} />
         <Container maxWidth="container.sm">
           <AccordionHelper items={dummy_data} />

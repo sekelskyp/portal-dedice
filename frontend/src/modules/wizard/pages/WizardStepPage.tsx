@@ -18,6 +18,14 @@ export function WizardPage() {
 
   const data = questionData
 
+  function StepperHeading({ text }: { text: string }) {
+    return (
+      <Heading as={'h3'} size="h3" pb={6}>
+        {text}
+      </Heading>
+    )
+  }
+
   return (
     <Box width="60%" mx="auto" mt="4">
       <StepperProgress
@@ -28,19 +36,19 @@ export function WizardPage() {
       <Box textAlign="center" mb="8">
         {step === 1 && (
           <Box>
-            <Heading as={'h3'} size="xl">
-              Identifikace zůstavitele{' '}
-            </Heading>
+            <StepperHeading text="Identifikace zůstavitele" />
             <TestatorIdentification nextStep={setNextStep} />
           </Box>
         )}
         {step === 2 && (
           <Box>
-            <Heading as={'h3'} size="xl">
-              {questionsProgress === 0
-                ? 'Přiřazení notáře'
-                : 'Průvodce pozůstalostním řízením'}
-            </Heading>
+            <StepperHeading
+              text={
+                questionsProgress === 0
+                  ? 'Přiřazení notáře'
+                  : `Průvodce pozůstalostním řízením (${questionsProgress / 10}/10)`
+              }
+            />
             {questionsProgress === 0 ? (
               <NotaryAssignment />
             ) : (
@@ -59,16 +67,8 @@ export function WizardPage() {
           </Box>
         )}
 
-        {step === 3 && (
-          <Heading as={'h3'} size="xl">
-            Rozhodovací strom...
-          </Heading>
-        )}
-        {step === 4 && (
-          <Heading as={'h3'} size="xl">
-            Výstup nachytřovadla...
-          </Heading>
-        )}
+        {step === 3 && <StepperHeading text="Rozhodovací strom..." />}
+        {step === 4 && <StepperHeading text="Výstup nachytřovadla..." />}
       </Box>
     </Box>
   )
