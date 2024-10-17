@@ -39,7 +39,7 @@ export function NotaryAssignment() {
         size={{ base: 'sm', sm: 'md', md: 'lg', lg: 'xl' }}
         textAlign="center"
       >
-        Na základě vyplněného dotazníku vám byl přidělen následující notář:
+        Na základě vyplněných údajů vám byl přidělen následující notář:
       </Heading>
       <Stack alignItems="center">
         <WrapItem>

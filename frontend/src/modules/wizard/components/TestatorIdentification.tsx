@@ -1,8 +1,8 @@
-import { Box, Container, Spacer, Stack, Text } from '@chakra-ui/react'
+import { Box, Container, Radio, Spacer, Stack, Text } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   InputControl,
-  SelectControl,
+  RadioGroupControl,
   SubmitButton,
 } from 'react-hook-form-chakra'
 import { z } from 'zod'
@@ -10,9 +10,9 @@ import { z } from 'zod'
 import { Form } from '../../../shared/forms/Form'
 
 const schema = z.object({
-  sex: z.string().min(1, 'Pohlaví je povinné'),
-  birthDate: z.string().min(1, 'Datum narození je povinné'),
-  address: z.string().min(1, 'Adresa bydliště je povinná'),
+  sex: z.string().min(1, 'Pohlaví je povinné.'),
+  birthDate: z.string().min(1, 'Datum narození je povinné.'),
+  address: z.string().min(1, 'Adresa bydliště je povinná.'),
 })
 
 type NextStepProps = {
@@ -32,23 +32,32 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
         px={{ base: 4, sm: 8, md: 12, lg: 16 }}
         py={{ base: 2, sm: 4 }}
       >
-        <Stack gap={5}>
-          <Text fontSize={{ base: 'sm', sm: 'md', md: 'lg' }}>
-            Vyplněním formuláře Vám pomůžeme zjistit, který notář bude spravovat
-            Vaše pozůstalostní řízení.
-          </Text>
-          <SelectControl
+        <Text fontSize={{ base: 'sm', sm: 'md', md: 'lg' }} pb={4}>
+          Vyplněním formuláře údaji zůstavitele Vám pomůžeme zjistit, který
+          notář bude spravovat Vaše pozůstalostní řízení.
+        </Text>
+        <Stack
+          gap={5}
+          p={8}
+          borderWidth="2px"
+          borderColor="gray.100"
+          borderRadius="xl"
+        >
+          <RadioGroupControl
             name="sex"
             label="Pohlaví"
             labelProps={{ fontSize: { base: 'sm', md: 'md' } }}
-            selectProps={{
-              placeholder: 'Zvolte pohlaví',
-              fontSize: { base: 'sm', md: 'md' },
-            }}
+            isRequired
           >
-            <option value="male">Muž</option>
-            <option value="female">Žena</option>
-          </SelectControl>
+            <Stack direction="row" spacing={5}>
+              <Radio value="male" size={{ base: 'sm', md: 'md' }}>
+                Muž
+              </Radio>
+              <Radio value="female" size={{ base: 'sm', md: 'md' }}>
+                Žena
+              </Radio>
+            </Stack>
+          </RadioGroupControl>
           <InputControl
             name="birthDate"
             label="Datum narození"
@@ -65,7 +74,7 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
           ></InputControl>
           <Spacer></Spacer>
           <Box>
-            <SubmitButton>Kdo bude můj notář?</SubmitButton>
+            <SubmitButton>Potvrdit údaje</SubmitButton>
           </Box>
         </Stack>
       </Container>
