@@ -121,7 +121,7 @@ export function NotaryAssignment({
             </Tooltip>{' '}
             dozvědět více o tom, co vás čeká v pozůstalostním řízení.
           </Text>
-          <Stack direction="row" pt={2}>
+          <Stack direction="row" pt={2} justify="center">
             <Button bg="gray.500" onClick={previousStep}>
               Zpět
             </Button>
