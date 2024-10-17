@@ -1,5 +1,12 @@
 import React, { useState } from 'react'
-import { Button, Heading } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Heading,
+  Radio,
+  RadioGroup,
+  Stack,
+} from '@chakra-ui/react'
 
 import questionData from '../questionarrie.json'
 
@@ -24,10 +31,13 @@ interface Step {
 const QuestionnaireStep = () => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [answers, setAnswers] = useState<{ [key: number]: number }>({})
+  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
 
   const currentStep = questionData.steps[currentStepIndex]
 
-  const handleAnswer = (answerId: number) => {
+  const handleAnswer = (nextValue: string) => {
+    const answerId = parseInt(nextValue, 10)
+    setSelectedAnswer(answerId)
     setAnswers({
       ...answers,
       [currentStep.id]: answerId,
@@ -43,26 +53,33 @@ const QuestionnaireStep = () => {
     return startIndex
   }
 
-  const findPreviousStepIndex = (startIndex: number): number => {
-    for (let i = startIndex; i >= 0; i--) {
-      if (canShowStep(questionData.steps[i])) {
-        return i
-      }
-    }
-    return startIndex
-  }
-
   const goToNextStep = () => {
-    const nextStepIndex = findNextStepIndex(currentStepIndex + 1)
+    let nextStepIndex = currentStepIndex + 1
+    while (
+      nextStepIndex < questionData.steps.length &&
+      !canShowStep(questionData.steps[nextStepIndex])
+    ) {
+      nextStepIndex++
+    }
     if (nextStepIndex < questionData.steps.length) {
       setCurrentStepIndex(nextStepIndex)
+      setSelectedAnswer(null) // Reset selected answer for the next step
     }
   }
 
   const goToPreviousStep = () => {
-    const prevStepIndex = findPreviousStepIndex(currentStepIndex - 1)
-    if (prevStepIndex >= 0) {
-      setCurrentStepIndex(prevStepIndex)
+    let previousStepIndex = currentStepIndex - 1
+    while (
+      previousStepIndex >= 0 &&
+      !canShowStep(questionData.steps[previousStepIndex])
+    ) {
+      previousStepIndex--
+    }
+    if (previousStepIndex >= 0) {
+      setCurrentStepIndex(previousStepIndex)
+      setSelectedAnswer(
+        answers[questionData.steps[previousStepIndex].id] || null
+      ) // Restore selected answer for the previous step
     }
   }
 
@@ -81,41 +98,44 @@ const QuestionnaireStep = () => {
   }
 
   return (
-    <div>
+    <Box>
       {canShowStep(currentStep) ? (
-        <div>
-          {/* Render the current question */}
-          <Heading>{currentStep.question_text}</Heading>
-
-          {currentStep.answer_options?.map((answer) => (
-            <div key={answer.id}>
-              <input
-                type="radio"
-                name={`question-${currentStep.id}`}
-                value={answer.id}
-                checked={answers[currentStep.id] === answer.id}
-                onChange={() => handleAnswer(answer.id)} // Corrected to pass the answer.id
-              />
-              <label>{answer.option_text}</label>
-            </div>
-          ))}
-
-          <div>
+        <Box>
+          <Heading as="h2" size="lg" mb={4}>
+            {currentStep.question_text}
+          </Heading>
+          <RadioGroup
+            onChange={(value) => handleAnswer(value)}
+            value={selectedAnswer !== null ? selectedAnswer.toString() : ''}
+          >
+            <Stack direction="column">
+              {currentStep.answer_options?.map((answer) => (
+                <Radio key={answer.id} value={answer.id.toString()}>
+                  {answer.option_text}
+                </Radio>
+              ))}
+            </Stack>
+          </RadioGroup>
+          <Box>
             {currentStepIndex > 0 && (
               <Button onClick={goToPreviousStep}>Previous</Button>
             )}
             {currentStepIndex < questionData.steps.length - 1 && (
-              <Button onClick={goToNextStep}>Next</Button>
+              <Button
+                onClick={goToNextStep}
+                isDisabled={selectedAnswer === null}
+              >
+                Next
+              </Button>
             )}
-          </div>
-        </div>
+          </Box>
+        </Box>
       ) : (
-        // If the step can't be shown due to dependencies, skip to the next step
-        <div>
+        <Box>
           <Button onClick={goToFirstStep}>Skip to next question</Button>
-        </div>
+        </Box>
       )}
-    </div>
+    </Box>
   )
 }
 
