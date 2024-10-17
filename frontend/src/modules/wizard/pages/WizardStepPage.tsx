@@ -20,14 +20,14 @@ export function WizardPage() {
 
   function StepperHeading({ text }: { text: string }) {
     return (
-      <Heading as={'h3'} size="h3" pb={6}>
+      <Heading size={{ base: 'md', sm: 'lg', md: 'xl', lg: '2xl' }} pb={6}>
         {text}
       </Heading>
     )
   }
 
   return (
-    <Box width="60%" mx="auto" mt="4">
+    <Box width={{ base: '85%', md: '60%' }} mx="auto" mt="4">
       <StepperProgress
         step={step}
         questionsProgress={questionsProgress}

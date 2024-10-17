@@ -1,4 +1,4 @@
-import { Container } from '@chakra-ui/react'
+import { Container, useBreakpointValue } from '@chakra-ui/react'
 import { FiMail, FiMapPin, FiPhone } from 'react-icons/fi'
 
 import { ContactInfoItem, ContactInfoItemProps } from './ContactInfoItem'
@@ -12,17 +12,22 @@ interface ContactInfoProps {
 }
 
 export function ContactInfo({ contactInfo }: ContactInfoProps) {
+  const iconBreakpoints = useBreakpointValue({
+    base: '18px',
+    sm: '20px',
+    md: '24px',
+  })
   const contactIcons: ContactInfoItemProps[] = [
     {
-      icon: <FiPhone size={24} />,
+      icon: <FiPhone size={iconBreakpoints} />,
       text: contactInfo.phone,
     },
     {
-      icon: <FiMail size={24} />,
+      icon: <FiMail size={iconBreakpoints} />,
       text: contactInfo.email,
     },
     {
-      icon: <FiMapPin size={24} />,
+      icon: <FiMapPin size={iconBreakpoints} />,
       text: contactInfo.address,
     },
   ]
@@ -34,9 +39,9 @@ export function ContactInfo({ contactInfo }: ContactInfoProps) {
       borderRadius="xl"
       borderWidth="2px"
       bg="gray.50"
-      fontSize="lg"
+      fontSize={{ base: 'sm', sm: 'md', md: 'lg' }}
       maxWidth="fit-content"
-      px={10}
+      px={{ base: 4, sm: 6, md: 10 }}
       py={4}
     >
       {contactIcons.map((item, index) => (

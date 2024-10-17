@@ -39,12 +39,12 @@ export function AccordionHelperItem({
   }
 
   return (
-    <AccordionItem bg="gray.200" mb={4} borderRadius="xl">
+    <AccordionItem bg="gray.200" my={4} borderRadius="xl">
       <AccordionButton
-        pl={6}
+        pl={{ base: 4, sm: 6 }}
         borderRadius="xl"
         _hover={{ borderRadius: 'none' }}
-        fontSize="lg"
+        fontSize={{ base: 'xs', sm: 'md', md: 'lg' }}
         py={4}
       >
         <Box as="span" flex="1" textAlign="left">
@@ -55,7 +55,7 @@ export function AccordionHelperItem({
       <AccordionPanel
         bg="gray.100"
         borderBottomRadius="xl"
-        fontSize="md"
+        fontSize={{ base: 'xs', sm: 'sm', md: 'md' }}
         pt={4}
       >
         {renderDescription(description)}

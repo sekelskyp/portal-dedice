@@ -1,4 +1,4 @@
-import { Circle, Stack, Text } from '@chakra-ui/react'
+import { Circle, Stack, Text, useBreakpointValue } from '@chakra-ui/react'
 import { FiCheck } from 'react-icons/fi'
 
 interface StepperCategoryProps {
@@ -7,17 +7,29 @@ interface StepperCategoryProps {
 }
 
 export function StepperCategory({ step, index }: StepperCategoryProps) {
+  const iconBreakpoints = useBreakpointValue({
+    base: '16px',
+    sm: '20px',
+    md: '24px',
+  })
+
+  const avatarBreakpoints = useBreakpointValue({
+    base: '24px',
+    sm: '36px',
+    md: '48px',
+  })
+
   return (
     <Stack direction="column" alignItems="center">
       <Circle
-        size="48px"
+        size={avatarBreakpoints}
         bg={step > index ? 'blue.500' : 'gray.300'}
         color="white"
       >
         {step > index ? (
-          <FiCheck size="24px" />
+          <FiCheck size={iconBreakpoints} />
         ) : (
-          <Text fontSize="24px">{index}</Text>
+          <Text fontSize={iconBreakpoints}>{index}</Text>
         )}
       </Circle>
     </Stack>

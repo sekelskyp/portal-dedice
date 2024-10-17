@@ -26,16 +26,25 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
 
   return (
     <Form onSubmit={onSubmit} resolver={zodResolver(schema)} noValidate>
-      <Container maxW="container.xl" width="100%" px={16} py={8}>
+      <Container
+        maxW="container.xl"
+        width="100%"
+        px={{ base: 4, sm: 8, md: 12, lg: 16 }}
+        py={{ base: 2, sm: 4 }}
+      >
         <Stack gap={5}>
-          <Text fontSize="lg">
+          <Text fontSize={{ base: 'sm', sm: 'md', md: 'lg' }}>
             Vyplněním formuláře Vám pomůžeme zjistit, který notář bude spravovat
             Vaše pozůstalostní řízení.
           </Text>
           <SelectControl
             name="sex"
             label="Pohlaví"
-            selectProps={{ placeholder: 'Zvolte pohlaví' }}
+            labelProps={{ fontSize: { base: 'sm', md: 'md' } }}
+            selectProps={{
+              placeholder: 'Zvolte pohlaví',
+              fontSize: { base: 'sm', md: 'md' },
+            }}
           >
             <option value="male">Muž</option>
             <option value="female">Žena</option>
@@ -43,12 +52,15 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
           <InputControl
             name="birthDate"
             label="Datum narození"
-            inputProps={{ type: 'date' }}
+            labelProps={{ fontSize: { base: 'sm', md: 'md' } }}
+            inputProps={{ type: 'date', fontSize: { base: 'sm', md: 'md' } }}
             isRequired
           ></InputControl>
           <InputControl
             name="address"
             label="Trvalé bydliště"
+            labelProps={{ fontSize: { base: 'sm', md: 'md' } }}
+            inputProps={{ fontSize: { base: 'sm', md: 'md' } }}
             isRequired
           ></InputControl>
           <Spacer></Spacer>

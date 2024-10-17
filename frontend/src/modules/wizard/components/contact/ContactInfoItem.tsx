@@ -10,7 +10,13 @@ export function ContactInfoItem({ icon, text }: ContactInfoItemProps) {
   const isEmail: boolean = text.includes('@')
 
   return (
-    <Stack direction="row" align="center" spacing={4} py={2}>
+    <Stack
+      direction="row"
+      align="center"
+      spacing={{ base: 2, sm: 4 }}
+      py={2}
+      textAlign="left"
+    >
       {icon}
       {isEmail ? (
         <Link to={`mailto:${text}`}>
