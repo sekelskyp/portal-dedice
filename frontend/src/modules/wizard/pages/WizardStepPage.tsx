@@ -51,7 +51,10 @@ export function WizardPage() {
               }
             />
             {questionsProgress === 0 ? (
-              <NotaryAssignment />
+              <NotaryAssignment
+                nextStep={setNextStep}
+                previousStep={setPreviousStep}
+              />
             ) : (
               <QuestionStep
                 progress={questionsProgress}
@@ -59,12 +62,6 @@ export function WizardPage() {
                 questions={data[questionsProgress / 10].question}
               />
             )}
-            <Box display="flex" justifyContent="space-between" mt="8" mb="8">
-              <Button onClick={setPreviousStep}>Zpět</Button>
-              <Button onClick={setNextStep}>
-                {data[questionsProgress / 10].button}
-              </Button>
-            </Box>
           </Box>
         )}
 
@@ -75,6 +72,14 @@ export function WizardPage() {
           </Box>
         )}
         {step === 4 && <StepperHeading text="Výstup nachytřovadla..." />}
+        {((step === 2 && questionsProgress !== 0) || step === 3) && (
+          <Box display="flex" justifyContent="space-between" mt="8" mb="8">
+            <Button onClick={setPreviousStep}>Zpět</Button>
+            <Button onClick={setNextStep}>
+              {data[questionsProgress / 10].button}
+            </Button>
+          </Box>
+        )}
       </Box>
     </Box>
   )
