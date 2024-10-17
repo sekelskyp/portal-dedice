@@ -79,7 +79,7 @@ const QuestionnaireStep = () => {
       setCurrentStepIndex(previousStepIndex)
       setSelectedAnswer(
         answers[questionData.steps[previousStepIndex].id] || null
-      ) // Restore selected answer for the previous step
+      )
     }
   }
 
