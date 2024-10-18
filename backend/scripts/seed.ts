@@ -16,7 +16,6 @@ async function seed() {
   console.log('Database connection established')
 
   try {
-
     await db.delete(beneficiary)
     await db.delete(notary)
 

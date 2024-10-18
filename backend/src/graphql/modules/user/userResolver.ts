@@ -37,10 +37,19 @@ export class UserResolver {
     @Arg('password') password: string,
     @Ctx() { db }: CustomContext
   ): Promise<AuthInfo> {
+    const contactRecord = await db
+      .select()
+      .from(contact)
+      .where(eq(lower(contact.email), email.toLowerCase()))
+
+    if (contactRecord.length === 0) {
+      throw new GraphQLError('Nesprávný email nebo heslo')
+    }
+
     const userRecord = await db
       .select()
       .from(user)
-      .where(eq(lower(user.login), email.toLowerCase()))
+      .where(eq(user.contactId, contactRecord[0].id))
 
     if (userRecord.length === 0) {
       throw new GraphQLError('Nesprávný email nebo heslo')
@@ -104,6 +113,9 @@ export class UserResolver {
         password: passwordHash,
       })
       .$returningId()
+
+    // todo: add row to beneficiary
+    // where to take deceasedRelationId ?
 
     /* ASSEMBLE MUTATION RESPONSE */
     const id = insertResult[0].id
