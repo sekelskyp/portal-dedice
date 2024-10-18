@@ -1,29 +1,39 @@
-import { getConnection } from '../db/db'
-import { Contact, Notary } from '../types/types' // Assuming these types are defined
+import { notaryAssignments } from '../notaryAssignments/notaryData'
 
 /**
- * Service to fetch the notary based on the contact's region or address.
- * @param contact - The contact object containing relevant address information.
- * @returns The assigned notary based on the contact's region.
+ * Function to fetch the assigned notary's name based on the Prague district number and date of birth
+ * @param districtNumber - Prague district number (e.g., 1, 2, 3, etc.)
+ * @param birthDate - User's date of birth in the format YYYY-MM-DD
+ * @returns The assigned notary's name based on district, birth month, and day
  */
-export const getNotaryByContactAddress = async (
-  contact: Contact
-): Promise<Notary | null> => {
-  const { db } = await getConnection()
+export const getNotaryByDistrictAndDate = (
+  districtNumber: number,
+  birthDate: string
+): string | null => {
+  // Parse the birth date to extract the birth month and day
+  const birthDateObj = new Date(birthDate)
+  const birthMonth = birthDateObj.toLocaleString('en-US', { month: 'long' })
+  const birthDay = birthDateObj.getDate()
 
-  // Use the contact object directly, assuming contact has a "region" field
-  if (!contact.region) {
-    throw new Error('Contact does not have region information')
+  // Get the notary data for the given Prague district number
+  const districtNotaries = notaryAssignments[districtNumber]
+
+  if (!districtNotaries) {
+    throw new Error(
+      `No notary found for Prague district number: ${districtNumber}`
+    )
   }
 
-  // Fetch the notary based on the contact's region
-  const notary = await db.notary.findFirst({
-    where: { region: contact.region },
-  })
-
-  if (!notary) {
-    throw new Error('No notary found for this region')
+  // Iterate through notaries to find one who works in the given birth month and date
+  for (const notary of districtNotaries) {
+    const notaryDaysForMonth = notary.dates[birthMonth]
+    if (notaryDaysForMonth && notaryDaysForMonth.includes(birthDay)) {
+      return notary.name // Return the notary's name if both month and date match
+    }
   }
 
-  return notary
+  // Return an error if no notary was found for the given month and day
+  throw new Error(
+    `No notary found for district number ${districtNumber}, birth month: ${birthMonth}, and day: ${birthDay}`
+  )
 }
