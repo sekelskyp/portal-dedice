@@ -1,4 +1,3 @@
-import { table } from 'console'
 import { SQL, sql } from 'drizzle-orm'
 import {
   AnyMySqlColumn,

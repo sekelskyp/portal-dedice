@@ -8,17 +8,6 @@ async function seed() {
 
   try {
 
-    await db.delete(contact);
-    await db.delete(user);
-    await db.delete(beneficiary);
-    await db.delete(notary);
-
-
-    
-
-
-
-
     // Use INSERT IGNORE to insert task states, ignoring duplicates
     // await db.execute(
     //   sql`INSERT IGNORE INTO TaskState (state) VALUES 
