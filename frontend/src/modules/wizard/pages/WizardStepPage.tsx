@@ -1,7 +1,7 @@
 import { Box, Heading } from '@chakra-ui/react'
 
 import { NotaryAssignment } from '../components/NotaryAssignment'
-import Questionnaire from '../components/Questionarrie'
+import { QuestionnaireStep } from '../components/Questionarrie'
 import { QuestionStep } from '../components/QuestionStep'
 import { StepperProgress } from '../components/stepper/StepperProgress'
 import { TestatorIdentification } from '../components/TestatorIdentification'
@@ -71,7 +71,7 @@ export function WizardPage() {
         {step === 3 && (
           <Box>
             <StepperHeading text="Rozhodovací strom..." />
-            <Questionnaire />
+            <QuestionnaireStep />
           </Box>
         )}
         {step === 4 && <StepperHeading text="Výstup nachytřovadla..." />}

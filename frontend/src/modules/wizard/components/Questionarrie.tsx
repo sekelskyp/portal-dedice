@@ -3,9 +3,10 @@ import {
   Box,
   Button,
   Heading,
-  Radio,
-  RadioGroup,
   Stack,
+  useRadio,
+  useRadioGroup,
+  UseRadioProps,
 } from '@chakra-ui/react'
 
 import questionData from '../questionarrie.json'
@@ -18,17 +19,50 @@ interface Answer {
 
 interface Dependency {
   questionId: number
-  answerId: number // The answer that triggers this question
+  answerId: number
 }
 
 interface Step {
   id: number
   question_text: string
   answer_options?: Answer[]
-  dependencies?: Dependency[] // Optional dependencies
+  dependencies?: Dependency[]
 }
 
-const QuestionnaireStep = () => {
+interface RadioCardProps extends UseRadioProps {
+  children: React.ReactNode
+}
+
+const RadioCard = (props: RadioCardProps) => {
+  const { getInputProps, getCheckboxProps } = useRadio(props)
+
+  const input = getInputProps()
+  const checkbox = getCheckboxProps()
+
+  return (
+    <Box as="label">
+      <input {...input} />
+      <Box
+        {...checkbox}
+        cursor="pointer"
+        borderWidth="1px"
+        borderRadius="md"
+        boxShadow="md"
+        bg={'gray.50'}
+        _checked={{
+          bg: 'blue.500',
+          color: 'white',
+        }}
+        px={5}
+        py={3}
+      >
+        {props.children}
+      </Box>
+    </Box>
+  )
+}
+
+export const QuestionnaireStep = () => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [answers, setAnswers] = useState<{ [key: number]: number }>({})
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
@@ -37,11 +71,16 @@ const QuestionnaireStep = () => {
 
   const handleAnswer = (nextValue: string) => {
     const answerId = parseInt(nextValue, 10)
-    setSelectedAnswer(answerId)
-    setAnswers({
-      ...answers,
-      [currentStep.id]: answerId,
-    })
+    const answerOption = currentStep.answer_options?.find(
+      (option) => option.id === answerId
+    )
+    if (answerOption) {
+      setSelectedAnswer(answerId)
+      setAnswers({
+        ...answers,
+        [currentStep.id]: answerId,
+      })
+    }
   }
 
   const findNextStepIndex = (startIndex: number): number => {
@@ -63,7 +102,7 @@ const QuestionnaireStep = () => {
     }
     if (nextStepIndex < questionData.steps.length) {
       setCurrentStepIndex(nextStepIndex)
-      setSelectedAnswer(null) // Reset selected answer for the next step
+      setSelectedAnswer(null)
     }
   }
 
@@ -97,6 +136,13 @@ const QuestionnaireStep = () => {
     })
   }
 
+  const { getRootProps, getRadioProps } = useRadioGroup({
+    value: selectedAnswer !== null ? selectedAnswer.toString() : '',
+    onChange: (value) => handleAnswer(value),
+  })
+
+  const group = getRootProps()
+
   return (
     <Box>
       {canShowStep(currentStep) ? (
@@ -104,28 +150,40 @@ const QuestionnaireStep = () => {
           <Heading as="h2" size="lg" mb={4}>
             {currentStep.question_text}
           </Heading>
-          <RadioGroup
-            onChange={(value) => handleAnswer(value)}
-            value={selectedAnswer !== null ? selectedAnswer.toString() : ''}
-          >
-            <Stack direction="column">
-              {currentStep.answer_options?.map((answer) => (
-                <Radio key={answer.id} value={answer.id.toString()}>
-                  {answer.option_text}
-                </Radio>
-              ))}
-            </Stack>
-          </RadioGroup>
           <Box>
+            <Stack {...group} direction="column" alignItems="center">
+              {currentStep.answer_options?.map((answer) => {
+                const radio = getRadioProps({ value: answer.id.toString() })
+                return (
+                  <RadioCard key={answer.id} {...radio}>
+                    <Box width={{ base: 'sm', lg: 'lg' }} textAlign="center">
+                      {answer.option_text}
+                    </Box>
+                  </RadioCard>
+                )
+              })}
+            </Stack>
+          </Box>
+          <Box mt={4}>
             {currentStepIndex > 0 && (
-              <Button onClick={goToPreviousStep}>Previous</Button>
+              <Button
+                bg="gray.500"
+                order={{ base: 2, sm: 1 }}
+                fontSize={{ base: 'sm', sm: 'md' }}
+                onClick={goToPreviousStep}
+                mr={2}
+              >
+                Zpět
+              </Button>
             )}
             {currentStepIndex < questionData.steps.length - 1 && (
               <Button
+                order={{ base: 1, sm: 2 }}
+                fontSize={{ base: 'sm', sm: 'md' }}
                 onClick={goToNextStep}
                 isDisabled={selectedAnswer === null}
               >
-                Next
+                Pokračuj
               </Button>
             )}
           </Box>
@@ -138,5 +196,3 @@ const QuestionnaireStep = () => {
     </Box>
   )
 }
-
-export default QuestionnaireStep
