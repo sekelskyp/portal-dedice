@@ -215,9 +215,16 @@ export const beneficiaryTaskRel = mysqlTable(
 // Define Password Reset Token Table
 export const passwordResetToken = mysqlTable('password_reset_token', {
   id: int('id').primaryKey().autoincrement(),
-  userId: int('user_id').notNull(), // References the user requesting the reset
-  token: varchar('token', { length: 255 }).notNull(), // Secure token for reset link
-  expiresAt: datetime('expires_at').notNull(), // Expiration time for the token
+  userId: int('user_id').notNull(),
+  token: varchar('token', { length: 255 }).notNull(),
+  expiresAt: datetime('expires_at').notNull(),
+})
+
+// Define Notary Date Table
+export const notaryDate = mysqlTable('notary_date', {
+  id: int('id').primaryKey().autoincrement(),
+  notaryId: int('notary_id').notNull(),
+  dateResponsible: date('date_responsible').notNull(), // we only care about day and month (part of the year)
 })
 
 // Custom lower function
