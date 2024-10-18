@@ -44,7 +44,7 @@ export function AccordionHelperItem({
         pl={{ base: 4, sm: 6 }}
         borderRadius="xl"
         _hover={{ borderRadius: 'none' }}
-        fontSize={{ base: 'xs', sm: 'md', md: 'lg' }}
+        fontSize={{ base: 'xs', sm: 'md' }}
         py={4}
       >
         <Box as="span" flex="1" textAlign="left">

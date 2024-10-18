@@ -1,4 +1,4 @@
-import { Box, Button, Heading } from '@chakra-ui/react'
+import { Box, Heading } from '@chakra-ui/react'
 
 import { NotaryAssignment } from '../components/NotaryAssignment'
 import Questionnaire from '../components/Questionarrie'
@@ -60,15 +60,11 @@ export function WizardPage() {
                 progress={questionsProgress}
                 heading={data[questionsProgress / 10].heading}
                 questions={data[questionsProgress / 10].question}
+                button={data[questionsProgress / 10].button}
+                nextStep={setNextStep}
+                previousStep={setPreviousStep}
+                questionsProgress={questionsProgress}
               />
-            )}
-            {questionsProgress !== 0 && (
-              <Box display="flex" justifyContent="space-between" mt="8" mb="8">
-                <Button onClick={setPreviousStep}>Zpět</Button>
-                <Button onClick={setNextStep}>
-                  {data[questionsProgress / 10].button}
-                </Button>
-              </Box>
             )}
           </Box>
         )}
