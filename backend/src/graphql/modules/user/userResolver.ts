@@ -40,7 +40,7 @@ export class UserResolver {
     const userRecord = await db
       .select()
       .from(user)
-      .where(eq(lower(user.login), email.toLowerCase()))
+      .where(eq(lower(user.login), email.toLocaleLowerCase()))
 
     if (userRecord.length === 0) {
       throw new GraphQLError('Nesprávný email nebo heslo')
@@ -64,7 +64,6 @@ export class UserResolver {
     @Arg('email') email: string,
     @Arg('password') password: string,
     @Arg('name') name: string,
-    @Arg('email') login: string,
     @Arg('surname') surname: string,
     @Arg('gender') gender: string,
     @Ctx() { db }: CustomContext
@@ -100,10 +99,13 @@ export class UserResolver {
       .insert(user)
       .values({
         contactId,
-        login,
+        login: email,
         password: passwordHash,
       })
       .$returningId()
+
+    // todo: add row to beneficiary
+    // where to take deceasedRelationId ?
 
     /* ASSEMBLE MUTATION RESPONSE */
     const id = insertResult[0].id
@@ -112,7 +114,7 @@ export class UserResolver {
 
     const userObject = {
       id,
-      login,
+      login: email,
       contactId,
       password,
     }
