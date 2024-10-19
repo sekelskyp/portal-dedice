@@ -120,12 +120,9 @@ pull-changes:
 e2e-testing:
   stage: e2e
   image: mcr.microsoft.com/playwright:v1.48.1-noble
-  variables:
-    FRONTEND_URL: "https://dev-frontend-team03-vse.handson.pro/"
-    BACKEND_URL: "https://dev-backend-team03-vse.handson.pro/"
   script:
-    - echo FRONTEND_URL=$FRONTEND_URL >> .env
-    - echo BACKEND_URL=$BACKEND_URL >> .env
+    - echo FRONTEND_URL="$FRONTEND_URL" >> .env
+    - echo BACKEND_URL="$BACKEND_URL" >> .env
     - yarn install --frozen-lockfile
     - yarn test:e2e
   only:

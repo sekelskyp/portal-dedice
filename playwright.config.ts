@@ -1,5 +1,7 @@
 import { defineConfig, PlaywrightTestConfig } from '@playwright/test'
 
+require('dotenv').config()
+
 const config: PlaywrightTestConfig = {
   testDir: './e2e', // Directory where tests will be placed
   webServer: [],
