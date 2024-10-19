@@ -1,14 +1,12 @@
-import bcrypt from 'bcrypt'
-
-const saltRounds = 10
+import { hash, verify } from 'argon2'
 
 /**
- * Hashes a plain text password to be stored in the database
+ * Hashes a plain text password to be stored in the database using Argon2
  * @param password - The plain text password to be hashed
  * @returns The hashed password as a string
  */
 export const hashPassword = async (password: string): Promise<string> => {
-  return await bcrypt.hash(password, saltRounds)
+  return await hash(password)
 }
 
 /**
@@ -21,5 +19,5 @@ export const comparePassword = async (
   password: string,
   hash: string
 ): Promise<boolean> => {
-  return await bcrypt.compare(password, hash)
+  return await verify(hash, password)
 }

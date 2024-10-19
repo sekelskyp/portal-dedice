@@ -3,6 +3,7 @@ import {
   AnyMySqlColumn,
   binary,
   char,
+  check,
   date,
   datetime,
   float,
@@ -15,12 +16,16 @@ import {
   varchar,
 } from 'drizzle-orm/mysql-core'
 
+const taskTypeEnum = ['Upload Document', 'Set Up Meeting', 'Custom'] as const
+
 // Define User Table
 export const user = mysqlTable(
   'user',
   {
     id: int('id').primaryKey().autoincrement(),
-    contactId: int('contact_id').notNull(),
+    contactId: int('contact_id')
+      .references(() => contact.id)
+      .notNull(),
     login: varchar('login', { length: 255 }).notNull(),
     password: varchar('password', { length: 255 }).notNull(),
   },
@@ -57,51 +62,44 @@ export const contact = mysqlTable(
 // Define Notary Table
 export const notary = mysqlTable('notary', {
   id: int('id').primaryKey().autoincrement(),
-  businessContactId: int('business_contact_id').notNull(),
-  userId: int('user_id').notNull(),
-})
-
-// Define TaskState Table
-export const taskState = mysqlTable('task_state', {
-  id: int('id').primaryKey().autoincrement(),
-  state: varchar('state', { length: 50 }).notNull().unique(),
-})
-
-// Define ProcedureState Table
-export const procedureState = mysqlTable('procedure_state', {
-  id: int('id').primaryKey().autoincrement(),
-  state: varchar('state', { length: 50 }).notNull().unique(),
+  businessContactId: int('business_contact_id')
+    .references(() => contact.id)
+    .notNull(),
+  userId: int('user_id')
+    .references(() => user.id)
+    .notNull(),
 })
 
 // Define InheritanceProcedure Table with Foreign Key to ProcedureState
 export const inheritanceProcedure = mysqlTable('inheritance_procedure', {
   id: int('id').primaryKey().autoincrement(),
-  notaryId: int('notary_id').notNull(),
-  stateId: int('state_id').notNull(), // FK to ProcedureState
+  notaryId: int('notary_id')
+    .references(() => notary.id)
+    .notNull(),
+  state: varchar('state', {
+    length: 10,
+    enum: ['InProgress', 'Closed'],
+  }).notNull(),
 })
 
 // Define Beneficiary Table
 export const beneficiary = mysqlTable('beneficiary', {
   id: int('id').primaryKey().autoincrement(),
-  userId: int('user_id').notNull(),
-  deceasedRelationId: int('deceased_relation_id').notNull(),
+  userId: int('user_id')
+    .references(() => user.id)
+    .notNull(),
+  deceasedRelation: varchar('deceased_relation', {
+    length: 6,
+    enum: ['Spouse', 'Child', 'Parent', 'Other'],
+  }).notNull(),
 })
-
-// Define BeneficiaryDeceasedRelation Table
-export const beneficiaryDeceasedRelation = mysqlTable(
-  'beneficiary_deceased_relation',
-  {
-    id: int('id').primaryKey().autoincrement(),
-    familyRelation: varchar('family_relation', { length: 50 })
-      .notNull()
-      .unique(),
-  }
-)
 
 // Define Meeting Table
 export const meeting = mysqlTable('meeting', {
   id: int('id').primaryKey().autoincrement(),
-  notaryId: int('notary_id').notNull(),
+  notaryId: int('notary_id')
+    .references(() => notary.id)
+    .notNull(), // FK to Notary
   scheduledDateTime: date('scheduled_date_time').notNull(),
   name: varchar('name', { length: 100 }).notNull(),
   notes: text('notes'),
@@ -110,7 +108,9 @@ export const meeting = mysqlTable('meeting', {
 // Define Asset Table
 export const asset = mysqlTable('asset', {
   id: int('id').primaryKey().autoincrement(),
-  inheritanceProcedureId: int('inheritance_procedure_id').notNull(),
+  inheritanceProcedureId: int('inheritance_procedure_id')
+    .references(() => inheritanceProcedure.id)
+    .notNull(), // FK to InheritanceProcedure
   value: float('value').notNull(),
   name: varchar('name', { length: 100 }).notNull(),
   description: text('description'),
@@ -119,9 +119,11 @@ export const asset = mysqlTable('asset', {
 // Define Document Table
 export const document = mysqlTable('document', {
   id: int('id').primaryKey().autoincrement(),
-  inheritanceProcedureId: int('inheritance_procedure_id').notNull(),
-  taskId: int('task_id'),
-  userOwnerId: int('user_owner_id'),
+  inheritanceProcedureId: int('inheritance_procedure_id')
+    .references(() => inheritanceProcedure.id)
+    .notNull(), // FK to InheritanceProcedure
+  taskId: int('task_id').references(() => task.id), // FK to Task
+  userOwnerId: int('user_owner_id').references(() => user.id), // FK to User
   createDate: timestamp('create_date').defaultNow(),
   fileName: varchar('file_name', { length: 255 }).notNull(),
   fileType: varchar('file_type', { length: 100 }).notNull(),
@@ -131,33 +133,40 @@ export const document = mysqlTable('document', {
 // Define Chat Table
 export const chat = mysqlTable('chat', {
   id: int('id').primaryKey().autoincrement(),
-  inheritanceProcedureId: int('inheritance_procedure_id').notNull(),
+  inheritanceProcedureId: int('inheritance_procedure_id')
+    .references(() => inheritanceProcedure.id)
+    .notNull(), // FK to InheritanceProcedure
 })
 
 // Define ChatMessage Table
 export const chatMessage = mysqlTable('chat_message', {
   id: int('id').primaryKey().autoincrement(),
-  chatId: int('chat_id').notNull(),
-  userId: int('user_id').notNull(),
+  chatId: int('chat_id')
+    .references(() => chat.id)
+    .notNull(), // FK to Chat
+  userId: int('user_id')
+    .references(() => user.id)
+    .notNull(), // FK to User
   body: text('body').notNull(),
 })
 
 // Define Task Table with Foreign Key to TaskState
 export const task = mysqlTable('task', {
   id: int('id').primaryKey().autoincrement(),
-  typeId: int('type_id').notNull(),
+  type: varchar('type', {
+    length: 15,
+    enum: taskTypeEnum,
+  }).notNull(),
   deadline: date('deadline'),
-  stateId: int('state_id').notNull(), // FK to TaskState
+  state: varchar('state', {
+    length: 10,
+    enum: ['Open', 'InProgress', 'Completed', 'Closed'],
+  }),
   label: varchar('label', { length: 100 }).notNull(),
   description: text('description'),
-  inheritanceProcedureId: int('inheritance_procedure_id').notNull(),
-})
-
-// Define TaskType Table
-export const taskType = mysqlTable('task_type', {
-  id: int('id').primaryKey().autoincrement(),
-  name: varchar('name', { length: 100 }).notNull().unique(),
-  description: text('description'),
+  inheritanceProcedureId: int('inheritance_procedure_id')
+    .references(() => inheritanceProcedure.id)
+    .notNull(), // FK to InheritanceProcedure
 })
 
 // Define FAQ Table
@@ -166,16 +175,20 @@ export const faq = mysqlTable('faq', {
   question: varchar('question', { length: 100 }).notNull(),
   answer: varchar('answer', { length: 255 }).notNull(),
   createDate: timestamp('create_date').defaultNow(),
-  notaryOwnerId: int('notary_owner_id'),
-  taskTypeId: int('task_type_id'),
+  notaryOwnerId: int('notary_owner_id').references(() => notary.id), // FK to Notary
+  taskType: varchar('task_type', { length: 15, enum: taskTypeEnum }),
 })
 
 // Define BeneficiaryMeetingRel Table for M2M between Beneficiary and Meeting with Composite Key
 export const beneficiaryMeetingRel = mysqlTable(
   'beneficiary_meeting_rel',
   {
-    beneficiaryId: int('beneficiary_id').notNull(),
-    meetingId: int('meeting_id').notNull(),
+    beneficiaryId: int('beneficiary_id')
+      .references(() => beneficiary.id)
+      .notNull(), // FK to Beneficiary
+    meetingId: int('meeting_id')
+      .references(() => meeting.id)
+      .notNull(), // FK to Meeting
   },
   (table) => ({
     compositePk: primaryKey({
@@ -188,8 +201,12 @@ export const beneficiaryMeetingRel = mysqlTable(
 export const beneficiaryInheritanceProcedureRel = mysqlTable(
   'beneficiary_inheritance_procedure_rel',
   {
-    beneficiaryId: int('beneficiary_id').notNull(),
-    inheritanceProcedureId: int('inheritance_procedure_id').notNull(),
+    beneficiaryId: int('beneficiary_id')
+      .references(() => beneficiary.id)
+      .notNull(), // FK to Beneficiary
+    inheritanceProcedureId: int('inheritance_procedure_id')
+      .references(() => inheritanceProcedure.id)
+      .notNull(), // FK to InheritanceProcedure
   },
   (table) => ({
     compositePk: primaryKey({
@@ -202,8 +219,12 @@ export const beneficiaryInheritanceProcedureRel = mysqlTable(
 export const beneficiaryTaskRel = mysqlTable(
   'beneficiary_task_rel',
   {
-    beneficiaryId: int('beneficiary_id').notNull(),
-    taskId: int('task_id').notNull(),
+    beneficiaryId: int('beneficiary_id')
+      .references(() => beneficiary.id)
+      .notNull(), // FK to Beneficiary
+    taskId: int('task_id')
+      .references(() => task.id)
+      .notNull(), // FK to Task
   },
   (table) => ({
     compositePk: primaryKey({
@@ -215,17 +236,54 @@ export const beneficiaryTaskRel = mysqlTable(
 // Define Password Reset Token Table
 export const passwordResetToken = mysqlTable('password_reset_token', {
   id: int('id').primaryKey().autoincrement(),
-  userId: int('user_id').notNull(),
+  userId: int('user_id')
+    .references(() => user.id)
+    .notNull(), // FK to User
   token: varchar('token', { length: 255 }).notNull(),
   expiresAt: datetime('expires_at').notNull(),
 })
 
-// Define Notary Date Table
-export const notaryDate = mysqlTable('notary_date', {
-  id: int('id').primaryKey().autoincrement(),
-  notaryId: int('notary_id').notNull(),
-  dateResponsible: date('date_responsible').notNull(), // we only care about day and month (part of the year)
-})
+// Define Notary Date Rule Table with Separate Day and Month Checks
+export const notaryDateRule = mysqlTable(
+  'notary_date_rule',
+  {
+    id: int('id').primaryKey().autoincrement(),
+    notaryId: int('notary_id')
+      .references(() => notary.id)
+      .notNull(), // Foreign Key to Notary
+    startDay: int('start_day').notNull(),
+    endDay: int('end_day').notNull(),
+    startMonth: int('start_month').notNull(),
+    endMonth: int('end_month').notNull(),
+  },
+  (table) => ({
+    // Check that the day is between 1 and 31
+    checkStartDay: check(
+      'check_start_day',
+      sql`${table.startDay} BETWEEN 1 AND 31`
+    ),
+    checkEndDay: check('check_end_day', sql`${table.endDay} BETWEEN 1 AND 31`),
+    // Check that the month is between 1 and 12
+    checkStartMonth: check(
+      'check_start_month',
+      sql`${table.startMonth} BETWEEN 1 AND 12`
+    ),
+    checkEndMonth: check(
+      'check_end_month',
+      sql`${table.endMonth} BETWEEN 1 AND 12`
+    ),
+    // Separate check: Ensure the end day is greater than or equal to the start day
+    checkDayRange: check(
+      'check_day_range',
+      sql`${table.endDay} >= ${table.startDay}`
+    ),
+    // Separate check: Ensure the end month is greater than or equal to the start month
+    checkMonthRange: check(
+      'check_month_range',
+      sql`${table.endMonth} >= ${table.startMonth}`
+    ),
+  })
+)
 
 // Custom lower function
 // https://orm.drizzle.team/docs/guides/unique-case-insensitive-email

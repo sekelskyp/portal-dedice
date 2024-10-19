@@ -1,39 +1,66 @@
-import { notaryAssignments } from '../notaryAssignments/notaryData'
+import { and, eq, gte, lte, sql } from 'drizzle-orm'
 
-/**
- * Function to fetch the assigned notary's name based on the Prague district number and date of birth
- * @param districtNumber - Prague district number (e.g., 1, 2, 3, etc.)
- * @param birthDate - User's date of birth in the format YYYY-MM-DD
- * @returns The assigned notary's name based on district, birth month, and day
- */
-export const getNotaryByDistrictAndDate = (
-  districtNumber: number,
-  birthDate: string
-): string | null => {
-  // Parse the birth date to extract the birth month and day
-  const birthDateObj = new Date(birthDate)
-  const birthMonth = birthDateObj.toLocaleString('en-US', { month: 'long' })
-  const birthDay = birthDateObj.getDate()
+import {
+  contact,
+  inheritanceProcedure,
+  notary,
+  notaryDateRule,
+} from '@backend/db/schema'
+import { CustomContext } from '@backend/types/types'
 
-  // Get the notary data for the given Prague district number
-  const districtNotaries = notaryAssignments[districtNumber]
+export interface Address {
+  postalCode: string
+}
 
-  if (!districtNotaries) {
+export const getNotaryByAddressAndBirthDate = async (
+  address: Address,
+  beneficiaryBirthDay: Date,
+  context: CustomContext
+): Promise<number | null> => {
+  const { db } = context // Get the db from the context
+
+  // Parse birth date to extract birth month and day
+  const birthMonth = beneficiaryBirthDay.getMonth() + 1
+  const birthDay = beneficiaryBirthDay.getDate()
+
+  // Query the database to find the notary with the least open procedures
+  const notaryResult = await db
+    .select({
+      notaryId: notary.id,
+      postalCode: contact.postalCode,
+      openProcedureCount: sql<number>`COUNT(${inheritanceProcedure.id})`.as(
+        'openProcedureCount'
+      ),
+    })
+    .from(notary)
+    .leftJoin(contact, eq(notary.businessContactId, contact.id)) // Join notary with contact by businessContactId
+    .leftJoin(
+      notaryDateRule,
+      and(
+        eq(notaryDateRule.notaryId, notary.id), // Match the notary's date rule
+        gte(notaryDateRule.startMonth, birthMonth),
+        lte(notaryDateRule.endMonth, birthMonth),
+        gte(notaryDateRule.startDay, birthDay),
+        lte(notaryDateRule.endDay, birthDay)
+      )
+    )
+    .leftJoin(
+      inheritanceProcedure,
+      and(
+        eq(inheritanceProcedure.notaryId, notary.id), // Join with procedures table
+        eq(inheritanceProcedure.state, 'InProgress') // Only count open procedures
+      )
+    )
+    .where(sql`LEFT(${contact.postalCode}, 2) = LEFT(${address.postalCode}, 2)`) // Match the first two digits of postal code
+    .groupBy(notary.id) // Group by notary ID to count the procedures
+    .orderBy(sql`openProcedureCount ASC`) // Order by least open procedures
+    .limit(1) // Limit to the notary with the fewest open procedures
+
+  if (!notaryResult.length) {
     throw new Error(
-      `No notary found for Prague district number: ${districtNumber}`
+      `No notary found for postal code: ${address.postalCode}, birth month: ${birthMonth}, and day: ${birthDay}`
     )
   }
 
-  // Iterate through notaries to find one who works in the given birth month and date
-  for (const notary of districtNotaries) {
-    const notaryDaysForMonth = notary.dates[birthMonth]
-    if (notaryDaysForMonth && notaryDaysForMonth.includes(birthDay)) {
-      return notary.name // Return the notary's name if both month and date match
-    }
-  }
-
-  // Return an error if no notary was found for the given month and day
-  throw new Error(
-    `No notary found for district number ${districtNumber}, birth month: ${birthMonth}, and day: ${birthDay}`
-  )
+  return notaryResult[0].notaryId
 }
