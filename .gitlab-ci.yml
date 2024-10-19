@@ -6,6 +6,7 @@ stages:
   - test
   - build
   - deploy
+  - e2e
 
 variables:
   YARN_CACHE_FOLDER: '$CI_PROJECT_DIR/cache/yarn'
@@ -116,3 +117,14 @@ pull-changes:
   only:
     - main  # This will run only on the 'main' branch
 
+e2e-testing:
+  stage: e2e
+  image: mcr.microsoft.com/playwright:v1.48.1-noble
+  variables:
+    FRONTEND_URL: "https://dev-frontend-team03-vse.handson.pro/"
+    BACKEND_URL: "https://dev-backend-team03-vse.handson.pro/"
+  script:
+    - yarn test:e2e
+  only:
+    - main
+    

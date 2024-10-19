@@ -29,6 +29,7 @@
       "esbenp.prettier-vscode",
       "dbaeumer.vscode-eslint",
       "GitHub.copilot",
+      "ms-playwright.playwright",
     ],
   },
 }
