@@ -7,7 +7,7 @@ import { contact, lower, user } from '@backend/db/schema'
 import { createToken } from '@backend/libs/jwt'
 import { type CustomContext } from '@backend/types/types'
 
-import { AuthInfo, User } from './userType'
+import { AuthInfo, ChangePassword, User, UserProfile } from './userType'
 
 @Resolver(() => User)
 export class UserResolver {
@@ -120,5 +120,80 @@ export class UserResolver {
     }
 
     return { user: userObject, token: token }
+  }
+
+  @Mutation(() => UserProfile)
+  async updateUserProfile(
+    @Arg('name') name: string,
+    @Arg('surname') surname: string,
+    @Ctx() { db, authUser }: CustomContext
+  ) {
+    if (!authUser) {
+      throw new GraphQLError('Unauthorized')
+    }
+    const userId = authUser.id
+    const userRecord = await db.select().from(user).where(eq(user.id, userId))
+
+    if (userRecord.length === 0) {
+      throw new GraphQLError('User not found')
+    }
+
+    if (authUser.id !== userRecord[0].id) {
+      throw new GraphQLError('Unauthorized access to another user')
+    }
+
+    await db
+      .update(contact)
+      .set({ name, surname })
+      .where(eq(contact.id, userRecord[0].contactId))
+
+    const updatedContact = await db
+      .select()
+      .from(contact)
+      .where(eq(contact.id, userRecord[0].contactId))
+
+    const toReturn: UserProfile = {
+      id: userId,
+      name: updatedContact[0].name,
+      surName: updatedContact[0].surname,
+    }
+    return toReturn
+  }
+
+  @Mutation(() => ChangePassword)
+  async changePassword(
+    @Arg('oldPassword') oldPassword: string,
+    @Arg('newPassword') newPassword: string,
+    @Ctx() { db, authUser }: CustomContext
+  ) {
+    if (!authUser) {
+      throw new GraphQLError('Unauthorized')
+    }
+
+    const userId = authUser.id
+    const userRecord = await db.select().from(user).where(eq(user.id, userId))
+
+    if (userRecord.length === 0) {
+      throw new GraphQLError('User not found')
+    }
+
+    const passwordsEqual = await argon2.verify(
+      userRecord[0].password,
+      oldPassword
+    )
+    if (!passwordsEqual) {
+      throw new GraphQLError('Old password is incorrect')
+    }
+    const newPasswordHash = await argon2.hash(newPassword)
+    await db
+      .update(user)
+      .set({ password: newPasswordHash })
+      .where(eq(user.id, userId))
+
+    const toReturn: ChangePassword = {
+      id: userId,
+      email: userRecord[0].login,
+    }
+    return toReturn
   }
 }
