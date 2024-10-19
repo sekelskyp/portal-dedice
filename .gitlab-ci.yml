@@ -1,10 +1,7 @@
 image: node:20.17.0
 
 stages:
-  - install
-  - lint
-  - test
-  - build
+  - verify
   - deploy
   - e2e
 
@@ -17,7 +14,7 @@ variables:
     - if: ($CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push")
 
 install:
-  stage: install
+  stage: verify
   interruptible: true
   rules:
     - !reference [.rules, rules]
@@ -31,7 +28,7 @@ install:
     - yarn install --frozen-lockfile
 
 format:
-  stage: lint
+  stage: verify
   interruptible: true
   rules:
     - !reference [.rules, rules]
@@ -43,9 +40,11 @@ format:
     policy: pull
   script:
     - yarn format:check
+  needs:
+    - install
 
 lint:
-  stage: lint
+  stage: verify
   interruptible: true
   rules:
     - !reference [.rules, rules]
@@ -57,9 +56,11 @@ lint:
     policy: pull
   script:
     - yarn lint
+  needs:
+    - format
 
 test-frontend:
-  stage: test
+  stage: verify
   interruptible: true
   rules:
     - !reference [.rules, rules]
@@ -71,9 +72,11 @@ test-frontend:
     policy: pull
   script:
     - yarn frontend test
+  needs:
+    - lint
 
 build-frontend:
-  stage: build
+  stage: verify
   interruptible: true
   rules:
     - if: ($CI_PIPELINE_SOURCE == "merge_request_event")
@@ -86,9 +89,11 @@ build-frontend:
     policy: pull
   script:
     - yarn frontend build
+  needs:
+    - test-frontend
 
 build-backend:
-  stage: build
+  stage: verify
   interruptible: true
   rules:
     - if: ($CI_PIPELINE_SOURCE == "merge_request_event")
@@ -101,6 +106,8 @@ build-backend:
     policy: pull
   script:
     - yarn backend build
+  needs:
+    - lint
 
 pull-changes:
   stage: deploy
@@ -120,10 +127,10 @@ pull-changes:
 e2e-testing:
   stage: e2e
   image: mcr.microsoft.com/playwright:v1.48.1-noble
-  variables:
-    FRONTEND_URL: "https://dev-frontend-team03-vse.handson.pro/"
-    BACKEND_URL: "https://dev-backend-team03-vse.handson.pro/"
   script:
+    - echo FRONTEND_URL="$FRONTEND_URL" >> .env
+    - echo BACKEND_URL="$BACKEND_URL" >> .env
+    - yarn install --frozen-lockfile
     - yarn test:e2e
   only:
     - main
