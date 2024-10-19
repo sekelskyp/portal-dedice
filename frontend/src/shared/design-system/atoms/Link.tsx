@@ -14,7 +14,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link(
 ) {
   return (
     <ChakraLink
-      color="green.600"
+      color="blue.600"
       _hover={{ textDecoration: noUnderline ? 'none' : 'underline' }}
       ref={ref}
       {...rest}

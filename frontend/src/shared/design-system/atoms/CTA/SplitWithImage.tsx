@@ -23,6 +23,8 @@ export const SplitWithImage = ({
       md: 8,
       lg: 12,
     }}
+    px={4}
+    my={10}
   >
     <Flex
       direction="column"
@@ -31,6 +33,7 @@ export const SplitWithImage = ({
       py={24}
       zIndex={3}
       gap={4}
+      pl={4}
     >
       {children}
     </Flex>
@@ -47,6 +50,7 @@ export const SplitWithImage = ({
         bg="gray.100"
         loading="lazy"
         opacity={0.4}
+        borderRadius={'lg'}
       />
     </Flex>
   </SimpleGrid>

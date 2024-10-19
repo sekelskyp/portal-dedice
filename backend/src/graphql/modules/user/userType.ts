@@ -6,10 +6,13 @@ export class User {
   id!: number
 
   @Field()
-  name!: string
+  contactId!: number
 
   @Field()
-  email!: string
+  login!: string
+
+  @Field()
+  password!: string
 }
 
 @ObjectType()
@@ -19,4 +22,25 @@ export class AuthInfo {
 
   @Field()
   token!: string
+}
+
+@ObjectType()
+export class UserProfile {
+  @Field(() => ID)
+  id!: number
+
+  @Field()
+  name!: string
+
+  @Field()
+  surName!: string
+}
+
+@ObjectType()
+export class ChangePassword {
+  @Field(() => ID)
+  id!: number
+
+  @Field()
+  email!: string
 }
