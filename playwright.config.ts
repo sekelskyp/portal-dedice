@@ -11,7 +11,7 @@ const config: PlaywrightTestConfig = {
   testDir: './e2e', // Directory where tests will be placed
   webServer: [],
   use: {
-    baseURL: defaultFEUrl,
+    baseURL: process.env.FRONTEND_URL ?? defaultFEUrl,
     headless: true,
     video: 'on-first-retry',
   },
