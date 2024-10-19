@@ -8,8 +8,9 @@ import {
   useRadioGroup,
   UseRadioProps,
 } from '@chakra-ui/react'
+import { audio } from 'framer-motion/client'
 
-import questionData from '../questionarrie.json'
+import questionData from '../questionnaire.json'
 
 interface Answer {
   id: number
@@ -40,21 +41,22 @@ const RadioCard = (props: RadioCardProps) => {
   const checkbox = getCheckboxProps()
 
   return (
-    <Box as="label">
+    <Box justifyContent={'center'}>
       <input {...input} />
       <Box
         {...checkbox}
         cursor="pointer"
         borderWidth="1px"
         borderRadius="md"
-        boxShadow="md"
         bg={'gray.50'}
         _checked={{
           bg: 'blue.500',
           color: 'white',
         }}
-        px={5}
-        py={3}
+        px={{ base: 3, sm: 5 }}
+        py={{ base: 2, sm: 3 }}
+        width={{ base: '100%', sm: '50%' }}
+        mx={'auto'}
       >
         {props.children}
       </Box>
@@ -146,46 +148,48 @@ export const QuestionnaireStep = () => {
   return (
     <Box>
       {canShowStep(currentStep) ? (
-        <Box>
+        <Box pt={4} my={4}>
           <Heading as="h2" size="lg" mb={4}>
             {currentStep.question_text}
           </Heading>
-          <Box>
-            <Stack {...group} direction="column" alignItems="center">
-              {currentStep.answer_options?.map((answer) => {
-                const radio = getRadioProps({ value: answer.id.toString() })
-                return (
-                  <RadioCard key={answer.id} {...radio}>
-                    <Box width={{ base: 'sm', lg: 'lg' }} textAlign="center">
-                      {answer.option_text}
-                    </Box>
-                  </RadioCard>
-                )
-              })}
+          <Stack {...group} direction="column" justifyItems={'center'}>
+            {currentStep.answer_options?.map((answer) => {
+              const radio = getRadioProps({ value: answer.id.toString() })
+              return (
+                <RadioCard key={answer.id} {...radio}>
+                  {answer.option_text}
+                </RadioCard>
+              )
+            })}
+          </Stack>
+          <Box my={8} justifyContent={'space-between'}>
+            <Stack
+              direction={{ base: 'column', sm: 'row' }}
+              pt={4}
+              mt={4}
+              justifyContent="space-between"
+            >
+              {currentStepIndex > 0 && (
+                <Button
+                  bg="gray.500"
+                  order={{ base: 2, sm: 1 }}
+                  fontSize={{ base: 'sm', sm: 'md' }}
+                  onClick={goToPreviousStep}
+                >
+                  Zpět
+                </Button>
+              )}
+              {currentStepIndex < questionData.steps.length - 1 && (
+                <Button
+                  order={{ base: 1, sm: 2 }}
+                  fontSize={{ base: 'sm', sm: 'md' }}
+                  onClick={goToNextStep}
+                  isDisabled={selectedAnswer === null}
+                >
+                  Pokračuj
+                </Button>
+              )}
             </Stack>
-          </Box>
-          <Box mt={4}>
-            {currentStepIndex > 0 && (
-              <Button
-                bg="gray.500"
-                order={{ base: 2, sm: 1 }}
-                fontSize={{ base: 'sm', sm: 'md' }}
-                onClick={goToPreviousStep}
-                mr={2}
-              >
-                Zpět
-              </Button>
-            )}
-            {currentStepIndex < questionData.steps.length - 1 && (
-              <Button
-                order={{ base: 1, sm: 2 }}
-                fontSize={{ base: 'sm', sm: 'md' }}
-                onClick={goToNextStep}
-                isDisabled={selectedAnswer === null}
-              >
-                Pokračuj
-              </Button>
-            )}
           </Box>
         </Box>
       ) : (

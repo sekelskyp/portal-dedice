@@ -39,7 +39,7 @@ export function AccordionHelperItem({
   }
 
   return (
-    <AccordionItem bg="gray.200" my={4} borderRadius="xl">
+    <AccordionItem bg="gray.200" mb={4} borderRadius="xl">
       <AccordionButton
         pl={{ base: 4, sm: 6 }}
         borderRadius="xl"

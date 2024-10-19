@@ -28,13 +28,13 @@ export function WizardPage() {
   }
 
   return (
-    <Box width={{ base: '85%', md: '60%' }} mx="auto" mt="4">
+    <Box width={{ base: '85%', md: '60%' }} mx="auto" mt="8">
       <StepperProgress
         step={step}
         questionsProgress={questionsProgress}
         treeProgress={treeProgress}
       />
-      <Box textAlign="center" mb="8">
+      <Box textAlign="center" my="8">
         {step === 1 && (
           <Box>
             <StepperHeading text="Identifikace zůstavitele" />
@@ -70,7 +70,7 @@ export function WizardPage() {
         )}
         {step === 3 && (
           <Box>
-            <StepperHeading text="Rozhodovací strom..." />
+            <StepperHeading text="Rozhodovací strom" />
             <QuestionnaireStep />
           </Box>
         )}
