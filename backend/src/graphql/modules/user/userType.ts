@@ -14,12 +14,3 @@ export class User {
   @Field()
   password!: string
 }
-
-@ObjectType()
-export class AuthInfo {
-  @Field(() => User)
-  user!: User
-
-  @Field()
-  token!: string
-}

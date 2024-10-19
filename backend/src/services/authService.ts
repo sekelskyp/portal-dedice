@@ -1,32 +1,39 @@
-import { and, eq } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 
 import { contact, lower, user } from '@backend/db/schema'
-import { Contact } from '@backend/graphql/modules/user/contactType'
-import { User } from '@backend/graphql/modules/user/userType'
 
-import { AuthInfo, RegisterInput } from '../graphql/modules/auth/authType'
 import { createToken } from '../libs/jwt'
 import { CustomContext } from '../types/types'
 
 import { comparePassword, hashPassword } from './passwordHashService'
 
-export interface LoginResponse {
+export interface AuthResponse {
+  userId: number
   token: string
-  user: User
 }
 
-/**
- * Service to log in a user by verifying the password and generating a JWT token
- * @param login - The login provided by the user
- * @param password - The password provided by the user (in plain text)
- * @param context - The GraphQL context containing the db connection
- * @returns A LoginResponse object with JWT token and user info
- */
+export interface RegisterUserDTO {
+  login: string
+  password: string
+  contact: {
+    name: string
+    surname: string
+    dateOfBirth: Date
+    gender: string
+    phone: string
+    email: string
+    country: string
+    city: string
+    street: string
+    postalCode: string
+  }
+}
+
 export const loginUser = async (
   login: string,
   password: string,
-  context: CustomContext // Pass context containing the db
-): Promise<LoginResponse> => {
+  context: CustomContext
+): Promise<AuthResponse> => {
   const { db } = context // Get the db from the context
 
   // Find the user in the database by login
@@ -35,10 +42,12 @@ export const loginUser = async (
     .from(user)
     .where(eq(lower(user.login), login.toLowerCase()))
 
-  if (!userRecord) {
+  if (userRecord.length === 0) {
     throw new Error('User not found')
   }
+
   const foundUser = userRecord[0]
+
   // Compare the provided password with the stored hashed password
   const isPasswordValid = await comparePassword(password, foundUser.password)
   if (!isPasswordValid) {
@@ -46,46 +55,45 @@ export const loginUser = async (
   }
 
   // Generate a JWT token
-  const token = createToken({ userId: user.id })
+  const token = createToken({ userId: foundUser.id })
 
-  // Return both the token and the user data
+  // Return only userId and token
   return {
-    user: { ...foundUser },
+    userId: foundUser.id,
     token,
   }
 }
 
 export const registerUser = async (
-  registerInput: RegisterInput,
+  input: RegisterUserDTO,
   context: CustomContext // Pass context containing the db
-): Promise<User> => {
+): Promise<AuthResponse> => {
   const { db } = context // Get the db from the context
 
   // Check if the login (email) is already in use
   const existingUserRecord = await db
     .select()
     .from(user)
-    .where(eq(lower(user.login), registerInput.contact.email.toLowerCase()))
+    .where(eq(lower(user.login), input.login.toLowerCase()))
 
   if (existingUserRecord) {
     throw new Error('Login already in use')
   }
 
   // Hash the password
-  const hashedPassword = await hashPassword(registerInput.password)
-
+  const hashedPassword = await hashPassword(input.password)
   const contactRecord = await db
     .insert(contact)
     .values({
-      name: registerInput.contact.name,
-      surname: registerInput.contact.surname,
-      dateOfBirth: registerInput.contact.dateOfBirth,
-      gender: registerInput.contact.gender,
-      email: registerInput.contact.email,
-      country: registerInput.contact.country,
-      city: registerInput.contact.city,
-      street: registerInput.contact.street,
-      postalCode: registerInput.contact.postalCode,
+      name: input.contact.name,
+      surname: input.contact.surname,
+      dateOfBirth: input.contact.dateOfBirth,
+      gender: input.contact.gender,
+      email: input.contact.email,
+      country: input.contact.country,
+      city: input.contact.city,
+      street: input.contact.street,
+      postalCode: input.contact.postalCode,
     })
     .$returningId()
 
@@ -95,12 +103,13 @@ export const registerUser = async (
     .insert(user)
     .values({
       contactId: contactRecordId,
-      login: registerInput.login,
+      login: input.login,
       password: hashedPassword,
     })
     .$returningId()
 
-  /* ASSEMBLE MUTATION RESPONSE */
+  // Generate a JWT token
+  const token = createToken({ userId: userRecord[0].id })
 
-  return { id: userRecord[0].id, contactId: userRecord[0].conta }
+  return { userId: userRecord[0].id, token: token }
 }

@@ -5,11 +5,11 @@ import { User } from '@backend/graphql/modules/user/userType'
 
 @ObjectType()
 export class AuthInfo {
-  @Field()
-  token!: string
+  @Field(() => User)
+  user!: User
 
   @Field()
-  user!: User
+  token!: string
 }
 
 @ObjectType()

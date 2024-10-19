@@ -1,13 +1,10 @@
-import * as argon2 from 'argon2'
 import { eq } from 'drizzle-orm'
-import { GraphQLError } from 'graphql/error'
-import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql'
+import { Arg, Ctx, Query, Resolver } from 'type-graphql'
 
-import { contact, lower, user } from '@backend/db/schema'
-import { createToken } from '@backend/libs/jwt'
+import { user } from '@backend/db/schema'
 import { type CustomContext } from '@backend/types/types'
 
-import { AuthInfo, User } from './userType'
+import { User } from './userType'
 
 @Resolver(() => User)
 export class UserResolver {
@@ -29,94 +26,5 @@ export class UserResolver {
   @Query(() => [User])
   async users(@Ctx() { db }: CustomContext): Promise<User[]> {
     return await db.select().from(user)
-  }
-
-  @Mutation(() => AuthInfo)
-  async signIn(
-    @Arg('email') email: string,
-    @Arg('password') password: string,
-    @Ctx() { db }: CustomContext
-  ): Promise<AuthInfo> {
-    const userRecord = await db
-      .select()
-      .from(user)
-      .where(eq(lower(user.login), email.toLowerCase()))
-
-    if (userRecord.length === 0) {
-      throw new GraphQLError('Nesprávný email nebo heslo')
-    }
-
-    const foundUser = userRecord[0]
-    if (await argon2.verify(foundUser.password, password)) {
-      const token = createToken({ id: foundUser.id })
-
-      return {
-        user: { ...foundUser },
-        token,
-      }
-    } else {
-      throw new GraphQLError('Nesprávný email nebo heslo')
-    }
-  }
-
-  @Mutation(() => AuthInfo)
-  async signUp(
-    @Arg('email') email: string,
-    @Arg('password') password: string,
-    @Arg('name') name: string,
-    @Arg('email') login: string,
-    @Arg('surname') surname: string,
-    @Arg('gender') gender: string,
-    @Ctx() { db }: CustomContext
-  ): Promise<AuthInfo> {
-    /* VALIDATION */
-    const userByEmail = await db
-      .select()
-      .from(contact)
-      .where(eq(contact.email, email))
-
-    if (userByEmail.length > 0) {
-      throw new GraphQLError('Email already registered')
-    }
-
-    /** PASSWORD HASHING */
-    const passwordHash = await argon2.hash(password)
-
-    /** CONTACT INSERT */
-    const insertContact = await db
-      .insert(contact)
-      .values({
-        email,
-        name,
-        surname,
-        gender,
-      })
-      .$returningId()
-
-    const contactId = insertContact[0].id
-
-    /* DATABASE INSERT */
-    const insertResult = await db
-      .insert(user)
-      .values({
-        contactId,
-        login,
-        password: passwordHash,
-      })
-      .$returningId()
-
-    /* ASSEMBLE MUTATION RESPONSE */
-    const id = insertResult[0].id
-
-    const token = createToken({ id })
-
-    const userObject = {
-      id,
-      login,
-      contactId,
-      password,
-    }
-
-    return { user: userObject, token: token }
   }
 }
