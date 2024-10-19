@@ -8,7 +8,6 @@ import {
   useRadioGroup,
   UseRadioProps,
 } from '@chakra-ui/react'
-import { audio } from 'framer-motion/client'
 
 import questionData from '../questionnaire.json'
 
@@ -41,8 +40,8 @@ const RadioCard = (props: RadioCardProps) => {
   const checkbox = getCheckboxProps()
 
   return (
-    <Box justifyContent={'center'}>
-      <input {...input} />
+    <Box as="label" justifyContent={'center'}>
+      <input {...input} style={{ display: 'none' }} />
       <Box
         {...checkbox}
         cursor="pointer"
