@@ -71,6 +71,7 @@ export function NotaryAssignment({
         <Heading
           size={{ base: 'sm', sm: 'md', md: 'lg', lg: 'xl' }}
           textAlign="center"
+          mb={6}
         >
           JUDr. Zdeněk Kratochvíl
         </Heading>
@@ -91,7 +92,7 @@ export function NotaryAssignment({
         p={8}
         borderRadius="xl"
         textAlign="left"
-        mt={2}
+        mt={8}
       >
         <Stack direction="column">
           <Heading size={{ base: 'sm', sm: 'md', md: 'lg', lg: 'xl' }}>

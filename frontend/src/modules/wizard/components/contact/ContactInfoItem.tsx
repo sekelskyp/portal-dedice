@@ -1,5 +1,6 @@
 import { Stack, Text } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
+import { z } from 'zod'
 
 export interface ContactInfoItemProps {
   icon: JSX.Element
@@ -7,7 +8,9 @@ export interface ContactInfoItemProps {
 }
 
 export function ContactInfoItem({ icon, text }: ContactInfoItemProps) {
-  const isEmail: boolean = text.includes('@')
+  const emailSchema = z.string().email()
+
+  const isEmail: boolean = emailSchema.safeParse(text).success
 
   return (
     <Stack

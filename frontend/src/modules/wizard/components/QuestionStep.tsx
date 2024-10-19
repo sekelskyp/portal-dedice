@@ -34,7 +34,6 @@ export function QuestionStep({
           borderRadius="xl"
         >
           <Heading
-            //size="xs"
             size={{ base: 'xs', sm: 'sm', md: 'md', lg: 'lg' }}
             py={{ base: 2, sm: 6 }}
             px={{ base: 4, sm: 10 }}
