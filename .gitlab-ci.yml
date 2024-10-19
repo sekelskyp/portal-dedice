@@ -40,7 +40,7 @@ format:
     policy: pull
   script:
     - yarn format:check
-  dependencies:
+  needs:
     - install
 
 lint:
@@ -56,8 +56,8 @@ lint:
     policy: pull
   script:
     - yarn lint
-  dependencies:
-    - install
+  needs:
+    - format
 
 test-frontend:
   stage: verify
@@ -72,8 +72,8 @@ test-frontend:
     policy: pull
   script:
     - yarn frontend test
-  dependencies:
-    - install
+  needs:
+    - lint
 
 build-frontend:
   stage: verify
@@ -89,8 +89,8 @@ build-frontend:
     policy: pull
   script:
     - yarn frontend build
-  dependencies:
-    - install
+  needs:
+    - test-frontend
 
 build-backend:
   stage: verify
@@ -106,8 +106,8 @@ build-backend:
     policy: pull
   script:
     - yarn backend build
-  dependencies:
-    - install
+  needs:
+    - lint
 
 pull-changes:
   stage: deploy
