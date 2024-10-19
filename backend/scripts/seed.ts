@@ -58,19 +58,19 @@ async function seed() {
         id: 1,
         contactId: 1,
         password: await argon2.hash('heaslo123456b!'),
-        login: 'gatyou',
+        login: 'gatyou@quacker.com',
       },
       {
         id: 2,
         contactId: 2,
         password: await argon2.hash('heaslo123456b!'),
-        login: 'hocpet',
+        login: 'hocpet@quacker.com',
       },
       {
         id: 3,
         contactId: 3,
         password: await argon2.hash('heaslo123456b!'),
-        login: 'hocpet_professional',
+        login: 'hocpet@mail.com',
       },
     ])
 

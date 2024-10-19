@@ -23,3 +23,24 @@ export class AuthInfo {
   @Field()
   token!: string
 }
+
+@ObjectType()
+export class UserProfile {
+  @Field(() => ID)
+  id!: number
+
+  @Field()
+  name!: string
+
+  @Field()
+  surName!: string
+}
+
+@ObjectType()
+export class ChangePassword {
+  @Field(() => ID)
+  id!: number
+
+  @Field()
+  email!: string
+}
