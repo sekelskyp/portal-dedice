@@ -9,7 +9,7 @@ import { SignOutPage } from './modules/auth/pages/SignOut'
 import { AboutPage } from './modules/static-pages/pages/AboutPage'
 import { BlogPage } from './modules/static-pages/pages/BlogPage'
 import { GuidePage } from './modules/static-pages/pages/GuidePage'
-import { WizardPage } from './modules/static-pages/pages/WizardPage'
+import { WizardPage } from './modules/wizard/pages/WizardStepPage'
 import { Layout } from './shared/layout'
 import { route } from './route'
 

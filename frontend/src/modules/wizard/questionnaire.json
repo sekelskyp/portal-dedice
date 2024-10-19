@@ -1,0 +1,75 @@
+{
+  "steps": [
+    {
+      "id": 1,
+      "question_text": "Měl zůstavitel/ka manžela/manželku?",
+      "answer_options": [
+        {
+          "id": 1,
+          "option_text": "Ano",
+          "option_value": "ano"
+        },
+        {
+          "id": 2,
+          "option_text": "Ne",
+          "option_value": "ne"
+        }
+      ],
+      "dependencies": []
+    },
+    {
+      "id": 2,
+      "question_text": "Měli zúžené SJM?",
+      "answer_options": [
+        {
+          "id": 1,
+          "option_text": "Ano",
+          "option_value": "ano"
+        },
+        {
+          "id": 2,
+          "option_text": "Ne",
+          "option_value": "ne"
+        }
+      ],
+      "dependencies": [
+        {
+          "questionId": 1,
+          "answerId": 1
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question_text": "Je v pozůstalosti závěť?",
+      "answer_options": [
+        {
+          "id": 1,
+          "option_text": "Ano",
+          "option_value": "ano"
+        },
+        {
+          "id": 2,
+          "option_text": "Ne",
+          "option_value": "ne"
+        }
+      ],
+      "dependencies": [
+        {
+          "questionId": 1,
+          "answerId": 2
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question_text": "Tady to dál nejde.",
+      "dependencies": [
+        {
+          "questionId": 3,
+          "answerId": 2
+        }
+      ]
+    }
+  ]
+}
