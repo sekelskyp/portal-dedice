@@ -60,9 +60,9 @@ export const Footer = () => {
             alignItems="center"
           >
             <Heading size="lg" whiteSpace="nowrap">
-              Portál dědice
+              Portál Dědice
             </Heading>
-            <Image h={16} src="/logo-nkcr.png" alt="logo" />
+            <Image h={20} src="/logo.png" alt="logo" />
           </Stack>
           <Stack
             direction={{ base: 'column', md: 'row' }}
