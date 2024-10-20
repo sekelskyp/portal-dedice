@@ -9,7 +9,7 @@ import { z } from 'zod'
 
 import { Form } from '../../../shared/forms/Form'
 
-import { PlacesAutocomplete } from './SuggestionsInput'
+import { PlacesAutocomplete } from './PlacesAutocomplete'
 
 const schema = z.object({
   sex: z.string().min(1, 'Pohlaví je povinné.'),
@@ -75,6 +75,7 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
               inputProps={{ fontSize: { base: 'sm', md: 'md' } }}
               isRequired
             ></InputControl>
+            <PlacesAutocomplete />
             <Spacer></Spacer>
             <Box>
               <SubmitButton>Potvrdit údaje</SubmitButton>
@@ -82,8 +83,6 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
           </Stack>
         </Container>
       </Form>
-
-      <PlacesAutocomplete />
     </>
   )
 }
