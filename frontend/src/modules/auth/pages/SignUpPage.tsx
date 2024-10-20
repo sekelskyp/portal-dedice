@@ -1,7 +1,14 @@
 import { useCallback } from 'react'
-import { useToast } from '@chakra-ui/react'
+import {
+  Alert,
+  AlertIcon,
+  Container,
+  Heading,
+  Stack,
+  useToast,
+} from '@chakra-ui/react'
 
-import { Box } from '@frontend/shared/design-system'
+import resources from '@frontend/resources'
 import { Page } from '@frontend/shared/layout'
 
 import { SignUpForm } from '../components/SignUpForm'
@@ -22,9 +29,8 @@ export function SignUpPage() {
       signUpRequest({ variables })
         .then(() =>
           toast({
-            title: 'Ověření emailové adresy',
-            description:
-              'Pro dokončení registrace prosím klikněte na odkaz, který jsme Vám zaslali mailem',
+            title: resources.auth.pages.signUp.emailConfirmation.title,
+            description: resources.auth.pages.signUp.emailConfirmation.desc,
             status: 'loading',
             duration: 10000,
             position: 'top',
@@ -33,8 +39,8 @@ export function SignUpPage() {
         )
         .catch(() => {
           toast({
-            title: 'Ověření selhalo',
-            description: 'Zkuste to později nebo kontaktujte správce systému',
+            title: resources.auth.pages.signUp.failed.title,
+            description: resources.auth.pages.signUp.failed.desc,
             status: 'error',
             duration: 10000,
             position: 'top',
@@ -47,10 +53,18 @@ export function SignUpPage() {
 
   return (
     <Page>
-      <SignUpForm onSubmit={handleSignUpFormSubmit}></SignUpForm>
-      {signUpRequestState.error ? (
-        <Box color="red">{signUpRequestState.error.message}</Box>
-      ) : null}
+      <Container as={Stack} gap={4}>
+        <Heading as="h2" size={'2xl'}>
+          {resources.auth.pages.signUp.title}
+        </Heading>
+        {signUpRequestState.error ? (
+          <Alert status="error">
+            <AlertIcon />
+            {signUpRequestState.error.message}
+          </Alert>
+        ) : null}
+        <SignUpForm onSubmit={handleSignUpFormSubmit}></SignUpForm>
+      </Container>
     </Page>
   )
 }
