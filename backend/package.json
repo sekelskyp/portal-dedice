@@ -15,8 +15,7 @@
     "postbuild": "nodetouch tmp/restart.txt",
     "db:migrations:generate": "drizzle-kit generate",
     "db:migrate": "ts-node -r dotenv-flow/config ./scripts/migrate.ts",
-    "db:seed": "ts-node -r dotenv-flow/config ./scripts/seed.ts",
-    "rimraf": "./node_modules/rimraf/bin.js"
+    "db:seed": "ts-node -r dotenv-flow/config ./scripts/seed.ts"
   },
   "dependencies": {
     "@apollo/server": "^4.11.0",
@@ -41,7 +40,6 @@
     "mysql2": "^3.11.2",
     "nodemailer": "^6.9.15",
     "reflect-metadata": "^0.2.2",
-    "rimraf": "^6.0.1",
     "type-graphql": "^2.0.0-rc.2",
     "unique-slug": "^4.0.0"
   },
@@ -52,6 +50,7 @@
     "@types/jsonwebtoken": "^9.0.6",
     "drizzle-kit": "^0.24.2",
     "nodemon": "^3.1.4",
+    "rimraf": "^6.0.1",
     "shelljs": "^0.8.5",
     "touch": "^3.1.1",
     "ts-node": "^10.9.2",
