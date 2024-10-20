@@ -1,6 +1,5 @@
 import { useCallback } from 'react'
 
-import { Box } from '@frontend/shared/design-system'
 import { Page } from '@frontend/shared/layout'
 
 import { SignInForm } from '../components/SignInForm'
@@ -18,10 +17,10 @@ export function SignInPage() {
 
   return (
     <Page>
-      <SignInForm onSubmit={handleSignInFormSubmit} />
-      {signInRequestState.error ? (
-        <Box color="red">{signInRequestState.error.message}</Box>
-      ) : null}
+      <SignInForm
+        onSubmit={handleSignInFormSubmit}
+        error={signInRequestState.error}
+      />
     </Page>
   )
 }
