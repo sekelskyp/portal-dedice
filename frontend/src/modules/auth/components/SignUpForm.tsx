@@ -1,4 +1,4 @@
-import { Container, Heading, Spacer, Stack } from '@chakra-ui/react'
+import { Spacer, Stack } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   InputControl,
@@ -6,6 +6,8 @@ import {
   SubmitButton,
 } from 'react-hook-form-chakra'
 import { z } from 'zod'
+
+import resources from '@frontend/resources'
 
 import { Form } from '../../../shared/forms/Form'
 import { passwordSchema } from '../passwordSchema'
@@ -43,44 +45,54 @@ export type SignUpFormProps = {
 export function SignUpForm({ onSubmit }: SignUpFormProps) {
   return (
     <Form onSubmit={onSubmit} resolver={zodResolver(schema)} noValidate>
-      <Container p={0}>
-        <Stack gap={5}>
-          <Heading as="h2">Registrace</Heading>
-          <InputControl name="name" label="Jméno" isRequired></InputControl>
-          <InputControl
-            name="surname"
-            label="Příjmení"
-            isRequired
-          ></InputControl>
-          <SelectControl
-            name="gender"
-            label="Pohlaví"
-            selectProps={{ placeholder: 'Zvolte pohlaví' }}
-          >
-            <option value="male">Muž</option>
-            <option value="female">Žena</option>
-          </SelectControl>
-          <InputControl
-            name="email"
-            label="Emailová adresa"
-            isRequired
-          ></InputControl>
-          <InputControl
-            name="password"
-            label="Heslo"
-            inputProps={{ type: 'password' }}
-            isRequired
-          ></InputControl>
-          <InputControl
-            name="confirmPassword"
-            label="Potvrdit heslo"
-            inputProps={{ type: 'password' }}
-            isRequired
-          ></InputControl>
-          <Spacer></Spacer>
-          <SubmitButton>Vytvořit účet</SubmitButton>
-        </Stack>
-      </Container>
+      <Stack gap={4}>
+        <InputControl
+          name="name"
+          label={resources.auth.forms.signUp.name}
+          isRequired
+        ></InputControl>
+        <InputControl
+          name="surname"
+          label={resources.auth.forms.signUp.surname}
+          isRequired
+        ></InputControl>
+        <SelectControl
+          name="gender"
+          label={resources.auth.forms.signUp.gender.label}
+          selectProps={{
+            placeholder: resources.auth.forms.signUp.gender.placeholder,
+          }}
+        >
+          <option value="male">
+            {resources.auth.forms.signUp.gender.values.male}
+          </option>
+          <option value="female">
+            {resources.auth.forms.signUp.gender.values.female}
+          </option>
+        </SelectControl>
+        <InputControl
+          name="email"
+          label={resources.auth.forms.shared.email.label}
+          inputProps={{
+            placeholder: resources.auth.forms.shared.email.placeholder,
+          }}
+          isRequired
+        ></InputControl>
+        <InputControl
+          name="password"
+          label={resources.auth.forms.shared.password}
+          inputProps={{ type: 'password' }}
+          isRequired
+        ></InputControl>
+        <InputControl
+          name="confirmPassword"
+          label={resources.auth.forms.signUp.confirmPassword}
+          inputProps={{ type: 'password' }}
+          isRequired
+        ></InputControl>
+        <Spacer></Spacer>
+        <SubmitButton>Vytvořit účet</SubmitButton>
+      </Stack>
     </Form>
   )
 }
