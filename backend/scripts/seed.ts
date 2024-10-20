@@ -1,7 +1,13 @@
 import { MySql2Database } from 'drizzle-orm/mysql2'
 
 import { getConnection } from '../src/db/db'
-import { beneficiary, contact, user } from '../src/db/schema'
+import {
+  beneficiary,
+  contact,
+  notary,
+  notaryDateRule,
+  user,
+} from '../src/db/schema'
 import { hashPassword } from '../src/services/passwordHashService'
 
 import { seedNotariesAndDateRules } from './seedNotaries'
@@ -82,6 +88,12 @@ async function seed() {
   const db = connection.db
 
   try {
+    // delete previous data (idk if we really need this when we have DB in docker and can just remove the volume and start fresh)
+    await db.delete(beneficiary)
+    await db.delete(notary)
+    await db.delete(user)
+    await db.delete(contact)
+    await db.delete(notaryDateRule)
     await seedNotariesAndDateRules(db)
     await populateDatabase(db)
   } catch (error) {

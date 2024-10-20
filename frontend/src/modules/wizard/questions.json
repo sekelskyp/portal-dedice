@@ -1,0 +1,96 @@
+[
+  {
+    "id": 1,
+    "heading": "Pojďte se v naší aplikaci dozvědět více o tom, co vás čeká v pozůstalostním řízení.",
+    "button": "OK",
+    "question": [
+      {
+        "title": "Co aplikace nabízí?",
+        "description": "Tato aplikace vám srozumitelně vysvětlí, co vás v pozůstalostním řízení čeká a díky návodu zjistíte, jaké jsou možnosti rozdělení majetku v pozůstalosti.."
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "heading": "Po úmrtí člověka vystaví matriční úřad umrtní list, který zasílá  místně příslušnému soudu. Ten následně pověří dle rozvrhu práce příslušného notáře.",
+    "button": "Co se děje pak?",
+    "question": [
+      {
+        "title": "Jak dlouho trvá, než se spis dostane k notář?",
+        "description": "Může to trvat až jeden měsíc."
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "heading": "Notář nařizuje předběžné šetření, jehož cílem je zjistit majetek zůstavitele a jeho osobní poměry ke dni úmrtí.",
+    "button": "Kdy PS nařídí?"
+  },
+  {
+    "id": 4,
+    "heading": "Notář by měl postupovat bezodkladně, ale záleží notář od notáře. Vyčkejte, až vás notář kontaktuje, nebo využijte naší aplikaci Online PŠ a využijte možnosti vyřešit tuto část řízení v pohodlí domova!",
+    "button": "Co přesně PŠ obnáší?",
+    "question": [
+      {
+        "title": "Jak je možné, že délka řízení či rychlost notářů jsou odlišné?",
+        "description": "Notáři nemají stejný počet případů a také jejich složitost a náročnost se různí. Proto se může stát, že notáři v řízení postupují s jinou rychlostí."
+      },
+      {
+        "title": "Proč je na PŠ pozván pouze vypravitel pohřbu?",
+        "description": "Jedná se o úvodní setkání s osobou nejbližší zůstaviteli. Při závěrečném řízení již budou účastni všichni dědicové."
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "heading": "Notář se Vás bude ptát na majetek, který zůstavitel vlastnil ke dni úmrtí, především na to, kde měl bankovní účty aj. majetek. Pokud měl zůstavitel v době úmrtí manželku, bude se ptát na stejné dotazy i vzhledem k její osobě.",
+    "button": "Co si mám přinést s sebou?"
+  },
+  {
+    "id": 6,
+    "heading": "S sebou si doneste doklad totožnosti, oddací list, závěť, rodné listy. Udělejte si přehled v majetkových záležitostech zůstavitele (bakovní účty apod.).",
+    "button": "Co se děje potom?",
+    "question": [
+      {
+        "title": "Co když je v pozůstalosti automobil?",
+        "description": "Přineste s sebou velký technický průkaz vozidla."
+      },
+      {
+        "title": "Co když je v pozůstalosti nemovitost?",
+        "description": "Bude potřeba zajistit odhad nemovitosti. Tento odhad za poplatek zpracuje kterákoliv realitní kancelář."
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "heading": "Notář zjišťuje majetek, doptává se institucí, dělá přehled majetku. Dokud není zjištění kompletní, není možné pokračovat dále.",
+    "button": "Aha, mám něco dělat?"
+  },
+  {
+    "id": 8,
+    "heading": "Ne, vyčkejte, až vás notář kontaktuje s případnými dotazy k doplnění majetku. Notář Vás může případne kontaktovat již kvůli nařízení soudního jednání, které je standardně závěrem pozůstalostního řízení.",
+    "button": "Co obnáší soudní jednání?",
+    "question": [
+      {
+        "title": "Jak dlouho trvá, než notář toto jednání nařídí?",
+        "description": "Na tuto otázku bohužel neexistuje jasná odpověď. Notář postupuje tak rychle, jak dokáže zjistit informace o majeteku zůstavitele. Je tady závislý také na součinnosti bankovních institucí apod.Pokud jde vše bez problémů, je možné, že nařídí řízení za 1-2 měsíce po Předběžném šetření. Není ale výjimkou, že je tento časový úsek delší."
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "heading": "Během tohoto jednání jsou přítomni všichni dědicové, vč. pozůstalé manželky. Cílem je mezi aby se tito účastníci dohodli na rozdělení majetku v pozůstalosti",
+    "button": "OK.",
+    "question": [
+      {
+        "title": "Je možné nechat se zastoupit na plnou moc?",
+        "description": "Ano, kontaktuje v tomto případě notáře, který Vám pro tyto účely vydá speciální tiskopis plné moci. Současně Vám sdělí, zda je nutné, aby měla ověřený podpis."
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "heading": "Chcete vědět víc o možnostech rozdělení pozůstalosti?",
+    "button": "Ano."
+  }
+]

@@ -25,9 +25,9 @@ export const Header = () => {
 const AppLink = () => {
   return (
     <HStack as={Link} to={'/'} gap={4}>
-      <Image h={10} src="/logo-nkcr.png" />
+      <Image h={10} src="/logo.png" />
       <Heading size="lg" whiteSpace="nowrap">
-        Portál dědice
+        Portál Dědice
       </Heading>
     </HStack>
   )

@@ -21,6 +21,14 @@ type Mutation {
   requestPasswordReset(email: String!): Boolean!
   signIn(login: String!, password: String!): AuthInfo!
   signUp(registerInput: RegisterInput!): AuthInfo!
+type ChangePassword {
+  email: String!
+  id: ID!
+}
+
+type Mutation {
+  changePassword(newPassword: String!, oldPassword: String!): ChangePassword!
+  updateUserProfile(name: String!, surname: String!): UserProfile!
 }
 
 type Query {
@@ -54,4 +62,10 @@ type User {
   id: ID!
   login: String!
   password: String!
+}
+
+type UserProfile {
+  id: ID!
+  name: String!
+  surName: String!
 }

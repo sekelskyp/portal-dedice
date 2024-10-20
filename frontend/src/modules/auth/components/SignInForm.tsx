@@ -1,4 +1,4 @@
-import { Container, Heading, Spacer, Stack, Text } from '@chakra-ui/react'
+import { Container, Flex, Heading, Spacer, Stack, Text } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { InputControl, SubmitButton } from 'react-hook-form-chakra'
 import { z } from 'zod'
@@ -23,7 +23,7 @@ export function SignInForm({ onSubmit }: SignInFormProps) {
     <Form onSubmit={onSubmit} resolver={zodResolver(schema)} noValidate>
       <Container p={0}>
         <Stack gap={4}>
-          <Heading as="h2" size={'2xl'}>
+          <Heading as="h3" size={'h3'}>
             Přihlášení
           </Heading>
           <InputControl
@@ -40,8 +40,13 @@ export function SignInForm({ onSubmit }: SignInFormProps) {
           <Spacer></Spacer>
           <SubmitButton>Přihlasit se</SubmitButton>
           <Spacer></Spacer>
-          <Text as="b">Nemáte účet?</Text>
-          <RouterLink to={route.home()}>Zaregistrujte se</RouterLink>
+          <Flex gap={2}>
+            <Text as="b">Nemáte účet?</Text>
+            <RouterLink to={route.signUp()}>Zaregistrujte se</RouterLink>
+          </Flex>
+          <RouterLink to={route.resetPassword()}>
+            Zapomněli jste heslo?
+          </RouterLink>
         </Stack>
       </Container>
     </Form>
