@@ -7,7 +7,7 @@ import { AddressInput, Notary } from './notaryAssignmentType'
 
 @Resolver()
 export class NotaryAssignmentResolver {
-  @Query(() => Number, { nullable: true })
+  @Query(() => Notary, { nullable: true })
   async getNotaryByAddressAndBirthDate(
     @Arg('address') address: AddressInput,
     @Arg('expirationDate') expirationDate: Date,

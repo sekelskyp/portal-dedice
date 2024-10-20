@@ -17,8 +17,8 @@ export class Contact {
   @Field()
   gender!: string
 
-  @Field()
-  phone!: string | null
+  @Field(() => String, { nullable: true })
+  phone?: string | null
 
   @Field()
   email!: string
