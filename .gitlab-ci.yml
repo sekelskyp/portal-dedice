@@ -11,7 +11,6 @@ variables:
 
 .rules:
   rules:
-    - when: manual
     - if: ($CI_PIPELINE_SOURCE == "merge_request_event")
     - if: ($CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push")
 
@@ -29,13 +28,16 @@ install:
   image: node:alpine
   rules:
     - !reference [.rules, rules]
+    - changes: 
+      - yarn.lock
   cache:
     <<: *cache_config
-    policy: pull-push
+    policy: push
   script:
     - echo 'yarn-offline-mirror ".yarn-cache/"' >> .yarnrc
     - echo 'yarn-offline-mirror-pruning true' >> .yarnrc
     - yarn install --frozen-lockfile
+    
 
 format:
   stage: verify
