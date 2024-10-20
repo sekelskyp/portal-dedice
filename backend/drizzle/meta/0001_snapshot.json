@@ -1,0 +1,821 @@
+{
+  "version": "5",
+  "dialect": "mysql",
+  "id": "2fe52045-b889-47d0-9c5a-dca2cdeb11a7",
+  "prevId": "1e7d5300-f8fa-4433-9a05-b04d548d6e91",
+  "tables": {
+    "Asset": {
+      "name": "Asset",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "inheritanceProcedureId": {
+          "name": "inheritanceProcedureId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "value": {
+          "name": "value",
+          "type": "float",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "Asset_id": {
+          "name": "Asset_id",
+          "columns": ["id"]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "Beneficiary": {
+      "name": "Beneficiary",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "deceasedRelationId": {
+          "name": "deceasedRelationId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "Beneficiary_id": {
+          "name": "Beneficiary_id",
+          "columns": ["id"]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "BeneficiaryDeceasedRelation": {
+      "name": "BeneficiaryDeceasedRelation",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "familyRelation": {
+          "name": "familyRelation",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "BeneficiaryDeceasedRelation_id": {
+          "name": "BeneficiaryDeceasedRelation_id",
+          "columns": ["id"]
+        }
+      },
+      "uniqueConstraints": {
+        "BeneficiaryDeceasedRelation_familyRelation_unique": {
+          "name": "BeneficiaryDeceasedRelation_familyRelation_unique",
+          "columns": ["familyRelation"]
+        }
+      }
+    },
+    "BeneficiaryInheritanceProcedureRel": {
+      "name": "BeneficiaryInheritanceProcedureRel",
+      "columns": {
+        "beneficiaryId": {
+          "name": "beneficiaryId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "inheritanceProcedureId": {
+          "name": "inheritanceProcedureId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "BeneficiaryMeetingRel": {
+      "name": "BeneficiaryMeetingRel",
+      "columns": {
+        "beneficiaryId": {
+          "name": "beneficiaryId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "meetingId": {
+          "name": "meetingId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "BeneficiaryTaskRel": {
+      "name": "BeneficiaryTaskRel",
+      "columns": {
+        "beneficiaryId": {
+          "name": "beneficiaryId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "taskId": {
+          "name": "taskId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "Chat": {
+      "name": "Chat",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "inheritanceProcedureId": {
+          "name": "inheritanceProcedureId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "Chat_id": {
+          "name": "Chat_id",
+          "columns": ["id"]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "ChatMessage": {
+      "name": "ChatMessage",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "chatId": {
+          "name": "chatId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "userId": {
+          "name": "userId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "body": {
+          "name": "body",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "ChatMessage_id": {
+          "name": "ChatMessage_id",
+          "columns": ["id"]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "Contact": {
+      "name": "Contact",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "surname": {
+          "name": "surname",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "dateOfBirth": {
+          "name": "dateOfBirth",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "gender": {
+          "name": "gender",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "phone": {
+          "name": "phone",
+          "type": "char(15)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "emailUniqueIndex": {
+          "name": "emailUniqueIndex",
+          "columns": ["(lower(`email`))"],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "Contact_id": {
+          "name": "Contact_id",
+          "columns": ["id"]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "Document": {
+      "name": "Document",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "inheritanceProcedureId": {
+          "name": "inheritanceProcedureId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "taskId": {
+          "name": "taskId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "userOwnerId": {
+          "name": "userOwnerId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "createDate": {
+          "name": "createDate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "(now())"
+        },
+        "fileName": {
+          "name": "fileName",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "fileType": {
+          "name": "fileType",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "fileData": {
+          "name": "fileData",
+          "type": "binary",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "Document_id": {
+          "name": "Document_id",
+          "columns": ["id"]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "FAQ": {
+      "name": "FAQ",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "question": {
+          "name": "question",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "answer": {
+          "name": "answer",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "createDate": {
+          "name": "createDate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "(now())"
+        },
+        "notaryOwnerId": {
+          "name": "notaryOwnerId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "taskTypeId": {
+          "name": "taskTypeId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "FAQ_id": {
+          "name": "FAQ_id",
+          "columns": ["id"]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "InheritanceProcedure": {
+      "name": "InheritanceProcedure",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "notaryId": {
+          "name": "notaryId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "stateId": {
+          "name": "stateId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "InheritanceProcedure_id": {
+          "name": "InheritanceProcedure_id",
+          "columns": ["id"]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "Meeting": {
+      "name": "Meeting",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "notaryId": {
+          "name": "notaryId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "scheduledDateTime": {
+          "name": "scheduledDateTime",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "notes": {
+          "name": "notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "Meeting_id": {
+          "name": "Meeting_id",
+          "columns": ["id"]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "Notary": {
+      "name": "Notary",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "businessContactId": {
+          "name": "businessContactId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "userId": {
+          "name": "userId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "Notary_id": {
+          "name": "Notary_id",
+          "columns": ["id"]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "ProcedureState": {
+      "name": "ProcedureState",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "state": {
+          "name": "state",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "ProcedureState_id": {
+          "name": "ProcedureState_id",
+          "columns": ["id"]
+        }
+      },
+      "uniqueConstraints": {
+        "ProcedureState_state_unique": {
+          "name": "ProcedureState_state_unique",
+          "columns": ["state"]
+        }
+      }
+    },
+    "Task": {
+      "name": "Task",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "typeId": {
+          "name": "typeId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "deadline": {
+          "name": "deadline",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "stateId": {
+          "name": "stateId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "label": {
+          "name": "label",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "inheritanceProcedureId": {
+          "name": "inheritanceProcedureId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "Task_id": {
+          "name": "Task_id",
+          "columns": ["id"]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "TaskState": {
+      "name": "TaskState",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "state": {
+          "name": "state",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "TaskState_id": {
+          "name": "TaskState_id",
+          "columns": ["id"]
+        }
+      },
+      "uniqueConstraints": {
+        "TaskState_state_unique": {
+          "name": "TaskState_state_unique",
+          "columns": ["state"]
+        }
+      }
+    },
+    "TaskType": {
+      "name": "TaskType",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "TaskType_id": {
+          "name": "TaskType_id",
+          "columns": ["id"]
+        }
+      },
+      "uniqueConstraints": {
+        "TaskType_name_unique": {
+          "name": "TaskType_name_unique",
+          "columns": ["name"]
+        }
+      }
+    },
+    "User": {
+      "name": "User",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "contactId": {
+          "name": "contactId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "login": {
+          "name": "login",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "password": {
+          "name": "password",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "loginUniqueIndex": {
+          "name": "loginUniqueIndex",
+          "columns": ["(lower(`login`))"],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "User_id": {
+          "name": "User_id",
+          "columns": ["id"]
+        }
+      },
+      "uniqueConstraints": {}
+    }
+  },
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "tables": {},
+    "indexes": {
+      "emailUniqueIndex": {
+        "columns": {
+          "(lower(`email`))": {
+            "isExpression": true
+          }
+        }
+      },
+      "loginUniqueIndex": {
+        "columns": {
+          "(lower(`login`))": {
+            "isExpression": true
+          }
+        }
+      }
+    }
+  }
+}
