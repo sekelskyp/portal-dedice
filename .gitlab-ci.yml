@@ -27,9 +27,12 @@ install:
   interruptible: true
   image: node:alpine
   rules:
-    - !reference [.rules, rules]
-    - changes: 
-      - yarn.lock
+    - if: ($CI_PIPELINE_SOURCE == "merge_request_event")
+      changes:
+        - yarn.lock
+    - if: ($CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push")
+      changes:
+        - yarn.lock
   cache:
     <<: *cache_config
     policy: push
