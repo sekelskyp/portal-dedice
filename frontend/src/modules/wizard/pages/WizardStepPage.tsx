@@ -47,7 +47,9 @@ export function WizardPage() {
               text={
                 questionsProgress === 0
                   ? 'Přiřazení notáře'
-                  : `Průvodce pozůstalostním řízením (${questionsProgress / 10}/10)`
+                  : `Průvodce pozůstalostním řízením (${
+                      questionsProgress / 10
+                    }/10)`
               }
             />
             {questionsProgress === 0 ? (

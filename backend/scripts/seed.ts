@@ -1,105 +1,121 @@
-import * as argon2 from 'argon2'
+import { MySql2Database } from 'drizzle-orm/mysql2'
 
 import { getConnection } from '../src/db/db'
 import {
   beneficiary,
-  beneficiaryDeceasedRelation,
   contact,
+  deceasedPerson,
   notary,
+  notaryDateRule,
   user,
 } from '../src/db/schema'
+import { hashPassword } from '../src/services/passwordHashService'
 
-async function seed() {
-  console.log('Starting seed function')
-  const connection = await getConnection()
-  const db = connection.db
-  console.log('Database connection established')
+import { seedNotariesAndDateRules } from './seedNotaries'
 
-  try {
-    await db.delete(beneficiary)
-    await db.delete(notary)
+async function populateDatabase(
+  db: MySql2Database<typeof import('../src/db/schema')>
+) {
+  console.log('Seeding population data...')
 
-    await db.delete(user)
-    await db.delete(contact)
-    await db.delete(beneficiaryDeceasedRelation)
-
-    await db.insert(contact).values([
+  // Insert contacts and save returned IDs
+  const [beneficiaryContactId1, beneficiaryContactId2] = await db
+    .insert(contact)
+    .values([
       {
-        id: 1,
         name: 'Young',
         surname: 'Gatchell',
         dateOfBirth: new Date('1990-01-01'),
         gender: 'Male',
         phone: '+420666666661',
         email: 'gatyou@quacker.com',
+        country: 'Czech Republic',
+        city: 'Prague',
+        street: 'Main Street 123',
+        postalCode: '11000',
       },
       {
-        id: 2,
         name: 'Petr',
         surname: 'Hochman',
         dateOfBirth: new Date('1990-01-01'),
         gender: 'Male',
         phone: '+420555555551',
         email: 'hocpet@quacker.com',
-      },
-      {
-        id: 3,
-        name: 'Petr',
-        surname: 'Hochman',
-        dateOfBirth: new Date('1990-01-01'),
-        gender: 'Male',
-        phone: '+420555555552',
-        email: 'hocpet@mail.com',
+        country: 'Czech Republic',
+        city: 'Brno',
+        street: 'Secondary Street 456',
+        postalCode: '15000',
       },
     ])
+    .$returningId()
 
-    await db.insert(user).values([
+  // Insert users and save returned IDs
+  const [beneficiaryUserId1, beneficiaryUserId2] = await db
+    .insert(user)
+    .values([
       {
-        id: 1,
-        contactId: 1,
-        password: await argon2.hash('heaslo123456b!'),
-        login: 'gatyou@quacker.com',
+        contactId: beneficiaryContactId1.id,
+        password: await hashPassword('heaslo123456b!'),
+        login: 'gatyou',
       },
       {
-        id: 2,
-        contactId: 2,
-        password: await argon2.hash('heaslo123456b!'),
-        login: 'hocpet@quacker.com',
-      },
-      {
-        id: 3,
-        contactId: 3,
-        password: await argon2.hash('heaslo123456b!'),
-        login: 'hocpet@mail.com',
+        contactId: beneficiaryContactId2.id,
+        password: await hashPassword('heaslo123456b!'),
+        login: 'hocpet',
       },
     ])
+    .$returningId()
 
-    await db.insert(notary).values([
+  // Insert beneficiaries using the saved beneficiaryUserId
+  await db
+    .insert(beneficiary)
+    .values([
       {
-        id: 1,
-        businessContactId: 3,
-        userId: 2,
+        userId: beneficiaryUserId1.id,
+        deceasedRelation: 'Spouse',
+      },
+      {
+        userId: beneficiaryUserId2.id,
+        deceasedRelation: 'Child',
       },
     ])
+    .onDuplicateKeyUpdate({ set: { userId: beneficiaryUserId2.id } })
 
-    await db.insert(beneficiaryDeceasedRelation).values([
-      {
-        id: 1,
-        familyRelation: 'Nejaka rodinna vazba',
-      },
-    ])
+  // Insert deceased persons
+  await db.insert(deceasedPerson).values([
+    {
+      postalCode: '15500',
+      name: 'John Smith',
+      dateOfDeath: new Date('2010-02-10'),
+    },
+    {
+      postalCode: '11000',
+      name: 'John Doe',
+      dateOfDeath: new Date('2023-01-12'),
+    },
+  ])
+  console.log('Population data seeded successfully.')
+}
 
-    await db.insert(beneficiary).values([
-      {
-        id: 1,
-        userId: 1,
-        deceasedRelationId: 1,
-      },
-    ])
+async function seed() {
+  const connection = await getConnection()
+  const db = connection.db
 
-    console.log('Seed function completed')
+  try {
+    // delete previous data (idk if we really need this when we have DB in docker and can just remove the volume and start fresh)
+    await db.delete(beneficiary)
+    await db.delete(notary)
+    await db.delete(deceasedPerson)
+    await db.delete(user)
+    await db.delete(contact)
+    await db.delete(notaryDateRule)
+    await seedNotariesAndDateRules(db)
+    await populateDatabase(db)
+  } catch (error) {
+    console.error('Error seeding database:', error)
   } finally {
-    await connection.connection.end()
+    await connection.connection.end() // Ensure the connection is closed after seeding
+    process.exit(0)
   }
 }
 

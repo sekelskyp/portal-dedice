@@ -9,14 +9,29 @@ export class Contact {
   name!: string
 
   @Field()
-  surName!: string
+  surname!: string
 
   @Field()
-  phone!: string
+  dateOfBirth!: Date
+
+  @Field()
+  gender!: string
+
+  @Field(() => String, { nullable: true })
+  phone?: string | null
 
   @Field()
   email!: string
 
   @Field()
-  gender!: string
+  country!: string
+
+  @Field()
+  city!: string
+
+  @Field()
+  street!: string
+
+  @Field()
+  postalCode!: string
 }

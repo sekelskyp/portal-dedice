@@ -18,7 +18,10 @@ import { buildSchema } from 'type-graphql'
 
 import { MOCKS, PORT } from '@backend/config'
 import { getConnection } from '@backend/db/db'
+import { AuthResolver } from '@backend/graphql/modules/auth/authResolver'
 import { EmptyResolver } from '@backend/graphql/modules/empty/emptyResolver'
+import { NotaryAssignmentResolver } from '@backend/graphql/modules/notaryAssignment/notaryAssignmentResolver'
+import { PasswordResetResolver } from '@backend/graphql/modules/passwordReset/passwordResetTokenResolver'
 import { UserResolver } from '@backend/graphql/modules/user/userResolver'
 import { parseAndVerifyJWT } from '@backend/libs/jwt'
 import { mockResolvers } from '@backend/mocks/mocks'
@@ -30,7 +33,13 @@ const init = async () => {
   const httpServer = http.createServer(app)
 
   const schema = await buildSchema({
-    resolvers: [EmptyResolver, UserResolver],
+    resolvers: [
+      EmptyResolver,
+      UserResolver,
+      AuthResolver,
+      NotaryAssignmentResolver,
+      PasswordResetResolver,
+    ],
     emitSchemaFile: true,
   })
 

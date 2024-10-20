@@ -1,13 +1,16 @@
-import * as argon2 from 'argon2'
 import { eq } from 'drizzle-orm'
-import { GraphQLError } from 'graphql/error'
+import { GraphQLError } from 'graphql'
 import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 
-import { contact, lower, user } from '@backend/db/schema'
-import { createToken } from '@backend/libs/jwt'
+import { contact, user } from '@backend/db/schema'
 import { type CustomContext } from '@backend/types/types'
 
-import { AuthInfo, ChangePassword, User, UserProfile } from './userType'
+import {
+  comparePassword,
+  hashPassword,
+} from '../../../services/passwordHashService'
+
+import { ChangePassword, User, UserProfile } from './userType'
 
 @Resolver(() => User)
 export class UserResolver {
@@ -30,98 +33,6 @@ export class UserResolver {
   async users(@Ctx() { db }: CustomContext): Promise<User[]> {
     return await db.select().from(user)
   }
-
-  @Mutation(() => AuthInfo)
-  async signIn(
-    @Arg('email') email: string,
-    @Arg('password') password: string,
-    @Ctx() { db }: CustomContext
-  ): Promise<AuthInfo> {
-    const userRecord = await db
-      .select()
-      .from(user)
-      .where(eq(lower(user.login), email.toLocaleLowerCase()))
-
-    if (userRecord.length === 0) {
-      throw new GraphQLError('Nesprávný email nebo heslo')
-    }
-
-    const foundUser = userRecord[0]
-    if (await argon2.verify(foundUser.password, password)) {
-      const token = createToken({ id: foundUser.id })
-
-      return {
-        user: { ...foundUser },
-        token,
-      }
-    } else {
-      throw new GraphQLError('Nesprávný email nebo heslo')
-    }
-  }
-
-  @Mutation(() => AuthInfo)
-  async signUp(
-    @Arg('email') email: string,
-    @Arg('password') password: string,
-    @Arg('name') name: string,
-    @Arg('surname') surname: string,
-    @Arg('gender') gender: string,
-    @Ctx() { db }: CustomContext
-  ): Promise<AuthInfo> {
-    /* VALIDATION */
-    const userByEmail = await db
-      .select()
-      .from(contact)
-      .where(eq(contact.email, email))
-
-    if (userByEmail.length > 0) {
-      throw new GraphQLError('Email already registered')
-    }
-
-    /** PASSWORD HASHING */
-    const passwordHash = await argon2.hash(password)
-
-    /** CONTACT INSERT */
-    const insertContact = await db
-      .insert(contact)
-      .values({
-        email,
-        name,
-        surname,
-        gender,
-      })
-      .$returningId()
-
-    const contactId = insertContact[0].id
-
-    /* DATABASE INSERT */
-    const insertResult = await db
-      .insert(user)
-      .values({
-        contactId,
-        login: email,
-        password: passwordHash,
-      })
-      .$returningId()
-
-    // todo: add row to beneficiary
-    // where to take deceasedRelationId ?
-
-    /* ASSEMBLE MUTATION RESPONSE */
-    const id = insertResult[0].id
-
-    const token = createToken({ id })
-
-    const userObject = {
-      id,
-      login: email,
-      contactId,
-      password,
-    }
-
-    return { user: userObject, token: token }
-  }
-
   @Mutation(() => UserProfile)
   async updateUserProfile(
     @Arg('name') name: string,
@@ -159,7 +70,7 @@ export class UserResolver {
     }
     return toReturn
   }
-
+  // for now i am leaving this as is, but we need to synchronize password reser process
   @Mutation(() => ChangePassword)
   async changePassword(
     @Arg('oldPassword') oldPassword: string,
@@ -177,14 +88,14 @@ export class UserResolver {
       throw new GraphQLError('User not found')
     }
 
-    const passwordsEqual = await argon2.verify(
+    const passwordsEqual = await comparePassword(
       userRecord[0].password,
       oldPassword
     )
     if (!passwordsEqual) {
       throw new GraphQLError('Old password is incorrect')
     }
-    const newPasswordHash = await argon2.hash(newPassword)
+    const newPasswordHash = await hashPassword(newPassword)
     await db
       .update(user)
       .set({ password: newPasswordHash })
