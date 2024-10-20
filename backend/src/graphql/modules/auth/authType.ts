@@ -1,6 +1,5 @@
-import { Field, ObjectType } from 'type-graphql'
+import { Field, InputType, ObjectType } from 'type-graphql'
 
-import { Contact } from '@backend/graphql/modules/user/contactType'
 import { User } from '@backend/graphql/modules/user/userType'
 
 @ObjectType()
@@ -12,7 +11,21 @@ export class AuthInfo {
   token!: string
 }
 
-@ObjectType()
+@InputType()
+export class RegisterContactInput {
+  @Field() name!: string
+  @Field() surname!: string
+  @Field() dateOfBirth!: Date
+  @Field() gender!: string
+  @Field() phone!: string
+  @Field() email!: string
+  @Field() country!: string
+  @Field() city!: string
+  @Field() street!: string
+  @Field() postalCode!: string
+}
+
+@InputType()
 export class RegisterInput {
   @Field()
   login!: string
@@ -21,5 +34,5 @@ export class RegisterInput {
   password!: string
 
   @Field()
-  contact!: Contact
+  contact!: RegisterContactInput
 }

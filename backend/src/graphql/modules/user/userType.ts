@@ -5,7 +5,7 @@ export class User {
   @Field(() => ID)
   id!: number
 
-  @Field()
+  @Field(() => ID)
   contactId!: number
 
   @Field()
