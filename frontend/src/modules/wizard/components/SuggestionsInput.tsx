@@ -13,10 +13,6 @@ export const PlacesAutocomplete = () => {
     clearSuggestions,
   } = usePlacesAutocomplete({
     callbackName: 'initMap',
-    requestOptions: {
-      /* Define search scope here */
-    },
-    debounce: 300,
   })
   const ref = useOnclickOutside(() => {
     // When the user clicks outside of the component, we can dismiss
@@ -66,15 +62,15 @@ export const PlacesAutocomplete = () => {
         defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNWbMJzrf02XhtdcIG7IeGnJYdZuLSkFE&libraries=places&callback=initMap"
       ></script> */}
-      <script
+      {/* <script
         async
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNWbMJzrf02XhtdcIG7IeGnJYdZuLSkFE&loading=async&libraries=places&callback=initMap"
-      ></script>
+      ></script> */}
       <div ref={ref}>
         <input
           value={value}
           onChange={handleInput}
-          // disabled={!ready}
+          disabled={!ready}
           placeholder="Where are you going?"
         />
         {/* We can use the "status" to decide whether we should display the dropdown or not */}
