@@ -43,7 +43,7 @@ export const loginUser = async (
     .where(eq(lower(user.login), login.toLowerCase()))
 
   if (userRecord.length === 0) {
-    throw new Error('User not found')
+    throw new Error('Invalid credentials')
   }
 
   const foundUser = userRecord[0]
@@ -51,7 +51,7 @@ export const loginUser = async (
   // Compare the provided password with the stored hashed password
   const isPasswordValid = await comparePassword(password, foundUser.password)
   if (!isPasswordValid) {
-    throw new Error('Invalid password')
+    throw new Error('Invalid credentials')
   }
 
   // Generate a JWT token
@@ -76,7 +76,7 @@ export const registerUser = async (
     .from(user)
     .where(eq(lower(user.login), input.login.toLowerCase()))
 
-  if (existingUserRecord) {
+  if (existingUserRecord.length > 0) {
     throw new Error('Login already in use')
   }
 

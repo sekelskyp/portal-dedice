@@ -19,7 +19,7 @@ scalar DateTimeISO
 
 type Mutation {
   requestPasswordReset(email: String!): Boolean!
-  signIn(email: String!, password: String!): AuthInfo!
+  signIn(login: String!, password: String!): AuthInfo!
   signUp(registerInput: RegisterInput!): AuthInfo!
 }
 

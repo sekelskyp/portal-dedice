@@ -16,12 +16,12 @@ import { AuthInfo, RegisterInput } from './authType'
 export class AuthResolver {
   @Mutation(() => AuthInfo)
   async signIn(
-    @Arg('email') email: string,
+    @Arg('login') login: string,
     @Arg('password') password: string,
     @Ctx() context: CustomContext
   ): Promise<AuthInfo> {
     // Pass context (db) along with email and password to the service
-    const authResponse = await loginUser(email, password, context)
+    const authResponse = await loginUser(login, password, context)
     const userRecord = await context.db
       .select()
       .from(user)
