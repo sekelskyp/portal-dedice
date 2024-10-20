@@ -4,6 +4,7 @@ import { getConnection } from '../src/db/db'
 import {
   beneficiary,
   contact,
+  deceasedPerson,
   notary,
   notaryDateRule,
   user,
@@ -80,6 +81,19 @@ async function populateDatabase(
     ])
     .onDuplicateKeyUpdate({ set: { userId: beneficiaryUserId2.id } })
 
+  // Insert deceased persons
+  await db.insert(deceasedPerson).values([
+    {
+      postalCode: '15500',
+      name: 'John Smith',
+      dateOfDeath: new Date('2010-02-10'),
+    },
+    {
+      postalCode: '11000',
+      name: 'John Doe',
+      dateOfDeath: new Date('2023-01-12'),
+    },
+  ])
   console.log('Population data seeded successfully.')
 }
 
@@ -91,6 +105,7 @@ async function seed() {
     // delete previous data (idk if we really need this when we have DB in docker and can just remove the volume and start fresh)
     await db.delete(beneficiary)
     await db.delete(notary)
+    await db.delete(deceasedPerson)
     await db.delete(user)
     await db.delete(contact)
     await db.delete(notaryDateRule)

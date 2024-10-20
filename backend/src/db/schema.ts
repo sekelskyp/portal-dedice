@@ -293,6 +293,15 @@ export const notaryDateRule = mysqlTable(
   })
 )
 
+// Define Deceased Person Table
+export const deceasedPerson = mysqlTable('deceased_person', {
+  id: int('id').primaryKey().autoincrement(),
+  procedureId: int('procedure_id').references(() => inheritanceProcedure.id),
+  name: varchar('name', { length: 100 }).notNull(),
+  postalCode: varchar('postal_code', { length: 10 }).notNull(),
+  dateOfDeath: date('date_of_death').notNull(),
+})
+
 // Custom lower function
 // https://orm.drizzle.team/docs/guides/unique-case-insensitive-email
 export function lower(email: AnyMySqlColumn): SQL {

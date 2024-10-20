@@ -3,26 +3,25 @@ import { Arg, Ctx, Query, Resolver } from 'type-graphql'
 import { getNotaryByAddressAndBirthDate } from '../../../services/notaryAssignmentService'
 import { CustomContext } from '../../../types/types'
 
-import { AddressInput } from './notaryAssignmentType' // Import the AddressInput type
+import { AddressInput, Notary } from './notaryAssignmentType'
 
 @Resolver()
 export class NotaryAssignmentResolver {
-  @Query(() => Number, { nullable: true }) // Define that the query returns a Number or null
+  @Query(() => Number, { nullable: true })
   async getNotaryByAddressAndBirthDate(
-    @Arg('address') address: AddressInput, // Use the AddressInput type here
-    @Arg('birthDate') birthDate: Date, // Birth date input argument in string form
-    @Ctx() context: CustomContext // The full context object, including database
-  ): Promise<number | null> {
-    const birthDateObj = new Date(birthDate) // Parse the birth date string into a Date object
+    @Arg('address') address: AddressInput,
+    @Arg('expirationDate') expirationDate: Date,
+    @Ctx() context: CustomContext
+  ): Promise<Notary | null> {
+    const birthDateObj = new Date(expirationDate)
 
     // Call the service method to get the notary by address and birth date
-    const notaryId = await getNotaryByAddressAndBirthDate(
+    const notary = await getNotaryByAddressAndBirthDate(
       address,
       birthDateObj,
       context
     )
 
-    // Return the notary ID or null if no notary is found
-    return notaryId
+    return notary
   }
 }
