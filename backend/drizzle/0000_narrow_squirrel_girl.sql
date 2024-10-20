@@ -62,6 +62,15 @@ CREATE TABLE `contact` (
 	CONSTRAINT `contact_email_unique_index` UNIQUE((lower(`email`)))
 );
 --> statement-breakpoint
+CREATE TABLE `deceased_person` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`procedure_id` int,
+	`name` varchar(100) NOT NULL,
+	`postal_code` varchar(10) NOT NULL,
+	`date_of_death` date NOT NULL,
+	CONSTRAINT `deceased_person_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
 CREATE TABLE `document` (
 	`id` int AUTO_INCREMENT NOT NULL,
 	`inheritance_procedure_id` int NOT NULL,
@@ -156,6 +165,7 @@ ALTER TABLE `beneficiary_task_rel` ADD CONSTRAINT `beneficiary_task_rel_task_id_
 ALTER TABLE `chat` ADD CONSTRAINT `chat_inheritance_procedure_id_inheritance_procedure_id_fk` FOREIGN KEY (`inheritance_procedure_id`) REFERENCES `inheritance_procedure`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `chat_message` ADD CONSTRAINT `chat_message_chat_id_chat_id_fk` FOREIGN KEY (`chat_id`) REFERENCES `chat`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `chat_message` ADD CONSTRAINT `chat_message_user_id_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `deceased_person` ADD CONSTRAINT `deceased_person_procedure_id_inheritance_procedure_id_fk` FOREIGN KEY (`procedure_id`) REFERENCES `inheritance_procedure`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `document` ADD CONSTRAINT `document_inheritance_procedure_id_inheritance_procedure_id_fk` FOREIGN KEY (`inheritance_procedure_id`) REFERENCES `inheritance_procedure`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `document` ADD CONSTRAINT `document_task_id_task_id_fk` FOREIGN KEY (`task_id`) REFERENCES `task`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `document` ADD CONSTRAINT `document_user_owner_id_user_id_fk` FOREIGN KEY (`user_owner_id`) REFERENCES `user`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint

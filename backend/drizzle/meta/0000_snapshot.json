@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "2463cdf1-1bb3-4253-91ce-a30793c1703b",
+  "id": "68c0c62f-3101-47e5-ab8b-c9116b42779a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "asset": {
@@ -440,6 +440,65 @@
       "compositePrimaryKeys": {
         "contact_id": {
           "name": "contact_id",
+          "columns": ["id"]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "deceased_person": {
+      "name": "deceased_person",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "procedure_id": {
+          "name": "procedure_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "postal_code": {
+          "name": "postal_code",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "date_of_death": {
+          "name": "date_of_death",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "deceased_person_procedure_id_inheritance_procedure_id_fk": {
+          "name": "deceased_person_procedure_id_inheritance_procedure_id_fk",
+          "tableFrom": "deceased_person",
+          "tableTo": "inheritance_procedure",
+          "columnsFrom": ["procedure_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "deceased_person_id": {
+          "name": "deceased_person_id",
           "columns": ["id"]
         }
       },
