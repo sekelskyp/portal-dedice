@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import useOnclickOutside from 'react-cool-onclickoutside'
 import usePlacesAutocomplete, {
   getGeocode,
-  getLatLng,
+  // getLatLng,
+  getZipCode,
 } from 'use-places-autocomplete'
 
 export const PlacesAutocomplete = () => {
@@ -14,6 +16,7 @@ export const PlacesAutocomplete = () => {
   } = usePlacesAutocomplete({
     callbackName: 'initMap',
   })
+  const [zipCode, setZipCode] = useState<ReturnType<typeof getZipCode>>()
   const ref = useOnclickOutside(() => {
     // When the user clicks outside of the component, we can dismiss
     // the searched suggestions by calling this method
@@ -35,8 +38,10 @@ export const PlacesAutocomplete = () => {
 
       // Get latitude and longitude via utility functions
       getGeocode({ address: description }).then((results) => {
-        const { lat, lng } = getLatLng(results[0])
-        console.log('📍 Coordinates: ', { lat, lng })
+        // const { lat, lng } = getLatLng(results[0])
+        // console.log('Zip code is: ', getZipCode(results[0], true))
+        // console.log('📍 Coordinates: ', { lat, lng })
+        setZipCode(getZipCode(results[0], false))
       })
     }
 
@@ -54,18 +59,10 @@ export const PlacesAutocomplete = () => {
       )
     })
 
-  console.log(ready)
+  console.log(zipCode)
 
   return (
     <>
-      {/* <script
-        defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNWbMJzrf02XhtdcIG7IeGnJYdZuLSkFE&libraries=places&callback=initMap"
-      ></script> */}
-      {/* <script
-        async
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNWbMJzrf02XhtdcIG7IeGnJYdZuLSkFE&loading=async&libraries=places&callback=initMap"
-      ></script> */}
       <div ref={ref}>
         <input
           value={value}
