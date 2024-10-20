@@ -15,7 +15,8 @@
     "postbuild": "nodetouch tmp/restart.txt",
     "db:migrations:generate": "drizzle-kit generate",
     "db:migrate": "ts-node -r dotenv-flow/config ./scripts/migrate.ts",
-    "db:seed": "ts-node -r dotenv-flow/config ./scripts/seed.ts"
+    "db:seed": "ts-node -r dotenv-flow/config ./scripts/seed.ts",
+    "rimraf": "./node_modules/rimraf/bin.js"
   },
   "dependencies": {
     "@apollo/server": "^4.11.0",
