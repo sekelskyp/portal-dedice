@@ -6,7 +6,7 @@ import { hashPassword } from '../src/services/passwordHashService'
 
 import { seedNotariesAndDateRules } from './seedNotaries'
 
-async function seedPopulationData(
+async function populateDatabase(
   db: MySql2Database<typeof import('../src/db/schema')>
 ) {
   console.log('Seeding population data...')
@@ -83,7 +83,7 @@ async function seed() {
 
   try {
     await seedNotariesAndDateRules(db)
-    await seedPopulationData(db)
+    await populateDatabase(db)
   } catch (error) {
     console.error('Error seeding database:', error)
   } finally {

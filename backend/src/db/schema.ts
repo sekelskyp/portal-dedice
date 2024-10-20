@@ -7,6 +7,7 @@ import {
   date,
   datetime,
   float,
+  foreignKey,
   int,
   mysqlTable,
   primaryKey,
@@ -201,16 +202,23 @@ export const beneficiaryMeetingRel = mysqlTable(
 export const beneficiaryInheritanceProcedureRel = mysqlTable(
   'beneficiary_inheritance_procedure_rel',
   {
-    beneficiaryId: int('beneficiary_id')
-      .references(() => beneficiary.id)
-      .notNull(), // FK to Beneficiary
-    inheritanceProcedureId: int('inheritance_procedure_id')
-      .references(() => inheritanceProcedure.id)
-      .notNull(), // FK to InheritanceProcedure
+    beneficiaryId: int('beneficiary_id').notNull(),
+    inheritanceProcedureId: int('inheritance_procedure_id').notNull(),
   },
   (table) => ({
-    compositePk: primaryKey({
-      columns: [table.beneficiaryId, table.inheritanceProcedureId], // Composite Primary Key
+    pk: primaryKey({
+      columns: [table.beneficiaryId, table.inheritanceProcedureId],
+      name: 'ben_inher_proc_pk', // Shorter custom name for PK
+    }),
+    beneficiaryFk: foreignKey({
+      columns: [table.beneficiaryId],
+      foreignColumns: [beneficiary.id],
+      name: 'ben_inher_proc_ben_id_fk', // Custom short name for FK
+    }),
+    inheritanceProcedureFk: foreignKey({
+      columns: [table.inheritanceProcedureId],
+      foreignColumns: [inheritanceProcedure.id],
+      name: 'ben_inher_proc_inher_id_fk', // Custom short name for FK
     }),
   })
 )

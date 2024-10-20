@@ -3,7 +3,6 @@ import { MySql2Database } from 'drizzle-orm/mysql2'
 
 import {
   ContactSeedValue,
-  NotaryDateRuleValue,
   NotarySeedData,
   notarySeedData,
 } from '../src/db/notarySeedData'
