@@ -22,7 +22,12 @@ export function SignInPage() {
 
   const handleSignInFormSubmit = useCallback(
     (variables: { email: string; password: string }) => {
-      signInRequest({ variables })
+      signInRequest({
+        variables: {
+          login: variables.email,
+          password: variables.password,
+        },
+      })
     },
     [signInRequest]
   )

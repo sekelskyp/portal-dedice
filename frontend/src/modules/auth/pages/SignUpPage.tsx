@@ -20,13 +20,34 @@ export function SignUpPage() {
 
   const handleSignUpFormSubmit = useCallback(
     (variables: {
-      email: string
-      gender: string
-      name: string
-      surname: string
+      contact: {
+        email: string
+        gender: string
+        name: string
+        surname: string
+        dateOfBirth: string
+        country: string
+        city: string
+        street: string
+        postalCode: string
+        phone: string
+      }
       password: string
     }) => {
-      signUpRequest({ variables })
+      signUpRequest({
+        variables: {
+          registerInput: {
+            login: variables.contact.email,
+            contact: {
+              ...variables.contact,
+              dateOfBirth: new Date(
+                variables.contact.dateOfBirth
+              ).toISOString(),
+            },
+            password: variables.password,
+          },
+        },
+      })
         .then(() =>
           toast({
             title: resources.auth.pages.signUp.emailConfirmation.title,

@@ -15,7 +15,7 @@ export function HomePage() {
     <Page as={Stack} gap={10} justifyContent={'space-between'} h={'full'}>
       {user && (
         <SimpleCentered bg="none">
-          <Heading size="3xl">Vítejte, {user.login}!</Heading>
+          <Heading size="3xl">Vítejte!</Heading>
         </SimpleCentered>
       )}
       <SplitWithImage
