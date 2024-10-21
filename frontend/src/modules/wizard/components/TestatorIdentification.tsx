@@ -9,6 +9,7 @@ import {
 import { z } from 'zod'
 
 import { Form } from '../../../shared/forms/Form'
+import { getZipCodeFromAddress } from '../utils/getGeocode'
 
 import { PlacesAutoComplete } from './PlacesAutoComplete'
 
@@ -29,8 +30,10 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
     reValidateMode: 'onChange',
   })
 
-  const onSubmit = (data: z.infer<typeof schema>) => {
-    console.log(data)
+  const onSubmit = async (data: z.infer<typeof schema>) => {
+    const postalCode = await getZipCodeFromAddress(data.address)
+    const testatorData = { ...data, postalCode }
+    console.log(testatorData)
     nextStep()
   }
 
