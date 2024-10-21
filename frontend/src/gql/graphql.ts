@@ -27,6 +27,12 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean }
   Int: { input: number; output: number }
   Float: { input: number; output: number }
+  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format. */
+  DateTimeISO: { input: any; output: any }
+}
+
+export type AddressInput = {
+  postalCode: Scalars['String']['input']
 }
 
 export type AuthInfo = {
@@ -35,46 +41,118 @@ export type AuthInfo = {
   user: User
 }
 
+export type ChangePassword = {
+  __typename?: 'ChangePassword'
+  email: Scalars['String']['output']
+  id: Scalars['ID']['output']
+}
+
+export type Contact = {
+  __typename?: 'Contact'
+  city: Scalars['String']['output']
+  country: Scalars['String']['output']
+  dateOfBirth: Scalars['DateTimeISO']['output']
+  email: Scalars['String']['output']
+  gender: Scalars['String']['output']
+  id: Scalars['ID']['output']
+  name: Scalars['String']['output']
+  phone?: Maybe<Scalars['String']['output']>
+  postalCode: Scalars['String']['output']
+  street: Scalars['String']['output']
+  surname: Scalars['String']['output']
+}
+
 export type Mutation = {
   __typename?: 'Mutation'
+  changePassword: ChangePassword
+  requestPasswordReset: Scalars['Boolean']['output']
   signIn: AuthInfo
   signUp: AuthInfo
+  updateUserProfile: UserProfile
+}
+
+export type MutationChangePasswordArgs = {
+  newPassword: Scalars['String']['input']
+  oldPassword: Scalars['String']['input']
+}
+
+export type MutationRequestPasswordResetArgs = {
+  email: Scalars['String']['input']
 }
 
 export type MutationSignInArgs = {
-  email: Scalars['String']['input']
+  login: Scalars['String']['input']
   password: Scalars['String']['input']
 }
 
 export type MutationSignUpArgs = {
-  email: Scalars['String']['input']
-  gender: Scalars['String']['input']
+  registerInput: RegisterInput
+}
+
+export type MutationUpdateUserProfileArgs = {
   name: Scalars['String']['input']
-  password: Scalars['String']['input']
   surname: Scalars['String']['input']
+}
+
+export type Notary = {
+  __typename?: 'Notary'
+  contact: Contact
+  id: Scalars['Float']['output']
 }
 
 export type Query = {
   __typename?: 'Query'
   _empty: Scalars['String']['output']
+  getNotaryByAddressAndBirthDate?: Maybe<Notary>
   user?: Maybe<User>
   users: Array<User>
+}
+
+export type QueryGetNotaryByAddressAndBirthDateArgs = {
+  address: AddressInput
+  expirationDate: Scalars['DateTimeISO']['input']
 }
 
 export type QueryUserArgs = {
   id: Scalars['String']['input']
 }
 
+export type RegisterContactInput = {
+  city: Scalars['String']['input']
+  country: Scalars['String']['input']
+  dateOfBirth: Scalars['DateTimeISO']['input']
+  email: Scalars['String']['input']
+  gender: Scalars['String']['input']
+  name: Scalars['String']['input']
+  phone: Scalars['String']['input']
+  postalCode: Scalars['String']['input']
+  street: Scalars['String']['input']
+  surname: Scalars['String']['input']
+}
+
+export type RegisterInput = {
+  contact: RegisterContactInput
+  login: Scalars['String']['input']
+  password: Scalars['String']['input']
+}
+
 export type User = {
   __typename?: 'User'
-  contactId: Scalars['Float']['output']
+  contactId: Scalars['ID']['output']
   id: Scalars['ID']['output']
   login: Scalars['String']['output']
   password: Scalars['String']['output']
 }
 
+export type UserProfile = {
+  __typename?: 'UserProfile'
+  id: Scalars['ID']['output']
+  name: Scalars['String']['output']
+  surName: Scalars['String']['output']
+}
+
 export type SignInMutationVariables = Exact<{
-  email: Scalars['String']['input']
+  login: Scalars['String']['input']
   password: Scalars['String']['input']
 }>
 
@@ -88,11 +166,7 @@ export type SignInMutation = {
 }
 
 export type SignUpMutationVariables = Exact<{
-  email: Scalars['String']['input']
-  gender: Scalars['String']['input']
-  name: Scalars['String']['input']
-  surname: Scalars['String']['input']
-  password: Scalars['String']['input']
+  registerInput: RegisterInput
 }>
 
 export type SignUpMutation = {
@@ -116,7 +190,7 @@ export const SignInDocument = {
           kind: 'VariableDefinition',
           variable: {
             kind: 'Variable',
-            name: { kind: 'Name', value: 'email' },
+            name: { kind: 'Name', value: 'login' },
           },
           type: {
             kind: 'NonNullType',
@@ -150,10 +224,10 @@ export const SignInDocument = {
             arguments: [
               {
                 kind: 'Argument',
-                name: { kind: 'Name', value: 'email' },
+                name: { kind: 'Name', value: 'login' },
                 value: {
                   kind: 'Variable',
-                  name: { kind: 'Name', value: 'email' },
+                  name: { kind: 'Name', value: 'login' },
                 },
               },
               {
@@ -200,66 +274,13 @@ export const SignUpDocument = {
           kind: 'VariableDefinition',
           variable: {
             kind: 'Variable',
-            name: { kind: 'Name', value: 'email' },
+            name: { kind: 'Name', value: 'registerInput' },
           },
           type: {
             kind: 'NonNullType',
             type: {
               kind: 'NamedType',
-              name: { kind: 'Name', value: 'String' },
-            },
-          },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'gender' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'String' },
-            },
-          },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'name' } },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'String' },
-            },
-          },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'surname' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'String' },
-            },
-          },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'password' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'String' },
+              name: { kind: 'Name', value: 'RegisterInput' },
             },
           },
         },
@@ -273,42 +294,10 @@ export const SignUpDocument = {
             arguments: [
               {
                 kind: 'Argument',
-                name: { kind: 'Name', value: 'email' },
+                name: { kind: 'Name', value: 'registerInput' },
                 value: {
                   kind: 'Variable',
-                  name: { kind: 'Name', value: 'email' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'gender' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'gender' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'name' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'name' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'surname' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'surname' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'password' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'password' },
+                  name: { kind: 'Name', value: 'registerInput' },
                 },
               },
             ],

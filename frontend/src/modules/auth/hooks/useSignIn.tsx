@@ -6,8 +6,8 @@ import { gql } from '@frontend/gql'
 import { useAuth } from '../auth-core'
 
 const SIGNIN_MUTATION = gql(/* GraphQL */ `
-  mutation SignIn($email: String!, $password: String!) {
-    signIn(email: $email, password: $password) {
+  mutation SignIn($login: String!, $password: String!) {
+    signIn(login: $login, password: $password) {
       user {
         id
         login

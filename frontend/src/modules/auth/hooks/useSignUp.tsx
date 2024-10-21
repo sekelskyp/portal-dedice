@@ -2,24 +2,13 @@ import { useMutation } from '@apollo/client'
 import { useNavigate } from 'react-router-dom'
 
 import { gql } from '@frontend/gql'
+import { route } from '@frontend/route'
 
 import { useAuth } from '../auth-core'
 
 const SIGNUP_MUTATION = gql(/* GraphQL */ `
-  mutation SignUp(
-    $email: String!
-    $gender: String!
-    $name: String!
-    $surname: String!
-    $password: String!
-  ) {
-    signUp(
-      email: $email
-      gender: $gender
-      name: $name
-      surname: $surname
-      password: $password
-    ) {
+  mutation SignUp($registerInput: RegisterInput!) {
+    signUp(registerInput: $registerInput) {
       user {
         id
         login
@@ -34,9 +23,9 @@ export function useSignUp() {
   const navigate = useNavigate()
   const [signUpRequest, signUpRequestState] = useMutation(SIGNUP_MUTATION, {
     onCompleted: ({ signUp: { user, token } }) => {
-      navigate('/auth/signin')
       /* WIP: Missing logic for sending verification link*/
       auth.signIn({ token, user })
+      navigate(route.home())
     },
     onError: () => {},
   })
