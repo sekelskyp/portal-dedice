@@ -9,6 +9,8 @@ import { z } from 'zod'
 
 import { Form } from '../../../shared/forms/Form'
 
+import { PlacesAutoComplete } from './PlacesAutoComplete'
+
 const schema = z.object({
   sex: z.string().min(1, 'Pohlaví je povinné.'),
   birthDate: z.string().min(1, 'Datum narození je povinné.'),
@@ -72,6 +74,7 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
             inputProps={{ fontSize: { base: 'sm', md: 'md' } }}
             isRequired
           ></InputControl>
+          <PlacesAutoComplete name="address" label="Trvalé bydliště" />
           <Spacer></Spacer>
           <Box>
             <SubmitButton>Potvrdit údaje</SubmitButton>
