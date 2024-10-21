@@ -1,5 +1,6 @@
 import { extendTheme } from '@chakra-ui/react'
 
+import { Alert } from './components/Alert'
 import { Button } from './components/Button'
 import { Heading } from './components/Heading'
 import { colors } from './Colors'
@@ -13,5 +14,6 @@ export const theme = extendTheme({
   components: {
     Button,
     Heading,
+    Alert,
   },
 })
