@@ -67,15 +67,13 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
             inputProps={{ type: 'date', fontSize: { base: 'sm', md: 'md' } }}
             isRequired
           ></InputControl>
-          {/*
-            <InputControl
+          <InputControl
             name="address"
             label="Trvalé bydliště"
             labelProps={{ fontSize: { base: 'sm', md: 'md' } }}
             inputProps={{ fontSize: { base: 'sm', md: 'md' } }}
             isRequired
-            ></InputControl>
-            */}
+          ></InputControl>
           <PlacesAutoComplete name="address" label="Trvalé bydliště" />
           <Spacer></Spacer>
           <Box>
