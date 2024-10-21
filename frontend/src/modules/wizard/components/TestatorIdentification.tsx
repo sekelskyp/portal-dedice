@@ -1,5 +1,6 @@
-import { Box, Container, Radio, Spacer, Stack, Text } from '@chakra-ui/react'
+import { Box, Container, Radio, Stack, Text } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
 import {
   InputControl,
   RadioGroupControl,
@@ -22,12 +23,24 @@ type NextStepProps = {
 }
 
 export function TestatorIdentification({ nextStep }: NextStepProps) {
+  const methods = useForm({
+    resolver: zodResolver(schema),
+    mode: 'onChange',
+    reValidateMode: 'onChange',
+  })
+
   const onSubmit = (data: z.infer<typeof schema>) => {
+    console.log(data)
     nextStep()
   }
 
   return (
-    <Form onSubmit={onSubmit} resolver={zodResolver(schema)} noValidate>
+    <Form
+      onSubmit={onSubmit}
+      resolver={zodResolver(schema)}
+      noValidate
+      {...methods}
+    >
       <Container
         maxW="container.xl"
         width="100%"
@@ -67,15 +80,7 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
             inputProps={{ type: 'date', fontSize: { base: 'sm', md: 'md' } }}
             isRequired
           ></InputControl>
-          <InputControl
-            name="address"
-            label="Trvalé bydliště"
-            labelProps={{ fontSize: { base: 'sm', md: 'md' } }}
-            inputProps={{ fontSize: { base: 'sm', md: 'md' } }}
-            isRequired
-          ></InputControl>
           <PlacesAutoComplete name="address" label="Trvalé bydliště" />
-          <Spacer></Spacer>
           <Box>
             <SubmitButton>Potvrdit údaje</SubmitButton>
           </Box>

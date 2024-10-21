@@ -1,10 +1,11 @@
-import { FormControl, FormLabel } from '@chakra-ui/react'
+import { FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/react'
 import {
   AutoComplete,
   AutoCompleteInput,
   AutoCompleteItem,
   AutoCompleteList,
 } from '@choc-ui/chakra-autocomplete'
+import { Controller, useFormContext } from 'react-hook-form'
 import usePlacesAutocomplete from 'use-places-autocomplete'
 
 type PlacesAutoCompleteProps = {
@@ -14,8 +15,12 @@ type PlacesAutoCompleteProps = {
 
 export function PlacesAutoComplete({ name, label }: PlacesAutoCompleteProps) {
   const {
+    control,
+    formState: { errors },
+  } = useFormContext()
+
+  const {
     ready,
-    value,
     suggestions: { status, data },
     setValue,
     clearSuggestions,
@@ -35,35 +40,51 @@ export function PlacesAutoComplete({ name, label }: PlacesAutoCompleteProps) {
     setValue(e.target.value)
   }
 
-  const handleSelect = (address: string) => {
+  const handleSelect = (address: string, onChange: (value: string) => void) => {
     setValue(address, false)
     clearSuggestions()
+    onChange(address)
   }
 
   return (
-    <FormControl>
-      <FormLabel>{label}</FormLabel>
-      <AutoComplete openOnFocus>
-        <AutoCompleteInput
-          name={name}
-          placeholder="Zadejte adresu..."
-          isDisabled={!ready}
-          onChange={handleInput}
-          value={value}
-        />
-        <AutoCompleteList>
-          {status === 'OK' &&
-            data.map(({ place_id, description }) => (
-              <AutoCompleteItem
-                key={place_id}
-                value={description}
-                onClick={() => handleSelect(description)}
-              >
-                {description}
-              </AutoCompleteItem>
-            ))}
-        </AutoCompleteList>
-      </AutoComplete>
-    </FormControl>
+    <Controller
+      name={name}
+      control={control}
+      defaultValue=""
+      render={({ field: { onChange, value } }) => (
+        <FormControl isRequired isInvalid={!!errors[name]}>
+          <FormLabel>{label}</FormLabel>
+          <AutoComplete openOnFocus>
+            <AutoCompleteInput
+              name={name}
+              placeholder="Zadejte adresu..."
+              isDisabled={!ready}
+              onChange={(e) => {
+                handleInput(e)
+                onChange(e.target.value)
+              }}
+              value={value || ''}
+            />
+            <AutoCompleteList>
+              {status === 'OK' &&
+                data.map(({ place_id, description }) => (
+                  <AutoCompleteItem
+                    key={place_id}
+                    value={description}
+                    onClick={() => handleSelect(description, onChange)}
+                  >
+                    {description}
+                  </AutoCompleteItem>
+                ))}
+            </AutoCompleteList>
+            {errors[name] && (
+              <FormErrorMessage>
+                {errors[name]?.message?.toString()}
+              </FormErrorMessage>
+            )}
+          </AutoComplete>
+        </FormControl>
+      )}
+    />
   )
 }
