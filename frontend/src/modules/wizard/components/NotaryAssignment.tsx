@@ -1,3 +1,4 @@
+import { gql, useQuery } from '@apollo/client'
 import {
   Avatar,
   Box,
@@ -15,7 +16,27 @@ import { useTooltip } from '../hooks/useTooltip'
 import { AccordionHelper } from './accordion/AccordionHelper'
 import { ContactInfo } from './contact/ContactInfo'
 
-// TO BE DELETED SOON
+const GET_NOTARY_QUERY = gql(/* GraphQL */ `
+  query GetNotaryByAddressAndBirthDate(
+    $address: AddressInput!
+    $expirationDate: DateTimeISO!
+  ) {
+    getNotaryByAddressAndBirthDate(
+      address: $address
+      expirationDate: $expirationDate
+    ) {
+      contact {
+        id
+        name
+        surname
+        postalCode
+        phone
+        email
+      }
+    }
+  }
+`)
+
 const dummy_data = [
   {
     id: 1,
@@ -33,13 +54,6 @@ const dummy_data = [
 const tooltipText =
   'Tato aplikace vám srozumitelně vysvětlí, co vás v pozůstalostním řízení čeká a díky návodu zjistíte, jaké jsou možnosti rozdělení majetku v pozůstalosti.'
 
-// TO BE DELETED SOON
-const mock_data = {
-  phone: '+420 222 715 217',
-  email: 'zkratochvil.notar@nkcr.cz',
-  address: 'Sudoměřská 32/1293, 130 00 Praha 3',
-}
-
 interface NotaryAssignmentProps {
   nextStep: () => void
   previousStep: () => void
@@ -50,6 +64,20 @@ export function NotaryAssignment({
   previousStep,
 }: NotaryAssignmentProps) {
   const { isOpen, openTooltip, closeTooltip, toggleTooltip } = useTooltip()
+
+  const { data, loading, error } = useQuery(GET_NOTARY_QUERY, {
+    variables: {
+      address: {
+        postalCode: '15000', // replace with actual postal code
+      },
+      expirationDate: '2024-01-01T00:00:00Z', // replace with actual expiration date
+    },
+  })
+
+  if (loading) return <Text>Loading...</Text>
+  if (error) return <Text>Error: {error.message}</Text>
+
+  const notary = data.getNotaryByAddressAndBirthDate.contact
 
   return (
     <Box>
@@ -63,7 +91,7 @@ export function NotaryAssignment({
         <WrapItem>
           <Avatar
             size={{ base: 'xl', sm: '2xl' }}
-            name="Placeholder"
+            name={notary.name}
             src="https://bit.ly/dan-abramov"
             my={{ base: 4, sm: 6 }}
           />
@@ -73,7 +101,7 @@ export function NotaryAssignment({
           textAlign="center"
           mb={6}
         >
-          JUDr. Zdeněk Kratochvíl
+          {notary.name} {notary.surname}
         </Heading>
       </Stack>
       <Stack
@@ -81,7 +109,7 @@ export function NotaryAssignment({
         direction={{ base: 'column', md: 'column', lg: 'row' }}
         pt={{ base: 4, md: 0 }}
       >
-        <ContactInfo contactInfo={mock_data} />
+        <ContactInfo contactInfo={notary} />
         <Container maxWidth="container.sm">
           <AccordionHelper items={dummy_data} />
         </Container>
