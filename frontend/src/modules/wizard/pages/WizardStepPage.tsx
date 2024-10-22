@@ -1,3 +1,4 @@
+import { createContext, Dispatch, SetStateAction, useState } from 'react'
 import { Box, Heading } from '@chakra-ui/react'
 
 import { NotaryAssignment } from '../components/NotaryAssignment'
@@ -8,6 +9,26 @@ import { TestatorIdentification } from '../components/TestatorIdentification'
 import { useWizardSteps } from '../hooks/useWizardSteps'
 import questionData from '../questions.json'
 
+type NotaryData = {
+  sex?: string
+  birthDate?: string
+  address?: string
+  postalCode?: string
+}
+
+interface NotaryDataContextProps {
+  notaryData: NotaryData
+  setNotaryData: Dispatch<SetStateAction<NotaryData>>
+}
+
+const defaultNotaryData: NotaryDataContextProps = {
+  notaryData: {},
+  setNotaryData: () => {},
+}
+
+export const NotaryDataContext =
+  createContext<NotaryDataContextProps>(defaultNotaryData)
+
 export function WizardPage() {
   const {
     step,
@@ -16,6 +37,8 @@ export function WizardPage() {
     setNextStep,
     setPreviousStep,
   } = useWizardSteps()
+
+  const [notaryData, setNotaryData] = useState<NotaryData>({})
 
   const data = questionData
 
@@ -28,56 +51,58 @@ export function WizardPage() {
   }
 
   return (
-    <Box width={{ base: '85%', md: '60%' }} mx="auto" mt="8">
-      <StepperProgress
-        step={step}
-        questionsProgress={questionsProgress}
-        treeProgress={treeProgress}
-      />
-      <Box textAlign="center" my="8">
-        {step === 1 && (
-          <Box>
-            <StepperHeading text="Identifikace zůstavitele" />
-            <TestatorIdentification nextStep={setNextStep} />
-          </Box>
-        )}
-        {step === 2 && (
-          <Box>
-            <StepperHeading
-              text={
-                questionsProgress === 0
-                  ? 'Přiřazení notáře'
-                  : `Průvodce pozůstalostním řízením (${
-                      questionsProgress / 10
-                    }/10)`
-              }
-            />
-            {questionsProgress === 0 ? (
-              <NotaryAssignment
-                nextStep={setNextStep}
-                previousStep={setPreviousStep}
+    <NotaryDataContext.Provider value={{ notaryData, setNotaryData }}>
+      <Box width={{ base: '85%', md: '60%' }} mx="auto" mt="8">
+        <StepperProgress
+          step={step}
+          questionsProgress={questionsProgress}
+          treeProgress={treeProgress}
+        />
+        <Box textAlign="center" my="8">
+          {step === 1 && (
+            <Box>
+              <StepperHeading text="Identifikace zůstavitele" />
+              <TestatorIdentification nextStep={setNextStep} />
+            </Box>
+          )}
+          {step === 2 && (
+            <Box>
+              <StepperHeading
+                text={
+                  questionsProgress === 0
+                    ? 'Přiřazení notáře'
+                    : `Průvodce pozůstalostním řízením (${
+                        questionsProgress / 10
+                      }/10)`
+                }
               />
-            ) : (
-              <QuestionStep
-                progress={questionsProgress}
-                heading={data[questionsProgress / 10].heading}
-                questions={data[questionsProgress / 10].question}
-                button={data[questionsProgress / 10].button}
-                nextStep={setNextStep}
-                previousStep={setPreviousStep}
-                questionsProgress={questionsProgress}
-              />
-            )}
-          </Box>
-        )}
-        {step === 3 && (
-          <Box>
-            <StepperHeading text="Rozhodovací strom" />
-            <QuestionnaireStep />
-          </Box>
-        )}
-        {step === 4 && <StepperHeading text="Výstup nachytřovadla..." />}
+              {questionsProgress === 0 ? (
+                <NotaryAssignment
+                  nextStep={setNextStep}
+                  previousStep={setPreviousStep}
+                />
+              ) : (
+                <QuestionStep
+                  progress={questionsProgress}
+                  heading={data[questionsProgress / 10].heading}
+                  questions={data[questionsProgress / 10].question}
+                  button={data[questionsProgress / 10].button}
+                  nextStep={setNextStep}
+                  previousStep={setPreviousStep}
+                  questionsProgress={questionsProgress}
+                />
+              )}
+            </Box>
+          )}
+          {step === 3 && (
+            <Box>
+              <StepperHeading text="Rozhodovací strom" />
+              <QuestionnaireStep />
+            </Box>
+          )}
+          {step === 4 && <StepperHeading text="Výstup nachytřovadla..." />}
+        </Box>
       </Box>
-    </Box>
+    </NotaryDataContext.Provider>
   )
 }

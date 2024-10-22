@@ -1,5 +1,7 @@
-import { Box, Container, Radio, Spacer, Stack, Text } from '@chakra-ui/react'
+import { useContext, useEffect } from 'react'
+import { Box, Container, Radio, Stack, Text } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
 import {
   InputControl,
   RadioGroupControl,
@@ -8,6 +10,8 @@ import {
 import { z } from 'zod'
 
 import { Form } from '../../../shared/forms/Form'
+import { NotaryDataContext } from '../pages/WizardStepPage'
+import { getZipCodeFromAddress } from '../utils/getGeocode'
 
 import { PlacesAutoComplete } from './PlacesAutoComplete'
 
@@ -22,12 +26,37 @@ type NextStepProps = {
 }
 
 export function TestatorIdentification({ nextStep }: NextStepProps) {
-  const onSubmit = (data: z.infer<typeof schema>) => {
+  const methods = useForm({
+    resolver: zodResolver(schema),
+    mode: 'onChange',
+    reValidateMode: 'onChange',
+  })
+
+  const notaryDataContext = useContext(NotaryDataContext)
+
+  const { notaryData, setNotaryData } = notaryDataContext
+
+  useEffect(() => {
+    if (notaryData) {
+      methods.reset(notaryData)
+    }
+  }, [notaryData, methods])
+
+  const onSubmit = async (data: z.infer<typeof schema>) => {
+    const postalCode = await getZipCodeFromAddress(data.address)
+    const testatorData = { ...data, postalCode }
+    setNotaryData(testatorData)
+    //console.log(testatorData)
     nextStep()
   }
 
   return (
-    <Form onSubmit={onSubmit} resolver={zodResolver(schema)} noValidate>
+    <Form
+      onSubmit={onSubmit}
+      resolver={zodResolver(schema)}
+      noValidate
+      {...methods}
+    >
       <Container
         maxW="container.xl"
         width="100%"
@@ -67,15 +96,7 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
             inputProps={{ type: 'date', fontSize: { base: 'sm', md: 'md' } }}
             isRequired
           ></InputControl>
-          <InputControl
-            name="address"
-            label="Trvalé bydliště"
-            labelProps={{ fontSize: { base: 'sm', md: 'md' } }}
-            inputProps={{ fontSize: { base: 'sm', md: 'md' } }}
-            isRequired
-          ></InputControl>
           <PlacesAutoComplete name="address" label="Trvalé bydliště" />
-          <Spacer></Spacer>
           <Box>
             <SubmitButton>Potvrdit údaje</SubmitButton>
           </Box>
