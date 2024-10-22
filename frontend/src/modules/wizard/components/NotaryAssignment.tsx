@@ -1,3 +1,4 @@
+import { useContext } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import {
   Avatar,
@@ -12,6 +13,7 @@ import {
 } from '@chakra-ui/react'
 
 import { useTooltip } from '../hooks/useTooltip'
+import { NotaryDataContext } from '../pages/WizardStepPage'
 
 import { AccordionHelper } from './accordion/AccordionHelper'
 import { ContactInfo } from './contact/ContactInfo'
@@ -65,12 +67,20 @@ export function NotaryAssignment({
 }: NotaryAssignmentProps) {
   const { isOpen, openTooltip, closeTooltip, toggleTooltip } = useTooltip()
 
+  const notaryDataContext = useContext(NotaryDataContext)
+
+  const { notaryData } = notaryDataContext
+
+  const birthDataISO = notaryData.birthDate
+    ? new Date(notaryData.birthDate).toISOString()
+    : ''
+
   const { data, loading, error } = useQuery(GET_NOTARY_QUERY, {
     variables: {
       address: {
-        postalCode: '15000', // replace with actual postal code
+        postalCode: notaryData.postalCode,
       },
-      expirationDate: '2024-01-01T00:00:00Z', // replace with actual expiration date
+      expirationDate: birthDataISO,
     },
   })
 
