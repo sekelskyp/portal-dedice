@@ -30,19 +30,19 @@ export const NotaryDataContext =
   createContext<NotaryDataContextProps>(defaultNotaryData)
 
 export function WizardPage() {
+  const totalQuestions = questionData.length
   const {
     step,
     questionsProgress,
+    questionId,
     treeProgress,
     setNextStep,
     setPreviousStep,
-  } = useWizardSteps()
+  } = useWizardSteps(totalQuestions)
 
   const [notaryData, setNotaryData] = useState<NotaryData>({})
 
   const data = questionData
-  const totalQuestions = data.length
-  const progressPercentage = (questionsProgress / totalQuestions) * 100
 
   function StepperHeading({ text }: { text: string }) {
     return (
@@ -74,7 +74,7 @@ export function WizardPage() {
                   questionsProgress === 0
                     ? 'Přiřazení notáře'
                     : `Průvodce pozůstalostním řízením (${
-                        questionsProgress / totalQuestions
+                        questionId
                       }/${totalQuestions})`
                 }
               />
@@ -86,12 +86,12 @@ export function WizardPage() {
               ) : (
                 <QuestionStep
                   progress={questionsProgress}
-                  heading={data[questionsProgress / totalQuestions].heading}
-                  questions={data[questionsProgress / totalQuestions].question}
-                  button={data[questionsProgress / totalQuestions].button}
+                  heading={questionData[questionId].heading}
+                  questions={questionData[questionId].question}
+                  button={questionData[questionId].button}
                   nextStep={setNextStep}
                   previousStep={setPreviousStep}
-                  questionsProgress={progressPercentage}
+                  questionsProgress={questionsProgress}
                 />
               )}
             </Box>
