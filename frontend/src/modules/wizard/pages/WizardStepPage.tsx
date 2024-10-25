@@ -41,6 +41,8 @@ export function WizardPage() {
   const [notaryData, setNotaryData] = useState<NotaryData>({})
 
   const data = questionData
+  const totalQuestions = data.length
+  const progressPercentage = (questionsProgress / totalQuestions) * 100
 
   function StepperHeading({ text }: { text: string }) {
     return (
@@ -72,8 +74,8 @@ export function WizardPage() {
                   questionsProgress === 0
                     ? 'Přiřazení notáře'
                     : `Průvodce pozůstalostním řízením (${
-                        questionsProgress / 10
-                      }/10)`
+                        questionsProgress / totalQuestions
+                      }/${totalQuestions})`
                 }
               />
               {questionsProgress === 0 ? (
@@ -84,12 +86,12 @@ export function WizardPage() {
               ) : (
                 <QuestionStep
                   progress={questionsProgress}
-                  heading={data[questionsProgress / 10].heading}
-                  questions={data[questionsProgress / 10].question}
-                  button={data[questionsProgress / 10].button}
+                  heading={data[questionsProgress / totalQuestions].heading}
+                  questions={data[questionsProgress / totalQuestions].question}
+                  button={data[questionsProgress / totalQuestions].button}
                   nextStep={setNextStep}
                   previousStep={setPreviousStep}
-                  questionsProgress={questionsProgress}
+                  questionsProgress={progressPercentage}
                 />
               )}
             </Box>
@@ -97,7 +99,7 @@ export function WizardPage() {
           {step === 3 && (
             <Box>
               <StepperHeading text="Rozhodovací strom" />
-              <QuestionnaireStep />
+              <QuestionnaireStep setPreviousStep={setPreviousStep} />
             </Box>
           )}
           {step === 4 && <StepperHeading text="Výstup nachytřovadla..." />}

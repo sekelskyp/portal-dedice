@@ -63,12 +63,35 @@ const RadioCard = (props: RadioCardProps) => {
   )
 }
 
-export const QuestionnaireStep = () => {
+interface QuestionnaireStepProps {
+  setPreviousStep: () => void // Accept the setPreviousStep prop
+}
+
+export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
+  setPreviousStep,
+}) => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [answers, setAnswers] = useState<{ [key: number]: number }>({})
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
 
   const currentStep = questionData.steps[currentStepIndex]
+
+  const canShowStep = (step: Step): boolean => {
+    if (!step.dependencies) return true
+    return step.dependencies.every((dependency) => {
+      const dependentAnswer = answers[dependency.questionId]
+      return dependentAnswer === dependency.answerId
+    })
+  }
+
+  const findNextStepIndex = (startIndex: number): number => {
+    for (let i = startIndex; i < questionData.steps.length; i++) {
+      if (canShowStep(questionData.steps[i])) {
+        return i
+      }
+    }
+    return startIndex
+  }
 
   const handleAnswer = (nextValue: string) => {
     const answerId = parseInt(nextValue, 10)
@@ -84,23 +107,9 @@ export const QuestionnaireStep = () => {
     }
   }
 
-  const findNextStepIndex = (startIndex: number): number => {
-    for (let i = startIndex; i < questionData.steps.length; i++) {
-      if (canShowStep(questionData.steps[i])) {
-        return i
-      }
-    }
-    return startIndex
-  }
-
   const goToNextStep = () => {
     let nextStepIndex = currentStepIndex + 1
-    while (
-      nextStepIndex < questionData.steps.length &&
-      !canShowStep(questionData.steps[nextStepIndex])
-    ) {
-      nextStepIndex++
-    }
+    nextStepIndex = findNextStepIndex(nextStepIndex)
     if (nextStepIndex < questionData.steps.length) {
       setCurrentStepIndex(nextStepIndex)
       setSelectedAnswer(null)
@@ -122,21 +131,12 @@ export const QuestionnaireStep = () => {
       )
     }
   }
-
   const goToFirstStep = () => {
     const firstStepIndex = findNextStepIndex(0)
     setCurrentStepIndex(firstStepIndex)
   }
 
-  const canShowStep = (step: Step): boolean => {
-    if (!step.dependencies) return true
-
-    return step.dependencies.every((dependency) => {
-      const dependentResponse = answers[dependency.questionId]
-      return dependentResponse === dependency.answerId
-    })
-  }
-
+  // RadioGroup setup for handling answer selection
   const { getRootProps, getRadioProps } = useRadioGroup({
     value: selectedAnswer !== null ? selectedAnswer.toString() : '',
     onChange: (value) => handleAnswer(value),
@@ -168,11 +168,23 @@ export const QuestionnaireStep = () => {
               mt={4}
               justifyContent="space-between"
             >
+              {currentStep.id === 1 && (
+                <Button
+                  onClick={setPreviousStep}
+                  bg="gray.500"
+                  order={{ base: 2, sm: 1 }}
+                  fontSize={{ base: 'sm', sm: 'md' }}
+                  size={{ base: 'sm', sm: 'lg' }}
+                >
+                  Zpět na otázky
+                </Button>
+              )}
               {currentStepIndex > 0 && (
                 <Button
                   bg="gray.500"
                   order={{ base: 2, sm: 1 }}
                   fontSize={{ base: 'sm', sm: 'md' }}
+                  size={{ base: 'sm', sm: 'lg' }}
                   onClick={goToPreviousStep}
                 >
                   Zpět
@@ -182,6 +194,7 @@ export const QuestionnaireStep = () => {
                 <Button
                   order={{ base: 1, sm: 2 }}
                   fontSize={{ base: 'sm', sm: 'md' }}
+                  size={{ base: 'sm', sm: 'lg' }}
                   onClick={goToNextStep}
                   isDisabled={selectedAnswer === null}
                 >
