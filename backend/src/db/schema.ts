@@ -24,38 +24,44 @@ export const user = mysqlTable(
   'user',
   {
     id: int('id').primaryKey().autoincrement(),
-    contactId: int('contact_id')
-      .references(() => contact.id)
-      .notNull(),
-    login: varchar('login', { length: 255 }).notNull(),
+    email: varchar('email', { length: 100 }).notNull(),
     password: varchar('password', { length: 255 }).notNull(),
   },
   (table) => ({
-    loginUniqueIndex: uniqueIndex('user_login_unique_index').on(
-      lower(table.login)
+    loginUniqueIndex: uniqueIndex('user_email_unique_index').on(
+      lower(table.email)
     ),
   })
 )
 
 // Define Contact Table
-export const contact = mysqlTable(
-  'contact',
+export const contact = mysqlTable('contact', {
+  id: int('id').primaryKey().autoincrement(),
+  name: varchar('name', { length: 125 }).notNull(),
+  surname: varchar('surname', { length: 125 }).notNull(),
+  displayName: varchar('display_name', { length: 255 })
+    .notNull()
+    .default(sql`CONCAT(name, ' ', surname)`),
+  gender: varchar('gender', { length: 50 }),
+  phone: char('phone', { length: 15 }),
+  email: varchar('email', { length: 255 }).notNull(),
+  addressId: int('address_id').references(() => address.id),
+})
+
+// Define Contact Table
+export const address = mysqlTable(
+  'address',
   {
     id: int('id').primaryKey().autoincrement(),
-    name: varchar('name', { length: 255 }).notNull(),
-    surname: varchar('surname', { length: 255 }).notNull(),
-    dateOfBirth: date('date_of_birth').notNull(),
-    gender: varchar('gender', { length: 50 }).notNull(),
-    phone: char('phone', { length: 15 }),
-    email: varchar('email', { length: 255 }).notNull(),
-    country: varchar('country', { length: 100 }).notNull(),
-    city: varchar('city', { length: 100 }).notNull(),
-    street: varchar('street', { length: 255 }).notNull(),
-    postalCode: varchar('postal_code', { length: 8 }).notNull(),
+    completeAddress: varchar('complete_address', { length: 255 }).notNull(),
+    postalCode: varchar('postal_code', { length: 8 }),
+    pragueNumber: int('prague_number'),
+    // we might need to separate address string into street, city, etc.
   },
   (table) => ({
-    emailUniqueIndex: uniqueIndex('contact_email_unique_index').on(
-      lower(table.email)
+    checkPragueNumber: check(
+      'check_prague_number',
+      sql`${table.pragueNumber} > 0`
     ),
   })
 )
@@ -63,35 +69,44 @@ export const contact = mysqlTable(
 // Define Notary Table
 export const notary = mysqlTable('notary', {
   id: int('id').primaryKey().autoincrement(),
-  businessContactId: int('business_contact_id')
+  contactId: int('contact_id')
     .references(() => contact.id)
     .notNull(),
-  userId: int('user_id')
-    .references(() => user.id)
+  userId: int('user_id').references(() => user.id),
+})
+
+// Define Beneficiary Table
+export const beneficiary = mysqlTable('beneficiary', {
+  id: int('id').primaryKey().autoincrement(),
+  userId: int('user_id').references(() => user.id),
+  deceasedRelation: varchar('deceased_relation', {
+    length: 6,
+    enum: ['Spouse', 'Child', 'Parent', 'Other'],
+  }).notNull(),
+  contactId: int('contact_id')
+    .references(() => contact.id)
+    .notNull(),
+  dateOfBirth: date('date_of_birth').notNull(),
+})
+
+// Define Deceased Person Table
+export const deceasedPerson = mysqlTable('deceased_person', {
+  id: int('id').primaryKey().autoincrement(),
+  procedureId: int('procedure_id').references(() => inheritanceProcedure.id),
+  dateOfBirth: date('date_of_birth').notNull(),
+  dateOfDeath: date('date_of_death').notNull(),
+  contactId: int('contact_id')
+    .references(() => contact.id)
     .notNull(),
 })
 
 // Define InheritanceProcedure Table with Foreign Key to ProcedureState
 export const inheritanceProcedure = mysqlTable('inheritance_procedure', {
   id: int('id').primaryKey().autoincrement(),
-  notaryId: int('notary_id')
-    .references(() => notary.id)
-    .notNull(),
+  notaryId: int('notary_id').references(() => notary.id),
   state: varchar('state', {
     length: 10,
     enum: ['InProgress', 'Closed'],
-  }).notNull(),
-})
-
-// Define Beneficiary Table
-export const beneficiary = mysqlTable('beneficiary', {
-  id: int('id').primaryKey().autoincrement(),
-  userId: int('user_id')
-    .references(() => user.id)
-    .notNull(),
-  deceasedRelation: varchar('deceased_relation', {
-    length: 6,
-    enum: ['Spouse', 'Child', 'Parent', 'Other'],
   }).notNull(),
 })
 
@@ -168,16 +183,6 @@ export const task = mysqlTable('task', {
   inheritanceProcedureId: int('inheritance_procedure_id')
     .references(() => inheritanceProcedure.id)
     .notNull(), // FK to InheritanceProcedure
-})
-
-// Define FAQ Table
-export const faq = mysqlTable('faq', {
-  id: int('id').primaryKey().autoincrement(),
-  question: varchar('question', { length: 100 }).notNull(),
-  answer: varchar('answer', { length: 255 }).notNull(),
-  createDate: timestamp('create_date').defaultNow(),
-  notaryOwnerId: int('notary_owner_id').references(() => notary.id), // FK to Notary
-  taskType: varchar('task_type', { length: 15, enum: taskTypeEnum }),
 })
 
 // Define BeneficiaryMeetingRel Table for M2M between Beneficiary and Meeting with Composite Key
@@ -292,15 +297,6 @@ export const notaryDateRule = mysqlTable(
     ),
   })
 )
-
-// Define Deceased Person Table
-export const deceasedPerson = mysqlTable('deceased_person', {
-  id: int('id').primaryKey().autoincrement(),
-  procedureId: int('procedure_id').references(() => inheritanceProcedure.id),
-  name: varchar('name', { length: 100 }).notNull(),
-  postalCode: varchar('postal_code', { length: 10 }).notNull(),
-  dateOfDeath: date('date_of_death').notNull(),
-})
 
 // Custom lower function
 // https://orm.drizzle.team/docs/guides/unique-case-insensitive-email
