@@ -39,16 +39,16 @@ export const contact = mysqlTable('contact', {
   id: int('id').primaryKey().autoincrement(),
   name: varchar('name', { length: 125 }).notNull(),
   surname: varchar('surname', { length: 125 }).notNull(),
-  displayName: varchar('display_name', { length: 255 })
-    .notNull()
-    .default(sql`CONCAT(name, ' ', surname)`),
+  displayName: varchar('display_name', { length: 255 }).default(
+    sql`CONCAT(name, ' ', surname)`
+  ),
   gender: varchar('gender', { length: 50 }),
   phone: char('phone', { length: 15 }),
-  email: varchar('email', { length: 255 }).notNull(),
+  email: varchar('email', { length: 255 }),
   addressId: int('address_id').references(() => address.id),
 })
 
-// Define Contact Table
+// Define Address Table
 export const address = mysqlTable(
   'address',
   {
@@ -69,9 +69,7 @@ export const address = mysqlTable(
 // Define Notary Table
 export const notary = mysqlTable('notary', {
   id: int('id').primaryKey().autoincrement(),
-  contactId: int('contact_id')
-    .references(() => contact.id)
-    .notNull(),
+  contactId: int('contact_id').references(() => contact.id),
   userId: int('user_id').references(() => user.id),
 })
 
@@ -83,9 +81,7 @@ export const beneficiary = mysqlTable('beneficiary', {
     length: 6,
     enum: ['Spouse', 'Child', 'Parent', 'Other'],
   }).notNull(),
-  contactId: int('contact_id')
-    .references(() => contact.id)
-    .notNull(),
+  contactId: int('contact_id').references(() => contact.id),
   dateOfBirth: date('date_of_birth').notNull(),
 })
 
@@ -95,9 +91,7 @@ export const deceasedPerson = mysqlTable('deceased_person', {
   procedureId: int('procedure_id').references(() => inheritanceProcedure.id),
   dateOfBirth: date('date_of_birth').notNull(),
   dateOfDeath: date('date_of_death').notNull(),
-  contactId: int('contact_id')
-    .references(() => contact.id)
-    .notNull(),
+  contactId: int('contact_id').references(() => contact.id),
 })
 
 // Define InheritanceProcedure Table with Foreign Key to ProcedureState

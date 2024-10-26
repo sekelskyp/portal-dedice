@@ -1,0 +1,69 @@
+import {
+  Arg,
+  Ctx,
+  FieldResolver,
+  Mutation,
+  Query,
+  Resolver,
+  Root,
+} from 'type-graphql'
+
+import { CustomContext } from '@backend/types/types'
+
+import { Contact } from '../contact/contactType'
+import { User } from '../user/userType'
+
+import { CreateNotaryInput } from './createNotaryInput'
+import { Notary } from './notaryType'
+
+@Resolver(() => Notary)
+export class NotaryResolver {
+  @Query(() => [Notary])
+  async notaries(
+    @Ctx() { notaryRepository }: CustomContext
+  ): Promise<Notary[]> {
+    return notaryRepository.getAllNotaries()
+  }
+
+  @Query(() => Notary, { nullable: true })
+  async author(
+    @Arg('id') id: number,
+    @Ctx() { notaryRepository }: CustomContext
+  ): Promise<Notary> {
+    return notaryRepository.getNotaryById(id)
+  }
+
+  @FieldResolver(() => User, { nullable: true })
+  async user(
+    @Root() notary: Notary,
+    @Ctx() { userRepository }: CustomContext
+  ): Promise<User | null> {
+    return await userRepository.getUserByNotaryId(notary.id)
+  }
+
+  @FieldResolver(() => Contact, { nullable: true })
+  async contact(
+    @Root() notary: Notary,
+    @Ctx() { contactRepository }: CustomContext
+  ): Promise<Contact | null> {
+    return await contactRepository.getContactByNotaryId(notary.id)
+  }
+
+  @Mutation(() => Notary)
+  async createNotary(
+    @Arg('data') data: CreateNotaryInput,
+    @Ctx() { notaryRepository }: CustomContext
+  ): Promise<Notary> {
+    const { id } = await notaryRepository.createNotary(data)
+    return notaryRepository.getNotaryById(id)
+  }
+
+  @Mutation(() => Notary)
+  async deleteNotary(
+    @Arg('id') id: number,
+    @Ctx() { notaryRepository }: CustomContext
+  ): Promise<boolean> {
+    const deletedNotaryId = await notaryRepository.deleteNotaryById(id)
+    return deletedNotaryId !== null
+  }
+}

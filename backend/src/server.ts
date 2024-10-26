@@ -10,7 +10,6 @@ import {
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
 import { addMocksToSchema } from '@graphql-tools/mock'
 import cors from 'cors'
-import { MySql2Database } from 'drizzle-orm/mysql2'
 import express from 'express'
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js'
 import * as http from 'http'
@@ -19,9 +18,12 @@ import { buildSchema } from 'type-graphql'
 import { MOCKS, PORT } from '@backend/config'
 import { getConnection } from '@backend/db/db'
 import { AuthResolver } from '@backend/graphql/modules/auth/authResolver'
+import { getContactRepository } from '@backend/graphql/modules/contact/contactRepository'
 import { EmptyResolver } from '@backend/graphql/modules/empty/emptyResolver'
+import { getNotaryRepository } from '@backend/graphql/modules/notary/notaryRepository'
 import { NotaryAssignmentResolver } from '@backend/graphql/modules/notaryAssignment/notaryAssignmentResolver'
 import { PasswordResetResolver } from '@backend/graphql/modules/passwordReset/passwordResetTokenResolver'
+import { getUserRepository } from '@backend/graphql/modules/user/userRepository'
 import { UserResolver } from '@backend/graphql/modules/user/userResolver'
 import { parseAndVerifyJWT } from '@backend/libs/jwt'
 import { mockResolvers } from '@backend/mocks/mocks'
@@ -59,7 +61,7 @@ const init = async () => {
     req,
     res,
   }: ExpressContextFunctionArgument): Promise<CustomContext> => {
-    const drizzle = MOCKS ? null : await getConnection()
+    const drizzle = await getConnection()
     const authToken = req.headers.authorization ?? ''
     const authUser = parseAndVerifyJWT(authToken)
 
@@ -68,8 +70,11 @@ const init = async () => {
     })
 
     return {
-      db: drizzle?.db as unknown as MySql2Database,
+      db: drizzle.db,
       authUser,
+      notaryRepository: getNotaryRepository(drizzle.db),
+      userRepository: getUserRepository(drizzle.db),
+      contactRepository: getContactRepository(drizzle.db),
     }
   }
 

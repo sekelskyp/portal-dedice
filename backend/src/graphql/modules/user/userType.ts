@@ -5,11 +5,8 @@ export class User {
   @Field(() => ID)
   id!: number
 
-  @Field(() => ID)
-  contactId!: number
-
   @Field()
-  login!: string
+  email!: string
 
   @Field()
   password!: string
