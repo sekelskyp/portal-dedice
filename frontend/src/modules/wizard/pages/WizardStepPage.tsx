@@ -9,25 +9,25 @@ import { TestatorIdentification } from '../components/TestatorIdentification'
 import { useWizardSteps } from '../hooks/useWizardSteps'
 import questionData from '../questions.json'
 
-type NotaryData = {
+type TestatorData = {
   sex?: string
   birthDate?: string
   address?: string
   postalCode?: string
 }
 
-interface NotaryDataContextProps {
-  notaryData: NotaryData
-  setNotaryData: Dispatch<SetStateAction<NotaryData>>
+interface TestatorDataContextProps {
+  testatorData: TestatorData
+  setTestatorData: Dispatch<SetStateAction<TestatorData>>
 }
 
-const defaultNotaryData: NotaryDataContextProps = {
-  notaryData: {},
-  setNotaryData: () => {},
+const defaultTestatorData: TestatorDataContextProps = {
+  testatorData: {},
+  setTestatorData: () => {},
 }
 
-export const NotaryDataContext =
-  createContext<NotaryDataContextProps>(defaultNotaryData)
+export const TestatorDataContext =
+  createContext<TestatorDataContextProps>(defaultTestatorData)
 
 export function WizardPage() {
   const totalQuestions = questionData.length
@@ -40,9 +40,7 @@ export function WizardPage() {
     setPreviousStep,
   } = useWizardSteps(totalQuestions)
 
-  const [notaryData, setNotaryData] = useState<NotaryData>({})
-
-  const data = questionData
+  const [testatorData, setTestatorData] = useState<TestatorData>({})
 
   function StepperHeading({ text }: { text: string }) {
     return (
@@ -53,7 +51,7 @@ export function WizardPage() {
   }
 
   return (
-    <NotaryDataContext.Provider value={{ notaryData, setNotaryData }}>
+    <TestatorDataContext.Provider value={{ testatorData, setTestatorData }}>
       <Box width={{ base: '85%', md: '60%' }} mx="auto" mt="8">
         <StepperProgress
           step={step}
@@ -105,6 +103,6 @@ export function WizardPage() {
           {step === 4 && <StepperHeading text="Výstup nachytřovadla..." />}
         </Box>
       </Box>
-    </NotaryDataContext.Provider>
+    </TestatorDataContext.Provider>
   )
 }

@@ -43,6 +43,7 @@ export function ContactInfo({ contactInfo }: ContactInfoProps) {
       maxWidth="fit-content"
       px={{ base: 4, sm: 6, md: 10 }}
       py={4}
+      mb={{ base: 4, lg: 0 }}
     >
       {contactIcons.map((item, index) => (
         <ContactInfoItem key={index} icon={item.icon} text={item.text} />

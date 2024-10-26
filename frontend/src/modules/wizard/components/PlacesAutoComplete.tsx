@@ -27,11 +27,12 @@ export function PlacesAutoComplete({ name, label }: PlacesAutoCompleteProps) {
   } = usePlacesAutocomplete({
     callbackName: 'initMap',
     requestOptions: {
-      /* Define search scope here */
       language: 'cs',
       componentRestrictions: {
         country: 'CZ',
       },
+      types: ['address'],
+      fields: ['address_components', 'formatted_address', 'place_id'],
     },
     debounce: 300,
   })
@@ -44,6 +45,14 @@ export function PlacesAutoComplete({ name, label }: PlacesAutoCompleteProps) {
     setValue(address, false)
     clearSuggestions()
     onChange(address)
+  }
+
+  const formatAddress = (description: string): string => {
+    const parts = description.split(',')
+    return parts
+      .slice(0, parts.length - 1)
+      .join(',')
+      .trim()
   }
 
   return (
@@ -67,15 +76,18 @@ export function PlacesAutoComplete({ name, label }: PlacesAutoCompleteProps) {
             />
             <AutoCompleteList>
               {status === 'OK' &&
-                data.map(({ place_id, description }) => (
-                  <AutoCompleteItem
-                    key={place_id}
-                    value={description}
-                    onClick={() => handleSelect(description, onChange)}
-                  >
-                    {description}
-                  </AutoCompleteItem>
-                ))}
+                data.map(({ place_id, description }) => {
+                  const formattedAddress = formatAddress(description)
+                  return (
+                    <AutoCompleteItem
+                      key={place_id}
+                      value={formattedAddress}
+                      onClick={() => handleSelect(formattedAddress, onChange)}
+                    >
+                      {formattedAddress}
+                    </AutoCompleteItem>
+                  )
+                })}
             </AutoCompleteList>
             {errors[name] && (
               <FormErrorMessage>

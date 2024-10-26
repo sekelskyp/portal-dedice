@@ -13,10 +13,11 @@ import {
 } from '@chakra-ui/react'
 
 import { useTooltip } from '../hooks/useTooltip'
-import { NotaryDataContext } from '../pages/WizardStepPage'
+import { TestatorDataContext } from '../pages/WizardStepPage'
 
 import { AccordionHelper } from './accordion/AccordionHelper'
 import { ContactInfo } from './contact/ContactInfo'
+import { NotaryAssignmentError } from './NotaryAssignmentError'
 
 const GET_NOTARY_QUERY = gql(/* GraphQL */ `
   query GetNotaryByAddressAndBirthDate(
@@ -34,6 +35,7 @@ const GET_NOTARY_QUERY = gql(/* GraphQL */ `
         postalCode
         phone
         email
+        gender
       }
     }
   }
@@ -67,27 +69,35 @@ export function NotaryAssignment({
 }: NotaryAssignmentProps) {
   const { isOpen, openTooltip, closeTooltip, toggleTooltip } = useTooltip()
 
-  const notaryDataContext = useContext(NotaryDataContext)
+  const testatorDataContext = useContext(TestatorDataContext)
 
-  const { notaryData } = notaryDataContext
+  const { testatorData } = testatorDataContext
 
-  const birthDataISO = notaryData.birthDate
-    ? new Date(notaryData.birthDate).toISOString()
+  const birthDataISO = testatorData.birthDate
+    ? new Date(testatorData.birthDate).toISOString()
     : ''
 
   const { data, loading, error } = useQuery(GET_NOTARY_QUERY, {
     variables: {
       address: {
-        postalCode: notaryData.postalCode,
+        postalCode: testatorData.postalCode,
       },
       expirationDate: birthDataISO,
     },
   })
 
   if (loading) return <Text>Loading...</Text>
-  if (error) return <Text>Error: {error.message}</Text>
+  if (error)
+    return (
+      <NotaryAssignmentError
+        errorMessage={error.message}
+        action={previousStep}
+      />
+    )
 
   const notary = data.getNotaryByAddressAndBirthDate.contact
+
+  console.log(notary)
 
   return (
     <Box>
@@ -101,15 +111,20 @@ export function NotaryAssignment({
         <WrapItem>
           <Avatar
             size={{ base: 'xl', sm: '2xl' }}
-            name={notary.name}
-            src="https://bit.ly/dan-abramov"
+            name=""
+            src={
+              notary.gender === 'Female'
+                ? '/woman-avatar.png'
+                : '/man-avatar.png'
+            }
             my={{ base: 4, sm: 6 }}
+            aria-label="Female and Male icons created by Prosymbols Premium - Flaticon"
           />
         </WrapItem>
         <Heading
           size={{ base: 'sm', sm: 'md', md: 'lg', lg: 'xl' }}
           textAlign="center"
-          mb={6}
+          mb={{ base: 2, md: 6 }}
         >
           {notary.name} {notary.surname}
         </Heading>
