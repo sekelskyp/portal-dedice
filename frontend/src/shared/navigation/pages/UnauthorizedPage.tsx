@@ -1,12 +1,11 @@
-import { Icon, Text } from '@chakra-ui/react'
+import { Button, Icon, Text } from '@chakra-ui/react'
 import { FiAlertCircle } from 'react-icons/fi'
+import { Link } from 'react-router-dom'
 
 import { route } from '@frontend/route'
 import { Box } from '@frontend/shared/design-system'
 
-import { RouterLink } from '../atoms'
-
-export function NotFoundPage() {
+export function UnauthorizedPage() {
   return (
     <Box
       display="flex"
@@ -26,26 +25,30 @@ export function NotFoundPage() {
           mb={4}
           mx={{ base: 8, sm: 0 }}
         >
-          Chyba 404.
+          Chyba 401.
           <Box as="span" display={{ base: 'inline', sm: 'none' }}>
             <br />
           </Box>
           <Box as="span" display={{ base: 'none', sm: 'inline' }}>
             {' '}
           </Box>
-          Stránka nenalezena
+          Přístup zamítnut
         </Text>
         <Text
           fontSize={{ base: 'sm', md: 'md', lg: 'lg' }}
           color="gray.600"
           mx={{ base: 8, sm: 0 }}
         >
-          Stránka, kterou se snažíte najít, neexistuje. Vraťte se{' '}
-          <RouterLink to={route.home()} fontWeight="bold">
-            Domů
-          </RouterLink>
-          .
+          Stránka, kterou se snažíte najít, vyžaduje autorizaci.
         </Text>
+        <Box mt={6} display="flex" gap={2} justifyContent="center">
+          <Button as={Link} to={route.signUp()}>
+            Registrovat se
+          </Button>
+          <Button as={Link} to={route.signIn()}>
+            Přihlásit se
+          </Button>
+        </Box>
       </Box>
     </Box>
   )

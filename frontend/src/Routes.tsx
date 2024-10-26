@@ -5,6 +5,7 @@ import { SignUpPage } from '@frontend/modules/auth/pages/SignUpPage'
 import { HomePage } from '@frontend/modules/home/pages/HomePage'
 import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 
+import { Portal } from './modules/app/pages/Portal'
 import { PasswordResetPage } from './modules/auth/pages/PasswordResetPage'
 import { SignOutPage } from './modules/auth/pages/SignOut'
 import { AboutPage } from './modules/static-pages/pages/AboutPage'
@@ -21,6 +22,7 @@ export function Routes() {
         <Route path={route.home()} element={<HomePage />} />
         <Route path={route.signIn()} element={<SignInPage />} />
         <Route path={route.signUp()} element={<SignUpPage />} />
+        <Route path={route.portal()} element={<Portal />} />
         <Route path={route.about()} element={<AboutPage />} />
         <Route path={route.guide()} element={<GuidePage />} />
         <Route path={route.blog()} element={<BlogPage />} />
