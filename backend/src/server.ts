@@ -18,8 +18,10 @@ import { buildSchema } from 'type-graphql'
 import { MOCKS, PORT } from '@backend/config'
 import { getConnection } from '@backend/db/db'
 import { AuthResolver } from '@backend/graphql/modules/auth/authResolver'
+import { getBeneficiaryRepository } from '@backend/graphql/modules/beneficiary/beneficiaryRepository'
 import { getContactRepository } from '@backend/graphql/modules/contact/contactRepository'
 import { EmptyResolver } from '@backend/graphql/modules/empty/emptyResolver'
+import { getInheritanceProcedureRepository } from '@backend/graphql/modules/inheritanceProcedure/inheritaceProcedureRepository'
 import { getNotaryRepository } from '@backend/graphql/modules/notary/notaryRepository'
 import { NotaryAssignmentResolver } from '@backend/graphql/modules/notaryAssignment/notaryAssignmentResolver'
 import { PasswordResetResolver } from '@backend/graphql/modules/passwordReset/passwordResetTokenResolver'
@@ -75,6 +77,10 @@ const init = async () => {
       notaryRepository: getNotaryRepository(drizzle.db),
       userRepository: getUserRepository(drizzle.db),
       contactRepository: getContactRepository(drizzle.db),
+      inheritanceProcedureRepository: getInheritanceProcedureRepository(
+        drizzle.db
+      ),
+      beneficiaryRepository: getBeneficiaryRepository(drizzle.db),
     }
   }
 

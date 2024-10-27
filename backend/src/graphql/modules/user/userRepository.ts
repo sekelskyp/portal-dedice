@@ -10,7 +10,7 @@ export interface User {
 }
 
 export function getUserRepository(db: Db) {
-  async function getUserById(id: number): Promise<User | undefined> {
+  async function getUserById(id: number): Promise<User | null> {
     const [result] = await db.select().from(user).where(eq(user.id, id))
     return result
   }

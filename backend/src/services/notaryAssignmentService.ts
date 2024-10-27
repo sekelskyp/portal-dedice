@@ -11,6 +11,7 @@ import { CustomContext } from '@backend/types/types'
 export interface Address {
   postalCode: string
 }
+
 interface ContactData {
   id: number
   name: string
@@ -24,6 +25,7 @@ interface ContactData {
   street: string
   postalCode: string
 }
+
 interface NotaryData {
   id: number
   contact: ContactData

@@ -35,15 +35,15 @@ export const loginUser = async (
   context: CustomContext
 ): Promise<AuthResponse> => {
   const { db } = context // Get the db from the context
-
+  const incorrectCredentialsErrorMsg = 'Nesprávný email nebo heslo'
   // Find the user in the database by login
   const userRecord = await db
     .select()
     .from(user)
-    .where(eq(lower(user.login), login.toLowerCase()))
+    .where(eq(lower(user.email), login.toLowerCase()))
 
   if (userRecord.length === 0) {
-    throw new Error('Invalid credentials')
+    throw new Error(incorrectCredentialsErrorMsg)
   }
 
   const foundUser = userRecord[0]
@@ -51,7 +51,7 @@ export const loginUser = async (
   // Compare the provided password with the stored hashed password
   const isPasswordValid = await comparePassword(password, foundUser.password)
   if (!isPasswordValid) {
-    throw new Error('Invalid credentials')
+    throw new Error(incorrectCredentialsErrorMsg)
   }
 
   // Generate a JWT token
@@ -74,10 +74,10 @@ export const registerUser = async (
   const existingUserRecord = await db
     .select()
     .from(user)
-    .where(eq(lower(user.login), input.login.toLowerCase()))
+    .where(eq(lower(user.email), input.login.toLowerCase()))
 
   if (existingUserRecord.length > 0) {
-    throw new Error('Login already in use')
+    throw new Error('Uživatel s tímto emailem již existuje')
   }
 
   // Hash the password

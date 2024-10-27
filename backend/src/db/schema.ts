@@ -1,4 +1,4 @@
-import { SQL, sql } from 'drizzle-orm'
+import { name, SQL, sql } from 'drizzle-orm'
 import {
   AnyMySqlColumn,
   binary,
@@ -18,6 +18,17 @@ import {
 } from 'drizzle-orm/mysql-core'
 
 const taskTypeEnum = ['Upload Document', 'Set Up Meeting', 'Custom'] as const
+export type TaskTypeEnumType = (typeof taskTypeEnum)[number]
+
+const taskStateEnum = ['Open', 'InProgress', 'Completed', 'Closed'] as const
+export type TaskStateEnumType = (typeof taskStateEnum)[number]
+
+const inheritanceProcedureStateEnum = ['InProgress', 'Closed'] as const
+export type InheritanceProcedureStateEnumType =
+  (typeof inheritanceProcedureStateEnum)[number]
+
+const deceasedRelationEnum = ['Spouse', 'Child', 'Parent', 'Other'] as const
+export type DeceasedRelationEnumType = (typeof deceasedRelationEnum)[number]
 
 // Define User Table
 export const user = mysqlTable(
@@ -45,26 +56,9 @@ export const contact = mysqlTable('contact', {
   gender: varchar('gender', { length: 50 }),
   phone: char('phone', { length: 15 }),
   email: varchar('email', { length: 255 }),
-  addressId: int('address_id').references(() => address.id),
+  completeAddress: varchar('complete_address', { length: 255 }).notNull(),
+  postalCode: varchar('postal_code', { length: 8 }).notNull(),
 })
-
-// Define Address Table
-export const address = mysqlTable(
-  'address',
-  {
-    id: int('id').primaryKey().autoincrement(),
-    completeAddress: varchar('complete_address', { length: 255 }).notNull(),
-    postalCode: varchar('postal_code', { length: 8 }),
-    pragueNumber: int('prague_number'),
-    // we might need to separate address string into street, city, etc.
-  },
-  (table) => ({
-    checkPragueNumber: check(
-      'check_prague_number',
-      sql`${table.pragueNumber} > 0`
-    ),
-  })
-)
 
 // Define Notary Table
 export const notary = mysqlTable('notary', {
@@ -79,7 +73,7 @@ export const beneficiary = mysqlTable('beneficiary', {
   userId: int('user_id').references(() => user.id),
   deceasedRelation: varchar('deceased_relation', {
     length: 6,
-    enum: ['Spouse', 'Child', 'Parent', 'Other'],
+    enum: deceasedRelationEnum,
   }).notNull(),
   contactId: int('contact_id').references(() => contact.id),
   dateOfBirth: date('date_of_birth').notNull(),
@@ -88,20 +82,28 @@ export const beneficiary = mysqlTable('beneficiary', {
 // Define Deceased Person Table
 export const deceasedPerson = mysqlTable('deceased_person', {
   id: int('id').primaryKey().autoincrement(),
-  procedureId: int('procedure_id').references(() => inheritanceProcedure.id),
+  // procedureId: int('procedure_id').references(() => inheritanceProcedure.id),
   dateOfBirth: date('date_of_birth').notNull(),
   dateOfDeath: date('date_of_death').notNull(),
   contactId: int('contact_id').references(() => contact.id),
 })
 
-// Define InheritanceProcedure Table with Foreign Key to ProcedureState
+// Define InheritanceProcedure Table
 export const inheritanceProcedure = mysqlTable('inheritance_procedure', {
   id: int('id').primaryKey().autoincrement(),
   notaryId: int('notary_id').references(() => notary.id),
+  deceasedPersonId: int('deceased_person_id').references(
+    () => deceasedPerson.id
+  ),
+  name: varchar('name', { length: 100 }).notNull(),
   state: varchar('state', {
     length: 10,
-    enum: ['InProgress', 'Closed'],
-  }).notNull(),
+    enum: inheritanceProcedureStateEnum,
+  })
+    .default('InProgress')
+    .notNull(),
+  startDate: date('start_date').notNull(),
+  endDate: date('end_date'),
 })
 
 // Define Meeting Table
@@ -160,7 +162,7 @@ export const chatMessage = mysqlTable('chat_message', {
   body: text('body').notNull(),
 })
 
-// Define Task Table with Foreign Key to TaskState
+// Define Task Table
 export const task = mysqlTable('task', {
   id: int('id').primaryKey().autoincrement(),
   type: varchar('type', {
@@ -170,7 +172,7 @@ export const task = mysqlTable('task', {
   deadline: date('deadline'),
   state: varchar('state', {
     length: 10,
-    enum: ['Open', 'InProgress', 'Completed', 'Closed'],
+    enum: taskStateEnum,
   }),
   label: varchar('label', { length: 100 }).notNull(),
   description: text('description'),

@@ -10,7 +10,8 @@ interface ContactData {
   phone?: string
   displayName?: string
   gender?: string
-  addressId?: number
+  completeAddress: string
+  postalCode: string
 }
 
 export function getContactRepository(db: Db) {

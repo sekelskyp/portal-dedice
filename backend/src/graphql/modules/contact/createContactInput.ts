@@ -1,4 +1,4 @@
-import { Field, ID, InputType } from 'type-graphql'
+import { Field, InputType } from 'type-graphql'
 
 @InputType()
 export class CreateContactInput {
@@ -20,6 +20,9 @@ export class CreateContactInput {
   @Field({ nullable: true })
   gender?: string
 
-  @Field(() => ID, { nullable: true })
-  addressId?: number
+  @Field()
+  completeAddress!: string
+
+  @Field()
+  postalCode!: string
 }

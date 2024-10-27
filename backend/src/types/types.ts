@@ -1,6 +1,8 @@
 import { MySql2Database } from 'drizzle-orm/mysql2'
 
+import { type getBeneficiaryRepository } from '@backend/graphql/modules/beneficiary/beneficiaryRepository'
 import { type getContactRepository } from '@backend/graphql/modules/contact/contactRepository'
+import { type getInheritanceProcedureRepository } from '@backend/graphql/modules/inheritanceProcedure/inheritaceProcedureRepository'
 import { type getNotaryRepository } from '@backend/graphql/modules/notary/notaryRepository'
 import { type getUserRepository } from '@backend/graphql/modules/user/userRepository'
 
@@ -15,6 +17,10 @@ export type CustomContext = {
   notaryRepository: ReturnType<typeof getNotaryRepository>
   userRepository: ReturnType<typeof getUserRepository>
   contactRepository: ReturnType<typeof getContactRepository>
+  inheritanceProcedureRepository: ReturnType<
+    typeof getInheritanceProcedureRepository
+  >
+  beneficiaryRepository: ReturnType<typeof getBeneficiaryRepository>
 }
 
 export type JWTPayload = {
