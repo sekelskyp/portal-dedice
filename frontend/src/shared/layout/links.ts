@@ -8,18 +8,18 @@ export const footerLinks = [
       {
         id: 1,
         title: 'Domů',
-        link: route.home,
+        link: route.home(),
       },
 
       {
         id: 2,
         title: 'Portál',
-        link: route.portal,
+        link: route.portal(),
       },
       {
         id: 3,
         title: 'Nachytřovadlo',
-        link: route.wizard,
+        link: route.wizard(),
       },
     ],
   },
@@ -30,17 +30,17 @@ export const footerLinks = [
       {
         id: 1,
         title: 'O nás',
-        link: route.about,
+        link: route.about(),
       },
       {
         id: 2,
         title: 'Jak to funguje',
-        link: route.guide,
+        link: route.guide(),
       },
       {
         id: 3,
         title: 'FAQ',
-        link: route.home,
+        link: route.home(),
       },
     ],
   },
@@ -51,17 +51,17 @@ export const footerLinks = [
       {
         id: 1,
         title: 'Podmínky užívání',
-        link: route.home,
+        link: route.home(),
       },
       {
         id: 2,
         title: 'Kontakt',
-        link: route.home,
+        link: route.home(),
       },
       {
         id: 3,
         title: 'Blog',
-        link: route.blog,
+        link: route.blog(),
       },
     ],
   },

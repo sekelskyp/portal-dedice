@@ -4,7 +4,7 @@ import { RouterLink } from '@frontend/shared/navigation/atoms'
 
 type FooterListProps = {
   title: string
-  links: { id: number; title: string; link: () => string }[]
+  links: { id: number; title: string; link: string }[]
 }
 
 export function FooterList({ title, links }: FooterListProps) {
