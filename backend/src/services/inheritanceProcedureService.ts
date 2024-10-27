@@ -4,6 +4,7 @@ import { CustomContext } from '../types/types'
 
 export interface InheritanceProcedureData {
   notaryId?: number | null
+  deceasedPersonId?: number | null
   name: string
   state: InheritanceProcedureStateEnumType
   startDate: Date
@@ -28,11 +29,12 @@ export async function createProcedure(
 ): Promise<number> {
   const { inheritanceProcedureRepository } = context
   const procedureName = generateProcedureName(data.name, data.startDate)
+
   const procedureId = await inheritanceProcedureRepository.createProcedure({
     ...data,
     name: procedureName,
   })
-  return procedureId
+  return procedureId.id
 }
 
 // Function to close an existing procedure

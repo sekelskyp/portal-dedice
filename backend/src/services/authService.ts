@@ -1,7 +1,3 @@
-import { eq } from 'drizzle-orm'
-
-import { contact, lower, user } from '@backend/db/schema'
-
 import { createToken } from '../libs/jwt'
 import { CustomContext } from '../types/types'
 
@@ -15,18 +11,6 @@ export interface AuthResponse {
 export interface RegisterUserDTO {
   login: string
   password: string
-  contact: {
-    name: string
-    surname: string
-    dateOfBirth: Date
-    gender: string
-    phone: string
-    email: string
-    country: string
-    city: string
-    street: string
-    postalCode: string
-  }
 }
 
 export const loginUser = async (
@@ -34,19 +18,14 @@ export const loginUser = async (
   password: string,
   context: CustomContext
 ): Promise<AuthResponse> => {
-  const { db } = context // Get the db from the context
+  const { userRepository } = context
   const incorrectCredentialsErrorMsg = 'Nesprávný email nebo heslo'
-  // Find the user in the database by login
-  const userRecord = await db
-    .select()
-    .from(user)
-    .where(eq(lower(user.email), login.toLowerCase()))
 
-  if (userRecord.length === 0) {
+  // Find the user in the database by login
+  const foundUser = await userRepository.getUserByEmail(login.toLowerCase())
+  if (!foundUser) {
     throw new Error(incorrectCredentialsErrorMsg)
   }
-
-  const foundUser = userRecord[0]
 
   // Compare the provided password with the stored hashed password
   const isPasswordValid = await comparePassword(password, foundUser.password)
@@ -66,50 +45,31 @@ export const loginUser = async (
 
 export const registerUser = async (
   input: RegisterUserDTO,
-  context: CustomContext // Pass context containing the db
-): Promise<AuthResponse> => {
-  const { db } = context // Get the db from the context
+  context: CustomContext
+) => {
+  const { userRepository } = context
 
   // Check if the login (email) is already in use
-  const existingUserRecord = await db
-    .select()
-    .from(user)
-    .where(eq(lower(user.email), input.login.toLowerCase()))
-
-  if (existingUserRecord.length > 0) {
+  const existingUser = await userRepository.getUserByEmail(
+    input.login.toLowerCase()
+  )
+  if (existingUser) {
     throw new Error('Uživatel s tímto emailem již existuje')
   }
 
   // Hash the password
   const hashedPassword = await hashPassword(input.password)
-  const contactRecord = await db
-    .insert(contact)
-    .values({
-      name: input.contact.name,
-      surname: input.contact.surname,
-      dateOfBirth: input.contact.dateOfBirth,
-      gender: input.contact.gender,
-      email: input.contact.email,
-      country: input.contact.country,
-      city: input.contact.city,
-      street: input.contact.street,
-      postalCode: input.contact.postalCode,
-    })
-    .$returningId()
 
-  const contactRecordId = contactRecord[0].id
+  // Create the user
+  const userId = await userRepository.createUser({
+    email: input.login,
+    password: hashedPassword,
+  })
 
-  const userRecord = await db
-    .insert(user)
-    .values({
-      contactId: contactRecordId,
-      login: input.login,
-      password: hashedPassword,
-    })
-    .$returningId()
+  if (!userId) {
+    throw new Error('Nastala chyba při vytváření uživatele')
+  }
 
-  // Generate a JWT token
-  const token = createToken({ userId: userRecord[0].id })
-
-  return { userId: userRecord[0].id, token: token }
+  // Fetch and return the newly created user
+  return await userRepository.getUserById(userId)
 }

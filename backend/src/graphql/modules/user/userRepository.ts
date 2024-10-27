@@ -50,11 +50,17 @@ export function getUserRepository(db: Db) {
     return resultingIds[0].id
   }
 
+  async function getUserByEmail(email: string): Promise<User | null> {
+    const [result] = await db.select().from(user).where(eq(user.email, email))
+    return result || null
+  }
+
   return {
     getUserById,
     getUsersByIds,
     getAllUsers,
     createUser,
     getUserByNotaryId,
+    getUserByEmail,
   }
 }

@@ -13,15 +13,6 @@ export class User {
 }
 
 @ObjectType()
-export class AuthInfo {
-  @Field(() => User)
-  user!: User
-
-  @Field()
-  token!: string
-}
-
-@ObjectType()
 export class UserProfile {
   @Field(() => ID)
   id!: number

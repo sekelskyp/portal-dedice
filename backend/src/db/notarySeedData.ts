@@ -1,15 +1,4 @@
-export interface ContactSeedValue {
-  name: string
-  surname: string
-  dateOfBirth: Date
-  gender: 'Male' | 'Female'
-  phone: string
-  email: string
-  country: string
-  city: string
-  street: string
-  postalCode: string
-}
+import { ContactData } from '../graphql/modules/contact/contactRepository'
 
 export interface NotaryDateRuleValue {
   startDay: number
@@ -19,23 +8,21 @@ export interface NotaryDateRuleValue {
 }
 
 export interface NotarySeedData {
-  contact: ContactSeedValue
+  contact: ContactData
   dateRules: NotaryDateRuleValue[]
 }
 
-export const notarySeedData: NotarySeedData[] = [
+export const notarySeedDataValues: NotarySeedData[] = [
   // Praha 1
   {
     contact: {
+      displayName: 'JUDr. Petr Hochman',
       name: 'Petr',
       surname: 'Hochman',
-      dateOfBirth: new Date('1972-04-10'),
       gender: 'Male',
       phone: '+420777111222',
       email: 'petr.hochman@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Old Town Square 1',
+      completeAddress: 'Old Town Square 1 11000, Prague, Czech Republic',
       postalCode: '11000',
     },
     dateRules: [
@@ -55,15 +42,13 @@ export const notarySeedData: NotarySeedData[] = [
   },
   {
     contact: {
+      displayName: 'JUDr. Roman Hochman',
       name: 'Roman',
       surname: 'Hochman',
-      dateOfBirth: new Date('1974-05-15'),
       gender: 'Male',
       phone: '+420777222333',
       email: 'roman.hochman@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Charles Bridge 15',
+      completeAddress: 'Charles Bridge 15 11800, Prague, Czech Republic',
       postalCode: '11800',
     },
     dateRules: [
@@ -83,15 +68,13 @@ export const notarySeedData: NotarySeedData[] = [
   },
   {
     contact: {
+      displayName: 'JUDr. Bohdan Hallada',
       name: 'Bohdan',
       surname: 'Hallada',
-      dateOfBirth: new Date('1968-07-20'),
       gender: 'Male',
       phone: '+420777333444',
       email: 'bohdan.hallada@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Wenceslas Square 21',
+      completeAddress: 'Wenceslas Square 21 11000, Prague, Czech Republic',
       postalCode: '11000',
     },
     dateRules: [
@@ -111,16 +94,14 @@ export const notarySeedData: NotarySeedData[] = [
   },
   {
     contact: {
+      displayName: 'JUDr. Jarmila Humpolcová',
       name: 'Jarmila',
       surname: 'Humpolcová',
-      dateOfBirth: new Date('1970-02-28'),
       gender: 'Female',
       phone: '+420777444555',
       email: 'jarmila.humpolcova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Vinohrady 34',
-      postalCode: '12000',
+      completeAddress: 'Vinohrady 34 11000, Prague, Czech Republic',
+      postalCode: '11000',
     },
     dateRules: [
       {
@@ -139,16 +120,14 @@ export const notarySeedData: NotarySeedData[] = [
   },
   {
     contact: {
+      displayName: 'JUDr. Miroslav Novák',
       name: 'Miroslav',
       surname: 'Novák',
-      dateOfBirth: new Date('1980-06-18'),
       gender: 'Male',
       phone: '+420777555666',
       email: 'miroslav.novak@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Malá Strana 17',
-      postalCode: '11800',
+      completeAddress: 'Malá Strana 17 11000, Prague, Czech Republic',
+      postalCode: '11000',
     },
     dateRules: [
       {
@@ -167,16 +146,14 @@ export const notarySeedData: NotarySeedData[] = [
   },
   {
     contact: {
+      displayName: 'JUDr. Lucie Vaňková',
       name: 'Lucie',
       surname: 'Vaňková',
-      dateOfBirth: new Date('1982-09-25'),
       gender: 'Female',
       phone: '+420777666777',
       email: 'lucie.vankova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Letná 50',
-      postalCode: '17000',
+      completeAddress: 'Letná 50 11000, Prague, Czech Republic',
+      postalCode: '11000',
     },
     dateRules: [
       {
@@ -193,18 +170,17 @@ export const notarySeedData: NotarySeedData[] = [
       },
     ],
   },
+
   // Praha 2
   {
     contact: {
+      displayName: 'JUDr. Zuzana Holá Procházková',
       name: 'Zuzana',
       surname: 'Holá Procházková',
-      dateOfBirth: new Date('1978-05-12'),
       gender: 'Female',
       phone: '+420777333444',
       email: 'zuzana.prochazkova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Wenceslas Square 1',
+      completeAddress: 'Wenceslas Square 1 12000, Prague, Czech Republic',
       postalCode: '12000',
     },
     dateRules: [
@@ -212,21 +188,19 @@ export const notarySeedData: NotarySeedData[] = [
         startDay: 1,
         endDay: 31,
         startMonth: 1,
-        endMonth: 3, // 1st quarter: January to March
+        endMonth: 3,
       },
     ],
   },
   {
     contact: {
+      displayName: 'Mgr. Nikola Slavík',
       name: 'Nikola',
       surname: 'Slavík',
-      dateOfBirth: new Date('1980-07-23'),
       gender: 'Male',
       phone: '+420777444555',
       email: 'nikola.slavik@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Charles Square 10',
+      completeAddress: 'Charles Square 10 12000, Prague, Czech Republic',
       postalCode: '12000',
     },
     dateRules: [
@@ -234,21 +208,19 @@ export const notarySeedData: NotarySeedData[] = [
         startDay: 1,
         endDay: 30,
         startMonth: 4,
-        endMonth: 6, // 2nd quarter: April to June
+        endMonth: 6,
       },
     ],
   },
   {
     contact: {
+      displayName: 'Mgr. Lukáš Valigura',
       name: 'Lukáš',
       surname: 'Valigura',
-      dateOfBirth: new Date('1985-09-18'),
       gender: 'Male',
       phone: '+420777555666',
       email: 'lukas.valigura@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Karlovo Náměstí 5',
+      completeAddress: 'Karlovo Náměstí 5 12000, Prague, Czech Republic',
       postalCode: '12000',
     },
     dateRules: [
@@ -256,21 +228,19 @@ export const notarySeedData: NotarySeedData[] = [
         startDay: 1,
         endDay: 30,
         startMonth: 7,
-        endMonth: 9, // 3rd quarter: July to September
+        endMonth: 9,
       },
     ],
   },
   {
     contact: {
+      displayName: 'JUDr. František Bouček, Ph.D.',
       name: 'František',
       surname: 'Bouček',
-      dateOfBirth: new Date('1973-03-22'),
       gender: 'Male',
       phone: '+420777666777',
       email: 'frantisek.boucek@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Na Příkopě 15',
+      completeAddress: 'Na Příkopě 15 12000, Prague, Czech Republic',
       postalCode: '12000',
     },
     dateRules: [
@@ -278,7 +248,7 @@ export const notarySeedData: NotarySeedData[] = [
         startDay: 1,
         endDay: 31,
         startMonth: 10,
-        endMonth: 12, // 4th quarter: October to December
+        endMonth: 12,
       },
     ],
   },
@@ -286,15 +256,13 @@ export const notarySeedData: NotarySeedData[] = [
   // Praha 3
   {
     contact: {
+      displayName: 'JUDr. Iva Šídová',
       name: 'Iva',
       surname: 'Šídová',
-      dateOfBirth: new Date('1965-01-15'),
       gender: 'Female',
       phone: '+420777888999',
       email: 'iva.sidova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Vinohradská 30',
+      completeAddress: 'Vinohradská 30 13000, Prague, Czech Republic',
       postalCode: '13000',
     },
     dateRules: [
@@ -302,27 +270,25 @@ export const notarySeedData: NotarySeedData[] = [
         startDay: 1,
         endDay: 6,
         startMonth: 1,
-        endMonth: 12, // 1st to 6th every month
+        endMonth: 12,
       },
       {
         startDay: 31,
         endDay: 31,
         startMonth: 1,
-        endMonth: 1, // Special rule: 31st of January
+        endMonth: 1,
       },
     ],
   },
   {
     contact: {
+      displayName: 'Mgr. Erik Mrzena',
       name: 'Erik',
       surname: 'Mrzena',
-      dateOfBirth: new Date('1975-04-18'),
       gender: 'Male',
       phone: '+420777999000',
       email: 'erik.mrzena@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Žižkova 50',
+      completeAddress: 'Žižkova 50 13000, Prague, Czech Republic',
       postalCode: '13000',
     },
     dateRules: [
@@ -330,27 +296,25 @@ export const notarySeedData: NotarySeedData[] = [
         startDay: 7,
         endDay: 12,
         startMonth: 1,
-        endMonth: 12, // 7th to 12th every month
+        endMonth: 12,
       },
       {
         startDay: 31,
         endDay: 31,
         startMonth: 3,
-        endMonth: 3, // Special rule: 31st of March
+        endMonth: 3,
       },
     ],
   },
   {
     contact: {
+      displayName: 'Mgr. Radim Neubauer',
       name: 'Radim',
       surname: 'Neubauer',
-      dateOfBirth: new Date('1982-07-21'),
       gender: 'Male',
       phone: '+420777000111',
       email: 'radim.neubauer@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Olšanská 12',
+      completeAddress: 'Olšanská 12 13000, Prague, Czech Republic',
       postalCode: '13000',
     },
     dateRules: [
@@ -358,27 +322,25 @@ export const notarySeedData: NotarySeedData[] = [
         startDay: 13,
         endDay: 18,
         startMonth: 1,
-        endMonth: 12, // 13th to 18th every month
+        endMonth: 12,
       },
       {
         startDay: 31,
         endDay: 31,
         startMonth: 5,
-        endMonth: 5, // Special rule: 31st of May
+        endMonth: 5,
       },
     ],
   },
   {
     contact: {
+      displayName: 'JUDr. Markéta Menclerová',
       name: 'Markéta',
       surname: 'Menclerová',
-      dateOfBirth: new Date('1970-02-28'),
       gender: 'Female',
       phone: '+420777111222',
       email: 'marketa.menclerova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Jičínská 8',
+      completeAddress: 'Jičínská 8 13000, Prague, Czech Republic',
       postalCode: '13000',
     },
     dateRules: [
@@ -386,213 +348,208 @@ export const notarySeedData: NotarySeedData[] = [
         startDay: 19,
         endDay: 24,
         startMonth: 1,
-        endMonth: 12, // 19th to 24th every month
+        endMonth: 12,
       },
       {
         startDay: 31,
         endDay: 31,
         startMonth: 7,
-        endMonth: 7, // Special rule: 31st of July
+        endMonth: 7,
       },
     ],
   },
   {
     contact: {
+      displayName: 'Mgr. Štěpán Stancl, LL.M.',
       name: 'Štěpán',
       surname: 'Stancl',
-      dateOfBirth: new Date('1988-11-09'),
       gender: 'Male',
       phone: '+420777222333',
       email: 'stepan.stancl@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Husitská 15',
+      completeAddress: 'Husitská 15 13000, Prague, Czech Republic',
       postalCode: '13000',
     },
     dateRules: [
-      { startDay: 25, endDay: 30, startMonth: 1, endMonth: 12 },
-      { startDay: 31, endDay: 31, startMonth: 8, endMonth: 8 },
-      { startDay: 31, endDay: 31, startMonth: 10, endMonth: 10 },
-      { startDay: 31, endDay: 31, startMonth: 12, endMonth: 12 },
+      {
+        startDay: 25,
+        endDay: 30,
+        startMonth: 1,
+        endMonth: 12,
+      },
+      {
+        startDay: 31,
+        endDay: 31,
+        startMonth: 8,
+        endMonth: 8,
+      },
+      {
+        startDay: 31,
+        endDay: 31,
+        startMonth: 10,
+        endMonth: 10,
+      },
+      {
+        startDay: 31,
+        endDay: 31,
+        startMonth: 12,
+        endMonth: 12,
+      },
     ],
   },
+
   // Praha 4
   {
     contact: {
+      displayName: 'Mgr. Markéta Nývltová',
       name: 'Markéta',
       surname: 'Nývltová',
-      dateOfBirth: new Date('1978-03-14'),
       gender: 'Female',
       phone: '+420777444555',
       email: 'marketa.nyvltova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Modřanská 72',
+      completeAddress: 'Modřanská 72 14000, Prague, Czech Republic',
       postalCode: '14000',
     },
     dateRules: [{ startDay: 1, endDay: 31, startMonth: 1, endMonth: 1 }],
   },
   {
     contact: {
+      displayName: 'JUDr. Ing. Ondřej Klička',
       name: 'Ondřej',
       surname: 'Klička',
-      dateOfBirth: new Date('1975-11-23'),
       gender: 'Male',
       phone: '+420777555666',
       email: 'ondrej.klicka@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Branická 23',
+      completeAddress: 'Branická 23 14000, Prague, Czech Republic',
       postalCode: '14000',
     },
     dateRules: [{ startDay: 1, endDay: 31, startMonth: 2, endMonth: 2 }],
   },
   {
     contact: {
+      displayName: 'Mgr. Markéta Káninská',
       name: 'Markéta',
       surname: 'Káninská',
-      dateOfBirth: new Date('1980-07-19'),
       gender: 'Female',
       phone: '+420777666777',
       email: 'marketa.kaninska@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Podolská 34',
+      completeAddress: 'Podolská 34 14000, Prague, Czech Republic',
       postalCode: '14000',
     },
     dateRules: [{ startDay: 1, endDay: 31, startMonth: 3, endMonth: 3 }],
   },
   {
     contact: {
+      displayName: 'Mgr. František Novotný',
       name: 'František',
       surname: 'Novotný',
-      dateOfBirth: new Date('1972-09-06'),
       gender: 'Male',
       phone: '+420777777888',
       email: 'frantisek.novotny@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Nad Malým Mýtem 11',
+      completeAddress: 'Nad Malým Mýtem 11 14000, Prague, Czech Republic',
       postalCode: '14000',
     },
     dateRules: [{ startDay: 1, endDay: 30, startMonth: 4, endMonth: 4 }],
   },
   {
     contact: {
+      displayName: 'Mgr. Šárka Tlašková',
       name: 'Šárka',
       surname: 'Tlašková',
-      dateOfBirth: new Date('1982-05-12'),
       gender: 'Female',
       phone: '+420777888999',
       email: 'sarka.tlaskova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Lhotka 7',
+      completeAddress: 'Lhotka 7 14000, Prague, Czech Republic',
       postalCode: '14000',
     },
     dateRules: [{ startDay: 1, endDay: 31, startMonth: 5, endMonth: 5 }],
   },
   {
     contact: {
+      displayName: 'Mgr. Petr Duda',
       name: 'Petr',
       surname: 'Duda',
-      dateOfBirth: new Date('1982-05-12'),
       gender: 'Male',
       phone: '+420777888999',
       email: 'petr.duda@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Lhotka 7',
+      completeAddress: 'Lhotka 7 14000, Prague, Czech Republic',
       postalCode: '14000',
     },
     dateRules: [{ startDay: 1, endDay: 31, startMonth: 6, endMonth: 6 }],
   },
   {
     contact: {
+      displayName: 'Mgr. Šárka Matějčková',
       name: 'Šárka',
       surname: 'Matějčková',
-      dateOfBirth: new Date('1982-05-12'),
       gender: 'Female',
       phone: '+420777888999',
       email: 'sarka.matejickova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Lhotka 7',
+      completeAddress: 'Lhotka 7 14000, Prague, Czech Republic',
       postalCode: '14000',
     },
     dateRules: [{ startDay: 1, endDay: 31, startMonth: 7, endMonth: 7 }],
   },
   {
     contact: {
+      displayName: 'Mgr. Šárka Sýkorová',
       name: 'Šárka',
       surname: 'Sýkorová',
-      dateOfBirth: new Date('1982-05-12'),
       gender: 'Female',
       phone: '+420777888999',
       email: 'sarka.sykorova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Lhotka 7',
+      completeAddress: 'Lhotka 7 14000, Prague, Czech Republic',
       postalCode: '14000',
     },
     dateRules: [{ startDay: 1, endDay: 31, startMonth: 8, endMonth: 8 }],
   },
   {
     contact: {
+      displayName: 'Mgr. Jana Rybářová',
       name: 'Jana',
       surname: 'Rybářová',
-      dateOfBirth: new Date('1982-05-12'),
       gender: 'Female',
       phone: '+420777888999',
       email: 'jana.rybarova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Lhotka 7',
+      completeAddress: 'Lhotka 7 14000, Prague, Czech Republic',
       postalCode: '14000',
     },
     dateRules: [{ startDay: 1, endDay: 31, startMonth: 9, endMonth: 9 }],
   },
   {
     contact: {
+      displayName: 'Mgr. Petr Oulík',
       name: 'Petr',
       surname: 'Oulík',
-      dateOfBirth: new Date('1982-05-12'),
       gender: 'Male',
       phone: '+420777888999',
       email: 'petr.oulik@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Lhotka 7',
+      completeAddress: 'Lhotka 7 14000, Prague, Czech Republic',
       postalCode: '14000',
     },
     dateRules: [{ startDay: 1, endDay: 31, startMonth: 10, endMonth: 10 }],
   },
   {
     contact: {
+      displayName: 'JUDr. Petra Habartová',
       name: 'Petra',
       surname: 'Habartová',
-      dateOfBirth: new Date('1982-05-12'),
-      gender: 'Male',
+      gender: 'Female',
       phone: '+420777888999',
       email: 'petra.habartova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Lhotka 7',
+      completeAddress: 'Lhotka 7 14000, Prague, Czech Republic',
       postalCode: '14000',
     },
     dateRules: [{ startDay: 1, endDay: 31, startMonth: 11, endMonth: 11 }],
   },
   {
     contact: {
+      displayName: 'JUDr. Miloslav Peterka',
       name: 'Miloslav',
       surname: 'Peterka',
-      dateOfBirth: new Date('1982-05-12'),
       gender: 'Male',
       phone: '+420777888999',
       email: 'miloslav.peterka@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Lhotka 7',
+      completeAddress: 'Lhotka 7 14000, Prague, Czech Republic',
       postalCode: '14000',
     },
     dateRules: [{ startDay: 1, endDay: 31, startMonth: 12, endMonth: 12 }],
@@ -601,89 +558,79 @@ export const notarySeedData: NotarySeedData[] = [
   // Praha 5
   {
     contact: {
+      displayName: 'JUDr. Aleš Březina',
       name: 'Aleš',
       surname: 'Březina',
-      dateOfBirth: new Date('1971-02-19'),
       gender: 'Male',
       phone: '+420777123456',
       email: 'ales.brezina@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Radlická 67',
+      completeAddress: 'Radlická 67 15000, Prague, Czech Republic',
       postalCode: '15000',
     },
     dateRules: [
-      { startDay: 1, endDay: 3, startMonth: 1, endMonth: 12 }, // 1st - 3rd, Jan to May
-      { startDay: 28, endDay: 28, startMonth: 1, endMonth: 5 }, // 28th, Jan to May
+      { startDay: 1, endDay: 3, startMonth: 1, endMonth: 12 },
+      { startDay: 28, endDay: 28, startMonth: 1, endMonth: 5 },
     ],
   },
   {
     contact: {
+      displayName: 'Mgr. Jakub Straděj',
       name: 'Jakub',
       surname: 'Straděj',
-      dateOfBirth: new Date('1973-04-22'),
       gender: 'Male',
       phone: '+420777234567',
       email: 'jakub.stradej@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Nádražní 89',
+      completeAddress: 'Nádražní 89 15000, Prague, Czech Republic',
       postalCode: '15000',
     },
     dateRules: [
-      { startDay: 4, endDay: 6, startMonth: 1, endMonth: 12 }, // 4th - 6th, Jun to Oct
-      { startDay: 28, endDay: 28, startMonth: 6, endMonth: 10 }, // 28th, Jun to Oct
+      { startDay: 4, endDay: 6, startMonth: 1, endMonth: 12 },
+      { startDay: 28, endDay: 28, startMonth: 6, endMonth: 10 },
     ],
   },
   {
     contact: {
+      displayName: 'JUDr. Michaela Havlová',
       name: 'Michaela',
       surname: 'Havlová',
-      dateOfBirth: new Date('1981-08-03'),
       gender: 'Female',
       phone: '+420777345678',
       email: 'michaela.havlova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Štefánikova 12',
+      completeAddress: 'Štefánikova 12 15000, Prague, Czech Republic',
       postalCode: '15000',
     },
     dateRules: [
-      { startDay: 8, endDay: 10, startMonth: 1, endMonth: 12 }, // 8th - 10th of every month, November to December
-      { startDay: 28, endDay: 28, startMonth: 11, endMonth: 12 }, // 28th of every month, November to December
-      { startDay: 29, endDay: 29, startMonth: 1, endMonth: 1 }, // 29th of every month, every year
+      { startDay: 8, endDay: 10, startMonth: 1, endMonth: 12 },
+      { startDay: 28, endDay: 28, startMonth: 11, endMonth: 12 },
+      { startDay: 29, endDay: 29, startMonth: 1, endMonth: 1 },
       { startDay: 29, endDay: 29, startMonth: 3, endMonth: 4 },
     ],
   },
   {
     contact: {
+      displayName: 'JUDr. Alena Procházková',
       name: 'Alena',
       surname: 'Procházková',
-      dateOfBirth: new Date('1980-11-17'),
       gender: 'Female',
       phone: '+420777456789',
       email: 'alena.prochazkova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Strakonická 45',
+      completeAddress: 'Strakonická 45 15000, Prague, Czech Republic',
       postalCode: '15000',
     },
     dateRules: [
-      { startDay: 13, endDay: 15, startMonth: 1, endMonth: 12 }, // 13th - 15th, May to Sep
-      { startDay: 29, endDay: 29, startMonth: 5, endMonth: 9 }, // 29th, May to Sep
+      { startDay: 13, endDay: 15, startMonth: 1, endMonth: 12 },
+      { startDay: 29, endDay: 29, startMonth: 5, endMonth: 9 },
     ],
   },
   {
     contact: {
+      displayName: 'JUDr. Tereza Kubišová',
       name: 'Tereza',
       surname: 'Kubišová',
-      dateOfBirth: new Date('1979-05-27'),
       gender: 'Female',
       phone: '+420777567890',
       email: 'tereza.kubisova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Vítězná 9',
+      completeAddress: 'Vítězná 9 15000, Prague, Czech Republic',
       postalCode: '15000',
     },
     dateRules: [
@@ -695,612 +642,529 @@ export const notarySeedData: NotarySeedData[] = [
   },
   {
     contact: {
+      displayName: 'JUDr. Lenka Leszay, Ph.D.',
       name: 'Lenka',
       surname: 'Leszay',
-      dateOfBirth: new Date('1982-06-01'),
       gender: 'Female',
       phone: '+420777678901',
       email: 'lenka.leszay@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Šaldova 10',
-      postalCode: '18600',
+      completeAddress: 'Šaldova 10 15000, Prague, Czech Republic',
+      postalCode: '15000',
     },
     dateRules: [
       { startDay: 19, endDay: 21, startMonth: 1, endMonth: 12 },
-      { startDay: 30, endDay: 30, startMonth: 4, endMonth: 7 }, // 30th, Apr to Jul
-      { startDay: 29, endDay: 29, startMonth: 2, endMonth: 2 }, // 29th of February every leap year
+      { startDay: 30, endDay: 30, startMonth: 4, endMonth: 7 },
+      { startDay: 29, endDay: 29, startMonth: 2, endMonth: 2 },
     ],
   },
   {
     contact: {
+      displayName: 'Mgr. Martin Diviš, LL.B.',
       name: 'Martin',
       surname: 'Diviš',
-      dateOfBirth: new Date('1982-07-03'),
       gender: 'Male',
       phone: '+420777567890',
       email: 'martin.divis@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Ocelářská 12',
-      postalCode: '19000',
+      completeAddress: 'Ocelářská 12 15000, Prague, Czech Republic',
+      postalCode: '15000',
     },
     dateRules: [
       { startDay: 25, endDay: 27, startMonth: 1, endMonth: 12 },
-      { startDay: 30, endDay: 30, startMonth: 8, endMonth: 11 }, // 30th, Aug to Nov
+      { startDay: 30, endDay: 30, startMonth: 8, endMonth: 11 },
     ],
   },
   {
     contact: {
+      displayName: 'JUDr. Jiří Svoboda',
       name: 'Jiří',
       surname: 'Svoboda',
-      dateOfBirth: new Date('1984-02-11'),
       gender: 'Male',
       phone: '+420777234567',
       email: 'jiri.svoboda@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Vysočanská 21',
-      postalCode: '19000',
+      completeAddress: 'Vysočanská 21 15000, Prague, Czech Republic',
+      postalCode: '15000',
     },
     dateRules: [
-      { startDay: 22, endDay: 24, startMonth: 1, endMonth: 12 }, // 22nd - 24th, Dec
-      { startDay: 30, endDay: 30, startMonth: 12, endMonth: 12 }, // 30th, Dec
+      { startDay: 22, endDay: 24, startMonth: 1, endMonth: 12 },
+      { startDay: 30, endDay: 30, startMonth: 12, endMonth: 12 },
       { startDay: 31, endDay: 31, startMonth: 1, endMonth: 1 },
       { startDay: 31, endDay: 31, startMonth: 3, endMonth: 3 },
-      { startDay: 31, endDay: 31, startMonth: 5, endMonth: 5 }, // 31st, May
+      { startDay: 31, endDay: 31, startMonth: 5, endMonth: 5 },
     ],
   },
   {
     contact: {
+      displayName: 'Mgr. Václav Voda',
       name: 'Václav',
       surname: 'Voda',
-      dateOfBirth: new Date('1977-12-03'),
       gender: 'Male',
       phone: '+420777956789',
       email: 'vaclav.voda@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Horní Měcholupy 34',
-      postalCode: '10900',
+      completeAddress: 'Horní Měcholupy 34 15000, Prague, Czech Republic',
+      postalCode: '15000',
     },
     dateRules: [
-      { startDay: 7, endDay: 12, startMonth: 1, endMonth: 12 }, // 7th - 12th, Jul to Dec
-      { startDay: 31, endDay: 31, startMonth: 7, endMonth: 12 }, // 31st, Jul to Dec
+      { startDay: 7, endDay: 12, startMonth: 1, endMonth: 12 },
+      { startDay: 31, endDay: 31, startMonth: 7, endMonth: 12 },
     ],
   },
+
   // Praha 6
   {
     contact: {
+      displayName: 'Mgr. Naděžda Alšová',
       name: 'Naděžda',
       surname: 'Alšová',
-      dateOfBirth: new Date('1976-03-15'),
       gender: 'Female',
       phone: '+420777123456',
       email: 'nadezda.alsova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Na Petynce 20',
+      completeAddress: 'Na Petynce 20 16000, Prague, Czech Republic',
       postalCode: '16000',
     },
     dateRules: [
-      { startDay: 1, endDay: 3, startMonth: 1, endMonth: 12 }, // 1st - 3rd, every month
-      { startDay: 27, endDay: 27, startMonth: 6, endMonth: 10 }, // 27th
+      { startDay: 1, endDay: 3, startMonth: 1, endMonth: 12 },
+      { startDay: 27, endDay: 27, startMonth: 6, endMonth: 10 },
     ],
   },
   {
     contact: {
+      displayName: 'JUDr. Ivana Krušková',
       name: 'Ivana',
       surname: 'Krušková',
-      dateOfBirth: new Date('1972-09-25'),
       gender: 'Female',
       phone: '+420777234567',
       email: 'ivana.kruskova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Pod Kaštany 8',
+      completeAddress: 'Pod Kaštany 8 16000, Prague, Czech Republic',
       postalCode: '16000',
     },
     dateRules: [
-      { startDay: 4, endDay: 6, startMonth: 1, endMonth: 12 }, // 4th - 6th, every month
-      { startDay: 7, endDay: 7, startMonth: 1, endMonth: 5 }, // 7th
+      { startDay: 4, endDay: 6, startMonth: 1, endMonth: 12 },
+      { startDay: 7, endDay: 7, startMonth: 1, endMonth: 5 },
     ],
   },
   {
     contact: {
+      displayName: 'Mgr. Jana Večerníková',
       name: 'Jana',
       surname: 'Večerníková',
-      dateOfBirth: new Date('1980-07-12'),
       gender: 'Female',
       phone: '+420777345678',
       email: 'jana.vecernikova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'V Šáreckém údolí 15',
+      completeAddress: 'V Šáreckém údolí 15 16000, Prague, Czech Republic',
       postalCode: '16000',
     },
     dateRules: [
-      { startDay: 9, endDay: 11, startMonth: 1, endMonth: 12 }, // 9th - 11th, every month
-      { startDay: 8, endDay: 8, startMonth: 7, endMonth: 11 }, // 8th
+      { startDay: 9, endDay: 11, startMonth: 1, endMonth: 12 },
+      { startDay: 8, endDay: 8, startMonth: 7, endMonth: 11 },
     ],
   },
   {
     contact: {
+      displayName: 'JUDr. Martin Krčma',
       name: 'Martin',
       surname: 'Krčma',
-      dateOfBirth: new Date('1985-02-14'),
       gender: 'Male',
       phone: '+420777456789',
       email: 'martin.krcma@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Na Ořechovce 33',
+      completeAddress: 'Na Ořechovce 33 16000, Prague, Czech Republic',
       postalCode: '16000',
     },
     dateRules: [
-      { startDay: 12, endDay: 14, startMonth: 1, endMonth: 12 }, // 12th - 14th, every month
-      { startDay: 8, endDay: 8, startMonth: 2, endMonth: 6 }, // 8th
+      { startDay: 12, endDay: 14, startMonth: 1, endMonth: 12 },
+      { startDay: 8, endDay: 8, startMonth: 2, endMonth: 6 },
     ],
   },
   {
     contact: {
+      displayName: 'Mgr. Olga Spoustová',
       name: 'Olga',
       surname: 'Spoustová',
-      dateOfBirth: new Date('1977-10-01'),
       gender: 'Female',
       phone: '+420777567890',
       email: 'olga.spoustova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Zelená 45',
+      completeAddress: 'Zelená 45 16000, Prague, Czech Republic',
       postalCode: '16000',
     },
     dateRules: [
-      { startDay: 15, endDay: 17, startMonth: 1, endMonth: 12 }, // 15th - 17th, every month
-      { startDay: 8, endDay: 8, startMonth: 12, endMonth: 12 }, // 8th December
+      { startDay: 15, endDay: 17, startMonth: 1, endMonth: 12 },
+      { startDay: 8, endDay: 8, startMonth: 12, endMonth: 12 },
     ],
   },
   {
     contact: {
+      displayName: 'Mgr. Alexandra Červová',
       name: 'Alexandra',
       surname: 'Červová',
-      dateOfBirth: new Date('1982-06-21'),
       gender: 'Female',
       phone: '+420777678901',
       email: 'alexandra.cervova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Evropská 12',
+      completeAddress: 'Evropská 12 16000, Prague, Czech Republic',
       postalCode: '16000',
     },
     dateRules: [
-      { startDay: 18, endDay: 20, startMonth: 1, endMonth: 12 }, // 18th - 20th, every month
+      { startDay: 18, endDay: 20, startMonth: 1, endMonth: 12 },
       { startDay: 7, endDay: 7, startMonth: 9, endMonth: 12 },
       { startDay: 8, endDay: 8, startMonth: 1, endMonth: 1 },
     ],
   },
   {
     contact: {
+      displayName: 'Mgr. Jan Hejtmánek',
       name: 'Jan',
       surname: 'Hejtmánek',
-      dateOfBirth: new Date('1979-04-05'),
       gender: 'Male',
       phone: '+420777789012',
       email: 'jan.hejtmanek@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Na Špitálce 9',
+      completeAddress: 'Na Špitálce 9 16000, Prague, Czech Republic',
       postalCode: '16000',
     },
     dateRules: [
-      { startDay: 21, endDay: 23, startMonth: 1, endMonth: 12 }, // 21st - 23rd, every month
+      { startDay: 21, endDay: 23, startMonth: 1, endMonth: 12 },
       { startDay: 27, endDay: 27, startMonth: 11, endMonth: 12 },
       { startDay: 7, endDay: 7, startMonth: 6, endMonth: 8 },
     ],
   },
   {
     contact: {
+      displayName: 'JUDr. Jan Krůta',
       name: 'Jan',
       surname: 'Krůta',
-      dateOfBirth: new Date('1976-12-09'),
       gender: 'Male',
       phone: '+420777890123',
       email: 'jan.kruta@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Střešovická 14',
+      completeAddress: 'Střešovická 14 16000, Prague, Czech Republic',
       postalCode: '16000',
     },
     dateRules: [
-      { startDay: 24, endDay: 26, startMonth: 1, endMonth: 12 }, // 24th - 26th, every month
+      { startDay: 24, endDay: 26, startMonth: 1, endMonth: 12 },
       { startDay: 27, endDay: 27, startMonth: 1, endMonth: 5 },
     ],
   },
   {
     contact: {
+      displayName: 'JUDr. Blanka Čechová',
       name: 'Blanka',
       surname: 'Čechová',
-      dateOfBirth: new Date('1983-09-17'),
       gender: 'Female',
       phone: '+420777901234',
       email: 'blanka.cechova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Na Bateriích 17',
+      completeAddress: 'Na Bateriích 17 16000, Prague, Czech Republic',
       postalCode: '16000',
     },
-    dateRules: [
-      { startDay: 28, endDay: 31, startMonth: 1, endMonth: 12 }, // 28th - 31st, every month
-    ],
+    dateRules: [{ startDay: 28, endDay: 31, startMonth: 1, endMonth: 12 }],
   },
 
   // Praha 7
   {
     contact: {
+      displayName: 'Mgr. Eva Králová',
       name: 'Eva',
       surname: 'Králová',
-      dateOfBirth: new Date('1978-11-22'),
       gender: 'Female',
       phone: '+420777345123',
       email: 'eva.kralova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Letenská 25',
+      completeAddress: 'Letenská 25 17000, Prague, Czech Republic',
       postalCode: '17000',
     },
-    dateRules: [
-      { startDay: 1, endDay: 31, startMonth: 1, endMonth: 3 }, // 1st quarter (January to March)
-    ],
+    dateRules: [{ startDay: 1, endDay: 31, startMonth: 1, endMonth: 3 }],
   },
   {
     contact: {
+      displayName: 'JUDr. Ing. Vanda Pirková',
       name: 'Vanda',
       surname: 'Pirková',
-      dateOfBirth: new Date('1981-04-15'),
       gender: 'Female',
       phone: '+420777456234',
       email: 'vanda.pirkova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Milady Horákové 10',
+      completeAddress: 'Milady Horákové 10 17000, Prague, Czech Republic',
       postalCode: '17000',
     },
-    dateRules: [
-      { startDay: 1, endDay: 31, startMonth: 4, endMonth: 6 }, // 2nd quarter (April to June)
-    ],
+    dateRules: [{ startDay: 1, endDay: 31, startMonth: 4, endMonth: 6 }],
   },
   {
     contact: {
+      displayName: 'Mgr. Gajané Rejzková',
       name: 'Gajané',
       surname: 'Rejzková',
-      dateOfBirth: new Date('1979-07-30'),
       gender: 'Female',
       phone: '+420777567345',
       email: 'gajane.rejzkova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'U Sparty 5',
+      completeAddress: 'U Sparty 5 17000, Prague, Czech Republic',
       postalCode: '17000',
     },
-    dateRules: [
-      { startDay: 1, endDay: 31, startMonth: 7, endMonth: 9 }, // 3rd quarter (July to September)
-    ],
+    dateRules: [{ startDay: 1, endDay: 31, startMonth: 7, endMonth: 9 }],
   },
   {
     contact: {
+      displayName: 'Mgr. Karel Uhlíř',
       name: 'Karel',
       surname: 'Uhlíř',
-      dateOfBirth: new Date('1975-03-18'),
       gender: 'Male',
       phone: '+420777678456',
       email: 'karel.uhlir@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'U Výstaviště 17',
+      completeAddress: 'U Výstaviště 17 17000, Prague, Czech Republic',
       postalCode: '17000',
     },
-    dateRules: [
-      { startDay: 1, endDay: 31, startMonth: 10, endMonth: 12 }, // 4th quarter (October to December)
-    ],
+    dateRules: [{ startDay: 1, endDay: 31, startMonth: 10, endMonth: 12 }],
   },
+
   // Praha 8
   {
     contact: {
+      displayName: 'JUDr. Ing. Michael Sáblík',
       name: 'Michael',
       surname: 'Sáblík',
-      dateOfBirth: new Date('1980-09-12'),
       gender: 'Male',
       phone: '+420777789012',
       email: 'michael.sablik@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Křižíkova 48',
+      completeAddress: 'Křižíkova 48 18600, Prague, Czech Republic',
       postalCode: '18600',
     },
     dateRules: [
-      { startDay: 1, endDay: 6, startMonth: 1, endMonth: 12 }, // 1st - 6th of each month
-      { startDay: 31, endDay: 31, startMonth: 1, endMonth: 1 }, // 31st January
-      { startDay: 31, endDay: 31, startMonth: 7, endMonth: 7 }, // 31st July
-      { startDay: 31, endDay: 31, startMonth: 12, endMonth: 12 }, // 31st December
+      { startDay: 1, endDay: 6, startMonth: 1, endMonth: 12 },
+      { startDay: 31, endDay: 31, startMonth: 1, endMonth: 1 },
+      { startDay: 31, endDay: 31, startMonth: 7, endMonth: 7 },
+      { startDay: 31, endDay: 31, startMonth: 12, endMonth: 12 },
     ],
   },
   {
     contact: {
+      displayName: 'Mgr. Michaela Oswaldová',
       name: 'Michaela',
       surname: 'Oswaldová',
-      dateOfBirth: new Date('1983-03-22'),
       gender: 'Female',
       phone: '+420777890123',
       email: 'michaela.oswaldova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Karlínské náměstí 12',
+      completeAddress: 'Karlínské náměstí 12 18600, Prague, Czech Republic',
       postalCode: '18600',
     },
-    dateRules: [
-      { startDay: 7, endDay: 12, startMonth: 1, endMonth: 12 }, // 7th - 12th of each month
-    ],
+    dateRules: [{ startDay: 7, endDay: 12, startMonth: 1, endMonth: 12 }],
   },
   {
     contact: {
+      displayName: 'Mgr. Hana Remešová',
       name: 'Hana',
       surname: 'Remešová',
-      dateOfBirth: new Date('1982-08-15'),
       gender: 'Female',
       phone: '+420777901234',
       email: 'hana.remesova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Pernerova 7',
+      completeAddress: 'Pernerova 7 18600, Prague, Czech Republic',
       postalCode: '18600',
     },
     dateRules: [
-      { startDay: 13, endDay: 18, startMonth: 1, endMonth: 12 }, // 13th - 18th of each month
-      { startDay: 31, endDay: 31, startMonth: 3, endMonth: 3 }, // 31st March
-      { startDay: 31, endDay: 31, startMonth: 8, endMonth: 8 }, // 31st August
+      { startDay: 13, endDay: 18, startMonth: 1, endMonth: 12 },
+      { startDay: 31, endDay: 31, startMonth: 3, endMonth: 3 },
+      { startDay: 31, endDay: 31, startMonth: 8, endMonth: 8 },
     ],
   },
   {
     contact: {
+      displayName: 'Mgr. Šárka Zwierzynová',
       name: 'Šárka',
       surname: 'Zwierzynová',
-      dateOfBirth: new Date('1985-06-30'),
       gender: 'Female',
       phone: '+420777012345',
       email: 'sarka.zwierzynova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Thámova 20',
+      completeAddress: 'Thámova 20 18600, Prague, Czech Republic',
       postalCode: '18600',
     },
-    dateRules: [
-      { startDay: 19, endDay: 24, startMonth: 1, endMonth: 12 }, // 19th - 24th of each month
-    ],
+    dateRules: [{ startDay: 19, endDay: 24, startMonth: 1, endMonth: 12 }],
   },
   {
     contact: {
+      displayName: 'JUDr. Eva Krejcarová',
       name: 'Eva',
       surname: 'Krejcarová',
-      dateOfBirth: new Date('1979-12-25'),
       gender: 'Female',
       phone: '+420777123456',
       email: 'eva.krejcarova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Šaldova 16',
+      completeAddress: 'Šaldova 16 18600, Prague, Czech Republic',
       postalCode: '18600',
     },
     dateRules: [
-      { startDay: 25, endDay: 30, startMonth: 1, endMonth: 12 }, // 25th - 30th of each month
-      { startDay: 31, endDay: 31, startMonth: 5, endMonth: 5 }, // 31st May
-      { startDay: 31, endDay: 31, startMonth: 10, endMonth: 10 }, // 31st October
+      { startDay: 25, endDay: 30, startMonth: 1, endMonth: 12 },
+      { startDay: 31, endDay: 31, startMonth: 5, endMonth: 5 },
+      { startDay: 31, endDay: 31, startMonth: 10, endMonth: 10 },
     ],
   },
 
   // Praha 9
   {
     contact: {
+      displayName: 'Mgr. Šimon Březina',
       name: 'Šimon',
       surname: 'Březina',
-      dateOfBirth: new Date('1981-11-08'),
       gender: 'Male',
       phone: '+420777234567',
       email: 'simon.brezina@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Prosecká 10',
+      completeAddress: 'Prosecká 10 19000, Prague, Czech Republic',
       postalCode: '19000',
     },
     dateRules: [
-      { startDay: 1, endDay: 6, startMonth: 1, endMonth: 12 }, // 1st - 6th of each month
-      { startDay: 31, endDay: 31, startMonth: 1, endMonth: 1 }, // 31st January
+      { startDay: 1, endDay: 6, startMonth: 1, endMonth: 12 },
+      { startDay: 31, endDay: 31, startMonth: 1, endMonth: 1 },
     ],
   },
   {
     contact: {
+      displayName: 'Mgr. Soňa Glazarová',
       name: 'Soňa',
       surname: 'Glazarová',
-      dateOfBirth: new Date('1984-02-11'),
       gender: 'Female',
       phone: '+420777345678',
       email: 'sona.glazarova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Vysočanská 21',
+      completeAddress: 'Vysočanská 21 19000, Prague, Czech Republic',
       postalCode: '19000',
     },
     dateRules: [
-      { startDay: 7, endDay: 12, startMonth: 1, endMonth: 12 }, // 7th - 12th of each month
-      { startDay: 31, endDay: 31, startMonth: 3, endMonth: 3 }, // 31st March
+      { startDay: 7, endDay: 12, startMonth: 1, endMonth: 12 },
+      { startDay: 31, endDay: 31, startMonth: 3, endMonth: 3 },
     ],
   },
   {
     contact: {
+      displayName: 'JUDr. Věra Sáblíková',
       name: 'Věra',
       surname: 'Sáblíková',
-      dateOfBirth: new Date('1980-04-19'),
       gender: 'Female',
       phone: '+420777456789',
       email: 'vera.sablikova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Kolbenova 50',
+      completeAddress: 'Kolbenova 50 19000, Prague, Czech Republic',
       postalCode: '19000',
     },
     dateRules: [
-      { startDay: 13, endDay: 18, startMonth: 1, endMonth: 12 }, // 13th - 18th of each month
-      { startDay: 31, endDay: 31, startMonth: 5, endMonth: 5 }, // 31st May
+      { startDay: 13, endDay: 18, startMonth: 1, endMonth: 12 },
+      { startDay: 31, endDay: 31, startMonth: 5, endMonth: 5 },
     ],
   },
   {
     contact: {
+      displayName: 'Mgr. Petr Diviš',
       name: 'Petr',
       surname: 'Diviš',
-      dateOfBirth: new Date('1982-07-03'),
       gender: 'Male',
       phone: '+420777567890',
       email: 'petr.divis@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Ocelářská 12',
+      completeAddress: 'Ocelářská 12 19000, Prague, Czech Republic',
       postalCode: '19000',
     },
     dateRules: [
-      { startDay: 19, endDay: 24, startMonth: 1, endMonth: 12 }, // 19th - 24th of each month
-      { startDay: 31, endDay: 31, startMonth: 7, endMonth: 7 }, // 31st July
+      { startDay: 19, endDay: 24, startMonth: 1, endMonth: 12 },
+      { startDay: 31, endDay: 31, startMonth: 7, endMonth: 7 },
     ],
   },
   {
     contact: {
+      displayName: 'JUDr. Sylva Kotrbová',
       name: 'Sylva',
       surname: 'Kotrbová',
-      dateOfBirth: new Date('1985-11-25'),
       gender: 'Female',
       phone: '+420777678901',
       email: 'sylva.kotrbova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Letňanská 14',
+      completeAddress: 'Letňanská 14 19000, Prague, Czech Republic',
       postalCode: '19000',
     },
     dateRules: [
-      { startDay: 25, endDay: 30, startMonth: 1, endMonth: 12 }, // 25th - 30th of each month
-      { startDay: 31, endDay: 31, startMonth: 8, endMonth: 8 }, // 31st August
-      { startDay: 31, endDay: 31, startMonth: 10, endMonth: 10 }, // 31st October
-      { startDay: 31, endDay: 31, startMonth: 12, endMonth: 12 }, // 31st December
+      { startDay: 25, endDay: 30, startMonth: 1, endMonth: 12 },
+      { startDay: 31, endDay: 31, startMonth: 8, endMonth: 8 },
+      { startDay: 31, endDay: 31, startMonth: 10, endMonth: 10 },
+      { startDay: 31, endDay: 31, startMonth: 12, endMonth: 12 },
     ],
   },
+
   // Praha 10
   {
     contact: {
       name: 'Šimon',
       surname: 'Klein',
-      dateOfBirth: new Date('1979-03-14'),
-      gender: 'Male',
+      displayName: 'Mgr. Šimon Klein',
       phone: '+420777789012',
       email: 'simon.klein@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Vršovická 25',
+      completeAddress: 'Vršovická 25 10100, Prague, Czech Republic',
       postalCode: '10100',
     },
     dateRules: [
-      { startDay: 1, endDay: 3, startMonth: 1, endMonth: 12 }, // 1st - 3rd of each month
+      { startDay: 1, endDay: 3, startMonth: 1, endMonth: 12 },
       { startDay: 16, endDay: 16, startMonth: 1, endMonth: 4 },
-      { startDay: 31, endDay: 31, startMonth: 12, endMonth: 12 }, // 31st December
+      { startDay: 31, endDay: 31, startMonth: 12, endMonth: 12 },
     ],
   },
   {
     contact: {
       name: 'Jaroslava',
       surname: 'Voclová',
-      dateOfBirth: new Date('1983-06-09'),
-      gender: 'Female',
+      displayName: 'JUDr. Jaroslava Voclová',
       phone: '+420777890123',
       email: 'jaroslava.voclova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Eden Street 45',
+      completeAddress: 'Eden Street 45 10100, Prague, Czech Republic',
       postalCode: '10100',
     },
     dateRules: [
-      { startDay: 5, endDay: 7, startMonth: 1, endMonth: 12 }, // 5th - 7th of each month
+      { startDay: 5, endDay: 7, startMonth: 1, endMonth: 12 },
       { startDay: 16, endDay: 16, startMonth: 5, endMonth: 8 },
-      { startDay: 31, endDay: 31, startMonth: 3, endMonth: 3 }, // 31st March
+      { startDay: 31, endDay: 31, startMonth: 3, endMonth: 3 },
     ],
   },
   {
     contact: {
       name: 'Martin',
       surname: 'Říha',
-      dateOfBirth: new Date('1981-05-22'),
-      gender: 'Male',
+      displayName: 'Mgr. Martin Říha',
       phone: '+420777901234',
       email: 'martin.riha@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Záběhlická 66',
+      completeAddress: 'Záběhlická 66 10200, Prague, Czech Republic',
       postalCode: '10200',
     },
     dateRules: [
-      { startDay: 9, endDay: 11, startMonth: 1, endMonth: 12 }, // 9th - 11th of each month
+      { startDay: 9, endDay: 11, startMonth: 1, endMonth: 12 },
       { startDay: 16, endDay: 16, startMonth: 9, endMonth: 12 },
-      { startDay: 31, endDay: 31, startMonth: 5, endMonth: 5 }, // 31st May
+      { startDay: 31, endDay: 31, startMonth: 5, endMonth: 5 },
     ],
   },
   {
     contact: {
       name: 'Štěpán',
       surname: 'Nývlt',
-      dateOfBirth: new Date('1985-02-07'),
-      gender: 'Male',
+      displayName: 'Mgr. Štěpán Nývlt',
       phone: '+420777912345',
       email: 'stepan.nyvlt@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Michle 72',
+      completeAddress: 'Michle 72 10100, Prague, Czech Republic',
       postalCode: '10100',
     },
     dateRules: [
-      { startDay: 13, endDay: 15, startMonth: 1, endMonth: 12 }, // 13th - 15th of each month
+      { startDay: 13, endDay: 15, startMonth: 1, endMonth: 12 },
       { startDay: 20, endDay: 20, startMonth: 1, endMonth: 4 },
-      { startDay: 31, endDay: 31, startMonth: 7, endMonth: 7 }, // 31st July
+      { startDay: 31, endDay: 31, startMonth: 7, endMonth: 7 },
     ],
   },
   {
     contact: {
       name: 'Daniela',
       surname: 'Anderson',
-      dateOfBirth: new Date('1984-08-30'),
-      gender: 'Female',
+      displayName: 'JUDr. Daniela Anderson',
       phone: '+420777923456',
       email: 'daniela.anderson@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Vinohrady 88',
+      completeAddress: 'Vinohrady 88 10100, Prague, Czech Republic',
       postalCode: '10100',
     },
     dateRules: [
-      { startDay: 17, endDay: 19, startMonth: 1, endMonth: 12 }, // 17th - 19th of each month
+      { startDay: 17, endDay: 19, startMonth: 1, endMonth: 12 },
       { startDay: 20, endDay: 20, startMonth: 5, endMonth: 8 },
-      { startDay: 31, endDay: 31, startMonth: 8, endMonth: 8 }, // 31st August
+      { startDay: 31, endDay: 31, startMonth: 8, endMonth: 8 },
     ],
   },
   {
     contact: {
       name: 'Věra',
       surname: 'Dundová',
-      dateOfBirth: new Date('1978-09-11'),
-      gender: 'Female',
+      displayName: 'JUDr. Věra Dundová',
       phone: '+420777934567',
       email: 'vera.dundova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Zahradní Město 93',
+      completeAddress: 'Zahradní Město 93 10200, Prague, Czech Republic',
       postalCode: '10200',
     },
     dateRules: [
-      { startDay: 21, endDay: 23, startMonth: 1, endMonth: 12 }, // 21st - 23rd of each month
+      { startDay: 21, endDay: 23, startMonth: 1, endMonth: 12 },
       { startDay: 20, endDay: 20, startMonth: 9, endMonth: 12 },
     ],
   },
@@ -1308,51 +1172,42 @@ export const notarySeedData: NotarySeedData[] = [
     contact: {
       name: 'Jana',
       surname: 'Zangiová',
-      dateOfBirth: new Date('1986-10-18'),
-      gender: 'Female',
+      displayName: 'JUDr. Jana Zangiová',
       phone: '+420777945678',
       email: 'jana.zangiova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Strašnice 12',
+      completeAddress: 'Strašnice 12 10000, Prague, Czech Republic',
       postalCode: '10000',
     },
     dateRules: [
-      { startDay: 24, endDay: 26, startMonth: 1, endMonth: 12 }, // 24th - 26th of each month
+      { startDay: 24, endDay: 26, startMonth: 1, endMonth: 12 },
       { startDay: 27, endDay: 27, startMonth: 1, endMonth: 6 },
-      { startDay: 31, endDay: 31, startMonth: 10, endMonth: 10 }, // 31st October
+      { startDay: 31, endDay: 31, startMonth: 10, endMonth: 10 },
     ],
   },
   {
     contact: {
       name: 'Martin',
       surname: 'Muzikář',
-      dateOfBirth: new Date('1977-12-03'),
-      gender: 'Male',
+      displayName: 'JUDr. Ing. Martin Muzikář',
       phone: '+420777956789',
       email: 'martin.muzikar@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Horní Měcholupy 34',
+      completeAddress: 'Horní Měcholupy 34 10900, Prague, Czech Republic',
       postalCode: '10900',
     },
     dateRules: [
-      { startDay: 28, endDay: 30, startMonth: 1, endMonth: 12 }, // 28th - 30th of each month
+      { startDay: 28, endDay: 30, startMonth: 1, endMonth: 12 },
       { startDay: 27, endDay: 27, startMonth: 5, endMonth: 8 },
-      { startDay: 31, endDay: 31, startMonth: 12, endMonth: 12 }, // 31st December
+      { startDay: 31, endDay: 31, startMonth: 12, endMonth: 12 },
     ],
   },
   {
     contact: {
       name: 'Lucie',
       surname: 'Foukalová',
-      dateOfBirth: new Date('1982-04-27'),
-      gender: 'Female',
+      displayName: 'JUDr. Lucie Foukalová',
       phone: '+420777967890',
       email: 'lucie.foukalova@notary.com',
-      country: 'Czech Republic',
-      city: 'Prague',
-      street: 'Hostivařská 17',
+      completeAddress: 'Hostivařská 17 10200, Prague, Czech Republic',
       postalCode: '10200',
     },
     dateRules: [

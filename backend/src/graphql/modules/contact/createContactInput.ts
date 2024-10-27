@@ -1,5 +1,7 @@
 import { Field, InputType } from 'type-graphql'
 
+import { GenderEnumType } from '@backend/db/schema'
+
 @InputType()
 export class CreateContactInput {
   @Field()
@@ -18,7 +20,7 @@ export class CreateContactInput {
   displayName?: string
 
   @Field({ nullable: true })
-  gender?: string
+  gender?: GenderEnumType
 
   @Field()
   completeAddress!: string

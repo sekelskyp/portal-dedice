@@ -1,5 +1,7 @@
 import { Field, ID, ObjectType } from 'type-graphql'
 
+import { GenderEnumType } from '../../../db/schema'
+
 @ObjectType()
 export class Contact {
   @Field(() => ID)
@@ -15,7 +17,7 @@ export class Contact {
   displayName?: string | null
 
   @Field({ nullable: true })
-  gender?: string | null
+  gender?: GenderEnumType | null
 
   @Field({ nullable: true })
   phone?: string | null

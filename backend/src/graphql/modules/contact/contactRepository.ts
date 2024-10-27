@@ -1,15 +1,15 @@
 import { eq } from 'drizzle-orm'
 
-import { contact, notary } from '@backend/db/schema'
+import { contact, GenderEnumType, notary } from '@backend/db/schema'
 import { Db } from '@backend/types/types'
 
-interface ContactData {
+export interface ContactData {
   name: string
   surname: string
-  email?: string
-  phone?: string
   displayName?: string
-  gender?: string
+  phone?: string
+  gender?: GenderEnumType
+  email?: string
   completeAddress: string
   postalCode: string
 }
@@ -27,6 +27,11 @@ export function getContactRepository(db: Db) {
   async function createContact(data: ContactData): Promise<number> {
     const [result] = await db.insert(contact).values(data).$returningId()
     return result.id
+  }
+
+  async function createContacts(data: ContactData[]): Promise<number[]> {
+    const results = await db.insert(contact).values(data).$returningId()
+    return results.map((contact) => contact.id)
   }
 
   async function deleteContactById(id: number): Promise<number> {
@@ -51,5 +56,6 @@ export function getContactRepository(db: Db) {
     createContact,
     deleteContactById,
     getContactByNotaryId,
+    createContacts,
   }
 }

@@ -19,17 +19,21 @@ import { MOCKS, PORT } from '@backend/config'
 import { getConnection } from '@backend/db/db'
 import { AuthResolver } from '@backend/graphql/modules/auth/authResolver'
 import { getBeneficiaryRepository } from '@backend/graphql/modules/beneficiary/beneficiaryRepository'
+import { BeneficiaryResolver } from '@backend/graphql/modules/beneficiary/beneficiaryResolver'
 import { getContactRepository } from '@backend/graphql/modules/contact/contactRepository'
 import { EmptyResolver } from '@backend/graphql/modules/empty/emptyResolver'
 import { getInheritanceProcedureRepository } from '@backend/graphql/modules/inheritanceProcedure/inheritaceProcedureRepository'
+import { InheritanceProcedureResolver } from '@backend/graphql/modules/inheritanceProcedure/inheritanceProcedureResolver'
 import { getNotaryRepository } from '@backend/graphql/modules/notary/notaryRepository'
-import { NotaryAssignmentResolver } from '@backend/graphql/modules/notaryAssignment/notaryAssignmentResolver'
+import { NotaryResolver } from '@backend/graphql/modules/notary/notaryResolver'
 import { PasswordResetResolver } from '@backend/graphql/modules/passwordReset/passwordResetTokenResolver'
 import { getUserRepository } from '@backend/graphql/modules/user/userRepository'
 import { UserResolver } from '@backend/graphql/modules/user/userResolver'
 import { parseAndVerifyJWT } from '@backend/libs/jwt'
 import { mockResolvers } from '@backend/mocks/mocks'
 import { CustomContext } from '@backend/types/types'
+
+import { getNotaryDateRuleRepository } from './graphql/modules/notaryDateRule/notaryDateRuleRepository'
 
 const init = async () => {
   const app = express()
@@ -41,8 +45,10 @@ const init = async () => {
       EmptyResolver,
       UserResolver,
       AuthResolver,
-      NotaryAssignmentResolver,
       PasswordResetResolver,
+      BeneficiaryResolver,
+      InheritanceProcedureResolver,
+      NotaryResolver,
     ],
     emitSchemaFile: true,
   })
@@ -81,6 +87,7 @@ const init = async () => {
         drizzle.db
       ),
       beneficiaryRepository: getBeneficiaryRepository(drizzle.db),
+      notaryDateRuleRepository: getNotaryDateRuleRepository(drizzle.db),
     }
   }
 

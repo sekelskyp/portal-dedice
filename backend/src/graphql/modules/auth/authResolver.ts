@@ -1,7 +1,5 @@
-import { eq } from 'drizzle-orm'
 import { Arg, Ctx, Mutation, Resolver } from 'type-graphql'
 
-import { user } from '@backend/db/schema'
 import { CustomContext } from '@backend/types/types'
 
 import {
@@ -9,66 +7,56 @@ import {
   registerUser,
   RegisterUserDTO,
 } from '../../../services/authService'
+import { User } from '../user/userType'
 
-import { AuthInfo, RegisterInput } from './authType'
+import { RegisterInput, SignInResponse } from './authType'
 
 @Resolver()
 export class AuthResolver {
-  @Mutation(() => AuthInfo)
+  @Mutation(() => SignInResponse)
   async signIn(
     @Arg('login') login: string,
     @Arg('password') password: string,
     @Ctx() context: CustomContext
-  ): Promise<AuthInfo> {
-    // Pass context (db) along with email and password to the service
+  ): Promise<SignInResponse> {
+    // Use loginUser service with userRepository for login logic
     const authResponse = await loginUser(login, password, context)
-    const userRecord = await context.db
-      .select()
-      .from(user)
-      .where(eq(user.id, authResponse.userId))
 
-    const foundUser = userRecord[0]
-    // Return the response from the loginUser service
+    // Fetch user details using userRepository
+    const foundUser = await context.userRepository.getUserById(
+      authResponse.userId
+    )
+    if (!foundUser) {
+      throw new Error('User not found after login')
+    }
+
     return {
       token: authResponse.token,
       user: foundUser,
     }
   }
 
-  @Mutation(() => AuthInfo)
+  @Mutation(() => User)
   async signUp(
     @Arg('registerInput') registerInput: RegisterInput,
     @Ctx() context: CustomContext
-  ): Promise<AuthInfo> {
+  ): Promise<User> {
     const input: RegisterUserDTO = {
       login: registerInput.login,
       password: registerInput.password,
-      contact: {
-        name: registerInput.contact.name,
-        surname: registerInput.contact.surname,
-        dateOfBirth: registerInput.contact.dateOfBirth,
-        gender: registerInput.contact.gender,
-        phone: registerInput.contact.phone,
-        email: registerInput.contact.email,
-        country: registerInput.contact.country,
-        city: registerInput.contact.city,
-        street: registerInput.contact.street,
-        postalCode: registerInput.contact.postalCode,
-      },
     }
 
-    const authResponse = await registerUser(input, context)
+    // Use registerUser service with userRepository for registration logic
+    const result = await registerUser(input, context)
 
-    // Fetch user details using userId
-    const userRecord = await context.db
-      .select()
-      .from(user)
-      .where(eq(user.id, authResponse.userId))
-
-    const foundUser = userRecord[0]
-    return {
-      user: foundUser,
-      token: authResponse.token,
+    // Fetch user details using userRepository after registration
+    if (!result) {
+      throw new Error('Registration failed')
     }
+    const foundUser = await context.userRepository.getUserById(result.id)
+    if (!foundUser) {
+      throw new Error('User not found after registration')
+    }
+    return foundUser
   }
 }

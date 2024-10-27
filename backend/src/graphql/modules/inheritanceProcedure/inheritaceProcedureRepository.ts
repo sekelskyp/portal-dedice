@@ -7,12 +7,12 @@ import {
 import { Db } from '@backend/types/types'
 
 interface InheritanceProcedureData {
-  notaryId?: number
-  deceasedPersonId?: number
+  notaryId?: number | null
+  deceasedPersonId?: number | null
   name: string
   state?: InheritanceProcedureStateEnumType
   startDate: Date
-  endDate?: Date
+  endDate?: Date | null
 }
 
 export function getInheritanceProcedureRepository(db: Db) {
@@ -28,14 +28,12 @@ export function getInheritanceProcedureRepository(db: Db) {
     return await db.select().from(inheritanceProcedure)
   }
 
-  async function createProcedure(
-    data: InheritanceProcedureData
-  ): Promise<number> {
+  async function createProcedure(data: InheritanceProcedureData) {
     const [result] = await db
       .insert(inheritanceProcedure)
       .values(data)
       .$returningId()
-    return result.id
+    return result
   }
 
   async function deleteProcedureById(id: number): Promise<number> {

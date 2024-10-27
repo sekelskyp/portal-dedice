@@ -10,10 +10,13 @@ import {
 
 import { CustomContext } from '@backend/types/types'
 
+import { findAvailableNotary } from '../../../services/notaryAssignmentService'
 import { Contact } from '../contact/contactType'
 import { User } from '../user/userType'
 
 import { CreateNotaryInput } from './createNotaryInput'
+import { FindNotaryInput } from './findNotaryInput'
+import { FindNotaryResponse } from './findNotaryResponse'
 import { Notary } from './notaryType'
 
 @Resolver(() => Notary)
@@ -65,5 +68,33 @@ export class NotaryResolver {
   ): Promise<boolean> {
     const deletedNotaryId = await notaryRepository.deleteNotaryById(id)
     return deletedNotaryId !== null
+  }
+
+  @Query(() => FindNotaryResponse, { nullable: true })
+  async findNotary(
+    @Arg('input') input: FindNotaryInput,
+    @Ctx() context: CustomContext
+  ): Promise<FindNotaryResponse | null> {
+    const findAvailableNotaryInput = {
+      postalCode: input.postalCode,
+      dateOfDeath: input.deceasedPersonDateOfDeath,
+    }
+
+    const [notaryRecord] = await findAvailableNotary(
+      findAvailableNotaryInput,
+      context
+    )
+
+    let contactValue = null
+    if (notaryRecord && notaryRecord.contactId) {
+      contactValue = await context.contactRepository.getContactById(
+        notaryRecord.contactId
+      )
+    }
+
+    return {
+      notary: notaryRecord,
+      contact: contactValue,
+    }
   }
 }

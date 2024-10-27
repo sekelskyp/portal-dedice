@@ -20,6 +20,9 @@ import {
 const taskTypeEnum = ['Upload Document', 'Set Up Meeting', 'Custom'] as const
 export type TaskTypeEnumType = (typeof taskTypeEnum)[number]
 
+const genderEnum = ['Male', 'Female', 'Other'] as const
+export type GenderEnumType = (typeof genderEnum)[number]
+
 const taskStateEnum = ['Open', 'InProgress', 'Completed', 'Closed'] as const
 export type TaskStateEnumType = (typeof taskStateEnum)[number]
 
@@ -53,7 +56,10 @@ export const contact = mysqlTable('contact', {
   displayName: varchar('display_name', { length: 255 }).default(
     sql`CONCAT(name, ' ', surname)`
   ),
-  gender: varchar('gender', { length: 50 }),
+  gender: varchar('gender', {
+    length: 7,
+    enum: genderEnum,
+  }),
   phone: char('phone', { length: 15 }),
   email: varchar('email', { length: 255 }),
   completeAddress: varchar('complete_address', { length: 255 }).notNull(),
