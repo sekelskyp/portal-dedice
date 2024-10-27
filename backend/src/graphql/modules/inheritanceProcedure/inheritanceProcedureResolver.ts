@@ -1,4 +1,13 @@
-import { Arg, Ctx, Int, Mutation, Query, Resolver } from 'type-graphql'
+import {
+  Arg,
+  Ctx,
+  FieldResolver,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+  Root,
+} from 'type-graphql'
 
 import {
   addBeneficiaryToProcedure,
@@ -9,6 +18,7 @@ import {
   removeBeneficiaryFromProcedure,
 } from '../../../services/inheritanceProcedureService'
 import { CustomContext } from '../../../types/types'
+import { DeceasedPerson } from '../deceasedPerson/deceasedPersonType'
 
 import { CreateInheritanceProcedureInput } from './createInheritanceProcedureInput'
 import { InheritanceProcedure } from './inheritanceProcedureType'
@@ -78,5 +88,19 @@ export class InheritanceProcedureResolver {
   ): Promise<boolean> {
     await assignNotary(procedureId, notaryId, context)
     return true
+  }
+
+  // Field Resolver to fetch the deceased person associated with the procedure
+  @FieldResolver(() => DeceasedPerson, { nullable: true })
+  async deceasedPerson(
+    @Root() procedure: InheritanceProcedure,
+    @Ctx() { deceasedPersonRepository }: CustomContext
+  ): Promise<DeceasedPerson | null> {
+    if (!procedure.deceasedPersonId) {
+      return null
+    }
+    return await deceasedPersonRepository.getDeceasedPersonById(
+      procedure.deceasedPersonId
+    )
   }
 }

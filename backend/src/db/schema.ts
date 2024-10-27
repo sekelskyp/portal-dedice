@@ -1,4 +1,4 @@
-import { name, SQL, sql } from 'drizzle-orm'
+import { SQL, sql } from 'drizzle-orm'
 import {
   AnyMySqlColumn,
   binary,
@@ -88,10 +88,11 @@ export const beneficiary = mysqlTable('beneficiary', {
 // Define Deceased Person Table
 export const deceasedPerson = mysqlTable('deceased_person', {
   id: int('id').primaryKey().autoincrement(),
-  // procedureId: int('procedure_id').references(() => inheritanceProcedure.id),
   dateOfBirth: date('date_of_birth').notNull(),
   dateOfDeath: date('date_of_death').notNull(),
-  contactId: int('contact_id').references(() => contact.id),
+  contactId: int('contact_id')
+    .references(() => contact.id)
+    .notNull(),
 })
 
 // Define InheritanceProcedure Table

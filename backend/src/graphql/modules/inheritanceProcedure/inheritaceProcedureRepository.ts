@@ -7,12 +7,12 @@ import {
 import { Db } from '@backend/types/types'
 
 interface InheritanceProcedureData {
-  notaryId?: number | null
-  deceasedPersonId?: number | null
-  name: string
-  state?: InheritanceProcedureStateEnumType
-  startDate: Date
-  endDate?: Date | null
+  notaryId: number | null // Nullable as per schema
+  deceasedPersonId: number | null // Nullable as per schema
+  name: string // Required, as defined in the schema
+  state: InheritanceProcedureStateEnumType // Required, with default in schema
+  startDate: Date // Required
+  endDate: Date | null // Nullable
 }
 
 export function getInheritanceProcedureRepository(db: Db) {
