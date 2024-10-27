@@ -2,14 +2,16 @@ import { useCallback } from 'react'
 import {
   Alert,
   AlertIcon,
-  Container,
+  Box,
+  Center,
+  GridItem,
   Heading,
-  Stack,
+  SimpleGrid,
+  Text,
   useToast,
 } from '@chakra-ui/react'
 
 import resources from '@frontend/resources'
-import { Page } from '@frontend/shared/layout'
 
 import { SignUpForm } from '../components/SignUpForm'
 import { useSignUp } from '../hooks/useSignUp'
@@ -73,19 +75,103 @@ export function SignUpPage() {
   )
 
   return (
-    <Page>
-      <Container as={Stack} gap={4}>
-        <Heading as="h2" size={'2xl'}>
-          {resources.auth.pages.signUp.title}
-        </Heading>
-        {signUpRequestState.error ? (
-          <Alert status="error">
-            <AlertIcon />
-            {signUpRequestState.error.message}
-          </Alert>
-        ) : null}
-        <SignUpForm onSubmit={handleSignUpFormSubmit}></SignUpForm>
-      </Container>
-    </Page>
+    <Box px={8} py={{ base: 8, sm: 16, lg: 24 }} mx={{ base: 0, xl: 8 }}>
+      {signUpRequestState.error ? (
+        <Alert status="error">
+          <AlertIcon />
+          {signUpRequestState.error.message}
+        </Alert>
+      ) : null}
+      <SimpleGrid
+        alignItems="center"
+        w={{
+          base: 'full',
+          xl: 9 / 12,
+        }}
+        columns={{
+          base: 1,
+          lg: 11,
+        }}
+        gap={{
+          base: 0,
+          lg: 24,
+        }}
+        mx="auto"
+      >
+        <GridItem
+          colSpan={{
+            base: 'auto',
+            lg: 7,
+          }}
+          textAlign={{
+            base: 'center',
+            lg: 'left',
+          }}
+        >
+          <Heading
+            mb={4}
+            fontSize={{
+              base: '2xl',
+              sm: '3xl',
+              md: '4xl',
+            }}
+            fontWeight="bold"
+            lineHeight={{
+              base: 'shorter',
+              md: 'none',
+            }}
+            color="gray.900"
+            _dark={{
+              color: 'gray.200',
+            }}
+            letterSpacing={{
+              base: 'normal',
+              md: 'tight',
+            }}
+          >
+            Potřebujete vyřešit předběžné řízení?
+          </Heading>
+          <Text
+            mb={{
+              base: 8,
+              md: 4,
+            }}
+            fontSize={{
+              base: 'md',
+              sm: 'lg',
+              md: 'xl',
+            }}
+            fontWeight="thin"
+            color="gray.500"
+            letterSpacing="wider"
+          >
+            Tato aplikace vám srozumitelně vysvětlí, co vás v pozůstalostním
+            řízení čeká. V aplikaci se po zaregistrování můžete spojit s notářem
+            a část pozůstalostního řízení vyřešit pohodlně online.
+          </Text>
+        </GridItem>
+        <GridItem
+          colSpan={{
+            base: 'auto',
+            md: 4,
+          }}
+        >
+          <Box rounded="xl">
+            <Center
+              pb={0}
+              color="gray.700"
+              _dark={{
+                color: 'gray.600',
+              }}
+            >
+              <Heading size="h4" as="h4">
+                Registrace
+              </Heading>
+            </Center>
+            <SignUpForm onSubmit={handleSignUpFormSubmit}></SignUpForm>
+          </Box>
+        </GridItem>
+      </SimpleGrid>
+    </Box>
   )
 }
