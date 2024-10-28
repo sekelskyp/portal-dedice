@@ -20,7 +20,7 @@ export function ProceedingsTableSearchBar({
   setGlobalFilter: Dispatch<SetStateAction<string>>
 }) {
   return (
-    <Stack mb={4}>
+    <Stack mb={4} p={1}>
       <InputGroup width="20%">
         <InputLeftElement>
           <FaSearch />
@@ -30,7 +30,6 @@ export function ProceedingsTableSearchBar({
           onChange={(e) => setGlobalFilter(e.target.value)}
           value={table.getState().globalFilter || ''}
           size="md"
-          pl={10}
         />
         <InputRightElement
           _hover={{ cursor: 'pointer' }}

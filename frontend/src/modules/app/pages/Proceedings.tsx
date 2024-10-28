@@ -1,6 +1,13 @@
-import { Heading, Stack } from '@chakra-ui/react'
+import { Button, Heading, Stack } from '@chakra-ui/react'
+import { Link } from 'react-router-dom'
+
+import { route } from '@frontend/route'
 
 import { ProceedingsTable } from '../components/ProceedingsTable'
+
+//TODO: replace with real data
+//TODO: add routing when pages are ready
+//TODO: render different content based on user role
 
 const items = [
   { id: 8457, date: '2024-01-05', status: 'Probíhající' },
@@ -32,6 +39,26 @@ export function Proceedings() {
     <Stack justifyContent="center" alignContent="center" alignItems="center">
       <Heading textAlign="center" pt={8}>
         Moje řízení
+      </Heading>
+      <Button as={Link} to={route.home()} m={10}>
+        Vytvořit nové řízení
+      </Button>
+      <Heading as="h4" size="h4">
+        Další možnosti
+      </Heading>
+      <Stack direction="row" mb={10}>
+        <Button as={Link} to={route.wizard()}>
+          Chci vědět jak řízení probíhá
+        </Button>
+        <Button as={Link} to={route.home()}>
+          Chci se na schůzku připravit
+        </Button>
+        <Button as={Link} to={route.home()}>
+          Chci si zkusit modelaci dědění
+        </Button>
+      </Stack>
+      <Heading as="h3" size="h3">
+        Seznam všech řízení
       </Heading>
       <ProceedingsTable data={items} />
     </Stack>

@@ -34,9 +34,9 @@ export function ProceedingsTableHeader({
                     )}
                   </Heading>
                   {header.column.getIsSorted() === 'asc' ? (
-                    <HiChevronUp fontSize="24px" />
-                  ) : header.column.getIsSorted() === 'desc' ? (
                     <HiChevronDown fontSize="24px" />
+                  ) : header.column.getIsSorted() === 'desc' ? (
+                    <HiChevronUp fontSize="24px" />
                   ) : null}
                 </Stack>
               </Th>

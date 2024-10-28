@@ -19,7 +19,8 @@ export function ProceedingsTable({ data }: { data: ProceedingsItem[] }) {
   return (
     <TableContainer
       p={5}
-      m={5}
+      mx={5}
+      mb={5}
       borderWidth="1px"
       borderColor="gray.200"
       borderRadius="xl"

@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Button } from '@chakra-ui/react'
+import { Badge, Button } from '@chakra-ui/react'
 import { rankItem } from '@tanstack/match-sorter-utils'
 import {
   ColumnDef,
@@ -14,6 +14,13 @@ import {
 import { HiChevronRight } from 'react-icons/hi'
 
 import { ProceedingsItem } from '../components/ProceedingsTable'
+
+const INITIAL_SORTING_STATE = [
+  {
+    id: 'status',
+    desc: false,
+  },
+]
 
 const fuzzyFilter: FilterFn<ProceedingsItem> = (
   row,
@@ -44,11 +51,28 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
       },
       {
         accessorKey: 'date',
-        header: () => 'Datum',
+        header: () => 'Datum založení',
       },
       {
         accessorKey: 'status',
         header: () => 'Status',
+        cell: (info) => {
+          return (
+            <Badge
+              bg={info.getValue() === 'Probíhající' ? 'green.700' : 'red.700'}
+              color="white"
+              variant="subtle"
+              style={{ textTransform: 'none' }}
+              px={4}
+              py={2}
+              borderRadius="xl"
+              width="120px"
+              fontSize="sm"
+            >
+              {info.getValue() as React.ReactNode}
+            </Badge>
+          )
+        },
       },
       {
         accessorKey: 'detail',
@@ -74,6 +98,9 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
     state: {
       globalFilter,
       pagination,
+    },
+    initialState: {
+      sorting: INITIAL_SORTING_STATE,
     },
     globalFilterFn: fuzzyFilter,
     onPaginationChange: setPagination,
