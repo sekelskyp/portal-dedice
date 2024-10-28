@@ -7,7 +7,7 @@ export class UpdateBeneficiaryInput {
   @Field(() => ID, { nullable: true })
   userId?: number
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   deceasedRelation?: DeceasedRelationEnumType
 
   @Field(() => ID, { nullable: true })
