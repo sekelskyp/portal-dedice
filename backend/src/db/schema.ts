@@ -2,6 +2,7 @@ import { SQL, sql } from 'drizzle-orm'
 import {
   AnyMySqlColumn,
   binary,
+  boolean,
   char,
   check,
   date,
@@ -40,6 +41,7 @@ export const user = mysqlTable(
     id: int('id').primaryKey().autoincrement(),
     email: varchar('email', { length: 100 }).notNull(),
     password: varchar('password', { length: 255 }).notNull(),
+    confirmed: boolean('confirmed').default(false),
   },
   (table) => ({
     loginUniqueIndex: uniqueIndex('user_email_unique_index').on(
@@ -78,9 +80,9 @@ export const beneficiary = mysqlTable('beneficiary', {
   deceasedRelation: varchar('deceased_relation', {
     length: 6,
     enum: deceasedRelationEnum,
-  }).notNull(),
+  }),
   contactId: int('contact_id').references(() => contact.id),
-  dateOfBirth: date('date_of_birth').notNull(),
+  dateOfBirth: date('date_of_birth'),
 })
 
 // Define Deceased Person Table
@@ -249,6 +251,16 @@ export const beneficiaryTaskRel = mysqlTable(
 
 // Define Password Reset Token Table
 export const passwordResetToken = mysqlTable('password_reset_token', {
+  id: int('id').primaryKey().autoincrement(),
+  userId: int('user_id')
+    .references(() => user.id)
+    .notNull(), // FK to User
+  token: varchar('token', { length: 255 }).notNull(),
+  expiresAt: datetime('expires_at').notNull(),
+})
+
+// Define Email confirmation Token Table
+export const emailConfirmationToken = mysqlTable('email_confirmation_token', {
   id: int('id').primaryKey().autoincrement(),
   userId: int('user_id')
     .references(() => user.id)

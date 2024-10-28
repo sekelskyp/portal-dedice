@@ -7,6 +7,13 @@ export interface User {
   id: number
   email: string
   password: string
+  confirmed: boolean | null
+}
+
+export interface UserUpdateData {
+  email: string
+  password: string
+  confirmed: boolean | null
 }
 
 export function getUserRepository(db: Db) {
@@ -63,6 +70,13 @@ export function getUserRepository(db: Db) {
       .where(eq(user.id, userId))
   }
 
+  async function updateUser(
+    userId: number,
+    data: Partial<UserUpdateData>
+  ): Promise<void> {
+    await db.update(user).set(data).where(eq(user.id, userId))
+  }
+
   return {
     getUserById,
     getUsersByIds,
@@ -71,5 +85,6 @@ export function getUserRepository(db: Db) {
     getUserByNotaryId,
     getUserByEmail,
     updatePassword,
+    updateUser,
   }
 }

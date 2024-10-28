@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "823ddc36-195f-428c-8825-df8f2670a028",
+  "id": "7d114617-6230-466e-8361-d75ec0132faa",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "asset": {
@@ -90,7 +90,7 @@
           "name": "deceased_relation",
           "type": "varchar(6)",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         },
         "contact_id": {
@@ -104,7 +104,7 @@
           "name": "date_of_birth",
           "type": "date",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         }
       },
@@ -686,6 +686,64 @@
       },
       "uniqueConstraints": {}
     },
+    "email_confirmation_token": {
+      "name": "email_confirmation_token",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "token": {
+          "name": "token",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "email_confirmation_token_user_id_user_id_fk": {
+          "name": "email_confirmation_token_user_id_user_id_fk",
+          "tableFrom": "email_confirmation_token",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "email_confirmation_token_id": {
+          "name": "email_confirmation_token_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
     "inheritance_procedure": {
       "name": "inheritance_procedure",
       "columns": {
@@ -1140,6 +1198,14 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
+        },
+        "confirmed": {
+          "name": "confirmed",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": false
         }
       },
       "indexes": {

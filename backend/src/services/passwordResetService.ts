@@ -39,7 +39,8 @@ export const requestPasswordReset = async (
   })
 
   // Generate the reset link
-  const resetLink = `https://your-app/reset-password?token=${token}`
+  const baseUrl = `${process.env.APP_BASE_URL}:${process.env.PORT}`
+  const resetLink = `${baseUrl}/reset-password?token=${token}`
 
   // Send the email with the reset link
   await sendEmail({

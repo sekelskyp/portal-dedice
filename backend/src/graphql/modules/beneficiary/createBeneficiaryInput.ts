@@ -5,14 +5,14 @@ import { DeceasedRelationEnumType } from '../../../db/schema'
 @InputType()
 export class CreateBeneficiaryInput {
   @Field(() => ID, { nullable: true })
-  userId?: number
+  userId?: number | null
 
-  @Field()
-  deceasedRelation!: DeceasedRelationEnumType
+  @Field(() => String, { nullable: true })
+  deceasedRelation?: DeceasedRelationEnumType | null
 
   @Field(() => ID, { nullable: true })
-  contactId?: number
+  contactId?: number | null
 
-  @Field()
-  dateOfBirth!: Date
+  @Field(() => Date, { nullable: true })
+  dateOfBirth?: Date | null
 }

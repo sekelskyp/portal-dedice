@@ -13,16 +13,16 @@ export class Contact {
   @Field()
   surname!: string
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   displayName?: string | null
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   gender?: GenderEnumType | null
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   phone?: string | null
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   email?: string | null
 
   @Field()

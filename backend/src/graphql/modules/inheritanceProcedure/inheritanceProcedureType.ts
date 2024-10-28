@@ -31,6 +31,6 @@ export class InheritanceProcedure {
   @Field()
   startDate!: Date
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   endDate?: Date | null
 }

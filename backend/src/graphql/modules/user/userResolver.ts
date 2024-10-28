@@ -10,11 +10,12 @@ import {
 
 import {
   changeUserPassword,
+  completePasswordReset,
+  confirmEmailVerification,
   getUserById,
+  initiatePasswordReset,
   loginUser,
   registerUser,
-  requestPasswordReset,
-  resetPassword,
 } from '@backend/services/userService'
 import { CustomContext } from '@backend/types/types'
 
@@ -23,7 +24,7 @@ import { Notary } from '../notary/notaryType'
 
 import { RegisterInput } from './registerInput'
 import { SignInResponse } from './signInResponseType'
-import { ChangePassword, User } from './userType'
+import { User } from './userType'
 
 @Resolver(() => User)
 export class UserResolver {
@@ -62,9 +63,7 @@ export class UserResolver {
   ): Promise<SignInResponse> {
     const authResponse = await loginUser(login, password, context)
 
-    const foundUser = await context.userRepository.getUserById(
-      authResponse.userId
-    )
+    const foundUser = await getUserById(authResponse.userId, context)
     if (!foundUser) {
       throw new Error('User not found after login')
     }
@@ -89,7 +88,8 @@ export class UserResolver {
     if (!result) {
       throw new Error('Registration failed')
     }
-    const foundUser = await context.userRepository.getUserById(result.id)
+
+    const foundUser = await getUserById(result.id, context)
     if (!foundUser) {
       throw new Error('User not found after registration')
     }
@@ -97,12 +97,12 @@ export class UserResolver {
   }
 
   // Mutation to change user password
-  @Mutation(() => ChangePassword)
+  @Mutation(() => User)
   async changePassword(
     @Arg('oldPassword') oldPassword: string,
     @Arg('newPassword') newPassword: string,
     @Ctx() context: CustomContext
-  ) {
+  ): Promise<void> {
     if (!context.authUser) {
       throw new Error('User is not authenticated')
     }
@@ -120,18 +120,27 @@ export class UserResolver {
     @Arg('email') email: string,
     @Ctx() context: CustomContext
   ): Promise<boolean> {
-    await requestPasswordReset(email, context)
+    await initiatePasswordReset(email, context)
     return true
   }
 
-  // Mutation to reset password with token
+  // Mutation to reset password with password reset token
   @Mutation(() => Boolean)
   async resetPassword(
     @Arg('token') token: string,
     @Arg('newPassword') newPassword: string,
     @Ctx() context: CustomContext
   ): Promise<boolean> {
-    await resetPassword(token, newPassword, context)
+    await completePasswordReset(token, newPassword, context)
+    return true
+  }
+
+  @Mutation(() => Boolean)
+  async confirmEmailVerification(
+    @Arg('token') token: string,
+    @Ctx() context: CustomContext
+  ): Promise<boolean> {
+    await confirmEmailVerification(token, context)
     return true
   }
 }

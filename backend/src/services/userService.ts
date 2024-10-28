@@ -1,18 +1,17 @@
-import crypto from 'crypto'
-import { addHours } from 'date-fns'
-
 import { createToken } from '../libs/jwt'
 import { CustomContext } from '../types/types'
 
-import { sendEmail } from './emailService'
+import {
+  requestEmailVerification,
+  verifyEmail,
+} from './emailConfirmationService'
 import { comparePassword, hashPassword } from './passwordHashService'
+import { requestPasswordReset, resetPassword } from './passwordResetService'
 
 export interface AuthResponse {
   userId: number
   token: string
 }
-
-const RESET_TOKEN_EXPIRATION_HOURS = 1 // Token expires in 1 hour
 
 /**
  * Login a user and return an authentication token.
@@ -54,8 +53,8 @@ export async function registerUser(
   password: string,
   context: CustomContext
 ) {
-  const { userRepository } = context
-
+  const { userRepository, beneficiaryRepository } = context
+  console.log('registerUser')
   // Check if email is already in use
   const existingUser = await userRepository.getUserByEmail(email.toLowerCase())
   if (existingUser) throw new Error('User with this email already exists')
@@ -66,9 +65,16 @@ export async function registerUser(
     email,
     password: hashedPassword,
   })
-
-  // Return the newly created user
-  return await userRepository.getUserById(userId)
+  const newUser = await userRepository.getUserById(userId)
+  if (!newUser) {
+    throw new Error('Failed to retrieve the newly created user')
+  }
+  // Create a beneficiary record linked to the new user
+  await beneficiaryRepository.createBeneficiary({
+    userId: newUser.id,
+  })
+  await sendEmailVerification(newUser.id, email, context)
+  return newUser
 }
 
 /**
@@ -118,48 +124,47 @@ export async function getUserById(userId: number, context: CustomContext) {
   return await userRepository.getUserById(userId)
 }
 
-// Function to request a password reset
-export async function requestPasswordReset(
+// Function to initiate password reset
+export async function initiatePasswordReset(
   email: string,
   context: CustomContext
 ): Promise<void> {
-  const { userRepository, passwordResetTokenRepository } = context
-
-  const userRecord = await userRepository.getUserByEmail(email)
-  if (!userRecord) {
-    return
-  }
-
-  const token = crypto.randomBytes(32).toString('hex')
-  const expiresAt = addHours(new Date(), RESET_TOKEN_EXPIRATION_HOURS)
-
-  await passwordResetTokenRepository.createToken({
-    userId: userRecord.id,
-    token,
-    expiresAt,
-  })
-
-  const resetLink = `https://your-app/reset-password?token=${token}`
-
-  await sendEmail({
-    to: userRecord.email,
-    subject: 'Password Reset Request',
-    text: `You requested a password reset. Click the link to reset your password: ${resetLink}`,
-  })
+  await requestPasswordReset(email, context) // Using the PasswordResetService function here
 }
 
-// Function to reset password
-export async function resetPassword(
+// Function to complete password reset with token and new password
+export async function completePasswordReset(
   token: string,
   newPassword: string,
   context: CustomContext
 ): Promise<void> {
-  const { passwordResetTokenRepository, userRepository } = context
+  await resetPassword(token, newPassword, context) // Using the PasswordResetService function here
+}
 
-  const resetToken = await passwordResetTokenRepository.getToken(token)
-  if (!resetToken) throw new Error('Invalid or expired reset token')
+/**
+ * Send an email verification request to a new user.
+ * @param userId - The ID of the user to confirm.
+ * @param email - The user's email to send the confirmation link to.
+ * @param context - The context to access the repositories.
+ * @returns {Promise<void>}
+ */
+async function sendEmailVerification(
+  userId: number,
+  email: string,
+  context: CustomContext
+): Promise<void> {
+  await requestEmailVerification(userId, email, context) // Calls emailConfirmationService to generate and send token
+}
 
-  const hashedPassword = await hashPassword(newPassword)
-  await userRepository.updatePassword(resetToken.userId, hashedPassword)
-  await passwordResetTokenRepository.deleteTokenById(resetToken.id)
+/**
+ * Confirm the user's email using a token.
+ * @param token - The confirmation token provided by the user.
+ * @param context - The context to access the repositories.
+ * @returns {Promise<void>}
+ */
+export async function confirmEmailVerification(
+  token: string,
+  context: CustomContext
+): Promise<void> {
+  await verifyEmail(token, context) // Calls emailConfirmationService to validate and confirm email
 }

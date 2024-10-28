@@ -9,9 +9,9 @@ import { Db } from '@backend/types/types'
 
 export interface BeneficiaryData {
   userId?: number | null
-  deceasedRelation: DeceasedRelationEnumType
+  deceasedRelation?: DeceasedRelationEnumType | null
   contactId?: number | null
-  dateOfBirth: Date
+  dateOfBirth?: Date | null
 }
 
 export function getBeneficiaryRepository(db: Db) {

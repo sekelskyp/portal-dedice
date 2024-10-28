@@ -101,7 +101,8 @@ export class BeneficiaryResolver {
     @Ctx() { beneficiaryRepository }: CustomContext
   ): Promise<Beneficiary[]> {
     const ids = await beneficiaryRepository.createBeneficiaries(data)
-    return ids.map((id, index) => ({ id, ...data[index] }))
+    const beneficiaries = beneficiaryRepository.getBeneficiariesByIds(ids)
+    return beneficiaries
   }
 
   // Update an existing beneficiary by ID
