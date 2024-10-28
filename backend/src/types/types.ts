@@ -6,6 +6,7 @@ import { type getDeceasedPersonRepository } from '@backend/graphql/modules/decea
 import { type getInheritanceProcedureRepository } from '@backend/graphql/modules/inheritanceProcedure/inheritaceProcedureRepository'
 import { type getNotaryRepository } from '@backend/graphql/modules/notary/notaryRepository'
 import { type getNotaryDateRuleRepository } from '@backend/graphql/modules/notaryDateRule/notaryDateRuleRepository'
+import { getPasswordResetTokenRepository } from '@backend/graphql/modules/passwordResetToken/passwordResetTokenRepository'
 import { type getUserRepository } from '@backend/graphql/modules/user/userRepository'
 
 import * as schema from '../db/schema'
@@ -25,6 +26,9 @@ export type CustomContext = {
   beneficiaryRepository: ReturnType<typeof getBeneficiaryRepository>
   notaryDateRuleRepository: ReturnType<typeof getNotaryDateRuleRepository>
   deceasedPersonRepository: ReturnType<typeof getDeceasedPersonRepository>
+  passwordResetTokenRepository: ReturnType<
+    typeof getPasswordResetTokenRepository
+  >
 }
 
 export type JWTPayload = {

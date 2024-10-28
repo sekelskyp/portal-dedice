@@ -29,6 +29,7 @@ import { getNotaryRepository } from '@backend/graphql/modules/notary/notaryRepos
 import { NotaryResolver } from '@backend/graphql/modules/notary/notaryResolver'
 import { getNotaryDateRuleRepository } from '@backend/graphql/modules/notaryDateRule/notaryDateRuleRepository'
 import { PasswordResetResolver } from '@backend/graphql/modules/passwordReset/passwordResetTokenResolver'
+import { getPasswordResetTokenRepository } from '@backend/graphql/modules/passwordResetToken/passwordResetTokenRepository'
 import { getUserRepository } from '@backend/graphql/modules/user/userRepository'
 import { UserResolver } from '@backend/graphql/modules/user/userResolver'
 import { parseAndVerifyJWT } from '@backend/libs/jwt'
@@ -89,6 +90,7 @@ const init = async () => {
       beneficiaryRepository: getBeneficiaryRepository(drizzle.db),
       notaryDateRuleRepository: getNotaryDateRuleRepository(drizzle.db),
       deceasedPersonRepository: getDeceasedPersonRepository(drizzle.db),
+      passwordResetTokenRepository: getPasswordResetTokenRepository(drizzle.db),
     }
   }
 

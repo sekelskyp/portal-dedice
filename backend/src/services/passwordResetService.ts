@@ -1,63 +1,49 @@
-import crypto from 'crypto' // For generating secure tokens
-import { addHours } from 'date-fns' // For handling token expiration
-import { and, eq, gt } from 'drizzle-orm'
-
-import { contact, passwordResetToken, user } from '@backend/db/schema'
+import crypto from 'crypto'
+import { addHours } from 'date-fns'
 
 import { CustomContext } from '../types/types'
 
 import { sendEmail } from './emailService'
-import { hashPassword } from './passwordHashService' // Password hashing function
+import { hashPassword } from './passwordHashService'
 
 const RESET_TOKEN_EXPIRATION_HOURS = 1 // Token expires in 1 hour
 
 /**
  * Generate a password reset token and send an email to the user.
  * @param email - The user's email to send the reset link to.
- * @param context - The context to access the database.
+ * @param context - The context to access the repositories.
  */
 export const requestPasswordReset = async (
   email: string,
   context: CustomContext
 ): Promise<void> => {
-  const { db } = context
+  const { userRepository, passwordResetTokenRepository } = context
 
-  // Find the user by email
-  const userRecords = await db
-    .select({
-      userId: user.id,
-      userEmail: contact.email,
-    })
-    .from(user)
-    .innerJoin(contact, eq(user.contactId, contact.id))
-    .where(eq(contact.email, email))
-
-  if (userRecords.length === 0) {
-    // If no user is found, silently return
+  // Find the user associated with the contact
+  const userRecord = await userRepository.getUserByEmail(email)
+  if (!userRecord) {
     return
   }
-
-  const userRecord = userRecords[0]
 
   // Generate a reset token
   const token = crypto.randomBytes(32).toString('hex')
 
-  // Set expiration time (e.g., 1 hour from now)
+  // Set expiration time
   const expiresAt = addHours(new Date(), RESET_TOKEN_EXPIRATION_HOURS)
 
   // Store the token in the password_reset_tokens table
-  await db.insert(passwordResetToken).values({
-    userId: userRecord.userId,
+  await passwordResetTokenRepository.createToken({
+    userId: userRecord.id,
     token,
     expiresAt,
   })
 
-  // Generate the reset link (example: https://your-app/reset-password?token=<token>)
+  // Generate the reset link
   const resetLink = `https://your-app/reset-password?token=${token}`
 
   // Send the email with the reset link
   await sendEmail({
-    to: userRecord.userEmail,
+    to: userRecord.email,
     subject: 'Password Reset Request',
     text: `You requested a password reset. Click the link to reset your password: ${resetLink}`,
   })
@@ -67,55 +53,33 @@ export const requestPasswordReset = async (
  * Validate the reset token and allow the user to reset their password.
  * @param token - The reset token provided by the user.
  * @param newPassword - The new password the user wants to set.
- * @param context - The context to access the database.
+ * @param context - The context to access the repositories.
  */
 export const resetPassword = async (
   token: string,
   newPassword: string,
   context: CustomContext
 ): Promise<void> => {
-  const { db } = context
+  const { userRepository, passwordResetTokenRepository } = context
 
   // Find the reset token in the database
-  const resetTokenRecords = await db
-    .select()
-    .from(passwordResetToken)
-    .where(
-      and(
-        eq(passwordResetToken.token, token),
-        gt(passwordResetToken.expiresAt, new Date())
-      )
-    )
-
-  if (resetTokenRecords.length === 0) {
+  const resetTokenRecord = await passwordResetTokenRepository.getToken(token)
+  if (!resetTokenRecord || resetTokenRecord.expiresAt < new Date()) {
     throw new Error('Invalid or expired reset token')
   }
 
-  const resetToken = resetTokenRecords[0]
-
   // Find the user associated with the reset token
-  const userRecords = await db
-    .select()
-    .from(user)
-    .where(eq(user.id, resetToken.userId))
-
-  if (userRecords.length === 0) {
+  const userRecord = await userRepository.getUserById(resetTokenRecord.userId)
+  if (!userRecord) {
     throw new Error('User not found')
   }
-
-  const userRecord = userRecords[0]
 
   // Hash the new password
   const hashedPassword = await hashPassword(newPassword)
 
   // Update the user's password
-  await db
-    .update(user)
-    .set({ password: hashedPassword })
-    .where(eq(user.id, userRecord.id))
+  await userRepository.updatePassword(userRecord.id, hashedPassword)
 
-  // Optionally, delete the reset token after it's used
-  await db
-    .delete(passwordResetToken)
-    .where(eq(passwordResetToken.id, resetToken.id))
+  // Delete the reset token after it's used
+  await passwordResetTokenRepository.deleteTokenById(resetTokenRecord.id)
 }

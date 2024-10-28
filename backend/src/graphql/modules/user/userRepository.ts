@@ -55,6 +55,14 @@ export function getUserRepository(db: Db) {
     return result || null
   }
 
+  // Update user's password
+  async function updatePassword(userId: number, hashedPassword: string) {
+    await db
+      .update(user)
+      .set({ password: hashedPassword })
+      .where(eq(user.id, userId))
+  }
+
   return {
     getUserById,
     getUsersByIds,
@@ -62,5 +70,6 @@ export function getUserRepository(db: Db) {
     createUser,
     getUserByNotaryId,
     getUserByEmail,
+    updatePassword,
   }
 }
