@@ -35,8 +35,8 @@ export function HomePage() {
             Komunikujte s notářem a ostatními dědici v řešení pro předběžné
             šetření. Zaregistujte se a získejte přístup k nástroji.
           </Text>
-          <Button as={Link} size="lg" to={route.signUp()}>
-            Vyřešit online
+          <Button as={Link} size="lg" to={route.signIn()}>
+            Přihlásit se
           </Button>
         </SimpleCentered>
       )}
