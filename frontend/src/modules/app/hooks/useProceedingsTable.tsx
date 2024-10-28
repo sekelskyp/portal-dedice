@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react'
 import { Button } from '@chakra-ui/react'
+import { rankItem } from '@tanstack/match-sorter-utils'
 import {
   ColumnDef,
+  FilterFn,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
@@ -9,8 +11,20 @@ import {
   PaginationState,
   useReactTable,
 } from '@tanstack/react-table'
+import { HiChevronRight } from 'react-icons/hi'
 
-import { ProceedingsItem } from '../../components/ProceedingsTable'
+import { ProceedingsItem } from '../components/ProceedingsTable'
+
+const fuzzyFilter: FilterFn<ProceedingsItem> = (
+  row,
+  columnId,
+  value,
+  addMeta
+) => {
+  const itemRank = rankItem(row.getValue(columnId), value)
+  addMeta({ itemRank })
+  return itemRank.passed
+}
 
 export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
   const [pagination, setPagination] = useState<PaginationState>({
@@ -18,15 +32,19 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
     pageSize: 10,
   })
 
+  const [globalFilter, setGlobalFilter] = useState<string>('')
+
   const columns = useMemo<ColumnDef<ProceedingsItem>[]>(
     () => [
       {
         accessorKey: 'id',
         header: () => 'ID',
+        filterFn: 'includesString',
+        cell: (info) => info.getValue(),
       },
       {
         accessorKey: 'date',
-        header: () => 'Date',
+        header: () => 'Datum',
       },
       {
         accessorKey: 'status',
@@ -36,7 +54,11 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
         accessorKey: 'detail',
         header: () => 'Detail',
         cell: () => {
-          return <Button>Detail</Button>
+          return (
+            <Button size="sm">
+              <HiChevronRight size="24px" />
+            </Button>
+          )
         },
       },
     ],
@@ -46,16 +68,21 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
   const table = useReactTable({
     columns,
     data,
-    debugTable: true,
+    filterFns: {
+      fuzzy: fuzzyFilter,
+    },
+    state: {
+      globalFilter,
+      pagination,
+    },
+    globalFilterFn: fuzzyFilter,
+    onPaginationChange: setPagination,
+    onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    onPaginationChange: setPagination,
-    state: {
-      pagination,
-    },
   })
 
-  return { table }
+  return { table, setGlobalFilter }
 }
