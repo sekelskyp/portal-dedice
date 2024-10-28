@@ -1,6 +1,14 @@
 import { eq } from 'drizzle-orm'
 import { GraphQLError } from 'graphql'
-import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql'
+import {
+  Arg,
+  Ctx,
+  FieldResolver,
+  Mutation,
+  Query,
+  Resolver,
+  Root,
+} from 'type-graphql'
 
 import { user } from '@backend/db/schema'
 import { type CustomContext } from '@backend/types/types'
@@ -9,11 +17,31 @@ import {
   comparePassword,
   hashPassword,
 } from '../../../services/passwordHashService'
+import { Beneficiary } from '../beneficiary/beneficiaryType'
+import { Notary } from '../notary/notaryType'
 
 import { ChangePassword, User } from './userType'
 
 @Resolver(() => User)
 export class UserResolver {
+  // Field resolver for Notary
+  @FieldResolver(() => Notary, { nullable: true })
+  async notary(
+    @Root() user: User,
+    @Ctx() { notaryRepository }: CustomContext
+  ): Promise<Notary | null> {
+    return await notaryRepository.getNotaryByUserId(user.id)
+  }
+
+  // Field resolver for Beneficiary
+  @FieldResolver(() => Beneficiary, { nullable: true })
+  async beneficiary(
+    @Root() user: User,
+    @Ctx() { beneficiaryRepository }: CustomContext
+  ): Promise<Beneficiary | null> {
+    return await beneficiaryRepository.getBeneficiaryByUserId(user.id)
+  }
+
   // Fetch a user by ID
   @Query(() => User, { nullable: true })
   async getUserById(

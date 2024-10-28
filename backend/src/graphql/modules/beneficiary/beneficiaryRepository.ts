@@ -121,6 +121,14 @@ export function getBeneficiaryRepository(db: Db) {
       )
   }
 
+  function getBeneficiaryByUserId(id: number) {
+    return db
+      .select()
+      .from(beneficiary)
+      .where(eq(beneficiary.userId, id))
+      .then((beneficiaries) => beneficiaries[0] || null)
+  }
+
   return {
     getBeneficiaryById,
     getBeneficiariesByProcedureId,
@@ -132,5 +140,6 @@ export function getBeneficiaryRepository(db: Db) {
     deleteBeneficiary,
     insertBeneficiaryProcedureRelation,
     deleteBeneficiaryProcedureRelation,
+    getBeneficiaryByUserId,
   }
 }

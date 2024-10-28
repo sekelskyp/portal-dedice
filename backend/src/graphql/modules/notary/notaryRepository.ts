@@ -26,6 +26,14 @@ export function getNotaryRepository(db: Db) {
       .then((notaries) => notaries)
   }
 
+  function getNotaryByUserId(id: number) {
+    return db
+      .select()
+      .from(notary)
+      .where(eq(notary.userId, id))
+      .then((notaries) => notaries[0] || null)
+  }
+
   function getAllNotaries() {
     return db
       .select()
@@ -93,5 +101,6 @@ export function getNotaryRepository(db: Db) {
     deleteNotaryById,
     findAvailableNotary,
     createNotaries,
+    getNotaryByUserId,
   }
 }

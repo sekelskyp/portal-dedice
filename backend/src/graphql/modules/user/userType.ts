@@ -1,5 +1,8 @@
 import { Field, ID, ObjectType } from 'type-graphql'
 
+import { Beneficiary } from '../beneficiary/beneficiaryType'
+import { Notary } from '../notary/notaryType'
+
 @ObjectType()
 export class User {
   @Field(() => ID)
@@ -10,6 +13,12 @@ export class User {
 
   @Field()
   password!: string
+
+  @Field(() => Notary, { nullable: true })
+  notary?: Notary
+
+  @Field(() => Beneficiary, { nullable: true })
+  beneficiary?: Beneficiary
 }
 
 @ObjectType()
