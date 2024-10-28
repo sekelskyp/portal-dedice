@@ -33,6 +33,7 @@ install:
     - if: ($CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push")
       changes:
         - yarn.lock
+    - if: $REINSTALL == "true"
   cache:
     <<: *cache_config
     policy: push
