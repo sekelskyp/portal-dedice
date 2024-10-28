@@ -1,6 +1,7 @@
 image: node:20.17.0
 
 stages:
+  - install
   - verify
   - deploy
   - e2e
@@ -13,46 +14,54 @@ variables:
     - if: ($CI_PIPELINE_SOURCE == "merge_request_event")
     - if: ($CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push")
 
+.cache_template: &cache_config
+  key:
+    files:
+      - yarn.lock
+  paths:
+    - cache/yarn
+    - node_modules
+
 install:
-  stage: verify
+  stage: install
   interruptible: true
+  image: node:alpine
   rules:
-    - !reference [.rules, rules]
+    - if: ($CI_PIPELINE_SOURCE == "merge_request_event")
+      changes:
+        - yarn.lock
+    - if: ($CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push")
+      changes:
+        - yarn.lock
   cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - cache/yarn
-      - node_modules
+    <<: *cache_config
     policy: push
   script:
+    - echo 'yarn-offline-mirror ".yarn-cache/"' >> .yarnrc
+    - echo 'yarn-offline-mirror-pruning true' >> .yarnrc
     - yarn install --frozen-lockfile
+    
 
 format:
   stage: verify
   interruptible: true
+  image: node:alpine
   rules:
     - !reference [.rules, rules]
   cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - cache/yarn
-      - node_modules
+    <<: *cache_config
     policy: pull
   script:
     - yarn format:check
-  needs:
-    - install
 
 lint:
   stage: verify
   interruptible: true
+  image: node:alpine
   rules:
     - !reference [.rules, rules]
   cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - cache/yarn
-      - node_modules
+    <<: *cache_config
     policy: pull
   script:
     - yarn lint
@@ -62,13 +71,11 @@ lint:
 test-frontend:
   stage: verify
   interruptible: true
+  image: node:alpine
   rules:
     - !reference [.rules, rules]
   cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - cache/yarn
-      - node_modules
+    <<: *cache_config
     policy: pull
   script:
     - yarn frontend test
@@ -78,14 +85,12 @@ test-frontend:
 build-frontend:
   stage: verify
   interruptible: true
+  image: node:alpine
   rules:
     - if: ($CI_PIPELINE_SOURCE == "merge_request_event")
     - if: ($CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push")
   cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - cache/yarn
-      - node_modules
+    <<: *cache_config
     policy: pull
   script:
     - yarn frontend build
@@ -95,14 +100,12 @@ build-frontend:
 build-backend:
   stage: verify
   interruptible: true
+  image: node:alpine
   rules:
     - if: ($CI_PIPELINE_SOURCE == "merge_request_event")
     - if: ($CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push")
   cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - cache/yarn
-      - node_modules
+    <<: *cache_config
     policy: pull
   script:
     - yarn backend build
@@ -112,6 +115,7 @@ build-backend:
 pull-changes:
   stage: deploy
   interruptible: true
+  image: alpine:latest
   before_script:
     - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
@@ -127,10 +131,12 @@ pull-changes:
 e2e-testing:
   stage: e2e
   image: mcr.microsoft.com/playwright:v1.48.1-noble
+  cache:
+    <<: *cache_config
+    policy: pull
   script:
     - echo FRONTEND_URL="$FRONTEND_URL" >> .env
     - echo BACKEND_URL="$BACKEND_URL" >> .env
-    - yarn install --frozen-lockfile
     - yarn test:e2e
   only:
     - main
