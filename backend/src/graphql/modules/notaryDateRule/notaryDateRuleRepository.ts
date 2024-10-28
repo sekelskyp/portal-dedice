@@ -1,7 +1,8 @@
 import { eq } from 'drizzle-orm'
 
-import { notaryDateRule } from '@backend/db/schema'
 import { Db } from '@backend/types/types'
+
+import { notaryDateRule } from '../../../db/schema'
 
 export interface NotaryDateRuleData {
   notaryId: number

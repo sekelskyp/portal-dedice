@@ -2,6 +2,7 @@ import { Arg, Ctx, Int, Mutation, Query, Resolver } from 'type-graphql'
 
 import { CustomContext } from '@backend/types/types'
 
+import { ContactData } from './contactRepository'
 import { Contact } from './contactType'
 import { CreateContactInput } from './createContactInput'
 
@@ -30,7 +31,11 @@ export class ContactResolver {
     @Arg('data') data: CreateContactInput,
     @Ctx() { contactRepository }: CustomContext
   ): Promise<number> {
-    return await contactRepository.createContact(data)
+    const contactData: ContactData = {
+      ...data,
+      displayName: data.displayName || `${data.name} ${data.surname}`,
+    }
+    return await contactRepository.createContact(contactData)
   }
 
   // Delete a contact by ID

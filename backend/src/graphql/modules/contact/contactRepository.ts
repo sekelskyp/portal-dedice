@@ -1,12 +1,13 @@
 import { eq } from 'drizzle-orm'
 
-import { contact, GenderEnumType, notary } from '@backend/db/schema'
 import { Db } from '@backend/types/types'
+
+import { contact, GenderEnumType, notary } from '../../../db/schema'
 
 export interface ContactData {
   name: string
   surname: string
-  displayName?: string
+  displayName: string
   phone?: string
   gender?: GenderEnumType
   email?: string

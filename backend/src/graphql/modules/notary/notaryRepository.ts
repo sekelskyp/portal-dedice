@@ -1,7 +1,8 @@
 import { and, eq, inArray, sql } from 'drizzle-orm'
 
-import { contact, notary, notaryDateRule } from '@backend/db/schema'
 import { type Db } from '@backend/types/types'
+
+import { contact, notary, notaryDateRule } from '../../../db/schema'
 
 export interface NotaryData {
   contactId?: number

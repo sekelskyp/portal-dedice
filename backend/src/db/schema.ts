@@ -53,9 +53,7 @@ export const contact = mysqlTable('contact', {
   id: int('id').primaryKey().autoincrement(),
   name: varchar('name', { length: 125 }).notNull(),
   surname: varchar('surname', { length: 125 }).notNull(),
-  displayName: varchar('display_name', { length: 255 }).default(
-    sql`CONCAT(name, ' ', surname)`
-  ),
+  displayName: varchar('display_name', { length: 255 }).notNull(),
   gender: varchar('gender', {
     length: 7,
     enum: genderEnum,
