@@ -5,7 +5,7 @@ export class PasswordResetToken {
   @Field(() => ID)
   id!: number
 
-  @Field()
+  @Field(() => ID)
   userId!: number
 
   @Field()

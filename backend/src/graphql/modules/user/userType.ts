@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from 'type-graphql'
+import { Field, ID, InputType, ObjectType } from 'type-graphql'
 
 import { Beneficiary } from '../beneficiary/beneficiaryType'
 import { Notary } from '../notary/notaryType'

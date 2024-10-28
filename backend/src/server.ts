@@ -17,7 +17,6 @@ import { buildSchema } from 'type-graphql'
 
 import { MOCKS, PORT } from '@backend/config'
 import { getConnection } from '@backend/db/db'
-import { AuthResolver } from '@backend/graphql/modules/auth/authResolver'
 import { getBeneficiaryRepository } from '@backend/graphql/modules/beneficiary/beneficiaryRepository'
 import { BeneficiaryResolver } from '@backend/graphql/modules/beneficiary/beneficiaryResolver'
 import { getContactRepository } from '@backend/graphql/modules/contact/contactRepository'
@@ -28,7 +27,6 @@ import { InheritanceProcedureResolver } from '@backend/graphql/modules/inheritan
 import { getNotaryRepository } from '@backend/graphql/modules/notary/notaryRepository'
 import { NotaryResolver } from '@backend/graphql/modules/notary/notaryResolver'
 import { getNotaryDateRuleRepository } from '@backend/graphql/modules/notaryDateRule/notaryDateRuleRepository'
-import { PasswordResetResolver } from '@backend/graphql/modules/passwordReset/passwordResetTokenResolver'
 import { getPasswordResetTokenRepository } from '@backend/graphql/modules/passwordResetToken/passwordResetTokenRepository'
 import { getUserRepository } from '@backend/graphql/modules/user/userRepository'
 import { UserResolver } from '@backend/graphql/modules/user/userResolver'
@@ -45,8 +43,6 @@ const init = async () => {
     resolvers: [
       EmptyResolver,
       UserResolver,
-      AuthResolver,
-      PasswordResetResolver,
       BeneficiaryResolver,
       InheritanceProcedureResolver,
       NotaryResolver,

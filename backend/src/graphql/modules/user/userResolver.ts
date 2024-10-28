@@ -1,5 +1,3 @@
-import { eq } from 'drizzle-orm'
-import { GraphQLError } from 'graphql'
 import {
   Arg,
   Ctx,
@@ -10,16 +8,21 @@ import {
   Root,
 } from 'type-graphql'
 
-import { user } from '@backend/db/schema'
-import { type CustomContext } from '@backend/types/types'
-
 import {
-  comparePassword,
-  hashPassword,
-} from '../../../services/passwordHashService'
+  changeUserPassword,
+  getUserById,
+  loginUser,
+  registerUser,
+  requestPasswordReset,
+  resetPassword,
+} from '@backend/services/userService'
+import { CustomContext } from '@backend/types/types'
+
 import { Beneficiary } from '../beneficiary/beneficiaryType'
 import { Notary } from '../notary/notaryType'
 
+import { RegisterInput } from './registerInput'
+import { SignInResponse } from './signInResponseType'
 import { ChangePassword, User } from './userType'
 
 @Resolver(() => User)
@@ -46,93 +49,89 @@ export class UserResolver {
   @Query(() => User, { nullable: true })
   async getUserById(
     @Arg('id') id: number,
-    @Ctx() { userRepository }: CustomContext
+    @Ctx() context: CustomContext
   ): Promise<User | null> {
-    return await userRepository.getUserById(id)
+    return await getUserById(id, context) // Call standalone function from userService
   }
 
-  // Fetch all users
-  @Query(() => [User])
-  async getAllUsers(@Ctx() { userRepository }: CustomContext): Promise<User[]> {
-    return await userRepository.getAllUsers()
+  @Mutation(() => SignInResponse)
+  async signIn(
+    @Arg('login') login: string,
+    @Arg('password') password: string,
+    @Ctx() context: CustomContext
+  ): Promise<SignInResponse> {
+    const authResponse = await loginUser(login, password, context)
+
+    const foundUser = await context.userRepository.getUserById(
+      authResponse.userId
+    )
+    if (!foundUser) {
+      throw new Error('User not found after login')
+    }
+
+    return {
+      token: authResponse.token,
+      user: foundUser,
+    }
   }
 
-  // FOR NOW I AM ONLY COMMENTING THIS OUT. PROFILE (CONTACT) WAS MOVED FROM USER TO NOTARY, BENEFICIARY AND OTHERS.
-  // TO UPDATE CONTACT IT IS POSSIBLE TO USE CONTACT RESOLVER.
+  @Mutation(() => User)
+  async signUp(
+    @Arg('registerInput') registerInput: RegisterInput,
+    @Ctx() context: CustomContext
+  ): Promise<User> {
+    const result = await registerUser(
+      registerInput.email,
+      registerInput.password,
+      context
+    )
 
-  // @Mutation(() => UserProfile)
-  // async updateUserProfile(
-  //   @Arg('name') name: string,
-  //   @Arg('surname') surname: string,
-  //   @Ctx() { db, authUser }: CustomContext
-  // ) {
-  //   if (!authUser) {
-  //     throw new GraphQLError('Unauthorized')
-  //   }
-  //   const userId = authUser.id
-  //   const userRecord = await db.select().from(user).where(eq(user.id, userId))
+    if (!result) {
+      throw new Error('Registration failed')
+    }
+    const foundUser = await context.userRepository.getUserById(result.id)
+    if (!foundUser) {
+      throw new Error('User not found after registration')
+    }
+    return foundUser
+  }
 
-  //   if (userRecord.length === 0) {
-  //     throw new GraphQLError('User not found')
-  //   }
-
-  //   if (authUser.id !== userRecord[0].id) {
-  //     throw new GraphQLError('Unauthorized access to another user')
-  //   }
-
-  //   await db
-  //     .update(contact)
-  //     .set({ name, surname })
-  //     .where(eq(contact.id, userRecord[0].contactId))
-
-  //   const updatedContact = await db
-  //     .select()
-  //     .from(contact)
-  //     .where(eq(contact.id, userRecord[0].contactId))
-
-  //   const toReturn: UserProfile = {
-  //     id: userId,
-  //     name: updatedContact[0].name,
-  //     surName: updatedContact[0].surname,
-  //   }
-  //   return toReturn
-  // }
-
-  // for now i am leaving this as is, but we need to synchronize password reset process
+  // Mutation to change user password
   @Mutation(() => ChangePassword)
   async changePassword(
     @Arg('oldPassword') oldPassword: string,
     @Arg('newPassword') newPassword: string,
-    @Ctx() { db, authUser }: CustomContext
+    @Ctx() context: CustomContext
   ) {
-    if (!authUser) {
-      throw new GraphQLError('Unauthorized')
+    if (!context.authUser) {
+      throw new Error('User is not authenticated')
     }
-
-    const userId = authUser.id
-    const userRecord = await db.select().from(user).where(eq(user.id, userId))
-
-    if (userRecord.length === 0) {
-      throw new GraphQLError('User not found')
-    }
-
-    const passwordsEqual = await comparePassword(
-      userRecord[0].password,
-      oldPassword
+    return await changeUserPassword(
+      context.authUser.id,
+      oldPassword,
+      newPassword,
+      context
     )
-    if (!passwordsEqual) {
-      throw new GraphQLError('Old password is incorrect')
-    }
-    const newPasswordHash = await hashPassword(newPassword)
-    await db
-      .update(user)
-      .set({ password: newPasswordHash })
-      .where(eq(user.id, userId))
+  }
 
-    const toReturn: ChangePassword = {
-      id: userId,
-      email: userRecord[0].email,
-    }
-    return toReturn
+  // Mutation to request password reset
+  @Mutation(() => Boolean)
+  async requestPasswordReset(
+    @Arg('email') email: string,
+    @Ctx() context: CustomContext
+  ): Promise<boolean> {
+    await requestPasswordReset(email, context)
+    return true
+  }
+
+  // Mutation to reset password with token
+  @Mutation(() => Boolean)
+  async resetPassword(
+    @Arg('token') token: string,
+    @Arg('newPassword') newPassword: string,
+    @Ctx() context: CustomContext
+  ): Promise<boolean> {
+    await resetPassword(token, newPassword, context)
+    return true
   }
 }
