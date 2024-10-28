@@ -25,7 +25,7 @@ export function useSignUp() {
     onCompleted: ({ signUp: { user, token } }) => {
       /* WIP: Missing logic for sending verification link*/
       auth.signIn({ token, user })
-      navigate(route.home())
+      navigate(route.portal())
     },
     onError: () => {},
   })

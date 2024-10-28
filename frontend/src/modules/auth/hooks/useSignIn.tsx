@@ -2,6 +2,7 @@ import { useMutation } from '@apollo/client'
 import { useNavigate } from 'react-router-dom'
 
 import { gql } from '@frontend/gql'
+import { route } from '@frontend/route'
 
 import { useAuth } from '../auth-core'
 
@@ -24,7 +25,7 @@ export function useSignIn() {
   const [signInRequest, signInRequestState] = useMutation(SIGNIN_MUTATION, {
     onCompleted: ({ signIn: { user, token } }) => {
       auth.signIn({ token, user })
-      navigate('/')
+      navigate(route.portal())
     },
     onError: () => {},
   })

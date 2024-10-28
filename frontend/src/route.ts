@@ -8,4 +8,5 @@ export const route = {
   guide: () => `/guide`,
   blog: () => `/blog`,
   wizard: () => `/wizard`,
+  portal: () => `/portal`,
 }
