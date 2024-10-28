@@ -10,7 +10,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 
-import { ProceedingsItem } from '../components/ProceedingsTable'
+import { ProceedingsItem } from '../../components/ProceedingsTable'
 
 export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
   const [pagination, setPagination] = useState<PaginationState>({

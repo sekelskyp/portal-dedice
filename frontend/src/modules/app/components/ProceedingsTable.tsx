@@ -1,6 +1,6 @@
 import { flexRender } from '@tanstack/react-table'
 
-import { useProceedingsTable } from '../hooks/useProceedingsTable'
+import { useProceedingsTable } from '../pages/hooks/useProceedingsTable'
 
 import { TableFilter } from './TableFilter'
 

@@ -1,6 +1,6 @@
 import { Heading, Stack } from '@chakra-ui/react'
 
-import { ProceedingsTable } from './components/ProceedingsTable'
+import { ProceedingsTable } from '../components/ProceedingsTable'
 
 const items = [
   { id: 8457, date: '2024-01-05', status: 'Probíhající' },
