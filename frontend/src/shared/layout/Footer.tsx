@@ -1,13 +1,7 @@
-import {
-  Box,
-  Container,
-  Heading,
-  Image,
-  Separator,
-  Stack,
-  Text,
-} from '@chakra-ui/react'
+import { Box, Heading, Image, Separator, Stack, Text } from '@chakra-ui/react'
 import { useTheme } from 'next-themes'
+
+import { ColorModeButton } from '../design-system/atoms/chakra'
 
 import { FooterList } from './components/FooterList'
 import { footerLinks } from './links'
