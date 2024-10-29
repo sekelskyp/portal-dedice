@@ -8,6 +8,8 @@ import {
   Text,
 } from '@chakra-ui/react'
 
+import { ColorModeButton } from '../design-system/atoms/chakra/color-mode'
+
 import { FooterList } from './components/FooterList'
 import { footerLinks } from './links'
 
@@ -63,6 +65,7 @@ export const Footer = () => {
           <Text fontSize={{ base: 'sm', md: 'md' }} mt={2} textAlign="center">
             © 2024 Vytvořeno na VŠE ve spolupráci s Applifting.
           </Text>
+          <ColorModeButton />
         </Stack>
       </Container>
     </Box>
