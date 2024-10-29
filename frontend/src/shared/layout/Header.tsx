@@ -1,4 +1,5 @@
 import { Box, Container, Heading, HStack, Image } from '@chakra-ui/react'
+import { useTheme } from 'next-themes'
 import { Link } from 'react-router-dom'
 
 import { TopNavigation } from '../navigation/organisms/TopNavigation'
@@ -24,10 +25,16 @@ export const Header = () => {
 }
 
 const AppLink = () => {
+  const theme = useTheme()
+  const isDark = theme.resolvedTheme === 'dark'
   return (
     <HStack asChild gap={4}>
       <Link to="/">
-        <Image h={10} src="/logo.png" />
+        <Image
+          h={10}
+          src={isDark ? '/logo-dark.png' : '/logo.png'}
+          opacity={isDark ? 0.8 : 1}
+        />
         <Heading size="lg" whiteSpace="nowrap">
           Portál Dědice
         </Heading>
