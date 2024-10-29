@@ -16,7 +16,6 @@ import { User } from '../user/userType'
 
 import { CreateNotaryInput } from './createNotaryInput'
 import { FindNotaryInput } from './findNotaryInput'
-import { FindNotaryResponse } from './findNotaryResponse'
 import { Notary } from './notaryType'
 
 @Resolver(() => Notary)
@@ -70,11 +69,11 @@ export class NotaryResolver {
     return deletedNotaryId !== null
   }
 
-  @Query(() => FindNotaryResponse, { nullable: true })
+  @Query(() => Notary, { nullable: true })
   async findNotary(
     @Arg('input') input: FindNotaryInput,
     @Ctx() context: CustomContext
-  ): Promise<FindNotaryResponse | null> {
+  ): Promise<Notary | null> {
     const findAvailableNotaryInput = {
       postalCode: input.postalCode,
       dateOfDeath: input.deceasedPersonDateOfDeath,
@@ -84,17 +83,6 @@ export class NotaryResolver {
       findAvailableNotaryInput,
       context
     )
-
-    let contactValue = null
-    if (notaryRecord && notaryRecord.contactId) {
-      contactValue = await context.contactRepository.getContactById(
-        notaryRecord.contactId
-      )
-    }
-
-    return {
-      notary: notaryRecord,
-      contact: contactValue,
-    }
+    return notaryRecord
   }
 }

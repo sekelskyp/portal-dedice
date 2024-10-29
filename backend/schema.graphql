@@ -74,11 +74,6 @@ input FindNotaryInput {
   postalCode: String!
 }
 
-type FindNotaryResponse {
-  contact: ID
-  notary: ID!
-}
-
 type InheritanceProcedure {
   deceasedPerson: DeceasedPerson
   deceasedPersonId: ID
@@ -124,7 +119,7 @@ type Notary {
 type Query {
   _empty: String!
   author(id: Float!): Notary
-  findNotary(input: FindNotaryInput!): FindNotaryResponse
+  findNotary(input: FindNotaryInput!): Notary
   getAllContacts: [Contact!]!
   getBeneficiariesByIds(ids: [Int!]!): [Beneficiary!]!
   getBeneficiariesByProcedureId(procedureId: Int!): [Beneficiary!]!
