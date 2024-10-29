@@ -3,7 +3,6 @@ import { FiMenu } from 'react-icons/fi'
 import { useMediaQuery } from 'usehooks-ts'
 
 import { useAuth } from '@frontend/modules/auth'
-import { route } from '@frontend/route'
 import {
   Button,
   MenuContent,
@@ -11,6 +10,7 @@ import {
   MenuTrigger,
   Stack,
 } from '@frontend/shared/design-system'
+import { route } from '@shared/route'
 
 import { RouterMenuItem, RouterNavLink } from '../atoms'
 

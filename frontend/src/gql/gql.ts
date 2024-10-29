@@ -17,6 +17,8 @@ const documents = {
     types.SignInDocument,
   '\n  mutation SignUp($registerInput: RegisterInput!) {\n    signUp(registerInput: $registerInput) {\n      id\n    }\n  }\n':
     types.SignUpDocument,
+  '\n    mutation EmailVerification($token: String!) {\n      confirmEmailVerification(token: $token)\n    }\n  ':
+    types.EmailVerificationDocument,
   '\n  query FindNotary($input: FindNotaryInput!) {\n    findNotary(input: $input) {\n      contact {\n        id\n        name\n        surname\n        displayName\n        completeAddress\n        email\n        gender\n        postalCode\n        phone\n      }\n    }\n  }\n':
     types.FindNotaryDocument,
 }
@@ -47,6 +49,12 @@ export function gql(
 export function gql(
   source: '\n  mutation SignUp($registerInput: RegisterInput!) {\n    signUp(registerInput: $registerInput) {\n      id\n    }\n  }\n'
 ): (typeof documents)['\n  mutation SignUp($registerInput: RegisterInput!) {\n    signUp(registerInput: $registerInput) {\n      id\n    }\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n    mutation EmailVerification($token: String!) {\n      confirmEmailVerification(token: $token)\n    }\n  '
+): (typeof documents)['\n    mutation EmailVerification($token: String!) {\n      confirmEmailVerification(token: $token)\n    }\n  ']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

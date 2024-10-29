@@ -327,6 +327,15 @@ export type SignUpMutation = {
   signUp: { __typename?: 'User'; id: string }
 }
 
+export type EmailVerificationMutationVariables = Exact<{
+  token: Scalars['String']['input']
+}>
+
+export type EmailVerificationMutation = {
+  __typename?: 'Mutation'
+  confirmEmailVerification: boolean
+}
+
 export type FindNotaryQueryVariables = Exact<{
   input: FindNotaryInput
 }>
@@ -485,6 +494,54 @@ export const SignUpDocument = {
     },
   ],
 } as unknown as DocumentNode<SignUpMutation, SignUpMutationVariables>
+export const EmailVerificationDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'EmailVerification' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'token' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'confirmEmailVerification' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'token' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'token' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  EmailVerificationMutation,
+  EmailVerificationMutationVariables
+>
 export const FindNotaryDocument = {
   kind: 'Document',
   definitions: [

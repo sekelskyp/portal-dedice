@@ -2,10 +2,10 @@ import { useCallback } from 'react'
 import { Container, Heading, Stack, Text } from '@chakra-ui/react'
 
 import resources from '@frontend/resources'
-import { route } from '@frontend/route'
 import { Alert, Box } from '@frontend/shared/design-system'
 import { Page } from '@frontend/shared/layout'
 import { RouterLink } from '@frontend/shared/navigation/atoms'
+import { route } from '@shared/route'
 
 import { SignInForm } from '../components/SignInForm'
 import { useSignIn } from '../hooks/useSignIn'

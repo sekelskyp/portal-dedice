@@ -36,7 +36,7 @@ export const requestEmailVerification = async (
 
   // Generate the confirmation link
   const baseUrl = `${process.env.APP_BASE_URL}:${process.env.PORT}`
-  const confirmationLink = `${baseUrl}${route.emailVerification}?token=${token}`
+  const confirmationLink = `${baseUrl}${route.emailVerification()}?token=${token}`
 
   // Send the email with the confirmation link
   await sendEmail({

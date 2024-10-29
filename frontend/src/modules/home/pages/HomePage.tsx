@@ -2,11 +2,11 @@ import { Heading, Stack, Text } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
 import { useAuth } from '@frontend/modules/auth'
-import { route } from '@frontend/route'
 import { Button } from '@frontend/shared/design-system'
 import { SimpleCentered } from '@frontend/shared/design-system/atoms/CTA/SimpleCentered'
 import { SplitWithImage } from '@frontend/shared/design-system/atoms/CTA/SplitWithImage'
 import { Page } from '@frontend/shared/layout'
+import { route } from '@shared/route'
 
 export function HomePage() {
   const { user } = useAuth()
