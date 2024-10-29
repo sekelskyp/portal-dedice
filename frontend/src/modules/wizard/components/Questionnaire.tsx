@@ -79,9 +79,14 @@ export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
   const currentStep = questionData.steps[currentStepIndex]
 
   const canShowStep = (step: Step): boolean => {
-    if (!step.dependencies) return true
+    if (!step.dependencies || step.dependencies.length === 0) return true
+    console.log('Checking dependencies for step:', step.id)
+    console.log('Current answers:', answers)
     return step.dependencies.every((dependency) => {
       const dependentAnswer = answers[dependency.questionId]
+      console.log(
+        `Dependency - Question ID: ${dependency.questionId}, Answer ID: ${dependency.answerId}, Selected Answer: ${dependentAnswer}`
+      )
       return dependentAnswer === dependency.answerId
     })
   }
@@ -89,51 +94,44 @@ export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
   const findNextStepIndex = (startIndex: number): number => {
     for (let i = startIndex; i < questionData.steps.length; i++) {
       if (canShowStep(questionData.steps[i])) {
-        return i
+        return i // Return the index of the next question that can be shown
       }
     }
-    return startIndex
+    return startIndex // If no valid next step is found
   }
 
-  const handleAnswer = (nextValue: string) => {
-    const answerId = parseInt(nextValue, 10)
-
-    // Only update selectedAnswer if the new value is different
-    if (selectedAnswer !== answerId) {
-      setSelectedAnswer(answerId)
-    }
-
-    // Update answers only if the new answer differs from the current one
-    if (answers[currentStep.id] !== answerId) {
-      setAnswers((prevAnswers) => ({
-        ...prevAnswers,
-        [currentStep.id]: answerId,
-      }))
-    }
+  const handleAnswer = (answerId: number) => {
+    setAnswers((prevAnswers) => ({
+      ...prevAnswers,
+      [currentStep.id]: answerId, // Store the answer for the current question
+    }))
+    setSelectedAnswer(answerId) // Update selected answer
+    goToNextStep() // Move to the next question
   }
 
   const goToNextStep = () => {
-    if (
-      selectedAnswer !== null ||
-      (currentStep.answer_options?.length ?? 0) === 1
-    ) {
-      if (currentStep.id === 3 && selectedAnswer === 1) {
-        setShowError(true)
-      } else {
-        const nextStepIndex = findNextStepIndex(currentStepIndex + 1)
-        if (currentStep.answer_options?.length === 1) {
-          const singleAnswerId = currentStep.answer_options[0].id
-          setSelectedAnswer(singleAnswerId)
-          setAnswers((prevAnswers) => ({
-            ...prevAnswers,
-            [currentStep.id]: singleAnswerId,
-          }))
-        }
+    // If the selected answer is not null or there is only one answer option
+    if (selectedAnswer !== null || currentStep.answer_options?.length === 1) {
+      // If the current step has only one answer option, select it automatically
+      if (currentStep.answer_options?.length === 1) {
+        const singleAnswerId = currentStep.answer_options[0].id // Get the ID of the single answer option
+        setSelectedAnswer(singleAnswerId) // Set it as the selected answer
 
-        if (nextStepIndex !== -1) {
-          setCurrentStepIndex(nextStepIndex)
-          setSelectedAnswer(null)
-        }
+        // Update the answers state
+        setAnswers((prevAnswers) => ({
+          ...prevAnswers,
+          [currentStep.id]: singleAnswerId,
+        }))
+      }
+
+      // Now find the next step index
+      const nextStepIndex = findNextStepIndex(currentStepIndex + 1)
+      console.log(`Next Step Index Found: ${nextStepIndex}`)
+
+      // If a valid next step is found, go to it
+      if (nextStepIndex !== -1) {
+        setCurrentStepIndex(nextStepIndex) // Move to the valid next step
+        setSelectedAnswer(null) // Reset the selected answer for the next question
       }
     }
   }
@@ -154,8 +152,14 @@ export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
 
   const { getRootProps, getRadioProps } = useRadioGroup({
     value: selectedAnswer !== null ? selectedAnswer.toString() : '',
-    onChange: (value) => handleAnswer(value),
+    onChange: (value) => handleAnswer(Number(value)),
   })
+
+  const goToFirstQuestion = () => {
+    setCurrentStepIndex(0)
+    setSelectedAnswer(null)
+    setAnswers({})
+  }
 
   const group = getRootProps()
 
@@ -236,9 +240,7 @@ export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
         </Box>
       ) : (
         <Box>
-          <Button onClick={() => setCurrentStepIndex(findNextStepIndex(0))}>
-            Skip to next question
-          </Button>
+          <Button onClick={goToFirstQuestion}>Skip to next question</Button>
         </Box>
       )}
     </Box>
