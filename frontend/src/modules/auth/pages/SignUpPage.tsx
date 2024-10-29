@@ -1,24 +1,14 @@
 import { useCallback } from 'react'
-import {
-  Alert,
-  AlertIcon,
-  Box,
-  Center,
-  GridItem,
-  Heading,
-  SimpleGrid,
-  Text,
-  useToast,
-} from '@chakra-ui/react'
+import { Box, Container, Flex, Heading, Text } from '@chakra-ui/react'
 
 import resources from '@frontend/resources'
+import { Alert, toaster } from '@frontend/shared/design-system'
 
 import { SignUpForm } from '../components/SignUpForm'
 import { useSignUp } from '../hooks/useSignUp'
 
 export function SignUpPage() {
   const [signUpRequest, signUpRequestState] = useSignUp()
-  const toast = useToast()
 
   const handleSignUpFormSubmit = useCallback(
     (variables: {
@@ -51,58 +41,42 @@ export function SignUpPage() {
         },
       })
         .then(() =>
-          toast({
+          toaster.loading({
             title: resources.auth.pages.signUp.emailConfirmation.title,
             description: resources.auth.pages.signUp.emailConfirmation.desc,
-            status: 'loading',
             duration: 10000,
-            position: 'top',
-            isClosable: false,
           })
         )
         .catch(() => {
-          toast({
+          toaster.error({
             title: resources.auth.pages.signUp.failed.title,
             description: resources.auth.pages.signUp.failed.desc,
-            status: 'error',
             duration: 10000,
-            position: 'top',
-            isClosable: true,
           })
         })
     },
-    [signUpRequest, toast]
+    [signUpRequest]
   )
 
   return (
-    <Box px={8} py={{ base: 8, sm: 16, lg: 24 }} mx={{ base: 0, xl: 8 }}>
+    <Container px={8} py={{ base: 8, sm: 16, lg: 24 }}>
       {signUpRequestState.error ? (
-        <Alert status="error">
-          <AlertIcon />
-          {signUpRequestState.error.message}
-        </Alert>
+        <Alert status="error" title={signUpRequestState.error.message} />
       ) : null}
-      <SimpleGrid
+      <Flex
         alignItems="center"
-        w={{
-          base: 'full',
-          xl: 9 / 12,
-        }}
-        columns={{
-          base: 1,
-          lg: 11,
+        direction={{
+          base: 'column',
+          lg: 'row',
         }}
         gap={{
           base: 0,
           lg: 24,
+          xl: 40,
         }}
-        mx="auto"
       >
-        <GridItem
-          colSpan={{
-            base: 'auto',
-            lg: 7,
-          }}
+        <Box
+          flex={{ base: 1, lg: 7 }}
           textAlign={{
             base: 'center',
             lg: 'left',
@@ -119,10 +93,6 @@ export function SignUpPage() {
             lineHeight={{
               base: 'shorter',
               md: 'none',
-            }}
-            color="gray.900"
-            _dark={{
-              color: 'gray.200',
             }}
             letterSpacing={{
               base: 'normal',
@@ -149,29 +119,16 @@ export function SignUpPage() {
             řízení čeká. V aplikaci se po zaregistrování můžete spojit s notářem
             a část pozůstalostního řízení vyřešit pohodlně online.
           </Text>
-        </GridItem>
-        <GridItem
-          colSpan={{
-            base: 'auto',
-            md: 4,
-          }}
-        >
+        </Box>
+        <Box flex={{ base: 1, lg: 4 }} w={'full'}>
           <Box rounded="xl">
-            <Center
-              pb={0}
-              color="gray.700"
-              _dark={{
-                color: 'gray.600',
-              }}
-            >
-              <Heading size="h4" as="h4">
-                Registrace
-              </Heading>
-            </Center>
+            <Heading size="3xl" as="h4" textAlign="center" mb={6}>
+              Registrace
+            </Heading>
             <SignUpForm onSubmit={handleSignUpFormSubmit}></SignUpForm>
           </Box>
-        </GridItem>
-      </SimpleGrid>
-    </Box>
+        </Box>
+      </Flex>
+    </Container>
   )
 }

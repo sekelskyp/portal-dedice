@@ -42,11 +42,11 @@ export function UnauthorizedPage() {
           Stránka, kterou se snažíte najít, vyžaduje autorizaci.
         </Text>
         <Box mt={6} display="flex" gap={2} justifyContent="center">
-          <Button as={Link} to={route.signUp()}>
-            Registrovat se
+          <Button asChild>
+            <Link to={route.signUp()}>Registrovat se</Link>
           </Button>
-          <Button as={Link} to={route.signIn()}>
-            Přihlásit se
+          <Button asChild>
+            <Link to={route.signIn()}>Přihlásit se</Link>
           </Button>
         </Box>
       </Box>

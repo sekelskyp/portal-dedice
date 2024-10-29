@@ -1,15 +1,17 @@
-import { Spacer, Stack } from '@chakra-ui/react'
+import { Stack } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { InputControl, SubmitButton } from 'react-hook-form-chakra'
 import { z } from 'zod'
 
 import resources from '@frontend/resources'
-
-import { Form } from '../../../shared/forms/Form'
+import { Form, InputFormControl, SubmitButton } from '@frontend/shared/forms'
 
 const schema = z.object({
-  email: z.string().email('Zadejte validní emailovou adresu'),
-  password: z.string().min(1, 'Zadejte heslo'),
+  email: z
+    .string({ required_error: 'Zadejte e-mailovou adresu.' })
+    .email('Zadejte validní e-mailovou adresu.'),
+  password: z
+    .string({ required_error: 'Zadejte heslo.' })
+    .min(1, 'Zadejte heslo.'),
 })
 
 export type SignInFormProps = {
@@ -21,21 +23,17 @@ export function SignInForm({ onSubmit, error }: SignInFormProps) {
   return (
     <Form onSubmit={onSubmit} resolver={zodResolver(schema)} noValidate>
       <Stack gap={4}>
-        <InputControl
+        <InputFormControl
           name="email"
           label={resources.auth.forms.shared.email.label}
-          inputProps={{
-            placeholder: resources.auth.forms.shared.email.placeholder,
-          }}
-          isRequired
+          required
         />
-        <InputControl
+        <InputFormControl
           name="password"
+          type="password"
           label={resources.auth.forms.shared.password}
-          inputProps={{ type: 'password' }}
-          isRequired
+          required
         />
-        <Spacer />
         <SubmitButton>{resources.shared.CTA.signIn}</SubmitButton>
       </Stack>
     </Form>

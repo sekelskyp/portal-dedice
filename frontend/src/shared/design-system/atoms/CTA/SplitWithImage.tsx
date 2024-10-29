@@ -17,13 +17,12 @@ export const SplitWithImage = ({
       base: 1,
       md: 2,
     }}
-    spacing={0}
+    gridGap={0}
     gap={{
       base: 4,
       md: 8,
       lg: 12,
     }}
-    px={4}
     my={10}
   >
     <Flex

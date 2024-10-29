@@ -1,22 +1,23 @@
-import { Box, Container, Heading, HStack, Image, Stack } from '@chakra-ui/react'
+import { Box, Container, Heading, HStack, Image } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
 import { TopNavigation } from '../navigation/organisms/TopNavigation'
 
 export const Header = () => {
   return (
-    <Box bg="gray.100">
+    <Box bg="bg.muted">
       <Container
         maxW="container.xl"
         p={4}
-        as={Stack}
-        direction="row"
+        asChild
         gap={12}
         alignItems="center"
         justifyContent="space-between"
       >
-        <AppLink />
-        <TopNavigation />
+        <HStack>
+          <AppLink />
+          <TopNavigation />
+        </HStack>
       </Container>
     </Box>
   )
@@ -24,11 +25,13 @@ export const Header = () => {
 
 const AppLink = () => {
   return (
-    <HStack as={Link} to={'/'} gap={4}>
-      <Image h={10} src="/logo.png" />
-      <Heading size="lg" whiteSpace="nowrap">
-        Portál Dědice
-      </Heading>
+    <HStack asChild gap={4}>
+      <Link to="/">
+        <Image h={10} src="/logo.png" />
+        <Heading size="lg" whiteSpace="nowrap">
+          Portál Dědice
+        </Heading>
+      </Link>
     </HStack>
   )
 }
