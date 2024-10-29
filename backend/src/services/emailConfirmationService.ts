@@ -1,5 +1,6 @@
 import crypto from 'crypto'
 import { addHours } from 'date-fns'
+import { route } from 'frontend/src/route'
 
 import { CustomContext } from '../types/types'
 
@@ -34,7 +35,7 @@ export const requestEmailVerification = async (
 
   // Generate the confirmation link
   const baseUrl = `${process.env.APP_BASE_URL}:${process.env.PORT}`
-  const confirmationLink = `${baseUrl}/email-verification?token=${token}`
+  const confirmationLink = `${baseUrl}${route.emailVerification}?token=${token}`
 
   // Send the email with the confirmation link
   await sendEmail({
