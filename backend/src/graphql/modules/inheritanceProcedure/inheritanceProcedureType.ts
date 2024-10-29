@@ -2,7 +2,8 @@ import { Field, ID, ObjectType } from 'type-graphql'
 
 import { InheritanceProcedureStateEnumType } from '@backend/db/schema'
 
-import { DeceasedPerson } from '../deceasedPerson/deceasedPersonType'
+import { Beneficiary } from '../beneficiary/beneficiaryType'
+import { Contact } from '../contact/contactType'
 import { Notary } from '../notary/notaryType'
 
 @ObjectType()
@@ -16,12 +17,6 @@ export class InheritanceProcedure {
   @Field(() => Notary, { nullable: true })
   notary?: Notary
 
-  @Field(() => ID, { nullable: true }) // Allow nullable
-  deceasedPersonId!: number | null
-
-  @Field(() => DeceasedPerson, { nullable: true })
-  deceasedPerson?: DeceasedPerson
-
   @Field()
   name!: string
 
@@ -31,6 +26,27 @@ export class InheritanceProcedure {
   @Field()
   startDate!: Date
 
-  @Field(() => String, { nullable: true })
+  @Field(() => Date, { nullable: true })
   endDate?: Date | null
+
+  @Field(() => Beneficiary, { nullable: true })
+  beneficiaries?: Beneficiary[]
+
+  @Field(() => ID, { nullable: true })
+  mainBeneficiaryId?: number | null
+
+  @Field(() => Beneficiary, { nullable: true })
+  mainBeneficiary?: Beneficiary
+
+  @Field(() => ID, { nullable: true })
+  deceasedContactId?: number | null
+
+  @Field(() => Contact, { nullable: true })
+  deceasedContact?: Contact | null
+
+  @Field(() => Date, { nullable: true })
+  deceasedDateOfBirth?: Date | null
+
+  @Field(() => Date, { nullable: true })
+  deceasedDateOfDeath?: Date | null
 }

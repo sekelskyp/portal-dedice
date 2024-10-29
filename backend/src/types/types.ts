@@ -2,7 +2,6 @@ import { MySql2Database } from 'drizzle-orm/mysql2'
 
 import { type getBeneficiaryRepository } from '@backend/graphql/modules/beneficiary/beneficiaryRepository'
 import { type getContactRepository } from '@backend/graphql/modules/contact/contactRepository'
-import { type getDeceasedPersonRepository } from '@backend/graphql/modules/deceasedPerson/deceasedPersonRepository'
 import { type getEmailConfirmationTokenRepository } from '@backend/graphql/modules/emailConfirmationToken/emailConfirmationTokenRepository'
 import { type getInheritanceProcedureRepository } from '@backend/graphql/modules/inheritanceProcedure/inheritaceProcedureRepository'
 import { type getNotaryRepository } from '@backend/graphql/modules/notary/notaryRepository'
@@ -26,7 +25,6 @@ export type CustomContext = {
   >
   beneficiaryRepository: ReturnType<typeof getBeneficiaryRepository>
   notaryDateRuleRepository: ReturnType<typeof getNotaryDateRuleRepository>
-  deceasedPersonRepository: ReturnType<typeof getDeceasedPersonRepository>
   passwordResetTokenRepository: ReturnType<
     typeof getPasswordResetTokenRepository
   >

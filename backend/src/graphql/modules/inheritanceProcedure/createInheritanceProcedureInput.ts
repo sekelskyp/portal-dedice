@@ -20,5 +20,14 @@ export class CreateInheritanceProcedureInput {
   endDate?: Date
 
   @Field(() => ID, { nullable: true })
-  deceasedPersonId?: number | null
+  mainBeneficiaryId?: number | null
+
+  @Field(() => ID, { nullable: true })
+  deceasedContactId?: number | null
+
+  @Field(() => Date, { nullable: true })
+  deceasedDateOfBirth?: Date | null
+
+  @Field(() => Date, { nullable: true })
+  deceasedDateOfDeath?: Date | null
 }

@@ -21,7 +21,6 @@ import { getBeneficiaryRepository } from '@backend/graphql/modules/beneficiary/b
 import { BeneficiaryResolver } from '@backend/graphql/modules/beneficiary/beneficiaryResolver'
 import { getContactRepository } from '@backend/graphql/modules/contact/contactRepository'
 import { ContactResolver } from '@backend/graphql/modules/contact/contactResolver'
-import { getDeceasedPersonRepository } from '@backend/graphql/modules/deceasedPerson/deceasedPersonRepository'
 import { getEmailConfirmationTokenRepository } from '@backend/graphql/modules/emailConfirmationToken/emailConfirmationTokenRepository'
 import { EmptyResolver } from '@backend/graphql/modules/empty/emptyResolver'
 import { getInheritanceProcedureRepository } from '@backend/graphql/modules/inheritanceProcedure/inheritaceProcedureRepository'
@@ -88,7 +87,6 @@ const init = async () => {
       ),
       beneficiaryRepository: getBeneficiaryRepository(drizzle.db),
       notaryDateRuleRepository: getNotaryDateRuleRepository(drizzle.db),
-      deceasedPersonRepository: getDeceasedPersonRepository(drizzle.db),
       passwordResetTokenRepository: getPasswordResetTokenRepository(drizzle.db),
       emailConfirmationTokenRepository: getEmailConfirmationTokenRepository(
         drizzle.db

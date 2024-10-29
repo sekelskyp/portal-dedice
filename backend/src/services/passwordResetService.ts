@@ -1,6 +1,7 @@
 import crypto from 'crypto'
 import { addHours } from 'date-fns'
-import { route } from 'frontend/src/route'
+
+import { route } from '@shared/route'
 
 import { CustomContext } from '../types/types'
 

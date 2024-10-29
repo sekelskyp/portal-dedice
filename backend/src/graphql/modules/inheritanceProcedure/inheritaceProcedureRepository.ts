@@ -6,13 +6,15 @@ import {
 } from '@backend/db/schema'
 import { Db } from '@backend/types/types'
 
-interface InheritanceProcedureData {
-  notaryId?: number | null // Nullable as per schema
-  deceasedPersonId?: number | null // Nullable as per schema
-  name: string // Required, as defined in the schema
-  state: InheritanceProcedureStateEnumType // Required, with default in schema
-  startDate: Date // Required
-  endDate?: Date | null // Nullable
+export interface InheritanceProcedureData {
+  notaryId?: number | null
+  mainBeneficiaryId?: number | null
+  name: string
+  state?: InheritanceProcedureStateEnumType
+  startDate: Date
+  endDate?: Date | null
+  deceasedDateOfBirth?: Date | null
+  deceasedDateOfDeath?: Date | null
 }
 
 export function getInheritanceProcedureRepository(db: Db) {

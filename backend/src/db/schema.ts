@@ -85,22 +85,12 @@ export const beneficiary = mysqlTable('beneficiary', {
   dateOfBirth: date('date_of_birth'),
 })
 
-// Define Deceased Person Table
-export const deceasedPerson = mysqlTable('deceased_person', {
-  id: int('id').primaryKey().autoincrement(),
-  dateOfBirth: date('date_of_birth').notNull(),
-  dateOfDeath: date('date_of_death').notNull(),
-  contactId: int('contact_id')
-    .references(() => contact.id)
-    .notNull(),
-})
-
 // Define InheritanceProcedure Table
 export const inheritanceProcedure = mysqlTable('inheritance_procedure', {
   id: int('id').primaryKey().autoincrement(),
   notaryId: int('notary_id').references(() => notary.id),
-  deceasedPersonId: int('deceased_person_id').references(
-    () => deceasedPerson.id
+  mainBeneficiaryId: int('main_beneficiary_id').references(
+    () => beneficiary.id
   ),
   name: varchar('name', { length: 100 }).notNull(),
   state: varchar('state', {
@@ -111,6 +101,10 @@ export const inheritanceProcedure = mysqlTable('inheritance_procedure', {
     .notNull(),
   startDate: date('start_date').notNull(),
   endDate: date('end_date'),
+  // deceased person info
+  deceasedContactId: int('deceased_contact_id').references(() => contact.id),
+  deceasedDateOfBirth: date('date_of_birth'),
+  deceasedDateOfDeath: date('date_of_death'),
 })
 
 // Define Meeting Table

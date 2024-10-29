@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "9704cdc8-f741-4ca6-b7b9-47922ef2047d",
+  "id": "b502b4b0-8b72-4394-8e2e-a8067dc2f58a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "asset": {
@@ -515,64 +515,6 @@
       },
       "uniqueConstraints": {}
     },
-    "deceased_person": {
-      "name": "deceased_person",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": true
-        },
-        "date_of_birth": {
-          "name": "date_of_birth",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "date_of_death": {
-          "name": "date_of_death",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "contact_id": {
-          "name": "contact_id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "deceased_person_contact_id_contact_id_fk": {
-          "name": "deceased_person_contact_id_contact_id_fk",
-          "tableFrom": "deceased_person",
-          "tableTo": "contact",
-          "columnsFrom": [
-            "contact_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "deceased_person_id": {
-          "name": "deceased_person_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
-      "uniqueConstraints": {}
-    },
     "document": {
       "name": "document",
       "columns": {
@@ -761,8 +703,8 @@
           "notNull": false,
           "autoincrement": false
         },
-        "deceased_person_id": {
-          "name": "deceased_person_id",
+        "main_beneficiary_id": {
+          "name": "main_beneficiary_id",
           "type": "int",
           "primaryKey": false,
           "notNull": false,
@@ -796,6 +738,27 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
+        },
+        "deceased_contact_id": {
+          "name": "deceased_contact_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "date_of_birth": {
+          "name": "date_of_birth",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "date_of_death": {
+          "name": "date_of_death",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         }
       },
       "indexes": {},
@@ -813,12 +776,25 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "inheritance_procedure_deceased_person_id_deceased_person_id_fk": {
-          "name": "inheritance_procedure_deceased_person_id_deceased_person_id_fk",
+        "inheritance_procedure_main_beneficiary_id_beneficiary_id_fk": {
+          "name": "inheritance_procedure_main_beneficiary_id_beneficiary_id_fk",
           "tableFrom": "inheritance_procedure",
-          "tableTo": "deceased_person",
+          "tableTo": "beneficiary",
           "columnsFrom": [
-            "deceased_person_id"
+            "main_beneficiary_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "inheritance_procedure_deceased_contact_id_contact_id_fk": {
+          "name": "inheritance_procedure_deceased_contact_id_contact_id_fk",
+          "tableFrom": "inheritance_procedure",
+          "tableTo": "contact",
+          "columnsFrom": [
+            "deceased_contact_id"
           ],
           "columnsTo": [
             "id"

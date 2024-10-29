@@ -14,11 +14,12 @@ import {
   assignNotary,
   closeProcedure,
   createProcedure,
-  InheritanceProcedureData,
   removeBeneficiaryFromProcedure,
 } from '../../../services/inheritanceProcedureService'
 import { CustomContext } from '../../../types/types'
-import { DeceasedPerson } from '../deceasedPerson/deceasedPersonType'
+import { Beneficiary } from '../beneficiary/beneficiaryType'
+import { Contact } from '../contact/contactType'
+import { InheritanceProcedureData } from '../inheritanceProcedure/inheritaceProcedureRepository'
 import { Notary } from '../notary/notaryType'
 
 import { CreateInheritanceProcedureInput } from './createInheritanceProcedureInput'
@@ -91,18 +92,30 @@ export class InheritanceProcedureResolver {
     return true
   }
 
-  // Field Resolver to fetch the deceased person associated with the procedure
-  @FieldResolver(() => DeceasedPerson, { nullable: true })
-  async deceasedPerson(
+  // Field Resolver to fetch the main Beneficiary associated with the procedure
+  @FieldResolver(() => Beneficiary, { nullable: true })
+  async mainBeneficiary(
     @Root() procedure: InheritanceProcedure,
-    @Ctx() { deceasedPersonRepository }: CustomContext
-  ): Promise<DeceasedPerson | null> {
-    if (!procedure.deceasedPersonId) {
+    @Ctx() { beneficiaryRepository }: CustomContext
+  ): Promise<Beneficiary | null> {
+    if (!procedure.mainBeneficiaryId) {
       return null
     }
-    return await deceasedPersonRepository.getDeceasedPersonById(
-      procedure.deceasedPersonId
+    return await beneficiaryRepository.getBeneficiaryById(
+      procedure.mainBeneficiaryId
     )
+  }
+
+  // Field Resolver to fetch the deceased person contact associated with the procedure
+  @FieldResolver(() => Contact, { nullable: true })
+  async deceasedContact(
+    @Root() procedure: InheritanceProcedure,
+    @Ctx() { contactRepository }: CustomContext
+  ): Promise<Contact | null> {
+    if (!procedure.deceasedContactId) {
+      return null
+    }
+    return await contactRepository.getContactById(procedure.deceasedContactId)
   }
 
   // Field Resolver to fetch the deceased person associated with the procedure
@@ -115,5 +128,16 @@ export class InheritanceProcedureResolver {
       return null
     }
     return await notaryRepository.getNotaryById(procedure.notaryId)
+  }
+
+  // Field Resolver to fetch the beneficiaries associated with the procedure
+  @FieldResolver(() => Beneficiary, { nullable: true })
+  async beneficiaries(
+    @Root() procedure: InheritanceProcedure,
+    @Ctx() { beneficiaryRepository }: CustomContext
+  ): Promise<Beneficiary[]> {
+    return await beneficiaryRepository.getBeneficiariesByProcedureId(
+      procedure.id
+    )
   }
 }

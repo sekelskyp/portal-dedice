@@ -1,15 +1,7 @@
 import { InheritanceProcedureStateEnumType } from '@backend/db/schema'
 
+import { InheritanceProcedureData } from '../graphql/modules/inheritanceProcedure/inheritaceProcedureRepository'
 import { CustomContext } from '../types/types'
-
-export interface InheritanceProcedureData {
-  notaryId?: number | null
-  deceasedPersonId?: number | null
-  name: string
-  state: InheritanceProcedureStateEnumType
-  startDate: Date
-  endDate?: Date | null
-}
 
 // Private helper function to generate a unique name for a new procedure
 function generateProcedureName(name: string, startDate: Date): string {

@@ -4,6 +4,7 @@ import { SignInPage } from '@frontend/modules/auth/pages/SignInPage'
 import { SignUpPage } from '@frontend/modules/auth/pages/SignUpPage'
 import { HomePage } from '@frontend/modules/home/pages/HomePage'
 import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
+import { route } from '@shared/route'
 
 import { Portal } from './modules/app/pages/Portal'
 import { ConfirmEmailPage } from './modules/auth/pages/ConfirmEmailPage'
@@ -15,7 +16,6 @@ import { BlogPage } from './modules/static-pages/pages/BlogPage'
 import { GuidePage } from './modules/static-pages/pages/GuidePage'
 import { WizardPage } from './modules/wizard/pages/WizardStepPage'
 import { Layout } from './shared/layout'
-import { route } from './route'
 
 export function Routes() {
   return (
