@@ -1,8 +1,9 @@
-import { Container, forwardRef } from '@chakra-ui/react'
+import { forwardRef } from 'react'
+import { Container, ContainerProps } from '@chakra-ui/react'
 
-export const Page = forwardRef((props, ref) => {
+export const Page = forwardRef((props: ContainerProps, ref) => {
   return (
-    <Container maxW="container.xl" py={6} ref={ref} {...props}>
+    <Container maxW="container.xl" py={6} {...props}>
       {props.children}
     </Container>
   )

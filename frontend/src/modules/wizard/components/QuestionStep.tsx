@@ -23,10 +23,7 @@ export function QuestionStep({
 }: WizardStepxProps) {
   return (
     <Box>
-      <Stack
-        spacing={4}
-        direction={{ base: 'column', md: 'column', lg: 'row' }}
-      >
+      <Stack gap={4} direction={{ base: 'column', md: 'column', lg: 'row' }}>
         <Container
           alignContent={'center'}
           maxWidth={{ base: '95%', lg: '50%' }}

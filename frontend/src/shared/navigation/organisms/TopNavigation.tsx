@@ -1,28 +1,27 @@
-import {
-  Flex,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuList,
-  ThemingProps,
-  useMediaQuery,
-} from '@chakra-ui/react'
+import { Flex } from '@chakra-ui/react'
 import { FiMenu } from 'react-icons/fi'
+import { useMediaQuery } from 'usehooks-ts'
 
 import { useAuth } from '@frontend/modules/auth'
 import { route } from '@frontend/route'
-import { Stack } from '@frontend/shared/design-system'
+import {
+  Button,
+  MenuContent,
+  MenuRoot,
+  MenuTrigger,
+  Stack,
+} from '@frontend/shared/design-system'
 
 import { RouterMenuItem, RouterNavLink } from '../atoms'
 
 export interface NavItem {
   label: string
   to: string
-  styleProps?: ThemingProps
+  highlight?: boolean
 }
 
 export function TopNavigation() {
-  const [isMobile] = useMediaQuery('(max-width: 768px)')
+  const isMobile = useMediaQuery('(max-width: 768px)')
 
   const { user } = useAuth()
 
@@ -54,32 +53,41 @@ export function TopNavigation() {
     navItems.push({
       label: 'Registrovat se',
       to: route.signUp(),
-      styleProps: { variant: 'solid' },
+      highlight: true,
     })
   }
 
   return (
-    <Stack direction="row" spacing="0" alignItems="center" color="primary.900">
+    <Stack direction="row" gap={0} alignItems="center" color="fg">
       {!isMobile && (
         <Flex gap={2} flexWrap="wrap" justifyContent="right">
-          {navItems.map(({ to, label, styleProps }) => (
-            <RouterNavLink to={to} key={to} {...styleProps}>
+          {navItems.map(({ to, label, highlight, ...rest }) => (
+            <RouterNavLink
+              variant={highlight ? 'solid' : 'ghost'}
+              to={to}
+              key={to}
+              {...rest}
+            >
               {label}
             </RouterNavLink>
           ))}
         </Flex>
       )}
       {isMobile && (
-        <Menu>
-          <MenuButton as={IconButton} icon={<FiMenu />} />
-          <MenuList>
-            {navItems.map(({ to, label, styleProps }) => (
-              <RouterMenuItem to={to} key={to} {...styleProps}>
+        <MenuRoot>
+          <MenuTrigger asChild>
+            <Button>
+              <FiMenu />
+            </Button>
+          </MenuTrigger>
+          <MenuContent>
+            {navItems.map(({ to, label, highlight, ...rest }) => (
+              <RouterMenuItem to={to} key={to} value={label} {...rest}>
                 {label}
               </RouterMenuItem>
             ))}
-          </MenuList>
-        </Menu>
+          </MenuContent>
+        </MenuRoot>
       )}
     </Stack>
   )

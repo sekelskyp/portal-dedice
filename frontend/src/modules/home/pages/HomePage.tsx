@@ -22,21 +22,25 @@ export function HomePage() {
         imageSrc="https://images.unsplash.com/photo-1525130413817-d45c1d127c42?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=750&q=80"
         imageAlt="Lidé hledající pomoc"
       >
-        <Heading as="h3">Hledáte pomoc při dědickém řízení?</Heading>
+        <Heading as="h3" size="4xl">
+          Hledáte pomoc při dědickém řízení?
+        </Heading>
         <Text>Využijte náš interaktivní nástroj pro řízení pozůstalosti.</Text>
-        <Button as={Link} to={route.wizard()}>
-          Pojďme na to!
+        <Button asChild>
+          <Link to={route.wizard()}>Pojďme na to!</Link>
         </Button>
       </SplitWithImage>
       {!user && (
-        <SimpleCentered maxW="container.xl">
-          <Heading>Řešíte předběžné šetření?</Heading>
+        <SimpleCentered bgColor="blue.bg">
+          <Heading as="h3" size="4xl">
+            Řešíte předběžné šetření?
+          </Heading>
           <Text>
             Komunikujte s notářem a ostatními dědici v řešení pro předběžné
             šetření. Zaregistujte se a získejte přístup k nástroji.
           </Text>
-          <Button as={Link} size="lg" to={route.signIn()}>
-            Přihlásit se
+          <Button size="lg" asChild>
+            <Link to={route.signIn()}>Přihlásit se</Link>
           </Button>
         </SimpleCentered>
       )}

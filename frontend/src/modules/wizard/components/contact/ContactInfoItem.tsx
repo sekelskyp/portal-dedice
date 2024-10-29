@@ -16,7 +16,7 @@ export function ContactInfoItem({ icon, text }: ContactInfoItemProps) {
     <Stack
       direction="row"
       align="center"
-      spacing={{ base: 2, sm: 4 }}
+      gap={{ base: 2, sm: 4 }}
       py={2}
       textAlign="left"
     >

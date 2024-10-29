@@ -1,11 +1,15 @@
-import { Box, Spacer, Stack } from '@chakra-ui/react'
+import { createListCollection, Stack } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { InputControl, SubmitButton } from 'react-hook-form-chakra'
 import { z } from 'zod'
 
 import resources from '@frontend/resources'
+import {
+  Form,
+  InputFormControl,
+  SelectFormControl,
+  SubmitButton,
+} from '@frontend/shared/forms'
 
-import { Form } from '../../../shared/forms/Form'
 import { passwordSchema } from '../passwordSchema'
 
 const schema = z
@@ -13,10 +17,18 @@ const schema = z
     password: passwordSchema,
     confirmPassword: z.string(),
     contact: z.object({
-      gender: z.string().min(1, 'Pohlaví je povinné'),
-      email: z.string().email('Zadejte validní emailovou adresu'),
-      name: z.string().min(1, 'Jméno je povinné'),
-      surname: z.string().min(1, 'Příjmení je povinné'),
+      gender: z
+        .string({ required_error: 'Pohlaví je povinné' })
+        .min(1, 'Pohlaví je povinné'),
+      email: z
+        .string({ required_error: 'Zadejte validní e-mailovou adresu' })
+        .email('Zadejte validní e-mailovou adresu'),
+      name: z
+        .string({ required_error: 'Jméno je povinné' })
+        .min(1, 'Jméno je povinné'),
+      surname: z
+        .string({ required_error: 'Příjmení je povinné' })
+        .min(1, 'Příjmení je povinné'),
     }),
   })
   .superRefine(({ password, confirmPassword }, ctx) => {
@@ -48,44 +60,58 @@ export type SignUpFormProps = {
   }) => void
 }
 
+const genderListCollection = createListCollection({
+  items: [
+    {
+      label: resources.auth.forms.signUp.gender.values.male,
+      value: 'male',
+    },
+    {
+      label: resources.auth.forms.signUp.gender.values.female,
+      value: 'female',
+    },
+  ],
+})
+
 export function SignUpForm({ onSubmit }: SignUpFormProps) {
   return (
     <Form onSubmit={onSubmit} resolver={zodResolver(schema)} noValidate>
       <Stack gap={4}>
-        <InputControl
+        <InputFormControl
           name="contact.name"
           label={resources.auth.forms.signUp.name}
-          isRequired
-        ></InputControl>
-        <InputControl
+          required
+        />
+        <InputFormControl
           name="contact.surname"
           label={resources.auth.forms.signUp.surname}
-          isRequired
-        ></InputControl>
-        <InputControl
+          required
+        />
+        <SelectFormControl
+          name="contact.gender"
+          label={resources.auth.forms.signUp.gender.label}
+          required
+          collection={genderListCollection}
+        />
+        <InputFormControl
           name="contact.email"
           label={resources.auth.forms.shared.email.label}
-          inputProps={{
-            placeholder: resources.auth.forms.shared.email.placeholder,
-          }}
-          isRequired
-        ></InputControl>
-        <InputControl
+          placeholder={resources.auth.forms.shared.email.placeholder}
+          required
+        />
+        <InputFormControl
           name="password"
           label={resources.auth.forms.shared.password}
-          inputProps={{ type: 'password' }}
-          isRequired
-        ></InputControl>
-        <InputControl
+          type="password"
+          required
+        />
+        <InputFormControl
           name="confirmPassword"
           label={resources.auth.forms.signUp.confirmPassword}
-          inputProps={{ type: 'password' }}
-          isRequired
-        ></InputControl>
-        <Spacer></Spacer>
-        <Box textAlign="center">
-          <SubmitButton width="fit-content">Vytvořit účet</SubmitButton>
-        </Box>
+          type="password"
+          required
+        />
+        <SubmitButton>Vytvořit účet</SubmitButton>
       </Stack>
     </Form>
   )
