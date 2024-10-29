@@ -19,7 +19,7 @@ export class CreateContactInput {
   @Field({ nullable: true })
   displayName?: string
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   gender?: GenderEnumType
 
   @Field()
