@@ -22,6 +22,42 @@ const customConfig = defineConfig({
             },
           },
         },
+        fg: {
+          DEFAULT: {
+            value: {
+              _light: '{colors.primary.900}',
+              _dark: '{colors.gray.300}',
+            },
+          },
+          error: {
+            value: {
+              _light: '{colors.red.500}',
+              _dark: '{colors.red.400}',
+            },
+          },
+        },
+        gray: {
+          fg: {
+            value: {
+              _light: '{colors.gray.800}',
+              _dark: '{colors.gray.300}',
+            },
+          },
+        },
+        bg: {
+          DEFAULT: {
+            value: {
+              _light: '{colors.gray.50}',
+              _dark: '{colors.gray.900}',
+            },
+          },
+          muted: {
+            value: {
+              _light: '{colors.gray.100}',
+              _dark: '{colors.gray.800}',
+            },
+          },
+        },
       },
     },
     recipes: {

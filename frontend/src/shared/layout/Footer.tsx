@@ -7,11 +7,15 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react'
+import { useTheme } from 'next-themes'
 
 import { FooterList } from './components/FooterList'
 import { footerLinks } from './links'
 
 export const Footer = () => {
+  const theme = useTheme()
+  const isDark = theme.resolvedTheme === 'dark'
+
   return (
     <Box bg="bg.muted" pb={4}>
       <Container px={0}>
@@ -26,7 +30,12 @@ export const Footer = () => {
             alignItems="center"
             py={0}
           >
-            <Image h={{ base: 16, md: 20 }} src="/logo.png" alt="logo" />
+            <Image
+              h={{ base: 16, md: 20 }}
+              src={isDark ? '/logo-dark.png' : '/logo.png'}
+              opacity={isDark ? 0.8 : 1}
+              alt="logo"
+            />
             <Stack
               direction="column"
               ml={{ base: 0, md: 8 }}
