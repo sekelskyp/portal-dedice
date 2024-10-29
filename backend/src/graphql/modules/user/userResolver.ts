@@ -96,7 +96,7 @@ export class UserResolver {
     return foundUser
   }
 
-  // Mutation to change user password
+  // Mutation to change user password of authenticated user
   @Mutation(() => User)
   async changePassword(
     @Arg('oldPassword') oldPassword: string,
@@ -134,7 +134,7 @@ export class UserResolver {
     await completePasswordReset(token, newPassword, context)
     return true
   }
-
+  // Mutation to confirm newly registered user's email with token sent to his email
   @Mutation(() => Boolean)
   async confirmEmailVerification(
     @Arg('token') token: string,
