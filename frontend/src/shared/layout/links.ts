@@ -1,4 +1,4 @@
-import { route } from '@frontend/route'
+import { route } from '@shared/route'
 
 export const footerLinks = [
   {

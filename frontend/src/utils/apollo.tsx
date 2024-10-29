@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { config } from '@frontend/config'
 import { useAuth } from '@frontend/modules/auth'
-import { route } from '@frontend/route'
+import { route } from '@shared/route'
 
 type Props = {
   children: ReactNode

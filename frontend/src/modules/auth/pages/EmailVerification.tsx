@@ -1,56 +1,87 @@
-import { Box, Icon, Text } from '@chakra-ui/react'
+import { useEffect } from 'react'
+import { Box, Button, Icon, Spinner, Text } from '@chakra-ui/react'
 import { FaCheckCircle } from 'react-icons/fa'
+import { Link } from 'react-router-dom'
 
-import { route } from '@frontend/route'
 import { Page } from '@frontend/shared/layout'
-import { RouterLink } from '@frontend/shared/navigation/atoms'
+import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
+import { route } from '@shared/route'
+
+import { useEmailToken } from '../hooks/useEmailToken'
 
 export function EmailVerification() {
-  return (
-    <Page>
-      <Box
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        minH={{ base: 'xs', sm: 'container.sm' }}
-      >
-        <Box textAlign="center">
-          <Icon
-            boxSize={{ base: '48px', sm: '64px', md: '72px' }}
-            color="green"
-          >
-            <FaCheckCircle />
-          </Icon>
-          <Text
-            fontSize={{ sm: 'xl', md: '2xl', lg: '3xl' }}
-            fontWeight="bold"
-            mb={4}
-            mx={{ base: 8, sm: 0 }}
-          >
-            Děkujeme za ověření vaší e-mailové adresy.
-          </Text>
-          <Text
-            fontSize={{ base: 'sm', md: 'md', lg: 'lg' }}
-            color="gray.600"
-            mx={{ base: 8, sm: 0 }}
-          >
-            Nyní máte kompletní přístup k Portálu Dědice.
-          </Text>
-          <Text
-            fontSize={{ base: 'sm', md: 'md', lg: 'lg' }}
-            color="gray.600"
-            mx={{ base: 8, sm: 0 }}
-            mt={4}
-          >
-            {' '}
-            Pokračujte na{' '}
-            <RouterLink to={route.portal()} fontWeight="bold">
-              Portál
-            </RouterLink>
-            .
-          </Text>
+  const { emailTokenRequest, emailTokenRequestState, queryToken } =
+    useEmailToken()
+
+  useEffect(() => {
+    if (queryToken) {
+      emailTokenRequest()
+    }
+  }, [emailTokenRequest, queryToken])
+
+  if (!queryToken) {
+    return <NotFoundPage />
+  }
+
+  if (emailTokenRequestState.loading) {
+    return (
+      <Page>
+        <Box display="flex" justifyContent="center" alignItems="center">
+          <Spinner size="xl" />
         </Box>
-      </Box>
-    </Page>
-  )
+      </Page>
+    )
+  }
+
+  if (emailTokenRequestState.error) {
+    return <NotFoundPage />
+  }
+
+  if (emailTokenRequestState.data) {
+    return (
+      <Page>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          minH={{ base: 'xs', sm: 'container.sm' }}
+        >
+          <Box textAlign="center">
+            <Icon
+              boxSize={{ base: '48px', sm: '64px', md: '72px' }}
+              color="green"
+            >
+              <FaCheckCircle />
+            </Icon>
+            <Text
+              fontSize={{ sm: 'xl', md: '2xl', lg: '3xl' }}
+              fontWeight="bold"
+              mb={4}
+              mx={{ base: 8, sm: 0 }}
+            >
+              Děkujeme za ověření vaší e-mailové adresy.
+            </Text>
+            <Text
+              fontSize={{ base: 'sm', md: 'md', lg: 'lg' }}
+              color="gray.600"
+              mx={{ base: 8, sm: 0 }}
+            >
+              Váš účet je nyní aktivní.
+            </Text>
+            <Text
+              fontSize={{ base: 'sm', md: 'md', lg: 'lg' }}
+              color="gray.600"
+              mx={{ base: 8, sm: 0 }}
+              mt={4}
+            >
+              Pro kompletní přístup k portálu se prosím přihlašte.
+            </Text>
+            <Button asChild mt={4}>
+              <Link to={route.signIn()}>Přihlásit se</Link>
+            </Button>
+          </Box>
+        </Box>
+      </Page>
+    )
+  }
 }

@@ -1,5 +1,3 @@
-import { InheritanceProcedureStateEnumType } from '@backend/db/schema'
-
 import { InheritanceProcedureData } from '../graphql/modules/inheritanceProcedure/inheritaceProcedureRepository'
 import { CustomContext } from '../types/types'
 

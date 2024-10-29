@@ -1,8 +1,8 @@
 import { Icon, Text } from '@chakra-ui/react'
 import { FiAlertCircle } from 'react-icons/fi'
 
-import { route } from '@frontend/route'
 import { Box } from '@frontend/shared/design-system'
+import { route } from '@shared/route'
 
 import { RouterLink } from '../atoms'
 
