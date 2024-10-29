@@ -11,8 +11,8 @@ export interface ContactData {
   phone?: string
   gender?: GenderEnumType
   email?: string
-  completeAddress: string
-  postalCode: string
+  completeAddress?: string
+  postalCode?: string
 }
 
 export function getContactRepository(db: Db) {

@@ -62,8 +62,8 @@ export const contact = mysqlTable('contact', {
   }),
   phone: char('phone', { length: 15 }),
   email: varchar('email', { length: 255 }),
-  completeAddress: varchar('complete_address', { length: 255 }).notNull(),
-  postalCode: varchar('postal_code', { length: 8 }).notNull(),
+  completeAddress: varchar('complete_address', { length: 255 }),
+  postalCode: varchar('postal_code', { length: 8 }),
 })
 
 // Define Notary Table

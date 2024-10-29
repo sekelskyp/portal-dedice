@@ -1,3 +1,5 @@
+import { getContactRepository } from '@backend/graphql/modules/contact/contactRepository'
+
 import { createToken } from '../libs/jwt'
 import { CustomContext } from '../types/types'
 
@@ -51,9 +53,11 @@ export async function loginUser(
 export async function registerUser(
   email: string,
   password: string,
+  name: string,
+  surname: string,
   context: CustomContext
 ) {
-  const { userRepository, beneficiaryRepository } = context
+  const { userRepository, beneficiaryRepository, contactRepository } = context
   console.log('registerUser')
   // Check if email is already in use
   const existingUser = await userRepository.getUserByEmail(email.toLowerCase())
@@ -69,6 +73,12 @@ export async function registerUser(
   if (!newUser) {
     throw new Error('Failed to retrieve the newly created user')
   }
+  const displayName = `${name} ${surname}`
+  await contactRepository.createContact({
+    name: name,
+    surname: surname,
+    displayName: displayName,
+  })
   // Create a beneficiary record linked to the new user
   await beneficiaryRepository.createBeneficiary({
     userId: newUser.id,

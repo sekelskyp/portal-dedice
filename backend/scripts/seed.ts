@@ -75,11 +75,11 @@ async function populateDatabase(
     .insert(user)
     .values([
       {
-        password: await hashPassword('heaslo123456b!'),
+        password: await hashPassword('heslo1234'),
         email: 'test.email1@email.com',
       },
       {
-        password: await hashPassword('heaslo123456b!'),
+        password: await hashPassword('heslo1234'),
         email: 'test.email2@email.com',
       },
     ])

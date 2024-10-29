@@ -56,8 +56,8 @@ CREATE TABLE `contact` (
 	`gender` varchar(7),
 	`phone` char(15),
 	`email` varchar(255),
-	`complete_address` varchar(255) NOT NULL,
-	`postal_code` varchar(8) NOT NULL,
+	`complete_address` varchar(255),
+	`postal_code` varchar(8),
 	CONSTRAINT `contact_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint

@@ -79,17 +79,19 @@ export class UserResolver {
     @Arg('registerInput') registerInput: RegisterInput,
     @Ctx() context: CustomContext
   ): Promise<User> {
-    const result = await registerUser(
+    const UserRecordId = await registerUser(
       registerInput.email,
       registerInput.password,
+      registerInput.name,
+      registerInput.surname,
       context
     )
 
-    if (!result) {
+    if (!UserRecordId) {
       throw new Error('Registration failed')
     }
 
-    const foundUser = await getUserById(result.id, context)
+    const foundUser = await getUserById(UserRecordId.id, context)
     if (!foundUser) {
       throw new Error('User not found after registration')
     }

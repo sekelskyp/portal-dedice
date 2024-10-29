@@ -22,9 +22,9 @@ export class CreateContactInput {
   @Field(() => String, { nullable: true })
   gender?: GenderEnumType
 
-  @Field()
-  completeAddress!: string
+  @Field(() => String, { nullable: true })
+  completeAddress?: string
 
-  @Field()
-  postalCode!: string
+  @Field(() => String, { nullable: true })
+  postalCode?: string
 }

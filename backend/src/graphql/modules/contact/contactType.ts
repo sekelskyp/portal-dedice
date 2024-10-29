@@ -25,9 +25,9 @@ export class Contact {
   @Field(() => String, { nullable: true })
   email?: string | null
 
-  @Field()
-  completeAddress!: string
+  @Field(() => String, { nullable: true })
+  completeAddress?: string | null
 
-  @Field()
-  postalCode!: string
+  @Field(() => String, { nullable: true })
+  postalCode?: string | null
 }

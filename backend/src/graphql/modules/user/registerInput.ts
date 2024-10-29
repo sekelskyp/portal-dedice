@@ -7,4 +7,10 @@ export class RegisterInput {
 
   @Field()
   password!: string
+
+  @Field()
+  name!: string
+
+  @Field()
+  surname!: string
 }

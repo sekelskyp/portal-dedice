@@ -132,7 +132,9 @@ type Query {
 
 input RegisterInput {
   email: String!
+  name: String!
   password: String!
+  surname: String!
 }
 
 type SignInResponse {
