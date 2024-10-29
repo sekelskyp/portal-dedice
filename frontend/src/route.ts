@@ -10,4 +10,5 @@ export const route = {
   wizard: () => `/wizard`,
   portal: () => `/portal`,
   emailVerification: () => `/auth/email-verification`,
+  confirmEmail: () => `/auth/confirm-email`,
 }

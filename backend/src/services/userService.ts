@@ -1,5 +1,3 @@
-import { getContactRepository } from '@backend/graphql/modules/contact/contactRepository'
-
 import { createToken } from '../libs/jwt'
 import { CustomContext } from '../types/types'
 
