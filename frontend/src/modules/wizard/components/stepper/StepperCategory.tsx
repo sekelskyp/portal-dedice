@@ -23,8 +23,8 @@ export function StepperCategory({ step, index }: StepperCategoryProps) {
     <Stack direction="column" alignItems="center">
       <Circle
         size={avatarBreakpoints}
-        bg={step > index ? 'blue.500' : 'gray.300'}
-        color="white"
+        bg={step > index ? 'blue.solid' : 'gray.emphasized'}
+        color="bg"
       >
         {step > index ? (
           <FiCheck size={iconBreakpoints} />

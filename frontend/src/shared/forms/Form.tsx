@@ -24,7 +24,13 @@ export function Form<TFieldValues extends FieldValues = FieldValues>({
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)} noValidate={noValidate}>
+      <form
+        onSubmit={methods.handleSubmit(onSubmit, (e) => {
+          console.error('Cannot submit form value:', e)
+          return e
+        })}
+        noValidate={noValidate}
+      >
         {children}
       </form>
     </FormProvider>
