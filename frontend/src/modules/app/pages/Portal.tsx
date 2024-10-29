@@ -12,7 +12,7 @@ export function Portal() {
       <Page as={Stack} gap={0} justifyContent={'space-between'} h={'full'}>
         <Stack alignItems="center" justifyContent="center" h="full">
           <Heading>Portál Dědice</Heading>
-          <Text>Vítejte, {user.user?.login}</Text>
+          <Text>Vítejte, {user.user?.email}</Text>
         </Stack>
       </Page>
     )

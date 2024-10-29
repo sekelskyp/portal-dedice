@@ -2,9 +2,9 @@ import { useEffect } from 'react'
 import { Center, Heading, Stack } from '@chakra-ui/react'
 
 import resources from '@frontend/resources'
-import { route } from '@frontend/route'
 import { Page } from '@frontend/shared/layout'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
+import { route } from '@shared/route'
 
 import { useAuth } from '../auth-core'
 

@@ -9,4 +9,6 @@ export const route = {
   blog: () => `/blog`,
   wizard: () => `/wizard`,
   portal: () => `/portal`,
+  emailVerification: () => `/auth/email-verification`,
+  confirmEmail: () => `/auth/confirm-email`,
 }
