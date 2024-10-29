@@ -9,14 +9,14 @@ type Beneficiary {
 }
 
 type Contact {
-  completeAddress: String!
+  completeAddress: String
   displayName: String
   email: String
   gender: String
   id: ID!
   name: String!
   phone: String
-  postalCode: String!
+  postalCode: String
   surname: String!
 }
 
@@ -28,13 +28,13 @@ input CreateBeneficiaryInput {
 }
 
 input CreateContactInput {
-  completeAddress: String!
+  completeAddress: String
   displayName: String
   email: String
   gender: String
   name: String!
   phone: String
-  postalCode: String!
+  postalCode: String
   surname: String!
 }
 
@@ -130,7 +130,9 @@ type Query {
 
 input RegisterInput {
   email: String!
+  name: String!
   password: String!
+  surname: String!
 }
 
 type SignInResponse {

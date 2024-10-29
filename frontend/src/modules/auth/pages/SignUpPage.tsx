@@ -1,8 +1,7 @@
 import { useCallback } from 'react'
 import { Box, Container, Flex, Heading, Text } from '@chakra-ui/react'
 
-import resources from '@frontend/resources'
-import { Alert, toaster } from '@frontend/shared/design-system'
+import { Alert } from '@frontend/shared/design-system'
 
 import { SignUpForm } from '../components/SignUpForm'
 import { useSignUp } from '../hooks/useSignUp'
@@ -12,48 +11,21 @@ export function SignUpPage() {
 
   const handleSignUpFormSubmit = useCallback(
     (variables: {
-      contact: {
-        email: string
-        gender: string
-        name: string
-        surname: string
-        dateOfBirth: string
-        country: string
-        city: string
-        street: string
-        postalCode: string
-        phone: string
-      }
+      email: string
+      name: string
+      surname: string
       password: string
     }) => {
       signUpRequest({
         variables: {
           registerInput: {
-            login: variables.contact.email,
-            contact: {
-              ...variables.contact,
-              dateOfBirth: new Date(
-                variables.contact.dateOfBirth
-              ).toISOString(),
-            },
+            email: variables.email,
+            name: variables.name,
+            surname: variables.surname,
             password: variables.password,
           },
         },
       })
-        .then(() =>
-          toaster.loading({
-            title: resources.auth.pages.signUp.emailConfirmation.title,
-            description: resources.auth.pages.signUp.emailConfirmation.desc,
-            duration: 10000,
-          })
-        )
-        .catch(() => {
-          toaster.error({
-            title: resources.auth.pages.signUp.failed.title,
-            description: resources.auth.pages.signUp.failed.desc,
-            duration: 10000,
-          })
-        })
     },
     [signUpRequest]
   )

@@ -1,11 +1,18 @@
 import { Box, Icon, Text } from '@chakra-ui/react'
 import { FaCheckCircle } from 'react-icons/fa'
+import { useLocation } from 'react-router-dom'
 
-import { route } from '@frontend/route'
 import { Page } from '@frontend/shared/layout'
-import { RouterLink } from '@frontend/shared/navigation/atoms'
+import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 
-export function EmailVerification() {
+export function ConfirmEmailPage() {
+  const location = useLocation()
+  const email = location.state?.email
+
+  if (!email) {
+    return <NotFoundPage />
+  }
+
   return (
     <Page>
       <Box
@@ -27,27 +34,18 @@ export function EmailVerification() {
             mb={4}
             mx={{ base: 8, sm: 0 }}
           >
-            Děkujeme za ověření vaší e-mailové adresy.
+            Děkujeme za registraci do portálu.
           </Text>
           <Text
             fontSize={{ base: 'sm', md: 'md', lg: 'lg' }}
             color="gray.600"
             mx={{ base: 8, sm: 0 }}
           >
-            Nyní máte kompletní přístup k Portálu Dědice.
-          </Text>
-          <Text
-            fontSize={{ base: 'sm', md: 'md', lg: 'lg' }}
-            color="gray.600"
-            mx={{ base: 8, sm: 0 }}
-            mt={4}
-          >
-            {' '}
-            Pokračujte na{' '}
-            <RouterLink to={route.portal()} fontWeight="bold">
-              Portál
-            </RouterLink>
-            .
+            Na vaši e-mailovou adresu{' '}
+            <Text as="span" color="primary.700" textDecoration="underline">
+              {email}
+            </Text>{' '}
+            jsme vám zaslali potvrzovací email.
           </Text>
         </Box>
       </Box>

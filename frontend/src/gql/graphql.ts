@@ -44,14 +44,14 @@ export type Beneficiary = {
 
 export type Contact = {
   __typename?: 'Contact'
-  completeAddress: Scalars['String']['output']
+  completeAddress?: Maybe<Scalars['String']['output']>
   displayName?: Maybe<Scalars['String']['output']>
   email?: Maybe<Scalars['String']['output']>
   gender?: Maybe<Scalars['String']['output']>
   id: Scalars['ID']['output']
   name: Scalars['String']['output']
   phone?: Maybe<Scalars['String']['output']>
-  postalCode: Scalars['String']['output']
+  postalCode?: Maybe<Scalars['String']['output']>
   surname: Scalars['String']['output']
 }
 
@@ -63,13 +63,13 @@ export type CreateBeneficiaryInput = {
 }
 
 export type CreateContactInput = {
-  completeAddress: Scalars['String']['input']
+  completeAddress?: InputMaybe<Scalars['String']['input']>
   displayName?: InputMaybe<Scalars['String']['input']>
   email?: InputMaybe<Scalars['String']['input']>
   gender?: InputMaybe<Scalars['String']['input']>
   name: Scalars['String']['input']
   phone?: InputMaybe<Scalars['String']['input']>
-  postalCode: Scalars['String']['input']
+  postalCode?: InputMaybe<Scalars['String']['input']>
   surname: Scalars['String']['input']
 }
 
@@ -277,7 +277,9 @@ export type QueryGetUserByIdArgs = {
 
 export type RegisterInput = {
   email: Scalars['String']['input']
+  name: Scalars['String']['input']
   password: Scalars['String']['input']
+  surname: Scalars['String']['input']
 }
 
 export type SignInResponse = {
@@ -322,7 +324,7 @@ export type SignUpMutationVariables = Exact<{
 
 export type SignUpMutation = {
   __typename?: 'Mutation'
-  signUp: { __typename?: 'User'; id: string; email: string }
+  signUp: { __typename?: 'User'; id: string }
 }
 
 export type FindNotaryQueryVariables = Exact<{
@@ -335,13 +337,14 @@ export type FindNotaryQuery = {
     __typename?: 'Notary'
     contact?: {
       __typename?: 'Contact'
+      id: string
       name: string
       surname: string
       displayName?: string | null
-      completeAddress: string
+      completeAddress?: string | null
       email?: string | null
       gender?: string | null
-      postalCode: string
+      postalCode?: string | null
       phone?: string | null
     } | null
   } | null
@@ -474,7 +477,6 @@ export const SignUpDocument = {
               kind: 'SelectionSet',
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'email' } },
               ],
             },
           },
@@ -531,6 +533,7 @@ export const FindNotaryDocument = {
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                       {
                         kind: 'Field',

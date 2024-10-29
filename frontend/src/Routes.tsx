@@ -6,6 +6,7 @@ import { HomePage } from '@frontend/modules/home/pages/HomePage'
 import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 
 import { Portal } from './modules/app/pages/Portal'
+import { ConfirmEmailPage } from './modules/auth/pages/ConfirmEmailPage'
 import { EmailVerification } from './modules/auth/pages/EmailVerification'
 import { PasswordResetPage } from './modules/auth/pages/PasswordResetPage'
 import { SignOutPage } from './modules/auth/pages/SignOut'
@@ -29,6 +30,7 @@ export function Routes() {
         <Route path={route.blog()} element={<BlogPage />} />
         <Route path={route.wizard()} element={<WizardPage />} />
         <Route path={route.signOut()} element={<SignOutPage />} />
+        <Route path={route.confirmEmail()} element={<ConfirmEmailPage />} />
         <Route path={route.resetPassword()} element={<PasswordResetPage />} />
         <Route
           path={route.emailVerification()}

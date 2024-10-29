@@ -1,12 +1,4 @@
-import {
-  Box,
-  Container,
-  Heading,
-  Image,
-  Separator,
-  Stack,
-  Text,
-} from '@chakra-ui/react'
+import { Box, Heading, Image, Separator, Stack, Text } from '@chakra-ui/react'
 
 import { ColorModeButton } from '../design-system/atoms/chakra/color-mode'
 
@@ -16,7 +8,7 @@ import { footerLinks } from './links'
 export const Footer = () => {
   return (
     <Box bg="bg.muted" pb={4}>
-      <Container px={0}>
+      <Stack px={6}>
         <Stack
           direction={{ base: 'column', md: 'row' }}
           alignItems="center"
@@ -67,7 +59,7 @@ export const Footer = () => {
           </Text>
           <ColorModeButton />
         </Stack>
-      </Container>
+      </Stack>
     </Box>
   )
 }
