@@ -1,4 +1,4 @@
-import { Accordion } from '@chakra-ui/react'
+import { AccordionRoot } from '@frontend/shared/design-system'
 
 import {
   AccordionHelperItem,
@@ -11,10 +11,10 @@ interface AccordionHelperProps {
 
 export function AccordionHelper({ items }: AccordionHelperProps) {
   return (
-    <Accordion allowMultiple textAlign="left">
+    <AccordionRoot multiple textAlign="left">
       {items.map((item) => (
         <AccordionHelperItem key={item.title} {...item} />
       ))}
-    </Accordion>
+    </AccordionRoot>
   )
 }

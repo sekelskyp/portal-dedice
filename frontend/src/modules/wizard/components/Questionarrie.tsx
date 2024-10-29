@@ -1,13 +1,7 @@
-import React, { useState } from 'react'
-import {
-  Box,
-  Button,
-  Heading,
-  Stack,
-  useRadio,
-  useRadioGroup,
-  UseRadioProps,
-} from '@chakra-ui/react'
+import { useState } from 'react'
+import { Box, Heading, Stack } from '@chakra-ui/react'
+
+import { Button } from '@frontend/shared/design-system'
 
 import questionData from '../questionnaire.json'
 
@@ -29,39 +23,39 @@ interface Step {
   dependencies?: Dependency[]
 }
 
-interface RadioCardProps extends UseRadioProps {
-  children: React.ReactNode
-}
+// interface RadioCardProps extends UseRadioProps {
+//   children: React.ReactNode
+// }
 
-const RadioCard = (props: RadioCardProps) => {
-  const { getInputProps, getCheckboxProps } = useRadio(props)
+// const RadioCard = (props: RadioCardProps) => {
+//   const { getInputProps, getCheckboxProps } = useRadio(props)
 
-  const input = getInputProps()
-  const checkbox = getCheckboxProps()
+//   const input = getInputProps()
+//   const checkbox = getCheckboxProps()
 
-  return (
-    <Box as="label" justifyContent={'center'}>
-      <input {...input} style={{ display: 'none' }} />
-      <Box
-        {...checkbox}
-        cursor="pointer"
-        borderWidth="1px"
-        borderRadius="md"
-        bg={'gray.50'}
-        _checked={{
-          bg: 'blue.500',
-          color: 'white',
-        }}
-        px={{ base: 3, sm: 5 }}
-        py={{ base: 2, sm: 3 }}
-        width={{ base: '100%', sm: '50%' }}
-        mx={'auto'}
-      >
-        {props.children}
-      </Box>
-    </Box>
-  )
-}
+//   return (
+//     <Box as="label" justifyContent={'center'}>
+//       <input {...input} style={{ display: 'none' }} />
+//       <Box
+//         {...checkbox}
+//         cursor="pointer"
+//         borderWidth="1px"
+//         borderRadius="md"
+//         bg={'gray.50'}
+//         _checked={{
+//           bg: 'blue.500',
+//           color: 'white',
+//         }}
+//         px={{ base: 3, sm: 5 }}
+//         py={{ base: 2, sm: 3 }}
+//         width={{ base: '100%', sm: '50%' }}
+//         mx={'auto'}
+//       >
+//         {props.children}
+//       </Box>
+//     </Box>
+//   )
+// }
 
 export const QuestionnaireStep = () => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
@@ -70,6 +64,7 @@ export const QuestionnaireStep = () => {
 
   const currentStep = questionData.steps[currentStepIndex]
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleAnswer = (nextValue: string) => {
     const answerId = parseInt(nextValue, 10)
     const answerOption = currentStep.answer_options?.find(
@@ -137,12 +132,12 @@ export const QuestionnaireStep = () => {
     })
   }
 
-  const { getRootProps, getRadioProps } = useRadioGroup({
-    value: selectedAnswer !== null ? selectedAnswer.toString() : '',
-    onChange: (value) => handleAnswer(value),
-  })
+  // const { getRootProps, getRadioProps } = useRadioGroup({
+  //   value: selectedAnswer !== null ? selectedAnswer.toString() : '',
+  //   onChange: (value) => handleAnswer(value),
+  // })
 
-  const group = getRootProps()
+  // const group = getRootProps()
 
   return (
     <Box>
@@ -151,7 +146,7 @@ export const QuestionnaireStep = () => {
           <Heading as="h2" size="lg" mb={4}>
             {currentStep.question_text}
           </Heading>
-          <Stack {...group} direction="column" justifyItems={'center'}>
+          {/* <Stack {...group} direction="column" justifyItems={'center'}>
             {currentStep.answer_options?.map((answer) => {
               const radio = getRadioProps({ value: answer.id.toString() })
               return (
@@ -160,7 +155,7 @@ export const QuestionnaireStep = () => {
                 </RadioCard>
               )
             })}
-          </Stack>
+          </Stack> */}
           <Box my={8} justifyContent={'space-between'}>
             <Stack
               direction={{ base: 'column', sm: 'row' }}
@@ -183,7 +178,7 @@ export const QuestionnaireStep = () => {
                   order={{ base: 1, sm: 2 }}
                   fontSize={{ base: 'sm', sm: 'md' }}
                   onClick={goToNextStep}
-                  isDisabled={selectedAnswer === null}
+                  disabled={selectedAnswer === null}
                 >
                   Pokračuj
                 </Button>

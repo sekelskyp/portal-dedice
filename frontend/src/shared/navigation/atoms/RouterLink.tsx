@@ -1,13 +1,14 @@
+import { Link, LinkProps } from '@chakra-ui/react'
 import { Link as ReactRouterLink } from 'react-router-dom'
 
-import {
-  forwardRef,
-  Link,
-  type LinkProps,
-} from '@frontend/shared/design-system'
+export interface RouterLinkProps extends LinkProps {
+  to: string
+}
 
-type Props = Omit<LinkProps, 'as'>
-
-export const RouterLink = forwardRef(function RouterLink(props: Props, ref) {
-  return <Link as={ReactRouterLink} ref={ref} {...props} />
-})
+export const RouterLink = (props: RouterLinkProps) => {
+  return (
+    <Link asChild {...props}>
+      <ReactRouterLink to={props.to}>{props.children}</ReactRouterLink>
+    </Link>
+  )
+}

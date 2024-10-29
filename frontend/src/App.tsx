@@ -2,13 +2,14 @@ import { BrowserRouter } from 'react-router-dom'
 
 import { AuthProvider } from '@frontend/modules/auth'
 import { Routes } from '@frontend/Routes'
-import { ChakraProvider, theme } from '@frontend/shared/design-system'
 import { ScrollToTop } from '@frontend/shared/navigation/atoms'
 import { EnhancedApolloProvider } from '@frontend/utils/apollo.tsx'
 
+import { Provider } from './shared/design-system/atoms/chakra/provider'
+
 export function App() {
   return (
-    <ChakraProvider theme={theme}>
+    <Provider>
       <BrowserRouter>
         <AuthProvider>
           <EnhancedApolloProvider>
@@ -17,6 +18,6 @@ export function App() {
           </EnhancedApolloProvider>
         </AuthProvider>
       </BrowserRouter>
-    </ChakraProvider>
+    </Provider>
   )
 }

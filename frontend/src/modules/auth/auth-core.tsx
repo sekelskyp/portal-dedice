@@ -14,7 +14,7 @@ type AuthState = {
 
 export type AuthUser = {
   id: string
-  login: string
+  email: string
 }
 
 const LOCAL_STORAGE_AUTH_KEY = 'project-auth'
