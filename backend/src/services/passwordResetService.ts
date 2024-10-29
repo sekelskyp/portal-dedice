@@ -41,7 +41,7 @@ export const requestPasswordReset = async (
   })
 
   // Generate the reset link
-  const baseUrl = `${process.env.APP_BASE_URL}:${process.env.PORT}`
+  const baseUrl = `${process.env.APP_BASE_URL_FRONTEND}`
   const resetLink = `${baseUrl}${route.resetPassword()}?token=${token}`
 
   // Send the email with the reset link
