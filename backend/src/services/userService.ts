@@ -1,5 +1,3 @@
-import { getContactRepository } from '@backend/graphql/modules/contact/contactRepository'
-
 import { createToken } from '../libs/jwt'
 import { CustomContext } from '../types/types'
 
@@ -37,6 +35,10 @@ export async function loginUser(
   // Validate password
   const isPasswordValid = await comparePassword(password, foundUser.password)
   if (!isPasswordValid) throw new Error(errorMessage)
+
+  // Check if user is confirmed
+  if (!foundUser.confirmed)
+    throw new Error('Pro login je nutné ověřit email uživatele')
 
   // Generate a JWT token for the user
   const token = createToken({ userId: foundUser.id })
