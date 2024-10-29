@@ -4,17 +4,8 @@ import { FaCheckCircle } from 'react-icons/fa'
 import { route } from '@frontend/route'
 import { Page } from '@frontend/shared/layout'
 import { RouterLink } from '@frontend/shared/navigation/atoms'
-import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
-
-import { useVerificationToken } from '../hooks/useVerificationToken'
 
 export function EmailVerification() {
-  const { token } = useVerificationToken()
-
-  if (!token) {
-    return <NotFoundPage />
-  }
-
   return (
     <Page>
       <Box

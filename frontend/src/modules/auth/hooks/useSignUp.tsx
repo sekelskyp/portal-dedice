@@ -9,11 +9,8 @@ import { useAuth } from '../auth-core'
 const SIGNUP_MUTATION = gql(/* GraphQL */ `
   mutation SignUp($registerInput: RegisterInput!) {
     signUp(registerInput: $registerInput) {
-      user {
-        id
-        login
-      }
-      token
+      id
+      email
     }
   }
 `)
