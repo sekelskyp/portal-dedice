@@ -1,20 +1,13 @@
 import { useState } from 'react'
 
-interface WizardState {
-  step: number
-  questionsProgress: number
-  questionId: number
-  treeProgress: number
-}
-
 export function useWizardSteps(totalQuestions: number) {
   const [{ step, questionsProgress, questionId, treeProgress }, setState] =
-    useState<WizardState>({
-      step: 1,
-      questionsProgress: 0,
-      questionId: 0,
-      treeProgress: 0,
-    })
+    useState<{
+      step: number
+      questionsProgress: number
+      questionId: number
+      treeProgress: number
+    }>(INITIAL_STATE)
 
   const questionProgressIncrement = 100 / totalQuestions
 
@@ -107,3 +100,10 @@ export function useWizardSteps(totalQuestions: number) {
     setPreviousStep,
   }
 }
+
+const INITIAL_STATE = {
+  step: 1,
+  questionsProgress: 0,
+  questionId: 0,
+  treeProgress: 0,
+} as const

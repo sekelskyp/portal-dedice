@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import {
   Box,
   Button,
+  Container,
   Heading,
   Stack,
   useRadio,
@@ -9,17 +10,17 @@ import {
   UseRadioProps,
 } from '@chakra-ui/react'
 
+import { ErrorTreePage } from '../pages/ErrorTreePage'
 import questionData from '../questionnaire.json'
 
 interface Answer {
   id: number
   option_text: string
-  option_value: string
 }
 
 interface Dependency {
   questionId: number
-  answerId: number
+  answerId?: number
 }
 
 interface Step {
@@ -64,7 +65,7 @@ const RadioCard = (props: RadioCardProps) => {
 }
 
 interface QuestionnaireStepProps {
-  setPreviousStep: () => void // Accept the setPreviousStep prop
+  setPreviousStep: () => void
 }
 
 export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
@@ -73,6 +74,7 @@ export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [answers, setAnswers] = useState<{ [key: number]: number }>({})
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
+  const [showError, setShowError] = useState(false)
 
   const currentStep = questionData.steps[currentStepIndex]
 
@@ -95,24 +97,44 @@ export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
 
   const handleAnswer = (nextValue: string) => {
     const answerId = parseInt(nextValue, 10)
-    const answerOption = currentStep.answer_options?.find(
-      (option) => option.id === answerId
-    )
-    if (answerOption) {
+
+    // Only update selectedAnswer if the new value is different
+    if (selectedAnswer !== answerId) {
       setSelectedAnswer(answerId)
-      setAnswers({
-        ...answers,
+    }
+
+    // Update answers only if the new answer differs from the current one
+    if (answers[currentStep.id] !== answerId) {
+      setAnswers((prevAnswers) => ({
+        ...prevAnswers,
         [currentStep.id]: answerId,
-      })
+      }))
     }
   }
 
   const goToNextStep = () => {
-    let nextStepIndex = currentStepIndex + 1
-    nextStepIndex = findNextStepIndex(nextStepIndex)
-    if (nextStepIndex < questionData.steps.length) {
-      setCurrentStepIndex(nextStepIndex)
-      setSelectedAnswer(null)
+    if (
+      selectedAnswer !== null ||
+      (currentStep.answer_options?.length ?? 0) === 1
+    ) {
+      if (currentStep.id === 3 && selectedAnswer === 1) {
+        setShowError(true)
+      } else {
+        const nextStepIndex = findNextStepIndex(currentStepIndex + 1)
+        if (currentStep.answer_options?.length === 1) {
+          const singleAnswerId = currentStep.answer_options[0].id
+          setSelectedAnswer(singleAnswerId)
+          setAnswers((prevAnswers) => ({
+            ...prevAnswers,
+            [currentStep.id]: singleAnswerId,
+          }))
+        }
+
+        if (nextStepIndex !== -1) {
+          setCurrentStepIndex(nextStepIndex)
+          setSelectedAnswer(null)
+        }
+      }
     }
   }
 
@@ -126,17 +148,10 @@ export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
     }
     if (previousStepIndex >= 0) {
       setCurrentStepIndex(previousStepIndex)
-      setSelectedAnswer(
-        answers[questionData.steps[previousStepIndex].id] || null
-      )
+      setSelectedAnswer(answers[questionData.steps[previousStepIndex].id])
     }
   }
-  const goToFirstStep = () => {
-    const firstStepIndex = findNextStepIndex(0)
-    setCurrentStepIndex(firstStepIndex)
-  }
 
-  // RadioGroup setup for handling answer selection
   const { getRootProps, getRadioProps } = useRadioGroup({
     value: selectedAnswer !== null ? selectedAnswer.toString() : '',
     onChange: (value) => handleAnswer(value),
@@ -144,35 +159,51 @@ export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
 
   const group = getRootProps()
 
+  if (showError) {
+    return (
+      <ErrorTreePage
+        onGoBack={(questionIndex) => {
+          setShowError(false)
+          setCurrentStepIndex(questionIndex)
+          setSelectedAnswer(null)
+        }}
+        questionIndex={currentStepIndex - 1}
+      />
+    )
+  }
+
   return (
     <Box>
       {canShowStep(currentStep) ? (
-        <Box pt={4} my={4}>
-          <Heading as="h2" size="lg" mb={4}>
-            {currentStep.question_text}
-          </Heading>
-          <Stack {...group} direction="column" justifyItems={'center'}>
-            {currentStep.answer_options?.map((answer) => {
-              const radio = getRadioProps({ value: answer.id.toString() })
-              return (
-                <RadioCard key={answer.id} {...radio}>
-                  {answer.option_text}
-                </RadioCard>
-              )
-            })}
-          </Stack>
+        <Box pt={4} my={16} mx={24}>
+          <Container>
+            <Heading as="h2" size={{ base: 'sm', sm: 'md' }} mb={4}>
+              {currentStep.question_text}
+            </Heading>
+          </Container>
+          {(currentStep.answer_options?.length ?? 0) > 1 && (
+            <Stack {...group} direction="column" justifyItems={'center'}>
+              {currentStep.answer_options?.map((answer) => {
+                const radio = getRadioProps({ value: answer.id.toString() })
+                return (
+                  <RadioCard key={answer.id} {...radio}>
+                    {answer.option_text}
+                  </RadioCard>
+                )
+              })}
+            </Stack>
+          )}
           <Box my={8} justifyContent={'space-between'}>
             <Stack
               direction={{ base: 'column', sm: 'row' }}
               pt={4}
-              mt={4}
+              mt={16}
               justifyContent="space-between"
             >
-              {currentStep.id === 1 && (
+              {currentStep?.id === 1 && (
                 <Button
                   onClick={setPreviousStep}
                   bg="gray.500"
-                  order={{ base: 2, sm: 1 }}
                   fontSize={{ base: 'sm', sm: 'md' }}
                   size={{ base: 'sm', sm: 'lg' }}
                 >
@@ -182,7 +213,6 @@ export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
               {currentStepIndex > 0 && (
                 <Button
                   bg="gray.500"
-                  order={{ base: 2, sm: 1 }}
                   fontSize={{ base: 'sm', sm: 'md' }}
                   size={{ base: 'sm', sm: 'lg' }}
                   onClick={goToPreviousStep}
@@ -190,23 +220,25 @@ export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
                   Zpět
                 </Button>
               )}
-              {currentStepIndex < questionData.steps.length - 1 && (
-                <Button
-                  order={{ base: 1, sm: 2 }}
-                  fontSize={{ base: 'sm', sm: 'md' }}
-                  size={{ base: 'sm', sm: 'lg' }}
-                  onClick={goToNextStep}
-                  isDisabled={selectedAnswer === null}
-                >
-                  Pokračuj
-                </Button>
-              )}
+              <Button
+                fontSize={{ base: 'sm', sm: 'md' }}
+                size={{ base: 'sm', sm: 'lg' }}
+                onClick={goToNextStep}
+                isDisabled={
+                  (currentStep.answer_options?.length ?? 0) > 1 &&
+                  selectedAnswer === null
+                }
+              >
+                Pokračuj
+              </Button>
             </Stack>
           </Box>
         </Box>
       ) : (
         <Box>
-          <Button onClick={goToFirstStep}>Skip to next question</Button>
+          <Button onClick={() => setCurrentStepIndex(findNextStepIndex(0))}>
+            Skip to next question
+          </Button>
         </Box>
       )}
     </Box>

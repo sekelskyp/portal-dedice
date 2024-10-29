@@ -2,7 +2,7 @@ import { createContext, Dispatch, SetStateAction, useState } from 'react'
 import { Box, Heading } from '@chakra-ui/react'
 
 import { NotaryAssignment } from '../components/NotaryAssignment'
-import { QuestionnaireStep } from '../components/Questionarrie'
+import { QuestionnaireStep } from '../components/Questionnaire'
 import { QuestionStep } from '../components/QuestionStep'
 import { StepperProgress } from '../components/stepper/StepperProgress'
 import { TestatorIdentification } from '../components/TestatorIdentification'
@@ -41,8 +41,6 @@ export function WizardPage() {
   } = useWizardSteps(totalQuestions)
 
   const [notaryData, setNotaryData] = useState<NotaryData>({})
-
-  const data = questionData
 
   function StepperHeading({ text }: { text: string }) {
     return (
