@@ -1,0 +1,47 @@
+import {
+  SelectContent,
+  SelectItem,
+  SelectRoot,
+  SelectRootProps,
+  SelectTrigger,
+  SelectValueText,
+} from '../design-system'
+
+import { BaseFieldControl, BaseFieldControlProps } from './BaseFieldControl'
+
+export interface SelectControlProps
+  extends Omit<SelectRootProps, 'name'>,
+    BaseFieldControlProps {}
+
+export const SelectFormControl = (props: SelectControlProps) => {
+  const { children, ...rest } = props
+
+  const multiple = rest.multiple
+
+  return (
+    <BaseFieldControl {...rest}>
+      {({ value, onChange, onBlur }, disabled) => (
+        <SelectRoot
+          value={multiple ? value : [value]}
+          onValueChange={(value) =>
+            onChange(multiple ? value.value : value.value[0])
+          }
+          onBlur={onBlur}
+          {...rest}
+          disabled={disabled}
+        >
+          <SelectTrigger>
+            <SelectValueText />
+          </SelectTrigger>
+          <SelectContent>
+            {rest.collection.items.map((item) => (
+              <SelectItem item={item} key={item.value}>
+                {item.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </SelectRoot>
+      )}
+    </BaseFieldControl>
+  )
+}

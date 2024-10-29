@@ -1,12 +1,15 @@
-import {
-  NavLink as ReactRouterNavLink,
-  type NavLinkProps as ReactRouterNavLinkProps,
-} from 'react-router-dom'
+import { NavLink as ReactRouterNavLink } from 'react-router-dom'
 
-import { NavLink, type NavLinkProps } from '@frontend/shared/design-system'
+import { Button, ButtonProps } from '@frontend/shared/design-system'
 
-type Props = Omit<NavLinkProps, 'as'> & ReactRouterNavLinkProps
+export interface RouterNavLinkProps extends ButtonProps {
+  to: string
+}
 
-export function RouterNavLink(props: Props) {
-  return <NavLink {...props} as={ReactRouterNavLink} />
+export function RouterNavLink(props: RouterNavLinkProps) {
+  return (
+    <Button asChild {...props}>
+      <ReactRouterNavLink to={props.to}>{props.children}</ReactRouterNavLink>
+    </Button>
+  )
 }

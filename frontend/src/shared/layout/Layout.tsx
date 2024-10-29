@@ -1,6 +1,8 @@
 import { Box, Flex } from '@chakra-ui/react'
 import { Outlet } from 'react-router-dom'
 
+import { Toaster } from '../design-system'
+
 import { Footer } from './Footer'
 import { Header } from './Header'
 
@@ -18,6 +20,7 @@ export const Layout = () => {
       <Box as="footer">
         <Footer />
       </Box>
+      <Toaster />
     </Flex>
   )
 }

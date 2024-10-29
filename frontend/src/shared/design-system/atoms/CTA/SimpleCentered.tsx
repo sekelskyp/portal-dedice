@@ -8,7 +8,6 @@ export const SimpleCentered = ({
   <Center
     as={Stack}
     w={'full'}
-    px={4}
     my={10}
     textAlign={{
       base: 'left',
@@ -19,7 +18,6 @@ export const SimpleCentered = ({
       as={Stack}
       gap={4}
       alignItems="center"
-      bg="primary.50"
       p={16}
       borderRadius={'lg'}
       {...rest}

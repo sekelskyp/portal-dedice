@@ -1,11 +1,10 @@
+import { Box, Link } from '@chakra-ui/react'
+
 import {
-  AccordionButton,
-  AccordionIcon,
   AccordionItem,
-  AccordionPanel,
-  Box,
-  Link,
-} from '@chakra-ui/react'
+  AccordionItemContent,
+  AccordionItemTrigger,
+} from '@frontend/shared/design-system'
 
 export interface AccordionHelperItemProps {
   title: string
@@ -39,8 +38,8 @@ export function AccordionHelperItem({
   }
 
   return (
-    <AccordionItem bg="gray.200" mb={4} borderRadius="xl">
-      <AccordionButton
+    <AccordionItem bg="gray.200" mb={4} borderRadius="xl" value="">
+      <AccordionItemTrigger
         pl={{ base: 4, sm: 6 }}
         borderRadius="xl"
         _hover={{ borderRadius: 'none' }}
@@ -50,16 +49,15 @@ export function AccordionHelperItem({
         <Box as="span" flex="1" textAlign="left">
           {title}
         </Box>
-        <AccordionIcon />
-      </AccordionButton>
-      <AccordionPanel
+      </AccordionItemTrigger>
+      <AccordionItemContent
         bg="gray.100"
         borderBottomRadius="xl"
         fontSize={{ base: 'xs', sm: 'sm', md: 'md' }}
         pt={4}
       >
         {renderDescription(description)}
-      </AccordionPanel>
+      </AccordionItemContent>
     </AccordionItem>
   )
 }
