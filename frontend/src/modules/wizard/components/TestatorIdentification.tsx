@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import { Box, Container, Radio, Stack, Text } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -10,7 +10,7 @@ import {
 import { z } from 'zod'
 
 import { Form } from '../../../shared/forms/Form'
-import { NotaryDataContext } from '../pages/WizardStepPage'
+import { TestatorDataContext } from '../pages/WizardStepPage'
 import { getZipCodeFromAddress } from '../utils/getGeocode'
 
 import { PlacesAutoComplete } from './PlacesAutoComplete'
@@ -26,27 +26,19 @@ type NextStepProps = {
 }
 
 export function TestatorIdentification({ nextStep }: NextStepProps) {
+  const testatorDataContext = useContext(TestatorDataContext)
+  const { testatorData, setTestatorData } = testatorDataContext
+
   const methods = useForm({
     resolver: zodResolver(schema),
     mode: 'onChange',
     reValidateMode: 'onChange',
   })
 
-  const notaryDataContext = useContext(NotaryDataContext)
-
-  const { notaryData, setNotaryData } = notaryDataContext
-
-  useEffect(() => {
-    if (notaryData) {
-      methods.reset(notaryData)
-    }
-  }, [notaryData, methods])
-
   const onSubmit = async (data: z.infer<typeof schema>) => {
     const postalCode = await getZipCodeFromAddress(data.address)
     const testatorData = { ...data, postalCode }
-    setNotaryData(testatorData)
-    //console.log(testatorData)
+    setTestatorData(testatorData)
     nextStep()
   }
 
@@ -55,6 +47,11 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
       onSubmit={onSubmit}
       resolver={zodResolver(schema)}
       noValidate
+      values={{
+        sex: testatorData.sex || '',
+        birthDate: testatorData.birthDate || '',
+        address: testatorData.address || '',
+      }}
       {...methods}
     >
       <Container
