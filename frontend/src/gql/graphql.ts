@@ -100,12 +100,6 @@ export type FindNotaryInput = {
   postalCode: Scalars['String']['input']
 }
 
-export type FindNotaryResponse = {
-  __typename?: 'FindNotaryResponse'
-  contact?: Maybe<Scalars['ID']['output']>
-  notary: Scalars['ID']['output']
-}
-
 export type InheritanceProcedure = {
   __typename?: 'InheritanceProcedure'
   deceasedPerson?: Maybe<DeceasedPerson>
@@ -238,7 +232,7 @@ export type Query = {
   __typename?: 'Query'
   _empty: Scalars['String']['output']
   author?: Maybe<Notary>
-  findNotary?: Maybe<FindNotaryResponse>
+  findNotary?: Maybe<Notary>
   getAllContacts: Array<Contact>
   getBeneficiariesByIds: Array<Beneficiary>
   getBeneficiariesByProcedureId: Array<Beneficiary>
@@ -331,16 +325,25 @@ export type SignUpMutation = {
   signUp: { __typename?: 'User'; id: string; email: string }
 }
 
-export type GetNotaryByAddressAndBirthDateQueryVariables = Exact<{
+export type FindNotaryQueryVariables = Exact<{
   input: FindNotaryInput
 }>
 
-export type GetNotaryByAddressAndBirthDateQuery = {
+export type FindNotaryQuery = {
   __typename?: 'Query'
   findNotary?: {
-    __typename?: 'FindNotaryResponse'
-    contact?: string | null
-    notary: string
+    __typename?: 'Notary'
+    contact?: {
+      __typename?: 'Contact'
+      name: string
+      surname: string
+      displayName?: string | null
+      completeAddress: string
+      email?: string | null
+      gender?: string | null
+      postalCode: string
+      phone?: string | null
+    } | null
   } | null
 }
 
@@ -480,13 +483,13 @@ export const SignUpDocument = {
     },
   ],
 } as unknown as DocumentNode<SignUpMutation, SignUpMutationVariables>
-export const GetNotaryByAddressAndBirthDateDocument = {
+export const FindNotaryDocument = {
   kind: 'Document',
   definitions: [
     {
       kind: 'OperationDefinition',
       operation: 'query',
-      name: { kind: 'Name', value: 'GetNotaryByAddressAndBirthDate' },
+      name: { kind: 'Name', value: 'FindNotary' },
       variableDefinitions: [
         {
           kind: 'VariableDefinition',
@@ -522,8 +525,38 @@ export const GetNotaryByAddressAndBirthDateDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'contact' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'notary' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'contact' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'surname' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'displayName' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'completeAddress' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'gender' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'postalCode' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'phone' } },
+                    ],
+                  },
+                },
               ],
             },
           },
@@ -531,7 +564,4 @@ export const GetNotaryByAddressAndBirthDateDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<
-  GetNotaryByAddressAndBirthDateQuery,
-  GetNotaryByAddressAndBirthDateQueryVariables
->
+} as unknown as DocumentNode<FindNotaryQuery, FindNotaryQueryVariables>
