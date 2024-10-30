@@ -1,6 +1,6 @@
 import { Box, Table } from '@chakra-ui/react'
 
-import { useProceedingsTable } from '../hooks/useProceedingsTable'
+import { useProceedingsTable } from '../../hooks/useProceedingsTable'
 
 import { ProceedingsTableBody } from './ProceedingsTableBody'
 import { ProceedingsTableFooter } from './ProceedingsTableFooter'
@@ -26,6 +26,7 @@ export function ProceedingsTable({ data }: { data: ProceedingsItem[] }) {
       borderRadius="xl"
       width="80%"
       textAlign="center"
+      bg="white"
     >
       <ProceedingsTableSearchBar
         table={table}

@@ -4,9 +4,6 @@ import { HiChevronDown, HiChevronUp } from 'react-icons/hi'
 
 import { ProceedingsItem } from './ProceedingsTable'
 
-//TODO: fix table header
-//TODO: fix heading size
-
 export function ProceedingsTableHeader({
   table,
 }: {
@@ -15,10 +12,10 @@ export function ProceedingsTableHeader({
   return (
     <Table.Header textAlign="center">
       {table.getHeaderGroups().map((headerGroup) => (
-        <Table.Row key={headerGroup.id}>
+        <Table.Row key={headerGroup.id} bg="white">
           {headerGroup.headers.map((header) => {
             return (
-              <Table.ColumnGroup
+              <Table.ColumnHeader
                 key={header.id}
                 colSpan={header.colSpan}
                 style={{ textTransform: 'none' }}
@@ -30,7 +27,7 @@ export function ProceedingsTableHeader({
                   alignItems="center"
                   onClick={header.column.getToggleSortingHandler()}
                 >
-                  <Heading as="h4" size="h4">
+                  <Heading as="h4" size="lg">
                     {flexRender(
                       header.column.columnDef.header,
                       header.getContext()
@@ -42,7 +39,7 @@ export function ProceedingsTableHeader({
                     <HiChevronUp fontSize="24px" />
                   ) : null}
                 </Stack>
-              </Table.ColumnGroup>
+              </Table.ColumnHeader>
             )
           })}
         </Table.Row>

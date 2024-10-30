@@ -1,18 +1,12 @@
 import { Dispatch, SetStateAction } from 'react'
-import {
-  Input,
-  InputGroup,
-  InputLeftElement,
-  InputRightElement,
-  Stack,
-} from '@chakra-ui/react'
+import { Input, Stack } from '@chakra-ui/react'
 import { Table } from '@tanstack/react-table'
 import { FaSearch } from 'react-icons/fa'
 import { MdOutlineCancel } from 'react-icons/md'
 
-import { ProceedingsItem } from './ProceedingsTable'
+import { InputGroup } from '@frontend/shared/design-system'
 
-//TODO: fix input group
+import { ProceedingsItem } from './ProceedingsTable'
 
 export function ProceedingsTableSearchBar({
   table,
@@ -23,22 +17,24 @@ export function ProceedingsTableSearchBar({
 }) {
   return (
     <Stack mb={4} p={1}>
-      <InputGroup width="20%">
-        <InputLeftElement>
-          <FaSearch />
-        </InputLeftElement>
+      <InputGroup
+        width="20%"
+        startElement={<FaSearch size="18px" />}
+        startElementProps={{ ml: 2 }}
+        endElement={<MdOutlineCancel size="18px" />}
+        endElementProps={{
+          color: 'red.600',
+          _hover: { cursor: 'pointer' },
+          onClick: () => setGlobalFilter(''),
+        }}
+      >
         <Input
           placeholder="Vyhledej..."
           onChange={(e) => setGlobalFilter(e.target.value)}
           value={table.getState().globalFilter || ''}
           size="md"
+          ml={2}
         />
-        <InputRightElement
-          _hover={{ cursor: 'pointer' }}
-          onClick={() => setGlobalFilter('')}
-        >
-          <MdOutlineCancel />
-        </InputRightElement>
       </InputGroup>
     </Stack>
   )

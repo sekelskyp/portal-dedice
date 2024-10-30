@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Badge, Button } from '@chakra-ui/react'
+import { Button } from '@chakra-ui/react'
 import { rankItem } from '@tanstack/match-sorter-utils'
 import {
   ColumnDef,
@@ -13,7 +13,8 @@ import {
 } from '@tanstack/react-table'
 import { HiChevronRight } from 'react-icons/hi'
 
-import { ProceedingsItem } from '../components/ProceedingsTable'
+import { ProceedingsItem } from '../components/proceedings-table/ProceedingsTable'
+import { StatusBadge } from '../components/StatusBadge'
 
 const INITIAL_SORTING_STATE = [
   {
@@ -57,33 +58,20 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
         accessorKey: 'status',
         header: () => 'Status',
         cell: (info) => {
-          return (
-            <Badge
-              bg={info.getValue() === 'Probíhající' ? 'green.700' : 'red.700'}
-              color="white"
-              variant="subtle"
-              style={{ textTransform: 'none' }}
-              px={4}
-              py={2}
-              borderRadius="xl"
-              width="120px"
-              fontSize="sm"
-            >
-              {info.getValue() as React.ReactNode}
-            </Badge>
-          )
+          return <StatusBadge info={info} />
         },
       },
       {
         accessorKey: 'detail',
-        header: () => 'Detail',
+        header: () => 'Detail řízení',
         cell: () => {
           return (
-            <Button size="sm">
+            <Button size="sm" bg="gray.500">
               <HiChevronRight size="24px" />
             </Button>
           )
         },
+        enableSorting: false,
       },
     ],
     []

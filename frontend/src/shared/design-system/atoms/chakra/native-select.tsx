@@ -26,13 +26,14 @@ interface NativeSelectItem {
   disabled?: boolean
 }
 
-interface NativeSelectFieldProps extends Select.FieldProps {
+interface NativeSelectField extends Select.FieldProps {
   items?: Array<string | NativeSelectItem>
 }
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const NativeSelectField = forwardRef<
   HTMLSelectElement,
-  NativeSelectFieldProps
+  NativeSelectField
 >(function NativeSelectField(props, ref) {
   const { items: itemsProp, children, ...rest } = props
 
