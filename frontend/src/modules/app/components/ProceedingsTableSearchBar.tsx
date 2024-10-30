@@ -12,6 +12,8 @@ import { MdOutlineCancel } from 'react-icons/md'
 
 import { ProceedingsItem } from './ProceedingsTable'
 
+//TODO: fix input group
+
 export function ProceedingsTableSearchBar({
   table,
   setGlobalFilter,

@@ -1,7 +1,7 @@
 import { Button, Heading, Stack } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
-import { route } from '@frontend/route'
+import { route } from '@shared/route'
 
 import { ProceedingsTable } from '../components/ProceedingsTable'
 
@@ -33,6 +33,8 @@ const items = [
   { id: 6784, date: '2009-05-01', status: 'Probíhající' },
   { id: 1111, date: '2024-05-05', status: 'Probíhající' },
 ]
+
+//TODO: fix heading, buttons (chakra 3)
 
 export function Proceedings() {
   return (

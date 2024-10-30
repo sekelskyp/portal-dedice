@@ -9,6 +9,8 @@ import {
 
 import { ProceedingsItem } from './ProceedingsTable'
 
+//TODO: fix chakra 3 select
+
 export function ProceedingsTableFooter({
   table,
 }: {
@@ -26,14 +28,14 @@ export function ProceedingsTableFooter({
         <Button
           className="border rounded p-1"
           onClick={() => table.firstPage()}
-          isDisabled={!table.getCanPreviousPage()}
+          disabled={!table.getCanPreviousPage()}
         >
           <HiChevronDoubleLeft />
         </Button>
         <Button
           className="border rounded p-1"
           onClick={() => table.previousPage()}
-          isDisabled={!table.getCanPreviousPage()}
+          disabled={!table.getCanPreviousPage()}
         >
           <HiChevronLeft />
         </Button>
@@ -46,14 +48,14 @@ export function ProceedingsTableFooter({
         <Button
           className="border rounded p-1"
           onClick={() => table.nextPage()}
-          isDisabled={!table.getCanNextPage()}
+          disabled={!table.getCanNextPage()}
         >
           <HiChevronRight />
         </Button>
         <Button
           className="border rounded p-1"
           onClick={() => table.lastPage()}
-          isDisabled={!table.getCanNextPage()}
+          disabled={!table.getCanNextPage()}
         >
           <HiChevronDoubleRight />
         </Button>

@@ -1,4 +1,4 @@
-import { Table, TableContainer } from '@chakra-ui/react'
+import { Box, Table } from '@chakra-ui/react'
 
 import { useProceedingsTable } from '../hooks/useProceedingsTable'
 
@@ -17,7 +17,7 @@ export function ProceedingsTable({ data }: { data: ProceedingsItem[] }) {
   const { table, setGlobalFilter } = useProceedingsTable({ data })
 
   return (
-    <TableContainer
+    <Box
       p={5}
       mx={5}
       mb={5}
@@ -31,11 +31,11 @@ export function ProceedingsTable({ data }: { data: ProceedingsItem[] }) {
         table={table}
         setGlobalFilter={setGlobalFilter}
       />
-      <Table size="sm">
+      <Table.Root size="sm">
         <ProceedingsTableHeader table={table} />
         <ProceedingsTableBody table={table} />
-      </Table>
+      </Table.Root>
       <ProceedingsTableFooter table={table} />
-    </TableContainer>
+    </Box>
   )
 }

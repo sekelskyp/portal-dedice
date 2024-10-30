@@ -1,28 +1,28 @@
-import { Tbody, Td, Tr } from '@chakra-ui/react'
-import { flexRender, Table } from '@tanstack/react-table'
+import { Table } from '@chakra-ui/react'
+import { flexRender, Table as ReactTable } from '@tanstack/react-table'
 
 import { ProceedingsItem } from './ProceedingsTable'
 
 export function ProceedingsTableBody({
   table,
 }: {
-  table: Table<ProceedingsItem>
+  table: ReactTable<ProceedingsItem>
 }) {
   return (
-    <Tbody>
+    <Table.Body>
       {table.getRowModel().rows.map((row) => {
         return (
-          <Tr key={row.id}>
+          <Table.Row key={row.id}>
             {row.getVisibleCells().map((cell) => {
               return (
-                <Td key={cell.id} textAlign="center">
+                <Table.Cell key={cell.id} textAlign="center">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </Td>
+                </Table.Cell>
               )
             })}
-          </Tr>
+          </Table.Row>
         )
       })}
-    </Tbody>
+    </Table.Body>
   )
 }

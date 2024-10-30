@@ -1,21 +1,24 @@
-import { Heading, Stack, Th, Thead, Tr } from '@chakra-ui/react'
-import { flexRender, Table } from '@tanstack/react-table'
+import { Heading, Stack, Table } from '@chakra-ui/react'
+import { flexRender, Table as ReactTable } from '@tanstack/react-table'
 import { HiChevronDown, HiChevronUp } from 'react-icons/hi'
 
 import { ProceedingsItem } from './ProceedingsTable'
 
+//TODO: fix table header
+//TODO: fix heading size
+
 export function ProceedingsTableHeader({
   table,
 }: {
-  table: Table<ProceedingsItem>
+  table: ReactTable<ProceedingsItem>
 }) {
   return (
-    <Thead textAlign="center">
+    <Table.Header textAlign="center">
       {table.getHeaderGroups().map((headerGroup) => (
-        <Tr key={headerGroup.id}>
+        <Table.Row key={headerGroup.id}>
           {headerGroup.headers.map((header) => {
             return (
-              <Th
+              <Table.ColumnGroup
                 key={header.id}
                 colSpan={header.colSpan}
                 style={{ textTransform: 'none' }}
@@ -39,11 +42,11 @@ export function ProceedingsTableHeader({
                     <HiChevronUp fontSize="24px" />
                   ) : null}
                 </Stack>
-              </Th>
+              </Table.ColumnGroup>
             )
           })}
-        </Tr>
+        </Table.Row>
       ))}
-    </Thead>
+    </Table.Header>
   )
 }
