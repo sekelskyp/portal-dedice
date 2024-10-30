@@ -1,16 +1,16 @@
 import { useContext } from 'react'
 import { gql, useQuery } from '@apollo/client'
 import {
-  Avatar,
   Box,
   Button,
   Container,
+  Flex,
   Heading,
   Stack,
   Text,
-  Tooltip,
-  WrapItem,
 } from '@chakra-ui/react'
+
+import { Avatar, Tooltip } from '@frontend/shared/design-system'
 
 import { useTooltip } from '../hooks/useTooltip'
 import { NotaryDataContext } from '../pages/WizardStepPage'
@@ -19,21 +19,18 @@ import { AccordionHelper } from './accordion/AccordionHelper'
 import { ContactInfo } from './contact/ContactInfo'
 
 const GET_NOTARY_QUERY = gql(/* GraphQL */ `
-  query GetNotaryByAddressAndBirthDate(
-    $address: AddressInput!
-    $expirationDate: DateTimeISO!
-  ) {
-    getNotaryByAddressAndBirthDate(
-      address: $address
-      expirationDate: $expirationDate
-    ) {
+  query FindNotary($input: FindNotaryInput!) {
+    findNotary(input: $input) {
       contact {
         id
         name
         surname
+        displayName
+        completeAddress
+        email
+        gender
         postalCode
         phone
-        email
       }
     }
   }
@@ -77,18 +74,17 @@ export function NotaryAssignment({
 
   const { data, loading, error } = useQuery(GET_NOTARY_QUERY, {
     variables: {
-      address: {
+      input: {
+        deceasedPersonDateOfDeath: birthDataISO,
         postalCode: notaryData.postalCode,
       },
-      expirationDate: birthDataISO,
     },
   })
 
   if (loading) return <Text>Loading...</Text>
   if (error) return <Text>Error: {error.message}</Text>
 
-  const notary = data.getNotaryByAddressAndBirthDate.contact
-
+  const notary = data.findNotary.contact
   return (
     <Box>
       <Heading
@@ -98,14 +94,14 @@ export function NotaryAssignment({
         Na základě vyplněných údajů vám byl přidělen následující notář:
       </Heading>
       <Stack alignItems="center">
-        <WrapItem>
+        <Flex align="flex-start">
           <Avatar
             size={{ base: 'xl', sm: '2xl' }}
             name={notary.name}
             src="https://bit.ly/dan-abramov"
             my={{ base: 4, sm: 6 }}
           />
-        </WrapItem>
+        </Flex>
         <Heading
           size={{ base: 'sm', sm: 'md', md: 'lg', lg: 'xl' }}
           textAlign="center"
@@ -138,17 +134,7 @@ export function NotaryAssignment({
           </Heading>
           <Text fontSize={{ base: 'xs', sm: 'sm', md: 'md', lg: 'lg' }}>
             Pojďte se v naší{' '}
-            <Tooltip
-              label={tooltipText}
-              bg="gray.50"
-              color="black"
-              p={4}
-              borderRadius="xl"
-              hasArrow
-              placement="top"
-              isOpen={isOpen}
-              fontSize={{ base: 'xs', sm: 'sm', md: 'md', lg: 'lg' }}
-            >
+            <Tooltip content={tooltipText} showArrow open={isOpen}>
               <Text
                 as="u"
                 onMouseLeave={closeTooltip}

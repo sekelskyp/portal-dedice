@@ -4,7 +4,6 @@ import { getConnection } from '../src/db/db'
 import {
   beneficiary,
   contact,
-  deceasedPerson,
   notary,
   notaryDateRule,
   user,
@@ -25,26 +24,42 @@ async function populateDatabase(
       {
         name: 'Young',
         surname: 'Gatchell',
-        dateOfBirth: new Date('1990-01-01'),
+        displayName: 'Young Gatchell',
         gender: 'Male',
         phone: '+420666666661',
         email: 'gatyou@quacker.com',
-        country: 'Czech Republic',
-        city: 'Prague',
-        street: 'Main Street 123',
+        completeAddress: 'Main Street 123, Brno, Czech Republic',
         postalCode: '11000',
       },
       {
         name: 'Petr',
         surname: 'Hochman',
-        dateOfBirth: new Date('1990-01-01'),
+        displayName: 'Petr Hochman',
         gender: 'Male',
         phone: '+420555555551',
         email: 'hocpet@quacker.com',
-        country: 'Czech Republic',
-        city: 'Brno',
-        street: 'Secondary Street 456',
+        completeAddress: 'Main Street 456, Brno, Czech Republic',
         postalCode: '15000',
+      },
+      {
+        name: 'Alice',
+        surname: 'Novakova',
+        displayName: 'Alice Novakova',
+        gender: 'Female',
+        phone: '+420444444441',
+        email: 'novali@quacker.com',
+        completeAddress: 'Liberty Avenue 789, Prague, Czech Republic',
+        postalCode: '12000',
+      },
+      {
+        name: 'Tomas',
+        surname: 'Vesely',
+        displayName: 'Tomas Vesely',
+        gender: 'Male',
+        phone: '+420333333331',
+        email: 'vestom@quacker.com',
+        completeAddress: 'Peace Square 321, Ostrava, Czech Republic',
+        postalCode: '13000',
       },
     ])
     .$returningId()
@@ -54,14 +69,12 @@ async function populateDatabase(
     .insert(user)
     .values([
       {
-        contactId: beneficiaryContactId1.id,
-        password: await hashPassword('heaslo123456b!'),
-        login: 'gatyou',
+        password: await hashPassword('heslo1234'),
+        email: 'test.email1@email.com',
       },
       {
-        contactId: beneficiaryContactId2.id,
-        password: await hashPassword('heaslo123456b!'),
-        login: 'hocpet',
+        password: await hashPassword('heslo1234'),
+        email: 'test.email2@email.com',
       },
     ])
     .$returningId()
@@ -72,28 +85,19 @@ async function populateDatabase(
     .values([
       {
         userId: beneficiaryUserId1.id,
+        contactId: beneficiaryContactId1.id,
         deceasedRelation: 'Spouse',
+        dateOfBirth: new Date('1980-01-01'),
       },
       {
         userId: beneficiaryUserId2.id,
+        contactId: beneficiaryContactId2.id,
         deceasedRelation: 'Child',
+        dateOfBirth: new Date('1980-01-01'),
       },
     ])
     .onDuplicateKeyUpdate({ set: { userId: beneficiaryUserId2.id } })
 
-  // Insert deceased persons
-  await db.insert(deceasedPerson).values([
-    {
-      postalCode: '15500',
-      name: 'John Smith',
-      dateOfDeath: new Date('2010-02-10'),
-    },
-    {
-      postalCode: '11000',
-      name: 'John Doe',
-      dateOfDeath: new Date('2023-01-12'),
-    },
-  ])
   console.log('Population data seeded successfully.')
 }
 
@@ -105,7 +109,6 @@ async function seed() {
     // delete previous data (idk if we really need this when we have DB in docker and can just remove the volume and start fresh)
     await db.delete(beneficiary)
     await db.delete(notary)
-    await db.delete(deceasedPerson)
     await db.delete(user)
     await db.delete(contact)
     await db.delete(notaryDateRule)
