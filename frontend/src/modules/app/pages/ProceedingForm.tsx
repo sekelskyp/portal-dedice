@@ -1,8 +1,20 @@
 import { useState } from 'react'
-import { Button, InputGroup, Stack, Text } from '@chakra-ui/react'
-import { InputControl, SubmitButton } from 'react-hook-form-chakra'
+import {
+  Box,
+  Button,
+  Field,
+  Fieldset,
+  HStack,
+  IconButton,
+  Input,
+  NativeSelectField,
+  NativeSelectRoot,
+  Stack,
+  Text,
+} from '@chakra-ui/react'
+import { LuPlus } from 'react-icons/lu'
 
-import { Form } from '@frontend/shared/forms/Form'
+import { Form, InputFormControl, SubmitButton } from '@frontend/shared/forms'
 
 export type ProceedingFormProps = {
   errorMessage?: string
@@ -39,37 +51,143 @@ export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
 
   return (
     <Form onSubmit={onSubmit}>
+      {/*
       <Stack gap={4}>
-        <Text fontSize={'lg'} as="b">
+      <Text fontSize={'lg'} as="b">
           Identifikace zůstavitele
         </Text>
-        <InputControl name="name" label="Jméno "></InputControl>
-        <InputControl name="surname" label="Příjmení "></InputControl>
-        <InputControl name="dateOfDeath" label="Datum úmrtí "></InputControl>
-        <InputControl name="address" label="Trvalé bydliště "></InputControl>
-        <Text fontSize={'lg'} as={'b'}>
+        <HStack gap={4}>
+          <InputFormControl name="name" label="Jméno "></InputFormControl>
+          <InputFormControl name="surname" label="Příjmení "></InputFormControl>
+          </HStack>
+        <InputFormControl
+          name="dateOfDeath"
+          label="Datum úmrtí "
+        ></InputFormControl>
+        <InputFormControl
+        name="address"
+          label="Trvalé bydliště "
+          ></InputFormControl>
+          <Text fontSize={'lg'} as={'b'}>
           Kontaktní osoba
         </Text>
-        <InputControl name="contactName" label="Jméno"></InputControl>
-        <InputControl name="contactSurname" label="Příjmení"></InputControl>
-        <InputControl
+        <HStack gap={4}>
+          <InputFormControl name="contactName" label="Jméno"></InputFormControl>
+          <InputFormControl
+            name="contactSurname"
+            label="Příjmení"
+          ></InputFormControl>
+        </HStack>
+        <InputFormControl
           name="contactEmail"
           label="Emailová adresa"
-        ></InputControl>
-        <Text fontSize={'lg'} as={'b'}>
+          ></InputFormControl>
+          <Text fontSize={'lg'} as={'b'}>
           Dědici po zůstaviteli
-        </Text>
-        {heirs.map((heir: Heir, index: number) => (
-          <InputGroup key={`heir-${index}`}>
-            <InputControl
-              name={`heirs.${index}.name`}
+          </Text>
+          {heirs.map((heir: Heir, index: number) => (
+            <Stack key={`heir-${index}`} gap={4}>
+            <HStack gap={4}>
+            <InputFormControl
+            name={`heirs.${index}.name`}
+            label="Jméno"
+            ></InputFormControl>
+            <InputFormControl
+            name={`heirs.${index}.surname`}
+            label="Příjmení"
+            ></InputFormControl>
+            </HStack>
+            <InputFormControl
+            name={`heirs.${index}.email`}
+            label="Emailová adresa"
+            ></InputFormControl>
+            </Stack>
+            ))}
+            <IconButton onClick={addHeir}>
+            <LuPlus></LuPlus>
+            Přidat dědice
+            </IconButton>
+            <SubmitButton>Vytvořit řízení</SubmitButton>
+            </Stack>
+            */}
+      <Fieldset.Root size="lg" maxW="2xl">
+        <Stack>
+          <Fieldset.Legend fontSize="xl" fontWeight="bold">
+            Založení nového řízení
+          </Fieldset.Legend>
+          <Fieldset.HelperText fontSize="sm">
+            Pro založení nového dědického řízení prosím vyplňte nasledující
+            formulář.
+          </Fieldset.HelperText>
+        </Stack>
+
+        <Fieldset.Content>
+          <Text fontWeight="bold">Identifikace zůstavitele</Text>
+          <HStack gap={4}>
+            <InputFormControl
+              name="contactName"
               label="Jméno"
-            ></InputControl>
-          </InputGroup>
-        ))}
-        <Button onClick={addHeir}>Přidat dědice</Button>
-        <SubmitButton>Vytvořit řízení</SubmitButton>
-      </Stack>
+            ></InputFormControl>
+            <InputFormControl
+              name="contactSurname"
+              label="Příjmení"
+            ></InputFormControl>
+          </HStack>
+          <InputFormControl
+            name="dateOfDeath"
+            label="Datum úmrtí "
+          ></InputFormControl>
+          <InputFormControl
+            name="address"
+            label="Trvalé bydliště "
+          ></InputFormControl>
+
+          <Text fontWeight="bold">Kontaktní osoba</Text>
+          <HStack gap={4}>
+            <InputFormControl
+              name="contactName"
+              label="Jméno"
+            ></InputFormControl>
+            <InputFormControl
+              name="contactSurname"
+              label="Příjmení"
+            ></InputFormControl>
+          </HStack>
+          <InputFormControl
+            name="contactEmail"
+            label="Emailová adresa"
+          ></InputFormControl>
+          <Text fontWeight="bold">
+          Dědici po zůstaviteli
+          </Text>
+          {heirs.map((heir: Heir, index: number) => (
+            <Box key={`heir-${index}`} gap={4}>
+              <HStack gap={4}>
+                <InputFormControl
+                  name={`heirs.${index}.name`}
+                  label="Jméno"
+                ></InputFormControl>
+                <InputFormControl
+                  name={`heirs.${index}.surname`}
+                  label="Příjmení"
+                ></InputFormControl>
+              </HStack>
+              <InputFormControl
+                name={`heirs.${index}.email`}
+                label="Emailová adresa"
+              ></InputFormControl>
+            </Box>
+          ))}
+          <IconButton onClick={addHeir} alignSelf="flex-start" p={4}>
+            <LuPlus></LuPlus>
+            Přidat dědice
+          </IconButton>
+        </Fieldset.Content>
+
+        <Button type="submit">
+          Založit řízení
+        </Button>
+      </Fieldset.Root>
     </Form>
   )
 }

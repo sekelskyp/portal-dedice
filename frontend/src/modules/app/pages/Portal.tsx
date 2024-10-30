@@ -1,5 +1,4 @@
-import { ReactNode } from 'react'
-import { Box, Container, Flex, Grid, GridItem, Text } from '@chakra-ui/react'
+import { Container, Grid, GridItem } from '@chakra-ui/react'
 
 import { useAuth } from '@frontend/modules/auth'
 import { Page } from '@frontend/shared/layout'
@@ -29,10 +28,10 @@ export function Portal() {
     return (
       <Page>
         <Container maxW="container.xl">
-          <Grid w="full" templateColumns="repeat(4, 1fr)" gap="6">
+          <Grid w="full" templateColumns="repeat(4, 1fr)" gap="28">
             <GridItem colSpan={1}>
               <SideBar></SideBar>
-            </GridItem>
+            </GridItem> 
             <GridItem colSpan={3}>
               <ProceedingForm
                 onSubmit={handleProceedingFormSubmit}
