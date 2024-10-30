@@ -1,15 +1,8 @@
 import { useContext } from 'react'
-import {
-  Box,
-  Button,
-  Container,
-  Flex,
-  Heading,
-  Stack,
-  Text,
-} from '@chakra-ui/react'
+import { Button, Container, Flex, Heading, Stack, Text } from '@chakra-ui/react'
 
 import { Avatar, Tooltip } from '@frontend/shared/design-system'
+import { SimpleCentered } from '@frontend/shared/design-system/atoms/CTA/SimpleCentered'
 
 import { useGetNotary } from '../hooks/useFindNotary'
 import { useTooltip } from '../hooks/useTooltip'
@@ -66,79 +59,66 @@ export function NotaryAssignment({
     )
 
   return (
-    <Box>
+    <Stack gap={8} alignItems="center">
       <Heading
         size={{ base: 'xs', sm: 'sm', md: 'md', lg: 'lg' }}
         textAlign="center"
       >
         Na základě vyplněných údajů vám byl přidělen následující notář:
       </Heading>
-      <Stack alignItems="center">
-        <Flex align="flex-start">
-          <Avatar
-            size={{ base: 'xl', sm: '2xl' }}
-            name=""
-            src={
-              notary.gender === 'Female'
-                ? '/woman-avatar.png'
-                : '/man-avatar.png'
-            }
-            aria-label="Female and Male icons created by Prosymbols Premium - Flaticon"
-            my={{ base: 4, sm: 6 }}
-          />
-        </Flex>
-        <Heading
-          size={{ base: 'sm', sm: 'md', md: 'lg', lg: 'xl' }}
-          textAlign="center"
-          mb={{ base: 2, md: 6 }}
+      <Flex align="flex-start">
+        <Avatar
+          size={{ base: 'xl', sm: '2xl' }}
+          name=""
+          src={
+            notary.gender === 'Female' ? '/woman-avatar.png' : '/man-avatar.png'
+          }
+          aria-label="Female and Male icons created by Prosymbols Premium - Flaticon"
+        />
+      </Flex>
+      <Heading
+        size={{ base: 'sm', sm: 'md', md: 'lg', lg: 'xl' }}
+        textAlign="center"
+      >
+        {notary.name} {notary.surname}
+      </Heading>
+      <Container px={0} asChild>
+        <Stack
+          alignItems="start"
+          direction={{ base: 'column', md: 'column', lg: 'row' }}
+          gap={8}
         >
-          {notary.name} {notary.surname}
-        </Heading>
-      </Stack>
-      <Stack
-        alignItems="center"
-        direction={{ base: 'column', md: 'column', lg: 'row' }}
-        pt={{ base: 4, md: 0 }}
-      >
-        <ContactInfo contactInfo={notary} />
-        <Container maxWidth="container.sm">
+          <ContactInfo contactInfo={notary} />
           <AccordionHelper items={dummy_data} />
-        </Container>
-      </Stack>
-      <Container
-        alignItems="center"
-        bg="gray.50"
-        p={8}
-        borderRadius="xl"
-        textAlign="left"
-        mt={8}
-      >
-        <Stack direction="column">
-          <Heading size={{ base: 'sm', sm: 'md', md: 'lg', lg: 'xl' }}>
-            Nevíte jak dál?
-          </Heading>
-          <Text fontSize={{ base: 'xs', sm: 'sm', md: 'md', lg: 'lg' }}>
-            Pojďte se v naší{' '}
-            <Tooltip content={tooltipText} showArrow open={isOpen}>
-              <Text
-                as="u"
-                onMouseLeave={closeTooltip}
-                onMouseEnter={openTooltip}
-                onClick={toggleTooltip}
-              >
-                aplikaci
-              </Text>
-            </Tooltip>{' '}
-            dozvědět více o tom, co vás čeká v pozůstalostním řízení.
-          </Text>
-          <Stack direction="row" pt={2} justify="center">
-            <Button bg="gray.500" onClick={previousStep}>
-              Zpět
-            </Button>
-            <Button onClick={nextStep}>OK</Button>
-          </Stack>
         </Stack>
       </Container>
-    </Box>
+      <SimpleCentered bg="blue.bg">
+        <Heading size={{ base: 'sm', sm: 'md', md: 'lg', lg: '2xl' }}>
+          Nevíte jak dál?
+        </Heading>
+        <Text fontSize={{ base: 'xs', sm: 'sm', md: 'md', lg: 'lg' }}>
+          Pojďte se v naší{' '}
+          <Tooltip content={tooltipText} showArrow open={isOpen}>
+            <Text
+              as="u"
+              onMouseLeave={closeTooltip}
+              onMouseEnter={openTooltip}
+              onClick={toggleTooltip}
+            >
+              aplikaci
+            </Text>
+          </Tooltip>{' '}
+          dozvědět více o tom, co vás čeká v pozůstalostním řízení.
+        </Text>
+        <Flex justify="space-between" gap={4}>
+          <Button bg="gray.500" onClick={previousStep} size="lg">
+            Zpět
+          </Button>
+          <Button onClick={nextStep} size="lg">
+            OK
+          </Button>
+        </Flex>
+      </SimpleCentered>
+    </Stack>
   )
 }

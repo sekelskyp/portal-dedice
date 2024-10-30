@@ -27,7 +27,7 @@ export function QuestionStep({
         <Container
           alignContent={'center'}
           maxWidth={{ base: '95%', lg: '50%' }}
-          bg="gray.50"
+          bg="bg.panel"
           borderRadius="xl"
         >
           <Heading

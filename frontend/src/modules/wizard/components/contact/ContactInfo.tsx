@@ -35,15 +35,14 @@ export function ContactInfo({ contactInfo }: ContactInfoProps) {
   return (
     <Container
       textAlign="center"
-      borderColor="gray.100"
+      borderColor="bg.emphasized"
       borderRadius="xl"
-      borderWidth="2px"
-      bg="gray.50"
+      borderWidth="1px"
+      bg="bg.panel"
       fontSize={{ base: 'sm', sm: 'md', md: 'lg' }}
-      maxWidth="fit-content"
-      px={{ base: 4, sm: 6, md: 10 }}
+      maxWidth={{ base: 'full', sm: 'fit-content' }}
+      px={{ base: 4, sm: 8, md: 10 }}
       py={4}
-      mb={{ base: 4, lg: 0 }}
     >
       {contactIcons.map((item, index) => (
         <ContactInfoItem key={index} icon={item.icon} text={item.text} />
