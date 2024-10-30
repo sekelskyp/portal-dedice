@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import { gql, useQuery } from '@apollo/client'
 import {
   Box,
   Button,
@@ -12,32 +11,13 @@ import {
 
 import { Avatar, Tooltip } from '@frontend/shared/design-system'
 
+import { useGetNotary } from '../hooks/useGetNotary'
 import { useTooltip } from '../hooks/useTooltip'
 import { TestatorDataContext } from '../pages/WizardStepPage'
 
 import { AccordionHelper } from './accordion/AccordionHelper'
 import { ContactInfo } from './contact/ContactInfo'
 import { NotaryAssignmentError } from './NotaryAssignmentError'
-
-const GET_NOTARY_QUERY = gql(/* GraphQL */ `
-  query FindNotary($input: FindNotaryInput!) {
-    findNotary(input: $input) {
-      contact {
-        id
-        name
-        surname
-        displayName
-        completeAddress
-        email
-        gender
-        postalCode
-        phone
-        email
-        gender
-      }
-    }
-  }
-`)
 
 const dummy_data = [
   {
@@ -71,20 +51,7 @@ export function NotaryAssignment({
 
   const { testatorData } = testatorDataContext
 
-  const birthDataISO = testatorData.birthDate
-    ? new Date(testatorData.birthDate).toISOString()
-    : ''
-
-  const { data, loading, error } = useQuery(GET_NOTARY_QUERY, {
-    variables: {
-      input: {
-        deceasedPersonDateOfDeath: birthDataISO,
-        postalCode: testatorData.postalCode,
-      },
-    },
-  })
-
-  const notary = data?.getNotaryByAddressAndBirthDate.contact
+  const { notary, loading, error } = useGetNotary(testatorData.birthDate)
 
   if (loading) return <Text>Loading...</Text>
   if (error)
