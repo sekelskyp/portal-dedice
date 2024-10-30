@@ -1,18 +1,11 @@
 import { useCallback } from 'react'
-import {
-  Alert,
-  AlertIcon,
-  Container,
-  Heading,
-  Stack,
-  Text,
-} from '@chakra-ui/react'
+import { Container, Heading, Stack, Text } from '@chakra-ui/react'
 
 import resources from '@frontend/resources'
-import { route } from '@frontend/route'
-import { Box } from '@frontend/shared/design-system'
+import { Alert, Box } from '@frontend/shared/design-system'
 import { Page } from '@frontend/shared/layout'
 import { RouterLink } from '@frontend/shared/navigation/atoms'
+import { route } from '@shared/route'
 
 import { SignInForm } from '../components/SignInForm'
 import { useSignIn } from '../hooks/useSignIn'
@@ -34,15 +27,12 @@ export function SignInPage() {
 
   return (
     <Page>
-      <Container as={Stack} gap={4}>
-        <Heading as="h2" size={'2xl'}>
+      <Container maxW="lg" as={Stack} gap={4}>
+        <Heading as="h2" size="3xl">
           {resources.auth.pages.signIn.title}
         </Heading>
         {signInRequestState.error ? (
-          <Alert status="error">
-            <AlertIcon />
-            {signInRequestState.error.message}
-          </Alert>
+          <Alert status="error" title={signInRequestState.error.message} />
         ) : null}
         <SignInForm
           onSubmit={handleSignInFormSubmit}

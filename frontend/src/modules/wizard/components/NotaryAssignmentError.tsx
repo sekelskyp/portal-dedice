@@ -1,5 +1,7 @@
-import { Alert, AlertIcon, Box, Button, Icon, Text } from '@chakra-ui/react'
+import { Box, Button, Icon, Text } from '@chakra-ui/react'
 import { FiAlertCircle } from 'react-icons/fi'
+
+import { Alert } from '@frontend/shared/design-system'
 
 export function NotaryAssignmentError({
   errorMessage,
@@ -30,7 +32,6 @@ export function NotaryAssignmentError({
         mx={{ base: 8, sm: 0 }}
         p={4}
       >
-        <AlertIcon />
         {errorMessage}
       </Alert>
       <Button mt={4} onClick={action}>

@@ -1,86 +1,74 @@
-import {
-  Box,
-  Container,
-  Heading,
-  Image,
-  Link,
-  List,
-  ListItem,
-  Stack,
-  Text,
-} from '@chakra-ui/react'
+import { Box, Heading, Image, Separator, Stack, Text } from '@chakra-ui/react'
+import { useTheme } from 'next-themes'
 
-const footerLinks = [
-  {
-    id: 1,
-    title: 'Lorem Ipsum',
-    link: '#',
-  },
-  {
-    id: 2,
-    title: 'Lorem Ipsum',
-    link: '#',
-  },
-  {
-    id: 3,
-    title: 'Lorem Ipsum',
-    link: '#',
-  },
-]
+import { ColorModeButton } from '../design-system/atoms/chakra'
 
-const FooterList = ({
-  title,
-  links,
-}: {
-  title: string
-  links: { id: number; title: string; link: string }[]
-}) => {
-  return (
-    <Stack direction="column" textAlign={{ base: 'center', md: 'left' }}>
-      <Heading size="md">{title}</Heading>
-      <List>
-        {links.map((link) => (
-          <ListItem key={link.id}>
-            <Link href={link.link}>{link.title}</Link>
-          </ListItem>
-        ))}
-      </List>
-    </Stack>
-  )
-}
+import { FooterList } from './components/FooterList'
+import { footerLinks } from './links'
 
 export const Footer = () => {
+  const theme = useTheme()
+  const isDark = theme.resolvedTheme === 'dark'
+
   return (
-    <Box bg="gray.200">
-      <Container as={Stack} gap={8} maxW="container.xl" p={8} pb={4}>
-        <Stack gap={16} direction="row" alignItems="start">
+    <Box bg="bg.muted" pb={4}>
+      <Stack px={6}>
+        <Stack
+          direction={{ base: 'column', md: 'row' }}
+          alignItems="center"
+          p={4}
+          justifyContent="space-between"
+        >
           <Stack
-            gap={4}
-            display={{ base: 'none', md: 'flex' }}
+            direction={{ base: 'column', md: 'row' }}
             alignItems="center"
+            py={0}
           >
-            <Heading size="lg" whiteSpace="nowrap">
-              Portál Dědice
-            </Heading>
-            <Image h={20} src="/logo.png" alt="logo" />
+            <Image
+              h={{ base: 16, md: 20 }}
+              src={isDark ? '/logo-dark.png' : '/logo.png'}
+              opacity={isDark ? 0.8 : 1}
+              alt="logo"
+            />
+            <Stack
+              direction="column"
+              ml={{ base: 0, md: 8 }}
+              gap={0}
+              pr={{ base: 0, md: 8 }}
+            >
+              <Heading
+                size={{ base: 'lg', lg: 'xl' }}
+                whiteSpace="nowrap"
+                textAlign={{ base: 'center', md: 'left' }}
+              >
+                Portál Dědice
+              </Heading>
+              <Text
+                fontSize={{ base: 'sm', md: 'md', lg: 'lg' }}
+                color="fg/50"
+                textAlign={{ base: 'center', md: 'left' }}
+              >
+                Nová éra digitalizace pozůstalostního řízení
+              </Text>
+            </Stack>
           </Stack>
           <Stack
             direction={{ base: 'column', md: 'row' }}
-            spacing={{ base: 4, md: 12 }}
+            gap={{ base: 4, md: 12 }}
           >
             {footerLinks.map((footerLink) => (
-              <FooterList
-                key={footerLink.id}
-                title={footerLink.title}
-                links={footerLinks}
-              />
+              <FooterList key={footerLink.id} {...footerLink} />
             ))}
           </Stack>
         </Stack>
-        <Text fontSize="sm">
-          © 2024 Vytvořeno na VŠE v rámci předmětu 4IT580
-        </Text>
-      </Container>
+        <Stack alignItems="center">
+          <Separator width="95%" borderColor="gray.400" mt={6} />
+          <Text fontSize={{ base: 'sm', md: 'md' }} mt={2} textAlign="center">
+            © 2024 Vytvořeno na VŠE ve spolupráci s Applifting.
+          </Text>
+          <ColorModeButton />
+        </Stack>
+      </Stack>
     </Box>
   )
 }

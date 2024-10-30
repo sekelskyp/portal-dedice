@@ -1,9 +1,8 @@
 import { Container, Heading, Stack, Text } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { InputControl, SubmitButton } from 'react-hook-form-chakra'
 import { z } from 'zod'
 
-import { Form } from '../../../shared/forms/Form'
+import { Form, InputFormControl, SubmitButton } from '@frontend/shared/forms'
 
 const schema = z.object({
   email: z.string().email('Zadejte validní emailovou adresu'),
@@ -25,11 +24,7 @@ export function PasswordResetForm({ onSubmit }: PasswordResetFormProps) {
             Zadejte emailovou adresu, kterou jste použili pro vytvoření účtu a
             my Vám na ní zašleme odkaz na obnovení hesla.
           </Text>
-          <InputControl
-            name="email"
-            label="Emailová adresa"
-            isRequired
-          ></InputControl>
+          <InputFormControl name="email" label="E-mail" required />
           <SubmitButton>Zaslat odkaz</SubmitButton>
         </Stack>
       </Container>

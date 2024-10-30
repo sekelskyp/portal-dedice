@@ -11,7 +11,7 @@ import questionData from '../questions.json'
 
 type TestatorData = {
   sex?: string
-  birthDate?: string
+  birthDate?: Date
   address?: string
   postalCode?: string
 }

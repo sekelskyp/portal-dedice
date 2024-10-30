@@ -1,23 +1,26 @@
 import { useContext } from 'react'
-import { Box, Container, Radio, Stack, Text } from '@chakra-ui/react'
+import { Card, Center, Container, Stack, Text } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import {
-  InputControl,
-  RadioGroupControl,
-  SubmitButton,
-} from 'react-hook-form-chakra'
 import { z } from 'zod'
 
-import { Form } from '../../../shared/forms/Form'
+import { Field, Radio } from '@frontend/shared/design-system'
+import {
+  DateFormControl,
+  Form,
+  PlacesAutoComplete,
+  RadioGroupFormControl,
+  SubmitButton,
+} from '@frontend/shared/forms'
+
 import { TestatorDataContext } from '../pages/WizardStepPage'
 import { getZipCodeFromAddress } from '../utils/getGeocode'
 
-import { PlacesAutoComplete } from './PlacesAutoComplete'
-
 const schema = z.object({
   sex: z.string().min(1, 'Pohlaví je povinné.'),
-  birthDate: z.string().min(1, 'Datum narození je povinné.'),
+  birthDate: z
+    .date({ required_error: 'Datum narození je povinné.' })
+    .max(new Date(), 'Datum narození musí být v minulosti.'),
   address: z.string().min(1, 'Adresa bydliště je povinná.'),
 })
 
@@ -49,55 +52,41 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
       noValidate
       values={{
         sex: testatorData.sex || '',
-        birthDate: testatorData.birthDate || '',
+        birthDate: testatorData.birthDate || undefined!,
         address: testatorData.address || '',
       }}
       {...methods}
     >
       <Container
-        maxW="container.xl"
+        maxW="2xl"
         width="100%"
         px={{ base: 4, sm: 8, md: 12, lg: 16 }}
         py={{ base: 2, sm: 4 }}
       >
-        <Text fontSize={{ base: 'sm', sm: 'md', md: 'lg' }} pb={4}>
+        <Text fontSize={{ base: 'sm', sm: 'md', md: 'lg' }}>
           Vyplněním formuláře údaji zůstavitele Vám pomůžeme zjistit, který
           notář bude spravovat Vaše pozůstalostní řízení.
         </Text>
-        <Stack
-          gap={5}
-          p={8}
-          borderWidth="2px"
-          borderColor="gray.100"
-          borderRadius="xl"
-        >
-          <RadioGroupControl
-            name="sex"
-            label="Pohlaví"
-            labelProps={{ fontSize: { base: 'sm', md: 'md' } }}
-            isRequired
-          >
-            <Stack direction="row" spacing={5}>
-              <Radio value="male" size={{ base: 'sm', md: 'md' }}>
-                Muž
-              </Radio>
-              <Radio value="female" size={{ base: 'sm', md: 'md' }}>
-                Žena
-              </Radio>
-            </Stack>
-          </RadioGroupControl>
-          <InputControl
-            name="birthDate"
-            label="Datum narození"
-            labelProps={{ fontSize: { base: 'sm', md: 'md' } }}
-            inputProps={{ type: 'date', fontSize: { base: 'sm', md: 'md' } }}
-            isRequired
-          ></InputControl>
-          <PlacesAutoComplete name="address" label="Trvalé bydliště" />
-          <Box>
-            <SubmitButton>Potvrdit údaje</SubmitButton>
-          </Box>
-        </Stack>
+        <Card.Root mt={8}>
+          <Card.Body as={Stack} gap={5}>
+            <RadioGroupFormControl
+              name="sex"
+              label="Pohlaví"
+              required
+              size={{ base: 'sm', md: 'md' }}
+            >
+              <Radio value="male">Muž</Radio>
+              <Radio value="female">Žena</Radio>
+            </RadioGroupFormControl>
+            <DateFormControl name="birthDate" label="Datum narození" required />
+            <Field label="Trvalé bydliště" required>
+              <PlacesAutoComplete name="address" />
+            </Field>
+            <Center>
+              <SubmitButton>Potvrdit údaje</SubmitButton>
+            </Center>
+          </Card.Body>
+        </Card.Root>
       </Container>
     </Form>
   )
