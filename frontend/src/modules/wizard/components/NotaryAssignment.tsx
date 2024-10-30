@@ -11,7 +11,7 @@ import {
 
 import { Avatar, Tooltip } from '@frontend/shared/design-system'
 
-import { useGetNotary } from '../hooks/useGetNotary'
+import { useGetNotary } from '../hooks/useFindNotary'
 import { useTooltip } from '../hooks/useTooltip'
 import { TestatorDataContext } from '../pages/WizardStepPage'
 

@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client'
 import gql from 'graphql-tag'
 
-const GET_NOTARY_QUERY = gql(/* GraphQL */ `
+const FIND_NOTARY_QUERY = gql(/* GraphQL */ `
   query FindNotary($input: FindNotaryInput!) {
     findNotary(input: $input) {
       contact {
@@ -22,7 +22,7 @@ const GET_NOTARY_QUERY = gql(/* GraphQL */ `
 `)
 
 export function useGetNotary(birthDate?: Date, postalCode?: string) {
-  const { data, loading, error } = useQuery(GET_NOTARY_QUERY, {
+  const { data, loading, error } = useQuery(FIND_NOTARY_QUERY, {
     variables: {
       input: {
         deceasedPersonDateOfDeath: birthDate,
