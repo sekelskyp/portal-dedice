@@ -51,7 +51,10 @@ export function NotaryAssignment({
 
   const { testatorData } = testatorDataContext
 
-  const { notary, loading, error } = useGetNotary(testatorData.birthDate)
+  const { notary, loading, error } = useGetNotary(
+    testatorData.birthDate,
+    '130 00'
+  )
 
   if (loading) return <Text>Loading...</Text>
   if (error)

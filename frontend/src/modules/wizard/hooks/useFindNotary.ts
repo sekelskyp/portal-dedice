@@ -31,7 +31,7 @@ export function useGetNotary(birthDate?: Date, postalCode?: string) {
     },
   })
 
-  const notary = data?.getNotaryByAddressAndBirthDate.contact
+  const notary = data?.findNotary.contact
 
   return { notary, data, loading, error } as const
 }

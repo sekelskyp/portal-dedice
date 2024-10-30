@@ -3,7 +3,7 @@ import { Portal } from '@ark-ui/react/portal'
 import { Box, Card, HStack, Input, Stack, Text } from '@chakra-ui/react'
 import { useController } from 'react-hook-form'
 import { FiChevronDown, FiX } from 'react-icons/fi'
-import usePlacesAutocomplete from 'use-places-autocomplete'
+import usePlacesAutocomplete, { getDetails } from 'use-places-autocomplete'
 
 import { Button, InputGroup } from '../design-system'
 
@@ -26,35 +26,41 @@ export function PlacesAutoComplete({ name }: PlacesAutoCompleteProps) {
       language: 'cs',
       componentRestrictions: {
         country: 'CZ',
+        types: ['address'],
       },
     },
     debounce: 300,
   })
 
-  const onChange = (value: string) => {
-    setValue(value)
-    field.onChange(value)
-  }
-
-  const handleSelect = (address: string) => {
-    setValue(address, false)
-    field.onChange(address)
-    clearSuggestions()
+  const handleSelect = ({
+    place_id,
+    description,
+  }: {
+    place_id: string
+    description: string
+  }) => {
+    getDetails({ placeId: place_id }).then((data) => {
+      setValue(data.formatted_address, false)
+      field.onChange(description)
+      clearSuggestions()
+    })
   }
 
   const collection = createListCollection({
-    items: (status === 'OK' ? data : []).map(({ place_id, description }) => ({
-      value: place_id,
-      label: description,
-    })),
+    items: (status === 'OK' ? data : []).map(
+      ({ place_id, description, ...rest }) => ({
+        place_id,
+        description,
+      })
+    ),
   })
 
   return (
     <Box asChild w="full">
       <Combobox.Root
         collection={collection}
-        inputValue={field.value}
-        onInputValueChange={(value) => onChange(value.inputValue)}
+        onInputValueChange={(value) => setValue(value.inputValue)}
+        onValueChange={(value) => handleSelect(value.items[0])}
         disabled={!ready}
       >
         <Combobox.Control>
@@ -93,12 +99,7 @@ export function PlacesAutoComplete({ name }: PlacesAutoCompleteProps) {
                   <Card.Body p={0}>
                     <Stack gap={1}>
                       {collection.items.map((item) => (
-                        <Combobox.Item
-                          key={item.value}
-                          item={item}
-                          asChild
-                          onClick={() => handleSelect(item.label)}
-                        >
+                        <Combobox.Item key={item.place_id} item={item} asChild>
                           <Button
                             size="sm"
                             variant="ghost"
@@ -107,7 +108,7 @@ export function PlacesAutoComplete({ name }: PlacesAutoCompleteProps) {
                           >
                             <Combobox.ItemText asChild>
                               <Text overflow="hidden" textOverflow="ellipsis">
-                                {item.label}
+                                {item.description}
                               </Text>
                             </Combobox.ItemText>
                             <Combobox.ItemIndicator>✓</Combobox.ItemIndicator>
@@ -128,33 +129,3 @@ export function PlacesAutoComplete({ name }: PlacesAutoCompleteProps) {
     </Box>
   )
 }
-
-// <AutoComplete openOnFocus>
-// <AutoCompleteInput
-//   name={name}
-//   placeholder="Zadejte adresu..."
-//   isDisabled={!ready}
-//   onChange={(e) => {
-//     handleInput(e)
-//     onChange(e.target.value)
-//   }}
-//   value={value || ''}
-// />
-// <AutoCompleteList>
-//   {status === 'OK' &&
-//     data.map(({ place_id, description }) => (
-//       <AutoCompleteItem
-//         key={place_id}
-//         value={description}
-//         onClick={() => handleSelect(description, onChange)}
-//       >
-//         {description}
-//       </AutoCompleteItem>
-//     ))}
-// </AutoCompleteList>
-// {errors[name] && (
-//   <FormErrorMessage>
-//     {errors[name]?.message?.toString()}
-//   </FormErrorMessage>
-// )}
-// </AutoComplete>
