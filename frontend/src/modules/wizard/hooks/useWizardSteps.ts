@@ -1,15 +1,21 @@
 import { useState } from 'react'
 
-export function useWizardSteps(totalQuestions: number) {
-  const [{ step, questionsProgress, questionId, treeProgress }, setState] =
-    useState<{
-      step: number
-      questionsProgress: number
-      questionId: number
-      treeProgress: number
-    }>(INITIAL_STATE)
+export function useWizardSteps(
+  totalQuestions: number,
+  totalQuestionnaireSteps: number
+) {
+  const [
+    { step, questionsProgress, questionId, questionnaireProgress },
+    setState,
+  ] = useState<{
+    step: number
+    questionsProgress: number
+    questionId: number
+    questionnaireProgress: number
+  }>(INITIAL_STATE)
 
   const questionProgressIncrement = 100 / totalQuestions
+  const questionnaireProgressIncrement = 100 / totalQuestionnaireSteps
 
   const setNextStep = () => {
     setState((prevState) => {
@@ -30,14 +36,12 @@ export function useWizardSteps(totalQuestions: number) {
         }
       }
       if (prevState.step === 3) {
-        if (prevState.treeProgress < 100) {
-          const newTreeProgress =
-            prevState.treeProgress + questionProgressIncrement
-          return {
-            ...prevState,
-            treeProgress: newTreeProgress,
-            step: newTreeProgress >= 100 ? 4 : 3,
-          }
+        const newQuestionnaireProgress =
+          prevState.questionnaireProgress + questionnaireProgressIncrement
+        return {
+          ...prevState,
+          questionnaireProgress: Math.min(newQuestionnaireProgress, 100),
+          step: newQuestionnaireProgress >= 100 ? 4 : 3,
         }
       }
       return prevState
@@ -60,12 +64,12 @@ export function useWizardSteps(totalQuestions: number) {
         return { ...prevState, step: 1 }
       }
       if (prevState.step === 3) {
-        if (prevState.treeProgress > 0) {
-          const newTreeProgress =
-            prevState.treeProgress - questionProgressIncrement
+        if (prevState.questionnaireProgress > 0) {
+          const newQuestionnaireProgress =
+            prevState.questionnaireProgress - questionnaireProgressIncrement
           return {
             ...prevState,
-            treeProgress: Math.max(newTreeProgress, 0),
+            questionnaireProgress: Math.max(newQuestionnaireProgress, 0),
           }
         }
         return {
@@ -79,11 +83,11 @@ export function useWizardSteps(totalQuestions: number) {
         }
       }
       if (prevState.step === 4) {
-        const newTreeProgress =
-          prevState.treeProgress - questionProgressIncrement
+        const newQuestionnaireProgress =
+          prevState.questionnaireProgress - questionnaireProgressIncrement
         return {
           ...prevState,
-          treeProgress: Math.max(newTreeProgress, 0),
+          questionnaireProgress: Math.max(newQuestionnaireProgress, 0),
           step: 3,
         }
       }
@@ -95,7 +99,7 @@ export function useWizardSteps(totalQuestions: number) {
     step,
     questionsProgress,
     questionId,
-    treeProgress,
+    questionnaireProgress, // Export as questionnaireProgress
     setNextStep,
     setPreviousStep,
   }
@@ -105,5 +109,5 @@ const INITIAL_STATE = {
   step: 1,
   questionsProgress: 0,
   questionId: 0,
-  treeProgress: 0,
+  questionnaireProgress: 0, // Updated to match renaming
 } as const

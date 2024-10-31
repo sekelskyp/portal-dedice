@@ -22,12 +22,16 @@ interface Step {
 }
 
 interface QuestionnaireStepProps {
-  setPreviousStep: () => void
+  updateQuestionnaireProgress: (progressIncrement: number) => void
+  decrementQuestionnaireProgress: (progressDecrement: number) => void
 }
 
 export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
-  setPreviousStep,
+  updateQuestionnaireProgress,
+  decrementQuestionnaireProgress,
 }) => {
+  const totalQuestionnaireSteps = questionData.steps.length
+
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [answers, setAnswers] = useState<{ [key: number]: number }>({})
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
@@ -86,6 +90,7 @@ export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
 
       if (nextStepIndex !== -1) {
         setCurrentStepIndex(nextStepIndex)
+        updateQuestionnaireProgress(100 / totalQuestionnaireSteps)
         setSelectedAnswer(null)
       }
     }
@@ -100,16 +105,19 @@ export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
 
   const goToPreviousStep = () => {
     let previousStepIndex = currentStepIndex - 1
+    if (previousStepIndex < 0) {
+      previousStepIndex--
+      setAnswers({})
+    }
     while (
       previousStepIndex >= 0 &&
       !canShowStep(questionData.steps[previousStepIndex])
     ) {
       previousStepIndex--
     }
-    if (previousStepIndex >= 0) {
-      setCurrentStepIndex(previousStepIndex)
-      setSelectedAnswer(answers[questionData.steps[previousStepIndex].id])
-    }
+    setCurrentStepIndex(previousStepIndex)
+    decrementQuestionnaireProgress(100 / totalQuestionnaireSteps)
+    setSelectedAnswer(answers[questionData.steps[previousStepIndex].id])
   }
 
   const goToFirstQuestion = () => {
@@ -160,26 +168,14 @@ export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
               mt={16}
               justifyContent="space-between"
             >
-              {currentStep?.id === 1 && (
-                <Button
-                  onClick={setPreviousStep}
-                  bg="gray.500"
-                  fontSize={{ base: 'sm', sm: 'md' }}
-                  size={{ base: 'sm', sm: 'lg' }}
-                >
-                  Zpět na otázky
-                </Button>
-              )}
-              {currentStepIndex > 0 && (
-                <Button
-                  bg="gray.500"
-                  fontSize={{ base: 'sm', sm: 'md' }}
-                  size={{ base: 'sm', sm: 'lg' }}
-                  onClick={goToPreviousStep}
-                >
-                  Zpět
-                </Button>
-              )}
+              <Button
+                bg="gray.500"
+                fontSize={{ base: 'sm', sm: 'md' }}
+                size={{ base: 'sm', sm: 'lg' }}
+                onClick={goToPreviousStep}
+              >
+                Zpět
+              </Button>
               <Button
                 fontSize={{ base: 'sm', sm: 'md' }}
                 size={{ base: 'sm', sm: 'lg' }}
