@@ -44,7 +44,7 @@ export function Proceedings() {
         {' '}
         <Button>Vytvořit nové řízení</Button>
       </Link>
-      <Heading size="xl">Další možnosti</Heading>
+      <Heading size="xl">Možnosti</Heading>
       <Stack
         direction={{ base: 'column', lg: 'row' }}
         textAlign="center"
