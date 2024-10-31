@@ -7,7 +7,7 @@ interface ContactInfoProps {
   contactInfo: {
     phone: string
     email: string
-    postalCode: string
+    completeAddress: string
   }
 }
 
@@ -28,7 +28,7 @@ export function ContactInfo({ contactInfo }: ContactInfoProps) {
     },
     {
       icon: <FiMapPin size={iconBreakpoints} />,
-      text: contactInfo.postalCode,
+      text: contactInfo.completeAddress,
     },
   ]
 
