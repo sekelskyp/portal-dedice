@@ -8,6 +8,7 @@ import {
   ProceedingsItem,
   ProceedingsTable,
 } from '../components/proceedings-table/ProceedingsTable'
+import { proceedingsNavigation } from '../utils/proceedingsNavigation'
 
 //TODO: replace with real data
 //TODO: add routing when pages are ready
@@ -36,8 +37,8 @@ function generateFakeData(count: number): ProceedingsItem[] {
 export function Proceedings() {
   return (
     <Stack justifyContent="center" alignContent="center" alignItems="center">
-      <Heading textAlign="center" pt={8}>
-        Moje řízení
+      <Heading textAlign="center" pt={8} size="3xl">
+        Mé řízení
       </Heading>
       <Link to={route.home()}>
         {' '}
@@ -45,20 +46,13 @@ export function Proceedings() {
       </Link>
       <Heading size="xl">Další možnosti</Heading>
       <Stack direction="row" mb={10}>
-        <Link to={route.wizard()}>
-          {' '}
-          <Button>Chci vědět jak řízení probíhá</Button>
-        </Link>
-        <Link to={route.home()}>
-          {' '}
-          <Button>Chci se na schůzku připravit</Button>
-        </Link>
-        <Link to={route.home()}>
-          {' '}
-          <Button as={Link}> Chci si zkusit modelaci dědění </Button>
-        </Link>
+        {proceedingsNavigation.map((item, index) => (
+          <Link key={index} to={item.link}>
+            <Button>{item.text}</Button>
+          </Link>
+        ))}
       </Stack>
-      <Heading size="3xl">Seznam všech řízení</Heading>
+      <Heading size="2xl">Seznam všech řízení</Heading>
       <ProceedingsTable data={generateFakeData(749)} />
     </Stack>
   )

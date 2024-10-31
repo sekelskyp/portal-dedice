@@ -66,7 +66,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
         header: () => 'Detail řízení',
         cell: () => {
           return (
-            <Button size="sm" bg="gray.500">
+            <Button size="sm" bg="primary.500">
               <HiChevronRight size="24px" />
             </Button>
           )
