@@ -27,7 +27,7 @@ export function ProceedingsTableHeader({
                   alignItems="center"
                   onClick={header.column.getToggleSortingHandler()}
                 >
-                  <Heading as="h4" size="lg">
+                  <Heading size={{ base: 'sm', sm: 'md', md: 'lg' }}>
                     {flexRender(
                       header.column.columnDef.header,
                       header.getContext()

@@ -45,10 +45,14 @@ export function Proceedings() {
         <Button>Vytvořit nové řízení</Button>
       </Link>
       <Heading size="xl">Další možnosti</Heading>
-      <Stack direction="row" mb={10}>
+      <Stack
+        direction={{ base: 'column', lg: 'row' }}
+        textAlign="center"
+        mb={10}
+      >
         {proceedingsNavigation.map((item, index) => (
           <Link key={index} to={item.link}>
-            <Button>{item.text}</Button>
+            <Button width="100%">{item.text}</Button>
           </Link>
         ))}
       </Stack>

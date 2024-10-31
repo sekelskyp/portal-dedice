@@ -1,5 +1,6 @@
-import { Badge } from '@chakra-ui/react'
+import { Badge, useBreakpointValue } from '@chakra-ui/react'
 import { CellContext } from '@tanstack/react-table'
+import { FaCheck, FaTimesCircle } from 'react-icons/fa'
 
 import { ProceedingsItem } from './proceedings-table/ProceedingsTable'
 
@@ -10,6 +11,11 @@ export function StatusBadge({
 }: {
   info: CellContext<ProceedingsItem, unknown>
 }) {
+  const component = useBreakpointValue({
+    base: info.getValue() === options[0] ? <FaCheck /> : <FaTimesCircle />,
+    md: info.getValue() as React.ReactNode,
+  })
+
   return (
     <Badge
       bg={info.getValue() === options[0] ? 'green.700' : 'red.700'}
@@ -19,11 +25,11 @@ export function StatusBadge({
       px={4}
       py={2}
       borderRadius="xl"
-      width="110px"
-      fontSize="sm"
+      width={{ base: 'auto', lg: '110px' }}
+      fontSize={{ base: 'xs', lg: 'sm' }}
       justifyContent="center"
     >
-      {info.getValue() as React.ReactNode}
+      {component}
     </Badge>
   )
 }

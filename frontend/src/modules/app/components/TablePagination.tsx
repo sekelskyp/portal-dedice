@@ -15,14 +15,22 @@ export function TablePagination({ table }: { table: Table<ProceedingsItem> }) {
             key={index}
             onClick={() => item.onClick(table)}
             disabled={item.disabled(table)}
+            size={{ base: 'xs', lg: 'md' }}
           >
             {item.icon}
           </Button>
         ))}
       </Stack>
       <Stack direction="row" alignItems="center" mx={4} fontWeight="bold">
-        <Text>
+        <Text display={{ base: 'none', md: 'block' }}>
           Stránka {table.getState().pagination.pageIndex + 1} z{' '}
+          {table.getPageCount().toLocaleString()}
+        </Text>
+        <Text
+          fontSize={{ base: 'md', md: 'md' }}
+          display={{ base: 'block', md: 'none' }}
+        >
+          {table.getState().pagination.pageIndex + 1} /{' '}
           {table.getPageCount().toLocaleString()}
         </Text>
       </Stack>
@@ -33,6 +41,7 @@ export function TablePagination({ table }: { table: Table<ProceedingsItem> }) {
             key={index + 2}
             onClick={() => item.onClick(table)}
             disabled={item.disabled(table)}
+            size={{ base: 'xs', lg: 'md' }}
           >
             {item.icon}
           </Button>

@@ -18,7 +18,7 @@ export function ProceedingsTableSearchBar({
   return (
     <Stack mb={4} p={1}>
       <InputGroup
-        width="20%"
+        width={{ base: '100%', lg: '50%', xl: '30%' }}
         startElement={<FaSearch size="18px" />}
         startElementProps={{ ml: 2 }}
         endElement={<MdOutlineCancel size="18px" />}

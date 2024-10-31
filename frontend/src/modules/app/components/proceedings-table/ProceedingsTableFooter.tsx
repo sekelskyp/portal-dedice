@@ -1,4 +1,4 @@
-import { Flex, Stack, Text } from '@chakra-ui/react'
+import { Stack, Text } from '@chakra-ui/react'
 import { Table } from '@tanstack/react-table'
 
 import {
@@ -16,8 +16,19 @@ export function ProceedingsTableFooter({
   table: Table<ProceedingsItem>
 }) {
   return (
-    <Flex justifyContent="space-between" m={4}>
-      <Stack direction="row" alignItems="center">
+    <Stack
+      direction={{ base: 'column', lg: 'row' }}
+      justifyContent="space-between"
+      alignItems="center"
+      mx={{ base: 0, md: 4 }}
+      my={4}
+    >
+      <Stack
+        direction="row"
+        alignItems="center"
+        fontSize={{ base: 'sm', md: 'md' }}
+        my={{ base: 2, lg: 0 }}
+      >
         <Text>
           Zobrazuji 1 - {table.getState().pagination.pageSize} z{' '}
           {table.getRowCount()} záznamů.
@@ -25,8 +36,11 @@ export function ProceedingsTableFooter({
       </Stack>
       <TablePagination table={table} />
       <Stack direction="row" alignItems="center">
-        <Text>Zobrazit</Text>
-        <NativeSelectRoot>
+        <Text fontSize={{ base: 'sm', md: 'md' }}>Zobrazit</Text>
+        <NativeSelectRoot
+          size={{ base: 'sm', md: 'md' }}
+          my={{ base: 2, lg: 0 }}
+        >
           <NativeSelectField
             value={table.getState().pagination.pageSize}
             onChange={(e) => {
@@ -44,8 +58,8 @@ export function ProceedingsTableFooter({
             ))}
           </NativeSelectField>
         </NativeSelectRoot>
-        <Text>záznamů</Text>
+        <Text fontSize={{ base: 'sm', md: 'md' }}>záznamů</Text>
       </Stack>
-    </Flex>
+    </Stack>
   )
 }
