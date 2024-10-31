@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm' 
+import { sql } from 'drizzle-orm'
 import { MySql2Database } from 'drizzle-orm/mysql2'
 
 import { getConnection } from '../src/db/db'
