@@ -44,7 +44,6 @@ export function QuestionStep({
             <Container maxWidth={{ base: '90%', lg: '50%' }}>
               <AccordionHelper items={questions} />
             </Container>
-            <Stack direction={'row'}>{progress}...</Stack>
           </>
         )}
       </Stack>

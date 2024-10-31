@@ -80,7 +80,7 @@ export function NotaryAssignment({
         size={{ base: 'sm', sm: 'md', md: 'lg', lg: 'xl' }}
         textAlign="center"
       >
-        {notary.name} {notary.surname}
+        {notary.displayName}
       </Heading>
       <Container px={0} asChild>
         <Stack
