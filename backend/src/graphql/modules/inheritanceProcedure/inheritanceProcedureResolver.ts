@@ -140,4 +140,28 @@ export class InheritanceProcedureResolver {
       procedure.id
     )
   }
+
+  @Query(() => [InheritanceProcedure])
+  async getProceduresByNotaryId(
+    @Arg('notaryId', () => Int) notaryId: number,
+    @Ctx() { inheritanceProcedureRepository }: CustomContext
+  ): Promise<InheritanceProcedure[]> {
+    return await inheritanceProcedureRepository.getProceduresByNotaryId(
+      notaryId
+    )
+  }
+
+  @Query(() => [InheritanceProcedure])
+  async getProceduresByBeneficiaryId(
+    @Arg('beneficiaryId', () => Int) beneficiaryId: number,
+    @Ctx() { inheritanceProcedureRepository }: CustomContext
+  ): Promise<InheritanceProcedure[]> {
+    const procedureRecords =
+      await inheritanceProcedureRepository.getProceduresByBeneficiaryId(
+        beneficiaryId
+      )
+    return procedureRecords.map((record) => ({
+      ...record.inheritance_procedure,
+    }))
+  }
 }
