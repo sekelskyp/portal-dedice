@@ -9,6 +9,7 @@ type Beneficiary {
   dateOfBirth: DateTimeISO
   deceasedRelation: String
   id: ID!
+  inheritanceProcedures: [InheritanceProcedure!]!
   user: User
   userId: ID
 }
@@ -113,6 +114,7 @@ type Notary {
   contact: Contact
   contactId: ID
   id: ID!
+  inheritanceProcedures: [InheritanceProcedure!]!
   user: User
   userId: ID
 }
@@ -151,9 +153,12 @@ input UpdateBeneficiaryInput {
 }
 
 type User {
-  beneficiary: Beneficiary
+  beneficiaries: [Beneficiary!]!
+  confirmed: Boolean!
   email: String!
   id: ID!
-  notary: Notary
+  isBeneficiary: Boolean!
+  isNotary: Boolean!
+  notaries: [Notary!]!
   password: String!
 }
