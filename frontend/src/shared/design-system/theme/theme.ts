@@ -64,6 +64,14 @@ const customConfig = defineConfig({
             },
           },
         },
+        border: {
+          DEFAULT: {
+            value: {
+              _light: '{colors.gray.200}',
+              _dark: '{colors.gray.700}',
+            },
+          },
+        },
       },
     },
     recipes: {

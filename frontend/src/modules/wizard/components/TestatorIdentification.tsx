@@ -4,14 +4,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { Field, Radio } from '@frontend/shared/design-system'
+import { Radio } from '@frontend/shared/design-system'
 import {
   DateFormControl,
   Form,
-  PlacesAutoComplete,
   RadioGroupFormControl,
   SubmitButton,
 } from '@frontend/shared/forms'
+import { ZipCodeFormControl } from '@frontend/shared/forms/ZipCodeFormControl'
 
 import { TestatorDataContext } from '../pages/WizardStepPage'
 import { getZipCodeFromAddress } from '../utils/getGeocode'
@@ -79,9 +79,11 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
               <Radio value="female">Žena</Radio>
             </RadioGroupFormControl>
             <DateFormControl name="birthDate" label="Datum narození" required />
-            <Field label="Trvalé bydliště" required>
-              <PlacesAutoComplete name="address" />
-            </Field>
+            <ZipCodeFormControl
+              name="address"
+              label="Trvalé bydliště"
+              required
+            />
             <Center>
               <SubmitButton>Potvrdit údaje</SubmitButton>
             </Center>
