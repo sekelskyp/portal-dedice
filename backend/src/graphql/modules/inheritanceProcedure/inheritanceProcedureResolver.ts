@@ -19,10 +19,10 @@ import {
 import { CustomContext } from '../../../types/types'
 import { Beneficiary } from '../beneficiary/beneficiaryType'
 import { Contact } from '../contact/contactType'
-import { InheritanceProcedureData } from '../inheritanceProcedure/inheritaceProcedureRepository'
 import { Notary } from '../notary/notaryType'
 
 import { CreateInheritanceProcedureInput } from './createInheritanceProcedureInput'
+import { InheritanceProcedureData } from './inheritaceProcedureRepository'
 import { InheritanceProcedure } from './inheritanceProcedureType'
 
 @Resolver(() => InheritanceProcedure)
@@ -112,10 +112,10 @@ export class InheritanceProcedureResolver {
     @Root() procedure: InheritanceProcedure,
     @Ctx() { contactRepository }: CustomContext
   ): Promise<Contact | null> {
-    if (!procedure.deceasedContactId) {
+    if (!procedure.mainBeneficiaryId) {
       return null
     }
-    return await contactRepository.getContactById(procedure.deceasedContactId)
+    return await contactRepository.getContactById(procedure.mainBeneficiaryId)
   }
 
   // Field Resolver to fetch the deceased person associated with the procedure

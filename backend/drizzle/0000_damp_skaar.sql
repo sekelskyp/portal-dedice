@@ -144,7 +144,7 @@ CREATE TABLE `user` (
 	`id` int AUTO_INCREMENT NOT NULL,
 	`email` varchar(100) NOT NULL,
 	`password` varchar(255) NOT NULL,
-	`confirmed` boolean DEFAULT false,
+	`confirmed` boolean NOT NULL DEFAULT false,
 	CONSTRAINT `user_id` PRIMARY KEY(`id`),
 	CONSTRAINT `user_email_unique_index` UNIQUE((lower(`email`)))
 );
