@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Button, Container, Heading, Stack } from '@chakra-ui/react'
 
 import { ErrorTreePage } from '../pages/ErrorTreePage'
@@ -54,7 +54,7 @@ export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
         return i
       }
     }
-    return startIndex
+    return -1
   }
 
   const handleAnswer = (answerId: number) => {
@@ -72,22 +72,17 @@ export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
     }
 
     if (selectedAnswer !== null || currentStep.answer_options?.length === 1) {
-      if (currentStep.answer_options?.length === 1) {
-        const singleAnswerId = currentStep.answer_options[0].id
-        setSelectedAnswer(singleAnswerId)
-
-        setAnswers((prevAnswers) => ({
-          ...prevAnswers,
-          [currentStep.id]: singleAnswerId,
-        }))
-      } else {
-        setAnswers((prevAnswers) => ({
-          ...prevAnswers,
-          [currentStep.id]: selectedAnswer!,
-        }))
-      }
       const nextStepIndex = findNextStepIndex(currentStepIndex + 1)
-      console.log(`Next Step Index Found: ${nextStepIndex}`)
+
+      setAnswers((prevAnswers) => {
+        const updatedAnswers = { ...prevAnswers }
+        const stepIds = questionData.steps.map((step) => step.id)
+        const currentIndex = stepIds.indexOf(currentStep.id)
+        stepIds
+          .slice(currentIndex + 1)
+          .forEach((id) => delete updatedAnswers[id])
+        return updatedAnswers
+      })
 
       if (nextStepIndex !== -1) {
         setCurrentStepIndex(nextStepIndex)
@@ -95,6 +90,13 @@ export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
       }
     }
   }
+
+  useEffect(() => {
+    if (currentStep.answer_options?.length === 1 && !answers[currentStep.id]) {
+      handleAnswer(currentStep.answer_options[0].id)
+      goToNextStep()
+    }
+  })
 
   const goToPreviousStep = () => {
     let previousStepIndex = currentStepIndex - 1

@@ -26,7 +26,7 @@ export function PlacesAutoComplete({ name }: PlacesAutoCompleteProps) {
       language: 'cs',
       componentRestrictions: {
         country: 'CZ',
-        types: ['address'],
+        // types: ['address'],
       },
     },
     debounce: 300,
