@@ -17,6 +17,7 @@ import {
   removeBeneficiaryFromProcedure,
 } from '../../../services/inheritanceProcedureService'
 import { CustomContext } from '../../../types/types'
+import { Asset } from '../asset/assetType'
 import { Beneficiary } from '../beneficiary/beneficiaryType'
 import { Contact } from '../contact/contactType'
 import { Notary } from '../notary/notaryType'
@@ -163,5 +164,14 @@ export class InheritanceProcedureResolver {
     return procedureRecords.map((record) => ({
       ...record.inheritance_procedure,
     }))
+  }
+
+  // Field Resolver to fetch the assets associated with the procedure
+  @FieldResolver(() => [Asset], { nullable: true })
+  async assets(
+    @Root() procedure: InheritanceProcedure,
+    @Ctx() { assetRepository }: CustomContext
+  ): Promise<Asset[]> {
+    return await assetRepository.getAssetsByProcedureId(procedure.id)
   }
 }

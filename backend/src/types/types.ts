@@ -1,5 +1,6 @@
 import { MySql2Database } from 'drizzle-orm/mysql2'
 
+import { getAssetRepository } from '@backend/graphql/modules/asset/assetRepository'
 import { type getBeneficiaryRepository } from '@backend/graphql/modules/beneficiary/beneficiaryRepository'
 import { type getContactRepository } from '@backend/graphql/modules/contact/contactRepository'
 import { type getEmailConfirmationTokenRepository } from '@backend/graphql/modules/emailConfirmationToken/emailConfirmationTokenRepository'
@@ -31,6 +32,7 @@ export type CustomContext = {
   emailConfirmationTokenRepository: ReturnType<
     typeof getEmailConfirmationTokenRepository
   >
+  assetRepository: ReturnType<typeof getAssetRepository>
 }
 
 export type JWTPayload = {

@@ -35,6 +35,8 @@ import { parseAndVerifyJWT } from '@backend/libs/jwt'
 import { mockResolvers } from '@backend/mocks/mocks'
 import { CustomContext } from '@backend/types/types'
 
+import { getAssetRepository } from './graphql/modules/asset/assetRepository'
+
 const init = async () => {
   const app = express()
 
@@ -91,6 +93,7 @@ const init = async () => {
       emailConfirmationTokenRepository: getEmailConfirmationTokenRepository(
         drizzle.db
       ),
+      assetRepository: getAssetRepository(drizzle.db),
     }
   }
 

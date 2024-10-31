@@ -3,6 +3,14 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+type Asset {
+  description: String
+  id: ID!
+  inheritanceProcedureId: ID!
+  name: String!
+  value: Float!
+}
+
 type Beneficiary {
   contact: Contact
   contactId: ID
@@ -72,7 +80,8 @@ input FindNotaryInput {
 }
 
 type InheritanceProcedure {
-  beneficiaries: Beneficiary
+  assets: [Asset!]
+  beneficiaries: [Beneficiary!]
   deceasedContact: Contact
   deceasedContactId: ID
   deceasedDateOfBirth: DateTimeISO
