@@ -41,7 +41,7 @@ export const user = mysqlTable(
     id: int('id').primaryKey().autoincrement(),
     email: varchar('email', { length: 100 }).notNull(),
     password: varchar('password', { length: 255 }).notNull(),
-    confirmed: boolean('confirmed').default(false),
+    confirmed: boolean('confirmed').default(false).notNull(),
   },
   (table) => ({
     loginUniqueIndex: uniqueIndex('user_email_unique_index').on(
