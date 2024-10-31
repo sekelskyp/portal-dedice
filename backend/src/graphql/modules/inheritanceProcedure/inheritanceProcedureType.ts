@@ -29,7 +29,7 @@ export class InheritanceProcedure {
   @Field(() => Date, { nullable: true })
   endDate?: Date | null
 
-  @Field(() => Beneficiary, { nullable: true })
+  @Field(() => [Beneficiary], { nullable: true })
   beneficiaries?: Beneficiary[]
 
   @Field(() => ID, { nullable: true })
