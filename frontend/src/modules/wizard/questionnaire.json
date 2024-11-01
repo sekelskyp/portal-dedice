@@ -62,7 +62,8 @@
       "answer_options": [
         {
           "id": 1,
-          "option_text": "Ano"
+          "option_text": "Ano",
+          "is_End": true
         }
       ],
       "dependencies": [
@@ -182,7 +183,8 @@
       "answer_options": [
         {
           "id": 1,
-          "option_text": "Ano"
+          "option_text": "Ano",
+          "is_End": true
         }
       ],
       "dependencies": [
@@ -214,7 +216,8 @@
       "answer_options": [
         {
           "id": 1,
-          "option_text": "Ano"
+          "option_text": "Ano",
+          "is_End": true
         }
       ],
       "dependencies": [
@@ -270,7 +273,8 @@
         },
         {
           "id": 2,
-          "option_text": "Ne"
+          "option_text": "Ne",
+          "is_Error": true
         }
       ],
       "dependencies": [
@@ -302,7 +306,8 @@
       "answer_options": [
         {
           "id": 1,
-          "option_text": "Ano"
+          "option_text": "Ano",
+          "is_End": true
         }
       ],
       "dependencies": [
@@ -318,7 +323,8 @@
       "answer_options": [
         {
           "id": 1,
-          "option_text": "Ano"
+          "option_text": "Ano",
+          "is_End": true
         }
       ],
       "dependencies": [
@@ -330,7 +336,7 @@
     },
     {
       "id": 20,
-      "question_text": "Bude nutné podívat se na další zákonnou dědickou třídu. Omlouváme se, ale tuto variantu nejsme schopni zpracovat.",
+      "question_text": "Typicky majetek, který je psán na jméno manželky, je ponechán manželce.",
       "answer_options": [
         {
           "id": 1,
@@ -339,14 +345,30 @@
       ],
       "dependencies": [
         {
-          "questionId": 16,
-          "answerId": 2
+          "questionId": 8,
+          "answerId": 1
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "question_text": "Manželka může dostat všechen majetek a dědice vyplatit.",
+      "answer_options": [
+        {
+          "id": 1,
+          "option_text": "Ano"
+        }
+      ],
+      "dependencies": [
+        {
+          "questionId": 20,
+          "answerId": 1
         }
       ]
     },
     {
       "id": 22,
-      "question_text": "Typicky majetek, který je psán na jméno manželky, je ponechán manželce.",
+      "question_text": "Jaké jsou výhody a nevýhody?",
       "answer_options": [
         {
           "id": 1,
@@ -362,38 +384,6 @@
     },
     {
       "id": 23,
-      "question_text": "Manželka může dostat všechen majetek a dědice vyplatit.",
-      "answer_options": [
-        {
-          "id": 1,
-          "option_text": "Ano"
-        }
-      ],
-      "dependencies": [
-        {
-          "questionId": 8,
-          "answerId": 1
-        }
-      ]
-    },
-    {
-      "id": 24,
-      "question_text": "Jaké jsou výhody a nevýhody?",
-      "answer_options": [
-        {
-          "id": 1,
-          "option_text": "Ano"
-        }
-      ],
-      "dependencies": [
-        {
-          "questionId": 23,
-          "answerId": 1
-        }
-      ]
-    },
-    {
-      "id": 25,
       "question_text": "Když získá všechen majetek, musí si být jistá, že může dědice vyplatit. Také to znamená, že musí všechny příslušné instituce obejít aby na sebe majetek přepsala, např. účty manžela",
       "answer_options": [
         {
@@ -407,14 +397,47 @@
       ],
       "dependencies": [
         {
-          "questionId": 24,
+          "questionId": 22,
           "answerId": 1
         }
       ]
     },
     {
-      "id": 26,
+      "id": 24,
       "question_text": "Nemusí, pokud se v rámci dědické dohody domluví, že dědicové žádnou výplatu nechtějí.",
+      "answer_options": [
+        {
+          "id": 1,
+          "option_text": "Ano",
+          "is_End": true
+        }
+      ],
+      "dependencies": [
+        {
+          "questionId": 23,
+          "answerId": 1
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "question_text": "Možné to je, ale tuto variantu nedoporučujeme. Zvyšujete tím hodnotu pozůstalosti a tím pádem i hodnotu, ze které se počítá odměna notáře.",
+      "answer_options": [
+        {
+          "id": 1,
+          "option_text": "Ano"
+        }
+      ],
+      "dependencies": [
+        {
+          "questionId": 23,
+          "answerId": 2
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "question_text": "Jak tedy SJM vypořádat ideálně?",
       "answer_options": [
         {
           "id": 1,
@@ -430,7 +453,7 @@
     },
     {
       "id": 27,
-      "question_text": "Možné to je, ale tuto variantu nedoporučujeme. Zvyšujete tím hodnotu pozůstalosti a tím pádem i hodnotu, ze které se počítá odměna notáře.",
+      "question_text": "Nechť pozůstalá manželka dostane majetku raději více, pakliže jí nečiní obtíže zařídit přepis majetku. V pozůstalostním řízení se pak objeví nejméně 1/2 SJM.",
       "answer_options": [
         {
           "id": 1,
@@ -439,14 +462,14 @@
       ],
       "dependencies": [
         {
-          "questionId": 25,
-          "answerId": 2
+          "questionId": 26,
+          "answerId": 1
         }
       ]
     },
     {
       "id": 28,
-      "question_text": "Jak tedy SJM vypořádat ideálně?",
+      "question_text": "Dobře, a co se děje potom?",
       "answer_options": [
         {
           "id": 1,
@@ -462,7 +485,7 @@
     },
     {
       "id": 29,
-      "question_text": "Nechť pozůstalá manželka dostane majetku raději více, pakliže jí nečiní obtíže zařídit přepis majetku. V pozůstalostním řízení se pak objeví nejméně 1/2 SJM.",
+      "question_text": "O druhé polovině majetku se rozhoduje v pozůstalostním řízení.",
       "answer_options": [
         {
           "id": 1,
@@ -478,38 +501,6 @@
     },
     {
       "id": 30,
-      "question_text": "Dobře, a co se děje potom?",
-      "answer_options": [
-        {
-          "id": 1,
-          "option_text": "Ano"
-        }
-      ],
-      "dependencies": [
-        {
-          "questionId": 29,
-          "answerId": 1
-        }
-      ]
-    },
-    {
-      "id": 31,
-      "question_text": "O druhé polovině majetku se rozhoduje v pozůstalostním řízení.",
-      "answer_options": [
-        {
-          "id": 1,
-          "option_text": "Ano"
-        }
-      ],
-      "dependencies": [
-        {
-          "questionId": 30,
-          "answerId": 1
-        }
-      ]
-    },
-    {
-      "id": 32,
       "question_text": "Je v pozůstalosti závěť?",
       "answer_options": [
         {
@@ -524,13 +515,13 @@
       ],
       "dependencies": [
         {
-          "questionId": 31,
+          "questionId": 29,
           "answerId": 1
         }
       ]
     },
     {
-      "id": 33,
+      "id": 31,
       "question_text": "Měl zůstavitel potomky?",
       "answer_options": [
         {
@@ -544,13 +535,13 @@
       ],
       "dependencies": [
         {
-          "questionId": 32,
+          "questionId": 30,
           "answerId": 2
         }
       ]
     },
     {
-      "id": 34,
+      "id": 32,
       "question_text": "Kolik jich bylo?",
       "answer_options": [
         {
@@ -564,18 +555,52 @@
       ],
       "dependencies": [
         {
-          "questionId": 33,
+          "questionId": 31,
           "answerId": 1
         }
       ]
     },
     {
-      "id": 35,
+      "id": 33,
       "question_text": "V tomto případě se majetek rovným dílem rozdělí mezi postalou manželku a jediného dědice. Preferovaným způsobem, jak věc vyřešit je dědická dohoda, kdy je možné si dědické podíly určit odlišným způsobem. Chcete se dozvědět víc?",
       "answer_options": [
         {
           "id": 1,
+          "option_text": "Ano",
+          "is_End": true
+        }
+      ],
+      "dependencies": [
+        {
+          "questionId": 32,
+          "answerId": 1
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "question_text": "V tomto případě náleží pozůstalé manželce a každému z potomků rovný díl majetku z pozůstalosti. Každému tedy 1/3. Preferovaným způsobem, jak věc vyřešit je dědická dohoda, kdy je možné si dědické podíly určit odlišným způsobem. Chcete se dozvědět víc?",
+      "answer_options": [
+        {
+          "id": 1,
           "option_text": "Ano"
+        }
+      ],
+      "dependencies": [
+        {
+          "questionId": 32,
+          "answerId": 2
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "question_text": "Dědicům sice náleží rovný díl, ale mohou se, v případě shody (proto slovo dohoda) dohodnout o rozdělení majetku jinak. To znamená, že dědicové si mohou dohodnout nejen jiné dědické podíly, např. 90% ku 10%, nebo všechno jeden, druhý nic. Je možné, aby jeden potomek získal všechen majetek a ostatní vyplatil v jimi určené výši. Tzn. pozůstalá manželka může zdědit veškerý majetek a potomky vyplatit. Nebo si mohou jednotlivé položky rozdělit mezi sebe, jak uznají za vhodné, bez nutnosti výplaty.  Notář bude (jakoukoliv) vaší dohodu respektovat.",
+      "answer_options": [
+        {
+          "id": 1,
+          "option_text": "Ano",
+          "is_End": true
         }
       ],
       "dependencies": [
@@ -587,23 +612,27 @@
     },
     {
       "id": 36,
-      "question_text": "V tomto případě náleží pozůstalé manželce a každému z potomků rovný díl majetku z pozůstalosti. Každému tedy 1/3. Preferovaným způsobem, jak věc vyřešit je dědická dohoda, kdy je možné si dědické podíly určit odlišným způsobem. Chcete se dozvědět víc?",
+      "question_text": "Měl zůstavitel v době úmrtí rodiče?",
       "answer_options": [
         {
           "id": 1,
           "option_text": "Ano"
+        },
+        {
+          "id": 2,
+          "option_text": "Ne"
         }
       ],
       "dependencies": [
         {
-          "questionId": 34,
+          "questionId": 31,
           "answerId": 2
         }
       ]
     },
     {
       "id": 37,
-      "question_text": "Dědicům sice náleží rovný díl, ale mohou se, v případě shody (proto slovo dohoda) dohodnout o rozdělení majetku jinak. To znamená, že dědicové si mohou dohodnout nejen jiné dědické podíly, např. 90% ku 10%, nebo všechno jeden, druhý nic. Je možné, aby jeden potomek získal všechen majetek a ostatní vyplatil v jimi určené výši. Tzn. pozůstalá manželka může zdědit veškerý majetek a potomky vyplatit. Nebo si mohou jednotlivé položky rozdělit mezi sebe, jak uznají za vhodné, bez nutnosti výplaty.  Notář bude (jakoukoliv) vaší dohodu respektovat.",
+      "question_text": "Žil se zůstavitelem ve společné domácnosti po dobu jednoho roku před smrtí někdo další?",
       "answer_options": [
         {
           "id": 1,
@@ -619,7 +648,40 @@
     },
     {
       "id": 38,
-      "question_text": "Měl zůstavitel v době úmrtí rodiče?",
+      "question_text": "V tomto případě dědí pozůstalá manželka, zůstavitelovi rodiče a osoby, které se zůstavitelem žily ve společné domácnosti po dobu alespoň jednoho roku před smrtí, rovným dílem. Pozůstalá manželka ale dědí nejméně jednu polovinu pozůstalosti.",
+      "answer_options": [
+        {
+          "id": 1,
+          "option_text": "Ano"
+        }
+      ],
+      "dependencies": [
+        {
+          "questionId": 37,
+          "answerId": 1
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "question_text": "Je možné, aby si tito dědicové majetek rozdělili dle dědické dohody i jiným způsobem. Informujte se u svého notáře.",
+      "answer_options": [
+        {
+          "id": 1,
+          "option_text": "Ano",
+          "is_End": true
+        }
+      ],
+      "dependencies": [
+        {
+          "questionId": 38,
+          "answerId": 1
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "question_text": "Žil se zůstavitelem ve společné domácnosti po dobu alespoň jednoho roku před smrtí někdo další?",
       "answer_options": [
         {
           "id": 1,
@@ -632,50 +694,19 @@
       ],
       "dependencies": [
         {
-          "questionId": 33,
+          "questionId": 36,
           "answerId": 2
         }
       ]
     },
     {
-      "id": 39,
-      "question_text": "Žil se zůstavitelem ve společné domácnosti po dobu jednoho roku před smrtí někdo další?",
-      "answer_options": [
-        {
-          "id": 1,
-          "option_text": "Ano"
-        }
-      ],
-      "dependencies": [
-        {
-          "questionId": 38,
-          "answerId": 1
-        }
-      ]
-    },
-    {
-      "id": 40,
-      "question_text": "V tomto případě dědí pozůstalá manželka, zůstavitelovi rodiče a osoby, které se zůstavitelem žily ve společné domácnosti po dobu alespoň jednoho roku před smrtí, rovným dílem. Pozůstalá manželka ale dědí nejméně jednu polovinu pozůstalosti.",
-      "answer_options": [
-        {
-          "id": 1,
-          "option_text": "Ano"
-        }
-      ],
-      "dependencies": [
-        {
-          "questionId": 39,
-          "answerId": 1
-        }
-      ]
-    },
-    {
       "id": 41,
-      "question_text": "Je možné, aby si tito dědicové majetek rozdělili dle dědické dohody i jiným způsobem. Informujte se u svého notáře.",
+      "question_text": "V tomto případě dědí pozůstalá manželka a osoby, které se zůstavitelem žily ve společné domácnosti po dobu alespoň jednoho roku před smrtí. Pozůstalá manželka ale dědí nejméně jednu polovinu pozůstalosti.",
       "answer_options": [
         {
           "id": 1,
-          "option_text": "Ano"
+          "option_text": "Ano",
+          "is_End": true
         }
       ],
       "dependencies": [
@@ -687,60 +718,17 @@
     },
     {
       "id": 42,
-      "question_text": "Žil se zůstavitelem ve společné domácnosti po dobu alespoň jednoho roku před smrtí někdo další?",
-      "answer_options": [
-        {
-          "id": 1,
-          "option_text": "Ano"
-        },
-        {
-          "id": 2,
-          "option_text": "Ano"
-        }
-      ],
-      "dependencies": [
-        {
-          "questionId": 38,
-          "answerId": 2
-        }
-      ]
-    },
-    {
-      "id": 43,
-      "question_text": "V tomto případě dědí pozůstalá manželka a osoby, které se zůstavitelem žily ve společné domácnosti po dobu alespoň jednoho roku před smrtí. Pozůstalá manželka ale dědí nejméně jednu polovinu pozůstalosti.",
-      "answer_options": [
-        {
-          "id": 1,
-          "option_text": "Ano"
-        },
-        {
-          "id": 2,
-          "option_text": "Ano"
-        }
-      ],
-      "dependencies": [
-        {
-          "questionId": 42,
-          "answerId": 1
-        }
-      ]
-    },
-    {
-      "id": 44,
       "question_text": "V tomto případě bude dědicem veškerého majetku v pozůstalostním řízení pozůstalá manželka.",
       "answer_options": [
         {
           "id": 1,
-          "option_text": "Ano"
-        },
-        {
-          "id": 2,
-          "option_text": "Ano"
+          "option_text": "Ano",
+          "is_End": true
         }
       ],
       "dependencies": [
         {
-          "questionId": 42,
+          "questionId": 40,
           "answerId": 2
         }
       ]

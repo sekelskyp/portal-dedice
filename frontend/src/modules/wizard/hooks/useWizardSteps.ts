@@ -95,13 +95,41 @@ export function useWizardSteps(
     })
   }
 
+  const setStep = (newStep: number) => {
+    setState((prevState) => {
+      let newQuestionsProgress = prevState.questionsProgress
+      let newQuestionnaireProgress = prevState.questionnaireProgress
+
+      if (newStep >= 4) {
+        newQuestionsProgress = 100
+        newQuestionnaireProgress = 100
+      }
+
+      return {
+        ...prevState,
+        step: newStep,
+        questionsProgress: newQuestionsProgress,
+        questionnaireProgress: newQuestionnaireProgress,
+      }
+    })
+  }
+
+  const resetProgress = () => {
+    setState((prevState) => ({
+      ...prevState,
+      questionnaireProgress: 0,
+    }))
+  }
+
   return {
     step,
     questionsProgress,
     questionId,
-    questionnaireProgress, // Export as questionnaireProgress
+    questionnaireProgress,
     setNextStep,
     setPreviousStep,
+    setStep,
+    resetProgress, // Include resetProgress in the returned object
   }
 }
 
@@ -109,5 +137,5 @@ const INITIAL_STATE = {
   step: 1,
   questionsProgress: 0,
   questionId: 0,
-  questionnaireProgress: 0, // Updated to match renaming
+  questionnaireProgress: 0,
 } as const
