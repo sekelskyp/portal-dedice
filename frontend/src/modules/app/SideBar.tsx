@@ -20,7 +20,7 @@ const sideBarItems: SideBarItem[] = [
   },
   {
     label: resources.portal.sideBar.proceedings,
-    to: route.proceedings(),
+    to: route.portal(),
     icon: <LuArchive />,
   },
   {

@@ -52,7 +52,7 @@ export function Proceedings() {
           Mé řízení
         </Heading>
         {!user.user?.isNotary && (
-          <Link to={route.home()}>
+          <Link to={route.newProceeding()}>
             {' '}
             <Button>
               Vytvořit nové řízení

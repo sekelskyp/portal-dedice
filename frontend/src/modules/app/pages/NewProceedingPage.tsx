@@ -20,7 +20,7 @@ export function NewProceedingPage() {
 
   const [createProcedureRequest] = useMutation(PROCEEDING_MUTATION, {
     onCompleted: (data, context) => {
-      navigate(route.proceedings())
+      navigate(route.portal())
     },
     onError: () => {},
   })
