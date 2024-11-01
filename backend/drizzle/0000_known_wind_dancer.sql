@@ -89,7 +89,7 @@ CREATE TABLE `inheritance_procedure` (
 	`state` varchar(10) NOT NULL DEFAULT 'InProgress',
 	`start_date` date NOT NULL,
 	`end_date` date,
-	`deceased_contact_id` int,
+	`deceased_contact_id` int NOT NULL,
 	`date_of_birth` date,
 	`date_of_death` date,
 	CONSTRAINT `inheritance_procedure_id` PRIMARY KEY(`id`)

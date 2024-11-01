@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "30fabad3-09d0-41c6-9e86-c5d048d77612",
+  "id": "fef873b3-ac31-4d77-8ea3-9efffc657556",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "asset": {
@@ -656,7 +656,7 @@
           "name": "deceased_contact_id",
           "type": "int",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "date_of_birth": {

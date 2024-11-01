@@ -14,6 +14,7 @@ export interface InheritanceProcedureData {
   state?: InheritanceProcedureStateEnumType
   startDate: Date
   endDate?: Date | null
+  deceasedContactId: number
   deceasedDateOfBirth?: Date | null
   deceasedDateOfDeath?: Date | null
 }
