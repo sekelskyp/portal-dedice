@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Box, HStack, IconButton, Text } from '@chakra-ui/react'
+import { HStack, IconButton, Stack, Text } from '@chakra-ui/react'
 import { LuPlus } from 'react-icons/lu'
 
 import resources from '@frontend/resources'
@@ -13,14 +13,17 @@ import {
 export type ProceedingFormProps = {
   errorMessage?: string
   onSubmit: (variables: {
-    name: string
-    surname: string
-    dateOfDeath: string
-    address: string
-    contactName: string
-    contactSurname: string
-    contactEmail: string
-    heirs: Heir[]
+    data: {
+      name: string
+      surname: string
+      dateOfBirth: string
+      dateOfDeath: string
+      address: string
+      contactName: string
+      contactSurname: string
+      contactEmail: string
+      heirs: Heir[]
+    }
   }) => void
 }
 
@@ -45,64 +48,90 @@ export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
 
   return (
     <Form onSubmit={onSubmit}>
-      <Text fontSize="xl" fontWeight="bold">
-        {resources.portal.pages.newProceeding.title}
-      </Text>
-      <Text fontSize="sm">{resources.portal.pages.newProceeding.subtitle}</Text>
-      <Text fontWeight="bold">
-        {resources.portal.forms.proceedingForm.groups.deceased}
-      </Text>
-      <HStack gap={4}>
-        <InputFormControl name="name" label="Jméno"></InputFormControl>
-        <InputFormControl name="surname" label="Příjmení"></InputFormControl>
-      </HStack>
-      <DateFormControl name="dateOfDeath" label="Datum úmrtí"></DateFormControl>
-      <InputFormControl
-        name="address"
-        label="Trvalé bydliště"
-      ></InputFormControl>
-      <Text fontWeight="bold">
-        {resources.portal.forms.proceedingForm.groups.contactPerson}
-      </Text>
-      <HStack gap={4}>
-        <InputFormControl name="contactName" label="Jméno"></InputFormControl>
-        <InputFormControl
-          name="contactSurname"
-          label="Příjmení"
-        ></InputFormControl>
-      </HStack>
-      <InputFormControl
-        name="contactEmail"
-        label="Emailová adresa"
-      ></InputFormControl>
-      <Text fontWeight="bold">
-        {resources.portal.forms.proceedingForm.groups.heirs}
-      </Text>
-      {heirs.map((heir: Heir, index: number) => (
-        <Box key={`heir-${index}`}>
-          <HStack gap={4}>
+      <Stack gap={6}>
+        <Stack gap={3}>
+          <Text fontWeight="bold">
+            {resources.portal.forms.proceedingForm.groups.deceased}
+          </Text>
+          <HStack gap={6}>
             <InputFormControl
-              name={`heirs.${index}.name`}
-              label="Jméno"
+              name="name"
+              label={resources.portal.forms.proceedingForm.name}
             ></InputFormControl>
             <InputFormControl
-              name={`heirs.${index}.surname`}
-              label="Příjmení"
+              name="surname"
+              label={resources.portal.forms.proceedingForm.surname}
+            ></InputFormControl>
+          </HStack>
+          <DateFormControl
+            name="dateOfBirth"
+            label={resources.portal.forms.proceedingForm.dateOfBirth}
+          ></DateFormControl>
+          <DateFormControl
+            name="dateOfDeath"
+            label={resources.portal.forms.proceedingForm.dateOfDeath}
+          ></DateFormControl>
+          <InputFormControl
+            name="address"
+            label={resources.portal.forms.proceedingForm.address}
+          ></InputFormControl>
+        </Stack>
+        <Stack>
+          <Text fontWeight="bold">
+            {resources.portal.forms.proceedingForm.groups.contactPerson}
+          </Text>
+          <HStack gap={6}>
+            <InputFormControl
+              name="contactName"
+              label={resources.portal.forms.proceedingForm.name}
+            ></InputFormControl>
+            <InputFormControl
+              name="contactSurname"
+              label={resources.portal.forms.proceedingForm.surname}
             ></InputFormControl>
           </HStack>
           <InputFormControl
-            name={`heirs.${index}.email`}
-            label="Emailová adresa"
+            name="contactEmail"
+            label={resources.portal.forms.proceedingForm.email}
           ></InputFormControl>
-        </Box>
-      ))}
-      <IconButton onClick={addHeir} alignSelf="flex-start" p={4}>
-        <LuPlus></LuPlus>
-        {resources.portal.forms.proceedingForm.addHeir}
-      </IconButton>
-      <SubmitButton>
-        {resources.portal.forms.proceedingForm.createProceeding}
-      </SubmitButton>
+        </Stack>
+        <Stack>
+          <Text fontWeight="bold">
+            {resources.portal.forms.proceedingForm.groups.heirs}
+          </Text>
+          <Stack gap={6}>
+            {heirs.map((heir: Heir, index: number) => (
+              <Stack key={`heir-${index}`}>
+                <Text
+                  fontSize="sm"
+                  fontWeight="bold"
+                >{`Dědic ${index + 1}`}</Text>
+                <HStack gap={6}>
+                  <InputFormControl
+                    name={`heirs.${index}.name`}
+                    label={resources.portal.forms.proceedingForm.name}
+                  ></InputFormControl>
+                  <InputFormControl
+                    name={`heirs.${index}.surname`}
+                    label={resources.portal.forms.proceedingForm.surname}
+                  ></InputFormControl>
+                </HStack>
+                <InputFormControl
+                  name={`heirs.${index}.email`}
+                  label={resources.portal.forms.proceedingForm.email}
+                ></InputFormControl>
+              </Stack>
+            ))}
+          </Stack>
+          <IconButton onClick={addHeir} alignSelf="flex-start" p={4} my={4}>
+            <LuPlus></LuPlus>
+            {resources.portal.forms.proceedingForm.addHeir}
+          </IconButton>
+        </Stack>
+        <SubmitButton>
+          {resources.portal.forms.proceedingForm.createProceeding}
+        </SubmitButton>
+      </Stack>
     </Form>
   )
 }

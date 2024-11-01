@@ -1,70 +1,54 @@
-import {
-  Box,
-  HStack,
-  IconButton,
-  Separator,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
-import {
-  LuArchive,
-  LuFolderPlus,
-  LuPlus,
-  LuSettings,
-  LuUser2,
-} from 'react-icons/lu'
+import { ReactElement } from 'react'
+import { IconButton, Separator, Text, VStack } from '@chakra-ui/react'
+import { LuArchive, LuFolderPlus, LuSettings, LuUser2 } from 'react-icons/lu'
 
-import { route } from '@frontend/route'
+import resources from '@frontend/resources'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms/RouterNavLink'
-import { NavItem } from '@frontend/shared/navigation/organisms/TopNavigation'
+import { route } from '@shared/route'
 
-const navItems: NavItem[] = [
+export interface SideBarItem {
+  label: string
+  to: string
+  icon?: ReactElement
+}
+
+const sideBarItems: SideBarItem[] = [
   {
-    label: 'Můj profil',
-    to: route.guide(),
+    label: resources.portal.sideBar.profile,
+    to: route.portal(),
+    icon: <LuUser2 />,
   },
   {
-    label: 'Nové řízení',
-    to: route.about(),
+    label: resources.portal.sideBar.proceedings,
+    to: route.proceedings(),
+    icon: <LuArchive />,
   },
   {
-    label: 'Nastavení',
-    to: route.blog(),
+    label: resources.portal.sideBar.newProceeding,
+    to: route.newProceeding(),
+    icon: <LuFolderPlus />,
+  },
+  {
+    label: resources.portal.sideBar.settings,
+    to: route.settings(),
+    icon: <LuSettings />,
   },
 ]
 
 export default function SideBar() {
   return (
-    <Box>
-      <VStack align="left">
-        <IconButton variant="ghost" size="lg" justifyContent="start" px={4}>
-          <LuUser2></LuUser2>
-          <Text>Profil</Text>
-        </IconButton>
-        <Separator size="md" />
-        <IconButton variant="ghost" size="lg" justifyContent="start" px={4}>
-          <LuArchive></LuArchive>
-          Moje řízení
-        </IconButton>
-        <Separator size="md" />
-        <IconButton variant="ghost" size="lg" justifyContent="start" px={4}>
-          <LuFolderPlus></LuFolderPlus>
-          <RouterNavLink
-            variant={'ghost'}
-            to={route.newProceeding()}
-            key={`route-${route.newProceeding()}`}
-            fontSize={'md'}
-          >
-            Nové řízení
-          </RouterNavLink>
-        </IconButton>
-        <Separator size="md" />
-        <IconButton variant="ghost" size="lg" justifyContent="start" px={4}>
-          <LuSettings></LuSettings>
-          Nastavení
-        </IconButton>
-        <Separator size="md" />
-      </VStack>
-    </Box>
+    <VStack align="left">
+      {sideBarItems.map(({ to, label, icon, ...rest }) => (
+        <>
+          <IconButton variant="ghost" size="lg" justifyContent="start" px={4}>
+            {icon}
+            <RouterNavLink variant="ghost" to={to} key={to} {...rest}>
+              <Text fontSize="md">{label}</Text>
+            </RouterNavLink>
+          </IconButton>
+          <Separator size="md" />
+        </>
+      ))}
+    </VStack>
   )
 }

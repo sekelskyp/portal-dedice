@@ -1,4 +1,5 @@
-import { Button, Text } from '@chakra-ui/react'
+import { Button, Icon, Text } from '@chakra-ui/react'
+import { FiAlertCircle } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
 
 import { Box } from '@frontend/shared/design-system'
@@ -13,9 +14,7 @@ export function UnauthorizedPage() {
       minH={{ base: 'xs', sm: 'container.sm' }}
     >
       <Box textAlign="center">
-        {/*
         <Icon
-          //as={FiAlertCircle}
           boxSize={{ base: '48px', sm: '64px', md: '72px' }}
           color="red.500"
         >

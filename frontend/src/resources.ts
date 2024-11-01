@@ -62,15 +62,27 @@ const resources = {
           'Pro založení nového dědického řízení prosím vyplňte nasledující formulář.',
       },
     },
+    sideBar: {
+      profile: 'Můj profil',
+      proceedings: 'Moje řízení',
+      newProceeding: 'Nové řízení',
+      settings: 'Nastavení',
+    },
     forms: {
       proceedingForm: {
+        name: 'Jméno',
+        surname: 'Příjmení',
+        dateOfBirth: 'Datum narození',
+        dateOfDeath: 'Datum úmrtí',
+        address: 'Trvalé bydliště',
+        email: 'Emailová adresa',
         groups: {
           deceased: 'Identifikace zůstavitele',
           contactPerson: 'Kontaktní osoba',
           heirs: 'Dědici po zůstaviteli',
         },
         addHeir: 'Přidat dědice',
-        createProceeding: 'Založit řízení' 
+        createProceeding: 'Založit řízení',
       },
     },
   },
