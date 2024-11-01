@@ -10,6 +10,7 @@ import {
 } from 'type-graphql'
 
 import {
+  addBeneficiariesToProcedure,
   addBeneficiaryToProcedure,
   assignNotary,
   closeProcedure,
@@ -71,6 +72,17 @@ export class InheritanceProcedureResolver {
     return true
   }
 
+  // Mutation to add a multiple beneficiaries to a procedure
+  @Mutation(() => Boolean)
+  async addBeneficiariesToProcedure(
+    @Arg('procedureId', () => Int) procedureId: number,
+    @Arg('beneficiaryIds', () => [Int]) beneficiaryIds: [number],
+    @Ctx() context: CustomContext
+  ): Promise<boolean> {
+    await addBeneficiariesToProcedure(procedureId, beneficiaryIds, context)
+    return true
+  }
+
   // Mutation to remove a beneficiary from a procedure
   @Mutation(() => Boolean)
   async removeBeneficiaryFromProcedure(
@@ -113,10 +125,10 @@ export class InheritanceProcedureResolver {
     @Root() procedure: InheritanceProcedure,
     @Ctx() { contactRepository }: CustomContext
   ): Promise<Contact | null> {
-    if (!procedure.mainBeneficiaryId) {
+    if (!procedure.deceasedContactId) {
       return null
     }
-    return await contactRepository.getContactById(procedure.mainBeneficiaryId)
+    return await contactRepository.getContactById(procedure.deceasedContactId)
   }
 
   // Field Resolver to fetch the deceased person associated with the procedure
@@ -132,14 +144,17 @@ export class InheritanceProcedureResolver {
   }
 
   // Field Resolver to fetch the beneficiaries associated with the procedure
-  @FieldResolver(() => Beneficiary, { nullable: true })
+  @FieldResolver(() => [Beneficiary], { nullable: true })
   async beneficiaries(
     @Root() procedure: InheritanceProcedure,
     @Ctx() { beneficiaryRepository }: CustomContext
   ): Promise<Beneficiary[]> {
-    return await beneficiaryRepository.getBeneficiariesByProcedureId(
-      procedure.id
-    )
+    const beneficiaryRecords =
+      await beneficiaryRepository.getBeneficiariesByProcedureId(procedure.id)
+
+    return beneficiaryRecords.map((record) => ({
+      ...record.beneficiary,
+    }))
   }
 
   @Query(() => [InheritanceProcedure])
@@ -168,7 +183,7 @@ export class InheritanceProcedureResolver {
 
   // Field Resolver to fetch the assets associated with the procedure
   @FieldResolver(() => [Asset], { nullable: true })
-  async assets(
+  async procedureAssets(
     @Root() procedure: InheritanceProcedure,
     @Ctx() { assetRepository }: CustomContext
   ): Promise<Asset[]> {

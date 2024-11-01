@@ -1,8 +1,8 @@
-import { Field, Float, InputType, Int } from 'type-graphql'
+import { Field, Float, ID, InputType } from 'type-graphql'
 
 @InputType()
 export class UpdateAssetInput {
-  @Field(() => Int, { nullable: true })
+  @Field(() => ID, { nullable: true })
   inheritanceProcedureId?: number
 
   @Field(() => Float, { nullable: true })

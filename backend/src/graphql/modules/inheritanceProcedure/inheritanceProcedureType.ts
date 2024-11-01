@@ -52,5 +52,5 @@ export class InheritanceProcedure {
   deceasedDateOfDeath?: Date | null
 
   @Field(() => [Asset], { nullable: true })
-  assets?: Asset[] | null
+  procedureAssets?: Asset[]
 }
