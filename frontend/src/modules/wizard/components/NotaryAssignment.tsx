@@ -98,7 +98,7 @@ export function NotaryAssignment({
         </Heading>
         <Text fontSize={{ base: 'xs', sm: 'sm', md: 'md', lg: 'lg' }}>
           Pojďte se v naší{' '}
-          <Tooltip content={tooltipText} showArrow open={isOpen}>
+          <Tooltip content={tooltipText} showArrow open={isOpen} portalled>
             <Text
               as="u"
               onMouseLeave={closeTooltip}

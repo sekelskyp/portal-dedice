@@ -18,18 +18,15 @@ import useAddressSuggestions, {
 } from '../hooks/useAddressSuggestions'
 
 type PlacesAutoCompleteProps = {
-  defaultInputValue?: string
-  onAddressChange: (value?: Suggestion) => void
+  value?: Suggestion
+  onChange: (value?: Suggestion) => void
   disabled?: boolean
 }
 
-export const PlacesAutoComplete = forwardRef(
-  (
-    { defaultInputValue, onAddressChange, disabled }: PlacesAutoCompleteProps,
-    ref
-  ) => {
+export const AddressAutoComplete = forwardRef(
+  ({ value, onChange, disabled }: PlacesAutoCompleteProps, ref) => {
     const [inputChangedByTyping, setInputChangedByTyping] = useState(false)
-    const [query, setQuery] = useState(defaultInputValue ?? '')
+    const [query, setQuery] = useState(value?.name ?? '')
     const { suggestions, loading, error } = useAddressSuggestions(query, {
       lang: 'cs',
       limit: 5,
@@ -41,11 +38,15 @@ export const PlacesAutoComplete = forwardRef(
     })
 
     function handleSelect(selectedSuggestion?: Suggestion): void {
-      console.log('selectedSuggestion', selectedSuggestion)
       setQuery(selectedSuggestion?.name ?? '')
       setInputChangedByTyping(false)
-      onAddressChange(selectedSuggestion)
+      onChange(selectedSuggestion)
     }
+
+    console.log(inputChangedByTyping)
+    console.log(query)
+    console.log(value)
+    console.log(suggestions.length)
 
     return (
       <Box asChild w="full" ref={ref}>
@@ -85,7 +86,7 @@ export const PlacesAutoComplete = forwardRef(
           <Portal>
             <Combobox.Positioner>
               <Combobox.Content>
-                {!error && query.length > 3 && (
+                {query.length > 3 && (
                   <Card.Root>
                     <Card.Body p={0}>
                       <Stack gap={1}>
@@ -99,7 +100,7 @@ export const PlacesAutoComplete = forwardRef(
                             >
                               <Combobox.ItemText asChild>
                                 <Text overflow="hidden" textOverflow="ellipsis">
-                                  {item.name} {item.location}
+                                  {item.name}, {item.location}
                                 </Text>
                               </Combobox.ItemText>
                             </Button>

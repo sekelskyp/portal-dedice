@@ -20,12 +20,16 @@ export const DateInput = forwardRef(
     { value, onChange, ...props }: DateInputProps,
     ref: ForwardedRef<HTMLInputElement>
   ) => {
+    const dateValue = value ? [fromDate(value, 'UTC')] : []
+
     return (
       <Box asChild w={'full'}>
         <DatePicker.Root
           locale="cs-CZ"
-          value={value && [fromDate(value, 'UTC')]}
-          onValueChange={(value) => onChange?.(value.value[0]?.toDate('UTC'))}
+          value={dateValue}
+          onValueChange={(value) => {
+            onChange?.(value.value[0]?.toDate('UTC') ?? null)
+          }}
           {...props}
         >
           <DatePicker.Control>
@@ -46,7 +50,9 @@ export const DateInput = forwardRef(
                 </HStack>
               }
             >
-              <Input ref={ref} readOnly />
+              <DatePicker.Input asChild>
+                <Input ref={ref} readOnly />
+              </DatePicker.Input>
             </InputGroup>
           </DatePicker.Control>
           <Portal>

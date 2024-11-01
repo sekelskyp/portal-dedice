@@ -11,7 +11,8 @@ import {
   RadioGroupFormControl,
   SubmitButton,
 } from '@frontend/shared/forms'
-import { ZipCodeFormControl } from '@frontend/shared/forms/ZipCodeFormControl'
+import { AddressFormControl } from '@frontend/shared/forms/AddressFormControl'
+import { Suggestion } from '@frontend/shared/hooks/useAddressSuggestions'
 
 import { TestatorDataContext } from '../pages/WizardStepPage'
 import { getZipCodeFromAddress } from '../utils/getGeocode'
@@ -21,7 +22,7 @@ const schema = z.object({
   birthDate: z
     .date({ required_error: 'Datum narození je povinné.' })
     .max(new Date(), 'Datum narození musí být v minulosti.'),
-  address: z.string().min(1, 'Adresa bydliště je povinná.'),
+  address: z.any({ required_error: 'Adresa bydliště je povinná.' }),
 })
 
 type NextStepProps = {
@@ -39,7 +40,9 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
   })
 
   const onSubmit = async (data: z.infer<typeof schema>) => {
-    const postalCode = await getZipCodeFromAddress(data.address)
+    const postalCode = await getZipCodeFromAddress(
+      (data.address as Suggestion).zip!
+    )
     const testatorData = { ...data, postalCode }
     setTestatorData(testatorData)
     nextStep()
@@ -50,7 +53,7 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
       onSubmit={onSubmit}
       resolver={zodResolver(schema)}
       noValidate
-      values={{
+      defaultValues={{
         sex: testatorData.sex || '',
         birthDate: testatorData.birthDate || undefined!,
         address: testatorData.address || '',
@@ -79,7 +82,7 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
               <Radio value="female">Žena</Radio>
             </RadioGroupFormControl>
             <DateFormControl name="birthDate" label="Datum narození" required />
-            <ZipCodeFormControl
+            <AddressFormControl
               name="address"
               label="Trvalé bydliště"
               required

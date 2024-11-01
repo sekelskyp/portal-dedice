@@ -11,6 +11,16 @@ export const DateFormControl = ({
   ...rest
 }: DateFromControlProps) => (
   <BaseFieldControl {...rest}>
-    {(field, disabled) => <DateInput {...field} disabled={disabled} />}
+    {(field, disabled) => (
+      <DateInput
+        {...field}
+        onChange={(value) => {
+          console.log('value', value)
+          field.onChange(value)
+          console.log('field', field.value)
+        }}
+        disabled={disabled}
+      />
+    )}
   </BaseFieldControl>
 )

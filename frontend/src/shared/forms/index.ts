@@ -1,5 +1,5 @@
 // @index('./**/*.tsx', f => `export * from '${f.path}'`)
-export * from '../components/PlacesAutoComplete'
+export * from '../components/AddressAutoComplete'
 export * from './DateFormControl'
 export * from './Form'
 export * from './InputFormControl'

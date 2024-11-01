@@ -23,7 +23,9 @@ interface TestatorDataContextProps {
 }
 
 const defaultTestatorData: TestatorDataContextProps = {
-  testatorData: {},
+  testatorData: {
+    birthDate: new Date(2000, 7, 1),
+  },
   setTestatorData: () => {},
 }
 
@@ -42,7 +44,9 @@ export function WizardPage() {
     setPreviousStep,
   } = useWizardSteps(totalQuestions, totalQuestionnaireSteps)
 
-  const [testatorData, setTestatorData] = useState<TestatorData>({})
+  const [testatorData, setTestatorData] = useState<TestatorData>({
+    birthDate: new Date(2000, 7, 1),
+  })
 
   function StepperHeading({ text }: { text: string }) {
     return (
