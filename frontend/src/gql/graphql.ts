@@ -31,6 +31,15 @@ export type Scalars = {
   DateTimeISO: { input: any; output: any }
 }
 
+export type Asset = {
+  __typename?: 'Asset'
+  description?: Maybe<Scalars['String']['output']>
+  id: Scalars['ID']['output']
+  inheritanceProcedureId: Scalars['ID']['output']
+  name: Scalars['String']['output']
+  value: Scalars['Float']['output']
+}
+
 export type Beneficiary = {
   __typename?: 'Beneficiary'
   contact?: Maybe<Contact>
@@ -38,6 +47,7 @@ export type Beneficiary = {
   dateOfBirth?: Maybe<Scalars['DateTimeISO']['output']>
   deceasedRelation?: Maybe<Scalars['String']['output']>
   id: Scalars['ID']['output']
+  inheritanceProcedures: Array<InheritanceProcedure>
   user?: Maybe<User>
   userId?: Maybe<Scalars['ID']['output']>
 }
@@ -74,8 +84,11 @@ export type CreateContactInput = {
 }
 
 export type CreateInheritanceProcedureInput = {
-  deceasedPersonId?: InputMaybe<Scalars['ID']['input']>
+  deceasedContactId?: InputMaybe<Scalars['ID']['input']>
+  deceasedDateOfBirth?: InputMaybe<Scalars['DateTimeISO']['input']>
+  deceasedDateOfDeath?: InputMaybe<Scalars['DateTimeISO']['input']>
   endDate: Scalars['DateTimeISO']['input']
+  mainBeneficiaryId?: InputMaybe<Scalars['ID']['input']>
   name: Scalars['String']['input']
   notaryId?: InputMaybe<Scalars['ID']['input']>
   startDate: Scalars['DateTimeISO']['input']
@@ -87,14 +100,6 @@ export type CreateNotaryInput = {
   userId?: InputMaybe<Scalars['ID']['input']>
 }
 
-export type DeceasedPerson = {
-  __typename?: 'DeceasedPerson'
-  contactId: Scalars['ID']['output']
-  dateOfBirth: Scalars['DateTimeISO']['output']
-  dateOfDeath: Scalars['DateTimeISO']['output']
-  id: Scalars['Int']['output']
-}
-
 export type FindNotaryInput = {
   deceasedPersonDateOfDeath: Scalars['DateTimeISO']['input']
   postalCode: Scalars['String']['input']
@@ -102,19 +107,26 @@ export type FindNotaryInput = {
 
 export type InheritanceProcedure = {
   __typename?: 'InheritanceProcedure'
-  deceasedPerson?: Maybe<DeceasedPerson>
-  deceasedPersonId?: Maybe<Scalars['ID']['output']>
-  endDate?: Maybe<Scalars['String']['output']>
+  beneficiaries?: Maybe<Array<Beneficiary>>
+  deceasedContact?: Maybe<Contact>
+  deceasedContactId?: Maybe<Scalars['ID']['output']>
+  deceasedDateOfBirth?: Maybe<Scalars['DateTimeISO']['output']>
+  deceasedDateOfDeath?: Maybe<Scalars['DateTimeISO']['output']>
+  endDate?: Maybe<Scalars['DateTimeISO']['output']>
   id: Scalars['ID']['output']
+  mainBeneficiary?: Maybe<Beneficiary>
+  mainBeneficiaryId?: Maybe<Scalars['ID']['output']>
   name: Scalars['String']['output']
   notary?: Maybe<Notary>
   notaryId?: Maybe<Scalars['ID']['output']>
+  procedureAssets?: Maybe<Array<Asset>>
   startDate: Scalars['DateTimeISO']['output']
   state: Scalars['String']['output']
 }
 
 export type Mutation = {
   __typename?: 'Mutation'
+  addBeneficiariesToProcedure: Scalars['Boolean']['output']
   addBeneficiaryToProcedure: Scalars['Boolean']['output']
   assignNotary: Scalars['Boolean']['output']
   changePassword: User
@@ -134,6 +146,11 @@ export type Mutation = {
   signIn: SignInResponse
   signUp: User
   updateBeneficiary: Beneficiary
+}
+
+export type MutationAddBeneficiariesToProcedureArgs = {
+  beneficiaryIds: Array<Scalars['Int']['input']>
+  procedureId: Scalars['Int']['input']
 }
 
 export type MutationAddBeneficiaryToProcedureArgs = {
@@ -224,6 +241,7 @@ export type Notary = {
   contact?: Maybe<Contact>
   contactId?: Maybe<Scalars['ID']['output']>
   id: Scalars['ID']['output']
+  inheritanceProcedures: Array<InheritanceProcedure>
   user?: Maybe<User>
   userId?: Maybe<Scalars['ID']['output']>
 }
@@ -239,6 +257,8 @@ export type Query = {
   getBeneficiaryById?: Maybe<Beneficiary>
   getContactById?: Maybe<Contact>
   getProcedureById?: Maybe<InheritanceProcedure>
+  getProceduresByBeneficiaryId: Array<InheritanceProcedure>
+  getProceduresByNotaryId: Array<InheritanceProcedure>
   getUserById?: Maybe<User>
   notaries: Array<Notary>
 }
@@ -271,6 +291,14 @@ export type QueryGetProcedureByIdArgs = {
   id: Scalars['Int']['input']
 }
 
+export type QueryGetProceduresByBeneficiaryIdArgs = {
+  beneficiaryId: Scalars['Int']['input']
+}
+
+export type QueryGetProceduresByNotaryIdArgs = {
+  notaryId: Scalars['Int']['input']
+}
+
 export type QueryGetUserByIdArgs = {
   id: Scalars['Float']['input']
 }
@@ -297,11 +325,51 @@ export type UpdateBeneficiaryInput = {
 
 export type User = {
   __typename?: 'User'
-  beneficiary?: Maybe<Beneficiary>
+  beneficiaries: Array<Beneficiary>
+  confirmed: Scalars['Boolean']['output']
   email: Scalars['String']['output']
   id: Scalars['ID']['output']
-  notary?: Maybe<Notary>
+  isBeneficiary: Scalars['Boolean']['output']
+  isNotary: Scalars['Boolean']['output']
+  notaries: Array<Notary>
   password: Scalars['String']['output']
+}
+
+export type GetProceduresByBeneficiaryIdQueryVariables = Exact<{
+  beneficiaryId: Scalars['Int']['input']
+}>
+
+export type GetProceduresByBeneficiaryIdQuery = {
+  __typename?: 'Query'
+  getProceduresByBeneficiaryId: Array<{
+    __typename?: 'InheritanceProcedure'
+    id: string
+    startDate: any
+    state: string
+  }>
+}
+
+export type GetProceduresByNotaryIdQueryVariables = Exact<{
+  notaryId: Scalars['Int']['input']
+}>
+
+export type GetProceduresByNotaryIdQuery = {
+  __typename?: 'Query'
+  getProceduresByNotaryId: Array<{
+    __typename?: 'InheritanceProcedure'
+    id: string
+    startDate: any
+    state: string
+  }>
+}
+
+export type EmailVerificationMutationVariables = Exact<{
+  token: Scalars['String']['input']
+}>
+
+export type EmailVerificationMutation = {
+  __typename?: 'Mutation'
+  confirmEmailVerification: boolean
 }
 
 export type SignInMutationVariables = Exact<{
@@ -314,7 +382,14 @@ export type SignInMutation = {
   signIn: {
     __typename?: 'SignInResponse'
     token: string
-    user: { __typename?: 'User'; id: string; email: string }
+    user: {
+      __typename?: 'User'
+      id: string
+      email: string
+      confirmed: boolean
+      isNotary: boolean
+      isBeneficiary: boolean
+    }
   }
 }
 
@@ -325,15 +400,6 @@ export type SignUpMutationVariables = Exact<{
 export type SignUpMutation = {
   __typename?: 'Mutation'
   signUp: { __typename?: 'User'; id: string }
-}
-
-export type EmailVerificationMutationVariables = Exact<{
-  token: Scalars['String']['input']
-}>
-
-export type EmailVerificationMutation = {
-  __typename?: 'Mutation'
-  confirmEmailVerification: boolean
 }
 
 export type FindNotaryQueryVariables = Exact<{
@@ -359,6 +425,160 @@ export type FindNotaryQuery = {
   } | null
 }
 
+export const GetProceduresByBeneficiaryIdDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetProceduresByBeneficiaryId' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'beneficiaryId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getProceduresByBeneficiaryId' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'beneficiaryId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'beneficiaryId' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'startDate' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'state' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetProceduresByBeneficiaryIdQuery,
+  GetProceduresByBeneficiaryIdQueryVariables
+>
+export const GetProceduresByNotaryIdDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetProceduresByNotaryId' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'notaryId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getProceduresByNotaryId' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'notaryId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'notaryId' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'startDate' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'state' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetProceduresByNotaryIdQuery,
+  GetProceduresByNotaryIdQueryVariables
+>
+export const EmailVerificationDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'EmailVerification' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'token' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'confirmEmailVerification' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'token' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'token' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  EmailVerificationMutation,
+  EmailVerificationMutationVariables
+>
 export const SignInDocument = {
   kind: 'Document',
   definitions: [
@@ -431,6 +651,18 @@ export const SignInDocument = {
                     selections: [
                       { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'confirmed' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'isNotary' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'isBeneficiary' },
+                      },
                     ],
                   },
                 },
@@ -494,54 +726,6 @@ export const SignUpDocument = {
     },
   ],
 } as unknown as DocumentNode<SignUpMutation, SignUpMutationVariables>
-export const EmailVerificationDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'EmailVerification' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'token' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'String' },
-            },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'confirmEmailVerification' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'token' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'token' },
-                },
-              },
-            ],
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  EmailVerificationMutation,
-  EmailVerificationMutationVariables
->
 export const FindNotaryDocument = {
   kind: 'Document',
   definitions: [

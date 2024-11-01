@@ -39,9 +39,10 @@ export type SignUpFormProps = {
     surname: string
     password: string
   }) => void
+  loading?: boolean
 }
 
-export function SignUpForm({ onSubmit }: SignUpFormProps) {
+export function SignUpForm({ onSubmit, loading }: SignUpFormProps) {
   return (
     <Form onSubmit={onSubmit} resolver={zodResolver(schema)} noValidate>
       <Stack gap={4}>
@@ -73,7 +74,9 @@ export function SignUpForm({ onSubmit }: SignUpFormProps) {
           type="password"
           required
         />
-        <SubmitButton>Vytvořit účet</SubmitButton>
+        <SubmitButton loading={loading} loadingText="Počkejte prosím...">
+          Vytvořit účet
+        </SubmitButton>
       </Stack>
     </Form>
   )

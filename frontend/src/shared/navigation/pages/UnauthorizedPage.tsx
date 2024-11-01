@@ -15,7 +15,6 @@ export function UnauthorizedPage() {
     >
       <Box textAlign="center">
         <Icon
-          //as={FiAlertCircle}
           boxSize={{ base: '48px', sm: '64px', md: '72px' }}
           color="red.500"
         >
@@ -27,14 +26,7 @@ export function UnauthorizedPage() {
           mb={4}
           mx={{ base: 8, sm: 0 }}
         >
-          Chyba 401.
-          <Box as="span" display={{ base: 'inline', sm: 'none' }}>
-            <br />
-          </Box>
-          <Box as="span" display={{ base: 'none', sm: 'inline' }}>
-            {' '}
-          </Box>
-          Přístup zamítnut
+          Přístup zamítnut.
         </Text>
         <Text
           fontSize={{ base: 'sm', md: 'md', lg: 'lg' }}
