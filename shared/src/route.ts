@@ -12,4 +12,5 @@ export const route = {
   proceedings: () => `/portal/proceedings`,
   emailVerification: () => `/auth/email-verification`,
   confirmEmail: () => `/auth/confirm-email`,
+  inheritanceProcedure: () => `/inheritance-procedure/:id`,
 }

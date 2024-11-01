@@ -10,6 +10,7 @@ import { Portal } from './modules/app/pages/Portal'
 import { Proceedings } from './modules/app/pages/Proceedings'
 import { ConfirmEmailPage } from './modules/auth/pages/ConfirmEmailPage'
 import { EmailVerification } from './modules/auth/pages/EmailVerification'
+import InheritanceProcedureDetail from './modules/auth/pages/InheritanceProcedureDetail'
 import { PasswordResetPage } from './modules/auth/pages/PasswordResetPage'
 import { SignOutPage } from './modules/auth/pages/SignOut'
 import { AboutPage } from './modules/static-pages/pages/AboutPage'
@@ -34,6 +35,10 @@ export function Routes() {
         <Route path={route.signOut()} element={<SignOutPage />} />
         <Route path={route.confirmEmail()} element={<ConfirmEmailPage />} />
         <Route path={route.resetPassword()} element={<PasswordResetPage />} />
+        <Route
+          path={route.inheritanceProcedure()}
+          element={<InheritanceProcedureDetail />}
+        />
         <Route
           path={route.emailVerification()}
           element={<EmailVerification />}
