@@ -41,7 +41,8 @@
       "answer_options": [
         {
           "id": 1,
-          "option_text": "Ano"
+          "option_text": "Ano",
+          "is_Error": true
         },
         {
           "id": 2,
@@ -193,7 +194,7 @@
     },
     {
       "id": 12,
-      "question_text": "V tomto případě náleží každému z potomků 1/2 (rovný díl) majetku z pozůstalosti. \n\nPreferovaným způsobem, jak věc vyřešit je dědická dohoda, kdy je možné si dědické podíly určit odlišným způsobem. Chcete se dozvědět víc?",
+      "question_text": "V tomto případě náleží každému z potomků 1/2 (rovný díl) majetku z pozůstalosti. Preferovaným způsobem, jak věc vyřešit je dědická dohoda, kdy je možné si dědické podíly určit odlišným způsobem. Chcete se dozvědět víc?",
       "answer_options": [
         {
           "id": 1,
@@ -513,7 +514,8 @@
       "answer_options": [
         {
           "id": 1,
-          "option_text": "Ano"
+          "option_text": "Ano",
+          "is_Error": true
         },
         {
           "id": 2,

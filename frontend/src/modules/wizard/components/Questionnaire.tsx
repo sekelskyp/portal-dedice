@@ -7,6 +7,7 @@ import questionData from '../questionnaire.json'
 interface Answer {
   id: number
   option_text: string
+  is_error?: boolean
 }
 
 interface Dependency {
@@ -70,12 +71,16 @@ export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
   }
 
   const goToNextStep = () => {
-    if (currentStep.id === 3 && selectedAnswer === 1) {
-      setShowError(true)
-      return
-    }
-
     if (selectedAnswer !== null || currentStep.answer_options?.length === 1) {
+      if (
+        currentStep.answer_options?.find(
+          (answer) => answer.id === selectedAnswer
+        )?.is_Error
+      ) {
+        setShowError(true)
+        setSelectedAnswer(null)
+        return
+      }
       const nextStepIndex = findNextStepIndex(currentStepIndex + 1)
 
       setAnswers((prevAnswers) => {
@@ -134,7 +139,7 @@ export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
           setCurrentStepIndex(questionIndex)
           setSelectedAnswer(null)
         }}
-        questionIndex={currentStepIndex - 1}
+        questionIndex={currentStepIndex}
       />
     )
   }
