@@ -7,6 +7,7 @@ import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 import { route } from '@shared/route'
 
 import { Portal } from './modules/app/pages/Portal'
+import { Proceedings } from './modules/app/pages/Proceedings'
 import { ConfirmEmailPage } from './modules/auth/pages/ConfirmEmailPage'
 import { EmailVerification } from './modules/auth/pages/EmailVerification'
 import { PasswordResetPage } from './modules/auth/pages/PasswordResetPage'
@@ -25,6 +26,7 @@ export function Routes() {
         <Route path={route.signIn()} element={<SignInPage />} />
         <Route path={route.signUp()} element={<SignUpPage />} />
         <Route path={route.portal()} element={<Portal />} />
+        <Route path={route.proceedings()} element={<Proceedings />} />
         <Route path={route.about()} element={<AboutPage />} />
         <Route path={route.guide()} element={<GuidePage />} />
         <Route path={route.blog()} element={<BlogPage />} />

@@ -42,13 +42,6 @@ type Contact {
   surname: String!
 }
 
-input CreateAssetInput {
-  description: String
-  inheritanceProcedureId: ID!
-  name: String!
-  value: Float!
-}
-
 input CreateBeneficiaryInput {
   contactId: ID
   dateOfBirth: DateTimeISO
@@ -124,7 +117,6 @@ type Mutation {
   createContact(data: CreateContactInput!): Int!
   createNotary(data: CreateNotaryInput!): Notary!
   createProcedure(data: CreateInheritanceProcedureInput!): Int!
-  deleteAsset(id: Int!): Boolean!
   deleteBeneficiary(id: Int!): Boolean!
   deleteContactById(id: Float!): Int!
   deleteNotary(id: Float!): Notary!
