@@ -18,15 +18,12 @@ const PROCEEDING_MUTATION = gql(/* GraphQL */ `
 export function NewProceedingPage() {
   const navigate = useNavigate()
 
-  const [createProcedureRequest, createProcedureRequestState] = useMutation(
-    PROCEEDING_MUTATION,
-    {
-      onCompleted: (data, context) => {
-        navigate(route.proceedings())
-      },
-      onError: () => {},
-    }
-  )
+  const [createProcedureRequest] = useMutation(PROCEEDING_MUTATION, {
+    onCompleted: (data, context) => {
+      navigate(route.proceedings())
+    },
+    onError: () => {},
+  })
 
   const handleProceedingFormSubmit = useCallback(
     (variables: {

@@ -30,6 +30,7 @@ export function Routes() {
         <Route path="/portal" element={<PortalLayout />}>
           <Route path={route.portal()} element={<Portal />} />
           <Route path={route.newProceeding()} element={<NewProceedingPage />} />
+          <Route path={route.proceedings()} element={<Proceedings />} />
         </Route>
         <Route path={route.about()} element={<AboutPage />} />
         <Route path={route.guide()} element={<GuidePage />} />
