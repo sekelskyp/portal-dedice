@@ -1,4 +1,4 @@
-import { forwardRef, useState } from 'react'
+import { forwardRef, useMemo, useState } from 'react'
 import { Combobox, createListCollection } from '@ark-ui/react/combobox'
 import { Portal } from '@ark-ui/react/portal'
 import {
@@ -25,39 +25,40 @@ type PlacesAutoCompleteProps = {
 
 export const AddressAutoComplete = forwardRef(
   ({ value, onChange, disabled }: PlacesAutoCompleteProps, ref) => {
-    const [inputChangedByTyping, setInputChangedByTyping] = useState(false)
     const [query, setQuery] = useState(value?.name ?? '')
     const { suggestions, loading, error } = useAddressSuggestions(query, {
       lang: 'cs',
       limit: 5,
-      enable: inputChangedByTyping,
+      enable: query.length > 3,
     })
 
-    const collection = createListCollection({
-      items: !error ? suggestions : [],
-    })
-
-    function handleSelect(selectedSuggestion?: Suggestion): void {
-      setQuery(selectedSuggestion?.name ?? '')
-      setInputChangedByTyping(false)
-      onChange(selectedSuggestion)
-    }
-
-    console.log(inputChangedByTyping)
-    console.log(query)
-    console.log(value)
-    console.log(suggestions.length)
+    const collection = useMemo(
+      () =>
+        createListCollection({
+          items: suggestions.map((x) => ({
+            label: x.name + ', ' + x.location,
+            value: x,
+          })),
+        }),
+      [suggestions]
+    )
 
     return (
       <Box asChild w="full" ref={ref}>
         <Combobox.Root
           collection={collection}
-          onInputValueChange={(value) => {
-            setQuery(value.inputValue)
-            setInputChangedByTyping(true)
-          }}
-          onValueChange={(value) => handleSelect(value.items[0])}
           inputValue={query}
+          onInputValueChange={(value) => {
+            if (value.inputValue === query) return
+
+            setQuery(value.inputValue)
+          }}
+          onValueChange={(details) => {
+            const suggestion = details.value[0] as unknown as Suggestion
+
+            setQuery(suggestion.name)
+            onChange(suggestion)
+          }}
           disabled={disabled}
         >
           <Combobox.Control>
@@ -90,23 +91,12 @@ export const AddressAutoComplete = forwardRef(
                   <Card.Root>
                     <Card.Body p={0}>
                       <Stack gap={1}>
-                        {collection.items.map((item, index) => (
-                          <Combobox.Item key={index} item={item} asChild>
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              justifyContent={'space-between'}
-                              pos={'relative'}
-                            >
-                              <Combobox.ItemText asChild>
-                                <Text overflow="hidden" textOverflow="ellipsis">
-                                  {item.name}, {item.location}
-                                </Text>
-                              </Combobox.ItemText>
-                            </Button>
+                        {collection.items.map((item) => (
+                          <Combobox.Item key={item.label} item={item}>
+                            <Combobox.ItemText>{item.label}</Combobox.ItemText>
                           </Combobox.Item>
                         ))}
-                        {suggestions.length === 0 && (
+                        {collection.items.length === 0 && (
                           <Text p={4}>Adresa nebyla nalezena.</Text>
                         )}
                       </Stack>

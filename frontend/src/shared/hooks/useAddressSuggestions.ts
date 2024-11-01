@@ -75,6 +75,7 @@ function useAddressSuggestions(
         url.searchParams.append('query', debouncedQuery)
         url.searchParams.append('lang', lang)
         url.searchParams.append('apiKey', API_KEY)
+        url.searchParams.append('locality', 'cz')
         if (limit) {
           url.searchParams.append('limit', limit.toString())
         }
