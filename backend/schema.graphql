@@ -11,6 +11,14 @@ type Asset {
   value: Float!
 }
 
+type AssetCopy {
+  description: String
+  id: ID!
+  inheritanceProcedureId: ID!
+  name: String!
+  value: Float!
+}
+
 type Beneficiary {
   contact: Contact
   contactId: ID
@@ -87,7 +95,6 @@ input FindNotaryInput {
 }
 
 type InheritanceProcedure {
-  assets: [Asset!]
   beneficiaries: [Beneficiary!]
   deceasedContact: Contact
   deceasedContactId: ID
@@ -100,6 +107,7 @@ type InheritanceProcedure {
   name: String!
   notary: Notary
   notaryId: ID
+  procedureAssets: [Asset!]
   startDate: DateTimeISO!
   state: String!
 }
@@ -110,7 +118,7 @@ type Mutation {
   changePassword(newPassword: String!, oldPassword: String!): User!
   closeProcedure(procedureId: Int!): Boolean!
   confirmEmailVerification(token: String!): Boolean!
-  createAsset(data: CreateAssetInput!): Asset!
+  createAsset(data: CreateAssetInput!): AssetCopy!
   createBeneficiaries(data: [CreateBeneficiaryInput!]!): [Beneficiary!]!
   createBeneficiary(data: CreateBeneficiaryInput!): Beneficiary!
   createContact(data: CreateContactInput!): Int!
@@ -125,7 +133,7 @@ type Mutation {
   resetPassword(newPassword: String!, token: String!): Boolean!
   signIn(login: String!, password: String!): SignInResponse!
   signUp(registerInput: RegisterInput!): User!
-  updateAsset(data: UpdateAssetInput!, id: Int!): Asset
+  updateAsset(data: UpdateAssetInput!, id: Int!): AssetCopy
   updateBeneficiary(data: UpdateBeneficiaryInput!, id: Int!): Beneficiary!
 }
 
@@ -140,10 +148,10 @@ type Notary {
 
 type Query {
   _empty: String!
-  asset(id: Int!): Asset
   author(id: Float!): Notary
   findNotary(input: FindNotaryInput!): Notary
   getAllContacts: [Contact!]!
+  getAssetById(id: Int!): AssetCopy
   getBeneficiariesByIds(ids: [Int!]!): [Beneficiary!]!
   getBeneficiariesByProcedureId(procedureId: Int!): [Beneficiary!]!
   getBeneficiaryById(id: Int!): Beneficiary
@@ -169,7 +177,7 @@ type SignInResponse {
 
 input UpdateAssetInput {
   description: String
-  inheritanceProcedureId: Int
+  inheritanceProcedureId: ID
   name: String
   value: Float
 }

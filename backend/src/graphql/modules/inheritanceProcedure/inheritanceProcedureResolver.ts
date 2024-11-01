@@ -183,7 +183,7 @@ export class InheritanceProcedureResolver {
 
   // Field Resolver to fetch the assets associated with the procedure
   @FieldResolver(() => [Asset], { nullable: true })
-  async assets(
+  async procedureAssets(
     @Root() procedure: InheritanceProcedure,
     @Ctx() { assetRepository }: CustomContext
   ): Promise<Asset[]> {
