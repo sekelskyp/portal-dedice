@@ -156,29 +156,34 @@ export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
   return (
     <Box>
       {canShowStep(currentStep) && (
-        <Box pt={4} my={16} mx={{ base: '24', sm: '8' }}>
+        <Box>
           <Container
             alignContent={'center'}
-            maxWidth={{ base: '100%', lg: '50%' }}
+            maxWidth={{ base: '95%', lg: '50%' }}
             bg="bg.panel"
             borderRadius="xl"
-            p={8}
+            px={8}
           >
             <Heading
               as="h2"
               size={{ base: 'xs', sm: 'sm', md: 'md', lg: 'lg' }}
               mb={4}
+              py={4}
             >
               {currentStep.question_text}
             </Heading>
 
             {(currentStep.answer_options?.length ?? 0) > 1 && (
-              <Stack direction="column" justifyItems={'center'}>
+              <Stack direction="column" justifyItems={'center'} pb={4}>
                 {currentStep.answer_options?.map((answer) => (
                   <Button
                     key={answer.id}
                     onClick={() => handleAnswer(answer.id)}
                     variant={selectedAnswer === answer.id ? 'solid' : 'outline'}
+                    size={{ base: 'xs', sm: 'sm', md: 'md', lg: 'lg' }}
+                    whiteSpace="normal"
+                    wordBreak="break-word"
+                    py={answer.option_text.includes(' ') ? 6 : 4}
                   >
                     {answer.option_text}
                   </Button>
