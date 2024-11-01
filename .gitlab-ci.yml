@@ -54,8 +54,6 @@ format:
     policy: pull
   script:
     - yarn format:check
-  needs:
-    - install
 
 lint:
   stage: verify
