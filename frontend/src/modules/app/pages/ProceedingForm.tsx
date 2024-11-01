@@ -1,20 +1,14 @@
 import { useState } from 'react'
-import {
-  Box,
-  Button,
-  Field,
-  Fieldset,
-  HStack,
-  IconButton,
-  Input,
-  NativeSelectField,
-  NativeSelectRoot,
-  Stack,
-  Text,
-} from '@chakra-ui/react'
+import { Box, HStack, IconButton, Text } from '@chakra-ui/react'
 import { LuPlus } from 'react-icons/lu'
 
-import { Form, InputFormControl, SubmitButton } from '@frontend/shared/forms'
+import resources from '@frontend/resources'
+import {
+  DateFormControl,
+  Form,
+  InputFormControl,
+  SubmitButton,
+} from '@frontend/shared/forms'
 
 export type ProceedingFormProps = {
   errorMessage?: string
@@ -51,143 +45,64 @@ export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
 
   return (
     <Form onSubmit={onSubmit}>
-      {/*
-      <Stack gap={4}>
-      <Text fontSize={'lg'} as="b">
-          Identifikace zůstavitele
-        </Text>
-        <HStack gap={4}>
-          <InputFormControl name="name" label="Jméno "></InputFormControl>
-          <InputFormControl name="surname" label="Příjmení "></InputFormControl>
-          </HStack>
-        <InputFormControl
-          name="dateOfDeath"
-          label="Datum úmrtí "
-        ></InputFormControl>
-        <InputFormControl
+      <Text fontSize="xl" fontWeight="bold">
+        {resources.portal.pages.newProceeding.title}
+      </Text>
+      <Text fontSize="sm">{resources.portal.pages.newProceeding.subtitle}</Text>
+      <Text fontWeight="bold">
+        {resources.portal.forms.proceedingForm.groups.deceased}
+      </Text>
+      <HStack gap={4}>
+        <InputFormControl name="name" label="Jméno"></InputFormControl>
+        <InputFormControl name="surname" label="Příjmení"></InputFormControl>
+      </HStack>
+      <DateFormControl name="dateOfDeath" label="Datum úmrtí"></DateFormControl>
+      <InputFormControl
         name="address"
-          label="Trvalé bydliště "
-          ></InputFormControl>
-          <Text fontSize={'lg'} as={'b'}>
-          Kontaktní osoba
-        </Text>
-        <HStack gap={4}>
-          <InputFormControl name="contactName" label="Jméno"></InputFormControl>
-          <InputFormControl
-            name="contactSurname"
-            label="Příjmení"
-          ></InputFormControl>
-        </HStack>
+        label="Trvalé bydliště"
+      ></InputFormControl>
+      <Text fontWeight="bold">
+        {resources.portal.forms.proceedingForm.groups.contactPerson}
+      </Text>
+      <HStack gap={4}>
+        <InputFormControl name="contactName" label="Jméno"></InputFormControl>
         <InputFormControl
-          name="contactEmail"
-          label="Emailová adresa"
-          ></InputFormControl>
-          <Text fontSize={'lg'} as={'b'}>
-          Dědici po zůstaviteli
-          </Text>
-          {heirs.map((heir: Heir, index: number) => (
-            <Stack key={`heir-${index}`} gap={4}>
-            <HStack gap={4}>
+          name="contactSurname"
+          label="Příjmení"
+        ></InputFormControl>
+      </HStack>
+      <InputFormControl
+        name="contactEmail"
+        label="Emailová adresa"
+      ></InputFormControl>
+      <Text fontWeight="bold">
+        {resources.portal.forms.proceedingForm.groups.heirs}
+      </Text>
+      {heirs.map((heir: Heir, index: number) => (
+        <Box key={`heir-${index}`}>
+          <HStack gap={4}>
             <InputFormControl
-            name={`heirs.${index}.name`}
-            label="Jméno"
+              name={`heirs.${index}.name`}
+              label="Jméno"
             ></InputFormControl>
             <InputFormControl
-            name={`heirs.${index}.surname`}
-            label="Příjmení"
+              name={`heirs.${index}.surname`}
+              label="Příjmení"
             ></InputFormControl>
-            </HStack>
-            <InputFormControl
+          </HStack>
+          <InputFormControl
             name={`heirs.${index}.email`}
             label="Emailová adresa"
-            ></InputFormControl>
-            </Stack>
-            ))}
-            <IconButton onClick={addHeir}>
-            <LuPlus></LuPlus>
-            Přidat dědice
-            </IconButton>
-            <SubmitButton>Vytvořit řízení</SubmitButton>
-            </Stack>
-            */}
-      <Fieldset.Root size="lg" maxW="2xl">
-        <Stack>
-          <Fieldset.Legend fontSize="xl" fontWeight="bold">
-            Založení nového řízení
-          </Fieldset.Legend>
-          <Fieldset.HelperText fontSize="sm">
-            Pro založení nového dědického řízení prosím vyplňte nasledující
-            formulář.
-          </Fieldset.HelperText>
-        </Stack>
-
-        <Fieldset.Content>
-          <Text fontWeight="bold">Identifikace zůstavitele</Text>
-          <HStack gap={4}>
-            <InputFormControl
-              name="contactName"
-              label="Jméno"
-            ></InputFormControl>
-            <InputFormControl
-              name="contactSurname"
-              label="Příjmení"
-            ></InputFormControl>
-          </HStack>
-          <InputFormControl
-            name="dateOfDeath"
-            label="Datum úmrtí "
           ></InputFormControl>
-          <InputFormControl
-            name="address"
-            label="Trvalé bydliště "
-          ></InputFormControl>
-
-          <Text fontWeight="bold">Kontaktní osoba</Text>
-          <HStack gap={4}>
-            <InputFormControl
-              name="contactName"
-              label="Jméno"
-            ></InputFormControl>
-            <InputFormControl
-              name="contactSurname"
-              label="Příjmení"
-            ></InputFormControl>
-          </HStack>
-          <InputFormControl
-            name="contactEmail"
-            label="Emailová adresa"
-          ></InputFormControl>
-          <Text fontWeight="bold">
-          Dědici po zůstaviteli
-          </Text>
-          {heirs.map((heir: Heir, index: number) => (
-            <Box key={`heir-${index}`} gap={4}>
-              <HStack gap={4}>
-                <InputFormControl
-                  name={`heirs.${index}.name`}
-                  label="Jméno"
-                ></InputFormControl>
-                <InputFormControl
-                  name={`heirs.${index}.surname`}
-                  label="Příjmení"
-                ></InputFormControl>
-              </HStack>
-              <InputFormControl
-                name={`heirs.${index}.email`}
-                label="Emailová adresa"
-              ></InputFormControl>
-            </Box>
-          ))}
-          <IconButton onClick={addHeir} alignSelf="flex-start" p={4}>
-            <LuPlus></LuPlus>
-            Přidat dědice
-          </IconButton>
-        </Fieldset.Content>
-
-        <Button type="submit">
-          Založit řízení
-        </Button>
-      </Fieldset.Root>
+        </Box>
+      ))}
+      <IconButton onClick={addHeir} alignSelf="flex-start" p={4}>
+        <LuPlus></LuPlus>
+        {resources.portal.forms.proceedingForm.addHeir}
+      </IconButton>
+      <SubmitButton>
+        {resources.portal.forms.proceedingForm.createProceeding}
+      </SubmitButton>
     </Form>
   )
 }

@@ -5,6 +5,7 @@ import { SignUpPage } from '@frontend/modules/auth/pages/SignUpPage'
 import { HomePage } from '@frontend/modules/home/pages/HomePage'
 import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 
+import { NewProceedingPage } from './modules/app/pages/NewProceedingPage'
 import { Portal } from './modules/app/pages/Portal'
 import { PasswordResetPage } from './modules/auth/pages/PasswordResetPage'
 import { SignOutPage } from './modules/auth/pages/SignOut'
@@ -29,6 +30,7 @@ export function Routes() {
         <Route path={route.wizard()} element={<WizardPage />} />
         <Route path={route.signOut()} element={<SignOutPage />} />
         <Route path={route.resetPassword()} element={<PasswordResetPage />} />
+        <Route path={route.newProceeding()} element={<NewProceedingPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </RouterRoutes>

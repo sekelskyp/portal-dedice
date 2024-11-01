@@ -54,6 +54,26 @@ const resources = {
       },
     },
   },
+  portal: {
+    pages: {
+      newProceeding: {
+        title: 'Založení nového řízení',
+        subtitle:
+          'Pro založení nového dědického řízení prosím vyplňte nasledující formulář.',
+      },
+    },
+    forms: {
+      proceedingForm: {
+        groups: {
+          deceased: 'Identifikace zůstavitele',
+          contactPerson: 'Kontaktní osoba',
+          heirs: 'Dědici po zůstaviteli',
+        },
+        addHeir: 'Přidat dědice',
+        createProceeding: 'Založit řízení' 
+      },
+    },
+  },
 }
 
 export default resources
