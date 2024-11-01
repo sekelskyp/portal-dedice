@@ -8,7 +8,6 @@ export const SimpleCentered = ({
   <Center
     as={Stack}
     w={'full'}
-    my={10}
     textAlign={{
       base: 'left',
       md: 'center',

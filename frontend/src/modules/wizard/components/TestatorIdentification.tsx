@@ -1,19 +1,20 @@
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import { Card, Center, Container, Stack, Text } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { Field, Radio } from '@frontend/shared/design-system'
+import { Radio } from '@frontend/shared/design-system'
 import {
   DateFormControl,
   Form,
-  PlacesAutoComplete,
   RadioGroupFormControl,
   SubmitButton,
 } from '@frontend/shared/forms'
+import { AddressFormControl } from '@frontend/shared/forms/AddressFormControl'
+import { Suggestion } from '@frontend/shared/hooks/useAddressSuggestions'
 
-import { NotaryDataContext } from '../pages/WizardStepPage'
+import { TestatorDataContext } from '../pages/WizardStepPage'
 import { getZipCodeFromAddress } from '../utils/getGeocode'
 
 const schema = z.object({
@@ -21,7 +22,7 @@ const schema = z.object({
   birthDate: z
     .date({ required_error: 'Datum narození je povinné.' })
     .max(new Date(), 'Datum narození musí být v minulosti.'),
-  address: z.string().min(1, 'Adresa bydliště je povinná.'),
+  address: z.any({ required_error: 'Adresa bydliště je povinná.' }),
 })
 
 type NextStepProps = {
@@ -29,26 +30,21 @@ type NextStepProps = {
 }
 
 export function TestatorIdentification({ nextStep }: NextStepProps) {
+  const testatorDataContext = useContext(TestatorDataContext)
+  const { testatorData, setTestatorData } = testatorDataContext
+
   const methods = useForm({
     resolver: zodResolver(schema),
     mode: 'onChange',
     reValidateMode: 'onChange',
   })
 
-  const notaryDataContext = useContext(NotaryDataContext)
-
-  const { notaryData, setNotaryData } = notaryDataContext
-
-  useEffect(() => {
-    if (notaryData) {
-      methods.reset(notaryData)
-    }
-  }, [notaryData, methods])
-
   const onSubmit = async (data: z.infer<typeof schema>) => {
-    const postalCode = await getZipCodeFromAddress(data.address)
+    const postalCode = await getZipCodeFromAddress(
+      (data.address as Suggestion).zip!
+    )
     const testatorData = { ...data, postalCode }
-    setNotaryData(testatorData)
+    setTestatorData(testatorData)
     nextStep()
   }
 
@@ -57,6 +53,11 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
       onSubmit={onSubmit}
       resolver={zodResolver(schema)}
       noValidate
+      defaultValues={{
+        sex: testatorData.sex || '',
+        birthDate: testatorData.birthDate || undefined!,
+        address: testatorData.address || '',
+      }}
       {...methods}
     >
       <Container
@@ -81,9 +82,11 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
               <Radio value="female">Žena</Radio>
             </RadioGroupFormControl>
             <DateFormControl name="birthDate" label="Datum narození" required />
-            <Field label="Trvalé bydliště" required>
-              <PlacesAutoComplete name="address" />
-            </Field>
+            <AddressFormControl
+              name="address"
+              label="Trvalé bydliště"
+              required
+            />
             <Center>
               <SubmitButton>Potvrdit údaje</SubmitButton>
             </Center>

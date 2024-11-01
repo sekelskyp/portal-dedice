@@ -1,19 +1,30 @@
-import { AccordionRoot } from '@frontend/shared/design-system'
-
 import {
-  AccordionHelperItem,
-  AccordionHelperItemProps,
-} from './AccordionHelperItem'
+  AccordionItem,
+  AccordionItemContent,
+  AccordionItemTrigger,
+  AccordionRoot,
+} from '@frontend/shared/design-system'
 
 interface AccordionHelperProps {
-  items: AccordionHelperItemProps[]
+  items: {
+    title: string
+    description: string
+  }[]
 }
 
 export function AccordionHelper({ items }: AccordionHelperProps) {
   return (
-    <AccordionRoot multiple textAlign="left">
-      {items.map((item) => (
-        <AccordionHelperItem key={item.title} {...item} />
+    <AccordionRoot
+      multiple
+      textAlign="left"
+      variant="enclosed"
+      borderRadius="lg"
+    >
+      {items.map((item, index) => (
+        <AccordionItem key={index} value={item.title}>
+          <AccordionItemTrigger>{item.title}</AccordionItemTrigger>
+          <AccordionItemContent>{item.description}</AccordionItemContent>
+        </AccordionItem>
       ))}
     </AccordionRoot>
   )

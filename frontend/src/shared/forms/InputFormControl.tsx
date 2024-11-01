@@ -3,8 +3,6 @@ import { Input } from '@chakra-ui/react'
 import { BaseFieldControl, BaseFieldControlProps } from './BaseFieldControl'
 
 export interface InputControlProps extends BaseFieldControlProps {
-  name: string
-  disabled?: boolean
   type?: string
   placeholder?: string
 }
