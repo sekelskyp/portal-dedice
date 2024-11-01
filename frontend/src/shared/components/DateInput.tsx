@@ -5,7 +5,12 @@ import { Box, Card, HStack, Input, Stack } from '@chakra-ui/react'
 import { fromDate } from '@internationalized/date'
 import { FiCalendar, FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi'
 
-import { Button, InputGroup } from '../design-system'
+import {
+  Button,
+  InputGroup,
+  NativeSelectField,
+  NativeSelectRoot,
+} from '../design-system'
 
 export interface DateInputProps
   extends Omit<DatePickerRootProps, 'value' | 'onChange' | 'name'> {
@@ -64,8 +69,28 @@ export const DateInput = forwardRef(
                       <Card.Root>
                         <Card.Body as={Stack} gap={4} p={3}>
                           <HStack>
-                            <DatePicker.MonthSelect />
-                            <DatePicker.YearSelect />
+                            <NativeSelectRoot size="xs" variant="plain">
+                              <NativeSelectField
+                                {...datePicker.getMonthSelectProps()}
+                              >
+                                {datePicker.getMonths().map((month, id) => (
+                                  <option key={id} value={month.value}>
+                                    {month.label}
+                                  </option>
+                                ))}
+                              </NativeSelectField>
+                            </NativeSelectRoot>
+                            <NativeSelectRoot size="xs" variant="plain">
+                              <NativeSelectField
+                                {...datePicker.getYearSelectProps()}
+                              >
+                                {datePicker.getYears().map((month, id) => (
+                                  <option key={id} value={month.value}>
+                                    {month.label}
+                                  </option>
+                                ))}
+                              </NativeSelectField>
+                            </NativeSelectRoot>
                           </HStack>
                           <DatePicker.ViewControl>
                             <HStack justifyContent="space-between">
@@ -130,8 +155,28 @@ export const DateInput = forwardRef(
                       <Card.Root>
                         <Card.Body as={Stack} gap={4} p={3}>
                           <HStack>
-                            <DatePicker.MonthSelect />
-                            <DatePicker.YearSelect />
+                            <NativeSelectRoot size="xs" variant="plain">
+                              <NativeSelectField
+                                {...datePicker.getMonthSelectProps()}
+                              >
+                                {datePicker.getMonths().map((month, id) => (
+                                  <option key={id} value={month.value}>
+                                    {month.label}
+                                  </option>
+                                ))}
+                              </NativeSelectField>
+                            </NativeSelectRoot>
+                            <NativeSelectRoot size="xs" variant="plain">
+                              <NativeSelectField
+                                {...datePicker.getYearSelectProps()}
+                              >
+                                {datePicker.getYears().map((month, id) => (
+                                  <option key={id} value={month.value}>
+                                    {month.label}
+                                  </option>
+                                ))}
+                              </NativeSelectField>
+                            </NativeSelectRoot>
                           </HStack>
                           <DatePicker.ViewControl>
                             <HStack justifyContent="space-between">
@@ -194,8 +239,28 @@ export const DateInput = forwardRef(
                       <Card.Root>
                         <Card.Body as={Stack} gap={4} p={3}>
                           <HStack>
-                            <DatePicker.MonthSelect />
-                            <DatePicker.YearSelect />
+                            <NativeSelectRoot size="xs" variant="plain">
+                              <NativeSelectField
+                                {...datePicker.getMonthSelectProps()}
+                              >
+                                {datePicker.getMonths().map((month, id) => (
+                                  <option key={id} value={month.value}>
+                                    {month.label}
+                                  </option>
+                                ))}
+                              </NativeSelectField>
+                            </NativeSelectRoot>
+                            <NativeSelectRoot size="xs" variant="plain">
+                              <NativeSelectField
+                                {...datePicker.getYearSelectProps()}
+                              >
+                                {datePicker.getYears().map((month, id) => (
+                                  <option key={id} value={month.value}>
+                                    {month.label}
+                                  </option>
+                                ))}
+                              </NativeSelectField>
+                            </NativeSelectRoot>
                           </HStack>
                           <DatePicker.ViewControl>
                             <HStack justifyContent="space-between">
