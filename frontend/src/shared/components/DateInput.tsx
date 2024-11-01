@@ -51,7 +51,7 @@ export const DateInput = forwardRef(
               }
             >
               <DatePicker.Input asChild>
-                <Input ref={ref} readOnly />
+                <Input ref={ref} readOnly placeholder="Vyberte datum" />
               </DatePicker.Input>
             </InputGroup>
           </DatePicker.Control>

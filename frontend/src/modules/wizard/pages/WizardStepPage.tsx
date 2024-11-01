@@ -1,6 +1,8 @@
 import { createContext, Dispatch, SetStateAction, useState } from 'react'
 import { Box, Heading } from '@chakra-ui/react'
 
+import { Suggestion } from '@frontend/shared/hooks/useAddressSuggestions'
+
 import { NotaryAssignment } from '../components/NotaryAssignment'
 import { QuestionnaireStep } from '../components/Questionnaire'
 import { QuestionStep } from '../components/QuestionStep'
@@ -14,8 +16,7 @@ import questionData from '../questions.json'
 type TestatorData = {
   sex?: string
   birthDate?: Date
-  address?: string
-  postalCode?: string
+  address?: Suggestion
 }
 
 interface TestatorDataContextProps {
@@ -24,9 +25,7 @@ interface TestatorDataContextProps {
 }
 
 const defaultTestatorData: TestatorDataContextProps = {
-  testatorData: {
-    birthDate: new Date(2000, 7, 1),
-  },
+  testatorData: {},
   setTestatorData: () => {},
 }
 
@@ -47,9 +46,7 @@ export function WizardPage() {
     resetProgress,
   } = useWizardSteps(totalQuestions, totalQuestionnaireSteps)
 
-  const [testatorData, setTestatorData] = useState<TestatorData>({
-    birthDate: new Date(2000, 7, 1),
-  })
+  const [testatorData, setTestatorData] = useState<TestatorData>({})
 
   function StepperHeading({ text }: { text: string }) {
     return (

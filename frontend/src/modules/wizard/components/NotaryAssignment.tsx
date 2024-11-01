@@ -46,7 +46,7 @@ export function NotaryAssignment({
 
   const { notary, loading, error } = useGetNotary(
     testatorData.birthDate,
-    testatorData.postalCode
+    testatorData.address
   )
 
   if (loading) return <Text>Loading...</Text>
