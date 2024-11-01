@@ -17,12 +17,13 @@ import {
   removeBeneficiaryFromProcedure,
 } from '../../../services/inheritanceProcedureService'
 import { CustomContext } from '../../../types/types'
+import { Asset } from '../asset/assetType'
 import { Beneficiary } from '../beneficiary/beneficiaryType'
 import { Contact } from '../contact/contactType'
-import { InheritanceProcedureData } from '../inheritanceProcedure/inheritaceProcedureRepository'
 import { Notary } from '../notary/notaryType'
 
 import { CreateInheritanceProcedureInput } from './createInheritanceProcedureInput'
+import { InheritanceProcedureData } from './inheritaceProcedureRepository'
 import { InheritanceProcedure } from './inheritanceProcedureType'
 
 @Resolver(() => InheritanceProcedure)
@@ -112,10 +113,10 @@ export class InheritanceProcedureResolver {
     @Root() procedure: InheritanceProcedure,
     @Ctx() { contactRepository }: CustomContext
   ): Promise<Contact | null> {
-    if (!procedure.deceasedContactId) {
+    if (!procedure.mainBeneficiaryId) {
       return null
     }
-    return await contactRepository.getContactById(procedure.deceasedContactId)
+    return await contactRepository.getContactById(procedure.mainBeneficiaryId)
   }
 
   // Field Resolver to fetch the deceased person associated with the procedure
@@ -139,5 +140,38 @@ export class InheritanceProcedureResolver {
     return await beneficiaryRepository.getBeneficiariesByProcedureId(
       procedure.id
     )
+  }
+
+  @Query(() => [InheritanceProcedure])
+  async getProceduresByNotaryId(
+    @Arg('notaryId', () => Int) notaryId: number,
+    @Ctx() { inheritanceProcedureRepository }: CustomContext
+  ): Promise<InheritanceProcedure[]> {
+    return await inheritanceProcedureRepository.getProceduresByNotaryId(
+      notaryId
+    )
+  }
+
+  @Query(() => [InheritanceProcedure])
+  async getProceduresByBeneficiaryId(
+    @Arg('beneficiaryId', () => Int) beneficiaryId: number,
+    @Ctx() { inheritanceProcedureRepository }: CustomContext
+  ): Promise<InheritanceProcedure[]> {
+    const procedureRecords =
+      await inheritanceProcedureRepository.getProceduresByBeneficiaryId(
+        beneficiaryId
+      )
+    return procedureRecords.map((record) => ({
+      ...record.inheritance_procedure,
+    }))
+  }
+
+  // Field Resolver to fetch the assets associated with the procedure
+  @FieldResolver(() => [Asset], { nullable: true })
+  async assets(
+    @Root() procedure: InheritanceProcedure,
+    @Ctx() { assetRepository }: CustomContext
+  ): Promise<Asset[]> {
+    return await assetRepository.getAssetsByProcedureId(procedure.id)
   }
 }

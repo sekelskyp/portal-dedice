@@ -1,6 +1,7 @@
-import { eq } from 'drizzle-orm'
+import { eq, or } from 'drizzle-orm'
 
 import {
+  beneficiaryInheritanceProcedureRel,
   inheritanceProcedure,
   InheritanceProcedureStateEnumType,
 } from '@backend/db/schema'
@@ -64,6 +65,26 @@ export function getInheritanceProcedureRepository(db: Db) {
       .where(eq(inheritanceProcedure.notaryId, notaryId))
   }
 
+  async function getProceduresByBeneficiaryId(beneficiaryId: number) {
+    return await db
+      .select()
+      .from(inheritanceProcedure)
+      .leftJoin(
+        beneficiaryInheritanceProcedureRel,
+        eq(
+          beneficiaryInheritanceProcedureRel.inheritanceProcedureId,
+          inheritanceProcedure.id
+        )
+      )
+      .where(
+        // Fetches where beneficiary is either mainBeneficiary or linked via the relationship table
+        or(
+          eq(inheritanceProcedure.mainBeneficiaryId, beneficiaryId),
+          eq(beneficiaryInheritanceProcedureRel.beneficiaryId, beneficiaryId)
+        )
+      )
+  }
+
   return {
     getProcedureById,
     getAllProcedures,
@@ -71,5 +92,6 @@ export function getInheritanceProcedureRepository(db: Db) {
     deleteProcedureById,
     updateProcedure,
     getProceduresByNotaryId,
+    getProceduresByBeneficiaryId,
   }
 }

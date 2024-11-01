@@ -13,13 +13,6 @@ export interface AuthResponse {
   token: string
 }
 
-/**
- * Login a user and return an authentication token.
- * @param login - The user's email or login.
- * @param password - The user's password.
- * @param context - The context to access the user repository.
- * @returns {Promise<AuthResponse>}
- */
 export async function loginUser(
   login: string,
   password: string,
@@ -45,13 +38,7 @@ export async function loginUser(
   return { userId: foundUser.id, token }
 }
 
-/**
- * Register a new user with email and password.
- * @param email - The email to register.
- * @param password - The password for the new user.
- * @param context - The context to access the user repository.
- * @returns {Promise<User>}
- */
+// Register a new user with email and password.
 export async function registerUser(
   email: string,
   password: string,
@@ -89,14 +76,7 @@ export async function registerUser(
   return newUser
 }
 
-/**
- * Change password for the authenticated user.
- * @param userId - The ID of the user requesting password change.
- * @param oldPassword - The current password for validation.
- * @param newPassword - The new password to be set.
- * @param context - The context to access repositories.
- * @returns {Promise<void>}
- */
+// Change password for the authenticated user.
 export async function changeUserPassword(
   userId: number,
   oldPassword: string,
@@ -122,15 +102,9 @@ export async function changeUserPassword(
 
   // Hash the new password and update it
   const newPasswordHash = await hashPassword(newPassword)
-  await userRepository.updatePassword(userId, newPasswordHash)
+  await userRepository.updateUser(userId, { password: newPasswordHash })
 }
 
-/**
- * Fetch user details by ID.
- * @param userId - The ID of the user.
- * @param context - The context to access the user repository.
- * @returns {Promise<User | null>}
- */
 export async function getUserById(userId: number, context: CustomContext) {
   const { userRepository } = context
   return await userRepository.getUserById(userId)
@@ -153,13 +127,7 @@ export async function completePasswordReset(
   await resetPassword(token, newPassword, context) // Using the PasswordResetService function here
 }
 
-/**
- * Send an email verification request to a new user.
- * @param userId - The ID of the user to confirm.
- * @param email - The user's email to send the confirmation link to.
- * @param context - The context to access the repositories.
- * @returns {Promise<void>}
- */
+// Send an email verification request to a new user.
 async function sendEmailVerification(
   userId: number,
   email: string,
@@ -168,15 +136,29 @@ async function sendEmailVerification(
   await requestEmailVerification(userId, email, context) // Calls emailConfirmationService to generate and send token
 }
 
-/**
- * Confirm the user's email using a token.
- * @param token - The confirmation token provided by the user.
- * @param context - The context to access the repositories.
- * @returns {Promise<void>}
- */
+//Confirm the user's email using a token.
 export async function confirmEmailVerification(
   token: string,
   context: CustomContext
 ): Promise<void> {
   await verifyEmail(token, context) // Calls emailConfirmationService to validate and confirm email
+}
+
+export async function isUserNotary(
+  userId: number,
+  context: CustomContext
+): Promise<boolean> {
+  const { notaryRepository } = context
+  const notaries = await notaryRepository.getNotariesByUserId(userId)
+  return notaries.length > 0
+}
+
+export async function isUserBeneficiary(
+  userId: number,
+  context: CustomContext
+): Promise<boolean> {
+  const { beneficiaryRepository } = context
+  const beneficiaries =
+    await beneficiaryRepository.getBeneficiariesByUserId(userId)
+  return beneficiaries.length > 0
 }

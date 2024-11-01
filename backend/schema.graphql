@@ -3,12 +3,21 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+type Asset {
+  description: String
+  id: ID!
+  inheritanceProcedureId: ID!
+  name: String!
+  value: Float!
+}
+
 type Beneficiary {
   contact: Contact
   contactId: ID
   dateOfBirth: DateTimeISO
   deceasedRelation: String
   id: ID!
+  inheritanceProcedures: [InheritanceProcedure!]!
   user: User
   userId: ID
 }
@@ -23,6 +32,13 @@ type Contact {
   phone: String
   postalCode: String
   surname: String!
+}
+
+input CreateAssetInput {
+  description: String
+  inheritanceProcedureId: ID!
+  name: String!
+  value: Float!
 }
 
 input CreateBeneficiaryInput {
@@ -71,7 +87,8 @@ input FindNotaryInput {
 }
 
 type InheritanceProcedure {
-  beneficiaries: Beneficiary
+  assets: [Asset!]
+  beneficiaries: [Beneficiary!]
   deceasedContact: Contact
   deceasedContactId: ID
   deceasedDateOfBirth: DateTimeISO
@@ -93,11 +110,13 @@ type Mutation {
   changePassword(newPassword: String!, oldPassword: String!): User!
   closeProcedure(procedureId: Int!): Boolean!
   confirmEmailVerification(token: String!): Boolean!
+  createAsset(data: CreateAssetInput!): Asset!
   createBeneficiaries(data: [CreateBeneficiaryInput!]!): [Beneficiary!]!
   createBeneficiary(data: CreateBeneficiaryInput!): Beneficiary!
   createContact(data: CreateContactInput!): Int!
   createNotary(data: CreateNotaryInput!): Notary!
   createProcedure(data: CreateInheritanceProcedureInput!): Int!
+  deleteAsset(id: Int!): Boolean!
   deleteBeneficiary(id: Int!): Boolean!
   deleteContactById(id: Float!): Int!
   deleteNotary(id: Float!): Notary!
@@ -106,6 +125,7 @@ type Mutation {
   resetPassword(newPassword: String!, token: String!): Boolean!
   signIn(login: String!, password: String!): SignInResponse!
   signUp(registerInput: RegisterInput!): User!
+  updateAsset(data: UpdateAssetInput!, id: Int!): Asset
   updateBeneficiary(data: UpdateBeneficiaryInput!, id: Int!): Beneficiary!
 }
 
@@ -113,12 +133,14 @@ type Notary {
   contact: Contact
   contactId: ID
   id: ID!
+  inheritanceProcedures: [InheritanceProcedure!]!
   user: User
   userId: ID
 }
 
 type Query {
   _empty: String!
+  asset(id: Int!): Asset
   author(id: Float!): Notary
   findNotary(input: FindNotaryInput!): Notary
   getAllContacts: [Contact!]!
@@ -127,6 +149,8 @@ type Query {
   getBeneficiaryById(id: Int!): Beneficiary
   getContactById(id: Float!): Contact
   getProcedureById(id: Int!): InheritanceProcedure
+  getProceduresByBeneficiaryId(beneficiaryId: Int!): [InheritanceProcedure!]!
+  getProceduresByNotaryId(notaryId: Int!): [InheritanceProcedure!]!
   getUserById(id: Float!): User
   notaries: [Notary!]!
 }
@@ -143,6 +167,13 @@ type SignInResponse {
   user: User!
 }
 
+input UpdateAssetInput {
+  description: String
+  inheritanceProcedureId: Int
+  name: String
+  value: Float
+}
+
 input UpdateBeneficiaryInput {
   contactId: ID
   dateOfBirth: DateTimeISO
@@ -151,9 +182,12 @@ input UpdateBeneficiaryInput {
 }
 
 type User {
-  beneficiary: Beneficiary
+  beneficiaries: [Beneficiary!]!
+  confirmed: Boolean!
   email: String!
   id: ID!
-  notary: Notary
+  isBeneficiary: Boolean!
+  isNotary: Boolean!
+  notaries: [Notary!]!
   password: String!
 }

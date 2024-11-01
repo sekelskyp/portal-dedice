@@ -81,7 +81,7 @@ export const resetPassword = async (
   const hashedPassword = await hashPassword(newPassword)
 
   // Update the user's password
-  await userRepository.updatePassword(userRecord.id, hashedPassword)
+  await userRepository.updateUser(userRecord.id, { password: hashedPassword })
 
   // Delete the reset token after it's used
   await passwordResetTokenRepository.deleteTokenById(resetTokenRecord.id)

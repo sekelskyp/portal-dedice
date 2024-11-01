@@ -13,6 +13,7 @@ import { DeceasedRelationEnumType } from '@backend/db/schema'
 import { CustomContext } from '@backend/types/types'
 
 import { Contact } from '../contact/contactType'
+import { InheritanceProcedure } from '../inheritanceProcedure/inheritanceProcedureType'
 import { User } from '../user/userType'
 
 import { BeneficiaryData } from './beneficiaryRepository'
@@ -22,6 +23,20 @@ import { UpdateBeneficiaryInput } from './updateBeneficiaryInput'
 
 @Resolver(() => Beneficiary)
 export class BeneficiaryResolver {
+  @FieldResolver(() => [InheritanceProcedure])
+  async inheritanceProcedures(
+    @Root() beneficiary: Beneficiary,
+    @Ctx() { inheritanceProcedureRepository }: CustomContext
+  ): Promise<InheritanceProcedure[]> {
+    const procedureRecords =
+      await inheritanceProcedureRepository.getProceduresByBeneficiaryId(
+        beneficiary.id
+      )
+    return procedureRecords.map((record) => ({
+      ...record.inheritance_procedure,
+    }))
+  }
+
   // Field resolver for contact
   @FieldResolver(() => Contact, { nullable: true })
   async contact(

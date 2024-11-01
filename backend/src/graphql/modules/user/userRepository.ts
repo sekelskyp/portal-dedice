@@ -3,36 +3,38 @@ import { eq, inArray } from 'drizzle-orm'
 import { notary, user } from '@backend/db/schema'
 import { type Db } from '@backend/types/types'
 
-export interface User {
+export interface UserDbRecord {
   id: number
   email: string
   password: string
-  confirmed: boolean | null
+  confirmed: boolean
 }
 
 export interface UserUpdateData {
   email: string
   password: string
-  confirmed: boolean | null
+  confirmed: boolean
 }
 
 export function getUserRepository(db: Db) {
-  async function getUserById(id: number): Promise<User | null> {
+  async function getUserById(id: number): Promise<UserDbRecord | null> {
     const [result] = await db.select().from(user).where(eq(user.id, id))
     return result
   }
 
-  async function getUsersByIds(ids: number[]): Promise<User[]> {
+  async function getUsersByIds(ids: number[]): Promise<UserDbRecord[]> {
     const results = await db.select().from(user).where(inArray(user.id, ids))
     return results
   }
 
-  async function getAllUsers(): Promise<User[]> {
+  async function getAllUsers(): Promise<UserDbRecord[]> {
     const results = await db.select().from(user)
     return results
   }
 
-  async function getUserByNotaryId(notaryId: number): Promise<User | null> {
+  async function getUserByNotaryId(
+    notaryId: number
+  ): Promise<UserDbRecord | null> {
     const [result] = await db
       .select()
       .from(user)
@@ -57,17 +59,9 @@ export function getUserRepository(db: Db) {
     return resultingIds[0].id
   }
 
-  async function getUserByEmail(email: string): Promise<User | null> {
+  async function getUserByEmail(email: string): Promise<UserDbRecord | null> {
     const [result] = await db.select().from(user).where(eq(user.email, email))
     return result || null
-  }
-
-  // Update user's password
-  async function updatePassword(userId: number, hashedPassword: string) {
-    await db
-      .update(user)
-      .set({ password: hashedPassword })
-      .where(eq(user.id, userId))
   }
 
   async function updateUser(
@@ -84,7 +78,6 @@ export function getUserRepository(db: Db) {
     createUser,
     getUserByNotaryId,
     getUserByEmail,
-    updatePassword,
     updateUser,
   }
 }

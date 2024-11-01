@@ -12,6 +12,7 @@ import { CustomContext } from '@backend/types/types'
 
 import { findAvailableNotary } from '../../../services/notaryAssignmentService'
 import { Contact } from '../contact/contactType'
+import { InheritanceProcedure } from '../inheritanceProcedure/inheritanceProcedureType'
 import { User } from '../user/userType'
 
 import { CreateNotaryInput } from './createNotaryInput'
@@ -20,6 +21,16 @@ import { Notary } from './notaryType'
 
 @Resolver(() => Notary)
 export class NotaryResolver {
+  @FieldResolver(() => [InheritanceProcedure])
+  async inheritanceProcedures(
+    @Root() user: User,
+    @Ctx() { inheritanceProcedureRepository }: CustomContext
+  ): Promise<InheritanceProcedure[]> {
+    const notaries =
+      await inheritanceProcedureRepository.getProceduresByNotaryId(user.id)
+    return notaries || []
+  }
+
   @Query(() => [Notary])
   async notaries(
     @Ctx() { notaryRepository }: CustomContext
