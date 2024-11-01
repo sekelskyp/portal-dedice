@@ -77,9 +77,12 @@ export class BeneficiaryResolver {
     @Arg('procedureId', () => Int) procedureId: number,
     @Ctx() { beneficiaryRepository }: CustomContext
   ): Promise<Beneficiary[]> {
-    return await beneficiaryRepository.getBeneficiariesByProcedureId(
-      procedureId
-    )
+    const beneficiaryRecords =
+      await beneficiaryRepository.getBeneficiariesByProcedureId(procedureId)
+
+    return beneficiaryRecords.map((record) => ({
+      ...record.beneficiary,
+    }))
   }
 
   // Get multiple beneficiaries by IDs
