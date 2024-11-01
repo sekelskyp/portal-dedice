@@ -14,6 +14,11 @@ export interface BeneficiaryData {
   dateOfBirth?: Date | null
 }
 
+export interface BeneficiaryInheritanceProcedureRelData {
+  inheritanceProcedureId: number
+  beneficiaryId: number
+}
+
 export function getBeneficiaryRepository(db: Db) {
   // Get a beneficiary by ID
   async function getBeneficiaryById(id: number) {
@@ -56,17 +61,6 @@ export function getBeneficiaryRepository(db: Db) {
       )
   }
 
-  // Add a procedure to a beneficiary
-  async function addProcedureToBeneficiary(
-    procedureId: number,
-    beneficiaryId: number
-  ): Promise<void> {
-    await db.insert(beneficiaryInheritanceProcedureRel).values({
-      beneficiaryId,
-      inheritanceProcedureId: procedureId,
-    })
-  }
-
   // Create a new beneficiary
   async function createBeneficiary(data: BeneficiaryData): Promise<number> {
     const [result] = await db.insert(beneficiary).values(data).$returningId()
@@ -95,16 +89,15 @@ export function getBeneficiaryRepository(db: Db) {
   }
 
   async function insertBeneficiaryProcedureRelation(
-    procedureId: number,
-    beneficiaryId: number
+    data: BeneficiaryInheritanceProcedureRelData
   ): Promise<void> {
     await db.insert(beneficiaryInheritanceProcedureRel).values({
-      inheritanceProcedureId: procedureId,
-      beneficiaryId,
+      inheritanceProcedureId: data.inheritanceProcedureId,
+      beneficiaryId: data.beneficiaryId,
     })
   }
 
-  async function deleteBeneficiaryProcedureRelation(
+  async function deleteBeneficiaryProcedureRelations(
     procedureId: number,
     beneficiaryId: number
   ): Promise<void> {
@@ -125,17 +118,31 @@ export function getBeneficiaryRepository(db: Db) {
     return db.select().from(beneficiary).where(eq(beneficiary.userId, id))
   }
 
+  // Insert multiple BeneficiaryProcedureRelations
+  async function insertMultipleBeneficiaryProcedureRelations(
+    relationsData: BeneficiaryInheritanceProcedureRelData[]
+  ): Promise<void> {
+    const formattedRelations = relationsData.map((relation) => ({
+      inheritanceProcedureId: relation.inheritanceProcedureId,
+      beneficiaryId: relation.beneficiaryId,
+    }))
+
+    await db
+      .insert(beneficiaryInheritanceProcedureRel)
+      .values(formattedRelations)
+  }
+
   return {
     getBeneficiaryById,
     getBeneficiariesByProcedureId,
-    addProcedureToBeneficiary,
     createBeneficiary,
     getBeneficiariesByIds,
     createBeneficiaries,
     updateBeneficiary,
     deleteBeneficiary,
     insertBeneficiaryProcedureRelation,
-    deleteBeneficiaryProcedureRelation,
+    deleteBeneficiaryProcedureRelations,
     getBeneficiariesByUserId,
+    insertMultipleBeneficiaryProcedureRelations,
   }
 }
