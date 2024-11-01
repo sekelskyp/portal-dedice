@@ -1,9 +1,18 @@
+type Asset {
+  description: String
+  id: ID!
+  inheritanceProcedureId: ID!
+  name: String!
+  value: Float!
+}
+
 type Beneficiary {
   contact: Contact
   contactId: ID
   dateOfBirth: DateTimeISO
   deceasedRelation: String
   id: ID!
+  inheritanceProcedures: [InheritanceProcedure!]!
   user: User
   userId: ID
 }
@@ -39,8 +48,11 @@ input CreateContactInput {
 }
 
 input CreateInheritanceProcedureInput {
-  deceasedPersonId: ID
+  deceasedContactId: ID
+  deceasedDateOfBirth: DateTimeISO
+  deceasedDateOfDeath: DateTimeISO
   endDate: DateTimeISO!
+  mainBeneficiaryId: ID
   name: String!
   notaryId: ID
   startDate: DateTimeISO!
@@ -57,23 +69,22 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTimeISO
 
-type DeceasedPerson {
-  contactId: ID!
-  dateOfBirth: DateTimeISO!
-  dateOfDeath: DateTimeISO!
-  id: Int!
-}
-
 input FindNotaryInput {
   deceasedPersonDateOfDeath: DateTimeISO!
   postalCode: String!
 }
 
 type InheritanceProcedure {
-  deceasedPerson: DeceasedPerson
-  deceasedPersonId: ID
-  endDate: String
+  assets: [Asset!]
+  beneficiaries: [Beneficiary!]
+  deceasedContact: Contact
+  deceasedContactId: ID
+  deceasedDateOfBirth: DateTimeISO
+  deceasedDateOfDeath: DateTimeISO
+  endDate: DateTimeISO
   id: ID!
+  mainBeneficiary: Beneficiary
+  mainBeneficiaryId: ID
   name: String!
   notary: Notary
   notaryId: ID
@@ -110,6 +121,7 @@ type Notary {
   contact: Contact
   contactId: ID
   id: ID!
+  inheritanceProcedures: [InheritanceProcedure!]!
   user: User
   userId: ID
 }
@@ -124,6 +136,8 @@ type Query {
   getBeneficiaryById(id: Int!): Beneficiary
   getContactById(id: Float!): Contact
   getProcedureById(id: Int!): InheritanceProcedure
+  getProceduresByBeneficiaryId(beneficiaryId: Int!): [InheritanceProcedure!]!
+  getProceduresByNotaryId(notaryId: Int!): [InheritanceProcedure!]!
   getUserById(id: Float!): User
   notaries: [Notary!]!
 }
@@ -148,9 +162,12 @@ input UpdateBeneficiaryInput {
 }
 
 type User {
-  beneficiary: Beneficiary
+  beneficiaries: [Beneficiary!]!
+  confirmed: Boolean!
   email: String!
   id: ID!
-  notary: Notary
+  isBeneficiary: Boolean!
+  isNotary: Boolean!
+  notaries: [Notary!]!
   password: String!
 }

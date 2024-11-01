@@ -51,7 +51,7 @@ const init = async () => {
       InheritanceProcedureResolver,
       NotaryResolver,
       ContactResolver,
-      AssetResolver,
+      //AssetResolver,
     ],
     emitSchemaFile: true,
   })

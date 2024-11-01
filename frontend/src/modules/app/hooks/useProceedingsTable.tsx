@@ -18,7 +18,7 @@ import { StatusBadge } from '../components/StatusBadge'
 
 const INITIAL_SORTING_STATE = [
   {
-    id: 'status',
+    id: 'state',
     desc: false,
   },
 ]
@@ -51,11 +51,16 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
         cell: (info) => info.getValue(),
       },
       {
-        accessorKey: 'date',
+        accessorKey: 'startDate',
         header: () => 'Datum založení',
+        cell: (info) => {
+          const date = info.getValue() as string
+          const formattedDate = date ? date.split('T')[0] : ''
+          return formattedDate
+        },
       },
       {
-        accessorKey: 'status',
+        accessorKey: 'state',
         header: () => 'Status',
         cell: (info) => {
           return <StatusBadge info={info} />

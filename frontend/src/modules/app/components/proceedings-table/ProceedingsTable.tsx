@@ -9,8 +9,8 @@ import { ProceedingsTableSearchBar } from './ProceedingsTableSearchBar'
 
 export type ProceedingsItem = {
   id: number
-  date: string
-  status: string
+  startDate: string
+  state: string
 }
 
 export function ProceedingsTable({ data }: { data: ProceedingsItem[] }) {
