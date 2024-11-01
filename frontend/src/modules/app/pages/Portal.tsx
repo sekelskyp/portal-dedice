@@ -26,19 +26,11 @@ export function Portal() {
 
   if (user.token) {
     return (
-      <Page>
-        <Container maxW="container.xl">
-          <Grid w="full" templateColumns="repeat(4, 1fr)" gap="28">
-            <GridItem colSpan={1}>
-              <SideBar></SideBar>
-            </GridItem> 
-            <GridItem colSpan={3}>
-              <ProceedingForm
-                onSubmit={handleProceedingFormSubmit}
-              ></ProceedingForm>
-            </GridItem>
-          </Grid>
-        </Container>
+      <Page as={Stack} gap={0} justifyContent={'space-between'} h={'full'}>
+        <Stack alignItems="center" justifyContent="center" h="full">
+          <Heading>Portál Dědice</Heading>
+          <Text>Vítejte, {user.user?.email}</Text>
+        </Stack>
       </Page>
     )
   } else {

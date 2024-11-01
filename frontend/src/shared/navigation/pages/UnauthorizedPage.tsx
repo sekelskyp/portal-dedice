@@ -1,8 +1,8 @@
 import { Button, Text } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
-import { route } from '@frontend/route'
 import { Box } from '@frontend/shared/design-system'
+import { route } from '@shared/route'
 
 export function UnauthorizedPage() {
   return (
@@ -15,10 +15,12 @@ export function UnauthorizedPage() {
       <Box textAlign="center">
         {/*
         <Icon
-        boxSize={{ base: '48px', sm: '64px', md: '72px' }}
-        color="red.500"
-        />
-        */}
+          //as={FiAlertCircle}
+          boxSize={{ base: '48px', sm: '64px', md: '72px' }}
+          color="red.500"
+        >
+          <FiAlertCircle />
+        </Icon>
         <Text
           fontSize={{ sm: 'xl', md: '2xl', lg: '3xl' }}
           fontWeight="bold"

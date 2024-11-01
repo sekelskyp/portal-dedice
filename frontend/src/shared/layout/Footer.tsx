@@ -1,13 +1,7 @@
-import {
-  Box,
-  Container,
-  Heading,
-  Image,
-  Separator,
-  Stack,
-  Text,
-} from '@chakra-ui/react'
+import { Box, Heading, Image, Separator, Stack, Text } from '@chakra-ui/react'
 import { useTheme } from 'next-themes'
+
+import { ColorModeButton } from '../design-system/atoms/chakra'
 
 import { FooterList } from './components/FooterList'
 import { footerLinks } from './links'
@@ -18,7 +12,7 @@ export const Footer = () => {
 
   return (
     <Box bg="bg.muted" pb={4}>
-      <Container px={0}>
+      <Stack px={6}>
         <Stack
           direction={{ base: 'column', md: 'row' }}
           alignItems="center"
@@ -72,8 +66,9 @@ export const Footer = () => {
           <Text fontSize={{ base: 'sm', md: 'md' }} mt={2} textAlign="center">
             © 2024 Vytvořeno na VŠE ve spolupráci s Applifting.
           </Text>
+          <ColorModeButton />
         </Stack>
-      </Container>
+      </Stack>
     </Box>
   )
 }

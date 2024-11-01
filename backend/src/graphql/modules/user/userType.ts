@@ -1,46 +1,32 @@
 import { Field, ID, ObjectType } from 'type-graphql'
 
+import { Beneficiary } from '../beneficiary/beneficiaryType'
+import { Notary } from '../notary/notaryType'
+
 @ObjectType()
 export class User {
   @Field(() => ID)
   id!: number
 
-  @Field(() => ID)
-  contactId!: number
-
   @Field()
-  login!: string
+  email!: string
 
   @Field()
   password!: string
-}
-
-@ObjectType()
-export class AuthInfo {
-  @Field(() => User)
-  user!: User
 
   @Field()
-  token!: string
-}
+  confirmed!: boolean
 
-@ObjectType()
-export class UserProfile {
-  @Field(() => ID)
-  id!: number
+  @Field(() => [Notary])
+  notaries?: Notary[]
+
+  @Field(() => [Beneficiary])
+  beneficiaries?: Beneficiary[]
+
+  // Computed fields
+  @Field()
+  isNotary?: boolean
 
   @Field()
-  name!: string
-
-  @Field()
-  surName!: string
-}
-
-@ObjectType()
-export class ChangePassword {
-  @Field(() => ID)
-  id!: number
-
-  @Field()
-  email!: string
+  isBeneficiary?: boolean
 }

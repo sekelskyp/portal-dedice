@@ -19,21 +19,18 @@ import { AccordionHelper } from './accordion/AccordionHelper'
 import { ContactInfo } from './contact/ContactInfo'
 
 const GET_NOTARY_QUERY = gql(/* GraphQL */ `
-  query GetNotaryByAddressAndBirthDate(
-    $address: AddressInput!
-    $expirationDate: DateTimeISO!
-  ) {
-    getNotaryByAddressAndBirthDate(
-      address: $address
-      expirationDate: $expirationDate
-    ) {
+  query FindNotary($input: FindNotaryInput!) {
+    findNotary(input: $input) {
       contact {
         id
         name
         surname
+        displayName
+        completeAddress
+        email
+        gender
         postalCode
         phone
-        email
       }
     }
   }
@@ -77,18 +74,17 @@ export function NotaryAssignment({
 
   const { data, loading, error } = useQuery(GET_NOTARY_QUERY, {
     variables: {
-      address: {
+      input: {
+        deceasedPersonDateOfDeath: birthDataISO,
         postalCode: notaryData.postalCode,
       },
-      expirationDate: birthDataISO,
     },
   })
 
   if (loading) return <Text>Loading...</Text>
   if (error) return <Text>Error: {error.message}</Text>
 
-  const notary = data.getNotaryByAddressAndBirthDate.contact
-
+  const notary = data.findNotary.contact
   return (
     <Box>
       <Heading

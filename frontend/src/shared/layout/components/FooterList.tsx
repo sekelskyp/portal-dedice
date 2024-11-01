@@ -1,5 +1,7 @@
 import { Heading, Link, List, Stack } from '@chakra-ui/react'
 
+import { RouterLink } from '@frontend/shared/navigation/atoms'
+
 type FooterListProps = {
   title: string
   links: { id: number; title: string; link: string }[]
@@ -12,7 +14,9 @@ export function FooterList({ title, links }: FooterListProps) {
       <List.Root>
         {links.map((link) => (
           <List.Item key={link.id}>
-            <Link href={link.link}>{link.title}</Link>
+            <RouterLink to={link.link}>
+              <Link>{link.title}</Link>
+            </RouterLink>
           </List.Item>
         ))}
       </List.Root>
