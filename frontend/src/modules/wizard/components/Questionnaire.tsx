@@ -19,6 +19,7 @@ interface Dependency {
 interface Step {
   id: number
   question_text: string
+  button_text: string
   answer_options?: Answer[]
   dependencies?: Dependency[]
 }
@@ -215,7 +216,7 @@ export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
                   selectedAnswer === null
                 }
               >
-                Pokračuj
+                {currentStep.button_text}
               </Button>
             </Stack>
           </Container>
