@@ -7,6 +7,8 @@ import questionData from '../questionnaire.json'
 interface Answer {
   id: number
   option_text: string
+  is_Error?: boolean
+  is_End?: boolean
 }
 
 interface Dependency {
@@ -17,6 +19,7 @@ interface Dependency {
 interface Step {
   id: number
   question_text: string
+  button_text: string
   answer_options?: Answer[]
   dependencies?: Dependency[]
 }
@@ -24,11 +27,13 @@ interface Step {
 interface QuestionnaireStepProps {
   updateQuestionnaireProgress: (progressIncrement: number) => void
   decrementQuestionnaireProgress: (progressDecrement: number) => void
+  setStep: (step: number) => void
 }
 
 export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
   updateQuestionnaireProgress,
   decrementQuestionnaireProgress,
+  setStep,
 }) => {
   const totalQuestionnaireSteps = questionData.steps.length
 
@@ -70,12 +75,28 @@ export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
   }
 
   const goToNextStep = () => {
-    if (currentStep.id === 3 && selectedAnswer === 1) {
-      setShowError(true)
-      return
-    }
-
     if (selectedAnswer !== null || currentStep.answer_options?.length === 1) {
+      const selectedAnswerObj = currentStep.answer_options?.find(
+        (answer) => answer.id === selectedAnswer
+      )
+      if (
+        selectedAnswerObj &&
+        'is_Error' in selectedAnswerObj &&
+        selectedAnswerObj.is_Error
+      ) {
+        setShowError(true)
+        setSelectedAnswer(null)
+        return
+      }
+      if (
+        selectedAnswerObj &&
+        'is_End' in selectedAnswerObj &&
+        selectedAnswerObj.is_End
+      ) {
+        setStep(4)
+        return
+      }
+
       const nextStepIndex = findNextStepIndex(currentStepIndex + 1)
 
       setAnswers((prevAnswers) => {
@@ -120,12 +141,6 @@ export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
     setSelectedAnswer(answers[questionData.steps[previousStepIndex].id])
   }
 
-  const goToFirstQuestion = () => {
-    setCurrentStepIndex(0)
-    setSelectedAnswer(null)
-    setAnswers({})
-  }
-
   if (showError) {
     return (
       <ErrorTreePage
@@ -134,34 +149,50 @@ export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
           setCurrentStepIndex(questionIndex)
           setSelectedAnswer(null)
         }}
-        questionIndex={currentStepIndex - 1}
+        questionIndex={currentStepIndex}
       />
     )
   }
 
   return (
     <Box>
-      {canShowStep(currentStep) ? (
-        <Box pt={4} my={16} mx={24}>
-          <Container>
-            <Heading as="h2" size={{ base: 'sm', sm: 'md' }} mb={4}>
+      {canShowStep(currentStep) && (
+        <Box>
+          <Container
+            alignContent={'center'}
+            maxWidth={{ base: '95%', lg: '50%' }}
+            bg="bg.panel"
+            borderRadius="xl"
+            px={8}
+          >
+            <Heading
+              as="h2"
+              size={{ base: 'xs', sm: 'sm', md: 'md', lg: 'lg' }}
+              mb={4}
+              py={4}
+            >
               {currentStep.question_text}
             </Heading>
+
+            {(currentStep.answer_options?.length ?? 0) > 1 && (
+              <Stack direction="column" justifyItems={'center'} pb={4}>
+                {currentStep.answer_options?.map((answer) => (
+                  <Button
+                    key={answer.id}
+                    onClick={() => handleAnswer(answer.id)}
+                    variant={selectedAnswer === answer.id ? 'solid' : 'outline'}
+                    size={{ base: 'xs', sm: 'sm', md: 'md', lg: 'lg' }}
+                    whiteSpace="normal"
+                    wordBreak="break-word"
+                    py={answer.option_text.includes(' ') ? 6 : 4}
+                  >
+                    {answer.option_text}
+                  </Button>
+                ))}
+              </Stack>
+            )}
           </Container>
-          {(currentStep.answer_options?.length ?? 0) > 1 && (
-            <Stack direction="column" justifyItems={'center'}>
-              {currentStep.answer_options?.map((answer) => (
-                <Button
-                  key={answer.id}
-                  onClick={() => handleAnswer(answer.id)}
-                  variant={selectedAnswer === answer.id ? 'solid' : 'outline'}
-                >
-                  {answer.option_text}
-                </Button>
-              ))}
-            </Stack>
-          )}
-          <Box my={8} justifyContent={'space-between'}>
+          <Container my={8} justifyContent={'space-between'}>
             <Stack
               direction={{ base: 'column', sm: 'row' }}
               pt={4}
@@ -185,14 +216,10 @@ export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
                   selectedAnswer === null
                 }
               >
-                Pokračuj
+                {currentStep.button_text}
               </Button>
             </Stack>
-          </Box>
-        </Box>
-      ) : (
-        <Box>
-          <Button onClick={goToFirstQuestion}>Skip to next question</Button>
+          </Container>
         </Box>
       )}
     </Box>

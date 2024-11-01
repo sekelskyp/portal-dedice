@@ -12,11 +12,9 @@ export function NotaryAssignmentError({
 }) {
   return (
     <Box textAlign="center" justifyContent="center" justifyItems="center">
-      <Icon
-        as={FiAlertCircle}
-        boxSize={{ base: '48px', sm: '64px', md: '72px' }}
-        color="red.500"
-      />
+      <Icon boxSize={{ base: '48px', sm: '64px', md: '72px' }} color="red.500">
+        <FiAlertCircle />
+      </Icon>
       <Text
         fontSize={{ base: 'sm', md: 'md', lg: 'xl' }}
         my={4}

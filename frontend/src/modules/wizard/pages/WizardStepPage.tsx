@@ -6,6 +6,7 @@ import { QuestionnaireStep } from '../components/Questionnaire'
 import { QuestionStep } from '../components/QuestionStep'
 import { StepperProgress } from '../components/stepper/StepperProgress'
 import { TestatorIdentification } from '../components/TestatorIdentification'
+import { WizardEnd } from '../components/WizardEnd'
 import { useWizardSteps } from '../hooks/useWizardSteps'
 import questionnaireData from '../questionnaire.json'
 import questionData from '../questions.json'
@@ -42,6 +43,8 @@ export function WizardPage() {
     questionnaireProgress,
     setNextStep,
     setPreviousStep,
+    setStep,
+    resetProgress,
   } = useWizardSteps(totalQuestions, totalQuestionnaireSteps)
 
   const [testatorData, setTestatorData] = useState<TestatorData>({
@@ -106,10 +109,16 @@ export function WizardPage() {
               <QuestionnaireStep
                 updateQuestionnaireProgress={setNextStep}
                 decrementQuestionnaireProgress={setPreviousStep}
+                setStep={setStep}
               />
             </Box>
           )}
-          {step === 4 && <StepperHeading text="Výstup nachytřovadla..." />}
+          {step === 4 && (
+            <Box>
+              <StepperHeading text="Výstup nachytřovadla" />
+              <WizardEnd setStep={setStep} resetProgress={resetProgress} />
+            </Box>
+          )}
         </Box>
       </Box>
     </TestatorDataContext.Provider>
