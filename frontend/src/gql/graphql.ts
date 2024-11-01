@@ -107,7 +107,6 @@ export type FindNotaryInput = {
 
 export type InheritanceProcedure = {
   __typename?: 'InheritanceProcedure'
-  assets?: Maybe<Array<Asset>>
   beneficiaries?: Maybe<Array<Beneficiary>>
   deceasedContact?: Maybe<Contact>
   deceasedContactId?: Maybe<Scalars['ID']['output']>
@@ -120,12 +119,14 @@ export type InheritanceProcedure = {
   name: Scalars['String']['output']
   notary?: Maybe<Notary>
   notaryId?: Maybe<Scalars['ID']['output']>
+  procedureAssets?: Maybe<Array<Asset>>
   startDate: Scalars['DateTimeISO']['output']
   state: Scalars['String']['output']
 }
 
 export type Mutation = {
   __typename?: 'Mutation'
+  addBeneficiariesToProcedure: Scalars['Boolean']['output']
   addBeneficiaryToProcedure: Scalars['Boolean']['output']
   assignNotary: Scalars['Boolean']['output']
   changePassword: User
@@ -145,6 +146,11 @@ export type Mutation = {
   signIn: SignInResponse
   signUp: User
   updateBeneficiary: Beneficiary
+}
+
+export type MutationAddBeneficiariesToProcedureArgs = {
+  beneficiaryIds: Array<Scalars['Int']['input']>
+  procedureId: Scalars['Int']['input']
 }
 
 export type MutationAddBeneficiaryToProcedureArgs = {
