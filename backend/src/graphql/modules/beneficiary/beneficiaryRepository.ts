@@ -41,13 +41,7 @@ export function getBeneficiaryRepository(db: Db) {
   // Get all beneficiaries associated with a specific procedure
   async function getBeneficiariesByProcedureId(procedureId: number) {
     return await db
-      .select({
-        id: beneficiary.id,
-        userId: beneficiary.userId,
-        deceasedRelation: beneficiary.deceasedRelation,
-        contactId: beneficiary.contactId,
-        dateOfBirth: beneficiary.dateOfBirth,
-      })
+      .select()
       .from(beneficiary)
       .innerJoin(
         beneficiaryInheritanceProcedureRel,

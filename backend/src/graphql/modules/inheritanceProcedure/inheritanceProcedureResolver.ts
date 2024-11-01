@@ -144,14 +144,17 @@ export class InheritanceProcedureResolver {
   }
 
   // Field Resolver to fetch the beneficiaries associated with the procedure
-  @FieldResolver(() => Beneficiary, { nullable: true })
+  @FieldResolver(() => [Beneficiary], { nullable: true })
   async beneficiaries(
     @Root() procedure: InheritanceProcedure,
     @Ctx() { beneficiaryRepository }: CustomContext
   ): Promise<Beneficiary[]> {
-    return await beneficiaryRepository.getBeneficiariesByProcedureId(
-      procedure.id
-    )
+    const beneficiaryRecords =
+      await beneficiaryRepository.getBeneficiariesByProcedureId(procedure.id)
+
+    return beneficiaryRecords.map((record) => ({
+      ...record.beneficiary,
+    }))
   }
 
   @Query(() => [InheritanceProcedure])
