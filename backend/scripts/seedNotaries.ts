@@ -44,4 +44,9 @@ export async function seedNotariesAndDateRules(
   console.log('Notary date rules seeded successfully.')
 
   console.log('Seeding process completed.')
+
+  return {
+    contactIds,
+    notaryIds,
+  }
 }

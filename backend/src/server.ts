@@ -35,6 +35,9 @@ import { parseAndVerifyJWT } from '@backend/libs/jwt'
 import { mockResolvers } from '@backend/mocks/mocks'
 import { CustomContext } from '@backend/types/types'
 
+import { getAssetRepository } from './graphql/modules/asset/assetRepository'
+import { AssetResolver } from './graphql/modules/asset/assetResolver'
+
 const init = async () => {
   const app = express()
 
@@ -48,6 +51,7 @@ const init = async () => {
       InheritanceProcedureResolver,
       NotaryResolver,
       ContactResolver,
+      AssetResolver,
     ],
     emitSchemaFile: true,
   })
@@ -91,6 +95,7 @@ const init = async () => {
       emailConfirmationTokenRepository: getEmailConfirmationTokenRepository(
         drizzle.db
       ),
+      assetRepository: getAssetRepository(drizzle.db),
     }
   }
 
