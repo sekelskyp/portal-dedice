@@ -24,7 +24,7 @@ export function ProceedingsTable({ data }: { data: ProceedingsItem[] }) {
       borderWidth="1px"
       borderColor="gray.200"
       borderRadius="xl"
-      width={{ base: '95%', lg: '75%' }}
+      width="95%"
       textAlign="center"
       bg="white"
       overflowX="auto"

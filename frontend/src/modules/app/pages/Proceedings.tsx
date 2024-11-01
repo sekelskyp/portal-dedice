@@ -1,12 +1,9 @@
 import { Box, Button, Heading, Stack, Text } from '@chakra-ui/react'
-import { FiNavigation } from 'react-icons/fi'
-import { MdNoteAdd } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 
 import { useAuth } from '@frontend/modules/auth'
 import { Alert } from '@frontend/shared/design-system'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
-import { route } from '@shared/route'
 
 import {
   ProceedingsItem,
@@ -15,8 +12,6 @@ import {
 import { useBeneficiaryProcedures } from '../hooks/useBeneficiaryProcedures'
 import { useNotaryProcedures } from '../hooks/useNotaryProcedures'
 import { proceedingsNavigation } from '../utils/proceedingsNavigation'
-
-//TODO: add routing when pages are ready
 
 export function Proceedings() {
   const user = useAuth()
@@ -49,19 +44,7 @@ export function Proceedings() {
     return (
       <Stack justifyContent="center" alignContent="center" alignItems="center">
         <Heading textAlign="center" pt={8} size="3xl" mb={2}>
-          Mé řízení
-        </Heading>
-        {!user.user?.isNotary && (
-          <Link to={route.newProceeding()}>
-            {' '}
-            <Button>
-              Vytvořit nové řízení
-              <MdNoteAdd />
-            </Button>
-          </Link>
-        )}
-        <Heading size="2xl" mt={10}>
-          Seznam řízení
+          Moje řízení
         </Heading>
         {procedures.length !== 0 ? (
           <ProceedingsTable data={procedures} />
@@ -83,8 +66,8 @@ export function Proceedings() {
             <Stack direction="column" textAlign="center" mb={10}>
               {proceedingsNavigation.map((item, index) => (
                 <Link key={index} to={item.link}>
-                  <Button width="100%">
-                    {item.text} <FiNavigation />
+                  <Button width="100%" rounded="full">
+                    {item.text} {item.icon}
                   </Button>
                 </Link>
               ))}

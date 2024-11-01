@@ -1,4 +1,4 @@
-import { Stack, Text } from '@chakra-ui/react'
+import { Box, Stack, Text } from '@chakra-ui/react'
 import { Table } from '@tanstack/react-table'
 
 import {
@@ -17,25 +17,29 @@ export function ProceedingsTableFooter({
 }) {
   return (
     <Stack
-      direction={{ base: 'column', lg: 'row' }}
+      direction={{ base: 'column', xl: 'row' }}
       justifyContent="space-between"
       alignItems="center"
       mx={{ base: 0, md: 4 }}
-      my={4}
+      mt={8}
+      mb={4}
     >
       <Stack
         direction="row"
         alignItems="center"
         fontSize={{ base: 'sm', md: 'md' }}
         my={{ base: 2, lg: 0 }}
+        order={{ base: 2, xl: 1 }}
       >
         <Text>
           Zobrazuji 1 - {table.getState().pagination.pageSize} z{' '}
           {table.getRowCount()} záznamů.
         </Text>
       </Stack>
-      <TablePagination table={table} />
-      <Stack direction="row" alignItems="center">
+      <Box order={{ base: 1, xl: 2 }}>
+        <TablePagination table={table} />
+      </Box>
+      <Stack direction="row" alignItems="center" order={{ base: 3, xl: 3 }}>
         <Text fontSize={{ base: 'sm', md: 'md' }}>Zobrazit</Text>
         <NativeSelectRoot
           size={{ base: 'sm', md: 'md' }}
