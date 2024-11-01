@@ -114,7 +114,6 @@ export type FindNotaryInput = {
 
 export type InheritanceProcedure = {
   __typename?: 'InheritanceProcedure'
-  assets?: Maybe<Array<Asset>>
   beneficiaries?: Maybe<Array<Beneficiary>>
   deceasedContact?: Maybe<Contact>
   deceasedContactId?: Maybe<Scalars['ID']['output']>
@@ -127,12 +126,14 @@ export type InheritanceProcedure = {
   name: Scalars['String']['output']
   notary?: Maybe<Notary>
   notaryId?: Maybe<Scalars['ID']['output']>
+  procedureAssets?: Maybe<Array<Asset>>
   startDate: Scalars['DateTimeISO']['output']
   state: Scalars['String']['output']
 }
 
 export type Mutation = {
   __typename?: 'Mutation'
+  addBeneficiariesToProcedure: Scalars['Boolean']['output']
   addBeneficiaryToProcedure: Scalars['Boolean']['output']
   assignNotary: Scalars['Boolean']['output']
   changePassword: User
@@ -155,6 +156,11 @@ export type Mutation = {
   signUp: User
   updateAsset?: Maybe<Asset>
   updateBeneficiary: Beneficiary
+}
+
+export type MutationAddBeneficiariesToProcedureArgs = {
+  beneficiaryIds: Array<Scalars['Int']['input']>
+  procedureId: Scalars['Int']['input']
 }
 
 export type MutationAddBeneficiaryToProcedureArgs = {
@@ -364,13 +370,32 @@ export type User = {
   password: Scalars['String']['output']
 }
 
-export type CreateProcedureMutationVariables = Exact<{
-  data: CreateInheritanceProcedureInput
+export type GetProceduresByBeneficiaryIdQueryVariables = Exact<{
+  beneficiaryId: Scalars['Int']['input']
 }>
 
-export type CreateProcedureMutation = {
-  __typename?: 'Mutation'
-  createProcedure: number
+export type GetProceduresByBeneficiaryIdQuery = {
+  __typename?: 'Query'
+  getProceduresByBeneficiaryId: Array<{
+    __typename?: 'InheritanceProcedure'
+    id: string
+    startDate: any
+    state: string
+  }>
+}
+
+export type GetProceduresByNotaryIdQueryVariables = Exact<{
+  notaryId: Scalars['Int']['input']
+}>
+
+export type GetProceduresByNotaryIdQuery = {
+  __typename?: 'Query'
+  getProceduresByNotaryId: Array<{
+    __typename?: 'InheritanceProcedure'
+    id: string
+    startDate: any
+    state: string
+  }>
 }
 
 export type EmailVerificationMutationVariables = Exact<{
@@ -392,7 +417,14 @@ export type SignInMutation = {
   signIn: {
     __typename?: 'SignInResponse'
     token: string
-    user: { __typename?: 'User'; id: string; email: string }
+    user: {
+      __typename?: 'User'
+      id: string
+      email: string
+      confirmed: boolean
+      isNotary: boolean
+      isBeneficiary: boolean
+    }
   }
 }
 
@@ -428,23 +460,23 @@ export type FindNotaryQuery = {
   } | null
 }
 
-export const CreateProcedureDocument = {
+export const GetProceduresByBeneficiaryIdDocument = {
   kind: 'Document',
   definitions: [
     {
       kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'createProcedure' },
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetProceduresByBeneficiaryId' },
       variableDefinitions: [
         {
           kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'data' } },
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'beneficiaryId' },
+          },
           type: {
             kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'CreateInheritanceProcedureInput' },
-            },
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
           },
         },
       ],
@@ -453,25 +485,86 @@ export const CreateProcedureDocument = {
         selections: [
           {
             kind: 'Field',
-            name: { kind: 'Name', value: 'createProcedure' },
+            name: { kind: 'Name', value: 'getProceduresByBeneficiaryId' },
             arguments: [
               {
                 kind: 'Argument',
-                name: { kind: 'Name', value: 'data' },
+                name: { kind: 'Name', value: 'beneficiaryId' },
                 value: {
                   kind: 'Variable',
-                  name: { kind: 'Name', value: 'data' },
+                  name: { kind: 'Name', value: 'beneficiaryId' },
                 },
               },
             ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'startDate' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'state' } },
+              ],
+            },
           },
         ],
       },
     },
   ],
 } as unknown as DocumentNode<
-  CreateProcedureMutation,
-  CreateProcedureMutationVariables
+  GetProceduresByBeneficiaryIdQuery,
+  GetProceduresByBeneficiaryIdQueryVariables
+>
+export const GetProceduresByNotaryIdDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetProceduresByNotaryId' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'notaryId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getProceduresByNotaryId' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'notaryId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'notaryId' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'startDate' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'state' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetProceduresByNotaryIdQuery,
+  GetProceduresByNotaryIdQueryVariables
 >
 export const EmailVerificationDocument = {
   kind: 'Document',
@@ -593,6 +686,18 @@ export const SignInDocument = {
                     selections: [
                       { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'confirmed' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'isNotary' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'isBeneficiary' },
+                      },
                     ],
                   },
                 },

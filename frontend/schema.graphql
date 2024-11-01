@@ -82,7 +82,6 @@ input FindNotaryInput {
 }
 
 type InheritanceProcedure {
-  assets: [Asset!]
   beneficiaries: [Beneficiary!]
   deceasedContact: Contact
   deceasedContactId: ID
@@ -95,11 +94,16 @@ type InheritanceProcedure {
   name: String!
   notary: Notary
   notaryId: ID
+  procedureAssets: [Asset!]
   startDate: DateTimeISO!
   state: String!
 }
 
 type Mutation {
+  addBeneficiariesToProcedure(
+    beneficiaryIds: [Int!]!
+    procedureId: Int!
+  ): Boolean!
   addBeneficiaryToProcedure(beneficiaryId: Int!, procedureId: Int!): Boolean!
   assignNotary(notaryId: Int!, procedureId: Int!): Boolean!
   changePassword(newPassword: String!, oldPassword: String!): User!

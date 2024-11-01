@@ -1,6 +1,5 @@
 import { InheritanceProcedureData } from '../graphql/modules/inheritanceProcedure/inheritaceProcedureRepository'
 import { CustomContext } from '../types/types'
-
 // Private helper function to generate a unique name for a new procedure
 function generateProcedureName(name: string, startDate: Date): string {
   const formattedDate = startDate.toISOString().split('T')[0].replace(/-/g, '_')
@@ -57,9 +56,28 @@ export async function addBeneficiaryToProcedure(
   context: CustomContext
 ): Promise<void> {
   const { beneficiaryRepository } = context
-  await beneficiaryRepository.insertBeneficiaryProcedureRelation(
-    procedureId,
-    beneficiaryId
+  await beneficiaryRepository.insertBeneficiaryProcedureRelation({
+    inheritanceProcedureId: procedureId,
+    beneficiaryId,
+  })
+}
+
+export async function addBeneficiariesToProcedure(
+  procedureId: number,
+  beneficiaryIds: number[],
+  context: CustomContext
+): Promise<void> {
+  const { beneficiaryRepository } = context
+
+  // Prepare the array of relation objects for bulk insertion
+  const relations = beneficiaryIds.map((beneficiaryId) => ({
+    inheritanceProcedureId: procedureId,
+    beneficiaryId,
+  }))
+
+  // Call the repository method for bulk insertion
+  await beneficiaryRepository.insertMultipleBeneficiaryProcedureRelations(
+    relations
   )
 }
 
@@ -70,7 +88,7 @@ export async function removeBeneficiaryFromProcedure(
   context: CustomContext
 ): Promise<void> {
   const { beneficiaryRepository } = context
-  await beneficiaryRepository.deleteBeneficiaryProcedureRelation(
+  await beneficiaryRepository.deleteBeneficiaryProcedureRelations(
     procedureId,
     beneficiaryId
   )

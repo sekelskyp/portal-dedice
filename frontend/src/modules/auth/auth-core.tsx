@@ -12,9 +12,14 @@ type AuthState = {
   user: AuthUser | null
 }
 
+//TODO: add beneficiaries and notaries
+
 export type AuthUser = {
   id: string
   email: string
+  confirmed: boolean
+  isNotary: boolean
+  isBeneficiary: boolean
 }
 
 const LOCAL_STORAGE_AUTH_KEY = 'project-auth'

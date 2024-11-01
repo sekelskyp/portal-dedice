@@ -8,6 +8,7 @@ import { route } from '@shared/route'
 
 import { NewProceedingPage } from './modules/app/pages/NewProceedingPage'
 import { Portal } from './modules/app/pages/Portal'
+import { Proceedings } from './modules/app/pages/Proceedings'
 import { ConfirmEmailPage } from './modules/auth/pages/ConfirmEmailPage'
 import { EmailVerification } from './modules/auth/pages/EmailVerification'
 import { PasswordResetPage } from './modules/auth/pages/PasswordResetPage'
