@@ -74,6 +74,7 @@ export function SignUpPage() {
             Potřebujete vyřešit předběžné řízení?
           </Heading>
           <Text
+            pr={{ base: 0, lg: 36 }}
             mb={{
               base: 8,
               md: 4,
@@ -97,7 +98,10 @@ export function SignUpPage() {
             <Heading size="3xl" as="h4" textAlign="center" mb={6}>
               Registrace
             </Heading>
-            <SignUpForm onSubmit={handleSignUpFormSubmit}></SignUpForm>
+            <SignUpForm
+              onSubmit={handleSignUpFormSubmit}
+              loading={signUpRequestState.loading}
+            ></SignUpForm>
           </Box>
         </Box>
       </Flex>

@@ -13,7 +13,7 @@ export function FooterList({ title, links }: FooterListProps) {
       <Heading size={{ base: 'sm', md: 'md' }}>{title}</Heading>
       <List.Root>
         {links.map((link) => (
-          <List.Item key={link.id}>
+          <List.Item key={link.id} textAlign="left">
             <RouterLink to={link.link}>
               <Link>{link.title}</Link>
             </RouterLink>
