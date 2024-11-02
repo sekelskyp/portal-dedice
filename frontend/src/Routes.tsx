@@ -6,6 +6,7 @@ import { HomePage } from '@frontend/modules/home/pages/HomePage'
 import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 import { route } from '@shared/route'
 
+import InheritanceProcedureDetail from './modules/app/pages/InheritanceProcedureDetail'
 import { Portal } from './modules/app/pages/Portal'
 import { Proceedings } from './modules/app/pages/Proceedings'
 import { ConfirmEmailPage } from './modules/auth/pages/ConfirmEmailPage'
@@ -34,6 +35,10 @@ export function Routes() {
         <Route path={route.signOut()} element={<SignOutPage />} />
         <Route path={route.confirmEmail()} element={<ConfirmEmailPage />} />
         <Route path={route.resetPassword()} element={<PasswordResetPage />} />
+        <Route
+          path={route.inheritanceProcedure(':id')}
+          element={<InheritanceProcedureDetail />}
+        />
         <Route
           path={route.emailVerification()}
           element={<EmailVerification />}

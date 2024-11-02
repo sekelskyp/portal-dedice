@@ -17,13 +17,15 @@ const documents = {
     types.GetProceduresByBeneficiaryIdDocument,
   '\n  query GetProceduresByNotaryId($notaryId: Int!) {\n    getProceduresByNotaryId(notaryId: $notaryId) {\n      id\n      startDate\n      state\n    }\n  }\n':
     types.GetProceduresByNotaryIdDocument,
+  '\n  query GetProcedureById($id: Int!) {\n    getProcedureById(id: $id) {\n      id\n      name\n      mainBeneficiary {\n        id\n        userId\n        user {\n          id\n          email\n        }\n        contactId\n        contact {\n          id\n          email\n          name\n          surname\n          gender\n        }\n      }\n      beneficiaries {\n        id\n        userId\n        user {\n          id\n          email\n        }\n        contactId\n        contact {\n          id\n          email\n          name\n          surname\n        }\n        deceasedRelation\n      }\n      procedureAssets {\n        id\n        name\n        value\n      }\n      state\n    }\n  }\n':
+    types.GetProcedureByIdDocument,
   '\n  mutation EmailVerification($token: String!) {\n    confirmEmailVerification(token: $token)\n  }\n':
     types.EmailVerificationDocument,
   '\n  mutation SignIn($login: String!, $password: String!) {\n    signIn(login: $login, password: $password) {\n      user {\n        id\n        email\n        confirmed\n        isNotary\n        isBeneficiary\n      }\n      token\n    }\n  }\n':
     types.SignInDocument,
   '\n  mutation SignUp($registerInput: RegisterInput!) {\n    signUp(registerInput: $registerInput) {\n      id\n    }\n  }\n':
     types.SignUpDocument,
-  '\n  query FindNotary($input: FindNotaryInput!) {\n    findNotary(input: $input) {\n      contact {\n        id\n        name\n        surname\n        displayName\n        completeAddress\n        email\n        gender\n        postalCode\n        phone\n      }\n    }\n  }\n':
+  '\n  query FindNotary($input: FindNotaryInput!) {\n    findNotary(input: $input) {\n      contact {\n        id\n        name\n        surname\n        displayName\n        completeAddress\n        email\n        gender\n        postalCode\n        phone\n        email\n        gender\n      }\n    }\n  }\n':
     types.FindNotaryDocument,
 }
 
@@ -57,6 +59,12 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
+  source: '\n  query GetProcedureById($id: Int!) {\n    getProcedureById(id: $id) {\n      id\n      name\n      mainBeneficiary {\n        id\n        userId\n        user {\n          id\n          email\n        }\n        contactId\n        contact {\n          id\n          email\n          name\n          surname\n          gender\n        }\n      }\n      beneficiaries {\n        id\n        userId\n        user {\n          id\n          email\n        }\n        contactId\n        contact {\n          id\n          email\n          name\n          surname\n        }\n        deceasedRelation\n      }\n      procedureAssets {\n        id\n        name\n        value\n      }\n      state\n    }\n  }\n'
+): (typeof documents)['\n  query GetProcedureById($id: Int!) {\n    getProcedureById(id: $id) {\n      id\n      name\n      mainBeneficiary {\n        id\n        userId\n        user {\n          id\n          email\n        }\n        contactId\n        contact {\n          id\n          email\n          name\n          surname\n          gender\n        }\n      }\n      beneficiaries {\n        id\n        userId\n        user {\n          id\n          email\n        }\n        contactId\n        contact {\n          id\n          email\n          name\n          surname\n        }\n        deceasedRelation\n      }\n      procedureAssets {\n        id\n        name\n        value\n      }\n      state\n    }\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
   source: '\n  mutation EmailVerification($token: String!) {\n    confirmEmailVerification(token: $token)\n  }\n'
 ): (typeof documents)['\n  mutation EmailVerification($token: String!) {\n    confirmEmailVerification(token: $token)\n  }\n']
 /**
@@ -75,8 +83,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query FindNotary($input: FindNotaryInput!) {\n    findNotary(input: $input) {\n      contact {\n        id\n        name\n        surname\n        displayName\n        completeAddress\n        email\n        gender\n        postalCode\n        phone\n      }\n    }\n  }\n'
-): (typeof documents)['\n  query FindNotary($input: FindNotaryInput!) {\n    findNotary(input: $input) {\n      contact {\n        id\n        name\n        surname\n        displayName\n        completeAddress\n        email\n        gender\n        postalCode\n        phone\n      }\n    }\n  }\n']
+  source: '\n  query FindNotary($input: FindNotaryInput!) {\n    findNotary(input: $input) {\n      contact {\n        id\n        name\n        surname\n        displayName\n        completeAddress\n        email\n        gender\n        postalCode\n        phone\n        email\n        gender\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query FindNotary($input: FindNotaryInput!) {\n    findNotary(input: $input) {\n      contact {\n        id\n        name\n        surname\n        displayName\n        completeAddress\n        email\n        gender\n        postalCode\n        phone\n        email\n        gender\n      }\n    }\n  }\n']
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {}
