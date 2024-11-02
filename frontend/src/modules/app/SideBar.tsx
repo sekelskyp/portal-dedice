@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react'
 import { HStack, IconButton, Separator, Text, VStack } from '@chakra-ui/react'
-import { LuArchive, LuFolderPlus, LuSettings, LuUser2 } from 'react-icons/lu'
+import { LuArchive, LuSettings, LuUser2 } from 'react-icons/lu'
 import { useMediaQuery } from 'usehooks-ts'
 
 import resources from '@frontend/resources'
@@ -15,19 +15,14 @@ export interface SideBarItem {
 
 const sideBarItems: SideBarItem[] = [
   {
-    label: resources.portal.sideBar.profile,
-    to: route.portal(),
-    icon: <LuUser2 />,
-  },
-  {
     label: resources.portal.sideBar.proceedings,
     to: route.portal(),
     icon: <LuArchive />,
   },
   {
-    label: resources.portal.sideBar.newProceeding,
-    to: route.newProceeding(),
-    icon: <LuFolderPlus />,
+    label: resources.portal.sideBar.profile,
+    to: route.portal(),
+    icon: <LuUser2 />,
   },
   {
     label: resources.portal.sideBar.settings,
@@ -39,16 +34,24 @@ const sideBarItems: SideBarItem[] = [
 export default function SideBar() {
   const isMobile = useMediaQuery('(max-width: 425px)')
   return !isMobile ? (
-    <VStack align="left">
-      {sideBarItems.map(({ to, label, icon, ...rest }) => (
+    <VStack align="left" gap={0}>
+      {sideBarItems.map(({ to, label, icon, ...rest }, index) => (
         <React.Fragment key={to}>
-          <IconButton variant="ghost" size="lg" justifyContent="start" px={4}>
+          <RouterNavLink
+            variant="ghost"
+            size="lg"
+            justifyContent="start"
+            to={to}
+            {...rest}
+            asChild
+            letterSpacing={0.5}
+          >
             {icon}
-            <RouterNavLink variant="ghost" to={to} {...rest}>
-              <Text fontSize="md">{label}</Text>
-            </RouterNavLink>
-          </IconButton>
-          <Separator size="md" />
+            <Text fontSize="md">{label}</Text>
+          </RouterNavLink>
+          {index !== sideBarItems.length - 1 && (
+            <Separator borderColor="bg.muted" mx={1} w={'calc(100% - 8px)'} />
+          )}
         </React.Fragment>
       ))}
     </VStack>
@@ -57,7 +60,7 @@ export default function SideBar() {
       {sideBarItems.map(({ to, label, icon, ...rest }) => (
         <React.Fragment key={to}>
           <IconButton
-            bg="gray.200"
+            bg="bg.emphasized"
             variant="ghost"
             size="sm"
             justifyContent="center"

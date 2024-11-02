@@ -56,6 +56,9 @@ const resources = {
   },
   portal: {
     pages: {
+      proceedings: {
+        newProceeding: 'Nové řízení',
+      },
       newProceeding: {
         title: 'Založení nového řízení',
         subtitle:
@@ -65,7 +68,6 @@ const resources = {
     sideBar: {
       profile: 'Můj profil',
       proceedings: 'Moje řízení',
-      newProceeding: 'Nové řízení',
       settings: 'Nastavení',
     },
     forms: {

@@ -45,6 +45,12 @@ export function TopNavigation() {
       label: 'Odhlásit se',
       to: route.signOut(),
     })
+
+    navItems.push({
+      label: 'Moje řízení',
+      to: route.portal(),
+      highlight: true,
+    })
   } else {
     navItems.push({
       label: 'Přihlásit se',

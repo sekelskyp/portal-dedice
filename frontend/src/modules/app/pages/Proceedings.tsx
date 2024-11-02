@@ -1,9 +1,13 @@
 import { Box, Button, Heading, Stack, Text } from '@chakra-ui/react'
+import { LuPlus } from 'react-icons/lu'
 import { Link } from 'react-router-dom'
 
 import { useAuth } from '@frontend/modules/auth'
+import resources from '@frontend/resources'
 import { Alert } from '@frontend/shared/design-system'
+import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
+import { route } from '@shared/route'
 
 import {
   ProceedingsItem,
@@ -57,6 +61,11 @@ export function Proceedings() {
               size={{ base: 'md', md: 'lg' }}
             />
           </Box>
+        )}
+        {!user.user?.isNotary && (
+          <RouterNavLink to={route.newProceeding()} size="xl" mb={8}>
+            <LuPlus /> {resources.portal.pages.proceedings.newProceeding}
+          </RouterNavLink>
         )}
         {!user.user?.isNotary && (
           <Stack>
