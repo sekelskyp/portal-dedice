@@ -9,6 +9,7 @@ import {
   InputFormControl,
   SubmitButton,
 } from '@frontend/shared/forms'
+import { AddressFormControl } from '@frontend/shared/forms/AddressFormControl'
 
 export type ProceedingFormProps = {
   errorMessage?: string
@@ -69,10 +70,10 @@ export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
             name="dateOfDeath"
             label={resources.portal.forms.proceedingForm.dateOfDeath}
           ></DateFormControl>
-          <InputFormControl
+          <AddressFormControl
             name="address"
             label={resources.portal.forms.proceedingForm.address}
-          ></InputFormControl>
+          ></AddressFormControl>
         </Stack>
         <Stack>
           <Text fontWeight="bold">
