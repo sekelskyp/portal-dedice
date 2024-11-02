@@ -1,7 +1,8 @@
 import { useCallback } from 'react'
-import { Box, Container, Flex, Heading, Text } from '@chakra-ui/react'
+import { Box, Flex, Heading, Text } from '@chakra-ui/react'
 
 import { Alert } from '@frontend/shared/design-system'
+import { Page } from '@frontend/shared/layout'
 
 import { SignUpForm } from '../components/SignUpForm'
 import { useSignUp } from '../hooks/useSignUp'
@@ -31,7 +32,10 @@ export function SignUpPage() {
   )
 
   return (
-    <Container px={8} py={{ base: 8, sm: 16, lg: 24 }}>
+    <Page
+      px={{ base: 4, sm: 16, lg: 20, xl: 24 }}
+      py={{ base: 8, sm: 16, lg: 24 }}
+    >
       {signUpRequestState.error ? (
         <Alert status="error" title={signUpRequestState.error.message} />
       ) : null}
@@ -105,6 +109,6 @@ export function SignUpPage() {
           </Box>
         </Box>
       </Flex>
-    </Container>
+    </Page>
   )
 }

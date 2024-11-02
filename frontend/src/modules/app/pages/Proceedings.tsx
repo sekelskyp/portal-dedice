@@ -1,4 +1,4 @@
-import { Box, Button, Heading, Stack, Text } from '@chakra-ui/react'
+import { Button, Heading, HStack, Stack, Text, VStack } from '@chakra-ui/react'
 import { LuPlus } from 'react-icons/lu'
 import { Link } from 'react-router-dom'
 
@@ -46,44 +46,43 @@ export function Proceedings() {
 
   if (user.token) {
     return (
-      <Stack justifyContent="center" alignContent="center" alignItems="center">
-        <Heading textAlign="center" pt={8} size="3xl" mb={2}>
-          Moje řízení
-        </Heading>
+      <VStack alignItems="start" gap={8}>
+        <HStack justifyContent="space-between" alignItems="start" w="full">
+          <Heading textAlign="center" size="3xl">
+            Moje řízení
+          </Heading>
+          {!user.user?.isNotary && (
+            <RouterNavLink
+              to={route.newProceeding()}
+              size={{ base: 'sm', sm: 'xl' }}
+            >
+              <LuPlus /> {resources.portal.pages.proceedings.newProceeding}
+            </RouterNavLink>
+          )}
+        </HStack>
         {procedures.length !== 0 ? (
           <ProceedingsTable data={procedures} />
         ) : (
-          <Box my={6}>
-            <Alert
-              justifyContent="center"
-              status="warning"
-              title="Seznam řízení je prázdný."
-              size={{ base: 'md', md: 'lg' }}
-            />
-          </Box>
+          <Alert
+            justifyContent="center"
+            status="warning"
+            title="Seznam řízení je prázdný."
+            size="lg"
+          />
         )}
         {!user.user?.isNotary && (
-          <RouterNavLink to={route.newProceeding()} size="xl" mb={8}>
-            <LuPlus /> {resources.portal.pages.proceedings.newProceeding}
-          </RouterNavLink>
-        )}
-        {!user.user?.isNotary && (
-          <Stack>
-            <Heading size="xl" textAlign="center">
-              Další možnosti
-            </Heading>
-            <Stack direction="column" textAlign="center" mb={10}>
-              {proceedingsNavigation.map((item, index) => (
-                <Link key={index} to={item.link}>
-                  <Button width="100%" rounded="full">
-                    {item.text} {item.icon}
-                  </Button>
-                </Link>
-              ))}
-            </Stack>
+          <Stack gap={4}>
+            <Heading size="xl">Další možnosti</Heading>
+            {proceedingsNavigation.map((item, index) => (
+              <Link key={index} to={item.link}>
+                <Button width="100%" rounded="full">
+                  {item.text} {item.icon}
+                </Button>
+              </Link>
+            ))}
           </Stack>
         )}
-      </Stack>
+      </VStack>
     )
   } else {
     return <UnauthorizedPage />

@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react'
-import { HStack, IconButton, Separator, Text, VStack } from '@chakra-ui/react'
+import { HStack, Icon, Separator, Text, VStack } from '@chakra-ui/react'
 import { LuArchive, LuSettings, LuUser2 } from 'react-icons/lu'
 import { useMediaQuery } from 'usehooks-ts'
 
@@ -45,9 +45,10 @@ export default function SideBar() {
             {...rest}
             asChild
             letterSpacing={0.5}
+            gap={6}
           >
             {icon}
-            <Text fontSize="md">{label}</Text>
+            {label}
           </RouterNavLink>
           {index !== sideBarItems.length - 1 && (
             <Separator borderColor="bg.muted" mx={1} w={'calc(100% - 8px)'} />
@@ -56,22 +57,18 @@ export default function SideBar() {
       ))}
     </VStack>
   ) : (
-    <HStack align="top" justifyContent={'center'}>
+    <HStack align="top" justifyContent="space-between" gap={1} flexWrap="wrap">
       {sideBarItems.map(({ to, label, icon, ...rest }) => (
-        <React.Fragment key={to}>
-          <IconButton
-            bg="bg.emphasized"
-            variant="ghost"
-            size="sm"
-            justifyContent="center"
-            px={2}
-            _active={{ bg: 'gray.400' }}
-          >
-            <RouterNavLink variant="ghost" to={to} {...rest}>
-              {icon}
-            </RouterNavLink>
-          </IconButton>
-        </React.Fragment>
+        <RouterNavLink
+          key={to}
+          variant="subtle"
+          size="xs"
+          to={to}
+          {...rest}
+          gap={2}
+        >
+          <Icon size="xs">{icon}</Icon> <Text fontSize="xs">{label}</Text>
+        </RouterNavLink>
       ))}
     </HStack>
   )

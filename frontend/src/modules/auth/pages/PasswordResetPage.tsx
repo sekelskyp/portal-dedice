@@ -1,5 +1,7 @@
 import { Box, Container, Flex, Image, Stack } from '@chakra-ui/react'
 
+import { Page } from '@frontend/shared/layout'
+
 import { PasswordResetForm } from '../components/PasswordResetForm'
 
 export function PasswordResetPage() {
@@ -7,7 +9,10 @@ export function PasswordResetPage() {
     console.log(data)
 
   return (
-    <Container px={8} py={{ base: 8, sm: 16, lg: 24 }}>
+    <Page
+      px={{ base: 4, sm: 16, lg: 20, xl: 24 }}
+      py={{ base: 8, sm: 16, lg: 24 }}
+    >
       <Flex
         alignItems="center"
         direction={{
@@ -34,6 +39,6 @@ export function PasswordResetPage() {
           </Box>
         </Box>
       </Flex>
-    </Container>
+    </Page>
   )
 }
