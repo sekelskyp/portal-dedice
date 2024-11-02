@@ -1,11 +1,12 @@
 import { eq } from 'drizzle-orm'
 
+import { type Db } from '@backend/types/types'
+
 import {
   beneficiaryInheritanceProcedureRel,
   inheritanceProcedure,
   InheritanceProcedureStateEnumType,
-} from '@backend/db/schema'
-import { Db } from '@backend/types/types'
+} from '../../../db/schema'
 
 export interface InheritanceProcedureData {
   notaryId?: number | null
