@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { HStack, IconButton, Stack, Text } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { LuPlus } from 'react-icons/lu'
+import { LuPlus, LuTrash2 } from 'react-icons/lu'
 import { z } from 'zod'
 
 import resources from '@frontend/resources'
@@ -25,31 +25,35 @@ const benefciarySchema = z.object({
     .email('Zadejte validní e-mailovou adresu'),
 })
 
-const schema = z.object({
-  name: z
-    .string({ required_error: 'Jméno je povinné' })
-    .min(1, 'Jméno je povinné'),
-  surname: z
-    .string({ required_error: 'Příjmení je povinné' })
-    .min(1, 'Příjmení je povinné'),
-  dateOfBirth: z
-    .date({ required_error: 'Datum narození je povinné.' })
-    .max(new Date(), 'Datum narození musí být v minulosti.'),
-  dateOfDeath: z
-    .date({ required_error: 'Datum narození je povinné.' })
-    .max(new Date(), 'Datum narození musí být v minulosti.'),
-  address: z.any({ required_error: 'Adresa bydliště je povinná.' }),
-  contactName: z
-    .string({ required_error: 'Jméno je povinné' })
-    .min(1, 'Jméno je povinné'),
-  contactSurname: z
-    .string({ required_error: 'Jméno je povinné' })
-    .min(1, 'Jméno je povinné'),
-  contactEmail: z
-    .string({ required_error: 'Zadejte validní e-mailovou adresu' })
-    .email('Zadejte validní e-mailovou adresu'),
-  beneficiaries: z.array(benefciarySchema),
-})
+const schema = z
+  .object({
+    name: z
+      .string({ required_error: 'Jméno je povinné' })
+      .min(1, 'Jméno je povinné'),
+    surname: z
+      .string({ required_error: 'Příjmení je povinné' })
+      .min(1, 'Příjmení je povinné'),
+    dateOfBirth: z
+      .date({ required_error: 'Datum narození je povinné.' })
+      .max(new Date(), 'Datum narození musí být v minulosti.'),
+    dateOfDeath: z
+      .date({ required_error: 'Datum narození je povinné.' })
+      .max(new Date(), 'Datum narození musí být v minulosti.'),
+    address: z.any({ required_error: 'Adresa bydliště je povinná.' }),
+    contactName: z
+      .string({ required_error: 'Jméno je povinné' })
+      .min(1, 'Jméno je povinné'),
+    contactSurname: z
+      .string({ required_error: 'Jméno je povinné' })
+      .min(1, 'Jméno je povinné'),
+    contactEmail: z
+      .string({ required_error: 'Zadejte validní e-mailovou adresu' })
+      .email('Zadejte validní e-mailovou adresu'),
+    beneficiaries: z.array(benefciarySchema),
+  })
+  .refine((data) => data.dateOfBirth < data.dateOfDeath, {
+    message: 'Datum úmrtí musí být po datumu narození',
+  })
 
 export type ProceedingFormProps = {
   errorMessage?: string
@@ -83,6 +87,11 @@ export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
 
   const addBeneficiary = () => {
     setBeneficiaries([...beneficiaries, emptyBeneficiary()])
+  }
+
+  const removeBeneficiary = (index: number) => {
+    const updatedBeneficiaries = beneficiaries.filter((_, i) => i !== index)
+    setBeneficiaries(updatedBeneficiaries)
   }
 
   return (
@@ -170,6 +179,15 @@ export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
                   label={resources.portal.forms.proceedingForm.email}
                   required
                 ></InputFormControl>
+                <IconButton
+                  alignSelf="flex-start"
+                  onClick={() => removeBeneficiary(index)}
+                  p={4}
+                  bg={{ base: 'red.500', _hover: 'red.600' }}
+                >
+                  <LuTrash2 />
+                  Odstranit
+                </IconButton>
               </Stack>
             ))}
           </Stack>
