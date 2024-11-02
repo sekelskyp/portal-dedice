@@ -1,11 +1,23 @@
 import React from 'react'
 import { useQuery } from '@apollo/client'
-import { Box, Heading, List, Spinner, Text } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Card,
+  Heading,
+  Spinner,
+  Stack,
+  Table,
+  Text,
+} from '@chakra-ui/react'
 import { useParams } from 'react-router-dom'
 
 import { gql } from '@frontend/gql'
 import { useAuth } from '@frontend/modules/auth'
 import { Page } from '@frontend/shared/layout'
+
+import { BeneficiaryBadge } from '../components/BeneficiaryBadge'
+import { StatusBadge } from '../components/StatusBadge'
 
 const GET_PROCEDURE_QUERY = gql(/* GraphQL */ `
   query GetProcedureById($id: Int!) {
@@ -25,6 +37,7 @@ const GET_PROCEDURE_QUERY = gql(/* GraphQL */ `
           email
           name
           surname
+          gender
         }
       }
       beneficiaries {
@@ -88,75 +101,71 @@ const InheritanceProcedureDetail: React.FC = () => {
 
   return (
     <Page>
-      <Box display="flex" alignItems="center">
-        <Heading as="h1">Procedure Detail</Heading>
-      </Box>
-      <Box
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        minH={{ base: 'xs', sm: 'container.sm' }}
-      >
+      <Stack display="flex" alignItems="center" justifyContent="center">
+        <Heading size="3xl">Detail řízení</Heading>
         {procedure ? (
-          <Box>
-            <Text fontSize="lg">
-              <strong>ID:</strong> {procedure.id}
-            </Text>
-            <Text fontSize="lg">
-              <strong>Řízení:</strong> {procedure.name}
-            </Text>
-            <Text fontSize="lg">
-              <strong>Hlavní kontaktní osoba:</strong>{' '}
-              {procedure.mainBeneficiary?.contact?.name}{' '}
-              {procedure.mainBeneficiary?.contact?.surname}
-            </Text>
-            <Text fontSize="lg">
-              <strong>Status:</strong> {procedure.state}
-            </Text>
-            <Heading as="h2" size="lg" mt={5} mb={3}>
-              Výpis dědiců
-            </Heading>
-            <List.Root listStyleType={'none'}>
-              {procedure.beneficiaries?.map((beneficiary) => (
-                <List.Item key={beneficiary.id}>
-                  <Text>
-                    <strong>User Email:</strong> {beneficiary.user?.email}
-                  </Text>
-                  <Text>
-                    <strong>Contact Name:</strong> {beneficiary.contact?.name}{' '}
-                    {beneficiary.contact?.surname}
-                  </Text>
-                  <Text>
-                    <strong>Contact Email:</strong> {beneficiary.contact?.email}
-                  </Text>
-                </List.Item>
-              ))}
-            </List.Root>{' '}
-            <Text fontSize="lg" mt={3}>
-              <strong>Celková hodnota majetku:</strong> {totalAssetsValue} ,- Kč
-              {/* TODO: CTA na modelaci */}
-            </Text>
-            <Heading as="h2" size="lg" mt={5} mb={3}>
-              Děděné položky
-            </Heading>
-            <List.Root listStyleType={'none'}>
-              {procedure.procedureAssets?.map((asset) => (
-                <List.Item key={asset.id}>
-                  <Text>
-                    <strong>Název:</strong> {asset.name}
-                  </Text>
-                  <Text>
-                    <strong>Hodnota:</strong> {asset.value}
-                  </Text>
-                </List.Item>
-              ))}
-            </List.Root>
-            {/* TODO: CTA na modelaci */}
-          </Box>
+          <Card.Root size="lg" borderRadius="2xl" width="50%">
+            <Card.Body gap="2">
+              <Card.Title mt="2" textAlign="center">
+                {procedure?.name}
+              </Card.Title>
+              <Card.Description>
+                <Heading size="lg" py={2}>
+                  Hlavní kontaktní osoba
+                </Heading>
+                <BeneficiaryBadge
+                  beneficiaryContact={procedure.mainBeneficiary?.contact}
+                />
+                <Heading size="lg" py={2}>
+                  Status
+                </Heading>
+                <StatusBadge state={procedure.state} />
+                <Heading size="lg" py={2}>
+                  Výpis dědiců
+                </Heading>
+                {procedure.beneficiaries?.map((beneficiary) => (
+                  <BeneficiaryBadge beneficiaryContact={beneficiary.contact} />
+                ))}
+                <Text fontSize="lg" mt={3} py={2}>
+                  <strong>Celková hodnota majetku</strong>
+                </Text>
+                <Text fontSize="lg">{totalAssetsValue},- Kč</Text>
+                <Heading as="h2" size="lg" mt={5} mb={3}>
+                  Děděné položky
+                </Heading>
+                <Table.Root size="sm">
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.ColumnHeader textAlign="center" fontWeight="bold">
+                        Název
+                      </Table.ColumnHeader>
+                      <Table.ColumnHeader textAlign="center" fontWeight="bold">
+                        Hodnota
+                      </Table.ColumnHeader>
+                    </Table.Row>
+                  </Table.Header>
+                  <Table.Body>
+                    {procedure.procedureAssets?.map((item) => (
+                      <Table.Row key={item.id}>
+                        <Table.Cell textAlign="center">{item.name}</Table.Cell>
+                        <Table.Cell textAlign="center">
+                          {item.value},- Kč
+                        </Table.Cell>
+                      </Table.Row>
+                    ))}
+                  </Table.Body>
+                </Table.Root>
+              </Card.Description>
+            </Card.Body>
+            <Card.Footer justifyContent="center">
+              <Button variant="outline">View</Button>
+              <Button>Join</Button>
+            </Card.Footer>
+          </Card.Root>
         ) : (
           <Text>No procedure found</Text>
         )}
-      </Box>
+      </Stack>
     </Page>
   )
 }

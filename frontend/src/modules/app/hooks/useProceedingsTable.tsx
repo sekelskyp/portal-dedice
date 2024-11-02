@@ -66,7 +66,8 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
         accessorKey: 'state',
         header: () => 'Status',
         cell: (info) => {
-          return <StatusBadge info={info} />
+          const state = info.getValue() as string
+          return <StatusBadge state={state} />
         },
       },
       {
