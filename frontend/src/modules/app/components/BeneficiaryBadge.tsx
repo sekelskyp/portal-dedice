@@ -16,17 +16,22 @@ export function BeneficiaryBadge({
   beneficiaryContact: any
 }) {
   return (
-    <HStack key={beneficiaryContact.id} gap={4} p={2}>
+    <HStack
+      key={beneficiaryContact.id}
+      gap={4}
+      p={2}
+      justifyContent={{ base: 'center', md: 'left' }}
+    >
       <Avatar
         name={beneficiaryContact.name}
-        size="lg"
+        size={{ base: 'md', sm: 'xl' }}
         colorPalette={pickPalette(beneficiaryContact.email)}
       />
       <Stack gap="0">
-        <Text fontWeight="medium">
+        <Text fontSize={{ base: 'md', md: 'lg' }} fontWeight="bold">
           {beneficiaryContact.name} {beneficiaryContact.surname}
         </Text>
-        <Text color="gray" textStyle="sm">
+        <Text fontSize={{ base: 'sm', md: 'md' }} color="gray">
           {beneficiaryContact.email}
         </Text>
       </Stack>

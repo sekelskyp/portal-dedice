@@ -10,7 +10,8 @@ import {
   Table,
   Text,
 } from '@chakra-ui/react'
-import { FaCalculator } from 'react-icons/fa'
+import { FaCalculator, FaCloudUploadAlt } from 'react-icons/fa'
+import { HiChat } from 'react-icons/hi'
 import { Link, useParams } from 'react-router-dom'
 
 import { gql } from '@frontend/gql'
@@ -105,25 +106,47 @@ const InheritanceProcedureDetail: React.FC = () => {
     return (
       <Page>
         <Stack display="flex" alignItems="center" justifyContent="center">
-          <Heading size="3xl">Detail řízení</Heading>
+          <Heading size="3xl" mb={4}>
+            Detail řízení
+          </Heading>
           {procedure ? (
-            <Card.Root size="lg" borderRadius="2xl" width="50%">
+            <Card.Root
+              size="lg"
+              borderRadius="2xl"
+              width={{ base: '100%', lg: '80%' }}
+              bg="gray.50"
+              borderWidth="2px"
+            >
               <Card.Body gap="2">
                 <Card.Title mt="2" textAlign="center">
                   {procedure?.name}
                 </Card.Title>
                 <Card.Description>
-                  <Heading size="lg" py={2}>
+                  <Heading
+                    size={{ base: 'lg', lg: 'xl' }}
+                    py={2}
+                    textAlign={{ base: 'center', lg: 'left' }}
+                  >
                     Hlavní kontaktní osoba
                   </Heading>
                   <BeneficiaryBadge
                     beneficiaryContact={procedure.mainBeneficiary?.contact}
                   />
-                  <Heading size="lg" py={2}>
+                  <Heading
+                    size={{ base: 'lg', lg: 'xl' }}
+                    py={4}
+                    textAlign={{ base: 'center', lg: 'left' }}
+                  >
                     Status
                   </Heading>
-                  <StatusBadge state={procedure.state} />
-                  <Heading size="lg" py={2}>
+                  <Box textAlign={{ base: 'center', lg: 'left' }}>
+                    <StatusBadge state={procedure.state} />
+                  </Box>
+                  <Heading
+                    size={{ base: 'lg', lg: 'xl' }}
+                    py={4}
+                    textAlign={{ base: 'center', lg: 'left' }}
+                  >
                     Výpis dědiců
                   </Heading>
                   {procedure.beneficiaries?.map((beneficiary) => (
@@ -131,9 +154,13 @@ const InheritanceProcedureDetail: React.FC = () => {
                       beneficiaryContact={beneficiary.contact}
                     />
                   ))}
-                  <Text fontSize="lg" mt={3} py={2}>
-                    <strong>Celková hodnota majetku</strong>
-                  </Text>
+                  <Heading
+                    size={{ base: 'lg', lg: 'xl' }}
+                    py={4}
+                    textAlign={{ base: 'center', lg: 'left' }}
+                  >
+                    Celková hodnota majetku
+                  </Heading>
                   {procedure.procedureAssets?.length === 0 ? (
                     <Stack>
                       <Text fontSize="md">Tuto hodnotu zatím neznáme.</Text>
@@ -148,9 +175,18 @@ const InheritanceProcedureDetail: React.FC = () => {
                       </Button>
                     </Stack>
                   ) : (
-                    <Text fontSize="lg">{totalAssetsValue},- Kč</Text>
+                    <Text
+                      fontSize="lg"
+                      textAlign={{ base: 'center', lg: 'left' }}
+                    >
+                      {totalAssetsValue},- Kč
+                    </Text>
                   )}
-                  <Heading as="h2" size="lg" mt={5} mb={3}>
+                  <Heading
+                    size={{ base: 'lg', lg: 'xl' }}
+                    py={4}
+                    textAlign={{ base: 'center', lg: 'left' }}
+                  >
                     Děděné položky
                   </Heading>
                   {procedure.procedureAssets?.length === 0 ? (
@@ -167,7 +203,7 @@ const InheritanceProcedureDetail: React.FC = () => {
                       </Button>
                     </Stack>
                   ) : (
-                    <Table.Root size="sm">
+                    <Table.Root size={{ base: 'sm', md: 'lg' }}>
                       <Table.Header>
                         <Table.Row>
                           <Table.ColumnHeader
@@ -198,24 +234,36 @@ const InheritanceProcedureDetail: React.FC = () => {
                       </Table.Body>
                     </Table.Root>
                   )}
-                  <Heading as="h2" size="lg" mt={5} mb={3}>
+                  <Heading
+                    size={{ base: 'lg', lg: 'xl' }}
+                    py={4}
+                    textAlign={{ base: 'center', lg: 'left' }}
+                  >
                     Návrh vypořádaní ze strany zůstavitele
                   </Heading>
-                  <Text fontSize="md">Tuto hodnotu zatím neznáme.</Text>
+                  <Text
+                    fontSize="md"
+                    textAlign={{ base: 'center', lg: 'left' }}
+                  >
+                    Tuto hodnotu zatím neznáme.
+                  </Text>
                 </Card.Description>
               </Card.Body>
               <Card.Footer justifyContent="center">
-                <Stack>
+                <Stack direction={{ base: 'column', lg: 'row' }}>
                   {!user.user?.isNotary ? (
                     <>
-                      <Button as={Link} disabled>
-                        Modelace dědického vyrovnání
+                      <Button as={Link} disabled rounded="full">
+                        Modelace vyrovnaní
+                        <FaCalculator />
                       </Button>
-                      <Button as={Link} disabled>
+                      <Button as={Link} disabled rounded="full">
                         Přiložit přílohu
+                        <FaCloudUploadAlt />
                       </Button>
-                      <Button as={Link} disabled>
+                      <Button as={Link} disabled rounded="full">
                         Chat s notářem
+                        <HiChat />
                       </Button>
                     </>
                   ) : (
