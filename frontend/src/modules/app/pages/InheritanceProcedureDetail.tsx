@@ -10,6 +10,7 @@ import {
   Table,
   Text,
 } from '@chakra-ui/react'
+import { FaCalculator } from 'react-icons/fa'
 import { Link, useParams } from 'react-router-dom'
 
 import { gql } from '@frontend/gql'
@@ -133,40 +134,74 @@ const InheritanceProcedureDetail: React.FC = () => {
                   <Text fontSize="lg" mt={3} py={2}>
                     <strong>Celková hodnota majetku</strong>
                   </Text>
-                  <Text fontSize="lg">{totalAssetsValue},- Kč</Text>
+                  {procedure.procedureAssets?.length === 0 ? (
+                    <Stack>
+                      <Text fontSize="md">Tuto hodnotu zatím neznáme.</Text>
+                      <Button
+                        as={Link}
+                        disabled
+                        width="fit-content"
+                        rounded="full"
+                      >
+                        Modelace
+                        <FaCalculator />
+                      </Button>
+                    </Stack>
+                  ) : (
+                    <Text fontSize="lg">{totalAssetsValue},- Kč</Text>
+                  )}
                   <Heading as="h2" size="lg" mt={5} mb={3}>
                     Děděné položky
                   </Heading>
-                  <Table.Root size="sm">
-                    <Table.Header>
-                      <Table.Row>
-                        <Table.ColumnHeader
-                          textAlign="center"
-                          fontWeight="bold"
-                        >
-                          Název
-                        </Table.ColumnHeader>
-                        <Table.ColumnHeader
-                          textAlign="center"
-                          fontWeight="bold"
-                        >
-                          Hodnota
-                        </Table.ColumnHeader>
-                      </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
-                      {procedure.procedureAssets?.map((item) => (
-                        <Table.Row key={item.id}>
-                          <Table.Cell textAlign="center">
-                            {item.name}
-                          </Table.Cell>
-                          <Table.Cell textAlign="center">
-                            {item.value},- Kč
-                          </Table.Cell>
+                  {procedure.procedureAssets?.length === 0 ? (
+                    <Stack>
+                      <Text fontSize="md">Tyto hodnoty zatím neznáme.</Text>
+                      <Button
+                        as={Link}
+                        disabled
+                        width="fit-content"
+                        rounded="full"
+                      >
+                        Modelace
+                        <FaCalculator />
+                      </Button>
+                    </Stack>
+                  ) : (
+                    <Table.Root size="sm">
+                      <Table.Header>
+                        <Table.Row>
+                          <Table.ColumnHeader
+                            textAlign="center"
+                            fontWeight="bold"
+                          >
+                            Název
+                          </Table.ColumnHeader>
+                          <Table.ColumnHeader
+                            textAlign="center"
+                            fontWeight="bold"
+                          >
+                            Hodnota
+                          </Table.ColumnHeader>
                         </Table.Row>
-                      ))}
-                    </Table.Body>
-                  </Table.Root>
+                      </Table.Header>
+                      <Table.Body>
+                        {procedure.procedureAssets?.map((item) => (
+                          <Table.Row key={item.id}>
+                            <Table.Cell textAlign="center">
+                              {item.name}
+                            </Table.Cell>
+                            <Table.Cell textAlign="center">
+                              {item.value},- Kč
+                            </Table.Cell>
+                          </Table.Row>
+                        ))}
+                      </Table.Body>
+                    </Table.Root>
+                  )}
+                  <Heading as="h2" size="lg" mt={5} mb={3}>
+                    Návrh vypořádaní ze strany zůstavitele
+                  </Heading>
+                  <Text fontSize="md">Tuto hodnotu zatím neznáme.</Text>
                 </Card.Description>
               </Card.Body>
               <Card.Footer justifyContent="center">
