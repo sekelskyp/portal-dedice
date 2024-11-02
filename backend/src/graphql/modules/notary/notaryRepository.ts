@@ -86,6 +86,11 @@ export function getNotaryRepository(db: Db) {
       .where(sql`LEFT(${contact.postalCode}, 2) = LEFT(${postalCode}, 2)`)
       .groupBy(notary.id)
       .limit(1)
+
+    if (result.length === 0) {
+      throw new Error('Notář nebyl nalezen.')
+    }
+
     return await db.select().from(notary).where(eq(notary.id, result[0].id))
   }
 
