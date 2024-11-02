@@ -21,7 +21,6 @@ export function useNotaryProcedures() {
     variables: {
       notaryId: userId,
     },
-    fetchPolicy: 'network-only',
   })
 
   const cleanData = data

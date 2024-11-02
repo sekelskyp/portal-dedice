@@ -19,7 +19,7 @@ import { StatusBadge } from '../components/StatusBadge'
 const INITIAL_SORTING_STATE = [
   {
     id: 'state',
-    desc: false,
+    desc: true,
   },
 ]
 
