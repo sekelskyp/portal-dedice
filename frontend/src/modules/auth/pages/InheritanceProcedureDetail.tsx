@@ -1,8 +1,11 @@
 import React from 'react'
 import { gql, useQuery } from '@apollo/client'
+import { Box, Heading, List, Spinner, Text } from '@chakra-ui/react'
 import { useParams } from 'react-router-dom'
 
-const GET_PROCEDURE_QUERY = gql(/* GraphQL */ `
+import { Page } from '@frontend/shared/layout'
+
+const GET_PROCEDURE_QUERY = gql`
   query GetProcedureById($id: Int!) {
     getProcedureById(id: $id) {
       id
@@ -33,6 +36,8 @@ const GET_PROCEDURE_QUERY = gql(/* GraphQL */ `
         contact {
           id
           email
+          name
+          surname
         }
         deceasedRelation
       }
@@ -44,11 +49,7 @@ const GET_PROCEDURE_QUERY = gql(/* GraphQL */ `
       state
     }
   }
-`)
-
-interface ProcedureDetailProps {
-  id: string
-}
+`
 
 const InheritanceProcedureDetail: React.FC = () => {
   const { id } = useParams()
@@ -58,16 +59,22 @@ const InheritanceProcedureDetail: React.FC = () => {
   })
 
   if (loading) {
-    return <div>Loading...</div>
+    return (
+      <Box textAlign="center" py={10} px={6}>
+        <Spinner size="xl" />
+      </Box>
+    )
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>
+    return (
+      <Box textAlign="center" py={10} px={6}>
+        <Text>{error.message}</Text>
+      </Box>
+    )
   }
 
   const procedure = data?.getProcedureById
-
-  console.log(procedure)
 
   const totalAssetsValue = procedure?.procedureAssets.reduce(
     (sum: number, asset: any) => sum + asset.value,
@@ -75,50 +82,74 @@ const InheritanceProcedureDetail: React.FC = () => {
   )
 
   return (
-    <div>
-      <h1>Procedure Detail</h1>
-      {procedure ? (
-        <div>
-          <p>ID: {procedure.id}</p>
-          <p>Name: {procedure.name}</p>
-          {/* Add more fields as necessary */}
-          <p>
-            Main beneficiary: {procedure.mainBeneficiary.contact.name}{' '}
-            {procedure.mainBeneficiary.contact.surname}
-          </p>
-          <p>Dedicove</p>
-          <ul>
-            {procedure.beneficiaries.map((beneficiary: any) => (
-              <li key={beneficiary.id}>
-                <p>ID: {beneficiary.id}</p>
-                <p>User ID: {beneficiary.userId}</p>
-                <p>User Email: {beneficiary.user.email}</p>
-                <p>Contact ID: {beneficiary.contactId}</p>
-                <p>
-                  Contact Name: {beneficiary.contact.name}{' '}
-                  {beneficiary.contact.surname}
-                </p>
-                <p>Contact Email: {beneficiary.contact.email}</p>
-                <p>Deceased Relation: {beneficiary.deceasedRelation}</p>
-              </li>
-            ))}
-          </ul>
-          <p>Assets</p>
-          <p>Total Assets Value: {totalAssetsValue}</p>
-          <ul>
-            {procedure.procedureAssets.map((asset: any) => (
-              <li key={asset.id}>
-                <p>ID: {asset.id}</p>
-                <p>Name: {asset.name}</p>
-                <p>Value: {asset.value}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : (
-        <p>No procedure found</p>
-      )}
-    </div>
+    <Page>
+      <Box display="flex" alignItems="center">
+        <Heading as="h1">Procedure Detail</Heading>
+      </Box>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        minH={{ base: 'xs', sm: 'container.sm' }}
+      >
+        {procedure ? (
+          <Box>
+            <Text fontSize="lg">
+              <strong>ID:</strong> {procedure.id}
+            </Text>
+            <Text fontSize="lg">
+              <strong>Řízení:</strong> {procedure.name}
+            </Text>
+            <Text fontSize="lg">
+              <strong>Hlavní kontaktní osoba:</strong>{' '}
+              {procedure.mainBeneficiary.contact.name}{' '}
+              {procedure.mainBeneficiary.contact.surname}
+            </Text>
+            <Heading as="h2" size="lg" mt={5} mb={3}>
+              Výpis dědiců
+            </Heading>
+            <List.Root listStyleType={'none'}>
+              {procedure.beneficiaries.map((beneficiary: any) => (
+                <List.Item key={beneficiary.id}>
+                  <Text>
+                    <strong>User Email:</strong> {beneficiary.user.email}
+                  </Text>
+                  <Text>
+                    <strong>Contact Name:</strong> {beneficiary.contact.name}{' '}
+                    {beneficiary.contact.surname}
+                  </Text>
+                  <Text>
+                    <strong>Contact Email:</strong> {beneficiary.contact.email}
+                  </Text>
+                </List.Item>
+              ))}
+            </List.Root>{' '}
+            <Text fontSize="lg" mt={3}>
+              <strong>Celková hodnota majetku:</strong> {totalAssetsValue} ,- Kč
+              {/* TODO: CTA na modelaci */}
+            </Text>
+            <Heading as="h2" size="lg" mt={5} mb={3}>
+              Děděné položky
+            </Heading>
+            <List.Root listStyleType={'none'}>
+              {procedure.procedureAssets.map((asset: any) => (
+                <List.Item key={asset.id}>
+                  <Text>
+                    <strong>Název:</strong> {asset.name}
+                  </Text>
+                  <Text>
+                    <strong>Hodnota:</strong> {asset.value}
+                  </Text>
+                </List.Item>
+              ))}
+            </List.Root>
+            {/* TODO: CTA na modelaci */}
+          </Box>
+        ) : (
+          <Text>No procedure found</Text>
+        )}
+      </Box>
+    </Page>
   )
 }
 
