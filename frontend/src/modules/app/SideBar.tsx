@@ -36,7 +36,7 @@ export default function SideBar() {
   return !isMobile ? (
     <VStack align="left" gap={0}>
       {sideBarItems.map(({ to, label, icon, ...rest }, index) => (
-        <React.Fragment key={to}>
+        <React.Fragment key={index}>
           <RouterNavLink
             variant="ghost"
             size="lg"
