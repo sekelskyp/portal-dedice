@@ -12,6 +12,7 @@ import {
   SubmitButton,
 } from '@frontend/shared/forms'
 import { AddressFormControl } from '@frontend/shared/forms/AddressFormControl'
+import { Suggestion } from '@frontend/shared/hooks/useAddressSuggestions'
 
 const benefciarySchema = z.object({
   name: z
@@ -62,7 +63,7 @@ export type ProceedingFormProps = {
     surname: string
     dateOfBirth: string
     dateOfDeath: string
-    address: string
+    address: Suggestion
     contactName: string
     contactSurname: string
     contactEmail: string

@@ -1,11 +1,10 @@
 import { useCallback } from 'react'
 import { Stack, Text } from '@chakra-ui/react'
-import { Suggestion } from 'use-places-autocomplete'
 
 import { useCreateProcedure } from '@frontend/modules/auth/hooks/useCreateProcedure'
-import { getZipCodeFromAddress } from '@frontend/modules/wizard/utils/getGeocode'
 import resources from '@frontend/resources'
 import { Alert } from '@frontend/shared/design-system'
+import { Suggestion } from '@frontend/shared/hooks/useAddressSuggestions'
 
 import { Beneficiary, ProceedingForm } from './ProceedingForm'
 
@@ -19,7 +18,7 @@ export function NewProceedingPage() {
       surname: string
       dateOfBirth: string
       dateOfDeath: string
-      address: string
+      address: Suggestion
       contactName: string
       contactSurname: string
       contactEmail: string
@@ -33,9 +32,7 @@ export function NewProceedingPage() {
               surname: variables.surname,
               dateOfBirth: new Date(variables.dateOfBirth).toISOString(),
               dateOfDeath: new Date(variables.dateOfDeath).toISOString(),
-              completeAddress: await getZipCodeFromAddress(
-                (variables.address as Suggestion).zip!
-              ),
+              completeAddress: `${variables.address.name}, ${variables.address.zip} ${variables.address.location}`,
             },
             contactPerson: {
               name: variables.contactName,
