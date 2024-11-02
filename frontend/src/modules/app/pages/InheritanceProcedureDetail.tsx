@@ -110,6 +110,9 @@ const InheritanceProcedureDetail: React.FC = () => {
               {procedure.mainBeneficiary?.contact?.name}{' '}
               {procedure.mainBeneficiary?.contact?.surname}
             </Text>
+            <Text fontSize="lg">
+              <strong>Status:</strong> {procedure.state}
+            </Text>
             <Heading as="h2" size="lg" mt={5} mb={3}>
               Výpis dědiců
             </Heading>
