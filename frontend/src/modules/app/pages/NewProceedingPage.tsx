@@ -1,7 +1,9 @@
 import { useCallback } from 'react'
 import { Stack, Text } from '@chakra-ui/react'
+import { Suggestion } from 'use-places-autocomplete'
 
 import { useCreateProcedure } from '@frontend/modules/auth/hooks/useCreateProcedure'
+import { getZipCodeFromAddress } from '@frontend/modules/wizard/utils/getGeocode'
 import resources from '@frontend/resources'
 import { Alert } from '@frontend/shared/design-system'
 
@@ -12,7 +14,7 @@ export function NewProceedingPage() {
     useCreateProcedure()
 
   const handleProceedingFormSubmit = useCallback(
-    (variables: {
+    async (variables: {
       name: string
       surname: string
       dateOfBirth: string
@@ -31,7 +33,9 @@ export function NewProceedingPage() {
               surname: variables.surname,
               dateOfBirth: new Date(variables.dateOfBirth).toISOString(),
               dateOfDeath: new Date(variables.dateOfDeath).toISOString(),
-              completeAddress: variables.address,
+              completeAddress: await getZipCodeFromAddress(
+                (variables.address as Suggestion).zip!
+              ),
             },
             contactPerson: {
               name: variables.contactName,
