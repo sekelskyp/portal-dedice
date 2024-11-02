@@ -14,6 +14,7 @@ import {
 } from '../src/db/schema'
 import { hashPassword } from '../src/services/passwordHashService'
 
+import { seedInheritanceProcedures } from './seedInheritanceProcedures'
 import { seedNotariesAndDateRules } from './seedNotaries'
 
 async function populateDatabase(
@@ -104,44 +105,38 @@ async function populateDatabase(
     ])
     .onDuplicateKeyUpdate({ set: { userId: beneficiaryUserId2.id } })
 
-  // todo: refactor separate to its own seed function
-  // Insert inheritance procedures
-  const [inheritanceId1] = await db
-    .insert(inheritanceProcedure)
-    .values([
-      {
-        notaryId: notaryIds[0],
-        mainBeneficiaryId: beneficiaryUserId1.id,
-        name: 'Dědické řízení 1',
-        state: 'InProgress',
-        startDate: new Date('2024-01-01'),
-        deceasedContactId: deceasedContactId1.id,
-        deceasedDateOfBirth: new Date('1940-01-01'),
-        deceasedDateOfDeath: new Date('2023-12-31'),
-      },
-    ])
-    .$returningId()
+  const [inheritanceId1] = await seedInheritanceProcedures(db, [
+    {
+      notaryId: notaryIds[0],
+      mainBeneficiaryId: beneficiaryUserId1.id,
+      state: 'InProgress',
+      startDate: new Date('2024-01-01'),
+      deceasedContactId: deceasedContactId1.id,
+      deceasedDateOfBirth: new Date('1940-01-01'),
+      deceasedDateOfDeath: new Date('2023-12-31'),
+    },
+  ])
 
   await db.insert(beneficiaryInheritanceProcedureRel).values([
     {
       beneficiaryId: beneficiaryUserId1.id,
-      inheritanceProcedureId: inheritanceId1.id,
+      inheritanceProcedureId: inheritanceId1,
     },
     {
       beneficiaryId: beneficiaryUserId2.id,
-      inheritanceProcedureId: inheritanceId1.id,
+      inheritanceProcedureId: inheritanceId1,
     },
   ])
 
   await db.insert(asset).values([
     {
-      inheritanceProcedureId: inheritanceId1.id,
+      inheritanceProcedureId: inheritanceId1,
 
       value: 100_000,
       name: 'Auto',
     },
     {
-      inheritanceProcedureId: inheritanceId1.id,
+      inheritanceProcedureId: inheritanceId1,
 
       value: 200_000,
       name: 'Dům',
