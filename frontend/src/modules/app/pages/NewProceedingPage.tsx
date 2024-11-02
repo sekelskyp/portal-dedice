@@ -1,58 +1,44 @@
 import { useCallback } from 'react'
-import { useMutation } from '@apollo/client'
 import { Stack, Text } from '@chakra-ui/react'
-import { useNavigate } from 'react-router-dom'
 
-import { gql } from '@frontend/gql'
+import { useCreateProcedure } from '@frontend/modules/auth/hooks/useCreateProcedure'
 import resources from '@frontend/resources'
-import { route } from '@shared/route'
+import { Alert } from '@frontend/shared/design-system'
 
 import { Heir, ProceedingForm } from './ProceedingForm'
 
-const PROCEEDING_MUTATION = gql(/* GraphQL */ `
-  mutation createProcedure($data: CreateInheritanceProcedureInput!) {
-    createProcedure(data: $data)
-  }
-`)
-
 export function NewProceedingPage() {
-  const navigate = useNavigate()
-
-  const [createProcedureRequest] = useMutation(PROCEEDING_MUTATION, {
-    onCompleted: (data, context) => {
-      navigate(route.portal())
-    },
-    onError: () => {},
-  })
+  const [createProcedureRequest, createProcedureRequestState] =
+    useCreateProcedure()
 
   const handleProceedingFormSubmit = useCallback(
     (variables: {
-      data: {
-        name: string
-        surname: string
-        dateOfBirth: string
-        dateOfDeath: string
-        address: string
-        contactName: string
-        contactSurname: string
-        contactEmail: string
-        heirs: Heir[]
-      }
+      name: string
+      surname: string
+      dateOfBirth: string
+      dateOfDeath: string
+      address: string
+      contactName: string
+      contactSurname: string
+      contactEmail: string
+      heirs: Heir[]
     }) => {
       createProcedureRequest({
         variables: {
           data: {
-            name: variables.data.name,
-            //surname: variables.data.surname,
-            deceasedDateOfBirth: variables.data.dateOfBirth,
-            deceasedDateOfDeath: variables.data.dateOfDeath,
-            endDate: new Date().toISOString(),
-            startDate: new Date().toISOString(),
-            //address: variables.data.address,
-            //contactName: variables.data.contactName,
-            //contactSurname: variables.data.contactEmail,
-            //contactEmail: variables.data.contactEmail,
-            //heirs: variables.data.heirs,
+            deceasedPerson: {
+              name: variables.name,
+              surname: variables.surname,
+              dateOfBirth: new Date(variables.dateOfBirth).toISOString(),
+              dateOfDeath: new Date(variables.dateOfDeath).toISOString(),
+              completeAddress: variables.address,
+            },
+            contactPerson: {
+              name: variables.contactName,
+              surname: variables.contactSurname,
+              email: variables.contactEmail,
+            },
+            beneficiaries: variables.heirs,
           },
         },
       })
@@ -70,6 +56,12 @@ export function NewProceedingPage() {
         </Text>
       </Stack>
       <ProceedingForm onSubmit={handleProceedingFormSubmit}></ProceedingForm>
+      {createProcedureRequestState.error ? (
+        <Alert
+          status="error"
+          title={createProcedureRequestState.error.message}
+        />
+      ) : null}
     </Stack>
   )
 }

@@ -17,7 +17,7 @@ const documents = {
     types.GetProceduresByBeneficiaryIdDocument,
   '\n  query GetProceduresByNotaryId($notaryId: Int!) {\n    getProceduresByNotaryId(notaryId: $notaryId) {\n      id\n      startDate\n      state\n    }\n  }\n':
     types.GetProceduresByNotaryIdDocument,
-  '\n  mutation createProcedure($data: CreateInheritanceProcedureInput!) {\n    createProcedure(data: $data)\n  }\n':
+  '\n  mutation createProcedure($data: InheritanceProcedureFormDataInput!) {\n    createInheritanceProcedureFromForm(data: $data) {\n      id\n    }\n  }\n':
     types.CreateProcedureDocument,
   '\n  mutation EmailVerification($token: String!) {\n    confirmEmailVerification(token: $token)\n  }\n':
     types.EmailVerificationDocument,
@@ -25,7 +25,7 @@ const documents = {
     types.SignInDocument,
   '\n  mutation SignUp($registerInput: RegisterInput!) {\n    signUp(registerInput: $registerInput) {\n      id\n    }\n  }\n':
     types.SignUpDocument,
-  '\n  query FindNotary($input: FindNotaryInput!) {\n    findNotary(input: $input) {\n      contact {\n        id\n        name\n        surname\n        displayName\n        completeAddress\n        email\n        gender\n        postalCode\n        phone\n      }\n    }\n  }\n':
+  '\n  query FindNotary($input: FindNotaryInput!) {\n    findNotary(input: $input) {\n      contact {\n        id\n        name\n        surname\n        displayName\n        completeAddress\n        email\n        gender\n        postalCode\n        phone\n        email\n        gender\n      }\n    }\n  }\n':
     types.FindNotaryDocument,
 }
 
@@ -59,8 +59,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  mutation createProcedure($data: CreateInheritanceProcedureInput!) {\n    createProcedure(data: $data)\n  }\n'
-): (typeof documents)['\n  mutation createProcedure($data: CreateInheritanceProcedureInput!) {\n    createProcedure(data: $data)\n  }\n']
+  source: '\n  mutation createProcedure($data: InheritanceProcedureFormDataInput!) {\n    createInheritanceProcedureFromForm(data: $data) {\n      id\n    }\n  }\n'
+): (typeof documents)['\n  mutation createProcedure($data: InheritanceProcedureFormDataInput!) {\n    createInheritanceProcedureFromForm(data: $data) {\n      id\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -83,8 +83,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query FindNotary($input: FindNotaryInput!) {\n    findNotary(input: $input) {\n      contact {\n        id\n        name\n        surname\n        displayName\n        completeAddress\n        email\n        gender\n        postalCode\n        phone\n      }\n    }\n  }\n'
-): (typeof documents)['\n  query FindNotary($input: FindNotaryInput!) {\n    findNotary(input: $input) {\n      contact {\n        id\n        name\n        surname\n        displayName\n        completeAddress\n        email\n        gender\n        postalCode\n        phone\n      }\n    }\n  }\n']
+  source: '\n  query FindNotary($input: FindNotaryInput!) {\n    findNotary(input: $input) {\n      contact {\n        id\n        name\n        surname\n        displayName\n        completeAddress\n        email\n        gender\n        postalCode\n        phone\n        email\n        gender\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query FindNotary($input: FindNotaryInput!) {\n    findNotary(input: $input) {\n      contact {\n        id\n        name\n        surname\n        displayName\n        completeAddress\n        email\n        gender\n        postalCode\n        phone\n        email\n        gender\n      }\n    }\n  }\n']
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {}

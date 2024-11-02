@@ -13,17 +13,15 @@ import {
 export type ProceedingFormProps = {
   errorMessage?: string
   onSubmit: (variables: {
-    data: {
-      name: string
-      surname: string
-      dateOfBirth: string
-      dateOfDeath: string
-      address: string
-      contactName: string
-      contactSurname: string
-      contactEmail: string
-      heirs: Heir[]
-    }
+    name: string
+    surname: string
+    dateOfBirth: string
+    dateOfDeath: string
+    address: string
+    contactName: string
+    contactSurname: string
+    contactEmail: string
+    heirs: Heir[]
   }) => void
 }
 

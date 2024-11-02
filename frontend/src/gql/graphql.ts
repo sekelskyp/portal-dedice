@@ -52,6 +52,12 @@ export type Beneficiary = {
   userId?: Maybe<Scalars['ID']['output']>
 }
 
+export type BeneficiaryInput = {
+  email: Scalars['String']['input']
+  name: Scalars['String']['input']
+  surname: Scalars['String']['input']
+}
+
 export type Contact = {
   __typename?: 'Contact'
   completeAddress?: Maybe<Scalars['String']['output']>
@@ -63,6 +69,12 @@ export type Contact = {
   phone?: Maybe<Scalars['String']['output']>
   postalCode?: Maybe<Scalars['String']['output']>
   surname: Scalars['String']['output']
+}
+
+export type ContactPersonInput = {
+  email: Scalars['String']['input']
+  name: Scalars['String']['input']
+  surname: Scalars['String']['input']
 }
 
 export type CreateBeneficiaryInput = {
@@ -84,7 +96,7 @@ export type CreateContactInput = {
 }
 
 export type CreateInheritanceProcedureInput = {
-  deceasedContactId?: InputMaybe<Scalars['ID']['input']>
+  deceasedContactId: Scalars['ID']['input']
   deceasedDateOfBirth?: InputMaybe<Scalars['DateTimeISO']['input']>
   deceasedDateOfDeath?: InputMaybe<Scalars['DateTimeISO']['input']>
   endDate: Scalars['DateTimeISO']['input']
@@ -98,6 +110,14 @@ export type CreateInheritanceProcedureInput = {
 export type CreateNotaryInput = {
   contactId?: InputMaybe<Scalars['ID']['input']>
   userId?: InputMaybe<Scalars['ID']['input']>
+}
+
+export type DeceasedPersonInput = {
+  completeAddress: Scalars['String']['input']
+  dateOfBirth: Scalars['DateTimeISO']['input']
+  dateOfDeath: Scalars['DateTimeISO']['input']
+  name: Scalars['String']['input']
+  surname: Scalars['String']['input']
 }
 
 export type FindNotaryInput = {
@@ -124,6 +144,12 @@ export type InheritanceProcedure = {
   state: Scalars['String']['output']
 }
 
+export type InheritanceProcedureFormDataInput = {
+  beneficiaries: Array<BeneficiaryInput>
+  contactPerson: ContactPersonInput
+  deceasedPerson: DeceasedPersonInput
+}
+
 export type Mutation = {
   __typename?: 'Mutation'
   addBeneficiariesToProcedure: Scalars['Boolean']['output']
@@ -135,6 +161,7 @@ export type Mutation = {
   createBeneficiaries: Array<Beneficiary>
   createBeneficiary: Beneficiary
   createContact: Scalars['Int']['output']
+  createInheritanceProcedureFromForm: InheritanceProcedure
   createNotary: Notary
   createProcedure: Scalars['Int']['output']
   deleteBeneficiary: Scalars['Boolean']['output']
@@ -186,6 +213,10 @@ export type MutationCreateBeneficiaryArgs = {
 
 export type MutationCreateContactArgs = {
   data: CreateContactInput
+}
+
+export type MutationCreateInheritanceProcedureFromFormArgs = {
+  data: InheritanceProcedureFormDataInput
 }
 
 export type MutationCreateNotaryArgs = {
@@ -364,12 +395,15 @@ export type GetProceduresByNotaryIdQuery = {
 }
 
 export type CreateProcedureMutationVariables = Exact<{
-  data: CreateInheritanceProcedureInput
+  data: InheritanceProcedureFormDataInput
 }>
 
 export type CreateProcedureMutation = {
   __typename?: 'Mutation'
-  createProcedure: number
+  createInheritanceProcedureFromForm: {
+    __typename?: 'InheritanceProcedure'
+    id: string
+  }
 }
 
 export type EmailVerificationMutationVariables = Exact<{
@@ -555,7 +589,10 @@ export const CreateProcedureDocument = {
             kind: 'NonNullType',
             type: {
               kind: 'NamedType',
-              name: { kind: 'Name', value: 'CreateInheritanceProcedureInput' },
+              name: {
+                kind: 'Name',
+                value: 'InheritanceProcedureFormDataInput',
+              },
             },
           },
         },
@@ -565,7 +602,7 @@ export const CreateProcedureDocument = {
         selections: [
           {
             kind: 'Field',
-            name: { kind: 'Name', value: 'createProcedure' },
+            name: { kind: 'Name', value: 'createInheritanceProcedureFromForm' },
             arguments: [
               {
                 kind: 'Argument',
@@ -576,6 +613,12 @@ export const CreateProcedureDocument = {
                 },
               },
             ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
           },
         ],
       },
@@ -852,6 +895,11 @@ export const FindNotaryDocument = {
                         name: { kind: 'Name', value: 'postalCode' },
                       },
                       { kind: 'Field', name: { kind: 'Name', value: 'phone' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'gender' },
+                      },
                     ],
                   },
                 },
