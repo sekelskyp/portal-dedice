@@ -6,11 +6,11 @@ import { HomePage } from '@frontend/modules/home/pages/HomePage'
 import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 import { route } from '@shared/route'
 
+import InheritanceProcedureDetail from './modules/app/pages/InheritanceProcedureDetail'
 import { Portal } from './modules/app/pages/Portal'
 import { Proceedings } from './modules/app/pages/Proceedings'
 import { ConfirmEmailPage } from './modules/auth/pages/ConfirmEmailPage'
 import { EmailVerification } from './modules/auth/pages/EmailVerification'
-import InheritanceProcedureDetail from './modules/auth/pages/InheritanceProcedureDetail'
 import { PasswordResetPage } from './modules/auth/pages/PasswordResetPage'
 import { SignOutPage } from './modules/auth/pages/SignOut'
 import { AboutPage } from './modules/static-pages/pages/AboutPage'
@@ -36,7 +36,7 @@ export function Routes() {
         <Route path={route.confirmEmail()} element={<ConfirmEmailPage />} />
         <Route path={route.resetPassword()} element={<PasswordResetPage />} />
         <Route
-          path={route.inheritanceProcedure()}
+          path={route.inheritanceProcedure(':id')}
           element={<InheritanceProcedureDetail />}
         />
         <Route

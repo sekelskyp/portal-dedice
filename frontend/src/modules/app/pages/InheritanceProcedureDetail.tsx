@@ -4,6 +4,7 @@ import { Box, Heading, List, Spinner, Text } from '@chakra-ui/react'
 import { useParams } from 'react-router-dom'
 
 import { gql } from '@frontend/gql'
+import { useAuth } from '@frontend/modules/auth'
 import { Page } from '@frontend/shared/layout'
 
 const GET_PROCEDURE_QUERY = gql(/* GraphQL */ `
@@ -53,6 +54,10 @@ const GET_PROCEDURE_QUERY = gql(/* GraphQL */ `
 `)
 
 const InheritanceProcedureDetail: React.FC = () => {
+  const user = useAuth()
+  console.log('user.user', user.user?.isNotary)
+  console.log('user.token', user.token)
+
   const { id } = useParams()
   const idInt = parseInt(id ?? '0', 10)
   const { loading, error, data } = useQuery(GET_PROCEDURE_QUERY, {
