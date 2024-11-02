@@ -17,6 +17,12 @@ type Beneficiary {
   userId: ID
 }
 
+input BeneficiaryInput {
+  email: String!
+  name: String!
+  surname: String!
+}
+
 type Contact {
   completeAddress: String
   displayName: String
@@ -26,6 +32,12 @@ type Contact {
   name: String!
   phone: String
   postalCode: String
+  surname: String!
+}
+
+input ContactPersonInput {
+  email: String!
+  name: String!
   surname: String!
 }
 
@@ -48,7 +60,7 @@ input CreateContactInput {
 }
 
 input CreateInheritanceProcedureInput {
-  deceasedContactId: ID
+  deceasedContactId: ID!
   deceasedDateOfBirth: DateTimeISO
   deceasedDateOfDeath: DateTimeISO
   endDate: DateTimeISO!
@@ -68,6 +80,14 @@ input CreateNotaryInput {
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format.
 """
 scalar DateTimeISO
+
+input DeceasedPersonInput {
+  completeAddress: String!
+  dateOfBirth: DateTimeISO!
+  dateOfDeath: DateTimeISO!
+  name: String!
+  surname: String!
+}
 
 input FindNotaryInput {
   deceasedPersonDateOfDeath: DateTimeISO!
@@ -92,6 +112,12 @@ type InheritanceProcedure {
   state: String!
 }
 
+input InheritanceProcedureFormDataInput {
+  beneficiaries: [BeneficiaryInput!]!
+  contactPerson: ContactPersonInput!
+  deceasedPerson: DeceasedPersonInput!
+}
+
 type Mutation {
   addBeneficiariesToProcedure(
     beneficiaryIds: [Int!]!
@@ -105,6 +131,9 @@ type Mutation {
   createBeneficiaries(data: [CreateBeneficiaryInput!]!): [Beneficiary!]!
   createBeneficiary(data: CreateBeneficiaryInput!): Beneficiary!
   createContact(data: CreateContactInput!): Int!
+  createInheritanceProcedureFromForm(
+    data: InheritanceProcedureFormDataInput!
+  ): InheritanceProcedure!
   createNotary(data: CreateNotaryInput!): Notary!
   createProcedure(data: CreateInheritanceProcedureInput!): Int!
   deleteBeneficiary(id: Int!): Boolean!
