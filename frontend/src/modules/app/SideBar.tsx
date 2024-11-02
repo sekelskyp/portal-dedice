@@ -1,12 +1,5 @@
 import React, { ReactElement } from 'react'
-import {
-  Center,
-  HStack,
-  IconButton,
-  Separator,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+import { HStack, IconButton, Separator, Text, VStack } from '@chakra-ui/react'
 import { LuArchive, LuFolderPlus, LuSettings, LuUser2 } from 'react-icons/lu'
 import { useMediaQuery } from 'usehooks-ts'
 
@@ -69,7 +62,7 @@ export default function SideBar() {
             size="sm"
             justifyContent="center"
             px={2}
-            _active={{ bg: 'gray.400' }} // Highlight when active
+            _active={{ bg: 'gray.400' }}
           >
             <RouterNavLink variant="ghost" to={to} {...rest}>
               {icon}
