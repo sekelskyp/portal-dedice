@@ -1,14 +1,49 @@
-import { InheritanceProcedureData } from '../graphql/modules/inheritanceProcedure/inheritaceProcedureRepository'
+import { InheritanceProcedureStateEnumType } from '@backend/db/schema'
+
 import { CustomContext } from '../types/types'
+
+export interface InheritanceProcedureData {
+  notaryId?: number | null
+  mainBeneficiaryId?: number | null
+  state?: InheritanceProcedureStateEnumType
+  startDate: Date
+  endDate?: Date | null
+  deceasedContactId: number
+  deceasedDateOfBirth?: Date | null
+  deceasedDateOfDeath?: Date | null
+}
+
+interface InheritanceProcedureFormData {
+  deceasedPerson: {
+    name: string
+    surname: string
+    dateOfBirth: Date
+    dateOfDeath: Date
+    completeAddress: string
+  }
+  contactPerson: {
+    name: string
+    surname: string
+    email: string
+  }
+  beneficiaries: {
+    name: string
+    surname: string
+    email: string
+  }[]
+}
+
 // Private helper function to generate a unique name for a new procedure
-function generateProcedureName(name: string, startDate: Date): string {
+function generateProcedureName(
+  name: string,
+  surname: string,
+  startDate: Date
+): string {
   const formattedDate = startDate.toISOString().split('T')[0].replace(/-/g, '_')
-  const initials = name
-    .split(' ')
-    .map((word) => word[0])
-    .join('')
-    .toUpperCase()
-  return `${formattedDate}_${initials}`
+  const initialName = name[0].toUpperCase()
+  const initialsSurname = surname.slice(0, 2).toUpperCase()
+
+  return `${formattedDate}_${initialName}${initialsSurname}`
 }
 
 // Function to create a new procedure
@@ -16,8 +51,18 @@ export async function createProcedure(
   data: InheritanceProcedureData,
   context: CustomContext
 ): Promise<number> {
-  const { inheritanceProcedureRepository } = context
-  const procedureName = generateProcedureName(data.name, data.startDate)
+  const { inheritanceProcedureRepository, contactRepository } = context
+  const deceasedContact = await contactRepository.getContactById(
+    data.deceasedContactId
+  )
+  if (!deceasedContact) {
+    throw new Error('Deceased contact not found')
+  }
+  const procedureName = generateProcedureName(
+    deceasedContact.name,
+    deceasedContact.surname,
+    data.startDate
+  )
 
   const procedureId = await inheritanceProcedureRepository.createProcedure({
     ...data,
@@ -104,4 +149,85 @@ export async function assignNotary(
   await inheritanceProcedureRepository.updateProcedure(procedureId, {
     notaryId,
   })
+}
+
+export async function createProcedureFromFormData(
+  data: InheritanceProcedureFormData,
+  context: CustomContext
+) {
+  const {
+    inheritanceProcedureRepository,
+    contactRepository,
+    beneficiaryRepository,
+  } = context
+
+  // Step 1: Create the Contact Person and Deceased Person entries
+  const [contactPersonId, deceasedContactId] =
+    await contactRepository.createContacts([
+      {
+        name: data.contactPerson.name,
+        surname: data.contactPerson.surname,
+        email: data.contactPerson.email,
+      },
+      {
+        name: data.deceasedPerson.name,
+        surname: data.deceasedPerson.surname,
+        completeAddress: data.deceasedPerson.completeAddress,
+      },
+    ])
+
+  // Step 2: Create the Inheritance Procedure entry
+  const procedureId = await createProcedure(
+    {
+      deceasedContactId: deceasedContactId,
+      startDate: new Date(),
+      deceasedDateOfBirth: data.deceasedPerson.dateOfBirth,
+      deceasedDateOfDeath: data.deceasedPerson.dateOfDeath,
+    },
+    context
+  )
+
+  // Step 3: Prepare contact data for other beneficiaries
+  const beneficiaryContactsData = data.beneficiaries.map((beneficiary) => ({
+    name: beneficiary.name,
+    surname: beneficiary.surname,
+    email: beneficiary.email,
+  }))
+
+  const otherBeneficiaryContactIds = await contactRepository.createContacts(
+    beneficiaryContactsData
+  )
+
+  // Step 4: Create all beneficiaries, including the main beneficiary
+  const allBeneficiaryData = [
+    {
+      name: data.contactPerson.name,
+      surname: data.contactPerson.surname,
+      email: data.contactPerson.email,
+      contactId: contactPersonId, // Use the contactPersonId for the main beneficiary
+    },
+    ...data.beneficiaries.map((beneficiary, index) => ({
+      name: beneficiary.name,
+      surname: beneficiary.surname,
+      email: beneficiary.email,
+      contactId: otherBeneficiaryContactIds[index], // Other beneficiaries' contacts
+    })),
+  ]
+
+  const beneficiaryIds =
+    await beneficiaryRepository.createBeneficiaries(allBeneficiaryData)
+
+  // Step 5: Link all beneficiaries to the procedure
+  const beneficiaryProcedureRelations = beneficiaryIds.map((beneficiaryId) => ({
+    inheritanceProcedureId: procedureId,
+    beneficiaryId: beneficiaryId,
+  }))
+
+  await beneficiaryRepository.insertMultipleBeneficiaryProcedureRelations(
+    beneficiaryProcedureRelations
+  )
+  // step 6 assign a notary to the procedure
+  await assignNotary(procedureId, 1, context)
+  // Return the created procedure
+  return await inheritanceProcedureRepository.getProcedureById(procedureId)
 }

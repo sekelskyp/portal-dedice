@@ -1,12 +1,14 @@
-import { Icon, Text } from '@chakra-ui/react'
+import { Button, Icon, Text } from '@chakra-ui/react'
 import { FiAlertCircle } from 'react-icons/fi'
 
 import { Box } from '@frontend/shared/design-system'
-import { route } from '@shared/route'
 
-import { RouterLink } from '../atoms'
+interface ErrorTreePageProps {
+  onGoBack: (questionIndex: number) => void
+  questionIndex: number
+}
 
-export function NotFoundPage() {
+export function ErrorTreePage({ onGoBack, questionIndex }: ErrorTreePageProps) {
   return (
     <Box
       display="flex"
@@ -24,22 +26,16 @@ export function NotFoundPage() {
         <Text
           fontSize={{ sm: 'xl', md: '2xl', lg: '3xl' }}
           fontWeight="bold"
-          mb={4}
+          mb={16}
           mx={{ base: 8, sm: 0 }}
         >
-          Stránka nebyla nalezena.
+          Omlouváme se, ale tuto variantu nejsme schopni zpracovat.
         </Text>
-        <Text
-          fontSize={{ base: 'sm', md: 'md', lg: 'lg' }}
-          color="gray.600"
-          mx={{ base: 8, sm: 0 }}
-        >
-          Stránka, kterou se snažíte najít, neexistuje. Vraťte se{' '}
-          <RouterLink to={route.home()} fontWeight="bold" color="primary.500">
-            Domů
-          </RouterLink>
-          .
-        </Text>
+        <Box mt={18} display="flex" gap={2} justifyContent="center">
+          <Button onClick={() => onGoBack(questionIndex)}>
+            Zpět na předchozí otázku
+          </Button>
+        </Box>
       </Box>
     </Box>
   )

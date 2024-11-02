@@ -27,7 +27,7 @@ export function QuestionStep({
         <Container
           alignContent={'center'}
           maxWidth={{ base: '95%', lg: '50%' }}
-          bg="gray.50"
+          bg="bg.panel"
           borderRadius="xl"
         >
           <Heading
@@ -44,7 +44,6 @@ export function QuestionStep({
             <Container maxWidth={{ base: '90%', lg: '50%' }}>
               <AccordionHelper items={questions} />
             </Container>
-            <Stack direction={'row'}>{progress}...</Stack>
           </>
         )}
       </Stack>

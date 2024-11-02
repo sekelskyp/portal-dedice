@@ -7,7 +7,7 @@ interface ContactInfoProps {
   contactInfo: {
     phone: string
     email: string
-    postalCode: string
+    completeAddress: string
   }
 }
 
@@ -28,20 +28,20 @@ export function ContactInfo({ contactInfo }: ContactInfoProps) {
     },
     {
       icon: <FiMapPin size={iconBreakpoints} />,
-      text: contactInfo.postalCode,
+      text: contactInfo.completeAddress,
     },
   ]
 
   return (
     <Container
       textAlign="center"
-      borderColor="gray.100"
+      borderColor="bg.emphasized"
       borderRadius="xl"
-      borderWidth="2px"
-      bg="gray.50"
+      borderWidth="1px"
+      bg="bg.panel"
       fontSize={{ base: 'sm', sm: 'md', md: 'lg' }}
-      maxWidth="fit-content"
-      px={{ base: 4, sm: 6, md: 10 }}
+      maxWidth={{ base: 'full', sm: 'fit-content' }}
+      px={{ base: 4, sm: 8, md: 10 }}
       py={4}
     >
       {contactIcons.map((item, index) => (

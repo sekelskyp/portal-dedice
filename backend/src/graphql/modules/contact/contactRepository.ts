@@ -7,12 +7,16 @@ import { contact, GenderEnumType, notary } from '../../../db/schema'
 export interface ContactData {
   name: string
   surname: string
-  displayName: string
+  displayName?: string
   phone?: string
   gender?: GenderEnumType
   email?: string
   completeAddress?: string
   postalCode?: string
+}
+
+function getDefaultDisplayName(data: ContactData): string {
+  return data.displayName || `${data.name} ${data.surname}`
 }
 
 export function getContactRepository(db: Db) {
@@ -26,12 +30,21 @@ export function getContactRepository(db: Db) {
   }
 
   async function createContact(data: ContactData): Promise<number> {
-    const [result] = await db.insert(contact).values(data).$returningId()
+    const contactData = {
+      ...data,
+      displayName: data.displayName || getDefaultDisplayName(data),
+    }
+    const [result] = await db.insert(contact).values(contactData).$returningId()
     return result.id
   }
 
   async function createContacts(data: ContactData[]): Promise<number[]> {
-    const results = await db.insert(contact).values(data).$returningId()
+    // Set a default displayName if it's missing for each contact
+    const preparedData = data.map((contact) => ({
+      ...contact,
+      displayName: getDefaultDisplayName(contact),
+    }))
+    const results = await db.insert(contact).values(preparedData).$returningId()
     return results.map((contact) => contact.id)
   }
 

@@ -47,14 +47,28 @@ const customConfig = defineConfig({
         bg: {
           DEFAULT: {
             value: {
-              _light: '{colors.gray.50}',
+              _light: 'white',
               _dark: '{colors.gray.900}',
+            },
+          },
+          panel: {
+            value: {
+              _light: '{colors.gray.50}',
+              _dark: '{colors.gray.800}',
             },
           },
           muted: {
             value: {
               _light: '{colors.gray.100}',
               _dark: '{colors.gray.800}',
+            },
+          },
+        },
+        border: {
+          DEFAULT: {
+            value: {
+              _light: '{colors.gray.200}',
+              _dark: '{colors.gray.700}',
             },
           },
         },

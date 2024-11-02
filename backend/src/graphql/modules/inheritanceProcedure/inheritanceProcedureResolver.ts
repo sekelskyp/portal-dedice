@@ -15,6 +15,7 @@ import {
   assignNotary,
   closeProcedure,
   createProcedure,
+  createProcedureFromFormData,
   removeBeneficiaryFromProcedure,
 } from '../../../services/inheritanceProcedureService'
 import { CustomContext } from '../../../types/types'
@@ -25,6 +26,7 @@ import { Notary } from '../notary/notaryType'
 
 import { CreateInheritanceProcedureInput } from './createInheritanceProcedureInput'
 import { InheritanceProcedureData } from './inheritaceProcedureRepository'
+import { InheritanceProcedureFormDataInput } from './inheritanceProcedureFormDataInput'
 import { InheritanceProcedure } from './inheritanceProcedureType'
 
 @Resolver(() => InheritanceProcedure)
@@ -188,5 +190,14 @@ export class InheritanceProcedureResolver {
     @Ctx() { assetRepository }: CustomContext
   ): Promise<Asset[]> {
     return await assetRepository.getAssetsByProcedureId(procedure.id)
+  }
+
+  @Mutation(() => InheritanceProcedure)
+  async createInheritanceProcedureFromForm(
+    @Arg('data') data: InheritanceProcedureFormDataInput,
+    @Ctx() context: CustomContext
+  ): Promise<InheritanceProcedure> {
+    // Call the service method to create the procedure from form data
+    return await createProcedureFromFormData(data, context)
   }
 }

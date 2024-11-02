@@ -1,80 +1,141 @@
 import { useState } from 'react'
 
-export function useWizardSteps() {
-  const [{ step, questionsProgress, treeProgress }, setState] = useState<{
+export function useWizardSteps(
+  totalQuestions: number,
+  totalQuestionnaireSteps: number
+) {
+  const [
+    { step, questionsProgress, questionId, questionnaireProgress },
+    setState,
+  ] = useState<{
     step: number
     questionsProgress: number
-    treeProgress: number
+    questionId: number
+    questionnaireProgress: number
   }>(INITIAL_STATE)
+
+  const questionProgressIncrement = 100 / totalQuestions
+  const questionnaireProgressIncrement = 100 / totalQuestionnaireSteps
+
   const setNextStep = () => {
-    if (step === 1) {
-      setState((prevState) => ({ ...prevState, step: 2 }))
-    } else if (step === 2) {
-      if (questionsProgress < 100) {
-        setState((prevState) => ({
-          ...prevState,
-          questionsProgress: questionsProgress + 10,
-        }))
-        if (questionsProgress + 10 >= 100) {
-          setState((prevState) => ({ ...prevState, step: 3 }))
+    setState((prevState) => {
+      if (prevState.step === 1) {
+        return { ...prevState, step: 2 }
+      }
+      if (prevState.step === 2) {
+        if (prevState.questionsProgress < 100) {
+          const newQuestionsProgress =
+            prevState.questionsProgress + questionProgressIncrement
+          const newQuestionId = prevState.questionId + 1
+          return {
+            ...prevState,
+            questionsProgress: newQuestionsProgress,
+            questionId: newQuestionId,
+            step: newQuestionsProgress >= 100 ? 3 : 2,
+          }
         }
       }
-    } else if (step === 3) {
-      if (treeProgress < 100) {
-        setState((prevState) => ({
+      if (prevState.step === 3) {
+        const newQuestionnaireProgress =
+          prevState.questionnaireProgress + questionnaireProgressIncrement
+        return {
           ...prevState,
-          treeProgress: treeProgress + 10,
-        }))
-        if (treeProgress + 10 >= 100) {
-          setState((prevState) => ({ ...prevState, step: 4 }))
+          questionnaireProgress: Math.min(newQuestionnaireProgress, 100),
+          step: newQuestionnaireProgress >= 100 ? 4 : 3,
         }
       }
-    }
+      return prevState
+    })
   }
 
   const setPreviousStep = () => {
-    if (step === 2) {
-      if (questionsProgress > 0) {
-        setState((prevState) => ({
-          ...prevState,
-          questionsProgress: questionsProgress - 10,
-        }))
-      } else {
-        setState((prevState) => ({ ...prevState, step: 1 }))
+    setState((prevState) => {
+      if (prevState.step === 2) {
+        if (prevState.questionsProgress > 0) {
+          const newQuestionsProgress =
+            prevState.questionsProgress - questionProgressIncrement
+          const newQuestionId = Math.max(prevState.questionId - 1, 0)
+          return {
+            ...prevState,
+            questionsProgress: Math.max(newQuestionsProgress, 0),
+            questionId: newQuestionId,
+          }
+        }
+        return { ...prevState, step: 1 }
       }
-    } else if (step === 3) {
-      if (treeProgress > 0) {
-        setState((prevState) => ({
-          ...prevState,
-          treeProgress: treeProgress - 10,
-        }))
-      } else {
-        setState((prevState) => ({
+      if (prevState.step === 3) {
+        if (prevState.questionnaireProgress > 0) {
+          const newQuestionnaireProgress =
+            prevState.questionnaireProgress - questionnaireProgressIncrement
+          return {
+            ...prevState,
+            questionnaireProgress: Math.max(newQuestionnaireProgress, 0),
+          }
+        }
+        return {
           ...prevState,
           step: 2,
-          questionsProgress: questionsProgress - 10,
-        }))
+          questionsProgress: Math.max(
+            prevState.questionsProgress - questionProgressIncrement,
+            0
+          ),
+          questionId: Math.max(prevState.questionId - 1, 0),
+        }
       }
-    } else if (step === 4) {
-      setState((prevState) => ({
+      if (prevState.step === 4) {
+        const newQuestionnaireProgress =
+          prevState.questionnaireProgress - questionnaireProgressIncrement
+        return {
+          ...prevState,
+          questionnaireProgress: Math.max(newQuestionnaireProgress, 0),
+          step: 3,
+        }
+      }
+      return prevState
+    })
+  }
+
+  const setStep = (newStep: number) => {
+    setState((prevState) => {
+      let newQuestionsProgress = prevState.questionsProgress
+      let newQuestionnaireProgress = prevState.questionnaireProgress
+
+      if (newStep >= 4) {
+        newQuestionsProgress = 100
+        newQuestionnaireProgress = 100
+      }
+
+      return {
         ...prevState,
-        treeProgress: treeProgress - 10,
-        step: 3,
-      }))
-    }
+        step: newStep,
+        questionsProgress: newQuestionsProgress,
+        questionnaireProgress: newQuestionnaireProgress,
+      }
+    })
+  }
+
+  const resetProgress = () => {
+    setState((prevState) => ({
+      ...prevState,
+      questionnaireProgress: 0,
+    }))
   }
 
   return {
     step,
     questionsProgress,
-    treeProgress,
+    questionId,
+    questionnaireProgress,
     setNextStep,
     setPreviousStep,
+    setStep,
+    resetProgress, // Include resetProgress in the returned object
   }
 }
 
 const INITIAL_STATE = {
   step: 1,
   questionsProgress: 0,
-  treeProgress: 0,
+  questionId: 0,
+  questionnaireProgress: 0,
 } as const
