@@ -1,6 +1,6 @@
-import { useState } from 'react'
 import { HStack, IconButton, Stack, Text } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useFieldArray } from 'react-hook-form'
 import { LuPlus, LuTrash2 } from 'react-icons/lu'
 import { z } from 'zod'
 
@@ -76,24 +76,7 @@ export interface Beneficiary {
   email: string
 }
 
-const emptyBeneficiary = (): Beneficiary => ({
-  name: '',
-  surname: '',
-  email: '',
-})
-
 export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
-  const [beneficiaries, setBeneficiaries] = useState<Beneficiary[]>([])
-
-  const addBeneficiary = () => {
-    setBeneficiaries([...beneficiaries, emptyBeneficiary()])
-  }
-
-  const removeBeneficiary = (index: number) => {
-    const updatedBeneficiaries = beneficiaries.filter((_, i) => i !== index)
-    setBeneficiaries(updatedBeneficiaries)
-  }
-
   return (
     <Form onSubmit={onSubmit} resolver={zodResolver(schema)} noValidate>
       <Stack gap={6}>
@@ -151,60 +134,71 @@ export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
             required
           ></InputFormControl>
         </Stack>
-        <Stack>
-          <Text fontWeight="bold">
-            {resources.portal.forms.proceedingForm.groups.beneficiaries}
-          </Text>
-          <Stack gap={6}>
-            {beneficiaries.map((beneficiary: Beneficiary, index: number) => (
-              <Stack key={`beneficiary-${index}`}>
-                <Text
-                  fontSize="sm"
-                  fontWeight="bold"
-                >{`Dědic ${index + 1}`}</Text>
-                <HStack gap={6}>
-                  <InputFormControl
-                    name={`beneficiaries.${index}.name`}
-                    label={resources.portal.forms.proceedingForm.name}
-                    required
-                  ></InputFormControl>
-                  <InputFormControl
-                    name={`beneficiaries.${index}.surname`}
-                    label={resources.portal.forms.proceedingForm.surname}
-                    required
-                  ></InputFormControl>
-                </HStack>
-                <InputFormControl
-                  name={`beneficiaries.${index}.email`}
-                  label={resources.portal.forms.proceedingForm.email}
-                  required
-                ></InputFormControl>
-                <IconButton
-                  alignSelf="flex-start"
-                  onClick={() => removeBeneficiary(index)}
-                  p={4}
-                  bg={{ base: 'red.500', _hover: 'red.600' }}
-                >
-                  <LuTrash2 />
-                  Odstranit
-                </IconButton>
-              </Stack>
-            ))}
-          </Stack>
-          <IconButton
-            onClick={addBeneficiary}
-            alignSelf="flex-start"
-            p={4}
-            my={4}
-          >
-            <LuPlus></LuPlus>
-            {resources.portal.forms.proceedingForm.addBeneficiary}
-          </IconButton>
-        </Stack>
+        <BeneficiarySection />
         <SubmitButton>
           {resources.portal.forms.proceedingForm.createProceeding}
         </SubmitButton>
       </Stack>
     </Form>
+  )
+}
+
+const BeneficiarySection = () => {
+  const beneficiaries = useFieldArray({ name: 'beneficiaries' })
+
+  return (
+    <Stack>
+      <Text fontWeight="bold">
+        {resources.portal.forms.proceedingForm.groups.beneficiaries}
+      </Text>
+      <Stack gap={6}>
+        {beneficiaries.fields.map((field, index) => (
+          <Stack key={field.id}>
+            <Text fontSize="sm" fontWeight="bold">{`Dědic ${index + 1}`}</Text>
+            <HStack gap={6}>
+              <InputFormControl
+                name={`beneficiaries.${index}.name`}
+                label={resources.portal.forms.proceedingForm.name}
+                required
+              ></InputFormControl>
+              <InputFormControl
+                name={`beneficiaries.${index}.surname`}
+                label={resources.portal.forms.proceedingForm.surname}
+                required
+              ></InputFormControl>
+            </HStack>
+            <InputFormControl
+              name={`beneficiaries.${index}.email`}
+              label={resources.portal.forms.proceedingForm.email}
+              required
+            ></InputFormControl>
+            <IconButton
+              alignSelf="flex-start"
+              onClick={() => beneficiaries.remove(index)}
+              p={4}
+              bg={{ base: 'red.500', _hover: 'red.600' }}
+            >
+              <LuTrash2 />
+              Odstranit
+            </IconButton>
+          </Stack>
+        ))}
+      </Stack>
+      <IconButton
+        onClick={() =>
+          beneficiaries.append({
+            name: '',
+            surname: '',
+            email: '',
+          })
+        }
+        alignSelf="flex-start"
+        p={4}
+        my={4}
+      >
+        <LuPlus></LuPlus>
+        {resources.portal.forms.proceedingForm.addBeneficiary}
+      </IconButton>
+    </Stack>
   )
 }
