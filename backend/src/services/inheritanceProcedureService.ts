@@ -2,6 +2,8 @@ import { InheritanceProcedureStateEnumType } from '@backend/db/schema'
 
 import { CustomContext } from '../types/types'
 
+import { findAvailableNotary } from './notaryAssignmentService'
+
 export interface InheritanceProcedureData {
   notaryId?: number | null
   mainBeneficiaryId?: number | null
@@ -44,6 +46,25 @@ function generateProcedureName(
   const initialsSurname = surname.slice(0, 2).toUpperCase()
 
   return `${formattedDate}_${initialName}${initialsSurname}`
+}
+
+function extractAndFormatCzechPostalCode(
+  completeAddress: string
+): string | null {
+  // Match the Czech postal code format of 5 digits, with an optional space between the third and fourth digits
+  const postalCodeMatch = completeAddress.match(/\b\d{3} ?\d{2}\b/)
+
+  // If a match is found, format it to include a space between the third and fourth digits
+  if (postalCodeMatch) {
+    const formattedPostalCode = postalCodeMatch[0].replace(
+      /(\d{3}) ?(\d{2})/,
+      '$1 $2'
+    )
+    return formattedPostalCode
+  }
+
+  // Return null if no postal code is found in the expected format
+  return null
 }
 
 // Function to create a new procedure
@@ -160,7 +181,14 @@ export async function createProcedureFromFormData(
     contactRepository,
     beneficiaryRepository,
   } = context
-
+  const deceasedPostalCode = extractAndFormatCzechPostalCode(
+    data.deceasedPerson.completeAddress
+  )
+  if (!deceasedPostalCode) {
+    throw new Error(
+      'Invalid or missing postal code in the deceased person address'
+    )
+  }
   // Step 1: Create the Contact Person and Deceased Person entries
   const [contactPersonId, deceasedContactId] =
     await contactRepository.createContacts([
@@ -173,6 +201,7 @@ export async function createProcedureFromFormData(
         name: data.deceasedPerson.name,
         surname: data.deceasedPerson.surname,
         completeAddress: data.deceasedPerson.completeAddress,
+        postalCode: deceasedPostalCode,
       },
     ])
 
@@ -227,7 +256,19 @@ export async function createProcedureFromFormData(
     beneficiaryProcedureRelations
   )
   // step 6 assign a notary to the procedure
-  await assignNotary(procedureId, 1, context)
+  await inheritanceProcedureRepository.updateProcedure(procedureId, {
+    mainBeneficiaryId: beneficiaryIds[0],
+  })
+  // step 7 find notary
+  const [notary] = await findAvailableNotary(
+    {
+      postalCode: deceasedPostalCode,
+      dateOfDeath: data.deceasedPerson.dateOfDeath,
+    },
+    context
+  )
+  // step 8 assign a notary to the procedure
+  await assignNotary(procedureId, notary.id, context)
   // Return the created procedure
   return await inheritanceProcedureRepository.getProcedureById(procedureId)
 }

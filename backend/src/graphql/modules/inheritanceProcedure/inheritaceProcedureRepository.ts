@@ -1,4 +1,4 @@
-import { eq, or } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 
 import {
   beneficiaryInheritanceProcedureRel,
@@ -78,11 +78,7 @@ export function getInheritanceProcedureRepository(db: Db) {
         )
       )
       .where(
-        // Fetches where beneficiary is either mainBeneficiary or linked via the relationship table
-        or(
-          eq(inheritanceProcedure.mainBeneficiaryId, beneficiaryId),
-          eq(beneficiaryInheritanceProcedureRel.beneficiaryId, beneficiaryId)
-        )
+        eq(beneficiaryInheritanceProcedureRel.beneficiaryId, beneficiaryId)
       )
   }
 
