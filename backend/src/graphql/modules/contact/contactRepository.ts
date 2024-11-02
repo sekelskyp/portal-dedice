@@ -38,14 +38,8 @@ export function getContactRepository(db: Db) {
     return result.id
   }
 
-  async function createContacts(data: ContactData[]): Promise<number[]> {
-    // Set a default displayName if it's missing for each contact
-    const preparedData = data.map((contact) => ({
-      ...contact,
-      displayName: getDefaultDisplayName(contact),
-    }))
-    const results = await db.insert(contact).values(preparedData).$returningId()
-    return results.map((contact) => contact.id)
+  function createContacts(data: ContactData[]): Promise<number[]> {
+    return Promise.all(data.map((d) => createContact(d)))
   }
 
   async function deleteContactById(id: number): Promise<number> {
