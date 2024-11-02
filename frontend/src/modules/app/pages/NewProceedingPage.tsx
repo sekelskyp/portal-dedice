@@ -5,7 +5,7 @@ import { useCreateProcedure } from '@frontend/modules/auth/hooks/useCreateProced
 import resources from '@frontend/resources'
 import { Alert } from '@frontend/shared/design-system'
 
-import { Heir, ProceedingForm } from './ProceedingForm'
+import { Beneficiary, ProceedingForm } from './ProceedingForm'
 
 export function NewProceedingPage() {
   const [createProcedureRequest, createProcedureRequestState] =
@@ -21,7 +21,7 @@ export function NewProceedingPage() {
       contactName: string
       contactSurname: string
       contactEmail: string
-      heirs: Heir[]
+      beneficiaries: Beneficiary[]
     }) => {
       createProcedureRequest({
         variables: {
@@ -38,13 +38,14 @@ export function NewProceedingPage() {
               surname: variables.contactSurname,
               email: variables.contactEmail,
             },
-            beneficiaries: variables.heirs,
+            beneficiaries: variables.beneficiaries,
           },
         },
       })
     },
     [createProcedureRequest]
   )
+
   return (
     <Stack gap={6}>
       <Stack>

@@ -21,27 +21,27 @@ export type ProceedingFormProps = {
     contactName: string
     contactSurname: string
     contactEmail: string
-    heirs: Heir[]
+    beneficiaries: Beneficiary[]
   }) => void
 }
 
-export interface Heir {
+export interface Beneficiary {
   name: string
   surname: string
   email: string
 }
 
-const emptyHeir = (): Heir => ({
+const emptyBeneficiary = (): Beneficiary => ({
   name: '',
   surname: '',
   email: '',
 })
 
 export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
-  const [heirs, setHeirs] = useState<Heir[]>([])
+  const [beneficiaries, setBeneficiaries] = useState<Beneficiary[]>([])
 
-  const addHeir = () => {
-    setHeirs([...heirs, emptyHeir()])
+  const addBeneficiary = () => {
+    setBeneficiaries([...beneficiaries, emptyBeneficiary()])
   }
 
   return (
@@ -95,35 +95,40 @@ export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
         </Stack>
         <Stack>
           <Text fontWeight="bold">
-            {resources.portal.forms.proceedingForm.groups.heirs}
+            {resources.portal.forms.proceedingForm.groups.beneficiaries}
           </Text>
           <Stack gap={6}>
-            {heirs.map((heir: Heir, index: number) => (
-              <Stack key={`heir-${index}`}>
+            {beneficiaries.map((beneficiary: Beneficiary, index: number) => (
+              <Stack key={`beneficiary-${index}`}>
                 <Text
                   fontSize="sm"
                   fontWeight="bold"
                 >{`Dědic ${index + 1}`}</Text>
                 <HStack gap={6}>
                   <InputFormControl
-                    name={`heirs.${index}.name`}
+                    name={`beneficiaries.${index}.name`}
                     label={resources.portal.forms.proceedingForm.name}
                   ></InputFormControl>
                   <InputFormControl
-                    name={`heirs.${index}.surname`}
+                    name={`beneficiaries.${index}.surname`}
                     label={resources.portal.forms.proceedingForm.surname}
                   ></InputFormControl>
                 </HStack>
                 <InputFormControl
-                  name={`heirs.${index}.email`}
+                  name={`beneficiaries.${index}.email`}
                   label={resources.portal.forms.proceedingForm.email}
                 ></InputFormControl>
               </Stack>
             ))}
           </Stack>
-          <IconButton onClick={addHeir} alignSelf="flex-start" p={4} my={4}>
+          <IconButton
+            onClick={addBeneficiary}
+            alignSelf="flex-start"
+            p={4}
+            my={4}
+          >
             <LuPlus></LuPlus>
-            {resources.portal.forms.proceedingForm.addHeir}
+            {resources.portal.forms.proceedingForm.addBeneficiary}
           </IconButton>
         </Stack>
         <SubmitButton>

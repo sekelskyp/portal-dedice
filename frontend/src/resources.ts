@@ -79,9 +79,9 @@ const resources = {
         groups: {
           deceased: 'Identifikace zůstavitele',
           contactPerson: 'Kontaktní osoba',
-          heirs: 'Dědici po zůstaviteli',
+          beneficiaries: 'Dědici po zůstaviteli',
         },
-        addHeir: 'Přidat dědice',
+        addBeneficiary: 'Přidat dědice',
         createProceeding: 'Založit řízení',
       },
     },
