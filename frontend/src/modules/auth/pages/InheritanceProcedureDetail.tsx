@@ -6,6 +6,8 @@ import { useParams } from 'react-router-dom'
 import { gql } from '@frontend/gql'
 import { Page } from '@frontend/shared/layout'
 
+import { useAuth } from '../auth-core'
+
 const GET_PROCEDURE_QUERY = gql(/* GraphQL */ `
   query GetProcedureById($id: Int!) {
     getProcedureById(id: $id) {
@@ -53,6 +55,11 @@ const GET_PROCEDURE_QUERY = gql(/* GraphQL */ `
 `)
 
 const InheritanceProcedureDetail: React.FC = () => {
+  const user = useAuth()
+  console.log(user.user)
+  console.log(user.user?.isNotary)
+  console.log(user.token)
+
   const { id } = useParams()
   const idInt = parseInt(id ?? '0', 10)
   const { loading, error, data } = useQuery(GET_PROCEDURE_QUERY, {
@@ -104,6 +111,9 @@ const InheritanceProcedureDetail: React.FC = () => {
               <strong>Hlavní kontaktní osoba:</strong>{' '}
               {procedure.mainBeneficiary?.contact?.name}{' '}
               {procedure.mainBeneficiary?.contact?.surname}
+            </Text>
+            <Text fontSize="lg">
+              <strong>Status:</strong> {procedure.state}
             </Text>
             <Heading as="h2" size="lg" mt={5} mb={3}>
               Výpis dědiců
