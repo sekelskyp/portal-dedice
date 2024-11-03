@@ -12,7 +12,7 @@ export function ProceedingsTableHeader({
   return (
     <Table.Header textAlign="center">
       {table.getHeaderGroups().map((headerGroup) => (
-        <Table.Row key={headerGroup.id} bg="bg">
+        <Table.Row key={headerGroup.id} bg="inherit">
           {headerGroup.headers.map((header) => {
             return (
               <Table.ColumnHeader
@@ -22,8 +22,6 @@ export function ProceedingsTableHeader({
               >
                 <Stack
                   direction="row"
-                  textAlign="center"
-                  justifyContent="center"
                   alignItems="center"
                   onClick={header.column.getToggleSortingHandler()}
                 >
@@ -34,9 +32,9 @@ export function ProceedingsTableHeader({
                     )}
                   </Heading>
                   {header.column.getIsSorted() === 'asc' ? (
-                    <HiChevronUp fontSize="24px" />
+                    <HiChevronUp size="20" />
                   ) : header.column.getIsSorted() === 'desc' ? (
-                    <HiChevronDown fontSize="24px" />
+                    <HiChevronDown size="20" />
                   ) : null}
                 </Stack>
               </Table.ColumnHeader>

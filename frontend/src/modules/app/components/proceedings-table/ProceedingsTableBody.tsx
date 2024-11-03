@@ -12,12 +12,11 @@ export function ProceedingsTableBody({
     <Table.Body>
       {table.getRowModel().rows.map((row) => {
         return (
-          <Table.Row key={row.id} bg="bg">
+          <Table.Row key={row.id} bg="inherit">
             {row.getVisibleCells().map((cell) => {
               return (
                 <Table.Cell
                   key={cell.id}
-                  textAlign="center"
                   style={{ width: cell.column.getSize() }}
                 >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
