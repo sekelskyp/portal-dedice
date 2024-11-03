@@ -85,6 +85,8 @@ function usePersistedAuth(
     setStorageState(newState)
   }, [])
 
+  console.log(state)
+
   return [state, setState]
 }
 
@@ -99,9 +101,9 @@ function getStorageState(defaultState: AuthState): AuthState {
   }
 
   try {
-    const { user, token } = JSON.parse(rawData)
+    const { token, user } = JSON.parse(rawData)
 
-    if (token && user && user.id && user.login) {
+    if (token && user && user.id && user.email) {
       return { token, user }
     }
   } catch {}
