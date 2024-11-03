@@ -191,19 +191,20 @@ export async function createProcedureFromFormData(
     )
   }
   // Step 1: Create the Contact Person and Deceased Person entries
-  const [contactPersonId] = await contactRepository.createContacts([
-    {
-      name: data.contactPerson.name,
-      surname: data.contactPerson.surname,
-      email: data.contactPerson.email,
-    },
-    {
-      name: data.deceasedPerson.name,
-      surname: data.deceasedPerson.surname,
-      completeAddress: data.deceasedPerson.completeAddress,
-      postalCode: deceasedPostalCode,
-    },
-  ])
+  const [contactPersonId, deceasedContactId] =
+    await contactRepository.createContacts([
+      {
+        name: data.contactPerson.name,
+        surname: data.contactPerson.surname,
+        email: data.contactPerson.email,
+      },
+      {
+        name: data.deceasedPerson.name,
+        surname: data.deceasedPerson.surname,
+        completeAddress: data.deceasedPerson.completeAddress,
+        postalCode: deceasedPostalCode,
+      },
+    ])
 
   // Step 2: Create the Inheritance Procedure entry
   const procedureId = await createProcedure(
@@ -212,7 +213,7 @@ export async function createProcedureFromFormData(
       startDate: new Date(),
       deceasedDateOfBirth: data.deceasedPerson.dateOfBirth,
       deceasedDateOfDeath: data.deceasedPerson.dateOfDeath,
-      deceasedContactId: 0,
+      deceasedContactId: deceasedContactId,
     },
     context
   )
