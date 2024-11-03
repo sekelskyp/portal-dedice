@@ -47,6 +47,7 @@ export function WizardPage() {
   } = useWizardSteps(totalQuestions, totalQuestionnaireSteps)
 
   const [testatorData, setTestatorData] = useState<TestatorData>({})
+  const [currentQuestionHeading, setCurrentQuestionHeading] = useState('')
 
   function StepperHeading({ text }: { text: string }) {
     return (
@@ -102,11 +103,12 @@ export function WizardPage() {
           )}
           {step === 3 && (
             <Box>
-              <StepperHeading text="Společné jmění manželů" />
+              <StepperHeading text={currentQuestionHeading} />
               <QuestionnaireStep
                 updateQuestionnaireProgress={setNextStep}
                 decrementQuestionnaireProgress={setPreviousStep}
                 setStep={setStep}
+                setCurrentQuestionHeading={setCurrentQuestionHeading}
               />
             </Box>
           )}

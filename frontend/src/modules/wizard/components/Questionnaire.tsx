@@ -33,12 +33,14 @@ interface QuestionnaireStepProps {
   updateQuestionnaireProgress: (progressIncrement: number) => void
   decrementQuestionnaireProgress: (progressDecrement: number) => void
   setStep: (step: number) => void
+  setCurrentQuestionHeading: (heading: string) => void
 }
 
 export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
   updateQuestionnaireProgress,
   decrementQuestionnaireProgress,
   setStep,
+  setCurrentQuestionHeading,
 }) => {
   const totalQuestionnaireSteps = questionData.steps.length
 
@@ -128,6 +130,10 @@ export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
       goToNextStep()
     }
   })
+
+  useEffect(() => {
+    setCurrentQuestionHeading(currentStep.question_heading)
+  }, [currentStep, setCurrentQuestionHeading])
 
   const goToPreviousStep = () => {
     let previousStepIndex = currentStepIndex - 1
