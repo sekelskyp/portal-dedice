@@ -193,6 +193,7 @@ async function populateDatabase(
       deceasedContactId: deceasedContactId1.id,
       deceasedDateOfBirth: new Date('1940-01-01'),
       deceasedDateOfDeath: new Date('2023-12-31'),
+      mainContactId: beneficiaryContactId1.id,
     },
     {
       notaryId: notaryId2.id,
@@ -201,6 +202,7 @@ async function populateDatabase(
       deceasedContactId: deceasedContactId2.id,
       deceasedDateOfBirth: new Date('1956-12-01'),
       deceasedDateOfDeath: new Date('2024-03-12'),
+      mainContactId: beneficiaryContactId3.id,
     },
   ])
 
