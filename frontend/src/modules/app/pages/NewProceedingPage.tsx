@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import { Stack, Text } from '@chakra-ui/react'
 
+import { useAuth } from '@frontend/modules/auth'
 import { useCreateProcedure } from '@frontend/modules/auth/hooks/useCreateProcedure'
 import resources from '@frontend/resources'
 import { Alert } from '@frontend/shared/design-system'
@@ -9,6 +10,7 @@ import { Suggestion } from '@frontend/shared/hooks/useAddressSuggestions'
 import { Beneficiary, ProceedingForm } from './ProceedingForm'
 
 export function NewProceedingPage() {
+  const { user } = useAuth()
   const [createProcedureRequest, createProcedureRequestState] =
     useCreateProcedure()
 
@@ -40,11 +42,12 @@ export function NewProceedingPage() {
               email: variables.contactEmail,
             },
             beneficiaries: variables.beneficiaries,
+            beneficiaryId: +user?.beneficiaries[0].id!,
           },
         },
       })
     },
-    [createProcedureRequest]
+    [createProcedureRequest, user]
   )
 
   return (

@@ -146,6 +146,7 @@ export type InheritanceProcedure = {
 
 export type InheritanceProcedureFormDataInput = {
   beneficiaries: Array<BeneficiaryInput>
+  beneficiaryId: Scalars['Float']['input']
   contactPerson: ContactPersonInput
   deceasedPerson: DeceasedPersonInput
 }
@@ -484,6 +485,20 @@ export type SignInMutation = {
       confirmed: boolean
       isNotary: boolean
       isBeneficiary: boolean
+      beneficiaries: Array<{
+        __typename?: 'Beneficiary'
+        id: string
+        dateOfBirth?: any | null
+        deceasedRelation?: string | null
+        userId?: string | null
+        contactId?: string | null
+      }>
+      notaries: Array<{
+        __typename?: 'Notary'
+        contactId?: string | null
+        id: string
+        userId?: string | null
+      }>
     }
   }
 }
@@ -1003,6 +1018,56 @@ export const SignInDocument = {
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'isBeneficiary' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'beneficiaries' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'dateOfBirth' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'deceasedRelation' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'userId' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'contactId' },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'notaries' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'contactId' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'userId' },
+                            },
+                          ],
+                        },
                       },
                     ],
                   },

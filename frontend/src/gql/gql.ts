@@ -23,7 +23,7 @@ const documents = {
     types.CreateProcedureDocument,
   '\n  mutation EmailVerification($token: String!) {\n    confirmEmailVerification(token: $token)\n  }\n':
     types.EmailVerificationDocument,
-  '\n  mutation SignIn($login: String!, $password: String!) {\n    signIn(login: $login, password: $password) {\n      user {\n        id\n        email\n        confirmed\n        isNotary\n        isBeneficiary\n      }\n      token\n    }\n  }\n':
+  '\n  mutation SignIn($login: String!, $password: String!) {\n    signIn(login: $login, password: $password) {\n      user {\n        id\n        email\n        confirmed\n        isNotary\n        isBeneficiary\n        beneficiaries {\n          id\n          dateOfBirth\n          deceasedRelation\n          userId\n          contactId\n        }\n        notaries {\n          contactId\n          id\n          userId\n        }\n      }\n      token\n    }\n  }\n':
     types.SignInDocument,
   '\n  mutation SignUp($registerInput: RegisterInput!) {\n    signUp(registerInput: $registerInput) {\n      id\n    }\n  }\n':
     types.SignUpDocument,
@@ -79,8 +79,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  mutation SignIn($login: String!, $password: String!) {\n    signIn(login: $login, password: $password) {\n      user {\n        id\n        email\n        confirmed\n        isNotary\n        isBeneficiary\n      }\n      token\n    }\n  }\n'
-): (typeof documents)['\n  mutation SignIn($login: String!, $password: String!) {\n    signIn(login: $login, password: $password) {\n      user {\n        id\n        email\n        confirmed\n        isNotary\n        isBeneficiary\n      }\n      token\n    }\n  }\n']
+  source: '\n  mutation SignIn($login: String!, $password: String!) {\n    signIn(login: $login, password: $password) {\n      user {\n        id\n        email\n        confirmed\n        isNotary\n        isBeneficiary\n        beneficiaries {\n          id\n          dateOfBirth\n          deceasedRelation\n          userId\n          contactId\n        }\n        notaries {\n          contactId\n          id\n          userId\n        }\n      }\n      token\n    }\n  }\n'
+): (typeof documents)['\n  mutation SignIn($login: String!, $password: String!) {\n    signIn(login: $login, password: $password) {\n      user {\n        id\n        email\n        confirmed\n        isNotary\n        isBeneficiary\n        beneficiaries {\n          id\n          dateOfBirth\n          deceasedRelation\n          userId\n          contactId\n        }\n        notaries {\n          contactId\n          id\n          userId\n        }\n      }\n      token\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

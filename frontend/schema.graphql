@@ -114,6 +114,7 @@ type InheritanceProcedure {
 
 input InheritanceProcedureFormDataInput {
   beneficiaries: [BeneficiaryInput!]!
+  beneficiaryId: Float!
   contactPerson: ContactPersonInput!
   deceasedPerson: DeceasedPersonInput!
 }

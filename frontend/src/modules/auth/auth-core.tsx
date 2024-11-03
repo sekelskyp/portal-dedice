@@ -20,6 +20,8 @@ export type AuthUser = {
   confirmed: boolean
   isNotary: boolean
   isBeneficiary: boolean
+  beneficiaries: { id: string }[]
+  notaries: { id: string }[]
 }
 
 const LOCAL_STORAGE_AUTH_KEY = 'project-auth'

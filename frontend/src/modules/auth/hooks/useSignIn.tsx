@@ -17,6 +17,18 @@ const SIGNIN_MUTATION = gql(/* GraphQL */ `
         confirmed
         isNotary
         isBeneficiary
+        beneficiaries {
+          id
+          dateOfBirth
+          deceasedRelation
+          userId
+          contactId
+        }
+        notaries {
+          contactId
+          id
+          userId
+        }
       }
       token
     }
