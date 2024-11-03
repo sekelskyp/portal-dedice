@@ -25,7 +25,7 @@ export const PortalLayout = () => {
           <GridItem colSpan={1}>
             <SideBar />
           </GridItem>
-          <GridItem colSpan={{ base: 1, md: 4, xl: 5 }} py={2}>
+          <GridItem colSpan={{ base: 1, md: 4, xl: 5 }}>
             <Outlet />
           </GridItem>
         </Grid>
