@@ -14,13 +14,18 @@ export function HomePage() {
   return (
     <Page as={Stack} gap={10} justifyContent={'space-between'} h={'full'}>
       {user && (
-        <SimpleCentered bg="none">
-          <Heading size="3xl">Vítejte!</Heading>
+        <SimpleCentered bg="none" py={0} my={0}>
+          <Heading size="3xl">
+            Vítejte,{' '}
+            <Text as="span" color="blue.500">
+              {user.email}
+            </Text>
+          </Heading>
         </SimpleCentered>
       )}
       <SplitWithImage
-        imageSrc="https://images.unsplash.com/photo-1525130413817-d45c1d127c42?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=750&q=80"
-        imageAlt="Lidé hledající pomoc"
+        imageSrc="/holding-hands.jpg"
+        imageAlt="Ilustrace dvou lidí držících se za ruce."
       >
         <Heading as="h3" size="4xl">
           Hledáte pomoc při dědickém řízení?
