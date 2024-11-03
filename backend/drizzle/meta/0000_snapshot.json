@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "fef873b3-ac31-4d77-8ea3-9efffc657556",
+  "id": "b5e84385-e732-4041-9980-985e27dd1da8",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "asset": {
@@ -616,13 +616,6 @@
           "notNull": false,
           "autoincrement": false
         },
-        "main_beneficiary_id": {
-          "name": "main_beneficiary_id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "name": {
           "name": "name",
           "type": "varchar(100)",
@@ -648,6 +641,13 @@
         "end_date": {
           "name": "end_date",
           "type": "date",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "main_contact_id": {
+          "name": "main_contact_id",
+          "type": "int",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -685,11 +685,11 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "inheritance_procedure_main_beneficiary_id_beneficiary_id_fk": {
-          "name": "inheritance_procedure_main_beneficiary_id_beneficiary_id_fk",
+        "inheritance_procedure_main_contact_id_contact_id_fk": {
+          "name": "inheritance_procedure_main_contact_id_contact_id_fk",
           "tableFrom": "inheritance_procedure",
-          "tableTo": "beneficiary",
-          "columnsFrom": ["main_beneficiary_id"],
+          "tableTo": "contact",
+          "columnsFrom": ["main_contact_id"],
           "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"

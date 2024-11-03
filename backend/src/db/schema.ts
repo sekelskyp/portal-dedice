@@ -89,9 +89,6 @@ export const beneficiary = mysqlTable('beneficiary', {
 export const inheritanceProcedure = mysqlTable('inheritance_procedure', {
   id: int('id').primaryKey().autoincrement(),
   notaryId: int('notary_id').references(() => notary.id),
-  mainBeneficiaryId: int('main_beneficiary_id').references(
-    () => beneficiary.id
-  ),
   name: varchar('name', { length: 100 }).notNull(),
   state: varchar('state', {
     length: 10,
@@ -101,6 +98,8 @@ export const inheritanceProcedure = mysqlTable('inheritance_procedure', {
     .notNull(),
   startDate: date('start_date').notNull(),
   endDate: date('end_date'),
+  // main Contact
+  mainContactId: int('main_contact_id').references(() => contact.id),
   // deceased person info
   deceasedContactId: int('deceased_contact_id')
     .references(() => contact.id)

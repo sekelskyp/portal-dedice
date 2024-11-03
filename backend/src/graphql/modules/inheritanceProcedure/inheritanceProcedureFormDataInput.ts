@@ -45,6 +45,9 @@ class BeneficiaryInput {
 @InputType()
 export class InheritanceProcedureFormDataInput {
   @Field()
+  beneficiaryId!: number
+
+  @Field()
   deceasedPerson!: DeceasedPersonInput
 
   @Field()
