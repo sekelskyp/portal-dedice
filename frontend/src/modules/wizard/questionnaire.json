@@ -8,6 +8,7 @@
           "questionText": "Měl zůstavitel/ka manžela/manželku?"
         }
       ],
+      "question_heading": "Vypořádání dědictví (Společné jmění manželů)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -29,6 +30,7 @@
           "questionText": "Měli zúžené SJM?"
         }
       ],
+      "question_heading": "Vypořádání dědictví (Společné jmění manželů)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -55,6 +57,7 @@
           "questionText": "Je v pozůstalosti závěť?"
         }
       ],
+      "question_heading": "Vypořádání dědictví (Závěť)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -86,6 +89,7 @@
           "questionText": "Podle toho, zda měli zůstavitel a pozůstalá manželka alespoň nějaký majetek v SJM, se nejdříve vypořádá SJM standardním způsobem, kdy je potřeba, aby pozůstalá manželka získala majetek (resp. hodnotu) ve výši 1/2 tohoto majetku."
         }
       ],
+      "question_heading": "Vypořádání dědictví (Společné jmění manželů)",
       "button_text": "Konec",
       "answer_options": [
         {
@@ -109,6 +113,7 @@
           "questionText": "V tomto případě, se v rámci pozůstalostního řízení nejdříve vypořádá SJM standardním způsobem, kdy je potřeba, aby pozůstalá manželka získala majetek (resp. hodnotu) ve výši 1/2 celkového majetku pozůstalosti."
         }
       ],
+      "question_heading": "Vypořádání dědictví (Společné jmění manželů)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -131,6 +136,7 @@
           "questionText": "Podíváme se na vzorový příklad!"
         }
       ],
+      "question_heading": "Vypořádání dědictví (Společné jmění manželů)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -153,6 +159,7 @@
           "questionText": "Zůstavitel a pozůstalá manželka vlastnili majtek v hodnotě 20.000.000,- Kč."
         }
       ],
+      "question_heading": "Vypořádání dědictví (Společné jmění manželů)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -176,9 +183,10 @@
         },
         {
           "questionTextId": 2,
-          "questionText": "10.000.000,- Kč hodnoty má dostat manželka. 10.000.000,- Kč hodnoty musí přijít do pozůstalosti (pro dědice)."
+          "questionText": "10.000.000,- Kč hodnoty musí přijít do pozůstalosti (pro dědice)."
         }
       ],
+      "question_heading": "Vypořádání dědictví (Společné jmění manželů)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -201,6 +209,7 @@
           "questionText": "Měl zůstavitel potomky?"
         }
       ],
+      "question_heading": "Vypořádání dědictví (Rozdělení pozůstalosti)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -227,6 +236,7 @@
           "questionText": "Kolik jich bylo?"
         }
       ],
+      "question_heading": "Vypořádání dědictví (Rozdělení pozůstalosti)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -253,6 +263,7 @@
           "questionText": "V tomto případě všechen majetek získá v pozůstalostním řízení tento jediný dědic."
         }
       ],
+      "question_heading": "Vypořádání dědictví (Rozdělení pozůstalosti)",
       "button_text": "Konec",
       "answer_options": [
         {
@@ -280,6 +291,7 @@
           "questionText": "Preferovaným způsobem, jak věc vyřešit je dědická dohoda, kdy je možné si dědické podíly určit odlišným způsobem. Chcete se dozvědět víc?"
         }
       ],
+      "question_heading": "Vypořádání dědictví (Rozdělení pozůstalosti)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -310,6 +322,7 @@
           "questionText": "Je možné, aby jeden potomek získal všechno a druhého vyplatil v jimi určené výši. Tzn. např. měli každý nárok na 500.000,- Kč. Potomek A dědí vše, potomek B dostane vyplaceno 200.000,- Kč. Notář bude (jakoukoliv) vaší dohodu respektovat."
         }
       ],
+      "question_heading": "Vypořádání dědictví (Rozdělení pozůstalosti)",
       "button_text": "Konec",
       "answer_options": [
         {
@@ -333,6 +346,7 @@
           "questionText": "Měl zůstavitel v době úmrtí rodiče?"
         }
       ],
+      "question_heading": "Vypořádání dědictví (Rozdělení pozůstalosti)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -359,6 +373,7 @@
           "questionText": "Žil se zůstavitelem ve společné domácnosti po dobu jednoho roku před smrtí někdo další?"
         }
       ],
+      "question_heading": "Vypořádání dědictví (Rozdělení pozůstalosti)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -381,6 +396,7 @@
           "questionText": "Žil se zůstavitelem ve společné domácnosti po dobu alespoň jednoho roku před smrtí někdo další?"
         }
       ],
+      "question_heading": "Vypořádání dědictví (Rozdělení pozůstalosti)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -408,6 +424,7 @@
           "questionText": "V tomto případě dědí zůstavitelovi rodiče a osoby, které se zůstavitelem žily ve společné domácnosti po dobu alespoň jednoho roku před smrtí, rovným dílem."
         }
       ],
+      "question_heading": "Vypořádání dědictví (Rozdělení pozůstalosti)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -430,6 +447,7 @@
           "questionText": "Je možné, aby si tito dědicové majetek rozdělili dle dědické dohody i jiným způsobem. Informujte se u svého notáře."
         }
       ],
+      "question_heading": "Vypořádání dědictví (Rozdělení pozůstalosti)",
       "button_text": "Konec",
       "answer_options": [
         {
@@ -453,6 +471,7 @@
           "questionText": "V tomto případě budou dědicem majetku v pozůstalostním řízení osoby, která se zůstavitelem žily ve společné domácnosti po dobu alespoň jednoho roku před smrtí."
         }
       ],
+      "question_heading": "Vypořádání dědictví (Rozdělení pozůstalosti)",
       "button_text": "Konec",
       "answer_options": [
         {
@@ -476,6 +495,7 @@
           "questionText": "Typicky majetek, který je psán na jméno manželky, je ponechán manželce."
         }
       ],
+      "question_heading": "Vypořádání dědictví (Společné jmění manželů)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -498,6 +518,7 @@
           "questionText": "Manželka může dostat všechen majetek a dědice vyplatit."
         }
       ],
+      "question_heading": "Vypořádání dědictví (Společné jmění manželů)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -520,6 +541,7 @@
           "questionText": "Jaké jsou výhody a nevýhody?"
         }
       ],
+      "question_heading": "Vypořádání dědictví (Společné jmění manželů)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -542,6 +564,7 @@
           "questionText": "Když získá všechen majetek, musí si být jistá, že může dědice vyplatit. Také to znamená, že musí všechny příslušné instituce obejít aby na sebe majetek přepsala, např. účty manžela."
         }
       ],
+      "question_heading": "Vypořádání dědictví (Společné jmění manželů)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -568,6 +591,7 @@
           "questionText": "Nemusí, pokud se v rámci dědické dohody domluví, že dědicové žádnou výplatu nechtějí."
         }
       ],
+      "question_heading": "Vypořádání dědictví (Společné jmění manželů)",
       "button_text": "Konec",
       "answer_options": [
         {
@@ -591,6 +615,7 @@
           "questionText": "Možné to je, ale tuto variantu nedoporučujeme. Zvyšujete tím hodnotu pozůstalosti a tím pádem i hodnotu, ze které se počítá odměna notáře."
         }
       ],
+      "question_heading": "Vypořádání dědictví (Společné jmění manželů)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -613,6 +638,7 @@
           "questionText": "Jak tedy SJM vypořádat ideálně?"
         }
       ],
+      "question_heading": "Vypořádání dědictví (Společné jmění manželů)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -635,6 +661,7 @@
           "questionText": "Nechť pozůstalá manželka dostane majetku raději více, pakliže jí nečiní obtíže zařídit přepis majetku. V pozůstalostním řízení se pak objeví nejméně 1/2 SJM."
         }
       ],
+      "question_heading": "Vypořádání dědictví (Společné jmění manželů)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -657,6 +684,7 @@
           "questionText": "Dobře, a co se děje potom?"
         }
       ],
+      "question_heading": "Vypořádání dědictví (Společné jmění manželů)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -679,6 +707,7 @@
           "questionText": "O druhé polovině majetku se rozhoduje v pozůstalostním řízení."
         }
       ],
+      "question_heading": "Vypořádání dědictví (Společné jmění manželů)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -701,6 +730,7 @@
           "questionText": "Je v pozůstalosti závěť?"
         }
       ],
+      "question_heading": "Vypořádání dědictví (Závěť)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -728,6 +758,7 @@
           "questionText": "Měl zůstavitel potomky?"
         }
       ],
+      "question_heading": "Vypořádání dědictví (Rozdělení pozůstalosti)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -754,6 +785,7 @@
           "questionText": "Kolik jich bylo?"
         }
       ],
+      "question_heading": "Vypořádání dědictví (Rozdělení pozůstalosti)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -784,6 +816,7 @@
           "questionText": "Preferovaným způsobem, jak věc vyřešit je dědická dohoda, kdy je možné si dědické podíly určit odlišným způsobem. Chcete se dozvědět víc?"
         }
       ],
+      "question_heading": "Vypořádání dědictví (Rozdělení pozůstalosti)",
       "button_text": "Konec",
       "answer_options": [
         {
@@ -811,6 +844,7 @@
           "questionText": "Preferovaným způsobem, jak věc vyřešit je dědická dohoda, kdy je možné si dědické podíly určit odlišným způsobem. Chcete se dozvědět víc?"
         }
       ],
+      "question_heading": "Vypořádání dědictví (Rozdělení pozůstalosti)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -841,6 +875,7 @@
           "questionText": "Je možné, aby jeden potomek získal všechen majetek a ostatní vyplatil v jimi určené výši. Tzn. pozůstalá manželka může zdědit veškerý majetek a potomky vyplatit. Nebo si mohou jednotlivé položky rozdělit mezi sebe, jak uznají za vhodné, bez nutnosti výplaty.  Notář bude (jakoukoliv) vaší dohodu respektovat."
         }
       ],
+      "question_heading": "Vypořádání dědictví (Rozdělení pozůstalosti)",
       "button_text": "Konec",
       "answer_options": [
         {
@@ -864,6 +899,7 @@
           "questionText": "Měl zůstavitel v době úmrtí rodiče?"
         }
       ],
+      "question_heading": "Vypořádání dědictví (Rozdělení pozůstalosti)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -890,6 +926,7 @@
           "questionText": "Žil se zůstavitelem ve společné domácnosti po dobu jednoho roku před smrtí někdo další?"
         }
       ],
+      "question_heading": "Vypořádání dědictví (Rozdělení pozůstalosti)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -912,6 +949,7 @@
           "questionText": "V tomto případě dědí pozůstalá manželka, zůstavitelovi rodiče a osoby, které se zůstavitelem žily ve společné domácnosti po dobu alespoň jednoho roku před smrtí, rovným dílem. Pozůstalá manželka ale dědí nejméně jednu polovinu pozůstalosti."
         }
       ],
+      "question_heading": "Vypořádání dědictví (Rozdělení pozůstalosti)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -934,6 +972,7 @@
           "questionText": "Je možné, aby si tito dědicové majetek rozdělili dle dědické dohody i jiným způsobem. Informujte se u svého notáře."
         }
       ],
+      "question_heading": "Vypořádání dědictví (Rozdělení pozůstalosti)",
       "button_text": "Konec",
       "answer_options": [
         {
@@ -957,6 +996,7 @@
           "questionText": "Žil se zůstavitelem ve společné domácnosti po dobu alespoň jednoho roku před smrtí někdo další?"
         }
       ],
+      "question_heading": "Vypořádání dědictví (Rozdělení pozůstalosti)",
       "button_text": "Pokračovat",
       "answer_options": [
         {
@@ -983,6 +1023,7 @@
           "questionText": "V tomto případě dědí pozůstalá manželka a osoby, které se zůstavitelem žily ve společné domácnosti po dobu alespoň jednoho roku před smrtí. Pozůstalá manželka ale dědí nejméně jednu polovinu pozůstalosti."
         }
       ],
+      "question_heading": "Vypořádání dědictví (Rozdělení pozůstalosti)",
       "button_text": "Konec",
       "answer_options": [
         {
@@ -1006,6 +1047,7 @@
           "questionText": "V tomto případě bude dědicem veškerého majetku v pozůstalostním řízení pozůstalá manželka."
         }
       ],
+      "question_heading": "Vypořádání dědictví (Rozdělení pozůstalosti)",
       "button_text": "Konec",
       "answer_options": [
         {
