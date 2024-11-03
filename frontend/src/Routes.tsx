@@ -30,6 +30,10 @@ export function Routes() {
         <Route path="/portal" element={<PortalLayout />}>
           <Route path={route.portal()} element={<Proceedings />} />
           <Route path={route.newProceeding()} element={<NewProceedingPage />} />
+          <Route
+            path={route.inheritanceProcedure(':id')}
+            element={<InheritanceProcedureDetail />}
+          />
         </Route>
         <Route path={route.about()} element={<AboutPage />} />
         <Route path={route.guide()} element={<GuidePage />} />
@@ -38,10 +42,6 @@ export function Routes() {
         <Route path={route.signOut()} element={<SignOutPage />} />
         <Route path={route.confirmEmail()} element={<ConfirmEmailPage />} />
         <Route path={route.resetPassword()} element={<PasswordResetPage />} />
-        <Route
-          path={route.inheritanceProcedure(':id')}
-          element={<InheritanceProcedureDetail />}
-        />
         <Route
           path={route.emailVerification()}
           element={<EmailVerification />}
