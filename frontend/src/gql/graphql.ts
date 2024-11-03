@@ -100,7 +100,7 @@ export type CreateInheritanceProcedureInput = {
   deceasedDateOfBirth?: InputMaybe<Scalars['DateTimeISO']['input']>
   deceasedDateOfDeath?: InputMaybe<Scalars['DateTimeISO']['input']>
   endDate: Scalars['DateTimeISO']['input']
-  mainBeneficiaryId?: InputMaybe<Scalars['ID']['input']>
+  mainContactId?: InputMaybe<Scalars['ID']['input']>
   name: Scalars['String']['input']
   notaryId?: InputMaybe<Scalars['ID']['input']>
   startDate: Scalars['DateTimeISO']['input']
@@ -134,8 +134,8 @@ export type InheritanceProcedure = {
   deceasedDateOfDeath?: Maybe<Scalars['DateTimeISO']['output']>
   endDate?: Maybe<Scalars['DateTimeISO']['output']>
   id: Scalars['ID']['output']
-  mainBeneficiary?: Maybe<Beneficiary>
-  mainBeneficiaryId?: Maybe<Scalars['ID']['output']>
+  mainContact?: Maybe<Contact>
+  mainContactId?: Maybe<Scalars['Float']['output']>
   name: Scalars['String']['output']
   notary?: Maybe<Notary>
   notaryId?: Maybe<Scalars['ID']['output']>
@@ -408,20 +408,17 @@ export type GetProcedureByIdQuery = {
     id: string
     name: string
     state: string
-    mainBeneficiary?: {
-      __typename?: 'Beneficiary'
+    mainContact?: {
+      __typename?: 'Contact'
       id: string
-      userId?: string | null
-      contactId?: string | null
-      user?: { __typename?: 'User'; id: string; email: string } | null
-      contact?: {
-        __typename?: 'Contact'
-        id: string
-        email?: string | null
-        name: string
-        surname: string
-        gender?: string | null
-      } | null
+      name: string
+      surname: string
+      displayName?: string | null
+      gender?: string | null
+      phone?: string | null
+      email?: string | null
+      completeAddress?: string | null
+      postalCode?: string | null
     } | null
     beneficiaries?: Array<{
       __typename?: 'Beneficiary'
@@ -683,64 +680,33 @@ export const GetProcedureByIdDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 {
                   kind: 'Field',
-                  name: { kind: 'Name', value: 'mainBeneficiary' },
+                  name: { kind: 'Name', value: 'mainContact' },
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
                       { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                       {
                         kind: 'Field',
-                        name: { kind: 'Name', value: 'userId' },
+                        name: { kind: 'Name', value: 'surname' },
                       },
                       {
                         kind: 'Field',
-                        name: { kind: 'Name', value: 'user' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'id' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'email' },
-                            },
-                          ],
-                        },
+                        name: { kind: 'Name', value: 'displayName' },
                       },
                       {
                         kind: 'Field',
-                        name: { kind: 'Name', value: 'contactId' },
+                        name: { kind: 'Name', value: 'gender' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'phone' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'completeAddress' },
                       },
                       {
                         kind: 'Field',
-                        name: { kind: 'Name', value: 'contact' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'id' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'email' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'name' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'surname' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'gender' },
-                            },
-                          ],
-                        },
+                        name: { kind: 'Name', value: 'postalCode' },
                       },
                     ],
                   },

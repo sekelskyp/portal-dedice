@@ -30,21 +30,16 @@ const GET_PROCEDURE_QUERY = gql(/* GraphQL */ `
     getProcedureById(id: $id) {
       id
       name
-      mainBeneficiary {
+      mainContact {
         id
-        userId
-        user {
-          id
-          email
-        }
-        contactId
-        contact {
-          id
-          email
-          name
-          surname
-          gender
-        }
+        name
+        surname
+        displayName
+        gender
+        phone
+        email
+        completeAddress
+        postalCode
       }
       beneficiaries {
         id
@@ -133,14 +128,12 @@ const InheritanceProcedureDetail: React.FC = () => {
                 >
                   Hlavní kontaktní osoba
                 </Heading>
-                {procedure.mainBeneficiary?.contact ? (
+                {procedure.mainContact ? (
                   <BeneficiaryBadge
-                    beneficiaryContact={procedure.mainBeneficiary.contact}
+                    beneficiaryContact={procedure.mainContact}
                   />
                 ) : (
-                  <Alert status="warning" key={procedure.mainBeneficiary?.id}>
-                    Dědic bez kontaktních údajů.
-                  </Alert>
+                  <Alert status="warning">Dědic bez kontaktních údajů.</Alert>
                 )}
                 <Heading
                   size={{ base: 'lg', lg: 'xl' }}

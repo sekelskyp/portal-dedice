@@ -107,18 +107,16 @@ export class InheritanceProcedureResolver {
     return true
   }
 
-  // Field Resolver to fetch the main Beneficiary associated with the procedure
-  @FieldResolver(() => Beneficiary, { nullable: true })
-  async mainBeneficiary(
+  // Field Resolver to fetch the main Contact associated with the procedure
+  @FieldResolver(() => Contact, { nullable: true })
+  async mainContact(
     @Root() procedure: InheritanceProcedure,
-    @Ctx() { beneficiaryRepository }: CustomContext
-  ): Promise<Beneficiary | null> {
-    if (!procedure.mainBeneficiaryId) {
+    @Ctx() { contactRepository }: CustomContext
+  ): Promise<Contact | null> {
+    if (!procedure.mainContactId) {
       return null
     }
-    return await beneficiaryRepository.getBeneficiaryById(
-      procedure.mainBeneficiaryId
-    )
+    return await contactRepository.getContactById(procedure.mainContactId)
   }
 
   // Field Resolver to fetch the deceased person contact associated with the procedure
