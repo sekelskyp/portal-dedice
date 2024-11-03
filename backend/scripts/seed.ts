@@ -129,7 +129,7 @@ async function populateDatabase(
     .$returningId()
 
   // Insert beneficiaries using the saved beneficiaryUserId
-  await db
+  const [beneficiaryId1, beneficiaryId2, beneficiaryId3] = await db
     .insert(beneficiary)
     .values([
       {
@@ -152,6 +152,7 @@ async function populateDatabase(
       },
     ])
     .onDuplicateKeyUpdate({ set: { userId: beneficiaryUserId2.id } })
+    .$returningId();
 
   // populate user notaries
   const [notaryUserId1, notaryUserId2] = await db
@@ -205,15 +206,15 @@ async function populateDatabase(
 
   await db.insert(beneficiaryInheritanceProcedureRel).values([
     {
-      beneficiaryId: beneficiaryUserId1.id,
+      beneficiaryId: beneficiaryId1.id,
       inheritanceProcedureId: inheritanceId1,
     },
     {
-      beneficiaryId: beneficiaryUserId2.id,
+      beneficiaryId: beneficiaryId2.id,
       inheritanceProcedureId: inheritanceId1,
     },
     {
-      beneficiaryId: beneficiaryUserId3.id,
+      beneficiaryId: beneficiaryId3.id,
       inheritanceProcedureId: inheritanceId2,
     },
   ])
