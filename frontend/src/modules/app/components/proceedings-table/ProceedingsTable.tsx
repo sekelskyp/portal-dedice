@@ -21,6 +21,7 @@ export function ProceedingsTable({ data }: { data: ProceedingsItem[] }) {
     <Box
       p={5}
       mx={5}
+      my={2}
       mb={5}
       borderWidth="1px"
       borderColor="gray.200"
