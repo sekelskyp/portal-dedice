@@ -40,6 +40,14 @@ export class InheritanceProcedureResolver {
     return await inheritanceProcedureRepository.getProcedureById(id)
   }
 
+  // Query to get all procedures
+  @Query(() => [InheritanceProcedure])
+  async getAllProcedures(
+    @Ctx() { inheritanceProcedureRepository }: CustomContext
+  ): Promise<InheritanceProcedure[]> {
+    return await inheritanceProcedureRepository.getAllProcedures()
+  }
+
   // Mutation to create a new procedure
   @Mutation(() => Int) // Returning the ID of the newly created procedure
   async createProcedure(
