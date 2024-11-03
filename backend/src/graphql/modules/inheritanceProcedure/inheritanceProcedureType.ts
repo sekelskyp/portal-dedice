@@ -33,11 +33,11 @@ export class InheritanceProcedure {
   @Field(() => [Beneficiary], { nullable: true })
   beneficiaries?: Beneficiary[]
 
-  @Field(() => ID, { nullable: true })
-  mainBeneficiaryId?: number | null
+  @Field(() => Number, { nullable: true })
+  mainContactId?: number | null
 
-  @Field(() => Beneficiary, { nullable: true })
-  mainBeneficiary?: Beneficiary
+  @Field(() => Contact, { nullable: true })
+  mainContact?: Contact | null
 
   @Field(() => ID, { nullable: true })
   deceasedContactId?: number | null
