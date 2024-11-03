@@ -129,7 +129,7 @@ async function populateDatabase(
     .$returningId()
 
   // Insert beneficiaries using the saved beneficiaryUserId
-  await db
+  const [beneficiaryId1, beneficiaryId2, beneficiaryId3] = await db
     .insert(beneficiary)
     .values([
       {
@@ -152,6 +152,7 @@ async function populateDatabase(
       },
     ])
     .onDuplicateKeyUpdate({ set: { userId: beneficiaryUserId2.id } })
+    .$returningId()
 
   // populate user notaries
   const [notaryUserId1, notaryUserId2] = await db
@@ -192,6 +193,7 @@ async function populateDatabase(
       deceasedContactId: deceasedContactId1.id,
       deceasedDateOfBirth: new Date('1940-01-01'),
       deceasedDateOfDeath: new Date('2023-12-31'),
+      mainContactId: beneficiaryContactId1.id,
     },
     {
       notaryId: notaryId2.id,
@@ -200,20 +202,21 @@ async function populateDatabase(
       deceasedContactId: deceasedContactId2.id,
       deceasedDateOfBirth: new Date('1956-12-01'),
       deceasedDateOfDeath: new Date('2024-03-12'),
+      mainContactId: beneficiaryContactId3.id,
     },
   ])
 
   await db.insert(beneficiaryInheritanceProcedureRel).values([
     {
-      beneficiaryId: beneficiaryUserId1.id,
+      beneficiaryId: beneficiaryId1.id,
       inheritanceProcedureId: inheritanceId1,
     },
     {
-      beneficiaryId: beneficiaryUserId2.id,
+      beneficiaryId: beneficiaryId2.id,
       inheritanceProcedureId: inheritanceId1,
     },
     {
-      beneficiaryId: beneficiaryUserId3.id,
+      beneficiaryId: beneficiaryId3.id,
       inheritanceProcedureId: inheritanceId2,
     },
   ])
