@@ -152,7 +152,7 @@ async function populateDatabase(
       },
     ])
     .onDuplicateKeyUpdate({ set: { userId: beneficiaryUserId2.id } })
-    .$returningId();
+    .$returningId()
 
   // populate user notaries
   const [notaryUserId1, notaryUserId2] = await db
