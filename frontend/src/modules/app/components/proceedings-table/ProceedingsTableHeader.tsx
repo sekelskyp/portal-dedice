@@ -10,7 +10,7 @@ export function ProceedingsTableHeader({
   table: ReactTable<ProceedingsItem>
 }) {
   return (
-    <Table.Header textAlign="center">
+    <Table.Header textAlign="center" whiteSpace="nowrap">
       {table.getHeaderGroups().map((headerGroup) => (
         <Table.Row key={headerGroup.id} bg="inherit">
           {headerGroup.headers.map((header) => {

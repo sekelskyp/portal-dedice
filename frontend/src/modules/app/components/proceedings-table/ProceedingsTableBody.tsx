@@ -9,7 +9,7 @@ export function ProceedingsTableBody({
   table: ReactTable<ProceedingsItem>
 }) {
   return (
-    <Table.Body>
+    <Table.Body whiteSpace="nowrap">
       {table.getRowModel().rows.map((row) => {
         return (
           <Table.Row key={row.id} bg="inherit">

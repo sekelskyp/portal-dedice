@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react'
-import { Button } from '@chakra-ui/react'
 import { rankItem } from '@tanstack/match-sorter-utils'
 import {
   ColumnDef,
@@ -12,8 +11,8 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { HiViewList } from 'react-icons/hi'
-import { Link } from 'react-router-dom'
 
+import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { route } from '@shared/route'
 
 import { ProceedingsItem } from '../components/proceedings-table/ProceedingsTable'
@@ -48,6 +47,23 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
   const columns = useMemo<ColumnDef<ProceedingsItem>[]>(
     () => [
       {
+        accessorKey: 'detail',
+        header: () => '',
+        size: 0,
+        cell: (info) => {
+          const id = info.row.original.id
+          return (
+            <RouterNavLink
+              to={route.inheritanceProcedure(id.toString())}
+              size="sm"
+            >
+              <HiViewList />
+            </RouterNavLink>
+          )
+        },
+        enableSorting: false,
+      },
+      {
         accessorKey: 'name',
         header: () => 'ID',
         filterFn: 'includesString',
@@ -77,26 +93,6 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
           const state = info.getValue() as string
           return <StatusBadge state={state} />
         },
-      },
-      {
-        accessorKey: 'detail',
-        header: () => 'Detail řízení',
-        cell: (info) => {
-          const id = info.row.original.id
-          return (
-            <Link to={route.inheritanceProcedure(id.toString())}>
-              <Button
-                size={{ base: 'xs', md: 'sm' }}
-                bg="gray.500"
-                _hover={{ bg: 'gray.700' }}
-                rounded="full"
-              >
-                <HiViewList size="24px" />
-              </Button>
-            </Link>
-          )
-        },
-        enableSorting: false,
       },
     ],
     []

@@ -45,44 +45,50 @@ export function Proceedings() {
 
   if (user.token) {
     return (
-      <Card.Root>
-        <Card.Header as={HStack} justifyContent="space-between">
-          <Heading size="2xl">Moje řízení</Heading>
-          {!user.user?.isNotary && (
-            <RouterNavLink to={route.newProceeding()} size="lg">
-              <MdNoteAdd />
-              Vytvořit nové řízení
-            </RouterNavLink>
-          )}
-        </Card.Header>
-        <Card.Body>
-          {procedures.length !== 0 ? (
-            <ProceedingsTable data={procedures} />
-          ) : (
-            <Alert
-              justifyContent="center"
-              status="warning"
-              title="Seznam řízení je prázdný."
-              size={{ base: 'md', md: 'lg' }}
-              width="fit-content"
-              borderRadius="xl"
-              my={4}
-            />
-          )}
-          {!user.user?.isNotary && (
-            <Stack gap={4} textAlign="center">
-              <Heading size="xl">Další možnosti</Heading>
-              {proceedingsNavigation.map((item, index) => (
-                <Link key={index} to={item.link}>
-                  <Button width="fit-content" rounded="full">
-                    {item.text} {item.icon}
-                  </Button>
-                </Link>
-              ))}
-            </Stack>
-          )}
-        </Card.Body>
-      </Card.Root>
+      <Stack gap={8}>
+        <Card.Root>
+          <Card.Header
+            as={HStack}
+            justifyContent="space-between"
+            flexWrap="wrap"
+          >
+            <Heading size={{ base: 'xl', sm: '2xl' }}>Moje řízení</Heading>
+            {!user.user?.isNotary && (
+              <RouterNavLink
+                to={route.newProceeding()}
+                size={{ base: 'sm', sm: 'lg' }}
+              >
+                <MdNoteAdd />
+                Vytvořit nové řízení
+              </RouterNavLink>
+            )}
+          </Card.Header>
+          <Card.Body>
+            {procedures.length !== 0 ? (
+              <ProceedingsTable data={procedures} />
+            ) : (
+              <Alert
+                status="warning"
+                title="Seznam řízení je prázdný."
+                size="lg"
+                borderRadius="xl"
+              />
+            )}
+          </Card.Body>
+        </Card.Root>
+        {!user.user?.isNotary && (
+          <Stack gap={4} alignItems={{ base: 'center', sm: 'start' }}>
+            <Heading size={{ base: 'xl', sm: '2xl' }}>Další možnosti</Heading>
+            {proceedingsNavigation.map((item, index) => (
+              <Link key={index} to={item.link}>
+                <Button width="fit-content" rounded="full">
+                  {item.text} {item.icon}
+                </Button>
+              </Link>
+            ))}
+          </Stack>
+        )}
+      </Stack>
     )
   } else {
     return <UnauthorizedPage />
