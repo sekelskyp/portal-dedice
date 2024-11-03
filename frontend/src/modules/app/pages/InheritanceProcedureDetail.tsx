@@ -154,7 +154,7 @@ const InheritanceProcedureDetail: React.FC = () => {
                 Celková hodnota majetku
               </Heading>
               {procedure.procedureAssets?.length === 0 ? (
-                <Stack alignItems={{ base: 'center', lg: 'left' }}>
+                <Stack alignItems={{ base: 'center', lg: 'start' }}>
                   <Text fontSize="md">Tuto hodnotu zatím neznáme.</Text>
                   <Button as={Link} disabled width="fit-content" rounded="full">
                     Modelace
@@ -174,7 +174,7 @@ const InheritanceProcedureDetail: React.FC = () => {
                 Děděné položky
               </Heading>
               {procedure.procedureAssets?.length === 0 ? (
-                <Stack alignItems={{ base: 'center', lg: 'left' }}>
+                <Stack alignItems={{ base: 'center', lg: 'start' }}>
                   <Text fontSize="md">Tyto hodnoty zatím neznáme.</Text>
                   <Button as={Link} disabled width="fit-content" rounded="full">
                     Modelace

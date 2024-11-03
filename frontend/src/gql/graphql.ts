@@ -135,7 +135,7 @@ export type InheritanceProcedure = {
   endDate?: Maybe<Scalars['DateTimeISO']['output']>
   id: Scalars['ID']['output']
   mainContact?: Maybe<Contact>
-  mainContactId?: Maybe<Scalars['Float']['output']>
+  mainContactId?: Maybe<Scalars['ID']['output']>
   name: Scalars['String']['output']
   notary?: Maybe<Notary>
   notaryId?: Maybe<Scalars['ID']['output']>
@@ -284,6 +284,7 @@ export type Query = {
   author?: Maybe<Notary>
   findNotary?: Maybe<Notary>
   getAllContacts: Array<Contact>
+  getAllProcedures: Array<InheritanceProcedure>
   getBeneficiariesByIds: Array<Beneficiary>
   getBeneficiariesByProcedureId: Array<Beneficiary>
   getBeneficiaryById?: Maybe<Beneficiary>
@@ -393,6 +394,23 @@ export type GetProceduresByNotaryIdQueryVariables = Exact<{
 export type GetProceduresByNotaryIdQuery = {
   __typename?: 'Query'
   getProceduresByNotaryId: Array<{
+    __typename?: 'InheritanceProcedure'
+    id: string
+    name: string
+    startDate: any
+    state: string
+    deceasedContact?: {
+      __typename?: 'Contact'
+      displayName?: string | null
+    } | null
+  }>
+}
+
+export type GetAllProceduresQueryVariables = Exact<{ [key: string]: never }>
+
+export type GetAllProceduresQuery = {
+  __typename?: 'Query'
+  getAllProcedures: Array<{
     __typename?: 'InheritanceProcedure'
     id: string
     name: string
@@ -673,6 +691,50 @@ export const GetProceduresByNotaryIdDocument = {
 } as unknown as DocumentNode<
   GetProceduresByNotaryIdQuery,
   GetProceduresByNotaryIdQueryVariables
+>
+export const GetAllProceduresDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetAllProcedures' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getAllProcedures' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'startDate' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'state' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'deceasedContact' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'displayName' },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetAllProceduresQuery,
+  GetAllProceduresQueryVariables
 >
 export const GetProcedureByIdDocument = {
   kind: 'Document',

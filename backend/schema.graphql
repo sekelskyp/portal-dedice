@@ -108,7 +108,7 @@ type InheritanceProcedure {
   endDate: DateTimeISO
   id: ID!
   mainContact: Contact
-  mainContactId: Float
+  mainContactId: ID
   name: String!
   notary: Notary
   notaryId: ID
@@ -162,6 +162,7 @@ type Query {
   author(id: Float!): Notary
   findNotary(input: FindNotaryInput!): Notary
   getAllContacts: [Contact!]!
+  getAllProcedures: [InheritanceProcedure!]!
   getBeneficiariesByIds(ids: [Int!]!): [Beneficiary!]!
   getBeneficiariesByProcedureId(procedureId: Int!): [Beneficiary!]!
   getBeneficiaryById(id: Int!): Beneficiary

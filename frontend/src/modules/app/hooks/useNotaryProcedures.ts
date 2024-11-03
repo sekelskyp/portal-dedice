@@ -1,11 +1,24 @@
 import { useQuery } from '@apollo/client'
 
 import { gql } from '@frontend/gql'
-import { useAuth } from '@frontend/modules/auth'
 
-const GET_PROCEDURES_BY_NOTARY_ID = gql(/* GraphQL */ `
-  query GetProceduresByNotaryId($notaryId: Int!) {
-    getProceduresByNotaryId(notaryId: $notaryId) {
+//const GET_PROCEDURES_BY_NOTARY_ID = gql(/* GraphQL */ `
+//  query GetProceduresByNotaryId($notaryId: Int!) {
+//    getProceduresByNotaryId(notaryId: $notaryId) {
+//      id
+//      name
+//      startDate
+//      state
+//      deceasedContact {
+//        displayName
+//      }
+//    }
+//  }
+//`)
+
+const GET_ALL_PROCEDURES = gql(/* GraphQL */ `
+  query GetAllProcedures {
+    getAllProcedures {
       id
       name
       startDate
@@ -18,19 +31,12 @@ const GET_PROCEDURES_BY_NOTARY_ID = gql(/* GraphQL */ `
 `)
 
 export function useNotaryProcedures() {
-  const auth = useAuth()
-  const userId = parseInt(auth.user?.id ?? '0', 10)
-
-  const { data, loading, error } = useQuery(GET_PROCEDURES_BY_NOTARY_ID, {
-    variables: {
-      notaryId: userId,
-    },
-  })
+  const { data, loading, error } = useQuery(GET_ALL_PROCEDURES)
 
   const cleanData = data
     ? {
         ...data,
-        getProceduresByNotaryId: data.getProceduresByNotaryId.map(
+        getProceduresByNotaryId: data.getAllProcedures.map(
           ({ __typename, ...procedure }) => procedure
         ),
       }

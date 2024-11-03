@@ -17,6 +17,8 @@ const documents = {
     types.GetProceduresByBeneficiaryIdDocument,
   '\n  query GetProceduresByNotaryId($notaryId: Int!) {\n    getProceduresByNotaryId(notaryId: $notaryId) {\n      id\n      name\n      startDate\n      state\n      deceasedContact {\n        displayName\n      }\n    }\n  }\n':
     types.GetProceduresByNotaryIdDocument,
+  '\n  query GetAllProcedures {\n    getAllProcedures {\n      id\n      name\n      startDate\n      state\n      deceasedContact {\n        displayName\n      }\n    }\n  }\n':
+    types.GetAllProceduresDocument,
   '\n  query GetProcedureById($id: Int!) {\n    getProcedureById(id: $id) {\n      id\n      name\n      mainContact {\n        id\n        name\n        surname\n        displayName\n        gender\n        phone\n        email\n        completeAddress\n        postalCode\n      }\n      beneficiaries {\n        id\n        userId\n        user {\n          id\n          email\n        }\n        contactId\n        contact {\n          id\n          email\n          name\n          surname\n        }\n        deceasedRelation\n      }\n      procedureAssets {\n        id\n        name\n        value\n      }\n      state\n    }\n  }\n':
     types.GetProcedureByIdDocument,
   '\n  mutation createProcedure($data: InheritanceProcedureFormDataInput!) {\n    createInheritanceProcedureFromForm(data: $data) {\n      id\n    }\n  }\n':
@@ -57,6 +59,12 @@ export function gql(
 export function gql(
   source: '\n  query GetProceduresByNotaryId($notaryId: Int!) {\n    getProceduresByNotaryId(notaryId: $notaryId) {\n      id\n      name\n      startDate\n      state\n      deceasedContact {\n        displayName\n      }\n    }\n  }\n'
 ): (typeof documents)['\n  query GetProceduresByNotaryId($notaryId: Int!) {\n    getProceduresByNotaryId(notaryId: $notaryId) {\n      id\n      name\n      startDate\n      state\n      deceasedContact {\n        displayName\n      }\n    }\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  query GetAllProcedures {\n    getAllProcedures {\n      id\n      name\n      startDate\n      state\n      deceasedContact {\n        displayName\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query GetAllProcedures {\n    getAllProcedures {\n      id\n      name\n      startDate\n      state\n      deceasedContact {\n        displayName\n      }\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
