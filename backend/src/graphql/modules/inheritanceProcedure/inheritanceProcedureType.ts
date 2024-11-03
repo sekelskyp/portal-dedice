@@ -12,7 +12,7 @@ export class InheritanceProcedure {
   @Field(() => ID)
   id!: number
 
-  @Field(() => ID, { nullable: true }) // Allow nullable
+  @Field(() => ID, { nullable: true })
   notaryId!: number | null
 
   @Field(() => Notary, { nullable: true })
@@ -33,7 +33,7 @@ export class InheritanceProcedure {
   @Field(() => [Beneficiary], { nullable: true })
   beneficiaries?: Beneficiary[]
 
-  @Field(() => Number, { nullable: true })
+  @Field(() => ID, { nullable: true })
   mainContactId?: number | null
 
   @Field(() => Contact, { nullable: true })
