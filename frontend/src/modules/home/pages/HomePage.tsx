@@ -15,7 +15,7 @@ export function HomePage() {
     <Page as={Stack} gap={10} justifyContent={'space-between'} h={'full'}>
       {user && (
         <SimpleCentered bg="none" py={0} my={0}>
-          <Heading size="3xl">
+          <Heading size={{ base: 'xl', sm: '3xl' }} textAlign="center" mx={10}>
             Vítejte,{' '}
             <Text as="span" color="blue.500">
               {user.email}
