@@ -1,15 +1,71 @@
-import { InheritanceProcedureData } from '../graphql/modules/inheritanceProcedure/inheritaceProcedureRepository'
+import { InheritanceProcedureStateEnumType } from '@backend/db/schema'
+
 import { CustomContext } from '../types/types'
 
+import { findAvailableNotary } from './notaryAssignmentService'
+
+export interface InheritanceProcedureData {
+  notaryId?: number | null
+  state?: InheritanceProcedureStateEnumType
+  startDate: Date
+  endDate?: Date | null
+  mainContactId?: number | null
+  deceasedContactId: number
+  deceasedDateOfBirth?: Date | null
+  deceasedDateOfDeath?: Date | null
+}
+
+interface InheritanceProcedureFormData {
+  beneficiaryId: number
+  deceasedPerson: {
+    name: string
+    surname: string
+    dateOfBirth: Date
+    dateOfDeath: Date
+    completeAddress: string
+  }
+  contactPerson: {
+    name: string
+    surname: string
+    email: string
+  }
+  beneficiaries: {
+    name: string
+    surname: string
+    email: string
+  }[]
+}
+
 // Private helper function to generate a unique name for a new procedure
-function generateProcedureName(name: string, startDate: Date): string {
+function generateProcedureName(
+  name: string,
+  surname: string,
+  startDate: Date
+): string {
   const formattedDate = startDate.toISOString().split('T')[0].replace(/-/g, '_')
-  const initials = name
-    .split(' ')
-    .map((word) => word[0])
-    .join('')
-    .toUpperCase()
-  return `${formattedDate}_${initials}`
+  const initialName = name[0].toUpperCase()
+  const initialsSurname = surname.slice(0, 2).toUpperCase()
+
+  return `${formattedDate}_${initialName}${initialsSurname}`
+}
+
+function extractAndFormatCzechPostalCode(
+  completeAddress: string
+): string | null {
+  // Match the Czech postal code format of 5 digits, with an optional space between the third and fourth digits
+  const postalCodeMatch = completeAddress.match(/\b\d{3} ?\d{2}\b/)
+
+  // If a match is found, format it to include a space between the third and fourth digits
+  if (postalCodeMatch) {
+    const formattedPostalCode = postalCodeMatch[0].replace(
+      /(\d{3}) ?(\d{2})/,
+      '$1 $2'
+    )
+    return formattedPostalCode
+  }
+
+  // Return null if no postal code is found in the expected format
+  return null
 }
 
 // Function to create a new procedure
@@ -17,8 +73,18 @@ export async function createProcedure(
   data: InheritanceProcedureData,
   context: CustomContext
 ): Promise<number> {
-  const { inheritanceProcedureRepository } = context
-  const procedureName = generateProcedureName(data.name, data.startDate)
+  const { inheritanceProcedureRepository, contactRepository } = context
+  const deceasedContact = await contactRepository.getContactById(
+    data.deceasedContactId
+  )
+  if (!deceasedContact) {
+    throw new Error('Deceased contact not found')
+  }
+  const procedureName = generateProcedureName(
+    deceasedContact.name,
+    deceasedContact.surname,
+    data.startDate
+  )
 
   const procedureId = await inheritanceProcedureRepository.createProcedure({
     ...data,
@@ -57,9 +123,28 @@ export async function addBeneficiaryToProcedure(
   context: CustomContext
 ): Promise<void> {
   const { beneficiaryRepository } = context
-  await beneficiaryRepository.insertBeneficiaryProcedureRelation(
-    procedureId,
-    beneficiaryId
+  await beneficiaryRepository.insertBeneficiaryProcedureRelation({
+    inheritanceProcedureId: procedureId,
+    beneficiaryId,
+  })
+}
+
+export async function addBeneficiariesToProcedure(
+  procedureId: number,
+  beneficiaryIds: number[],
+  context: CustomContext
+): Promise<void> {
+  const { beneficiaryRepository } = context
+
+  // Prepare the array of relation objects for bulk insertion
+  const relations = beneficiaryIds.map((beneficiaryId) => ({
+    inheritanceProcedureId: procedureId,
+    beneficiaryId,
+  }))
+
+  // Call the repository method for bulk insertion
+  await beneficiaryRepository.insertMultipleBeneficiaryProcedureRelations(
+    relations
   )
 }
 
@@ -70,7 +155,7 @@ export async function removeBeneficiaryFromProcedure(
   context: CustomContext
 ): Promise<void> {
   const { beneficiaryRepository } = context
-  await beneficiaryRepository.deleteBeneficiaryProcedureRelation(
+  await beneficiaryRepository.deleteBeneficiaryProcedureRelations(
     procedureId,
     beneficiaryId
   )
@@ -86,4 +171,112 @@ export async function assignNotary(
   await inheritanceProcedureRepository.updateProcedure(procedureId, {
     notaryId,
   })
+}
+
+export async function createProcedureFromFormData(
+  data: InheritanceProcedureFormData,
+  context: CustomContext
+) {
+  const {
+    inheritanceProcedureRepository,
+    contactRepository,
+    beneficiaryRepository,
+  } = context
+
+  // Extract and validate the postal code from the deceased person's address
+  const deceasedPostalCode = extractAndFormatCzechPostalCode(
+    data.deceasedPerson.completeAddress
+  )
+  if (!deceasedPostalCode) {
+    throw new Error(
+      'Invalid or missing postal code in the deceased person address'
+    )
+  }
+
+  // Create entries for the contact person and deceased person
+  const [contactPersonId, deceasedContactId] =
+    await contactRepository.createContacts([
+      {
+        name: data.contactPerson.name,
+        surname: data.contactPerson.surname,
+        email: data.contactPerson.email,
+      },
+      {
+        name: data.deceasedPerson.name,
+        surname: data.deceasedPerson.surname,
+        completeAddress: data.deceasedPerson.completeAddress,
+        postalCode: deceasedPostalCode,
+      },
+    ])
+
+  // Create an inheritance procedure entry with main contact and deceased contact details
+  const procedureId = await createProcedure(
+    {
+      mainContactId: contactPersonId,
+      startDate: new Date(),
+      deceasedContactId: deceasedContactId,
+      deceasedDateOfBirth: data.deceasedPerson.dateOfBirth,
+      deceasedDateOfDeath: data.deceasedPerson.dateOfDeath,
+    },
+    context
+  )
+
+  // Initialize relations list with the main beneficiary (the one who created the procedure)
+  let beneficiaryProcedureRelations = [
+    {
+      inheritanceProcedureId: procedureId,
+      beneficiaryId: data.beneficiaryId,
+    },
+  ]
+
+  // If additional beneficiaries are provided, create their contacts and beneficiaries
+  if (data.beneficiaries && data.beneficiaries.length > 0) {
+    const beneficiaryContactsData = data.beneficiaries.map((beneficiary) => ({
+      name: beneficiary.name,
+      surname: beneficiary.surname,
+      email: beneficiary.email,
+    }))
+
+    const otherBeneficiaryContactIds = await contactRepository.createContacts(
+      beneficiaryContactsData
+    )
+
+    const allBeneficiaryData = data.beneficiaries.map((beneficiary, index) => ({
+      name: beneficiary.name,
+      surname: beneficiary.surname,
+      email: beneficiary.email,
+      contactId: otherBeneficiaryContactIds[index], // Link to corresponding contact
+    }))
+
+    const beneficiaryIds =
+      await beneficiaryRepository.createBeneficiaries(allBeneficiaryData)
+
+    // Add the newly created beneficiaries to the relations list
+    beneficiaryProcedureRelations = beneficiaryProcedureRelations.concat(
+      beneficiaryIds.map((beneficiaryId) => ({
+        inheritanceProcedureId: procedureId,
+        beneficiaryId: beneficiaryId,
+      }))
+    )
+  }
+
+  // Insert all beneficiary-procedure relations
+  await beneficiaryRepository.insertMultipleBeneficiaryProcedureRelations(
+    beneficiaryProcedureRelations
+  )
+
+  // Find an available notary based on postal code and date of death
+  const [notary] = await findAvailableNotary(
+    {
+      postalCode: deceasedPostalCode,
+      dateOfDeath: data.deceasedPerson.dateOfDeath,
+    },
+    context
+  )
+
+  // Assign the found notary to the procedure
+  await assignNotary(procedureId, notary.id, context)
+
+  // Return the created procedure with its details
+  return await inheritanceProcedureRepository.getProcedureById(procedureId)
 }

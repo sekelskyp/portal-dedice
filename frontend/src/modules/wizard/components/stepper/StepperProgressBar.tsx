@@ -8,10 +8,9 @@ export function StepperProgressBar({ progress }: { progress: number }) {
       <ProgressRoot
         value={progress}
         size={{ base: 'sm', md: 'md' }}
-        colorScheme="blue"
-        borderRadius="xl"
+        colorPalette="blue"
       >
-        <ProgressBar />
+        <ProgressBar borderRadius="md" />
       </ProgressRoot>
     </Box>
   )

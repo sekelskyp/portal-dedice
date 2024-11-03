@@ -13,20 +13,13 @@ export interface AuthResponse {
   token: string
 }
 
-/**
- * Login a user and return an authentication token.
- * @param login - The user's email or login.
- * @param password - The user's password.
- * @param context - The context to access the user repository.
- * @returns {Promise<AuthResponse>}
- */
 export async function loginUser(
   login: string,
   password: string,
   context: CustomContext
 ): Promise<AuthResponse> {
   const { userRepository } = context
-  const errorMessage = 'Invalid email or password'
+  const errorMessage = 'Neplatný e-mail nebo heslo'
 
   // Find user by email
   const foundUser = await userRepository.getUserByEmail(login.toLowerCase())
@@ -38,20 +31,14 @@ export async function loginUser(
 
   // Check if user is confirmed
   if (!foundUser.confirmed)
-    throw new Error('Pro login je nutné ověřit email uživatele')
+    throw new Error('Pro login je nutné ověřit e-mail uživatele')
 
   // Generate a JWT token for the user
   const token = createToken({ userId: foundUser.id })
   return { userId: foundUser.id, token }
 }
 
-/**
- * Register a new user with email and password.
- * @param email - The email to register.
- * @param password - The password for the new user.
- * @param context - The context to access the user repository.
- * @returns {Promise<User>}
- */
+// Register a new user with email and password.
 export async function registerUser(
   email: string,
   password: string,
@@ -60,10 +47,10 @@ export async function registerUser(
   context: CustomContext
 ) {
   const { userRepository, beneficiaryRepository, contactRepository } = context
-  console.log('registerUser')
+
   // Check if email is already in use
   const existingUser = await userRepository.getUserByEmail(email.toLowerCase())
-  if (existingUser) throw new Error('User with this email already exists')
+  if (existingUser) throw new Error('Uživatel s tímto emailem již existuje')
 
   // Hash the password and create the user
   const hashedPassword = await hashPassword(password)
@@ -89,14 +76,7 @@ export async function registerUser(
   return newUser
 }
 
-/**
- * Change password for the authenticated user.
- * @param userId - The ID of the user requesting password change.
- * @param oldPassword - The current password for validation.
- * @param newPassword - The new password to be set.
- * @param context - The context to access repositories.
- * @returns {Promise<void>}
- */
+// Change password for the authenticated user.
 export async function changeUserPassword(
   userId: number,
   oldPassword: string,
@@ -108,7 +88,7 @@ export async function changeUserPassword(
   // Fetch user to verify old password
   const userRecord = await userRepository.getUserById(userId)
   if (!userRecord) {
-    throw new Error('User not found')
+    throw new Error('Uživatel nebyl nalezen.')
   }
 
   // Validate old password
@@ -117,20 +97,14 @@ export async function changeUserPassword(
     oldPassword
   )
   if (!isOldPasswordCorrect) {
-    throw new Error('Old password is incorrect')
+    throw new Error('Nesprávné staré heslo.')
   }
 
   // Hash the new password and update it
   const newPasswordHash = await hashPassword(newPassword)
-  await userRepository.updatePassword(userId, newPasswordHash)
+  await userRepository.updateUser(userId, { password: newPasswordHash })
 }
 
-/**
- * Fetch user details by ID.
- * @param userId - The ID of the user.
- * @param context - The context to access the user repository.
- * @returns {Promise<User | null>}
- */
 export async function getUserById(userId: number, context: CustomContext) {
   const { userRepository } = context
   return await userRepository.getUserById(userId)
@@ -153,13 +127,7 @@ export async function completePasswordReset(
   await resetPassword(token, newPassword, context) // Using the PasswordResetService function here
 }
 
-/**
- * Send an email verification request to a new user.
- * @param userId - The ID of the user to confirm.
- * @param email - The user's email to send the confirmation link to.
- * @param context - The context to access the repositories.
- * @returns {Promise<void>}
- */
+// Send an email verification request to a new user.
 async function sendEmailVerification(
   userId: number,
   email: string,
@@ -168,15 +136,29 @@ async function sendEmailVerification(
   await requestEmailVerification(userId, email, context) // Calls emailConfirmationService to generate and send token
 }
 
-/**
- * Confirm the user's email using a token.
- * @param token - The confirmation token provided by the user.
- * @param context - The context to access the repositories.
- * @returns {Promise<void>}
- */
+//Confirm the user's email using a token.
 export async function confirmEmailVerification(
   token: string,
   context: CustomContext
 ): Promise<void> {
   await verifyEmail(token, context) // Calls emailConfirmationService to validate and confirm email
+}
+
+export async function isUserNotary(
+  userId: number,
+  context: CustomContext
+): Promise<boolean> {
+  const { notaryRepository } = context
+  const notaries = await notaryRepository.getNotariesByUserId(userId)
+  return notaries.length > 0
+}
+
+export async function isUserBeneficiary(
+  userId: number,
+  context: CustomContext
+): Promise<boolean> {
+  const { beneficiaryRepository } = context
+  const beneficiaries =
+    await beneficiaryRepository.getBeneficiariesByUserId(userId)
+  return beneficiaries.length > 0
 }

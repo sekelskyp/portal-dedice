@@ -16,7 +16,6 @@ export function NotFoundPage() {
     >
       <Box textAlign="center">
         <Icon
-          //as={FiAlertCircle}
           boxSize={{ base: '48px', sm: '64px', md: '72px' }}
           color="red.500"
         >
@@ -28,14 +27,7 @@ export function NotFoundPage() {
           mb={4}
           mx={{ base: 8, sm: 0 }}
         >
-          Chyba 404.
-          <Box as="span" display={{ base: 'inline', sm: 'none' }}>
-            <br />
-          </Box>
-          <Box as="span" display={{ base: 'none', sm: 'inline' }}>
-            {' '}
-          </Box>
-          Stránka nenalezena
+          Stránka nebyla nalezena.
         </Text>
         <Text
           fontSize={{ base: 'sm', md: 'md', lg: 'lg' }}
@@ -43,7 +35,7 @@ export function NotFoundPage() {
           mx={{ base: 8, sm: 0 }}
         >
           Stránka, kterou se snažíte najít, neexistuje. Vraťte se{' '}
-          <RouterLink to={route.home()} fontWeight="bold">
+          <RouterLink to={route.home()} fontWeight="bold" color="primary.500">
             Domů
           </RouterLink>
           .

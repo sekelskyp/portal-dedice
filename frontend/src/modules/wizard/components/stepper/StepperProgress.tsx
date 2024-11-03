@@ -6,13 +6,13 @@ import { StepperProgressBar } from './StepperProgressBar'
 interface StepperProgressProps {
   step: number
   questionsProgress: number
-  treeProgress: number
+  questionnaireProgress: number
 }
 
 export function StepperProgress({
   step,
   questionsProgress,
-  treeProgress,
+  questionnaireProgress,
 }: StepperProgressProps) {
   return (
     <>
@@ -25,7 +25,7 @@ export function StepperProgress({
         <StepperCategory step={step} index={1} />
         <StepperProgressBar progress={questionsProgress} />
         <StepperCategory step={step} index={2} />
-        <StepperProgressBar progress={treeProgress} />
+        <StepperProgressBar progress={questionnaireProgress} />
         <StepperCategory step={step} index={3} />
       </Box>
     </>

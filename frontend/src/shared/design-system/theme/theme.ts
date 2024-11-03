@@ -1,6 +1,9 @@
 import { createSystem, defaultConfig, defineConfig } from '@chakra-ui/react'
 
+import { alertSlotRecipe } from './Alert'
+import { badgeRecipe } from './Badge'
 import { buttonRecipe } from './Button'
+import { cardSlotRecipe } from './Card'
 import { colors } from './Colors'
 
 const customConfig = defineConfig({
@@ -47,8 +50,14 @@ const customConfig = defineConfig({
         bg: {
           DEFAULT: {
             value: {
-              _light: '{colors.gray.50}',
+              _light: 'white',
               _dark: '{colors.gray.900}',
+            },
+          },
+          panel: {
+            value: {
+              _light: '{colors.gray.50}',
+              _dark: '{colors.gray.800}',
             },
           },
           muted: {
@@ -58,10 +67,23 @@ const customConfig = defineConfig({
             },
           },
         },
+        border: {
+          DEFAULT: {
+            value: {
+              _light: '{colors.gray.200}',
+              _dark: '{colors.gray.700}',
+            },
+          },
+        },
       },
     },
     recipes: {
       button: buttonRecipe,
+      badge: badgeRecipe,
+    },
+    slotRecipes: {
+      alert: alertSlotRecipe,
+      card: cardSlotRecipe,
     },
   },
 })

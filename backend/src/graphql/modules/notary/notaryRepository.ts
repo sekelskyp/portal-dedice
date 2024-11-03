@@ -26,12 +26,8 @@ export function getNotaryRepository(db: Db) {
       .then((notaries) => notaries)
   }
 
-  function getNotaryByUserId(id: number) {
-    return db
-      .select()
-      .from(notary)
-      .where(eq(notary.userId, id))
-      .then((notaries) => notaries[0] || null)
+  function getNotariesByUserId(id: number) {
+    return db.select().from(notary).where(eq(notary.userId, id))
   }
 
   function getAllNotaries() {
@@ -90,6 +86,11 @@ export function getNotaryRepository(db: Db) {
       .where(sql`LEFT(${contact.postalCode}, 2) = LEFT(${postalCode}, 2)`)
       .groupBy(notary.id)
       .limit(1)
+
+    if (result.length === 0) {
+      throw new Error('Notář nebyl nalezen.')
+    }
+
     return await db.select().from(notary).where(eq(notary.id, result[0].id))
   }
 
@@ -101,6 +102,6 @@ export function getNotaryRepository(db: Db) {
     deleteNotaryById,
     findAvailableNotary,
     createNotaries,
-    getNotaryByUserId,
+    getNotariesByUserId,
   }
 }

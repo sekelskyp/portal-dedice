@@ -1,11 +1,26 @@
+type Asset {
+  description: String
+  id: ID!
+  inheritanceProcedureId: ID!
+  name: String!
+  value: Float!
+}
+
 type Beneficiary {
   contact: Contact
   contactId: ID
   dateOfBirth: DateTimeISO
   deceasedRelation: String
   id: ID!
+  inheritanceProcedures: [InheritanceProcedure!]!
   user: User
   userId: ID
+}
+
+input BeneficiaryInput {
+  email: String!
+  name: String!
+  surname: String!
 }
 
 type Contact {
@@ -17,6 +32,12 @@ type Contact {
   name: String!
   phone: String
   postalCode: String
+  surname: String!
+}
+
+input ContactPersonInput {
+  email: String!
+  name: String!
   surname: String!
 }
 
@@ -39,8 +60,11 @@ input CreateContactInput {
 }
 
 input CreateInheritanceProcedureInput {
-  deceasedPersonId: ID
+  deceasedContactId: ID!
+  deceasedDateOfBirth: DateTimeISO
+  deceasedDateOfDeath: DateTimeISO
   endDate: DateTimeISO!
+  mainContactId: ID
   name: String!
   notaryId: ID
   startDate: DateTimeISO!
@@ -57,11 +81,12 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTimeISO
 
-type DeceasedPerson {
-  contactId: ID!
+input DeceasedPersonInput {
+  completeAddress: String!
   dateOfBirth: DateTimeISO!
   dateOfDeath: DateTimeISO!
-  id: Int!
+  name: String!
+  surname: String!
 }
 
 input FindNotaryInput {
@@ -70,18 +95,35 @@ input FindNotaryInput {
 }
 
 type InheritanceProcedure {
-  deceasedPerson: DeceasedPerson
-  deceasedPersonId: ID
-  endDate: String
+  beneficiaries: [Beneficiary!]
+  deceasedContact: Contact
+  deceasedContactId: ID
+  deceasedDateOfBirth: DateTimeISO
+  deceasedDateOfDeath: DateTimeISO
+  endDate: DateTimeISO
   id: ID!
+  mainContact: Contact
+  mainContactId: ID
   name: String!
   notary: Notary
   notaryId: ID
+  procedureAssets: [Asset!]
   startDate: DateTimeISO!
   state: String!
 }
 
+input InheritanceProcedureFormDataInput {
+  beneficiaries: [BeneficiaryInput!]!
+  beneficiaryId: Float!
+  contactPerson: ContactPersonInput!
+  deceasedPerson: DeceasedPersonInput!
+}
+
 type Mutation {
+  addBeneficiariesToProcedure(
+    beneficiaryIds: [Int!]!
+    procedureId: Int!
+  ): Boolean!
   addBeneficiaryToProcedure(beneficiaryId: Int!, procedureId: Int!): Boolean!
   assignNotary(notaryId: Int!, procedureId: Int!): Boolean!
   changePassword(newPassword: String!, oldPassword: String!): User!
@@ -90,6 +132,9 @@ type Mutation {
   createBeneficiaries(data: [CreateBeneficiaryInput!]!): [Beneficiary!]!
   createBeneficiary(data: CreateBeneficiaryInput!): Beneficiary!
   createContact(data: CreateContactInput!): Int!
+  createInheritanceProcedureFromForm(
+    data: InheritanceProcedureFormDataInput!
+  ): InheritanceProcedure!
   createNotary(data: CreateNotaryInput!): Notary!
   createProcedure(data: CreateInheritanceProcedureInput!): Int!
   deleteBeneficiary(id: Int!): Boolean!
@@ -110,6 +155,7 @@ type Notary {
   contact: Contact
   contactId: ID
   id: ID!
+  inheritanceProcedures: [InheritanceProcedure!]!
   user: User
   userId: ID
 }
@@ -119,11 +165,14 @@ type Query {
   author(id: Float!): Notary
   findNotary(input: FindNotaryInput!): Notary
   getAllContacts: [Contact!]!
+  getAllProcedures: [InheritanceProcedure!]!
   getBeneficiariesByIds(ids: [Int!]!): [Beneficiary!]!
   getBeneficiariesByProcedureId(procedureId: Int!): [Beneficiary!]!
   getBeneficiaryById(id: Int!): Beneficiary
   getContactById(id: Float!): Contact
   getProcedureById(id: Int!): InheritanceProcedure
+  getProceduresByBeneficiaryId(beneficiaryId: Int!): [InheritanceProcedure!]!
+  getProceduresByNotaryId(notaryId: Int!): [InheritanceProcedure!]!
   getUserById(id: Float!): User
   notaries: [Notary!]!
 }
@@ -148,9 +197,12 @@ input UpdateBeneficiaryInput {
 }
 
 type User {
-  beneficiary: Beneficiary
+  beneficiaries: [Beneficiary!]!
+  confirmed: Boolean!
   email: String!
   id: ID!
-  notary: Notary
+  isBeneficiary: Boolean!
+  isNotary: Boolean!
+  notaries: [Notary!]!
   password: String!
 }

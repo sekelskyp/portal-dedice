@@ -15,6 +15,11 @@ type AuthState = {
 export type AuthUser = {
   id: string
   email: string
+  confirmed: boolean
+  isNotary: boolean
+  isBeneficiary: boolean
+  beneficiaries: { id: string }[]
+  notaries: { id: string }[]
 }
 
 const LOCAL_STORAGE_AUTH_KEY = 'project-auth'
@@ -94,9 +99,9 @@ function getStorageState(defaultState: AuthState): AuthState {
   }
 
   try {
-    const { user, token } = JSON.parse(rawData)
+    const { token, user } = JSON.parse(rawData)
 
-    if (token && user && user.id && user.login) {
+    if (token && user && user.id && user.email) {
       return { token, user }
     }
   } catch {}

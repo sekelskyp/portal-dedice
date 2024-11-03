@@ -13,6 +13,7 @@ import { DeceasedRelationEnumType } from '@backend/db/schema'
 import { CustomContext } from '@backend/types/types'
 
 import { Contact } from '../contact/contactType'
+import { InheritanceProcedure } from '../inheritanceProcedure/inheritanceProcedureType'
 import { User } from '../user/userType'
 
 import { BeneficiaryData } from './beneficiaryRepository'
@@ -22,6 +23,20 @@ import { UpdateBeneficiaryInput } from './updateBeneficiaryInput'
 
 @Resolver(() => Beneficiary)
 export class BeneficiaryResolver {
+  @FieldResolver(() => [InheritanceProcedure])
+  async inheritanceProcedures(
+    @Root() beneficiary: Beneficiary,
+    @Ctx() { inheritanceProcedureRepository }: CustomContext
+  ): Promise<InheritanceProcedure[]> {
+    const procedureRecords =
+      await inheritanceProcedureRepository.getProceduresByBeneficiaryId(
+        beneficiary.id
+      )
+    return procedureRecords.map((record) => ({
+      ...record.inheritance_procedure,
+    }))
+  }
+
   // Field resolver for contact
   @FieldResolver(() => Contact, { nullable: true })
   async contact(
@@ -62,9 +77,12 @@ export class BeneficiaryResolver {
     @Arg('procedureId', () => Int) procedureId: number,
     @Ctx() { beneficiaryRepository }: CustomContext
   ): Promise<Beneficiary[]> {
-    return await beneficiaryRepository.getBeneficiariesByProcedureId(
-      procedureId
-    )
+    const beneficiaryRecords =
+      await beneficiaryRepository.getBeneficiariesByProcedureId(procedureId)
+
+    return beneficiaryRecords.map((record) => ({
+      ...record.beneficiary,
+    }))
   }
 
   // Get multiple beneficiaries by IDs

@@ -1,18 +1,21 @@
 import { eq } from 'drizzle-orm'
 
+import { type Db } from '@backend/types/types'
+
 import {
+  beneficiaryInheritanceProcedureRel,
   inheritanceProcedure,
   InheritanceProcedureStateEnumType,
-} from '@backend/db/schema'
-import { Db } from '@backend/types/types'
+} from '../../../db/schema'
 
 export interface InheritanceProcedureData {
   notaryId?: number | null
-  mainBeneficiaryId?: number | null
   name: string
   state?: InheritanceProcedureStateEnumType
   startDate: Date
   endDate?: Date | null
+  mainContactId?: number | null
+  deceasedContactId: number
   deceasedDateOfBirth?: Date | null
   deceasedDateOfDeath?: Date | null
 }
@@ -64,6 +67,22 @@ export function getInheritanceProcedureRepository(db: Db) {
       .where(eq(inheritanceProcedure.notaryId, notaryId))
   }
 
+  async function getProceduresByBeneficiaryId(beneficiaryId: number) {
+    return await db
+      .select()
+      .from(inheritanceProcedure)
+      .leftJoin(
+        beneficiaryInheritanceProcedureRel,
+        eq(
+          beneficiaryInheritanceProcedureRel.inheritanceProcedureId,
+          inheritanceProcedure.id
+        )
+      )
+      .where(
+        eq(beneficiaryInheritanceProcedureRel.beneficiaryId, beneficiaryId)
+      )
+  }
+
   return {
     getProcedureById,
     getAllProcedures,
@@ -71,5 +90,6 @@ export function getInheritanceProcedureRepository(db: Db) {
     deleteProcedureById,
     updateProcedure,
     getProceduresByNotaryId,
+    getProceduresByBeneficiaryId,
   }
 }

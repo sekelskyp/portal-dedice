@@ -2,6 +2,7 @@ import { Field, ID, ObjectType } from 'type-graphql'
 
 import { InheritanceProcedureStateEnumType } from '@backend/db/schema'
 
+import { Asset } from '../asset/assetType'
 import { Beneficiary } from '../beneficiary/beneficiaryType'
 import { Contact } from '../contact/contactType'
 import { Notary } from '../notary/notaryType'
@@ -11,7 +12,7 @@ export class InheritanceProcedure {
   @Field(() => ID)
   id!: number
 
-  @Field(() => ID, { nullable: true }) // Allow nullable
+  @Field(() => ID, { nullable: true })
   notaryId!: number | null
 
   @Field(() => Notary, { nullable: true })
@@ -29,14 +30,14 @@ export class InheritanceProcedure {
   @Field(() => Date, { nullable: true })
   endDate?: Date | null
 
-  @Field(() => Beneficiary, { nullable: true })
+  @Field(() => [Beneficiary], { nullable: true })
   beneficiaries?: Beneficiary[]
 
   @Field(() => ID, { nullable: true })
-  mainBeneficiaryId?: number | null
+  mainContactId?: number | null
 
-  @Field(() => Beneficiary, { nullable: true })
-  mainBeneficiary?: Beneficiary
+  @Field(() => Contact, { nullable: true })
+  mainContact?: Contact | null
 
   @Field(() => ID, { nullable: true })
   deceasedContactId?: number | null
@@ -49,4 +50,7 @@ export class InheritanceProcedure {
 
   @Field(() => Date, { nullable: true })
   deceasedDateOfDeath?: Date | null
+
+  @Field(() => [Asset], { nullable: true })
+  procedureAssets?: Asset[]
 }

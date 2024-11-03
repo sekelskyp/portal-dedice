@@ -16,6 +16,8 @@ export {
   type MenuItemProps,
   MenuRoot,
   MenuTrigger,
+  NativeSelectField,
+  NativeSelectRoot,
   ProgressBar,
   ProgressRoot,
   Radio,

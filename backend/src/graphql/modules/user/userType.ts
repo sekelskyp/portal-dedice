@@ -14,9 +14,19 @@ export class User {
   @Field()
   password!: string
 
-  @Field(() => Notary, { nullable: true })
-  notary?: Notary
+  @Field()
+  confirmed!: boolean
 
-  @Field(() => Beneficiary, { nullable: true })
-  beneficiary?: Beneficiary
+  @Field(() => [Notary])
+  notaries?: Notary[]
+
+  @Field(() => [Beneficiary])
+  beneficiaries?: Beneficiary[]
+
+  // Computed fields
+  @Field()
+  isNotary?: boolean
+
+  @Field()
+  isBeneficiary?: boolean
 }

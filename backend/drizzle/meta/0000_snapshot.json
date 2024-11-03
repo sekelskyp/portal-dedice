@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "b502b4b0-8b72-4394-8e2e-a8067dc2f58a",
+  "id": "b5e84385-e732-4041-9980-985e27dd1da8",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "asset": {
@@ -616,13 +616,6 @@
           "notNull": false,
           "autoincrement": false
         },
-        "main_beneficiary_id": {
-          "name": "main_beneficiary_id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "name": {
           "name": "name",
           "type": "varchar(100)",
@@ -652,11 +645,18 @@
           "notNull": false,
           "autoincrement": false
         },
+        "main_contact_id": {
+          "name": "main_contact_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "deceased_contact_id": {
           "name": "deceased_contact_id",
           "type": "int",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "date_of_birth": {
@@ -685,11 +685,11 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "inheritance_procedure_main_beneficiary_id_beneficiary_id_fk": {
-          "name": "inheritance_procedure_main_beneficiary_id_beneficiary_id_fk",
+        "inheritance_procedure_main_contact_id_contact_id_fk": {
+          "name": "inheritance_procedure_main_contact_id_contact_id_fk",
           "tableFrom": "inheritance_procedure",
-          "tableTo": "beneficiary",
-          "columnsFrom": ["main_beneficiary_id"],
+          "tableTo": "contact",
+          "columnsFrom": ["main_contact_id"],
           "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
@@ -1044,7 +1044,7 @@
           "name": "confirmed",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": false
         }

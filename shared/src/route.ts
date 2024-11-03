@@ -8,7 +8,10 @@ export const route = {
   guide: () => `/guide`,
   blog: () => `/blog`,
   wizard: () => `/wizard`,
-  portal: () => `/portal`,
+  portal: () => `/portal/proceedings`,
+  newProceeding: () => `/portal/newProceeding`,
+  settings: () => `/portal/settings`,
   emailVerification: () => `/auth/email-verification`,
   confirmEmail: () => `/auth/confirm-email`,
+  inheritanceProcedure: (id = ':id') => `/portal/inheritance-procedure/${id}`,
 }

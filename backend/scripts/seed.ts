@@ -1,24 +1,38 @@
+import { sql } from 'drizzle-orm'
 import { MySql2Database } from 'drizzle-orm/mysql2'
 
 import { getConnection } from '../src/db/db'
 import {
+  asset,
   beneficiary,
+  beneficiaryInheritanceProcedureRel,
   contact,
+  inheritanceProcedure,
   notary,
   notaryDateRule,
   user,
 } from '../src/db/schema'
 import { hashPassword } from '../src/services/passwordHashService'
 
+import { seedInheritanceProcedures } from './seedInheritanceProcedures'
 import { seedNotariesAndDateRules } from './seedNotaries'
 
 async function populateDatabase(
-  db: MySql2Database<typeof import('../src/db/schema')>
+  db: MySql2Database<typeof import('../src/db/schema')>,
+  notaryIds: number[]
 ) {
   console.log('Seeding population data...')
 
   // Insert contacts and save returned IDs
-  const [beneficiaryContactId1, beneficiaryContactId2] = await db
+  const [
+    beneficiaryContactId1,
+    beneficiaryContactId2,
+    deceasedContactId1,
+    beneficiaryContactId3,
+    deceasedContactId2,
+    notaryContactId1,
+    notaryContactId2,
+  ] = await db
     .insert(contact)
     .values([
       {
@@ -61,11 +75,42 @@ async function populateDatabase(
         completeAddress: 'Peace Square 321, Ostrava, Czech Republic',
         postalCode: '13000',
       },
+      {
+        name: 'Jan',
+        surname: 'Svoboda',
+        displayName: 'Jan Svoboda',
+        gender: 'Male',
+        phone: '+42033333333š',
+        email: 'svojan@quacker.com',
+        completeAddress: 'Peace Square 321, Ostrava, Czech Republic',
+        postalCode: '13000',
+      },
+      // main Contacts for inheritance procedures
+      {
+        name: 'Jan',
+        surname: 'Michalec',
+        displayName: 'Jan Michalec',
+        gender: 'Male',
+        phone: '+42033333333š',
+        email: 'michalec@quacker.com',
+        completeAddress: 'Peace Square 321, Ostrava, Czech Republic',
+        postalCode: '13000',
+      },
+      {
+        name: 'Petr',
+        surname: 'Hochman',
+        displayName: 'Petr Hochman',
+        gender: 'Male',
+        phone: '+42033333333š',
+        email: 'hochman@quacker.com',
+        completeAddress: 'Peace Square 321, Ostrava, Czech Republic',
+        postalCode: '13000',
+      },
     ])
     .$returningId()
 
   // Insert users and save returned IDs
-  const [beneficiaryUserId1, beneficiaryUserId2] = await db
+  const [beneficiaryUserId1, beneficiaryUserId2, beneficiaryUserId3] = await db
     .insert(user)
     .values([
       {
@@ -76,11 +121,15 @@ async function populateDatabase(
         password: await hashPassword('heslo1234'),
         email: 'test.email2@email.com',
       },
+      {
+        password: await hashPassword('heslo1234'),
+        email: 'test.email3@email.com',
+      },
     ])
     .$returningId()
 
   // Insert beneficiaries using the saved beneficiaryUserId
-  await db
+  const [beneficiaryId1, beneficiaryId2, beneficiaryId3] = await db
     .insert(beneficiary)
     .values([
       {
@@ -95,9 +144,97 @@ async function populateDatabase(
         deceasedRelation: 'Child',
         dateOfBirth: new Date('1980-01-01'),
       },
+      {
+        userId: beneficiaryUserId3.id,
+        contactId: beneficiaryContactId3.id,
+        deceasedRelation: 'Parent',
+        dateOfBirth: new Date('1990-01-01'),
+      },
     ])
     .onDuplicateKeyUpdate({ set: { userId: beneficiaryUserId2.id } })
+    .$returningId()
 
+  // populate user notaries
+  const [notaryUserId1, notaryUserId2] = await db
+    .insert(user)
+    .values([
+      {
+        email: 'test.notary1@quacker.cz',
+        password: await hashPassword('heslo1234'),
+        confirmed: true,
+      },
+      {
+        email: 'test.notary2@quacker.cz',
+        password: await hashPassword('heslo1234'),
+        confirmed: true,
+      },
+    ])
+    .$returningId()
+
+  const [notaryId1, notaryId2] = await db
+    .insert(notary)
+    .values([
+      {
+        contactId: notaryContactId1.id,
+        userId: notaryUserId1.id,
+      },
+      {
+        contactId: notaryContactId2.id,
+        userId: notaryUserId2.id,
+      },
+    ])
+    .$returningId()
+
+  const [inheritanceId1, inheritanceId2] = await seedInheritanceProcedures(db, [
+    {
+      notaryId: notaryId1.id,
+      state: 'InProgress',
+      startDate: new Date('2024-01-01'),
+      deceasedContactId: deceasedContactId1.id,
+      deceasedDateOfBirth: new Date('1940-01-01'),
+      deceasedDateOfDeath: new Date('2023-12-31'),
+      mainContactId: beneficiaryContactId1.id,
+    },
+    {
+      notaryId: notaryId2.id,
+      state: 'InProgress',
+      startDate: new Date('2024-03-10'),
+      deceasedContactId: deceasedContactId2.id,
+      deceasedDateOfBirth: new Date('1956-12-01'),
+      deceasedDateOfDeath: new Date('2024-03-12'),
+      mainContactId: beneficiaryContactId3.id,
+    },
+  ])
+
+  await db.insert(beneficiaryInheritanceProcedureRel).values([
+    {
+      beneficiaryId: beneficiaryId1.id,
+      inheritanceProcedureId: inheritanceId1,
+    },
+    {
+      beneficiaryId: beneficiaryId2.id,
+      inheritanceProcedureId: inheritanceId1,
+    },
+    {
+      beneficiaryId: beneficiaryId3.id,
+      inheritanceProcedureId: inheritanceId2,
+    },
+  ])
+
+  await db.insert(asset).values([
+    {
+      inheritanceProcedureId: inheritanceId1,
+
+      value: 100_000,
+      name: 'Auto',
+    },
+    {
+      inheritanceProcedureId: inheritanceId1,
+
+      value: 200_000,
+      name: 'Dům',
+    },
+  ])
   console.log('Population data seeded successfully.')
 }
 
@@ -106,17 +243,25 @@ async function seed() {
   const db = connection.db
 
   try {
+    // Disable foreign key checks
+    await db.execute(sql`SET FOREIGN_KEY_CHECKS = 0;`)
+
     // delete previous data (idk if we really need this when we have DB in docker and can just remove the volume and start fresh)
     await db.delete(beneficiary)
     await db.delete(notary)
     await db.delete(user)
     await db.delete(contact)
     await db.delete(notaryDateRule)
-    await seedNotariesAndDateRules(db)
-    await populateDatabase(db)
+    await db.delete(inheritanceProcedure)
+    await db.delete(beneficiaryInheritanceProcedureRel)
+    await db.delete(asset)
+    const { notaryIds } = await seedNotariesAndDateRules(db)
+    await populateDatabase(db, notaryIds)
   } catch (error) {
     console.error('Error seeding database:', error)
   } finally {
+    // Enable foreign key checks
+    await db.execute(sql`SET FOREIGN_KEY_CHECKS = 1;`)
     await connection.connection.end() // Ensure the connection is closed after seeding
     process.exit(0)
   }

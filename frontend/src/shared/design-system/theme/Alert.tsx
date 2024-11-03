@@ -1,13 +1,11 @@
-// import { alertAnatomy } from '@chakra-ui/anatomy'
-// import { createMultiStyleConfigHelpers } from '@chakra-ui/react'
+import { defineSlotRecipe } from '@chakra-ui/react'
+import { alertAnatomy } from '@chakra-ui/react/anatomy'
 
-// const { definePartsStyle, defineMultiStyleConfig } =
-//   createMultiStyleConfigHelpers(alertAnatomy.keys)
-
-// const baseStyle = definePartsStyle({
-//   container: {
-//     borderRadius: 'md',
-//   },
-// })
-
-// export const Alert = defineMultiStyleConfig({ baseStyle })
+export const alertSlotRecipe = defineSlotRecipe({
+  slots: alertAnatomy.keys(),
+  base: {
+    root: {
+      alignItems: 'center',
+    },
+  },
+})

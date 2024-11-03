@@ -14,6 +14,8 @@ import {
   confirmEmailVerification,
   getUserById,
   initiatePasswordReset,
+  isUserBeneficiary,
+  isUserNotary,
   loginUser,
   registerUser,
 } from '@backend/services/userService'
@@ -28,22 +30,44 @@ import { User } from './userType'
 
 @Resolver(() => User)
 export class UserResolver {
-  // Field resolver for Notary
-  @FieldResolver(() => Notary, { nullable: true })
-  async notary(
+  // Field resolver for Notaries (ensures an empty array if no notaries are found)
+  @FieldResolver(() => [Notary])
+  async notaries(
     @Root() user: User,
     @Ctx() { notaryRepository }: CustomContext
-  ): Promise<Notary | null> {
-    return await notaryRepository.getNotaryByUserId(user.id)
+  ): Promise<Notary[]> {
+    const notaries = await notaryRepository.getNotariesByUserId(user.id)
+    return notaries || []
   }
 
-  // Field resolver for Beneficiary
-  @FieldResolver(() => Beneficiary, { nullable: true })
-  async beneficiary(
+  // Field resolver for Beneficiaries (ensures an empty array if no beneficiaries are found)
+  @FieldResolver(() => [Beneficiary])
+  async beneficiaries(
     @Root() user: User,
     @Ctx() { beneficiaryRepository }: CustomContext
-  ): Promise<Beneficiary | null> {
-    return await beneficiaryRepository.getBeneficiaryByUserId(user.id)
+  ): Promise<Beneficiary[]> {
+    const beneficiaries = await beneficiaryRepository.getBeneficiariesByUserId(
+      user.id
+    )
+    return beneficiaries || []
+  }
+
+  // Computed field for isNotary
+  @FieldResolver(() => Boolean)
+  async isNotary(
+    @Root() user: User,
+    @Ctx() context: CustomContext
+  ): Promise<boolean> {
+    return await isUserNotary(user.id, context)
+  }
+
+  // Computed field for isBeneficiary
+  @FieldResolver(() => Boolean)
+  async isBeneficiary(
+    @Root() user: User,
+    @Ctx() context: CustomContext
+  ): Promise<boolean> {
+    return await isUserBeneficiary(user.id, context)
   }
 
   // Fetch a user by ID
@@ -52,9 +76,14 @@ export class UserResolver {
     @Arg('id') id: number,
     @Ctx() context: CustomContext
   ): Promise<User | null> {
-    return await getUserById(id, context) // Call standalone function from userService
+    const userRecord = await getUserById(id, context)
+    if (!userRecord) {
+      return null
+    }
+    return userRecord
   }
 
+  // Sign in mutation
   @Mutation(() => SignInResponse)
   async signIn(
     @Arg('login') login: string,
@@ -74,12 +103,13 @@ export class UserResolver {
     }
   }
 
+  // Sign up mutation
   @Mutation(() => User)
   async signUp(
     @Arg('registerInput') registerInput: RegisterInput,
     @Ctx() context: CustomContext
   ): Promise<User> {
-    const UserRecordId = await registerUser(
+    const userRecordId = await registerUser(
       registerInput.email,
       registerInput.password,
       registerInput.name,
@@ -87,18 +117,18 @@ export class UserResolver {
       context
     )
 
-    if (!UserRecordId) {
+    if (!userRecordId) {
       throw new Error('Registration failed')
     }
 
-    const foundUser = await getUserById(UserRecordId.id, context)
+    const foundUser = await getUserById(userRecordId.id, context)
     if (!foundUser) {
       throw new Error('User not found after registration')
     }
     return foundUser
   }
 
-  // Mutation to change user password of authenticated user
+  // Mutation to change user password
   @Mutation(() => User)
   async changePassword(
     @Arg('oldPassword') oldPassword: string,
@@ -126,7 +156,7 @@ export class UserResolver {
     return true
   }
 
-  // Mutation to reset password with password reset token
+  // Mutation to reset password
   @Mutation(() => Boolean)
   async resetPassword(
     @Arg('token') token: string,
@@ -136,7 +166,8 @@ export class UserResolver {
     await completePasswordReset(token, newPassword, context)
     return true
   }
-  // Mutation to confirm newly registered user's email with token sent to his email
+
+  // Mutation to confirm email
   @Mutation(() => Boolean)
   async confirmEmailVerification(
     @Arg('token') token: string,

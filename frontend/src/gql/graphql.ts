@@ -31,6 +31,15 @@ export type Scalars = {
   DateTimeISO: { input: any; output: any }
 }
 
+export type Asset = {
+  __typename?: 'Asset'
+  description?: Maybe<Scalars['String']['output']>
+  id: Scalars['ID']['output']
+  inheritanceProcedureId: Scalars['ID']['output']
+  name: Scalars['String']['output']
+  value: Scalars['Float']['output']
+}
+
 export type Beneficiary = {
   __typename?: 'Beneficiary'
   contact?: Maybe<Contact>
@@ -38,8 +47,15 @@ export type Beneficiary = {
   dateOfBirth?: Maybe<Scalars['DateTimeISO']['output']>
   deceasedRelation?: Maybe<Scalars['String']['output']>
   id: Scalars['ID']['output']
+  inheritanceProcedures: Array<InheritanceProcedure>
   user?: Maybe<User>
   userId?: Maybe<Scalars['ID']['output']>
+}
+
+export type BeneficiaryInput = {
+  email: Scalars['String']['input']
+  name: Scalars['String']['input']
+  surname: Scalars['String']['input']
 }
 
 export type Contact = {
@@ -53,6 +69,12 @@ export type Contact = {
   phone?: Maybe<Scalars['String']['output']>
   postalCode?: Maybe<Scalars['String']['output']>
   surname: Scalars['String']['output']
+}
+
+export type ContactPersonInput = {
+  email: Scalars['String']['input']
+  name: Scalars['String']['input']
+  surname: Scalars['String']['input']
 }
 
 export type CreateBeneficiaryInput = {
@@ -74,8 +96,11 @@ export type CreateContactInput = {
 }
 
 export type CreateInheritanceProcedureInput = {
-  deceasedPersonId?: InputMaybe<Scalars['ID']['input']>
+  deceasedContactId: Scalars['ID']['input']
+  deceasedDateOfBirth?: InputMaybe<Scalars['DateTimeISO']['input']>
+  deceasedDateOfDeath?: InputMaybe<Scalars['DateTimeISO']['input']>
   endDate: Scalars['DateTimeISO']['input']
+  mainContactId?: InputMaybe<Scalars['ID']['input']>
   name: Scalars['String']['input']
   notaryId?: InputMaybe<Scalars['ID']['input']>
   startDate: Scalars['DateTimeISO']['input']
@@ -87,12 +112,12 @@ export type CreateNotaryInput = {
   userId?: InputMaybe<Scalars['ID']['input']>
 }
 
-export type DeceasedPerson = {
-  __typename?: 'DeceasedPerson'
-  contactId: Scalars['ID']['output']
-  dateOfBirth: Scalars['DateTimeISO']['output']
-  dateOfDeath: Scalars['DateTimeISO']['output']
-  id: Scalars['Int']['output']
+export type DeceasedPersonInput = {
+  completeAddress: Scalars['String']['input']
+  dateOfBirth: Scalars['DateTimeISO']['input']
+  dateOfDeath: Scalars['DateTimeISO']['input']
+  name: Scalars['String']['input']
+  surname: Scalars['String']['input']
 }
 
 export type FindNotaryInput = {
@@ -102,19 +127,33 @@ export type FindNotaryInput = {
 
 export type InheritanceProcedure = {
   __typename?: 'InheritanceProcedure'
-  deceasedPerson?: Maybe<DeceasedPerson>
-  deceasedPersonId?: Maybe<Scalars['ID']['output']>
-  endDate?: Maybe<Scalars['String']['output']>
+  beneficiaries?: Maybe<Array<Beneficiary>>
+  deceasedContact?: Maybe<Contact>
+  deceasedContactId?: Maybe<Scalars['ID']['output']>
+  deceasedDateOfBirth?: Maybe<Scalars['DateTimeISO']['output']>
+  deceasedDateOfDeath?: Maybe<Scalars['DateTimeISO']['output']>
+  endDate?: Maybe<Scalars['DateTimeISO']['output']>
   id: Scalars['ID']['output']
+  mainContact?: Maybe<Contact>
+  mainContactId?: Maybe<Scalars['ID']['output']>
   name: Scalars['String']['output']
   notary?: Maybe<Notary>
   notaryId?: Maybe<Scalars['ID']['output']>
+  procedureAssets?: Maybe<Array<Asset>>
   startDate: Scalars['DateTimeISO']['output']
   state: Scalars['String']['output']
 }
 
+export type InheritanceProcedureFormDataInput = {
+  beneficiaries: Array<BeneficiaryInput>
+  beneficiaryId: Scalars['Float']['input']
+  contactPerson: ContactPersonInput
+  deceasedPerson: DeceasedPersonInput
+}
+
 export type Mutation = {
   __typename?: 'Mutation'
+  addBeneficiariesToProcedure: Scalars['Boolean']['output']
   addBeneficiaryToProcedure: Scalars['Boolean']['output']
   assignNotary: Scalars['Boolean']['output']
   changePassword: User
@@ -123,6 +162,7 @@ export type Mutation = {
   createBeneficiaries: Array<Beneficiary>
   createBeneficiary: Beneficiary
   createContact: Scalars['Int']['output']
+  createInheritanceProcedureFromForm: InheritanceProcedure
   createNotary: Notary
   createProcedure: Scalars['Int']['output']
   deleteBeneficiary: Scalars['Boolean']['output']
@@ -134,6 +174,11 @@ export type Mutation = {
   signIn: SignInResponse
   signUp: User
   updateBeneficiary: Beneficiary
+}
+
+export type MutationAddBeneficiariesToProcedureArgs = {
+  beneficiaryIds: Array<Scalars['Int']['input']>
+  procedureId: Scalars['Int']['input']
 }
 
 export type MutationAddBeneficiaryToProcedureArgs = {
@@ -169,6 +214,10 @@ export type MutationCreateBeneficiaryArgs = {
 
 export type MutationCreateContactArgs = {
   data: CreateContactInput
+}
+
+export type MutationCreateInheritanceProcedureFromFormArgs = {
+  data: InheritanceProcedureFormDataInput
 }
 
 export type MutationCreateNotaryArgs = {
@@ -224,6 +273,7 @@ export type Notary = {
   contact?: Maybe<Contact>
   contactId?: Maybe<Scalars['ID']['output']>
   id: Scalars['ID']['output']
+  inheritanceProcedures: Array<InheritanceProcedure>
   user?: Maybe<User>
   userId?: Maybe<Scalars['ID']['output']>
 }
@@ -234,11 +284,14 @@ export type Query = {
   author?: Maybe<Notary>
   findNotary?: Maybe<Notary>
   getAllContacts: Array<Contact>
+  getAllProcedures: Array<InheritanceProcedure>
   getBeneficiariesByIds: Array<Beneficiary>
   getBeneficiariesByProcedureId: Array<Beneficiary>
   getBeneficiaryById?: Maybe<Beneficiary>
   getContactById?: Maybe<Contact>
   getProcedureById?: Maybe<InheritanceProcedure>
+  getProceduresByBeneficiaryId: Array<InheritanceProcedure>
+  getProceduresByNotaryId: Array<InheritanceProcedure>
   getUserById?: Maybe<User>
   notaries: Array<Notary>
 }
@@ -271,6 +324,14 @@ export type QueryGetProcedureByIdArgs = {
   id: Scalars['Int']['input']
 }
 
+export type QueryGetProceduresByBeneficiaryIdArgs = {
+  beneficiaryId: Scalars['Int']['input']
+}
+
+export type QueryGetProceduresByNotaryIdArgs = {
+  notaryId: Scalars['Int']['input']
+}
+
 export type QueryGetUserByIdArgs = {
   id: Scalars['Float']['input']
 }
@@ -297,11 +358,137 @@ export type UpdateBeneficiaryInput = {
 
 export type User = {
   __typename?: 'User'
-  beneficiary?: Maybe<Beneficiary>
+  beneficiaries: Array<Beneficiary>
+  confirmed: Scalars['Boolean']['output']
   email: Scalars['String']['output']
   id: Scalars['ID']['output']
-  notary?: Maybe<Notary>
+  isBeneficiary: Scalars['Boolean']['output']
+  isNotary: Scalars['Boolean']['output']
+  notaries: Array<Notary>
   password: Scalars['String']['output']
+}
+
+export type GetProceduresByBeneficiaryIdQueryVariables = Exact<{
+  beneficiaryId: Scalars['Int']['input']
+}>
+
+export type GetProceduresByBeneficiaryIdQuery = {
+  __typename?: 'Query'
+  getProceduresByBeneficiaryId: Array<{
+    __typename?: 'InheritanceProcedure'
+    id: string
+    name: string
+    startDate: any
+    state: string
+    deceasedContact?: {
+      __typename?: 'Contact'
+      displayName?: string | null
+    } | null
+  }>
+}
+
+export type GetProceduresByNotaryIdQueryVariables = Exact<{
+  notaryId: Scalars['Int']['input']
+}>
+
+export type GetProceduresByNotaryIdQuery = {
+  __typename?: 'Query'
+  getProceduresByNotaryId: Array<{
+    __typename?: 'InheritanceProcedure'
+    id: string
+    name: string
+    startDate: any
+    state: string
+    deceasedContact?: {
+      __typename?: 'Contact'
+      displayName?: string | null
+    } | null
+  }>
+}
+
+export type GetAllProceduresQueryVariables = Exact<{ [key: string]: never }>
+
+export type GetAllProceduresQuery = {
+  __typename?: 'Query'
+  getAllProcedures: Array<{
+    __typename?: 'InheritanceProcedure'
+    id: string
+    name: string
+    startDate: any
+    state: string
+    deceasedContact?: {
+      __typename?: 'Contact'
+      displayName?: string | null
+    } | null
+  }>
+}
+
+export type GetProcedureByIdQueryVariables = Exact<{
+  id: Scalars['Int']['input']
+}>
+
+export type GetProcedureByIdQuery = {
+  __typename?: 'Query'
+  getProcedureById?: {
+    __typename?: 'InheritanceProcedure'
+    id: string
+    name: string
+    state: string
+    mainContact?: {
+      __typename?: 'Contact'
+      id: string
+      name: string
+      surname: string
+      displayName?: string | null
+      gender?: string | null
+      phone?: string | null
+      email?: string | null
+      completeAddress?: string | null
+      postalCode?: string | null
+    } | null
+    beneficiaries?: Array<{
+      __typename?: 'Beneficiary'
+      id: string
+      userId?: string | null
+      contactId?: string | null
+      deceasedRelation?: string | null
+      user?: { __typename?: 'User'; id: string; email: string } | null
+      contact?: {
+        __typename?: 'Contact'
+        id: string
+        email?: string | null
+        name: string
+        surname: string
+      } | null
+    }> | null
+    procedureAssets?: Array<{
+      __typename?: 'Asset'
+      id: string
+      name: string
+      value: number
+    }> | null
+  } | null
+}
+
+export type CreateProcedureMutationVariables = Exact<{
+  data: InheritanceProcedureFormDataInput
+}>
+
+export type CreateProcedureMutation = {
+  __typename?: 'Mutation'
+  createInheritanceProcedureFromForm: {
+    __typename?: 'InheritanceProcedure'
+    id: string
+  }
+}
+
+export type EmailVerificationMutationVariables = Exact<{
+  token: Scalars['String']['input']
+}>
+
+export type EmailVerificationMutation = {
+  __typename?: 'Mutation'
+  confirmEmailVerification: boolean
 }
 
 export type SignInMutationVariables = Exact<{
@@ -314,7 +501,28 @@ export type SignInMutation = {
   signIn: {
     __typename?: 'SignInResponse'
     token: string
-    user: { __typename?: 'User'; id: string; email: string }
+    user: {
+      __typename?: 'User'
+      id: string
+      email: string
+      confirmed: boolean
+      isNotary: boolean
+      isBeneficiary: boolean
+      beneficiaries: Array<{
+        __typename?: 'Beneficiary'
+        id: string
+        dateOfBirth?: any | null
+        deceasedRelation?: string | null
+        userId?: string | null
+        contactId?: string | null
+      }>
+      notaries: Array<{
+        __typename?: 'Notary'
+        contactId?: string | null
+        id: string
+        userId?: string | null
+      }>
+    }
   }
 }
 
@@ -325,15 +533,6 @@ export type SignUpMutationVariables = Exact<{
 export type SignUpMutation = {
   __typename?: 'Mutation'
   signUp: { __typename?: 'User'; id: string }
-}
-
-export type EmailVerificationMutationVariables = Exact<{
-  token: Scalars['String']['input']
-}>
-
-export type EmailVerificationMutation = {
-  __typename?: 'Mutation'
-  confirmEmailVerification: boolean
 }
 
 export type FindNotaryQueryVariables = Exact<{
@@ -359,6 +558,445 @@ export type FindNotaryQuery = {
   } | null
 }
 
+export const GetProceduresByBeneficiaryIdDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetProceduresByBeneficiaryId' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'beneficiaryId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getProceduresByBeneficiaryId' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'beneficiaryId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'beneficiaryId' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'startDate' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'state' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'deceasedContact' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'displayName' },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetProceduresByBeneficiaryIdQuery,
+  GetProceduresByBeneficiaryIdQueryVariables
+>
+export const GetProceduresByNotaryIdDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetProceduresByNotaryId' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'notaryId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getProceduresByNotaryId' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'notaryId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'notaryId' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'startDate' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'state' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'deceasedContact' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'displayName' },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetProceduresByNotaryIdQuery,
+  GetProceduresByNotaryIdQueryVariables
+>
+export const GetAllProceduresDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetAllProcedures' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getAllProcedures' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'startDate' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'state' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'deceasedContact' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'displayName' },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetAllProceduresQuery,
+  GetAllProceduresQueryVariables
+>
+export const GetProcedureByIdDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetProcedureById' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getProcedureById' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'id' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'id' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'mainContact' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'surname' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'displayName' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'gender' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'phone' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'completeAddress' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'postalCode' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'beneficiaries' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'userId' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'user' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'email' },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'contactId' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'contact' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'email' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'name' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'surname' },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'deceasedRelation' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'procedureAssets' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'value' } },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'state' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetProcedureByIdQuery,
+  GetProcedureByIdQueryVariables
+>
+export const CreateProcedureDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'createProcedure' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'data' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: {
+                kind: 'Name',
+                value: 'InheritanceProcedureFormDataInput',
+              },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'createInheritanceProcedureFromForm' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'data' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'data' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateProcedureMutation,
+  CreateProcedureMutationVariables
+>
+export const EmailVerificationDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'EmailVerification' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'token' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'confirmEmailVerification' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'token' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'token' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  EmailVerificationMutation,
+  EmailVerificationMutationVariables
+>
 export const SignInDocument = {
   kind: 'Document',
   definitions: [
@@ -431,6 +1069,68 @@ export const SignInDocument = {
                     selections: [
                       { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'confirmed' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'isNotary' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'isBeneficiary' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'beneficiaries' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'dateOfBirth' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'deceasedRelation' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'userId' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'contactId' },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'notaries' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'contactId' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'userId' },
+                            },
+                          ],
+                        },
+                      },
                     ],
                   },
                 },
@@ -494,54 +1194,6 @@ export const SignUpDocument = {
     },
   ],
 } as unknown as DocumentNode<SignUpMutation, SignUpMutationVariables>
-export const EmailVerificationDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'EmailVerification' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'token' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'String' },
-            },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'confirmEmailVerification' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'token' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'token' },
-                },
-              },
-            ],
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  EmailVerificationMutation,
-  EmailVerificationMutationVariables
->
 export const FindNotaryDocument = {
   kind: 'Document',
   definitions: [
@@ -614,6 +1266,11 @@ export const FindNotaryDocument = {
                         name: { kind: 'Name', value: 'postalCode' },
                       },
                       { kind: 'Field', name: { kind: 'Name', value: 'phone' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'gender' },
+                      },
                     ],
                   },
                 },
