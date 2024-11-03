@@ -7,6 +7,7 @@ const GET_PROCEDURES_BY_NOTARY_ID = gql(/* GraphQL */ `
   query GetProceduresByNotaryId($notaryId: Int!) {
     getProceduresByNotaryId(notaryId: $notaryId) {
       id
+      name
       startDate
       state
     }

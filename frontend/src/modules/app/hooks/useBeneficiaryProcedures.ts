@@ -7,6 +7,7 @@ const GET_PROCEDURES_BY_BENEFICIARY_ID = gql(/* GraphQL */ `
   query GetProceduresByBeneficiaryId($beneficiaryId: Int!) {
     getProceduresByBeneficiaryId(beneficiaryId: $beneficiaryId) {
       id
+      name
       startDate
       state
     }

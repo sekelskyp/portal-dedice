@@ -375,6 +375,7 @@ export type GetProceduresByBeneficiaryIdQuery = {
   getProceduresByBeneficiaryId: Array<{
     __typename?: 'InheritanceProcedure'
     id: string
+    name: string
     startDate: any
     state: string
   }>
@@ -389,6 +390,7 @@ export type GetProceduresByNotaryIdQuery = {
   getProceduresByNotaryId: Array<{
     __typename?: 'InheritanceProcedure'
     id: string
+    name: string
     startDate: any
     state: string
   }>
@@ -558,6 +560,7 @@ export const GetProceduresByBeneficiaryIdDocument = {
               kind: 'SelectionSet',
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'startDate' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'state' } },
               ],
@@ -611,6 +614,7 @@ export const GetProceduresByNotaryIdDocument = {
               kind: 'SelectionSet',
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'startDate' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'state' } },
               ],

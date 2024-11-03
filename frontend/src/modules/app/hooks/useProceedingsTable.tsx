@@ -48,7 +48,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
   const columns = useMemo<ColumnDef<ProceedingsItem>[]>(
     () => [
       {
-        accessorKey: 'id',
+        accessorKey: 'name',
         header: () => 'ID',
         filterFn: 'includesString',
         cell: (info) => info.getValue(),

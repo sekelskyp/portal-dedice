@@ -13,9 +13,9 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-  '\n  query GetProceduresByBeneficiaryId($beneficiaryId: Int!) {\n    getProceduresByBeneficiaryId(beneficiaryId: $beneficiaryId) {\n      id\n      startDate\n      state\n    }\n  }\n':
+  '\n  query GetProceduresByBeneficiaryId($beneficiaryId: Int!) {\n    getProceduresByBeneficiaryId(beneficiaryId: $beneficiaryId) {\n      id\n      name\n      startDate\n      state\n    }\n  }\n':
     types.GetProceduresByBeneficiaryIdDocument,
-  '\n  query GetProceduresByNotaryId($notaryId: Int!) {\n    getProceduresByNotaryId(notaryId: $notaryId) {\n      id\n      startDate\n      state\n    }\n  }\n':
+  '\n  query GetProceduresByNotaryId($notaryId: Int!) {\n    getProceduresByNotaryId(notaryId: $notaryId) {\n      id\n      name\n      startDate\n      state\n    }\n  }\n':
     types.GetProceduresByNotaryIdDocument,
   '\n  query GetProcedureById($id: Int!) {\n    getProcedureById(id: $id) {\n      id\n      name\n      mainBeneficiary {\n        id\n        userId\n        user {\n          id\n          email\n        }\n        contactId\n        contact {\n          id\n          email\n          name\n          surname\n          gender\n        }\n      }\n      beneficiaries {\n        id\n        userId\n        user {\n          id\n          email\n        }\n        contactId\n        contact {\n          id\n          email\n          name\n          surname\n        }\n        deceasedRelation\n      }\n      procedureAssets {\n        id\n        name\n        value\n      }\n      state\n    }\n  }\n':
     types.GetProcedureByIdDocument,
@@ -49,14 +49,14 @@ export function gql(source: string): unknown
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query GetProceduresByBeneficiaryId($beneficiaryId: Int!) {\n    getProceduresByBeneficiaryId(beneficiaryId: $beneficiaryId) {\n      id\n      startDate\n      state\n    }\n  }\n'
-): (typeof documents)['\n  query GetProceduresByBeneficiaryId($beneficiaryId: Int!) {\n    getProceduresByBeneficiaryId(beneficiaryId: $beneficiaryId) {\n      id\n      startDate\n      state\n    }\n  }\n']
+  source: '\n  query GetProceduresByBeneficiaryId($beneficiaryId: Int!) {\n    getProceduresByBeneficiaryId(beneficiaryId: $beneficiaryId) {\n      id\n      name\n      startDate\n      state\n    }\n  }\n'
+): (typeof documents)['\n  query GetProceduresByBeneficiaryId($beneficiaryId: Int!) {\n    getProceduresByBeneficiaryId(beneficiaryId: $beneficiaryId) {\n      id\n      name\n      startDate\n      state\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query GetProceduresByNotaryId($notaryId: Int!) {\n    getProceduresByNotaryId(notaryId: $notaryId) {\n      id\n      startDate\n      state\n    }\n  }\n'
-): (typeof documents)['\n  query GetProceduresByNotaryId($notaryId: Int!) {\n    getProceduresByNotaryId(notaryId: $notaryId) {\n      id\n      startDate\n      state\n    }\n  }\n']
+  source: '\n  query GetProceduresByNotaryId($notaryId: Int!) {\n    getProceduresByNotaryId(notaryId: $notaryId) {\n      id\n      name\n      startDate\n      state\n    }\n  }\n'
+): (typeof documents)['\n  query GetProceduresByNotaryId($notaryId: Int!) {\n    getProceduresByNotaryId(notaryId: $notaryId) {\n      id\n      name\n      startDate\n      state\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

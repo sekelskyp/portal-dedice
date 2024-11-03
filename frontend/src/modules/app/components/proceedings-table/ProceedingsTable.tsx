@@ -8,7 +8,8 @@ import { ProceedingsTableHeader } from './ProceedingsTableHeader'
 import { ProceedingsTableSearchBar } from './ProceedingsTableSearchBar'
 
 export type ProceedingsItem = {
-  id: number
+  id: string
+  name: string
   startDate: string
   state: string
 }
