@@ -182,6 +182,8 @@ export async function createProcedureFromFormData(
     contactRepository,
     beneficiaryRepository,
   } = context
+
+  // Extract and validate the postal code from the deceased person's address
   const deceasedPostalCode = extractAndFormatCzechPostalCode(
     data.deceasedPerson.completeAddress
   )
@@ -190,7 +192,8 @@ export async function createProcedureFromFormData(
       'Invalid or missing postal code in the deceased person address'
     )
   }
-  // Step 1: Create the Contact Person and Deceased Person entries
+
+  // Create entries for the contact person and deceased person
   const [contactPersonId, deceasedContactId] =
     await contactRepository.createContacts([
       {
@@ -206,57 +209,63 @@ export async function createProcedureFromFormData(
       },
     ])
 
-  // Step 2: Create the Inheritance Procedure entry
+  // Create an inheritance procedure entry with main contact and deceased contact details
   const procedureId = await createProcedure(
     {
       mainContactId: contactPersonId,
       startDate: new Date(),
+      deceasedContactId: deceasedContactId,
       deceasedDateOfBirth: data.deceasedPerson.dateOfBirth,
       deceasedDateOfDeath: data.deceasedPerson.dateOfDeath,
-      deceasedContactId: deceasedContactId,
     },
     context
   )
 
-  // Step 3: Prepare contact data for other beneficiaries
-  const beneficiaryContactsData = data.beneficiaries.map((beneficiary) => ({
-    name: beneficiary.name,
-    surname: beneficiary.surname,
-    email: beneficiary.email,
-  }))
+  // Initialize relations list with the main beneficiary (the one who created the procedure)
+  let beneficiaryProcedureRelations = [
+    {
+      inheritanceProcedureId: procedureId,
+      beneficiaryId: data.beneficiaryId,
+    },
+  ]
 
-  const otherBeneficiaryContactIds = await contactRepository.createContacts(
-    beneficiaryContactsData
-  )
-
-  // Step 4: Create all beneficiaries, including the main beneficiary
-  const allBeneficiaryData = [
-    ...data.beneficiaries.map((beneficiary, index) => ({
+  // If additional beneficiaries are provided, create their contacts and beneficiaries
+  if (data.beneficiaries && data.beneficiaries.length > 0) {
+    const beneficiaryContactsData = data.beneficiaries.map((beneficiary) => ({
       name: beneficiary.name,
       surname: beneficiary.surname,
       email: beneficiary.email,
-      contactId: otherBeneficiaryContactIds[index], // Other beneficiaries' contacts
-    })),
-  ]
+    }))
 
-  const beneficiaryIds =
-    await beneficiaryRepository.createBeneficiaries(allBeneficiaryData)
+    const otherBeneficiaryContactIds = await contactRepository.createContacts(
+      beneficiaryContactsData
+    )
 
-  // Step 5: Link all beneficiaries to the procedure
-  const beneficiaryProcedureRelations = beneficiaryIds.map((beneficiaryId) => ({
-    inheritanceProcedureId: procedureId,
-    beneficiaryId: beneficiaryId,
-  }))
-  // Step 6: Add beneficiary from arg (then one that created procedure) to procedure
-  beneficiaryProcedureRelations.push({
-    inheritanceProcedureId: procedureId,
-    beneficiaryId: data.beneficiaryId,
-  })
+    const allBeneficiaryData = data.beneficiaries.map((beneficiary, index) => ({
+      name: beneficiary.name,
+      surname: beneficiary.surname,
+      email: beneficiary.email,
+      contactId: otherBeneficiaryContactIds[index], // Link to corresponding contact
+    }))
 
+    const beneficiaryIds =
+      await beneficiaryRepository.createBeneficiaries(allBeneficiaryData)
+
+    // Add the newly created beneficiaries to the relations list
+    beneficiaryProcedureRelations = beneficiaryProcedureRelations.concat(
+      beneficiaryIds.map((beneficiaryId) => ({
+        inheritanceProcedureId: procedureId,
+        beneficiaryId: beneficiaryId,
+      }))
+    )
+  }
+
+  // Insert all beneficiary-procedure relations
   await beneficiaryRepository.insertMultipleBeneficiaryProcedureRelations(
     beneficiaryProcedureRelations
   )
-  // step 7 find notary
+
+  // Find an available notary based on postal code and date of death
   const [notary] = await findAvailableNotary(
     {
       postalCode: deceasedPostalCode,
@@ -264,8 +273,10 @@ export async function createProcedureFromFormData(
     },
     context
   )
-  // step 8 assign a notary to the procedure
+
+  // Assign the found notary to the procedure
   await assignNotary(procedureId, notary.id, context)
-  // Return the created procedure
+
+  // Return the created procedure with its details
   return await inheritanceProcedureRepository.getProcedureById(procedureId)
 }
