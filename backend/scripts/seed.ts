@@ -160,12 +160,12 @@ async function populateDatabase(
     .values([
       {
         email: 'test.notary1@quacker.cz',
-        password: 'heslo1234',
+        password: await hashPassword('heslo1234'),
         confirmed: true,
       },
       {
         email: 'test.notary2@quacker.cz',
-        password: 'heslo1234',
+        password: await hashPassword('heslo1234'),
         confirmed: true,
       },
     ])
