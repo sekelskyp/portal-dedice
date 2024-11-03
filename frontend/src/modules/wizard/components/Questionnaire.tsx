@@ -16,9 +16,14 @@ interface Dependency {
   answerId?: number
 }
 
+interface Question {
+  questionTextId: number
+  questionText: string
+}
+
 interface Step {
   id: number
-  question_text: string
+  question_text: Question[]
   button_text: string
   answer_options?: Answer[]
   dependencies?: Dependency[]
@@ -155,24 +160,27 @@ export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
   }
 
   return (
-    <Box>
+    <Box my={8}>
       {canShowStep(currentStep) && (
         <Box>
           <Container
-            alignContent={'center'}
-            maxWidth={{ base: '95%', lg: '50%' }}
+            alignContent={'block'}
+            maxWidth={{ base: '95%', lg: '60%' }}
             bg="bg.panel"
             borderRadius="xl"
             px={8}
+            my={8}
           >
-            <Heading
-              as="h2"
-              size={{ base: 'xs', sm: 'sm', md: 'md', lg: 'lg' }}
-              mb={4}
-              py={4}
-            >
-              {currentStep.question_text}
-            </Heading>
+            {currentStep.question_text.map((textObj, index) => (
+              <Heading
+                key={index}
+                as="h2"
+                size={{ base: 'xs', sm: 'sm', md: 'md', lg: 'lg' }}
+                py={4}
+              >
+                {textObj.questionText}
+              </Heading>
+            ))}
 
             {(currentStep.answer_options?.length ?? 0) > 1 && (
               <Stack direction="column" justifyItems={'center'} pb={4}>
