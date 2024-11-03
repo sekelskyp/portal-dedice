@@ -11,7 +11,7 @@ import {
   PaginationState,
   useReactTable,
 } from '@tanstack/react-table'
-import { HiChevronRight } from 'react-icons/hi'
+import { HiViewList } from 'react-icons/hi'
 import { Link } from 'react-router-dom'
 
 import { route } from '@shared/route'
@@ -77,8 +77,13 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
           const id = info.row.original.id
           return (
             <Link to={route.inheritanceProcedure(id.toString())}>
-              <Button size={{ base: 'xs', md: 'sm' }} bg="primary.500">
-                <HiChevronRight size="24px" />
+              <Button
+                size={{ base: 'xs', md: 'sm' }}
+                bg="gray.500"
+                _hover={{ bg: 'gray.700' }}
+                rounded="full"
+              >
+                <HiViewList size="24px" />
               </Button>
             </Link>
           )
