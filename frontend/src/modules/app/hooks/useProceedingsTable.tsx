@@ -54,6 +54,14 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
         cell: (info) => info.getValue(),
       },
       {
+        accessorKey: 'deceasedContact.displayName',
+        header: () => 'Zůstavitel',
+        cell: (info) => {
+          const name = info.getValue() as string
+          return name
+        },
+      },
+      {
         accessorKey: 'startDate',
         header: () => 'Datum založení',
         cell: (info) => {

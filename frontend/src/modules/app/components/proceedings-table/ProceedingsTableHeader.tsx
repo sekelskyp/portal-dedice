@@ -12,7 +12,7 @@ export function ProceedingsTableHeader({
   return (
     <Table.Header textAlign="center">
       {table.getHeaderGroups().map((headerGroup) => (
-        <Table.Row key={headerGroup.id} bg="white">
+        <Table.Row key={headerGroup.id} bg="bg">
           {headerGroup.headers.map((header) => {
             return (
               <Table.ColumnHeader

@@ -64,7 +64,7 @@ input CreateInheritanceProcedureInput {
   deceasedDateOfBirth: DateTimeISO
   deceasedDateOfDeath: DateTimeISO
   endDate: DateTimeISO!
-  mainBeneficiaryId: ID
+  mainContactId: ID
   name: String!
   notaryId: ID
   startDate: DateTimeISO!
@@ -102,8 +102,8 @@ type InheritanceProcedure {
   deceasedDateOfDeath: DateTimeISO
   endDate: DateTimeISO
   id: ID!
-  mainBeneficiary: Beneficiary
-  mainBeneficiaryId: ID
+  mainContact: Contact
+  mainContactId: Float
   name: String!
   notary: Notary
   notaryId: ID
