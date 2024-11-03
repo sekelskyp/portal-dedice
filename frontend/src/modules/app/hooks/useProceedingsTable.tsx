@@ -12,6 +12,9 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { HiChevronRight } from 'react-icons/hi'
+import { Link } from 'react-router-dom'
+
+import { route } from '@shared/route'
 
 import { ProceedingsItem } from '../components/proceedings-table/ProceedingsTable'
 import { StatusBadge } from '../components/StatusBadge'
@@ -63,17 +66,21 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
         accessorKey: 'state',
         header: () => 'Status',
         cell: (info) => {
-          return <StatusBadge info={info} />
+          const state = info.getValue() as string
+          return <StatusBadge state={state} />
         },
       },
       {
         accessorKey: 'detail',
         header: () => 'Detail řízení',
-        cell: () => {
+        cell: (info) => {
+          const id = info.row.original.id
           return (
-            <Button size={{ base: 'xs', md: 'sm' }} bg="primary.500">
-              <HiChevronRight size="24px" />
-            </Button>
+            <Link to={route.inheritanceProcedure(id.toString())}>
+              <Button size={{ base: 'xs', md: 'sm' }} bg="primary.500">
+                <HiChevronRight size="24px" />
+              </Button>
+            </Link>
           )
         },
         enableSorting: false,
