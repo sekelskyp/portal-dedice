@@ -12,8 +12,6 @@ type AuthState = {
   user: AuthUser | null
 }
 
-//TODO: add beneficiaries and notaries
-
 export type AuthUser = {
   id: string
   email: string
@@ -86,8 +84,6 @@ function usePersistedAuth(
     setStateRaw(newState)
     setStorageState(newState)
   }, [])
-
-  console.log(state)
 
   return [state, setState]
 }

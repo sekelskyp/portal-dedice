@@ -15,7 +15,6 @@ import { AddressFormControl } from '@frontend/shared/forms/AddressFormControl'
 import { Suggestion } from '@frontend/shared/hooks/useAddressSuggestions'
 
 import { TestatorDataContext } from '../pages/WizardStepPage'
-import { getZipCodeFromAddress } from '../utils/getGeocode'
 
 const schema = z.object({
   sex: z.string().min(1, 'Pohlaví je povinné.'),
@@ -40,10 +39,10 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
   })
 
   const onSubmit = async (data: z.infer<typeof schema>) => {
-    const postalCode = await getZipCodeFromAddress(
-      (data.address as Suggestion).zip!
-    )
-    const testatorData = { ...data, postalCode }
+    const testatorData = {
+      ...data,
+      postalCode: (data.address as Suggestion).zip!,
+    }
     setTestatorData(testatorData)
     nextStep()
   }
