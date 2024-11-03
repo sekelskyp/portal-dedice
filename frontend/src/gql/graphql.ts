@@ -379,6 +379,10 @@ export type GetProceduresByBeneficiaryIdQuery = {
     name: string
     startDate: any
     state: string
+    deceasedContact?: {
+      __typename?: 'Contact'
+      displayName?: string | null
+    } | null
   }>
 }
 
@@ -394,6 +398,10 @@ export type GetProceduresByNotaryIdQuery = {
     name: string
     startDate: any
     state: string
+    deceasedContact?: {
+      __typename?: 'Contact'
+      displayName?: string | null
+    } | null
   }>
 }
 
@@ -575,6 +583,19 @@ export const GetProceduresByBeneficiaryIdDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'startDate' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'state' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'deceasedContact' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'displayName' },
+                      },
+                    ],
+                  },
+                },
               ],
             },
           },
@@ -629,6 +650,19 @@ export const GetProceduresByNotaryIdDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'startDate' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'state' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'deceasedContact' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'displayName' },
+                      },
+                    ],
+                  },
+                },
               ],
             },
           },

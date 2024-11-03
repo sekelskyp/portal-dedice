@@ -10,6 +10,9 @@ const GET_PROCEDURES_BY_NOTARY_ID = gql(/* GraphQL */ `
       name
       startDate
       state
+      deceasedContact {
+        displayName
+      }
     }
   }
 `)

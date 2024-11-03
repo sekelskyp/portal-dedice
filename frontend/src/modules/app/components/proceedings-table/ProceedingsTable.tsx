@@ -24,11 +24,11 @@ export function ProceedingsTable({ data }: { data: ProceedingsItem[] }) {
       my={2}
       mb={5}
       borderWidth="1px"
-      borderColor="gray.200"
+      borderColor="bg.emphasized"
       borderRadius="xl"
       width="95%"
       textAlign="center"
-      bg="white"
+      bg="bg"
       overflowX="auto"
     >
       <ProceedingsTableSearchBar
