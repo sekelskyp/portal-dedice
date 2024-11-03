@@ -8,7 +8,7 @@ import { Form, InputFormControl, SubmitButton } from '@frontend/shared/forms'
 const schema = z.object({
   email: z
     .string({ required_error: 'Zadejte e-mailovou adresu.' })
-    .email('Zadejte validní e-mailovou adresu.'),
+    .min(1, 'Zadejte validní e-mailovou adresu.'),
   password: z
     .string({ required_error: 'Zadejte heslo.' })
     .min(1, 'Zadejte heslo.'),

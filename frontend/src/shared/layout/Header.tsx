@@ -9,7 +9,8 @@ export const Header = () => {
     <Box bg="bg.muted">
       <Container
         maxW="container.xl"
-        p={4}
+        py={4}
+        px={{ base: 4, sm: 6, '2xl': 0 }}
         asChild
         gap={12}
         alignItems="center"

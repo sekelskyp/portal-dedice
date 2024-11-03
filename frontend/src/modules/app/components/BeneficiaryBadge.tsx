@@ -1,5 +1,6 @@
 import { HStack, Stack, Text } from '@chakra-ui/react'
 
+import { Contact } from '@frontend/gql/graphql'
 import { Avatar } from '@frontend/shared/design-system'
 
 const colorPalette = ['red', 'blue', 'green', 'yellow', 'purple', 'orange']
@@ -12,8 +13,7 @@ const pickPalette = (name: string) => {
 export function BeneficiaryBadge({
   beneficiaryContact,
 }: {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  beneficiaryContact: any
+  beneficiaryContact: Contact
 }) {
   return (
     <HStack
@@ -25,7 +25,7 @@ export function BeneficiaryBadge({
       <Avatar
         name={beneficiaryContact.name}
         size={{ base: 'md', sm: 'xl' }}
-        colorPalette={pickPalette(beneficiaryContact.email)}
+        colorPalette={pickPalette(beneficiaryContact.email ?? '')}
       />
       <Stack gap="0">
         <Text fontSize={{ base: 'md', md: 'lg' }} fontWeight="bold">

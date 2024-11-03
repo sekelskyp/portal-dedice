@@ -12,7 +12,7 @@ export function ProceedingsTableBody({
     <Table.Body>
       {table.getRowModel().rows.map((row) => {
         return (
-          <Table.Row key={row.id} bg="white">
+          <Table.Row key={row.id} bg="bg">
             {row.getVisibleCells().map((cell) => {
               return (
                 <Table.Cell

@@ -12,7 +12,7 @@ export function ProceedingsTableHeader({
   return (
     <Table.Header textAlign="center">
       {table.getHeaderGroups().map((headerGroup) => (
-        <Table.Row key={headerGroup.id} bg="white">
+        <Table.Row key={headerGroup.id} bg="bg">
           {headerGroup.headers.map((header) => {
             return (
               <Table.ColumnHeader
@@ -34,9 +34,9 @@ export function ProceedingsTableHeader({
                     )}
                   </Heading>
                   {header.column.getIsSorted() === 'asc' ? (
-                    <HiChevronDown fontSize="24px" />
-                  ) : header.column.getIsSorted() === 'desc' ? (
                     <HiChevronUp fontSize="24px" />
+                  ) : header.column.getIsSorted() === 'desc' ? (
+                    <HiChevronDown fontSize="24px" />
                   ) : null}
                 </Stack>
               </Table.ColumnHeader>

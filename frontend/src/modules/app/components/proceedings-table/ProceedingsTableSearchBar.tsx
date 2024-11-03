@@ -16,14 +16,18 @@ export function ProceedingsTableSearchBar({
   setGlobalFilter: Dispatch<SetStateAction<string>>
 }) {
   return (
-    <Stack mb={4} p={1}>
+    <Stack
+      mb={10}
+      p={1}
+      direction={{ base: 'column', lg: 'row' }}
+      justifyContent="space-between"
+    >
       <InputGroup
         width={{ base: '100%', lg: '50%', xl: '30%' }}
         startElement={<FaSearch size="18px" />}
         startElementProps={{ ml: 2 }}
         endElement={<MdOutlineCancel size="18px" />}
         endElementProps={{
-          color: 'red.600',
           _hover: { cursor: 'pointer' },
           onClick: () => setGlobalFilter(''),
         }}

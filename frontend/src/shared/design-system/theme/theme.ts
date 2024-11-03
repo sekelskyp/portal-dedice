@@ -1,5 +1,7 @@
 import { createSystem, defaultConfig, defineConfig } from '@chakra-ui/react'
 
+import { alertSlotRecipe } from './Alert'
+import { badgeRecipe } from './Badge'
 import { buttonRecipe } from './Button'
 import { colors } from './Colors'
 
@@ -76,6 +78,10 @@ const customConfig = defineConfig({
     },
     recipes: {
       button: buttonRecipe,
+      badge: badgeRecipe,
+    },
+    slotRecipes: {
+      alert: alertSlotRecipe,
     },
   },
 })

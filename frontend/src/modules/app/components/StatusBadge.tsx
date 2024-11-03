@@ -1,4 +1,4 @@
-import { Badge, useBreakpointValue } from '@chakra-ui/react'
+import { Badge, BadgeProps, useBreakpointValue } from '@chakra-ui/react'
 import { FaCheck, FaTimesCircle } from 'react-icons/fa'
 
 const statusMapping = {
@@ -6,11 +6,12 @@ const statusMapping = {
   Closed: 'Ukončené',
 }
 
-export function StatusBadge({ state }: { state: string }) {
+export function StatusBadge({
+  state,
+  ...rest
+}: { state: string } & BadgeProps) {
   const stateValue = state as keyof typeof statusMapping
-  console.log(stateValue)
   const stateMapped = statusMapping[stateValue]
-  console.log(stateMapped)
 
   const component = useBreakpointValue({
     base: stateMapped === 'Probíhající' ? <FaCheck /> : <FaTimesCircle />,
@@ -22,13 +23,12 @@ export function StatusBadge({ state }: { state: string }) {
       bg={stateMapped === 'Probíhající' ? 'green.700' : 'red.700'}
       color="white"
       variant="subtle"
-      style={{ textTransform: 'none' }}
       px={4}
       py={2}
-      borderRadius="xl"
       width={{ base: 'auto', lg: '110px' }}
       fontSize={{ base: 'xs', lg: 'sm' }}
       justifyContent="center"
+      {...rest}
     >
       {component}
     </Badge>

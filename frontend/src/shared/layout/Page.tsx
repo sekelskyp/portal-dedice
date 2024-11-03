@@ -3,7 +3,12 @@ import { Container, ContainerProps } from '@chakra-ui/react'
 
 export const Page = forwardRef((props: ContainerProps, ref) => {
   return (
-    <Container maxW="container.xl" py={6} {...props}>
+    <Container
+      maxW="container.xl"
+      py={{ base: 4, sm: 6 }}
+      px={{ base: 4, sm: 6, '2xl': 0 }}
+      {...props}
+    >
       {props.children}
     </Container>
   )

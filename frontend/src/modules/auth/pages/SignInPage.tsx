@@ -3,6 +3,7 @@ import { Container, Flex, Heading, Stack, Text } from '@chakra-ui/react'
 
 import resources from '@frontend/resources'
 import { Alert, Box } from '@frontend/shared/design-system'
+import { Page } from '@frontend/shared/layout'
 import { RouterLink } from '@frontend/shared/navigation/atoms'
 import { route } from '@shared/route'
 
@@ -25,7 +26,10 @@ export function SignInPage() {
   )
 
   return (
-    <Container px={8} py={{ base: 8, sm: 16, lg: 24 }}>
+    <Page
+      px={{ base: 4, sm: 16, lg: 20, xl: 24 }}
+      py={{ base: 8, sm: 16, lg: 24 }}
+    >
       <Flex
         alignItems="center"
         direction={{
@@ -76,7 +80,7 @@ export function SignInPage() {
               md: 'xl',
             }}
             fontWeight="thin"
-            color="gray.500"
+            color="fg.subtle"
             letterSpacing="wider"
           >
             Začněte řešit pozůstalostní řízení online z pohodlí vašeho domova.
@@ -88,7 +92,7 @@ export function SignInPage() {
             <Heading size="3xl" as="h4" textAlign="center" mb={6}>
               Přihlášení
             </Heading>
-            <Container maxW="lg" as={Stack} gap={4}>
+            <Container maxW="lg" as={Stack} gap={4} px={0}>
               {signInRequestState.error ? (
                 <Alert
                   status="error"
@@ -112,6 +116,6 @@ export function SignInPage() {
           </Box>
         </Box>
       </Flex>
-    </Container>
+    </Page>
   )
 }

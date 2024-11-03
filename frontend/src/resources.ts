@@ -54,6 +54,40 @@ const resources = {
       },
     },
   },
+  portal: {
+    pages: {
+      proceedings: {
+        newProceeding: 'Nové řízení',
+      },
+      newProceeding: {
+        title: 'Založení nového řízení',
+        subtitle:
+          'Pro založení nového dědického řízení prosím vyplňte nasledující formulář.',
+      },
+    },
+    sideBar: {
+      profile: 'Můj profil',
+      proceedings: 'Moje řízení',
+      settings: 'Nastavení',
+    },
+    forms: {
+      proceedingForm: {
+        name: 'Jméno',
+        surname: 'Příjmení',
+        dateOfBirth: 'Datum narození',
+        dateOfDeath: 'Datum úmrtí',
+        address: 'Trvalé bydliště',
+        email: 'Emailová adresa',
+        groups: {
+          deceased: 'Identifikace zůstavitele',
+          contactPerson: 'Kontaktní osoba',
+          beneficiaries: 'Dědici po zůstaviteli',
+        },
+        addBeneficiary: 'Přidat dědice',
+        createProceeding: 'Založit řízení',
+      },
+    },
+  },
 }
 
 export default resources

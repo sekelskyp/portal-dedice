@@ -102,7 +102,7 @@ export function WizardPage() {
           )}
           {step === 3 && (
             <Box>
-              <StepperHeading text="Rozhodovací strom" />
+              <StepperHeading text="Společné jmění manželů" />
               <QuestionnaireStep
                 updateQuestionnaireProgress={setNextStep}
                 decrementQuestionnaireProgress={setPreviousStep}

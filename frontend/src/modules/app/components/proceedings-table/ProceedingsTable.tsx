@@ -8,7 +8,8 @@ import { ProceedingsTableHeader } from './ProceedingsTableHeader'
 import { ProceedingsTableSearchBar } from './ProceedingsTableSearchBar'
 
 export type ProceedingsItem = {
-  id: number
+  id: string
+  name: string
   startDate: string
   state: string
 }
@@ -20,13 +21,14 @@ export function ProceedingsTable({ data }: { data: ProceedingsItem[] }) {
     <Box
       p={5}
       mx={5}
+      my={2}
       mb={5}
       borderWidth="1px"
-      borderColor="gray.200"
+      borderColor="bg.emphasized"
       borderRadius="xl"
-      width={{ base: '95%', lg: '75%' }}
+      width="95%"
       textAlign="center"
-      bg="white"
+      bg="bg"
       overflowX="auto"
     >
       <ProceedingsTableSearchBar

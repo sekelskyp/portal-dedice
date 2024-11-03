@@ -93,7 +93,15 @@ export const AddressAutoComplete = forwardRef(
                       <Stack gap={1}>
                         {collection.items.map((item) => (
                           <Combobox.Item key={item.label} item={item}>
-                            <Combobox.ItemText>{item.label}</Combobox.ItemText>
+                            <Combobox.ItemText>
+                              <Button
+                                variant="ghost"
+                                w="full"
+                                justifyContent="start"
+                              >
+                                {item.label}
+                              </Button>
+                            </Combobox.ItemText>
                           </Combobox.Item>
                         ))}
                         {collection.items.length === 0 && (

@@ -19,7 +19,7 @@ export async function loginUser(
   context: CustomContext
 ): Promise<AuthResponse> {
   const { userRepository } = context
-  const errorMessage = 'Invalid email or password'
+  const errorMessage = 'Neplatný e-mail nebo heslo'
 
   // Find user by email
   const foundUser = await userRepository.getUserByEmail(login.toLowerCase())
@@ -31,7 +31,7 @@ export async function loginUser(
 
   // Check if user is confirmed
   if (!foundUser.confirmed)
-    throw new Error('Pro login je nutné ověřit email uživatele')
+    throw new Error('Pro login je nutné ověřit e-mail uživatele')
 
   // Generate a JWT token for the user
   const token = createToken({ userId: foundUser.id })
@@ -47,10 +47,10 @@ export async function registerUser(
   context: CustomContext
 ) {
   const { userRepository, beneficiaryRepository, contactRepository } = context
-  console.log('registerUser')
+
   // Check if email is already in use
   const existingUser = await userRepository.getUserByEmail(email.toLowerCase())
-  if (existingUser) throw new Error('User with this email already exists')
+  if (existingUser) throw new Error('Uživatel s tímto emailem již existuje')
 
   // Hash the password and create the user
   const hashedPassword = await hashPassword(password)
@@ -88,7 +88,7 @@ export async function changeUserPassword(
   // Fetch user to verify old password
   const userRecord = await userRepository.getUserById(userId)
   if (!userRecord) {
-    throw new Error('User not found')
+    throw new Error('Uživatel nebyl nalezen.')
   }
 
   // Validate old password
@@ -97,7 +97,7 @@ export async function changeUserPassword(
     oldPassword
   )
   if (!isOldPasswordCorrect) {
-    throw new Error('Old password is incorrect')
+    throw new Error('Nesprávné staré heslo.')
   }
 
   // Hash the new password and update it

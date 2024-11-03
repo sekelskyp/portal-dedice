@@ -1,5 +1,4 @@
-import { Box, Button, Heading, Stack, Text } from '@chakra-ui/react'
-import { FiNavigation } from 'react-icons/fi'
+import { Button, Heading, Stack, Text } from '@chakra-ui/react'
 import { MdNoteAdd } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 
@@ -15,8 +14,6 @@ import {
 import { useBeneficiaryProcedures } from '../hooks/useBeneficiaryProcedures'
 import { useNotaryProcedures } from '../hooks/useNotaryProcedures'
 import { proceedingsNavigation } from '../utils/proceedingsNavigation'
-
-//TODO: add routing when pages are ready
 
 export function Proceedings() {
   const user = useAuth()
@@ -35,62 +32,62 @@ export function Proceedings() {
     if ('getProceduresByNotaryId' in data) {
       procedures = data.getProceduresByNotaryId.map((item) => ({
         ...item,
-        id: Number(item.id),
+        id: String(item.id),
       }))
     } else if ('getProceduresByBeneficiaryId' in data) {
       procedures = data.getProceduresByBeneficiaryId.map((item) => ({
         ...item,
-        id: Number(item.id),
+        id: String(item.id),
       }))
     }
   }
 
   if (user.token) {
     return (
-      <Stack justifyContent="center" alignContent="center" alignItems="center">
-        <Heading textAlign="center" pt={8} size="3xl" mb={2}>
-          Mé řízení
-        </Heading>
-        {!user.user?.isNotary && (
-          <Link to={route.home()}>
-            {' '}
-            <Button>
-              Vytvořit nové řízení
-              <MdNoteAdd />
-            </Button>
-          </Link>
-        )}
-        <Heading size="2xl" mt={10}>
-          Seznam řízení
-        </Heading>
-        {procedures.length !== 0 ? (
-          <ProceedingsTable data={procedures} />
-        ) : (
-          <Box my={6}>
+      <Stack alignItems="start" gap={8}>
+        <Stack justifyContent="center" alignItems="center" w="full">
+          <Heading textAlign="center" size="3xl">
+            Moje řízení
+          </Heading>
+          {!user.user?.isNotary && (
+            <Link to={route.newProceeding()}>
+              <Button
+                rounded="full"
+                bg="gray.500"
+                _hover={{ bg: 'gray.700' }}
+                my={4}
+              >
+                Vytvořit nové řízení
+                <MdNoteAdd />
+              </Button>
+            </Link>
+          )}
+          {procedures.length !== 0 ? (
+            <ProceedingsTable data={procedures} />
+          ) : (
             <Alert
               justifyContent="center"
               status="warning"
               title="Seznam řízení je prázdný."
               size={{ base: 'md', md: 'lg' }}
+              width="fit-content"
+              borderRadius="xl"
+              my={4}
             />
-          </Box>
-        )}
-        {!user.user?.isNotary && (
-          <Stack>
-            <Heading size="xl" textAlign="center">
-              Další možnosti
-            </Heading>
-            <Stack direction="column" textAlign="center" mb={10}>
+          )}
+          {!user.user?.isNotary && (
+            <Stack gap={4} textAlign="center">
+              <Heading size="xl">Další možnosti</Heading>
               {proceedingsNavigation.map((item, index) => (
                 <Link key={index} to={item.link}>
-                  <Button width="100%">
-                    {item.text} <FiNavigation />
+                  <Button width="fit-content" rounded="full">
+                    {item.text} {item.icon}
                   </Button>
                 </Link>
               ))}
             </Stack>
-          </Stack>
-        )}
+          )}
+        </Stack>
       </Stack>
     )
   } else {

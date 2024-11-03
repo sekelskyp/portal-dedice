@@ -13,7 +13,7 @@ export const Layout = () => {
         <Header />
       </Box>
 
-      <Box as="main" flex="1">
+      <Box as="main" flex="1" minH="60vh">
         <Outlet />
       </Box>
 
