@@ -30,6 +30,8 @@ async function populateDatabase(
     deceasedContactId1,
     beneficiaryContactId3,
     deceasedContactId2,
+    notaryContactId1,
+    notaryContactId2,
   ] = await db
     .insert(contact)
     .values([
@@ -83,6 +85,27 @@ async function populateDatabase(
         completeAddress: 'Peace Square 321, Ostrava, Czech Republic',
         postalCode: '13000',
       },
+      // main Contacts for inheritance procedures
+      {
+        name: 'Jan',
+        surname: 'Michalec',
+        displayName: 'Jan Michalec',
+        gender: 'Male',
+        phone: '+42033333333š',
+        email: 'michalec@quacker.com',
+        completeAddress: 'Peace Square 321, Ostrava, Czech Republic',
+        postalCode: '13000',
+      },
+      {
+        name: 'Petr',
+        surname: 'Hochman',
+        displayName: 'Petr Hochman',
+        gender: 'Male',
+        phone: '+42033333333š',
+        email: 'hochman@quacker.com',
+        completeAddress: 'Peace Square 321, Ostrava, Czech Republic',
+        postalCode: '13000',
+      },
     ])
     .$returningId()
 
@@ -130,10 +153,40 @@ async function populateDatabase(
     ])
     .onDuplicateKeyUpdate({ set: { userId: beneficiaryUserId2.id } })
 
+  // populate user notaries
+  const [notaryUserId1, notaryUserId2] = await db
+    .insert(user)
+    .values([
+      {
+        email: 'test.notary1@quacker.cz',
+        password: 'heslo1234',
+        confirmed: true,
+      },
+      {
+        email: 'test.notary2@quacker.cz',
+        password: 'heslo1234',
+        confirmed: true,
+      },
+    ])
+    .$returningId()
+
+  const [notaryId1, notaryId2] = await db
+    .insert(notary)
+    .values([
+      {
+        contactId: notaryContactId1.id,
+        userId: notaryUserId1.id,
+      },
+      {
+        contactId: notaryContactId2.id,
+        userId: notaryUserId2.id,
+      },
+    ])
+    .$returningId()
+
   const [inheritanceId1, inheritanceId2] = await seedInheritanceProcedures(db, [
     {
-      notaryId: notaryIds[0],
-      mainBeneficiaryId: beneficiaryUserId1.id,
+      notaryId: notaryId1.id,
       state: 'InProgress',
       startDate: new Date('2024-01-01'),
       deceasedContactId: deceasedContactId1.id,
@@ -141,8 +194,7 @@ async function populateDatabase(
       deceasedDateOfDeath: new Date('2023-12-31'),
     },
     {
-      notaryId: notaryIds[0],
-      mainBeneficiaryId: beneficiaryUserId3.id,
+      notaryId: notaryId2.id,
       state: 'InProgress',
       startDate: new Date('2024-03-10'),
       deceasedContactId: deceasedContactId2.id,

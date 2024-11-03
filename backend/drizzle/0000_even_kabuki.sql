@@ -84,11 +84,11 @@ CREATE TABLE `email_confirmation_token` (
 CREATE TABLE `inheritance_procedure` (
 	`id` int AUTO_INCREMENT NOT NULL,
 	`notary_id` int,
-	`main_beneficiary_id` int,
 	`name` varchar(100) NOT NULL,
 	`state` varchar(10) NOT NULL DEFAULT 'InProgress',
 	`start_date` date NOT NULL,
 	`end_date` date,
+	`main_contact_id` int,
 	`deceased_contact_id` int NOT NULL,
 	`date_of_birth` date,
 	`date_of_death` date,
@@ -166,7 +166,7 @@ ALTER TABLE `document` ADD CONSTRAINT `document_task_id_task_id_fk` FOREIGN KEY 
 ALTER TABLE `document` ADD CONSTRAINT `document_user_owner_id_user_id_fk` FOREIGN KEY (`user_owner_id`) REFERENCES `user`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `email_confirmation_token` ADD CONSTRAINT `email_confirmation_token_user_id_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `inheritance_procedure` ADD CONSTRAINT `inheritance_procedure_notary_id_notary_id_fk` FOREIGN KEY (`notary_id`) REFERENCES `notary`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE `inheritance_procedure` ADD CONSTRAINT `inheritance_procedure_main_beneficiary_id_beneficiary_id_fk` FOREIGN KEY (`main_beneficiary_id`) REFERENCES `beneficiary`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `inheritance_procedure` ADD CONSTRAINT `inheritance_procedure_main_contact_id_contact_id_fk` FOREIGN KEY (`main_contact_id`) REFERENCES `contact`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `inheritance_procedure` ADD CONSTRAINT `inheritance_procedure_deceased_contact_id_contact_id_fk` FOREIGN KEY (`deceased_contact_id`) REFERENCES `contact`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `meeting` ADD CONSTRAINT `meeting_notary_id_notary_id_fk` FOREIGN KEY (`notary_id`) REFERENCES `notary`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `notary` ADD CONSTRAINT `notary_contact_id_contact_id_fk` FOREIGN KEY (`contact_id`) REFERENCES `contact`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint

@@ -10,11 +10,11 @@ import {
 
 export interface InheritanceProcedureData {
   notaryId?: number | null
-  mainBeneficiaryId?: number | null
   name: string
   state?: InheritanceProcedureStateEnumType
   startDate: Date
   endDate?: Date | null
+  mainContactId?: number | null
   deceasedContactId: number
   deceasedDateOfBirth?: Date | null
   deceasedDateOfDeath?: Date | null
