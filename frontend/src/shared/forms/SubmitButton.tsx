@@ -4,10 +4,10 @@ import { Button, ButtonProps } from '../design-system'
 
 export const SubmitButton = (props: ButtonProps) => {
   const { children, ...rest } = props
-  const { isSubmitting, isValid } = useFormState()
+  const { isSubmitting } = useFormState()
 
   return (
-    <Button type="submit" loading={isSubmitting} disabled={!isValid} {...rest}>
+    <Button type="submit" loading={isSubmitting} {...rest}>
       {children}
     </Button>
   )
