@@ -5,6 +5,7 @@ import {
   Button,
   Card,
   Heading,
+  HStack,
   Spinner,
   Stack,
   Table,
@@ -12,10 +13,12 @@ import {
 } from '@chakra-ui/react'
 import { FaCalculator, FaCloudUploadAlt } from 'react-icons/fa'
 import { HiChat } from 'react-icons/hi'
+import { LuFile } from 'react-icons/lu'
 import { Link, useParams } from 'react-router-dom'
 
 import { gql } from '@frontend/gql'
 import { useAuth } from '@frontend/modules/auth'
+import { Alert } from '@frontend/shared/design-system'
 import { Page } from '@frontend/shared/layout'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
 
@@ -117,137 +120,137 @@ const InheritanceProcedureDetail: React.FC = () => {
               bg="gray.50"
               borderWidth="2px"
             >
+              <Card.Header as={HStack} gap={4}>
+                <LuFile size={24} />
+                <Heading>{procedure?.name}</Heading>
+                <StatusBadge ml="auto" state={procedure.state} />
+              </Card.Header>
               <Card.Body gap="2">
-                <Card.Title mt="2" textAlign="center">
-                  {procedure?.name}
-                </Card.Title>
-                <Card.Description>
-                  <Heading
-                    size={{ base: 'lg', lg: 'xl' }}
-                    py={2}
-                    textAlign={{ base: 'center', lg: 'left' }}
-                  >
-                    Hlavní kontaktní osoba
-                  </Heading>
+                <Heading
+                  size={{ base: 'lg', lg: 'xl' }}
+                  py={2}
+                  textAlign={{ base: 'center', lg: 'left' }}
+                >
+                  Hlavní kontaktní osoba
+                </Heading>
+                {procedure.mainBeneficiary?.contact ? (
                   <BeneficiaryBadge
-                    beneficiaryContact={procedure.mainBeneficiary?.contact}
+                    beneficiaryContact={procedure.mainBeneficiary.contact}
                   />
-                  <Heading
-                    size={{ base: 'lg', lg: 'xl' }}
-                    py={4}
-                    textAlign={{ base: 'center', lg: 'left' }}
-                  >
-                    Status
-                  </Heading>
-                  <Box textAlign={{ base: 'center', lg: 'left' }}>
-                    <StatusBadge state={procedure.state} />
-                  </Box>
-                  <Heading
-                    size={{ base: 'lg', lg: 'xl' }}
-                    py={4}
-                    textAlign={{ base: 'center', lg: 'left' }}
-                  >
-                    Výpis dědiců
-                  </Heading>
-                  {procedure.beneficiaries?.map((beneficiary) => (
+                ) : (
+                  <Alert status="warning" key={procedure.mainBeneficiary?.id}>
+                    Dědic bez kontaktních údajů.
+                  </Alert>
+                )}
+                <Heading
+                  size={{ base: 'lg', lg: 'xl' }}
+                  py={4}
+                  textAlign={{ base: 'center', lg: 'left' }}
+                >
+                  Výpis dědiců
+                </Heading>
+                {procedure.beneficiaries?.map((beneficiary) =>
+                  beneficiary.contact ? (
                     <BeneficiaryBadge
+                      key={beneficiary.id}
                       beneficiaryContact={beneficiary.contact}
                     />
-                  ))}
-                  <Heading
-                    size={{ base: 'lg', lg: 'xl' }}
-                    py={4}
-                    textAlign={{ base: 'center', lg: 'left' }}
-                  >
-                    Celková hodnota majetku
-                  </Heading>
-                  {procedure.procedureAssets?.length === 0 ? (
-                    <Stack alignItems={{ base: 'center', lg: 'left' }}>
-                      <Text fontSize="md">Tuto hodnotu zatím neznáme.</Text>
-                      <Button
-                        as={Link}
-                        disabled
-                        width="fit-content"
-                        rounded="full"
-                      >
-                        Modelace
-                        <FaCalculator />
-                      </Button>
-                    </Stack>
                   ) : (
-                    <Text
-                      fontSize="lg"
-                      textAlign={{ base: 'center', lg: 'left' }}
+                    <Alert status="warning" key={beneficiary.id}>
+                      Dědic bez kontaktních údajů.
+                    </Alert>
+                  )
+                )}
+                <Heading
+                  size={{ base: 'lg', lg: 'xl' }}
+                  py={4}
+                  textAlign={{ base: 'center', lg: 'left' }}
+                >
+                  Celková hodnota majetku
+                </Heading>
+                {procedure.procedureAssets?.length === 0 ? (
+                  <Stack alignItems={{ base: 'center', lg: 'left' }}>
+                    <Text fontSize="md">Tuto hodnotu zatím neznáme.</Text>
+                    <Button
+                      as={Link}
+                      disabled
+                      width="fit-content"
+                      rounded="full"
                     >
-                      {totalAssetsValue},- Kč
-                    </Text>
-                  )}
-                  <Heading
-                    size={{ base: 'lg', lg: 'xl' }}
-                    py={4}
-                    textAlign={{ base: 'center', lg: 'left' }}
-                  >
-                    Děděné položky
-                  </Heading>
-                  {procedure.procedureAssets?.length === 0 ? (
-                    <Stack alignItems={{ base: 'center', lg: 'left' }}>
-                      <Text fontSize="md">Tyto hodnoty zatím neznáme.</Text>
-                      <Button
-                        as={Link}
-                        disabled
-                        width="fit-content"
-                        rounded="full"
-                      >
-                        Modelace
-                        <FaCalculator />
-                      </Button>
-                    </Stack>
-                  ) : (
-                    <Table.Root size={{ base: 'sm', md: 'lg' }}>
-                      <Table.Header>
-                        <Table.Row>
-                          <Table.ColumnHeader
-                            textAlign="center"
-                            fontWeight="bold"
-                          >
-                            Název
-                          </Table.ColumnHeader>
-                          <Table.ColumnHeader
-                            textAlign="center"
-                            fontWeight="bold"
-                          >
-                            Hodnota
-                          </Table.ColumnHeader>
-                        </Table.Row>
-                      </Table.Header>
-                      <Table.Body>
-                        {procedure.procedureAssets?.map((item) => (
-                          <Table.Row key={item.id}>
-                            <Table.Cell textAlign="center">
-                              {item.name}
-                            </Table.Cell>
-                            <Table.Cell textAlign="center">
-                              {item.value},- Kč
-                            </Table.Cell>
-                          </Table.Row>
-                        ))}
-                      </Table.Body>
-                    </Table.Root>
-                  )}
-                  <Heading
-                    size={{ base: 'lg', lg: 'xl' }}
-                    py={4}
-                    textAlign={{ base: 'center', lg: 'left' }}
-                  >
-                    Návrh vypořádaní ze strany zůstavitele
-                  </Heading>
+                      Modelace
+                      <FaCalculator />
+                    </Button>
+                  </Stack>
+                ) : (
                   <Text
-                    fontSize="md"
+                    fontSize="lg"
                     textAlign={{ base: 'center', lg: 'left' }}
                   >
-                    Tuto hodnotu zatím neznáme.
+                    {totalAssetsValue},- Kč
                   </Text>
-                </Card.Description>
+                )}
+                <Heading
+                  size={{ base: 'lg', lg: 'xl' }}
+                  py={4}
+                  textAlign={{ base: 'center', lg: 'left' }}
+                >
+                  Děděné položky
+                </Heading>
+                {procedure.procedureAssets?.length === 0 ? (
+                  <Stack alignItems={{ base: 'center', lg: 'left' }}>
+                    <Text fontSize="md">Tyto hodnoty zatím neznáme.</Text>
+                    <Button
+                      as={Link}
+                      disabled
+                      width="fit-content"
+                      rounded="full"
+                    >
+                      Modelace
+                      <FaCalculator />
+                    </Button>
+                  </Stack>
+                ) : (
+                  <Table.Root size={{ base: 'sm', md: 'lg' }}>
+                    <Table.Header>
+                      <Table.Row>
+                        <Table.ColumnHeader
+                          textAlign="center"
+                          fontWeight="bold"
+                        >
+                          Název
+                        </Table.ColumnHeader>
+                        <Table.ColumnHeader
+                          textAlign="center"
+                          fontWeight="bold"
+                        >
+                          Hodnota
+                        </Table.ColumnHeader>
+                      </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                      {procedure.procedureAssets?.map((item) => (
+                        <Table.Row key={item.id}>
+                          <Table.Cell textAlign="center">
+                            {item.name}
+                          </Table.Cell>
+                          <Table.Cell textAlign="center">
+                            {item.value},- Kč
+                          </Table.Cell>
+                        </Table.Row>
+                      ))}
+                    </Table.Body>
+                  </Table.Root>
+                )}
+                <Heading
+                  size={{ base: 'lg', lg: 'xl' }}
+                  py={4}
+                  textAlign={{ base: 'center', lg: 'left' }}
+                >
+                  Návrh vypořádaní ze strany zůstavitele
+                </Heading>
+                <Text fontSize="md" textAlign={{ base: 'center', lg: 'left' }}>
+                  Tuto hodnotu zatím neznáme.
+                </Text>
               </Card.Body>
               <Card.Footer justifyContent="center">
                 <Stack direction={{ base: 'column', lg: 'row' }}>
