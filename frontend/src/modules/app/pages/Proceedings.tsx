@@ -1,9 +1,10 @@
-import { Button, Heading, Stack, Text } from '@chakra-ui/react'
+import { Button, Card, Heading, HStack, Stack, Text } from '@chakra-ui/react'
 import { MdNoteAdd } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 
 import { useAuth } from '@frontend/modules/auth'
 import { Alert } from '@frontend/shared/design-system'
+import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
 import { route } from '@shared/route'
 
@@ -44,24 +45,17 @@ export function Proceedings() {
 
   if (user.token) {
     return (
-      <Stack alignItems="start" gap={8}>
-        <Stack justifyContent="center" alignItems="center" w="full">
-          <Heading textAlign="center" size="3xl">
-            Moje řízení
-          </Heading>
+      <Card.Root>
+        <Card.Header as={HStack} justifyContent="space-between">
+          <Heading size="2xl">Moje řízení</Heading>
           {!user.user?.isNotary && (
-            <Link to={route.newProceeding()}>
-              <Button
-                rounded="full"
-                bg="gray.500"
-                _hover={{ bg: 'gray.700' }}
-                my={4}
-              >
-                Vytvořit nové řízení
-                <MdNoteAdd />
-              </Button>
-            </Link>
+            <RouterNavLink to={route.newProceeding()} size="lg">
+              <MdNoteAdd />
+              Vytvořit nové řízení
+            </RouterNavLink>
           )}
+        </Card.Header>
+        <Card.Body>
           {procedures.length !== 0 ? (
             <ProceedingsTable data={procedures} />
           ) : (
@@ -87,8 +81,8 @@ export function Proceedings() {
               ))}
             </Stack>
           )}
-        </Stack>
-      </Stack>
+        </Card.Body>
+      </Card.Root>
     )
   } else {
     return <UnauthorizedPage />

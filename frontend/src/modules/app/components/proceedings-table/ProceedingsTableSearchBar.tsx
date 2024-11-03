@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react'
-import { Input, Stack } from '@chakra-ui/react'
+import { Input } from '@chakra-ui/react'
 import { Table } from '@tanstack/react-table'
 import { FaSearch } from 'react-icons/fa'
 import { MdOutlineCancel } from 'react-icons/md'
@@ -16,30 +16,21 @@ export function ProceedingsTableSearchBar({
   setGlobalFilter: Dispatch<SetStateAction<string>>
 }) {
   return (
-    <Stack
-      mb={10}
-      p={1}
-      direction={{ base: 'column', lg: 'row' }}
-      justifyContent="space-between"
+    <InputGroup
+      width={{ base: '100%', lg: '50%', xl: '30%' }}
+      startElement={<FaSearch size="18px" />}
+      endElement={<MdOutlineCancel size="18px" />}
+      endElementProps={{
+        _hover: { cursor: 'pointer' },
+        onClick: () => setGlobalFilter(''),
+      }}
     >
-      <InputGroup
-        width={{ base: '100%', lg: '50%', xl: '30%' }}
-        startElement={<FaSearch size="18px" />}
-        startElementProps={{ ml: 2 }}
-        endElement={<MdOutlineCancel size="18px" />}
-        endElementProps={{
-          _hover: { cursor: 'pointer' },
-          onClick: () => setGlobalFilter(''),
-        }}
-      >
-        <Input
-          placeholder="Vyhledej..."
-          onChange={(e) => setGlobalFilter(e.target.value)}
-          value={table.getState().globalFilter || ''}
-          size="md"
-          ml={2}
-        />
-      </InputGroup>
-    </Stack>
+      <Input
+        placeholder="Vyhledej..."
+        onChange={(e) => setGlobalFilter(e.target.value)}
+        value={table.getState().globalFilter || ''}
+        size="md"
+      />
+    </InputGroup>
   )
 }

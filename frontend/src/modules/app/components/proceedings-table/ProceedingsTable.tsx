@@ -1,4 +1,4 @@
-import { Box, Table } from '@chakra-ui/react'
+import { Stack, Table } from '@chakra-ui/react'
 
 import { useProceedingsTable } from '../../hooks/useProceedingsTable'
 
@@ -18,19 +18,7 @@ export function ProceedingsTable({ data }: { data: ProceedingsItem[] }) {
   const { table, setGlobalFilter } = useProceedingsTable({ data })
 
   return (
-    <Box
-      p={5}
-      mx={5}
-      my={2}
-      mb={5}
-      borderWidth="1px"
-      borderColor="bg.emphasized"
-      borderRadius="xl"
-      width="95%"
-      textAlign="center"
-      bg="bg"
-      overflowX="auto"
-    >
+    <Stack gap={4}>
       <ProceedingsTableSearchBar
         table={table}
         setGlobalFilter={setGlobalFilter}
@@ -40,6 +28,6 @@ export function ProceedingsTable({ data }: { data: ProceedingsItem[] }) {
         <ProceedingsTableBody table={table} />
       </Table.Root>
       <ProceedingsTableFooter table={table} />
-    </Box>
+    </Stack>
   )
 }

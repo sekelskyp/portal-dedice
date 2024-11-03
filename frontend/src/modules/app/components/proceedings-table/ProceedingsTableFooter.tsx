@@ -32,7 +32,7 @@ export function ProceedingsTableFooter({
         order={{ base: 2, xl: 1 }}
       >
         <Text>
-          Zobrazuji 1 - {table.getState().pagination.pageSize} z{' '}
+          Zobrazeno 1 - {table.getState().pagination.pageSize} z{' '}
           {table.getRowCount()} záznamů.
         </Text>
       </Stack>
