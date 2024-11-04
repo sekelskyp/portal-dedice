@@ -29,6 +29,15 @@ const GET_PROCEDURE_QUERY = gql(/* GraphQL */ `
     getProcedureById(id: $id) {
       id
       name
+      notary {
+        id
+        contact {
+          id
+          name
+          surname
+          email
+        }
+      }
       mainContact {
         id
         name
@@ -123,6 +132,18 @@ const InheritanceProcedureDetail: React.FC = () => {
                   />
                 ) : (
                   <Alert status="warning">Dědic bez kontaktních údajů.</Alert>
+                )}
+              </Stack>
+              <Stack>
+                <Heading size={'xl'} textAlign={{ base: 'center', lg: 'left' }}>
+                  Přiřazený notář
+                </Heading>
+                {procedure.notary?.contact ? (
+                  <BeneficiaryBadge
+                    beneficiaryContact={procedure.notary.contact}
+                  />
+                ) : (
+                  <Alert status="warning">Notář bez kontaktních údajů.</Alert>
                 )}
               </Stack>
               <Stack>

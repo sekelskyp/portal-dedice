@@ -138,8 +138,9 @@ type Mutation {
   createNotary(data: CreateNotaryInput!): Notary!
   createProcedure(data: CreateInheritanceProcedureInput!): Int!
   deleteBeneficiary(id: Int!): Boolean!
-  deleteContactById(id: Float!): Int!
-  deleteNotary(id: Float!): Notary!
+  deleteContactById(id: Int!): Int!
+  deleteNotary(id: Int!): Notary!
+  deleteProceduresByIds(ids: [Int!]!): [Int!]!
   removeBeneficiaryFromProcedure(
     beneficiaryId: Int!
     procedureId: Int!
@@ -162,7 +163,6 @@ type Notary {
 
 type Query {
   _empty: String!
-  author(id: Float!): Notary
   findNotary(input: FindNotaryInput!): Notary
   getAllContacts: [Contact!]!
   getAllProcedures: [InheritanceProcedure!]!
@@ -170,6 +170,7 @@ type Query {
   getBeneficiariesByProcedureId(procedureId: Int!): [Beneficiary!]!
   getBeneficiaryById(id: Int!): Beneficiary
   getContactById(id: Float!): Contact
+  getNotaryById(id: Int!): Notary
   getProcedureById(id: Int!): InheritanceProcedure
   getProceduresByBeneficiaryId(beneficiaryId: Int!): [InheritanceProcedure!]!
   getProceduresByNotaryId(notaryId: Int!): [InheritanceProcedure!]!
