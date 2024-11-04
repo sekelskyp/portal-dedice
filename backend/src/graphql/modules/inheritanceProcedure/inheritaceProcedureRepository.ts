@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm'
+import { eq, inArray } from 'drizzle-orm'
 
 import { type Db } from '@backend/types/types'
 
@@ -29,6 +29,13 @@ export function getInheritanceProcedureRepository(db: Db) {
     return result || null
   }
 
+  async function getProceduresByIds(ids: number[]) {
+    return await db
+      .select()
+      .from(inheritanceProcedure)
+      .where(inArray(inheritanceProcedure.id, ids))
+  }
+
   async function getAllProcedures() {
     return await db.select().from(inheritanceProcedure)
   }
@@ -48,6 +55,22 @@ export function getInheritanceProcedureRepository(db: Db) {
       .where(eq(inheritanceProcedure.id, id))
     await db.delete(inheritanceProcedure).where(eq(inheritanceProcedure.id, id))
     return result.id
+  }
+
+  async function deleteProceduresByIds(ids: number[]): Promise<number[]> {
+    // Select all the records that match the given IDs
+    const results = await db
+      .select()
+      .from(inheritanceProcedure)
+      .where(inArray(inheritanceProcedure.id, ids))
+
+    // Delete the records
+    await db
+      .delete(inheritanceProcedure)
+      .where(inArray(inheritanceProcedure.id, ids))
+
+    // Return the IDs of deleted procedures
+    return results.map((result) => result.id)
   }
 
   async function updateProcedure(
@@ -85,11 +108,13 @@ export function getInheritanceProcedureRepository(db: Db) {
 
   return {
     getProcedureById,
+    getProceduresByIds,
     getAllProcedures,
     createProcedure,
     deleteProcedureById,
     updateProcedure,
     getProceduresByNotaryId,
     getProceduresByBeneficiaryId,
+    deleteProceduresByIds,
   }
 }
