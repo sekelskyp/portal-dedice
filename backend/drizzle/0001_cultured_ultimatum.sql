@@ -1,0 +1,1 @@
+ALTER TABLE `inheritance_procedure` MODIFY COLUMN `deceased_contact_id` int;

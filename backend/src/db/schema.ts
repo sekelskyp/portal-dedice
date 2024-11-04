@@ -101,9 +101,7 @@ export const inheritanceProcedure = mysqlTable('inheritance_procedure', {
   // main Contact
   mainContactId: int('main_contact_id').references(() => contact.id),
   // deceased person info
-  deceasedContactId: int('deceased_contact_id')
-    .references(() => contact.id)
-    .notNull(),
+  deceasedContactId: int('deceased_contact_id').references(() => contact.id),
   deceasedDateOfBirth: date('date_of_birth'),
   deceasedDateOfDeath: date('date_of_death'),
 })

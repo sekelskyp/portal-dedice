@@ -8,6 +8,13 @@
       "when": 1730649562999,
       "tag": "0000_even_kabuki",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1730722931073,
+      "tag": "0001_cultured_ultimatum",
+      "breakpoints": true
     }
   ]
 }

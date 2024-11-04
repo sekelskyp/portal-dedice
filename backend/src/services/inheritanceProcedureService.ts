@@ -178,14 +178,14 @@ export async function deleteProceduresByIds(
     return acc
   }, [])
 
-  // Step 3: Delete the procedures
-  const deletedIds =
-    await inheritanceProcedureRepository.deleteProceduresByIds(ids)
-
   // Step 4: Delete the associated contacts in bulk
   if (contactIdsToDelete.length > 0) {
     await contactRepository.deleteContactsByIds(contactIdsToDelete)
   }
+
+  // Step 3: Delete the procedures
+  const deletedIds =
+    await inheritanceProcedureRepository.deleteProceduresByIds(ids)
 
   // Step 5: Return the array of deleted procedure IDs as confirmation
   return deletedIds
