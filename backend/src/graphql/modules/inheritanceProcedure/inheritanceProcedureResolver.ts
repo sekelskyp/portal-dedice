@@ -16,6 +16,7 @@ import {
   closeProcedure,
   createProcedure,
   createProcedureFromFormData,
+  deleteProceduresByIds,
   removeBeneficiaryFromProcedure,
 } from '../../../services/inheritanceProcedureService'
 import { CustomContext } from '../../../types/types'
@@ -205,5 +206,13 @@ export class InheritanceProcedureResolver {
   ): Promise<InheritanceProcedure> {
     // Call the service method to create the procedure from form data
     return await createProcedureFromFormData(data, context)
+  }
+
+  @Mutation(() => [Number])
+  async deleteProceduresByIds(
+    @Arg('ids', () => [Number]) ids: number[],
+    @Ctx() context: CustomContext
+  ): Promise<number[]> {
+    return await deleteProceduresByIds(ids, context)
   }
 }
