@@ -207,10 +207,9 @@ export class InheritanceProcedureResolver {
     // Call the service method to create the procedure from form data
     return await createProcedureFromFormData(data, context)
   }
-
-  @Mutation(() => [Number])
+  @Mutation(() => [Int])
   async deleteProceduresByIds(
-    @Arg('ids', () => [Number]) ids: number[],
+    @Arg('ids', () => [Int]) ids: number[],
     @Ctx() context: CustomContext
   ): Promise<number[]> {
     return await deleteProceduresByIds(ids, context)
