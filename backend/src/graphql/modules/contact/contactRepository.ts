@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm'
+import { eq, inArray } from 'drizzle-orm'
 
 import { Db } from '@backend/types/types'
 
@@ -48,6 +48,10 @@ export function getContactRepository(db: Db) {
     return result.id
   }
 
+  async function deleteContactsByIds(ids: number[]): Promise<void> {
+    await db.delete(contact).where(inArray(contact.id, ids))
+  }
+
   async function getContactByNotaryId(notaryId: number) {
     const [result] = await db
       .select()
@@ -63,6 +67,7 @@ export function getContactRepository(db: Db) {
     getAllContacts,
     createContact,
     deleteContactById,
+    deleteContactsByIds,
     getContactByNotaryId,
     createContacts,
   }

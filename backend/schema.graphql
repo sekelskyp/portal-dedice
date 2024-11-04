@@ -140,6 +140,7 @@ type Mutation {
   deleteBeneficiary(id: Int!): Boolean!
   deleteContactById(id: Float!): Int!
   deleteNotary(id: Float!): Notary!
+  deleteProceduresByIds(ids: [Float!]!): [Float!]!
   removeBeneficiaryFromProcedure(beneficiaryId: Int!, procedureId: Int!): Boolean!
   requestPasswordReset(email: String!): Boolean!
   resetPassword(newPassword: String!, token: String!): Boolean!
