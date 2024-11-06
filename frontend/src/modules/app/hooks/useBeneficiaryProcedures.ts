@@ -19,11 +19,11 @@ const GET_PROCEDURES_BY_BENEFICIARY_ID = gql(/* GraphQL */ `
 
 export function useBeneficiaryProcedures() {
   const auth = useAuth()
-  const userId = parseInt(auth.user?.id ?? '0', 10)
+  const id = parseInt(auth.user?.beneficiaries[0]?.id ?? '0', 10)
 
   const { data, loading, error } = useQuery(GET_PROCEDURES_BY_BENEFICIARY_ID, {
     variables: {
-      beneficiaryId: userId,
+      beneficiaryId: id,
     },
   })
 

@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { Card, Center, Container, Stack, Text } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -12,7 +12,10 @@ import {
   SubmitButton,
 } from '@frontend/shared/forms'
 import { AddressFormControl } from '@frontend/shared/forms/AddressFormControl'
-import { Suggestion } from '@frontend/shared/hooks/useAddressSuggestions'
+import {
+  Suggestion,
+  suggestionSchema,
+} from '@frontend/shared/hooks/useAddressSuggestions'
 
 import { TestatorDataContext } from '../pages/WizardStepPage'
 
@@ -21,7 +24,7 @@ const schema = z.object({
   birthDate: z
     .date({ required_error: 'Datum narození je povinné.' })
     .max(new Date(), 'Datum narození musí být v minulosti.'),
-  address: z.any({ required_error: 'Adresa bydliště je povinná.' }),
+  address: suggestionSchema,
 })
 
 type NextStepProps = {
@@ -31,19 +34,33 @@ type NextStepProps = {
 export function TestatorIdentification({ nextStep }: NextStepProps) {
   const testatorDataContext = useContext(TestatorDataContext)
   const { testatorData, setTestatorData } = testatorDataContext
-
-  const methods = useForm({
+  const { watch, trigger } = useForm({
     resolver: zodResolver(schema),
-    mode: 'onChange',
-    reValidateMode: 'onChange',
+    defaultValues: {
+      sex: testatorData.sex || '',
+      birthDate: testatorData.birthDate || undefined!,
+      address: (testatorData.address as Suggestion) || undefined,
+    },
   })
 
-  const onSubmit = async (data: z.infer<typeof schema>) => {
-    const testatorData = {
-      ...data,
-      postalCode: (data.address as Suggestion).zip!,
+  const watchedFields = watch(['sex', 'birthDate', 'address'])
+
+  useEffect(() => {
+    const [sex, birthDate, address] = watchedFields
+    if (!sex && !birthDate && !address) {
+      setTestatorData({})
     }
-    setTestatorData(testatorData)
+
+    // Trigger validation for the address field when it changes
+    trigger('address')
+  }, [watchedFields, setTestatorData, trigger])
+
+  const onSubmit = async (data: z.infer<typeof schema>) => {
+    const updatedTestatorData = {
+      ...testatorData,
+      ...data,
+    }
+    setTestatorData(updatedTestatorData)
     nextStep()
   }
 
@@ -55,9 +72,8 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
       defaultValues={{
         sex: testatorData.sex || '',
         birthDate: testatorData.birthDate || undefined!,
-        address: testatorData.address || '',
+        address: (testatorData.address as Suggestion) || undefined,
       }}
-      {...methods}
     >
       <Container
         maxW="2xl"

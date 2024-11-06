@@ -12,7 +12,10 @@ import {
   SubmitButton,
 } from '@frontend/shared/forms'
 import { AddressFormControl } from '@frontend/shared/forms/AddressFormControl'
-import { Suggestion } from '@frontend/shared/hooks/useAddressSuggestions'
+import {
+  Suggestion,
+  suggestionSchema,
+} from '@frontend/shared/hooks/useAddressSuggestions'
 
 const benefciarySchema = z.object({
   name: z
@@ -40,7 +43,7 @@ const schema = z
     dateOfDeath: z
       .date({ required_error: 'Datum narození je povinné.' })
       .max(new Date(), 'Datum narození musí být v minulosti.'),
-    address: z.any({ required_error: 'Adresa bydliště je povinná.' }),
+    address: suggestionSchema,
     contactName: z
       .string({ required_error: 'Jméno je povinné' })
       .min(1, 'Jméno je povinné'),

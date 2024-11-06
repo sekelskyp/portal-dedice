@@ -161,6 +161,36 @@ export async function removeBeneficiaryFromProcedure(
   )
 }
 
+export async function deleteProceduresByIds(
+  ids: number[],
+  context: CustomContext
+): Promise<number[]> {
+  const { inheritanceProcedureRepository, contactRepository } = context
+
+  // Step 1: Fetch the procedures to get the associated contact IDs
+  const procedures =
+    await inheritanceProcedureRepository.getProceduresByIds(ids)
+
+  // Step 2: Extract mainContactIds and deceasedContactIds
+  const contactIdsToDelete = procedures.reduce<number[]>((acc, procedure) => {
+    if (procedure.mainContactId) acc.push(procedure.mainContactId)
+    if (procedure.deceasedContactId) acc.push(procedure.deceasedContactId)
+    return acc
+  }, [])
+
+  // Step 4: Delete the associated contacts in bulk
+  if (contactIdsToDelete.length > 0) {
+    await contactRepository.deleteContactsByIds(contactIdsToDelete)
+  }
+
+  // Step 3: Delete the procedures
+  const deletedIds =
+    await inheritanceProcedureRepository.deleteProceduresByIds(ids)
+
+  // Step 5: Return the array of deleted procedure IDs as confirmation
+  return deletedIds
+}
+
 // Function to assign a notary to a procedure
 export async function assignNotary(
   procedureId: number,

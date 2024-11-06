@@ -1,4 +1,4 @@
-import { forwardRef, useMemo, useState } from 'react'
+import { forwardRef, useEffect, useMemo, useState } from 'react'
 import { Combobox, createListCollection } from '@ark-ui/react/combobox'
 import { Portal } from '@ark-ui/react/portal'
 import {
@@ -19,14 +19,14 @@ import useAddressSuggestions, {
 
 type PlacesAutoCompleteProps = {
   value?: Suggestion
-  onChange: (value?: Suggestion) => void
+  onChange: (value?: Suggestion | undefined) => void
   disabled?: boolean
 }
 
 export const AddressAutoComplete = forwardRef(
-  ({ value, onChange, disabled }: PlacesAutoCompleteProps, ref) => {
+  ({ value, onChange, disabled, ...props }: PlacesAutoCompleteProps, ref) => {
     const [query, setQuery] = useState(value?.name ?? '')
-    const { suggestions, loading, error } = useAddressSuggestions(query, {
+    const { suggestions, loading } = useAddressSuggestions(query, {
       lang: 'cs',
       limit: 5,
       enable: query.length > 3,
@@ -43,6 +43,10 @@ export const AddressAutoComplete = forwardRef(
       [suggestions]
     )
 
+    useEffect(() => {
+      setQuery(value?.name ?? '')
+    }, [value?.name])
+
     return (
       <Box asChild w="full" ref={ref}>
         <Combobox.Root
@@ -54,25 +58,38 @@ export const AddressAutoComplete = forwardRef(
             setQuery(value.inputValue)
           }}
           onValueChange={(details) => {
-            const suggestion = details.value[0] as unknown as Suggestion
-
-            setQuery(suggestion.name)
-            onChange(suggestion)
+            if (details.value.length === 0) {
+              setQuery('')
+              onChange?.(undefined)
+            } else {
+              const suggestion = details.value[0] as unknown as Suggestion
+              setQuery(suggestion.name)
+              onChange(suggestion)
+            }
           }}
           disabled={disabled}
+          {...props}
         >
           <Combobox.Control>
             <InputGroup
               w="full"
               endElement={
                 <HStack mr={-2} gap={1}>
-                  <Combobox.ClearTrigger asChild>
-                    <Button size="xs" variant="ghost" px={1}>
+                  {query && (
+                    <Button
+                      size="xs"
+                      variant="ghost"
+                      px={1}
+                      onClick={() => {
+                        setQuery('')
+                        onChange?.(undefined)
+                      }}
+                    >
                       <FiX />
                     </Button>
-                  </Combobox.ClearTrigger>
+                  )}
                   <Combobox.Trigger asChild>
-                    <Button size="xs" variant="ghost" px={1} disabled={!error}>
+                    <Button size="xs" variant="ghost" px={1}>
                       {loading ? <Spinner size="sm" /> : <FiChevronDown />}
                     </Button>
                   </Combobox.Trigger>

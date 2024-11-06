@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { z } from 'zod'
 
 interface Position {
   lon: number
@@ -20,6 +21,28 @@ export interface Suggestion {
   regionalStructure: RegionalStructure[]
   zip?: string
 }
+
+export const suggestionSchema = z.object(
+  {
+    name: z.string(),
+    label: z.string(),
+    position: z.object({
+      lon: z.number(),
+      lat: z.number(),
+    }),
+    type: z.string(),
+    location: z.string(),
+    regionalStructure: z.array(
+      z.object({
+        name: z.string(),
+        type: z.string(),
+        isoCode: z.string().optional(),
+      })
+    ),
+    zip: z.string().min(1),
+  },
+  { required_error: 'Adresa je povinná' }
+)
 
 interface UseAddressSuggestionsOptions {
   lang?: string

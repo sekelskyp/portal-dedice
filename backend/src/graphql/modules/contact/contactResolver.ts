@@ -41,7 +41,7 @@ export class ContactResolver {
   // Delete a contact by ID
   @Mutation(() => Int)
   async deleteContactById(
-    @Arg('id') id: number,
+    @Arg('id', () => Int) id: number,
     @Ctx() { contactRepository }: CustomContext
   ): Promise<number> {
     return await contactRepository.deleteContactById(id)

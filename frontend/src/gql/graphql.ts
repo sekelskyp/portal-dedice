@@ -168,6 +168,7 @@ export type Mutation = {
   deleteBeneficiary: Scalars['Boolean']['output']
   deleteContactById: Scalars['Int']['output']
   deleteNotary: Notary
+  deleteProceduresByIds: Array<Scalars['Int']['output']>
   removeBeneficiaryFromProcedure: Scalars['Boolean']['output']
   requestPasswordReset: Scalars['Boolean']['output']
   resetPassword: Scalars['Boolean']['output']
@@ -233,11 +234,15 @@ export type MutationDeleteBeneficiaryArgs = {
 }
 
 export type MutationDeleteContactByIdArgs = {
-  id: Scalars['Float']['input']
+  id: Scalars['Int']['input']
 }
 
 export type MutationDeleteNotaryArgs = {
-  id: Scalars['Float']['input']
+  id: Scalars['Int']['input']
+}
+
+export type MutationDeleteProceduresByIdsArgs = {
+  ids: Array<Scalars['Int']['input']>
 }
 
 export type MutationRemoveBeneficiaryFromProcedureArgs = {
@@ -281,7 +286,6 @@ export type Notary = {
 export type Query = {
   __typename?: 'Query'
   _empty: Scalars['String']['output']
-  author?: Maybe<Notary>
   findNotary?: Maybe<Notary>
   getAllContacts: Array<Contact>
   getAllProcedures: Array<InheritanceProcedure>
@@ -289,15 +293,12 @@ export type Query = {
   getBeneficiariesByProcedureId: Array<Beneficiary>
   getBeneficiaryById?: Maybe<Beneficiary>
   getContactById?: Maybe<Contact>
+  getNotaryById?: Maybe<Notary>
   getProcedureById?: Maybe<InheritanceProcedure>
   getProceduresByBeneficiaryId: Array<InheritanceProcedure>
   getProceduresByNotaryId: Array<InheritanceProcedure>
   getUserById?: Maybe<User>
   notaries: Array<Notary>
-}
-
-export type QueryAuthorArgs = {
-  id: Scalars['Float']['input']
 }
 
 export type QueryFindNotaryArgs = {
@@ -318,6 +319,10 @@ export type QueryGetBeneficiaryByIdArgs = {
 
 export type QueryGetContactByIdArgs = {
   id: Scalars['Float']['input']
+}
+
+export type QueryGetNotaryByIdArgs = {
+  id: Scalars['Int']['input']
 }
 
 export type QueryGetProcedureByIdArgs = {
@@ -387,25 +392,6 @@ export type GetProceduresByBeneficiaryIdQuery = {
   }>
 }
 
-export type GetProceduresByNotaryIdQueryVariables = Exact<{
-  notaryId: Scalars['Int']['input']
-}>
-
-export type GetProceduresByNotaryIdQuery = {
-  __typename?: 'Query'
-  getProceduresByNotaryId: Array<{
-    __typename?: 'InheritanceProcedure'
-    id: string
-    name: string
-    startDate: any
-    state: string
-    deceasedContact?: {
-      __typename?: 'Contact'
-      displayName?: string | null
-    } | null
-  }>
-}
-
 export type GetAllProceduresQueryVariables = Exact<{ [key: string]: never }>
 
 export type GetAllProceduresQuery = {
@@ -434,6 +420,17 @@ export type GetProcedureByIdQuery = {
     id: string
     name: string
     state: string
+    notary?: {
+      __typename?: 'Notary'
+      id: string
+      contact?: {
+        __typename?: 'Contact'
+        id: string
+        name: string
+        surname: string
+        email?: string | null
+      } | null
+    } | null
     mainContact?: {
       __typename?: 'Contact'
       id: string
@@ -625,73 +622,6 @@ export const GetProceduresByBeneficiaryIdDocument = {
   GetProceduresByBeneficiaryIdQuery,
   GetProceduresByBeneficiaryIdQueryVariables
 >
-export const GetProceduresByNotaryIdDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'GetProceduresByNotaryId' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'notaryId' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'getProceduresByNotaryId' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'notaryId' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'notaryId' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'startDate' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'state' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'deceasedContact' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'displayName' },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  GetProceduresByNotaryIdQuery,
-  GetProceduresByNotaryIdQueryVariables
->
 export const GetAllProceduresDocument = {
   kind: 'Document',
   definitions: [
@@ -774,6 +704,41 @@ export const GetProcedureByIdDocument = {
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'notary' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'contact' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'name' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'surname' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'email' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'mainContact' },

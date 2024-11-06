@@ -2,6 +2,7 @@ import {
   Arg,
   Ctx,
   FieldResolver,
+  Int,
   Mutation,
   Query,
   Resolver,
@@ -39,8 +40,8 @@ export class NotaryResolver {
   }
 
   @Query(() => Notary, { nullable: true })
-  async author(
-    @Arg('id') id: number,
+  async getNotaryById(
+    @Arg('id', () => Int) id: number,
     @Ctx() { notaryRepository }: CustomContext
   ): Promise<Notary> {
     return notaryRepository.getNotaryById(id)
@@ -73,7 +74,7 @@ export class NotaryResolver {
 
   @Mutation(() => Notary)
   async deleteNotary(
-    @Arg('id') id: number,
+    @Arg('id', () => Int) id: number,
     @Ctx() { notaryRepository }: CustomContext
   ): Promise<boolean> {
     const deletedNotaryId = await notaryRepository.deleteNotaryById(id)
