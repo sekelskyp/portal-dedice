@@ -6,6 +6,7 @@ import { useAuth } from '@frontend/modules/auth'
 import {
   Button,
   MenuContent,
+  MenuItem,
   MenuRoot,
   MenuTrigger,
   Stack,
@@ -16,14 +17,15 @@ import { RouterMenuItem, RouterNavLink } from '../atoms'
 
 export interface NavItem {
   label: string
-  to: string
+  to?: string
+  onClick?: () => void
   highlight?: boolean
 }
 
 export function TopNavigation() {
   const isMobile = useMediaQuery('(max-width: 768px)')
 
-  const { user } = useAuth()
+  const { user, signOut } = useAuth()
 
   const navItems: NavItem[] = [
     {
@@ -43,7 +45,7 @@ export function TopNavigation() {
   if (user) {
     navItems.push({
       label: 'Odhlásit se',
-      to: route.signOut(),
+      onClick: () => signOut(),
     })
 
     navItems.push({
@@ -67,16 +69,27 @@ export function TopNavigation() {
     <Stack direction="row" gap={0} alignItems="center" color="fg">
       {!isMobile && (
         <Flex gap={2} flexWrap="wrap" justifyContent="right">
-          {navItems.map(({ to, label, highlight, ...rest }) => (
-            <RouterNavLink
-              variant={highlight ? 'solid' : 'ghost'}
-              to={to}
-              key={to}
-              {...rest}
-            >
-              {label}
-            </RouterNavLink>
-          ))}
+          {navItems.map(({ to, onClick, label, highlight, ...rest }) =>
+            to ? (
+              <RouterNavLink
+                variant={highlight ? 'solid' : 'ghost'}
+                to={to}
+                key={to}
+                {...rest}
+              >
+                {label}
+              </RouterNavLink>
+            ) : (
+              <Button
+                key={label}
+                variant={highlight ? 'solid' : 'ghost'}
+                onClick={onClick}
+                {...rest}
+              >
+                {label}
+              </Button>
+            )
+          )}
         </Flex>
       )}
       {isMobile && (
@@ -87,11 +100,17 @@ export function TopNavigation() {
             </Button>
           </MenuTrigger>
           <MenuContent>
-            {navItems.map(({ to, label, highlight, ...rest }) => (
-              <RouterMenuItem to={to} key={to} value={label} {...rest}>
-                {label}
-              </RouterMenuItem>
-            ))}
+            {navItems.map(({ to, onClick, label, highlight, ...rest }) =>
+              to ? (
+                <RouterMenuItem to={to} key={to} value={label} {...rest}>
+                  {label}
+                </RouterMenuItem>
+              ) : (
+                <MenuItem key={label} onClick={onClick} value={label} {...rest}>
+                  {label}
+                </MenuItem>
+              )
+            )}
           </MenuContent>
         </MenuRoot>
       )}
