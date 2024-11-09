@@ -6,6 +6,10 @@ import {
   useMemo,
   useState,
 } from 'react'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
+
+import { toaster } from '@frontend/shared/design-system'
+import { route } from '@shared/route'
 
 type AuthState = {
   token: string | null
@@ -35,6 +39,8 @@ const AuthContext = createContext(
     user: initialState.user,
     setState: () =>
       console.error('You are using AuthContext without AuthProvider!'),
+    navigate: () =>
+      console.error('You are using AuthContext without AuthProvider!'),
   })
 )
 
@@ -49,11 +55,12 @@ type Props = {
 
 export function AuthProvider({ children }: Props) {
   const [state, setState] = usePersistedAuth(initialState)
+  const navigate = useNavigate()
 
   const contextValue = useMemo(() => {
     const { token, user } = state
-    return createContextValue({ token, user, setState })
-  }, [state, setState])
+    return createContextValue({ token, user, setState, navigate })
+  }, [state, setState, navigate])
 
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
@@ -64,14 +71,23 @@ function createContextValue({
   token,
   user,
   setState,
+  navigate,
 }: AuthState & {
   setState: (newState: AuthState) => void
+  navigate: NavigateFunction
 }) {
   return {
     token,
     user,
     signIn: ({ token, user }: AuthState) => setState({ token, user }),
-    signOut: () => setState({ token: null, user: null }),
+    signOut: () => {
+      setState({ token: null, user: null })
+      navigate(route.home())
+      toaster.create({
+        title: 'Byli jste odhlášeni.',
+        type: 'success',
+      })
+    },
   }
 }
 
