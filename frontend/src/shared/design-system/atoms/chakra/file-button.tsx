@@ -62,10 +62,11 @@ interface VisibilityProps {
 
 interface FileUploadItemProps extends VisibilityProps {
   file: File
+  onDelete?: (fileName: string) => void
 }
 
-const FileUploadItem = (props: FileUploadItemProps) => {
-  const { file, showSize, clearable } = props
+export const FileUploadItem = (props: FileUploadItemProps) => {
+  const { file, showSize, clearable, onDelete } = props
   return (
     <ChakraFileUpload.Item file={file}>
       <ChakraFileUpload.ItemPreview asChild>
@@ -85,7 +86,12 @@ const FileUploadItem = (props: FileUploadItemProps) => {
 
       {clearable && (
         <ChakraFileUpload.ItemDeleteTrigger asChild>
-          <IconButton variant="ghost" color="fg.muted" size="xs">
+          <IconButton
+            variant="ghost"
+            color="fg.muted"
+            size="xs"
+            onClick={() => onDelete && onDelete(file.name)}
+          >
             <LuX />
           </IconButton>
         </ChakraFileUpload.ItemDeleteTrigger>

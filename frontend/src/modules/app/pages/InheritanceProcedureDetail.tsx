@@ -19,7 +19,9 @@ import { Link, useParams } from 'react-router-dom'
 import { gql } from '@frontend/gql'
 import { useAuth } from '@frontend/modules/auth'
 import { Alert } from '@frontend/shared/design-system'
+import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
+import { route } from '@shared/route'
 
 import { BeneficiaryBadge } from '../components/BeneficiaryBadge'
 import { StatusBadge } from '../components/StatusBadge'
@@ -245,10 +247,10 @@ const InheritanceProcedureDetail: React.FC = () => {
                       Modelace vyrovnaní
                       <FaCalculator />
                     </Button>
-                    <Button as={Link} disabled rounded="full">
-                      Přiložit přílohu
+                    <RouterNavLink to={route.newDocument(id)} rounded="full">
                       <FaCloudUploadAlt />
-                    </Button>
+                      Přiložit přílohu
+                    </RouterNavLink>
                     <Button as={Link} disabled rounded="full">
                       Chat s notářem
                       <HiChat />

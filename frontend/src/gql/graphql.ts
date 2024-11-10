@@ -467,6 +467,18 @@ export type GetProcedureByIdQuery = {
   } | null
 }
 
+export type GetProcedureNameQueryVariables = Exact<{
+  id: Scalars['Int']['input']
+}>
+
+export type GetProcedureNameQuery = {
+  __typename?: 'Query'
+  getProcedureById?: {
+    __typename?: 'InheritanceProcedure'
+    name: string
+  } | null
+}
+
 export type CreateProcedureMutationVariables = Exact<{
   data: InheritanceProcedureFormDataInput
 }>
@@ -859,6 +871,54 @@ export const GetProcedureByIdDocument = {
 } as unknown as DocumentNode<
   GetProcedureByIdQuery,
   GetProcedureByIdQueryVariables
+>
+export const GetProcedureNameDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetProcedureName' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getProcedureById' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'id' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'id' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetProcedureNameQuery,
+  GetProcedureNameQueryVariables
 >
 export const CreateProcedureDocument = {
   kind: 'Document',
