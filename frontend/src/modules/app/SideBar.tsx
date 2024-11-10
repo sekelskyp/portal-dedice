@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react'
 import { HStack, Icon, Separator, Text, VStack } from '@chakra-ui/react'
+import { IoDocumentTextOutline } from 'react-icons/io5'
 import { LuArchive, LuSettings, LuUser2 } from 'react-icons/lu'
 import { useMediaQuery } from 'usehooks-ts'
 
@@ -18,6 +19,11 @@ const sideBarItems: SideBarItem[] = [
     label: resources.portal.sideBar.proceedings,
     to: route.portal(),
     icon: <LuArchive />,
+  },
+  {
+    label: resources.portal.sideBar.documents,
+    to: route.documents(),
+    icon: <IoDocumentTextOutline />,
   },
   {
     label: resources.portal.sideBar.profile,

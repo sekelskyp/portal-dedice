@@ -6,6 +6,7 @@ import { HomePage } from '@frontend/modules/home/pages/HomePage'
 import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 import { route } from '@shared/route'
 
+import { DocumentsPage } from './modules/app/pages/DocumentsPage'
 import InheritanceProcedureDetail from './modules/app/pages/InheritanceProcedureDetail'
 import { NewProceedingPage } from './modules/app/pages/NewProceedingPage'
 import { Proceedings } from './modules/app/pages/Proceedings'
@@ -33,6 +34,7 @@ export function Routes() {
             path={route.inheritanceProcedure(':id')}
             element={<InheritanceProcedureDetail />}
           />
+          <Route path={route.documents()} element={<DocumentsPage />} />
         </Route>
         <Route path={route.about()} element={<AboutPage />} />
         <Route path={route.guide()} element={<GuidePage />} />
