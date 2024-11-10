@@ -1,12 +1,16 @@
 import { useQuery } from '@apollo/client'
-import { Button, Heading, List, Spinner, Text } from '@chakra-ui/react'
+import { Heading, Spinner, Stack, Text } from '@chakra-ui/react'
+import { FaFileUpload } from 'react-icons/fa'
+import { LuFile } from 'react-icons/lu'
 import { useParams } from 'react-router-dom'
 
 import { gql } from '@frontend/gql'
 import { useAuth } from '@frontend/modules/auth'
-import { Page } from '@frontend/shared/layout'
+import { AccordionHelper } from '@frontend/modules/wizard/components/accordion/AccordionHelper'
+import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
+import { route } from '@shared/route'
 
 import { DocumentUpload } from '../components/DocumentUpload'
 import { documentTypes } from '../utils/documentTypes'
@@ -43,29 +47,38 @@ export function NewDocumentPage() {
     return <UnauthorizedPage />
   } else {
     return (
-      <Page>
-        <Heading size="xl">
-          Přiložit přílohu k tomuto řízení: {procedure?.name}
+      <Stack gap={8}>
+        <Heading size="3xl" textAlign="center">
+          Nahrání nové přílohy
         </Heading>
-        <Text>
-          Pro zrychlení dědického řízení pomůže, když notáři doložíte tyto
-          dokumenty:
-        </Text>
-        <List.Root>
-          {documentTypes.map((documentType) => (
-            <List.Item key={documentType.id}>
-              <Text as={'span'} fontWeight="bold">
-                {documentType.type}
-              </Text>
-              <Text as={'span'} color="gray">
-                {''} ({documentType.text})
-              </Text>
-            </List.Item>
-          ))}
-        </List.Root>
-        <DocumentUpload />
-        <Button m={4}>Nahrát přílohu</Button>
-      </Page>
+        <Stack direction="row" alignItems="center" justifyContent="center">
+          <LuFile size={24} />
+          <Heading>{procedure?.name}</Heading>
+        </Stack>
+        <Stack direction="row" gap={16}>
+          <Stack direction="column">
+            <Text>
+              Pro zrychlení dědického řízení pomůže, když notáři doložíte tyto
+              dokumenty:
+            </Text>
+            <AccordionHelper items={documentTypes} />
+          </Stack>
+          <DocumentUpload />
+        </Stack>
+        <Stack
+          justifyContent="center"
+          alignItems="center"
+          justifyItems="center"
+        >
+          <RouterNavLink
+            to={route.inheritanceProcedure(id)}
+            width="30%"
+            size="xl"
+          >
+            Nahrát přílohu <FaFileUpload />
+          </RouterNavLink>
+        </Stack>
+      </Stack>
     )
   }
 }

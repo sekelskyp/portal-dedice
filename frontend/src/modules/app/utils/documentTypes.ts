@@ -1,18 +1,18 @@
 const documentTypes = [
   {
     id: 1,
-    type: 'Oddací list',
-    text: 'pokud v době úmrtí byl zůstavitel v manželství',
+    title: 'Oddací list',
+    description: 'Pokud v době úmrtí byl zůstavitel v manželství.',
   },
   {
     id: 2,
-    type: 'Rodné listy potomků',
-    text: 'pokud měl zůstavitel potomky',
+    title: 'Rodné listy potomků',
+    description: 'Pokud měl zůstavitel potomky.',
   },
   {
     id: 3,
-    type: 'Odhad nemovitosti zpracovaný libovolnou realitní kanceláří',
-    text: 'pokud v SJM nebo pozůstalosti figuruje nemovitost',
+    title: 'Odhad nemovitosti zpracovaný realitní kanceláří',
+    description: 'Pokud v SJM nebo pozůstalosti figuruje nemovitost.',
   },
 ]
 
