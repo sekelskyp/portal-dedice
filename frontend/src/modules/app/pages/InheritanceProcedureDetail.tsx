@@ -11,7 +11,7 @@ import {
   Tabs,
   Text,
 } from '@chakra-ui/react'
-import { FaCalculator, FaCloudUploadAlt } from 'react-icons/fa'
+import { FaCalculator } from 'react-icons/fa'
 import { HiChat } from 'react-icons/hi'
 import { LuFile } from 'react-icons/lu'
 import { Link, useParams } from 'react-router-dom'
@@ -24,6 +24,7 @@ import { UnauthorizedPage } from '@frontend/shared/navigation/pages/Unauthorized
 import { route } from '@shared/route'
 
 import { BeneficiaryBadge } from '../components/BeneficiaryBadge'
+import { Documents } from '../components/Documents'
 import { StatusBadge } from '../components/StatusBadge'
 
 const GET_PROCEDURE_QUERY = gql(/* GraphQL */ `
@@ -226,7 +227,9 @@ const InheritanceProcedureDetail: React.FC = () => {
                     Tuto hodnotu zatím neznáme.
                   </Text>
                 </Tabs.Content>
-                <Tabs.Content value="documents">Dokumenty TODO</Tabs.Content>
+                <Tabs.Content value="documents">
+                  <Documents id={id ?? ''} />
+                </Tabs.Content>
                 <Tabs.Content value="assets">Majetek TODO</Tabs.Content>
               </Tabs.Root>
             </Card.Body>
@@ -238,10 +241,6 @@ const InheritanceProcedureDetail: React.FC = () => {
                       Modelace vyrovnaní
                       <FaCalculator />
                     </Button>
-                    <RouterNavLink to={route.newDocument(id)} rounded="full">
-                      Přiložit přílohu
-                      <FaCloudUploadAlt />
-                    </RouterNavLink>
                     <RouterNavLink to={route.asset(id)} rounded={'full'}>
                       Přidat/upravit Majetek
                       <FaCalculator />
