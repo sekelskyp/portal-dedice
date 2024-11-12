@@ -31,7 +31,7 @@ export function Routes() {
           <Route path={route.portal()} element={<Proceedings />} />
           <Route path={route.newProceeding()} element={<NewProceedingPage />} />
           <Route
-            path={route.inheritanceProcedure(':id')}
+            path={route.inheritanceProcedure()}
             element={<InheritanceProcedureDetail />}
           />
           <Route path={route.newDocument()} element={<NewDocumentPage />} />
