@@ -476,6 +476,7 @@ export type GetProcedureNameQuery = {
   getProcedureById?: {
     __typename?: 'InheritanceProcedure'
     name: string
+    beneficiaries?: Array<{ __typename?: 'Beneficiary'; id: string }> | null
   } | null
 }
 
@@ -909,6 +910,16 @@ export const GetProcedureNameDocument = {
               kind: 'SelectionSet',
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'beneficiaries' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                    ],
+                  },
+                },
               ],
             },
           },

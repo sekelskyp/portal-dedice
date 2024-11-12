@@ -13,7 +13,6 @@ export function DocumentUpload() {
 
   return (
     <FileUploadRoot
-      maxW="xl"
       alignItems="stretch"
       maxFiles={1}
       maxFileSize={25000000}

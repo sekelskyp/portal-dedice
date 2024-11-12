@@ -19,6 +19,9 @@ const GET_PROCEDURE_DOCUMENT_QUERY = gql(/* GraphQL */ `
   query GetProcedureName($id: Int!) {
     getProcedureById(id: $id) {
       name
+      beneficiaries {
+        id
+      }
     }
   }
 `)
@@ -43,40 +46,42 @@ export function NewDocumentPage() {
 
   const procedure = data?.getProcedureById
 
+  const userBeneficiaryId = user.user?.beneficiaries[0]?.id
+  const procedureBeneficiaryIds = procedure?.beneficiaries?.map((b) => b.id)
+
+  if (
+    !userBeneficiaryId ||
+    !procedureBeneficiaryIds?.includes(userBeneficiaryId)
+  ) {
+    return <UnauthorizedPage />
+  }
+
   if (!user.token) {
     return <UnauthorizedPage />
   } else {
     return (
-      <Stack gap={8}>
-        <Heading size="3xl" textAlign="center">
-          Nahrání nové přílohy
-        </Heading>
-        <Stack direction="row" alignItems="center" justifyContent="center">
-          <LuFile size={24} />
-          <Heading>{procedure?.name}</Heading>
+      <Stack gap={4}>
+        <Stack direction="column">
+          <Heading size="3xl">Nahrání nové přílohy</Heading>
+          <Stack direction="row" alignItems="center" py={2}>
+            <LuFile size={24} />
+            <Heading>{procedure?.name}</Heading>
+          </Stack>
         </Stack>
-        <Stack direction="row" gap={16}>
-          <Stack direction="column">
+        <Stack direction="column" gap={4}>
+          <Stack direction="column" gap={4}>
             <Text>
               Pro zrychlení dědického řízení pomůže, když notáři doložíte tyto
               dokumenty:
             </Text>
             <AccordionHelper items={documentTypes} />
           </Stack>
-          <DocumentUpload />
-        </Stack>
-        <Stack
-          justifyContent="center"
-          alignItems="center"
-          justifyItems="center"
-        >
-          <RouterNavLink
-            to={route.inheritanceProcedure(id)}
-            width="30%"
-            size="xl"
-          >
-            Nahrát přílohu <FaFileUpload />
-          </RouterNavLink>
+          <Stack gap={4}>
+            <DocumentUpload />
+            <RouterNavLink to={route.inheritanceProcedure(id)}>
+              Nahrát přílohu <FaFileUpload />
+            </RouterNavLink>
+          </Stack>
         </Stack>
       </Stack>
     )
