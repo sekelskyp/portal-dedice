@@ -8,7 +8,6 @@ import {
   HStack,
   Spinner,
   Stack,
-  Table,
   Tabs,
   Text,
 } from '@chakra-ui/react'
@@ -212,58 +211,7 @@ const InheritanceProcedureDetail: React.FC = () => {
                       {totalAssetsValue},- Kč
                     </Text>
                   )}
-                  <Heading
-                    size={{ base: 'lg', lg: 'xl' }}
-                    py={4}
-                    textAlign={{ base: 'center', lg: 'left' }}
-                  >
-                    Děděné položky
-                  </Heading>
-                  {procedure.procedureAssets?.length === 0 ? (
-                    <Stack alignItems={{ base: 'center', lg: 'start' }}>
-                      <Text fontSize="md">Tyto hodnoty zatím neznáme.</Text>
-                      <Button
-                        as={Link}
-                        disabled
-                        width="fit-content"
-                        rounded="full"
-                      >
-                        Modelace
-                        <FaCalculator />
-                      </Button>
-                    </Stack>
-                  ) : (
-                    <Table.Root size={{ base: 'sm', md: 'lg' }}>
-                      <Table.Header>
-                        <Table.Row>
-                          <Table.ColumnHeader
-                            textAlign="center"
-                            fontWeight="bold"
-                          >
-                            Název
-                          </Table.ColumnHeader>
-                          <Table.ColumnHeader
-                            textAlign="center"
-                            fontWeight="bold"
-                          >
-                            Hodnota
-                          </Table.ColumnHeader>
-                        </Table.Row>
-                      </Table.Header>
-                      <Table.Body>
-                        {procedure.procedureAssets?.map((item) => (
-                          <Table.Row key={item.id}>
-                            <Table.Cell textAlign="center">
-                              {item.name}
-                            </Table.Cell>
-                            <Table.Cell textAlign="center">
-                              {item.value},- Kč
-                            </Table.Cell>
-                          </Table.Row>
-                        ))}
-                      </Table.Body>
-                    </Table.Root>
-                  )}
+
                   <Heading
                     size={{ base: 'lg', lg: 'xl' }}
                     py={4}
@@ -277,13 +225,6 @@ const InheritanceProcedureDetail: React.FC = () => {
                   >
                     Tuto hodnotu zatím neznáme.
                   </Text>
-                  <Heading
-                    size={{ base: 'lg', lg: 'xl' }}
-                    py={4}
-                    textAlign={{ base: 'center', lg: 'left' }}
-                  >
-                    Dokumenty
-                  </Heading>
                 </Tabs.Content>
                 <Tabs.Content value="documents">Dokumenty TODO</Tabs.Content>
                 <Tabs.Content value="assets">Majetek TODO</Tabs.Content>
@@ -300,6 +241,10 @@ const InheritanceProcedureDetail: React.FC = () => {
                     <RouterNavLink to={route.newDocument(id)} rounded="full">
                       Přiložit přílohu
                       <FaCloudUploadAlt />
+                    </RouterNavLink>
+                    <RouterNavLink to={route.asset(id)} rounded={'full'}>
+                      Přidat/upravit Majetek
+                      <FaCalculator />
                     </RouterNavLink>
                     <Button as={Link} disabled rounded="full">
                       Chat s notářem

@@ -6,6 +6,7 @@ import { HomePage } from '@frontend/modules/home/pages/HomePage'
 import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 import { route } from '@shared/route'
 
+import { AssetPage } from './modules/app/pages/AssetPage'
 import InheritanceProcedureDetail from './modules/app/pages/InheritanceProcedureDetail'
 import { NewDocumentPage } from './modules/app/pages/NewDocumentPage'
 import { NewProceedingPage } from './modules/app/pages/NewProceedingPage'
@@ -42,6 +43,7 @@ export function Routes() {
         <Route path={route.wizard()} element={<WizardPage />} />
         <Route path={route.confirmEmail()} element={<ConfirmEmailPage />} />
         <Route path={route.resetPassword()} element={<PasswordResetPage />} />
+        <Route path={route.asset()} element={<AssetPage />} />
         <Route
           path={route.emailVerification()}
           element={<EmailVerification />}
