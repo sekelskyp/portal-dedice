@@ -69,7 +69,6 @@ const resources = {
       profile: 'Můj profil',
       proceedings: 'Moje řízení',
       settings: 'Nastavení',
-      documents: 'Dokumenty',
     },
     forms: {
       proceedingForm: {
