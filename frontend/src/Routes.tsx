@@ -36,6 +36,7 @@ export function Routes() {
             element={<InheritanceProcedureDetail />}
           />
           <Route path={route.newDocument()} element={<NewDocumentPage />} />
+          <Route path={route.asset()} element={<AssetPage />} />
         </Route>
         <Route path={route.about()} element={<AboutPage />} />
         <Route path={route.guide()} element={<GuidePage />} />
@@ -43,7 +44,6 @@ export function Routes() {
         <Route path={route.wizard()} element={<WizardPage />} />
         <Route path={route.confirmEmail()} element={<ConfirmEmailPage />} />
         <Route path={route.resetPassword()} element={<PasswordResetPage />} />
-        <Route path={route.asset()} element={<AssetPage />} />
         <Route
           path={route.emailVerification()}
           element={<EmailVerification />}

@@ -86,6 +86,21 @@ const resources = {
         addBeneficiary: 'Přidat dědice',
         createProceeding: 'Založit řízení',
       },
+      assetForm: {
+        name: 'Jméno',
+        surname: 'Příjmení',
+        dateOfBirth: 'Datum narození',
+        dateOfDeath: 'Datum úmrtí',
+        address: 'Trvalé bydliště',
+        email: 'Emailová adresa',
+        groups: {
+          bankAccount: 'Měl zůstavitel bankovní účet?',
+          company: 'Účastnil se v obchodní společnosti?',
+          car: 'Měl zůstavitel auto?',
+          valuables: 'Vlastnil zůstavitel nějaké cennosti?',
+          others: 'Vlastnil zůstavitel ještě něco jiného?',
+        },
+      },
     },
   },
 }
