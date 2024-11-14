@@ -36,6 +36,9 @@ import { mockResolvers } from '@backend/mocks/mocks'
 import { CustomContext } from '@backend/types/types'
 
 import { getAssetRepository } from './graphql/modules/asset/assetRepository'
+import { getChatMessageRepository } from './graphql/modules/chat/chatMessageRepository'
+import { getChatRepository } from './graphql/modules/chat/chatRepository'
+import { ChatResolver } from './graphql/modules/chat/chatResolver'
 
 const init = async () => {
   const app = express()
@@ -51,6 +54,7 @@ const init = async () => {
       NotaryResolver,
       ContactResolver,
       //AssetResolver,
+      ChatResolver,
     ],
     emitSchemaFile: true,
   })
@@ -95,6 +99,8 @@ const init = async () => {
         drizzle.db
       ),
       assetRepository: getAssetRepository(drizzle.db),
+      chatRepository: getChatRepository(drizzle.db),
+      chatMessageRepository: getChatMessageRepository(drizzle.db),
     }
   }
 

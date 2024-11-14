@@ -105,6 +105,8 @@ const InheritanceProcedureDetail: React.FC = () => {
 
   const procedure = data?.getProcedureById
 
+  console.log(procedure)
+
   const totalAssetsValue =
     procedure?.procedureAssets?.reduce((sum, asset) => sum + asset.value, 0) ??
     0

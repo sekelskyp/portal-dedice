@@ -2,6 +2,8 @@ import { MySql2Database } from 'drizzle-orm/mysql2'
 
 import { getAssetRepository } from '@backend/graphql/modules/asset/assetRepository'
 import { type getBeneficiaryRepository } from '@backend/graphql/modules/beneficiary/beneficiaryRepository'
+import { getChatMessageRepository } from '@backend/graphql/modules/chat/chatMessageRepository'
+import { getChatRepository } from '@backend/graphql/modules/chat/chatRepository'
 import { type getContactRepository } from '@backend/graphql/modules/contact/contactRepository'
 import { type getEmailConfirmationTokenRepository } from '@backend/graphql/modules/emailConfirmationToken/emailConfirmationTokenRepository'
 import { type getInheritanceProcedureRepository } from '@backend/graphql/modules/inheritanceProcedure/inheritaceProcedureRepository'
@@ -33,6 +35,8 @@ export type CustomContext = {
     typeof getEmailConfirmationTokenRepository
   >
   assetRepository: ReturnType<typeof getAssetRepository>
+  chatRepository: ReturnType<typeof getChatRepository>
+  chatMessageRepository: ReturnType<typeof getChatMessageRepository>
 }
 
 export type JWTPayload = {

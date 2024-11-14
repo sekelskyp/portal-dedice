@@ -90,6 +90,10 @@ export async function createProcedure(
     ...data,
     name: procedureName,
   })
+  await context.chatRepository.createChat({
+    inheritanceProcedureId: procedureId.id,
+  })
+
   return procedureId.id
 }
 
@@ -129,6 +133,7 @@ export async function addBeneficiaryToProcedure(
   })
 }
 
+/// todo
 export async function addBeneficiariesToProcedure(
   procedureId: number,
   beneficiaryIds: number[],
