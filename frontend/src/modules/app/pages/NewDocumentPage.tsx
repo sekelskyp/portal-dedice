@@ -60,25 +60,47 @@ export function NewDocumentPage() {
     return <UnauthorizedPage />
   } else {
     return (
-      <Stack gap={4}>
+      <Stack
+        gap={4}
+        borderRadius="xl"
+        p={{ base: 4, md: 10, lg: 16 }}
+        borderWidth="1px"
+      >
         <Stack direction="column">
-          <Heading size="3xl">Nahrání nové přílohy</Heading>
-          <Stack direction="row" alignItems="center" py={2}>
+          <Heading
+            size={{ base: 'xl', md: '2xl', lg: '3xl' }}
+            textAlign={{ base: 'center', md: 'left' }}
+          >
+            Nahrání nové přílohy
+          </Heading>
+          <Stack
+            direction="row"
+            alignItems="center"
+            py={2}
+            justifyContent={{ base: 'center', md: 'start' }}
+          >
             <LuFile size={24} />
             <Heading>{procedure?.name}</Heading>
           </Stack>
         </Stack>
         <Stack direction="column" gap={4}>
           <Stack direction="column" gap={4}>
-            <Text>
+            <Text
+              fontSize={{ base: 'sm', md: 'md' }}
+              textAlign={{ base: 'center', md: 'left' }}
+            >
               Pro zrychlení dědického řízení pomůže, když notáři doložíte tyto
               dokumenty:
             </Text>
             <AccordionHelper items={documentTypes} />
           </Stack>
-          <Stack gap={4}>
+          <Stack gap={4} alignItems="center">
             <DocumentUpload />
-            <RouterNavLink to={route.inheritanceProcedure(id)}>
+            <RouterNavLink
+              to={route.inheritanceProcedure(id)}
+              width="1/2"
+              textAlign="center"
+            >
               Nahrát přílohu <FaFileUpload />
             </RouterNavLink>
           </Stack>
