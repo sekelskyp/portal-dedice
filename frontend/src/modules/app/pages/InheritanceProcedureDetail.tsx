@@ -1,5 +1,4 @@
 import React from 'react'
-import { useQuery } from '@apollo/client'
 import {
   Box,
   Button,
@@ -12,11 +11,11 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { FaCalculator } from 'react-icons/fa'
+import { FiSend } from 'react-icons/fi'
 import { HiChat } from 'react-icons/hi'
 import { LuFile } from 'react-icons/lu'
 import { Link, useParams } from 'react-router-dom'
 
-import { gql } from '@frontend/gql'
 import { useAuth } from '@frontend/modules/auth'
 import { Alert } from '@frontend/shared/design-system'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
@@ -26,65 +25,14 @@ import { route } from '@shared/route'
 import { BeneficiaryBadge } from '../components/BeneficiaryBadge'
 import { Documents } from '../components/Documents'
 import { StatusBadge } from '../components/StatusBadge'
-
-const GET_PROCEDURE_QUERY = gql(/* GraphQL */ `
-  query GetProcedureById($id: Int!) {
-    getProcedureById(id: $id) {
-      id
-      name
-      notary {
-        id
-        contact {
-          id
-          name
-          surname
-          email
-        }
-      }
-      mainContact {
-        id
-        name
-        surname
-        displayName
-        gender
-        phone
-        email
-        completeAddress
-        postalCode
-      }
-      beneficiaries {
-        id
-        userId
-        user {
-          id
-          email
-        }
-        contactId
-        contact {
-          id
-          email
-          name
-          surname
-        }
-        deceasedRelation
-      }
-      procedureAssets {
-        id
-        name
-        value
-      }
-      state
-    }
-  }
-`)
+import { useProcedure } from '../hooks/useProcedure'
 
 const InheritanceProcedureDetail: React.FC = () => {
   const user = useAuth()
   const { id } = useParams()
 
-  const idInt = parseInt(id ?? '0', 10)
-  const { loading, error, data } = useQuery(GET_PROCEDURE_QUERY, {
-    variables: { id: idInt },
+  const { data, loading, error } = useProcedure({
+    procedureId: parseInt(id ?? '0', 10),
   })
 
   if (loading) {
@@ -252,9 +200,10 @@ const InheritanceProcedureDetail: React.FC = () => {
                   </>
                 ) : (
                   <>
-                    <Button as={Link} disabled>
-                      Hromadná zpráva všem zůstavitelům
-                    </Button>
+                    <RouterNavLink to={route.newEmail(id)} rounded={'full'}>
+                      Hromadná zpráva všem dědicům
+                      <FiSend />
+                    </RouterNavLink>
                   </>
                 )}
               </Stack>

@@ -1,10 +1,8 @@
-import { useQuery } from '@apollo/client'
 import { Heading, Spinner, Stack, Text } from '@chakra-ui/react'
 import { FaFileUpload } from 'react-icons/fa'
 import { LuFile } from 'react-icons/lu'
 import { useParams } from 'react-router-dom'
 
-import { gql } from '@frontend/gql'
 import { useAuth } from '@frontend/modules/auth'
 import { AccordionHelper } from '@frontend/modules/wizard/components/accordion/AccordionHelper'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
@@ -13,27 +11,15 @@ import { UnauthorizedPage } from '@frontend/shared/navigation/pages/Unauthorized
 import { route } from '@shared/route'
 
 import { DocumentUpload } from '../components/DocumentUpload'
+import { useProcedure } from '../hooks/useProcedure'
 import { documentTypes } from '../utils/documentTypes'
-
-const GET_PROCEDURE_DOCUMENT_QUERY = gql(/* GraphQL */ `
-  query GetProcedureName($id: Int!) {
-    getProcedureById(id: $id) {
-      name
-      beneficiaries {
-        id
-      }
-    }
-  }
-`)
 
 export function NewDocumentPage() {
   const user = useAuth()
   const { id } = useParams()
 
-  const idInt = parseInt(id ?? '0', 10)
-
-  const { data, loading, error } = useQuery(GET_PROCEDURE_DOCUMENT_QUERY, {
-    variables: { id: idInt },
+  const { data, loading, error } = useProcedure({
+    procedureId: parseInt(id ?? '0', 10),
   })
 
   if (loading) {

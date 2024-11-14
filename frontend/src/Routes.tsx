@@ -10,6 +10,7 @@ import { AssetPage } from './modules/app/pages/AssetPage'
 import InheritanceProcedureDetail from './modules/app/pages/InheritanceProcedureDetail'
 import { NewDocumentPage } from './modules/app/pages/NewDocumentPage'
 import { NewProceedingPage } from './modules/app/pages/NewProceedingPage'
+import { NotaryEmailPage } from './modules/app/pages/NotaryEmailPage'
 import { Proceedings } from './modules/app/pages/Proceedings'
 import { ConfirmEmailPage } from './modules/auth/pages/ConfirmEmailPage'
 import { EmailVerification } from './modules/auth/pages/EmailVerification'
@@ -36,6 +37,7 @@ export function Routes() {
             element={<InheritanceProcedureDetail />}
           />
           <Route path={route.newDocument()} element={<NewDocumentPage />} />
+          <Route path={route.newEmail()} element={<NotaryEmailPage />} />
           <Route path={route.asset()} element={<AssetPage />} />
         </Route>
         <Route path={route.about()} element={<AboutPage />} />
