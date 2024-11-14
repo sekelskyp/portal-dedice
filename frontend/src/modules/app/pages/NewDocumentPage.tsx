@@ -49,7 +49,7 @@ export function NewDocumentPage() {
       <Stack
         gap={4}
         borderRadius="xl"
-        p={{ base: 4, md: 10, lg: 16 }}
+        p={{ base: 4, md: 10 }}
         borderWidth="1px"
       >
         <Stack direction="column">
