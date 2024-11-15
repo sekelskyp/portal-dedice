@@ -17,6 +17,7 @@ export function getChatMessageRepository(db: Db) {
       .select()
       .from(chatMessage)
       .where(eq(chatMessage.chatId, chatId))
+      .orderBy(chatMessage.createdAt)
   }
 
   async function getChatMessageById(id: number) {
