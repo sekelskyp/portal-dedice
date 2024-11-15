@@ -14,6 +14,16 @@ export function getChatRepository(db: Db) {
     return result || null
   }
 
+  async function getChatByInheritanceProcedureId(
+    inheritanceProcedureId: number
+  ) {
+    const [result] = await db
+      .select()
+      .from(chat)
+      .where(eq(chat.inheritanceProcedureId, inheritanceProcedureId))
+    return result || null
+  }
+
   async function createChat(data: ChatData) {
     const [result] = await db.insert(chat).values(data).$returningId()
     return result
@@ -22,5 +32,6 @@ export function getChatRepository(db: Db) {
   return {
     getChatById,
     createChat,
+    getChatByInheritanceProcedureId,
   }
 }

@@ -176,6 +176,7 @@ type Notary {
 type Query {
   _empty: String!
   chat(id: Int!): Chat!
+  chatByInheritanceProcedureId(inheritanceProcedureId: Int!): Chat!
   findNotary(input: FindNotaryInput!): Notary
   getAllContacts: [Contact!]!
   getAllProcedures: [InheritanceProcedure!]!

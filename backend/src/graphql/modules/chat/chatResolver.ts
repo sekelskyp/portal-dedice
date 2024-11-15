@@ -24,6 +24,16 @@ export class ChatResolver {
     return await chatRepository.getChatById(id)
   }
 
+  @Query(() => Chat)
+  async chatByInheritanceProcedureId(
+    @Arg('inheritanceProcedureId', () => Int) inheritanceProcedureId: number,
+    @Ctx() { chatRepository }: CustomContext
+  ): Promise<Chat | null> {
+    return await chatRepository.getChatByInheritanceProcedureId(
+      inheritanceProcedureId
+    )
+  }
+
   @FieldResolver(() => [ChatMessage])
   async chatMessages(
     @Root() chat: Chat,
