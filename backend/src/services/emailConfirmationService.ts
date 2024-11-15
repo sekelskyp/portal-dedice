@@ -6,6 +6,7 @@ import { route } from '@shared/route'
 import { CustomContext } from '../types/types'
 
 import { sendEmail } from './emailService'
+import { renderTemplate } from './templateService'
 
 const CONFIRMATION_TOKEN_EXPIRATION_HOURS = 24 // Token expires in 24 hours
 
@@ -37,12 +38,16 @@ export const requestEmailVerification = async (
   // Generate the confirmation link
   const baseUrl = `${process.env.APP_BASE_URL_FRONTEND}`
   const confirmationLink = `${baseUrl}${route.emailVerification()}?token=${token}`
+  // Render the template
+  const html = await renderTemplate('confirmation', {
+    confirmationLink,
+  })
 
   // Send the email with the confirmation link
   await sendEmail({
     to: email,
     subject: 'Email Confirmation Request',
-    text: `Welcome! Please confirm your email by clicking the following link: ${confirmationLink}`,
+    html,
   })
 }
 
