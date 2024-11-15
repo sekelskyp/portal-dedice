@@ -119,7 +119,7 @@ const Section: React.FC<SectionProps> = ({
     <Box display="flex" justifyContent="space-between" alignItems="center">
       <Heading as={'h3'}>{title}</Heading>
       <Box display="flex" alignItems="center">
-        <Box mr={2}>žádné</Box>
+        <Box mr={2}>Ne</Box>
         <Checkbox
           checked={selected}
           onChange={() => {
@@ -229,7 +229,7 @@ const CarSection: React.FC<{
             render={({ field }) => (
               <SelectFormControl
                 {...field}
-                label="Auto"
+                label="Značka"
                 collection={carBrandCollection}
                 placeholder="Vyberte značku auta"
               />
@@ -285,7 +285,7 @@ const ValuablesSection: React.FC<{
           render={({ field }) => (
             <InputFormControl
               {...field}
-              placeholder="Zadejte jaké cennosti zůstavitel vlastnil (Max. 300 znaků)"
+              placeholder="Zadejte, jaké cennosti zůstavitel vlastnil (Max. 300 znaků)"
             />
           )}
         />

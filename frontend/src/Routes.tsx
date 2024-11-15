@@ -6,8 +6,8 @@ import { HomePage } from '@frontend/modules/home/pages/HomePage'
 import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 import { route } from '@shared/route'
 
-import { AssetPage } from './modules/app/pages/AssetPage'
 import InheritanceProcedureDetail from './modules/app/pages/InheritanceProcedureDetail'
+import { NewAssetPage } from './modules/app/pages/NewAssetPage'
 import { NewDocumentPage } from './modules/app/pages/NewDocumentPage'
 import { NewProceedingPage } from './modules/app/pages/NewProceedingPage'
 import { NotaryEmailPage } from './modules/app/pages/NotaryEmailPage'
@@ -38,7 +38,7 @@ export function Routes() {
           />
           <Route path={route.newDocument()} element={<NewDocumentPage />} />
           <Route path={route.newEmail()} element={<NotaryEmailPage />} />
-          <Route path={route.asset()} element={<AssetPage />} />
+          <Route path={route.newAsset()} element={<NewAssetPage />} />
         </Route>
         <Route path={route.about()} element={<AboutPage />} />
         <Route path={route.guide()} element={<GuidePage />} />
