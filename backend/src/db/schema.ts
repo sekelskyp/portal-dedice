@@ -1,7 +1,6 @@
 import { SQL, sql } from 'drizzle-orm'
 import {
   AnyMySqlColumn,
-  binary,
   boolean,
   char,
   check,

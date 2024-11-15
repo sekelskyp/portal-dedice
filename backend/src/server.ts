@@ -37,6 +37,7 @@ import { mockResolvers } from '@backend/mocks/mocks'
 import { CustomContext } from '@backend/types/types'
 
 import { getAssetRepository } from './graphql/modules/asset/assetRepository'
+import { DocumentResolver } from './graphql/modules/document/documentResolver'
 
 const init = async () => {
   const app = express()
@@ -52,6 +53,7 @@ const init = async () => {
       NotaryResolver,
       ContactResolver,
       //AssetResolver,
+      DocumentResolver,
     ],
     emitSchemaFile: true,
   })
@@ -96,7 +98,7 @@ const init = async () => {
         drizzle.db
       ),
       assetRepository: getAssetRepository(drizzle.db),
-      getDocumentRepository: getDocumentRepository(drizzle.db),
+      documentRepository: getDocumentRepository(drizzle.db),
     }
   }
 

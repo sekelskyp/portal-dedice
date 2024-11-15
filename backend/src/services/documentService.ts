@@ -41,7 +41,7 @@ async function encodeFileToBase64(file: FileUpload): Promise<string> {
       resolve(Buffer.concat(chunks).toString('base64'))
     })
 
-    fileStream.on('error', (err: any) => reject(err))
+    fileStream.on('error', (err) => reject(err))
   })
   return fileData
 }
