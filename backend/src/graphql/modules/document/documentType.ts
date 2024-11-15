@@ -6,7 +6,7 @@ export class Document {
   id!: number
 
   @Field()
-  fileData!: string // base64 encoded string for binary data
+  fileData!: string // base64 encoded string
 
   @Field()
   fileName!: string
