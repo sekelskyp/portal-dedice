@@ -204,6 +204,10 @@ type SignInResponse {
   user: User!
 }
 
+type Subscription {
+  newChatMessage(chatId: Int!): ChatMessage!
+}
+
 input UpdateBeneficiaryInput {
   contactId: ID
   dateOfBirth: DateTimeISO

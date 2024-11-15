@@ -9,11 +9,14 @@ import {
 } from '@apollo/server/express4'
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
 import { addMocksToSchema } from '@graphql-tools/mock'
+import { createPubSub } from '@graphql-yoga/subscription'
 import cors from 'cors'
 import express from 'express'
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js'
+import { useServer } from 'graphql-ws/lib/use/ws'
 import * as http from 'http'
 import { buildSchema } from 'type-graphql'
+import { WebSocketServer } from 'ws'
 
 import { MOCKS, PORT } from '@backend/config'
 import { getConnection } from '@backend/db/db'
@@ -45,6 +48,9 @@ const init = async () => {
 
   const httpServer = http.createServer(app)
 
+  // Create PubSub instance
+  const pubSub = createPubSub()
+
   const schema = await buildSchema({
     resolvers: [
       EmptyResolver,
@@ -56,8 +62,24 @@ const init = async () => {
       //AssetResolver,
       ChatResolver,
     ],
+    pubSub,
     emitSchemaFile: true,
   })
+
+  const wsServer = new WebSocketServer({
+    server: httpServer,
+    path: '/graphql',
+  })
+
+  // useServer is not react hook so disable eslint for next line
+  // eslint-disable-next-line
+  const wsServerCleanUp = useServer(
+    {
+      schema,
+      context: async () => ({ pubSub }),
+    },
+    wsServer
+  )
 
   const server = new ApolloServer({
     schema: MOCKS
@@ -66,7 +88,18 @@ const init = async () => {
           resolvers: mockResolvers,
         })
       : schema,
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    plugins: [
+      ApolloServerPluginDrainHttpServer({ httpServer }),
+      {
+        async serverWillStart() {
+          return {
+            async drainServer() {
+              await wsServerCleanUp.dispose()
+            },
+          }
+        },
+      },
+    ],
   })
 
   await server.start()
@@ -101,6 +134,7 @@ const init = async () => {
       assetRepository: getAssetRepository(drizzle.db),
       chatRepository: getChatRepository(drizzle.db),
       chatMessageRepository: getChatMessageRepository(drizzle.db),
+      pubSub, // Add PubSub to the HTTP context
     }
   }
 

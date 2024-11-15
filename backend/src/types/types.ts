@@ -1,3 +1,4 @@
+import { createPubSub } from '@graphql-yoga/subscription'
 import { MySql2Database } from 'drizzle-orm/mysql2'
 
 import { getAssetRepository } from '@backend/graphql/modules/asset/assetRepository'
@@ -37,6 +38,7 @@ export type CustomContext = {
   assetRepository: ReturnType<typeof getAssetRepository>
   chatRepository: ReturnType<typeof getChatRepository>
   chatMessageRepository: ReturnType<typeof getChatMessageRepository>
+  pubSub: ReturnType<typeof createPubSub>
 }
 
 export type JWTPayload = {
