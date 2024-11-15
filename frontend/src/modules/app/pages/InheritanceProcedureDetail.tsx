@@ -22,6 +22,7 @@ import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
 import { route } from '@shared/route'
 
+import { Assets } from '../components/Assets'
 import { BeneficiaryBadge } from '../components/BeneficiaryBadge'
 import { Documents } from '../components/Documents'
 import { StatusBadge } from '../components/StatusBadge'
@@ -178,7 +179,9 @@ const InheritanceProcedureDetail: React.FC = () => {
                 <Tabs.Content value="documents">
                   <Documents id={id ?? ''} />
                 </Tabs.Content>
-                <Tabs.Content value="assets">Majetek TODO</Tabs.Content>
+                <Tabs.Content value="assets">
+                <Assets id={id ?? ''} />
+                </Tabs.Content>
               </Tabs.Root>
             </Card.Body>
             <Card.Footer justifyContent="center">
@@ -189,10 +192,6 @@ const InheritanceProcedureDetail: React.FC = () => {
                       Modelace vyrovnaní
                       <FaCalculator />
                     </Button>
-                    <RouterNavLink to={route.asset(id)} rounded={'full'}>
-                      Přidat/upravit Majetek
-                      <FaCalculator />
-                    </RouterNavLink>
                     <Button as={Link} disabled rounded="full">
                       Chat s notářem
                       <HiChat />

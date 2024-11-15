@@ -51,7 +51,6 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
       setTestatorData({})
     }
 
-    // Trigger validation for the address field when it changes
     trigger('address')
   }, [watchedFields, setTestatorData, trigger])
 

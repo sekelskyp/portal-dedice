@@ -21,7 +21,6 @@ import { Form } from '@frontend/shared/forms/Form'
 import { InputFormControl } from '@frontend/shared/forms/InputFormControl'
 import { SelectFormControl } from '@frontend/shared/forms/SelectFormControl'
 import { SubmitButton } from '@frontend/shared/forms/SubmitButton'
-import { Page } from '@frontend/shared/layout/Page'
 
 import { Checkbox } from '../../../shared/design-system/atoms/chakra/checkbox'
 
@@ -120,7 +119,7 @@ const Section: React.FC<SectionProps> = ({
     <Box display="flex" justifyContent="space-between" alignItems="center">
       <Heading as={'h3'}>{title}</Heading>
       <Box display="flex" alignItems="center">
-        <Box mr={2}>žádné</Box>
+        <Box mr={2}>Ne</Box>
         <Checkbox
           checked={selected}
           onChange={() => {
@@ -132,7 +131,7 @@ const Section: React.FC<SectionProps> = ({
         />
       </Box>
     </Box>
-    <Separator mb={2} />
+    <Separator mb={4} />
     {!selected && children}
   </Box>
 )
@@ -230,8 +229,7 @@ const CarSection: React.FC<{
             render={({ field }) => (
               <SelectFormControl
                 {...field}
-                label="Auto"
-                mb={4}
+                label="Značka"
                 collection={carBrandCollection}
                 placeholder="Vyberte značku auta"
               />
@@ -287,7 +285,7 @@ const ValuablesSection: React.FC<{
           render={({ field }) => (
             <InputFormControl
               {...field}
-              placeholder="Zadejte jaké cennosti zůstavitel vlastnil (Max. 300 znaků)"
+              placeholder="Zadejte, jaké cennosti zůstavitel vlastnil (Max. 300 znaků)"
             />
           )}
         />
@@ -353,7 +351,9 @@ export type AssetSummary = {
   onSubmit: (variables: AssetFormData) => void
 }
 
-export const AssetPage = () => {
+export const AssetForm: React.FC<{
+  onSubmit: (data: AssetFormData) => void
+}> = ({ onSubmit }) => {
   const [sections, setSections] = useState({
     bankAccount: false,
     company: false,
@@ -367,8 +367,6 @@ export const AssetPage = () => {
   })
 
   const { setValue } = methods
-
-  const [summary, setSummary] = useState<AssetSummary | null>(null)
 
   const handleSetSelected =
     (section: keyof typeof sections) =>
@@ -385,70 +383,49 @@ export const AssetPage = () => {
       }
     }
 
-  const onSubmit: SubmitHandler<AssetFormData> = (data) => {
-    console.log('Form data:', data)
+  const handleSubmit: SubmitHandler<AssetFormData> = (data) => {
     const filteredData: AssetFormData = Object.keys(data)
       .filter((key) => !sections[key as keyof typeof sections])
       .reduce(
         (acc, key) => ({ ...acc, [key]: data[key as keyof AssetFormData] }),
         {}
       )
-    console.log('Filtered data:', filteredData)
-
-    try {
-      assetSchema(sections).parse(filteredData)
-      setSummary({ onSubmit: () => {}, ...filteredData })
-      console.log('Filtered data:', filteredData)
-    } catch (error) {
-      console.error(error)
-    }
+    onSubmit(filteredData)
   }
 
   return (
-    <Page>
-      <Heading mb={6}>Určení Majetku</Heading>
-      <FormProvider {...methods}>
-        <Form
-          onSubmit={onSubmit}
-          resolver={zodResolver(assetSchema(sections))}
-          noValidate
-        >
-          <VStack align="stretch">
-            <BankAccountSection
-              selected={sections.bankAccount}
-              setSelected={handleSetSelected('bankAccount')}
-            />
-            <CompanySection
-              selected={sections.company}
-              setSelected={handleSetSelected('company')}
-            />
-            <CarSection
-              selected={sections.car}
-              setSelected={handleSetSelected('car')}
-            />
-            <ValuablesSection
-              selected={sections.valuables}
-              setSelected={handleSetSelected('valuables')}
-            />
-            <OthersSection
-              selected={sections.others}
-              setSelected={handleSetSelected('others')}
-            />
-            <SubmitButton type="submit" colorScheme="blue">
-              Uložit souhrn
-            </SubmitButton>
-          </VStack>
-        </Form>
-      </FormProvider>
-
-      {summary && (
-        <Box mt={6} p={4} borderWidth="1px" borderRadius="md">
-          <Heading size="md" mb={4}>
-            Souhrn majetku
-          </Heading>
-          <pre>{JSON.stringify(summary, null, 2)}</pre>
-        </Box>
-      )}
-    </Page>
+    <FormProvider {...methods}>
+      <Form
+        onSubmit={handleSubmit}
+        resolver={zodResolver(assetSchema(sections))}
+        noValidate
+      >
+        <VStack align="stretch">
+          <BankAccountSection
+            selected={sections.bankAccount}
+            setSelected={handleSetSelected('bankAccount')}
+          />
+          <CompanySection
+            selected={sections.company}
+            setSelected={handleSetSelected('company')}
+          />
+          <CarSection
+            selected={sections.car}
+            setSelected={handleSetSelected('car')}
+          />
+          <ValuablesSection
+            selected={sections.valuables}
+            setSelected={handleSetSelected('valuables')}
+          />
+          <OthersSection
+            selected={sections.others}
+            setSelected={handleSetSelected('others')}
+          />
+          <SubmitButton type="submit" colorScheme="blue">
+            Uložit souhrn
+          </SubmitButton>
+        </VStack>
+      </Form>
+    </FormProvider>
   )
 }
