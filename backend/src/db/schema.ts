@@ -136,10 +136,10 @@ export const document = mysqlTable('document', {
     .notNull(), // FK to InheritanceProcedure
   taskId: int('task_id').references(() => task.id), // FK to Task
   userOwnerId: int('user_owner_id').references(() => user.id), // FK to User
-  createDate: timestamp('create_date').defaultNow(),
+  createDate: timestamp('create_date').defaultNow().notNull(),
   fileName: varchar('file_name', { length: 255 }).notNull(),
   fileType: varchar('file_type', { length: 100 }).notNull(),
-  fileData: binary('file_data'),
+  fileData: text('file_data').notNull(),
 })
 
 // Define Chat Table

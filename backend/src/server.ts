@@ -21,6 +21,7 @@ import { getBeneficiaryRepository } from '@backend/graphql/modules/beneficiary/b
 import { BeneficiaryResolver } from '@backend/graphql/modules/beneficiary/beneficiaryResolver'
 import { getContactRepository } from '@backend/graphql/modules/contact/contactRepository'
 import { ContactResolver } from '@backend/graphql/modules/contact/contactResolver'
+import { getDocumentRepository } from '@backend/graphql/modules/document/documentRepository'
 import { getEmailConfirmationTokenRepository } from '@backend/graphql/modules/emailConfirmationToken/emailConfirmationTokenRepository'
 import { EmptyResolver } from '@backend/graphql/modules/empty/emptyResolver'
 import { getInheritanceProcedureRepository } from '@backend/graphql/modules/inheritanceProcedure/inheritaceProcedureRepository'
@@ -95,6 +96,7 @@ const init = async () => {
         drizzle.db
       ),
       assetRepository: getAssetRepository(drizzle.db),
+      getDocumentRepository: getDocumentRepository(drizzle.db),
     }
   }
 

@@ -9,6 +9,8 @@ import {
   Root,
 } from 'type-graphql'
 
+import { getDocumentsByProcedureId } from '@backend/services/documentService'
+
 import {
   addBeneficiariesToProcedure,
   addBeneficiaryToProcedure,
@@ -23,6 +25,7 @@ import { CustomContext } from '../../../types/types'
 import { Asset } from '../asset/assetType'
 import { Beneficiary } from '../beneficiary/beneficiaryType'
 import { Contact } from '../contact/contactType'
+import { Document } from '../document/documentType'
 import { Notary } from '../notary/notaryType'
 
 import { CreateInheritanceProcedureInput } from './createInheritanceProcedureInput'
@@ -188,6 +191,14 @@ export class InheritanceProcedureResolver {
     return procedureRecords.map((record) => ({
       ...record.inheritance_procedure,
     }))
+  }
+
+  @FieldResolver(() => [Document], { nullable: true })
+  async documents(
+    @Root() procedure: InheritanceProcedure,
+    @Ctx() context: CustomContext
+  ): Promise<Document[]> {
+    return await getDocumentsByProcedureId(procedure.id, context)
   }
 
   // Field Resolver to fetch the assets associated with the procedure
