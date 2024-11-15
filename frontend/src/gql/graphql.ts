@@ -58,6 +58,22 @@ export type BeneficiaryInput = {
   surname: Scalars['String']['input']
 }
 
+export type Chat = {
+  __typename?: 'Chat'
+  chatMessages?: Maybe<Array<ChatMessage>>
+  id: Scalars['ID']['output']
+  inheritanceProcedureId: Scalars['ID']['output']
+}
+
+export type ChatMessage = {
+  __typename?: 'ChatMessage'
+  body: Scalars['String']['output']
+  chatId: Scalars['ID']['output']
+  createdAt: Scalars['DateTimeISO']['output']
+  id: Scalars['ID']['output']
+  userId: Scalars['ID']['output']
+}
+
 export type Contact = {
   __typename?: 'Contact'
   completeAddress?: Maybe<Scalars['String']['output']>
@@ -155,6 +171,7 @@ export type Mutation = {
   __typename?: 'Mutation'
   addBeneficiariesToProcedure: Scalars['Boolean']['output']
   addBeneficiaryToProcedure: Scalars['Boolean']['output']
+  addChatMessage: ChatMessage
   assignNotary: Scalars['Boolean']['output']
   changePassword: User
   closeProcedure: Scalars['Boolean']['output']
@@ -185,6 +202,12 @@ export type MutationAddBeneficiariesToProcedureArgs = {
 export type MutationAddBeneficiaryToProcedureArgs = {
   beneficiaryId: Scalars['Int']['input']
   procedureId: Scalars['Int']['input']
+}
+
+export type MutationAddChatMessageArgs = {
+  body: Scalars['String']['input']
+  chatId: Scalars['Int']['input']
+  userId: Scalars['Int']['input']
 }
 
 export type MutationAssignNotaryArgs = {
@@ -286,6 +309,8 @@ export type Notary = {
 export type Query = {
   __typename?: 'Query'
   _empty: Scalars['String']['output']
+  chat: Chat
+  chatByInheritanceProcedureId: Chat
   findNotary?: Maybe<Notary>
   getAllContacts: Array<Contact>
   getAllProcedures: Array<InheritanceProcedure>
@@ -299,6 +324,14 @@ export type Query = {
   getProceduresByNotaryId: Array<InheritanceProcedure>
   getUserById?: Maybe<User>
   notaries: Array<Notary>
+}
+
+export type QueryChatArgs = {
+  id: Scalars['Int']['input']
+}
+
+export type QueryChatByInheritanceProcedureIdArgs = {
+  inheritanceProcedureId: Scalars['Int']['input']
 }
 
 export type QueryFindNotaryArgs = {
@@ -373,6 +406,17 @@ export type User = {
   password: Scalars['String']['output']
 }
 
+export type AddChatMessageMutationVariables = Exact<{
+  body: Scalars['String']['input']
+  chatId: Scalars['Int']['input']
+  userId: Scalars['Int']['input']
+}>
+
+export type AddChatMessageMutation = {
+  __typename?: 'Mutation'
+  addChatMessage: { __typename?: 'ChatMessage'; id: string }
+}
+
 export type GetProceduresByBeneficiaryIdQueryVariables = Exact<{
   beneficiaryId: Scalars['Int']['input']
 }>
@@ -390,6 +434,25 @@ export type GetProceduresByBeneficiaryIdQuery = {
       displayName?: string | null
     } | null
   }>
+}
+
+export type GetChatQueryVariables = Exact<{
+  inheritanceProcedureId: Scalars['Int']['input']
+}>
+
+export type GetChatQuery = {
+  __typename?: 'Query'
+  chatByInheritanceProcedureId: {
+    __typename?: 'Chat'
+    chatMessages?: Array<{
+      __typename?: 'ChatMessage'
+      body: string
+      chatId: string
+      createdAt: any
+      id: string
+      userId: string
+    }> | null
+  }
 }
 
 export type GetAllProceduresQueryVariables = Exact<{ [key: string]: never }>
@@ -568,6 +631,95 @@ export type FindNotaryQuery = {
   } | null
 }
 
+export const AddChatMessageDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'addChatMessage' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'body' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'chatId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'userId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'addChatMessage' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'body' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'body' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'chatId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'chatId' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'userId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'userId' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  AddChatMessageMutation,
+  AddChatMessageMutationVariables
+>
 export const GetProceduresByBeneficiaryIdDocument = {
   kind: 'Document',
   definitions: [
@@ -635,6 +787,76 @@ export const GetProceduresByBeneficiaryIdDocument = {
   GetProceduresByBeneficiaryIdQuery,
   GetProceduresByBeneficiaryIdQueryVariables
 >
+export const GetChatDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'getChat' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'inheritanceProcedureId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'chatByInheritanceProcedureId' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'inheritanceProcedureId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'inheritanceProcedureId' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'chatMessages' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'body' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'chatId' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'createdAt' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'userId' },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetChatQuery, GetChatQueryVariables>
 export const GetAllProceduresDocument = {
   kind: 'Document',
   definitions: [

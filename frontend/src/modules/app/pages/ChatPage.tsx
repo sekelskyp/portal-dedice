@@ -1,38 +1,50 @@
-import { Container, Heading, HStack, Input } from '@chakra-ui/react'
-import { LuUser } from 'react-icons/lu'
+import { useCallback } from 'react'
+import { Box, Container, Heading } from '@chakra-ui/react'
 
-import { InputGroup } from '@frontend/shared/design-system'
-import { Form, InputFormControl, SubmitButton } from '@frontend/shared/forms'
+import { Chat, ChatMessage } from '@frontend/gql/graphql'
+import { useAuth } from '@frontend/modules/auth'
 import { Page } from '@frontend/shared/layout'
 
-export type ChatPageProps = {
-  errorMessage?: string
-  onSubmit: (data: {
-    email: string
-    name: string
-    surname: string
-    password: string
-  }) => void
-  loading?: boolean
-}
+import { useAddChatMessage } from '../hooks/useAddChatMessage'
+import { useBeneficiaryProcedures } from '../hooks/useBeneficiaryProcedures'
+import { useGetChat } from '../hooks/useGetChatMessages'
+
+import { ChatMessageForm } from './ChatMessageForm'
 
 export default function ChatPage() {
+  const user = useAuth()
+  const proceedings = useBeneficiaryProcedures()
+  const messages = useGetChat()
+
+  console.log(messages)
+
+  const [addChatMessageRequest, addChatMessageRequestState] =
+    useAddChatMessage()
+
+  const handleChatMessageFormSubmit = useCallback(
+    async (data: { message: string }) => {
+      addChatMessageRequest({
+        variables: {
+          body: data.message,
+          chatId: 1,
+          userId: +user.user?.id!,
+        },
+      })
+    },
+    [addChatMessageRequest]
+  )
+
   return (
     <Page>
       <Container maxW={'3xl'}>
         <Heading>Chat</Heading>
-        <Form onSubmit={() => console.log('Hello')}>
-          <HStack>
-            <InputGroup flex="1" startElement={<LuUser />}>
-              <Input placeholder="Username" />
-            </InputGroup>
-            <InputFormControl
-              name="message"
-              placeholder="Napište zprávu..."
-            ></InputFormControl>
-            <SubmitButton>Odeslat</SubmitButton>
-          </HStack>
-        </Form>
+        {proceedings?.data?.getProceduresByBeneficiaryId.map((item) => (
+          <Box>{item.name}</Box>
+        ))}
+        {messages.map((message) => (
+            <Box>{message.body}</Box>
+        ))}
+        <ChatMessageForm onSubmit={handleChatMessageFormSubmit} />
       </Container>
     </Page>
   )
