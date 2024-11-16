@@ -18,7 +18,7 @@ export class DocumentResolver {
   async createDocument(
     @Arg('data') data: UploadDocumentInput,
     @Ctx() context: CustomContext
-  ): Promise<Document> {
+  ): Promise<number> {
     const documentData: CreateDocumentInput = {
       file: data.file,
       userOwnerId: data.userOwnerId || null,

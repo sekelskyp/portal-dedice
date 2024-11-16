@@ -7,9 +7,6 @@ export class UploadDocumentInput {
   @Field(() => GraphQLUpload)
   file!: FileUpload
 
-  @Field()
-  filename!: string
-
   @Field(() => ID, { nullable: true })
   userOwnerId?: number
 

@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "a183aac9-3ed1-45a6-86e9-c82b55b26998",
-  "prevId": "01139a81-e69e-4d3e-9912-b1801e472e28",
+  "id": "3050f7a1-6e9b-4144-9cc2-0a60860230a6",
+  "prevId": "a183aac9-3ed1-45a6-86e9-c82b55b26998",
   "tables": {
     "asset": {
       "name": "asset",
@@ -503,7 +503,7 @@
         },
         "file_data": {
           "name": "file_data",
-          "type": "text",
+          "type": "longtext",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false

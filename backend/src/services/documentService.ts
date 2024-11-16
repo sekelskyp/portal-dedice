@@ -49,7 +49,7 @@ async function encodeFileToBase64(file: FileUpload): Promise<string> {
 export async function createDocument(
   input: CreateDocumentInput,
   context: CustomContext
-) {
+): Promise<number> {
   const { documentRepository } = context
   const file = await input.file
   const fileData = await encodeFileToBase64(file)
@@ -62,8 +62,7 @@ export async function createDocument(
     inheritanceProcedureId: input.inheritanceProcedureId,
   }
   const [document] = await documentRepository.createDocument(documentData)
-  const documentRecord = await documentRepository.getDocumentById(document.id)
-  return documentRecord
+  return document.id
 }
 
 /**
