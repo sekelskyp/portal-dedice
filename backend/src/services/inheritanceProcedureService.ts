@@ -133,7 +133,6 @@ export async function addBeneficiaryToProcedure(
   })
 }
 
-/// todo
 export async function addBeneficiariesToProcedure(
   procedureId: number,
   beneficiaryIds: number[],
