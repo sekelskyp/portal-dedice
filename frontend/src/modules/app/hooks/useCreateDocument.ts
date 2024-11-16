@@ -20,13 +20,10 @@ export function useCreateDocument() {
   const [createDocumentRequest, createDocumentRequestState] = useMutation(
     CREATE_DOCUMENT_MUTATION,
     {
-      onCompleted: (data) => {
-        console.log('Document created:', data)
+      onCompleted: () => {
         navigate(route.portal())
       },
-      onError: (error) => {
-        console.error('Error creating document:', error)
-      },
+      onError: () => {},
     }
   )
 

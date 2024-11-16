@@ -16,9 +16,6 @@ export function DocumentUpload() {
   const { files, handleFileUpload, clearFiles, acceptedFileTypes } =
     useDocumentUpload()
 
-  console.log(files)
-  console.log()
-
   const [createDocumentRequest, createDocumentRequestState] =
     useCreateDocument()
 
