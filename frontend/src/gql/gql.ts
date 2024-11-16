@@ -17,6 +17,8 @@ const documents = {
     types.GetProceduresByBeneficiaryIdDocument,
   '\n  mutation CreateDocument($data: UploadDocumentInput!) {\n    createDocument(data: $data)\n  }\n':
     types.CreateDocumentDocument,
+  '\n  mutation DeleteDocument($id: ID!) {\n    deleteDocumentsByIds(ids: [$id])\n  }\n':
+    types.DeleteDocumentDocument,
   '\n  query GetDocumentsByProcedureId($procedureId: Int!) {\n    getProcedureById(id: $procedureId) {\n      documents {\n        id\n        fileName\n        createDate\n        fileData\n        fileType\n      }\n    }\n  }\n':
     types.GetDocumentsByProcedureIdDocument,
   '\n  query GetAllProcedures {\n    getAllProcedures {\n      id\n      name\n      startDate\n      state\n      deceasedContact {\n        displayName\n      }\n    }\n  }\n':
@@ -61,6 +63,12 @@ export function gql(
 export function gql(
   source: '\n  mutation CreateDocument($data: UploadDocumentInput!) {\n    createDocument(data: $data)\n  }\n'
 ): (typeof documents)['\n  mutation CreateDocument($data: UploadDocumentInput!) {\n    createDocument(data: $data)\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  mutation DeleteDocument($id: ID!) {\n    deleteDocumentsByIds(ids: [$id])\n  }\n'
+): (typeof documents)['\n  mutation DeleteDocument($id: ID!) {\n    deleteDocumentsByIds(ids: [$id])\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
