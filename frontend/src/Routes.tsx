@@ -7,6 +7,7 @@ import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 import { route } from '@shared/route'
 
 import InheritanceProcedureDetail from './modules/app/pages/InheritanceProcedureDetail'
+import { NewDocumentPage } from './modules/app/pages/NewDocumentPage'
 import { NewProceedingPage } from './modules/app/pages/NewProceedingPage'
 import { Proceedings } from './modules/app/pages/Proceedings'
 import { ConfirmEmailPage } from './modules/auth/pages/ConfirmEmailPage'
@@ -30,9 +31,10 @@ export function Routes() {
           <Route path={route.portal()} element={<Proceedings />} />
           <Route path={route.newProceeding()} element={<NewProceedingPage />} />
           <Route
-            path={route.inheritanceProcedure(':id')}
+            path={route.inheritanceProcedure()}
             element={<InheritanceProcedureDetail />}
           />
+          <Route path={route.newDocument()} element={<NewDocumentPage />} />
         </Route>
         <Route path={route.about()} element={<AboutPage />} />
         <Route path={route.guide()} element={<GuidePage />} />

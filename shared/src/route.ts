@@ -13,4 +13,6 @@ export const route = {
   emailVerification: () => `/auth/email-verification`,
   confirmEmail: () => `/auth/confirm-email`,
   inheritanceProcedure: (id = ':id') => `/portal/inheritance-procedure/${id}`,
+  newDocument: (id = ':id') =>
+    `/portal/inheritance-procedure/${id}/new-document`,
 }
