@@ -6,9 +6,7 @@ import { route } from '@shared/route'
 
 const CREATE_DOCUMENT_MUTATION = gql(/* GraphQL */ `
   mutation CreateDocument($data: UploadDocumentInput!) {
-    createDocument(data: $data) {
-      id
-    }
+    createDocument(data: $data)
   }
 `)
 

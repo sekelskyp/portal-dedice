@@ -144,7 +144,7 @@ type Mutation {
   createBeneficiaries(data: [CreateBeneficiaryInput!]!): [Beneficiary!]!
   createBeneficiary(data: CreateBeneficiaryInput!): Beneficiary!
   createContact(data: CreateContactInput!): Int!
-  createDocument(data: UploadDocumentInput!): Document!
+  createDocument(data: UploadDocumentInput!): ID!
   createInheritanceProcedureFromForm(
     data: InheritanceProcedureFormDataInput!
   ): InheritanceProcedure!
@@ -186,6 +186,7 @@ type Query {
   getContactById(id: Float!): Contact
   getDocumentById(id: ID!): Document
   getDocumentsByIds(ids: [ID!]!): [Document!]!
+  getDocumentsByProcedureId(notaryId: Int!): [Document!]!
   getNotaryById(id: Int!): Notary
   getProcedureById(id: Int!): InheritanceProcedure
   getProceduresByBeneficiaryId(beneficiaryId: Int!): [InheritanceProcedure!]!

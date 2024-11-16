@@ -177,7 +177,7 @@ export type Mutation = {
   createBeneficiaries: Array<Beneficiary>
   createBeneficiary: Beneficiary
   createContact: Scalars['Int']['output']
-  createDocument: Document
+  createDocument: Scalars['ID']['output']
   createInheritanceProcedureFromForm: InheritanceProcedure
   createNotary: Notary
   createProcedure: Scalars['Int']['output']
@@ -320,6 +320,7 @@ export type Query = {
   getContactById?: Maybe<Contact>
   getDocumentById?: Maybe<Document>
   getDocumentsByIds: Array<Document>
+  getDocumentsByProcedureId: Array<Document>
   getNotaryById?: Maybe<Notary>
   getProcedureById?: Maybe<InheritanceProcedure>
   getProceduresByBeneficiaryId: Array<InheritanceProcedure>
@@ -354,6 +355,10 @@ export type QueryGetDocumentByIdArgs = {
 
 export type QueryGetDocumentsByIdsArgs = {
   ids: Array<Scalars['ID']['input']>
+}
+
+export type QueryGetDocumentsByProcedureIdArgs = {
+  notaryId: Scalars['Int']['input']
 }
 
 export type QueryGetNotaryByIdArgs = {
@@ -440,7 +445,26 @@ export type CreateDocumentMutationVariables = Exact<{
 
 export type CreateDocumentMutation = {
   __typename?: 'Mutation'
-  createDocument: { __typename?: 'Document'; id: string }
+  createDocument: string
+}
+
+export type GetDocumentsByProcedureIdQueryVariables = Exact<{
+  procedureId: Scalars['Int']['input']
+}>
+
+export type GetDocumentsByProcedureIdQuery = {
+  __typename?: 'Query'
+  getProcedureById?: {
+    __typename?: 'InheritanceProcedure'
+    documents?: Array<{
+      __typename?: 'Document'
+      id: string
+      fileName: string
+      createDate: any
+      fileData: string
+      fileType: string
+    }> | null
+  } | null
 }
 
 export type GetAllProceduresQueryVariables = Exact<{ [key: string]: never }>
@@ -709,12 +733,6 @@ export const CreateDocumentDocument = {
                 },
               },
             ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-              ],
-            },
           },
         ],
       },
@@ -723,6 +741,82 @@ export const CreateDocumentDocument = {
 } as unknown as DocumentNode<
   CreateDocumentMutation,
   CreateDocumentMutationVariables
+>
+export const GetDocumentsByProcedureIdDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetDocumentsByProcedureId' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'procedureId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getProcedureById' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'id' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'procedureId' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'documents' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'fileName' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'createDate' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'fileData' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'fileType' },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetDocumentsByProcedureIdQuery,
+  GetDocumentsByProcedureIdQueryVariables
 >
 export const GetAllProceduresDocument = {
   kind: 'Document',

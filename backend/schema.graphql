@@ -146,7 +146,7 @@ type Mutation {
   createBeneficiaries(data: [CreateBeneficiaryInput!]!): [Beneficiary!]!
   createBeneficiary(data: CreateBeneficiaryInput!): Beneficiary!
   createContact(data: CreateContactInput!): Int!
-  createDocument(data: UploadDocumentInput!): Document!
+  createDocument(data: UploadDocumentInput!): ID!
   createInheritanceProcedureFromForm(data: InheritanceProcedureFormDataInput!): InheritanceProcedure!
   createNotary(data: CreateNotaryInput!): Notary!
   createProcedure(data: CreateInheritanceProcedureInput!): Int!
