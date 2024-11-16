@@ -17,20 +17,20 @@ import {
 import { z } from 'zod'
 
 import resources from '@frontend/resources'
+import { Switch } from '@frontend/shared/design-system/atoms/chakra'
 import { Form } from '@frontend/shared/forms/Form'
 import { InputFormControl } from '@frontend/shared/forms/InputFormControl'
 import { SelectFormControl } from '@frontend/shared/forms/SelectFormControl'
 import { SubmitButton } from '@frontend/shared/forms/SubmitButton'
 
-import { Checkbox } from '../../../shared/design-system/atoms/chakra/checkbox'
 
 const assetSchema = (sections: Record<string, boolean>) => {
   const schema: Record<string, z.ZodObject<Record<string, z.ZodTypeAny>>> = {}
   if (!sections.bankAccount) {
     schema.bankAccount = z.object({
       bank: z
-        .string({ required_error: 'Vyberte bankovní instituci' })
-        .min(1, { message: 'Vyberte bankovní instituci' }),
+        .array(z.string({ required_error: 'Vyberte bankovní instituci' }))
+        .min(1, { message: 'Vyberte alespoň jednu bankovní instituci' }),
     })
   }
   if (!sections.company) {
@@ -118,20 +118,21 @@ const Section: React.FC<SectionProps> = ({
   <Box>
     <Box display="flex" justifyContent="space-between" alignItems="center">
       <Heading as={'h3'}>{title}</Heading>
-      <Box display="flex" alignItems="center">
-        <Box mr={2}>Ne</Box>
-        <Checkbox
-          checked={selected}
-          onChange={() => {
-            setSelected((prev) => !prev)
-            if (!selected && clearFields) {
-              clearFields()
-            }
-          }}
-        />
-      </Box>
     </Box>
-    <Separator mb={4} />
+    <Separator mb={2} />
+    <Box p={1} m={2} display="flex" alignItems="center">
+    <Box mr={2}>Ano</Box>
+      <Switch
+        checked={selected}
+        onChange={() => {
+          setSelected((prev) => !prev)
+          if (!selected && clearFields) {
+            clearFields()
+          }
+        }}
+      />
+      <Box ml={2}>Ne</Box>
+    </Box>
     {!selected && children}
   </Box>
 )
@@ -143,7 +144,7 @@ const BankAccountSection: React.FC<{
   const { setValue } = useFormContext<AssetFormData>()
 
   const clearFields = () => {
-    setValue('bankAccount.bank', '')
+    setValue('bankAccount.bank', [])
   }
 
   return (
@@ -162,6 +163,7 @@ const BankAccountSection: React.FC<{
               label="Bankovní účet"
               collection={bankAccountCollection}
               placeholder="Vyberte bankovní instituci"
+              multiple
             />
           )}
         />
@@ -229,7 +231,7 @@ const CarSection: React.FC<{
             render={({ field }) => (
               <SelectFormControl
                 {...field}
-                label="Značka"
+                label="Auto"
                 collection={carBrandCollection}
                 placeholder="Vyberte značku auta"
               />
@@ -285,7 +287,7 @@ const ValuablesSection: React.FC<{
           render={({ field }) => (
             <InputFormControl
               {...field}
-              placeholder="Zadejte, jaké cennosti zůstavitel vlastnil (Max. 300 znaků)"
+              placeholder="Zadejte jaké cennosti zůstavitel vlastnil (Max. 300 znaků)"
             />
           )}
         />
@@ -328,7 +330,7 @@ const OthersSection: React.FC<{
 
 export type AssetFormData = {
   bankAccount?: {
-    bank?: string
+    bank?: string[]
   }
   company?: {
     ico?: string
@@ -422,7 +424,7 @@ export const AssetForm: React.FC<{
             setSelected={handleSetSelected('others')}
           />
           <SubmitButton type="submit" colorScheme="blue">
-            Uložit souhrn
+            Uložit majetek
           </SubmitButton>
         </VStack>
       </Form>
