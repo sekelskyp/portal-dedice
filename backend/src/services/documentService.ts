@@ -62,6 +62,9 @@ export async function createDocument(
     inheritanceProcedureId: input.inheritanceProcedureId,
   }
   const [document] = await documentRepository.createDocument(documentData)
+  if (!document) {
+    throw new Error('Failed to create document')
+  }
   return document.id
 }
 
