@@ -60,7 +60,7 @@ export default function ChatPage() {
       await addMessage({
         variables: {
           body: data.message,
-          chatId: +id!,
+          procedureId: +id!,
           userId: +user.user?.id!,
         },
       })

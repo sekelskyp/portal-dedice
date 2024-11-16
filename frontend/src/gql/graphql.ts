@@ -206,7 +206,7 @@ export type MutationAddBeneficiaryToProcedureArgs = {
 
 export type MutationAddChatMessageArgs = {
   body: Scalars['String']['input']
-  chatId: Scalars['Int']['input']
+  procedureId: Scalars['Int']['input']
   userId: Scalars['Int']['input']
 }
 
@@ -393,7 +393,7 @@ export type Subscription = {
 }
 
 export type SubscriptionNewChatMessageArgs = {
-  chatId: Scalars['Int']['input']
+  procedureId: Scalars['Int']['input']
 }
 
 export type UpdateBeneficiaryInput = {
@@ -413,6 +413,22 @@ export type User = {
   isNotary: Scalars['Boolean']['output']
   notaries: Array<Notary>
   password: Scalars['String']['output']
+}
+
+export type AddMessageMutationVariables = Exact<{
+  body: Scalars['String']['input']
+  procedureId: Scalars['Int']['input']
+  userId: Scalars['Int']['input']
+}>
+
+export type AddMessageMutation = {
+  __typename?: 'Mutation'
+  addChatMessage: {
+    __typename?: 'ChatMessage'
+    chatId: string
+    body: string
+    userId: string
+  }
 }
 
 export type GetChatQueryVariables = Exact<{
@@ -435,7 +451,7 @@ export type GetChatQuery = {
 }
 
 export type NewChatMessageSubscriptionVariables = Exact<{
-  chatId: Scalars['Int']['input']
+  procedureId: Scalars['Int']['input']
 }>
 
 export type NewChatMessageSubscription = {
@@ -447,22 +463,6 @@ export type NewChatMessageSubscription = {
     userId: string
     createdAt: any
     id: string
-  }
-}
-
-export type AddMessageMutationVariables = Exact<{
-  body: Scalars['String']['input']
-  chatId: Scalars['Int']['input']
-  userId: Scalars['Int']['input']
-}>
-
-export type AddMessageMutation = {
-  __typename?: 'Mutation'
-  addChatMessage: {
-    __typename?: 'ChatMessage'
-    chatId: string
-    body: string
-    userId: string
   }
 }
 
@@ -673,6 +673,94 @@ export type FindNotaryQuery = {
   } | null
 }
 
+export const AddMessageDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'addMessage' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'body' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'procedureId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'userId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'addChatMessage' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'body' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'body' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'procedureId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'procedureId' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'userId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'userId' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'chatId' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'body' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'userId' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<AddMessageMutation, AddMessageMutationVariables>
 export const GetChatDocument = {
   kind: 'Document',
   definitions: [
@@ -755,7 +843,7 @@ export const NewChatMessageDocument = {
           kind: 'VariableDefinition',
           variable: {
             kind: 'Variable',
-            name: { kind: 'Name', value: 'chatId' },
+            name: { kind: 'Name', value: 'procedureId' },
           },
           type: {
             kind: 'NonNullType',
@@ -772,10 +860,10 @@ export const NewChatMessageDocument = {
             arguments: [
               {
                 kind: 'Argument',
-                name: { kind: 'Name', value: 'chatId' },
+                name: { kind: 'Name', value: 'procedureId' },
                 value: {
                   kind: 'Variable',
-                  name: { kind: 'Name', value: 'chatId' },
+                  name: { kind: 'Name', value: 'procedureId' },
                 },
               },
             ],
@@ -798,94 +886,6 @@ export const NewChatMessageDocument = {
   NewChatMessageSubscription,
   NewChatMessageSubscriptionVariables
 >
-export const AddMessageDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'addMessage' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'body' } },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'String' },
-            },
-          },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'chatId' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
-          },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'userId' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'addChatMessage' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'body' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'body' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'chatId' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'chatId' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'userId' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'userId' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'chatId' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'body' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'userId' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<AddMessageMutation, AddMessageMutationVariables>
 export const GetProceduresByBeneficiaryIdDocument = {
   kind: 'Document',
   definitions: [

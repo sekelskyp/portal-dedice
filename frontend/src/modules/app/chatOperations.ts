@@ -1,8 +1,8 @@
 import { gql } from '@frontend/gql'
 
 export const ADD_MESSAGE_MUTATION = gql(/* GraphQL */ `
-  mutation addMessage($body: String!, $chatId: Int!, $userId: Int!) {
-    addChatMessage(body: $body, chatId: $chatId, userId: $userId) {
+  mutation addMessage($body: String!, $procedureId: Int!, $userId: Int!) {
+    addChatMessage(body: $body, procedureId: $procedureId, userId: $userId) {
       chatId
       body
       userId
@@ -27,8 +27,8 @@ export const GET_MESSAGES_QUERY = gql(/* GraphQL */ `
 `)
 
 export const MESSAGE_SUBSCRIPTION = gql(/* GraphQL */ `
-  subscription newChatMessage($chatId: Int!) {
-    newChatMessage(chatId: $chatId) {
+  subscription newChatMessage($procedureId: Int!) {
+    newChatMessage(procedureId: $procedureId) {
       chatId
       body
       userId

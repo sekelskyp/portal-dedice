@@ -11,7 +11,7 @@ export function useGetMessages(proceedingId: string) {
 
   useSubscription(MESSAGE_SUBSCRIPTION, {
     variables: {
-      chatId: +proceedingId,
+      procedureId: +proceedingId,
     },
     onData: ({ data, client }) => {
       const newMessage = data.data?.newChatMessage

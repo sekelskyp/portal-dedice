@@ -139,7 +139,7 @@ type Mutation {
     procedureId: Int!
   ): Boolean!
   addBeneficiaryToProcedure(beneficiaryId: Int!, procedureId: Int!): Boolean!
-  addChatMessage(body: String!, chatId: Int!, userId: Int!): ChatMessage!
+  addChatMessage(body: String!, procedureId: Int!, userId: Int!): ChatMessage!
   assignNotary(notaryId: Int!, procedureId: Int!): Boolean!
   changePassword(newPassword: String!, oldPassword: String!): User!
   closeProcedure(procedureId: Int!): Boolean!
@@ -208,7 +208,7 @@ type SignInResponse {
 }
 
 type Subscription {
-  newChatMessage(chatId: Int!): ChatMessage!
+  newChatMessage(procedureId: Int!): ChatMessage!
 }
 
 input UpdateBeneficiaryInput {
