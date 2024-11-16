@@ -15,7 +15,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
   '\n  query GetProceduresByBeneficiaryId($beneficiaryId: Int!) {\n    getProceduresByBeneficiaryId(beneficiaryId: $beneficiaryId) {\n      id\n      name\n      startDate\n      state\n      deceasedContact {\n        displayName\n      }\n    }\n  }\n':
     types.GetProceduresByBeneficiaryIdDocument,
-  '\n  mutation CreateDocument($data: UploadDocumentInput!) {\n    createDocument(data: $data) {\n      id\n      fileType\n      createDate\n    }\n  }\n':
+  '\n  mutation CreateDocument($data: UploadDocumentInput!) {\n    createDocument(data: $data) {\n      id\n    }\n  }\n':
     types.CreateDocumentDocument,
   '\n  query GetAllProcedures {\n    getAllProcedures {\n      id\n      name\n      startDate\n      state\n      deceasedContact {\n        displayName\n      }\n    }\n  }\n':
     types.GetAllProceduresDocument,
@@ -57,8 +57,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  mutation CreateDocument($data: UploadDocumentInput!) {\n    createDocument(data: $data) {\n      id\n      fileType\n      createDate\n    }\n  }\n'
-): (typeof documents)['\n  mutation CreateDocument($data: UploadDocumentInput!) {\n    createDocument(data: $data) {\n      id\n      fileType\n      createDate\n    }\n  }\n']
+  source: '\n  mutation CreateDocument($data: UploadDocumentInput!) {\n    createDocument(data: $data) {\n      id\n    }\n  }\n'
+): (typeof documents)['\n  mutation CreateDocument($data: UploadDocumentInput!) {\n    createDocument(data: $data) {\n      id\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -1,8 +1,11 @@
-import { useCallback } from 'react'
-import { Box, Button, Stack } from '@chakra-ui/react'
+import { useCallback, useState } from 'react'
+import { Box, Stack } from '@chakra-ui/react'
 import { FaFileUpload } from 'react-icons/fa'
+import { useParams } from 'react-router-dom'
 
 import {
+  Alert,
+  Button,
   FileUploadDropzone,
   FileUploadItem,
   FileUploadList,
@@ -11,8 +14,16 @@ import {
 
 import { useCreateDocument } from '../hooks/useCreateDocument'
 import { useDocumentUpload } from '../hooks/useDocumentUpload'
+import { useProcedure } from '../hooks/useProcedure'
 
 export function DocumentUpload() {
+  const { id } = useParams()
+  const [showEmptyFilesAlert, setShowEmptyFilesAlert] = useState(false)
+
+  const { data } = useProcedure({
+    procedureId: parseInt(id ?? '0', 10),
+  })
+
   const { files, handleFileUpload, clearFiles, acceptedFileTypes } =
     useDocumentUpload()
 
@@ -20,18 +31,23 @@ export function DocumentUpload() {
     useCreateDocument()
 
   const handleUpload = useCallback(async () => {
+    if (files.length === 0) {
+      setShowEmptyFilesAlert(true)
+      return
+    }
+    setShowEmptyFilesAlert(false)
     for (const file of files) {
       await createDocumentRequest({
         variables: {
           data: {
             file: file,
-            filename: file.name,
-            inheritanceProcedureId: '1',
+            inheritanceProcedureId:
+              data?.getProcedureById?.id?.toString() ?? '',
           },
         },
       })
     }
-  }, [createDocumentRequest, files])
+  }, [createDocumentRequest, data, files])
 
   return (
     <Box width="100%">
@@ -53,11 +69,31 @@ export function DocumentUpload() {
         </FileUploadList>
       </FileUploadRoot>
       <Stack mt={4} alignItems="center">
-        <Button onClick={handleUpload} w="1/2" textAlign="center">
+        <Button
+          onClick={handleUpload}
+          w="1/2"
+          textAlign="center"
+          loading={createDocumentRequestState.loading}
+          loadingText="Probíhá nahrávání..."
+        >
           Nahrát přílohu <FaFileUpload />
         </Button>
-        {createDocumentRequestState.loading && <p>Probíhá nahrávání...</p>}
-        {createDocumentRequestState.error && <div> Chyba.</div>}
+        {showEmptyFilesAlert && (
+          <Alert
+            status="error"
+            width="fit-content"
+            alignItems="center"
+            title="Prosím, vložte soubor k nahrání."
+          />
+        )}
+        {createDocumentRequestState.error && (
+          <Alert
+            status="error"
+            width="fit-content"
+            alignItems="center"
+            title="Nepodařilo se nahrát přílohu. Zkuste to prosím znovu."
+          />
+        )}
       </Stack>
     </Box>
   )

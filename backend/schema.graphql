@@ -215,7 +215,6 @@ scalar Upload
 
 input UploadDocumentInput {
   file: Upload!
-  filename: String!
   inheritanceProcedureId: ID!
   taskId: ID
   userOwnerId: ID

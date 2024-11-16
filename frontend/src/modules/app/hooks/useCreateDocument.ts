@@ -8,8 +8,6 @@ const CREATE_DOCUMENT_MUTATION = gql(/* GraphQL */ `
   mutation CreateDocument($data: UploadDocumentInput!) {
     createDocument(data: $data) {
       id
-      fileType
-      createDate
     }
   }
 `)
@@ -23,7 +21,9 @@ export function useCreateDocument() {
       onCompleted: () => {
         navigate(route.portal())
       },
-      onError: () => {},
+      onError: (error) => {
+        console.error('Error creating document:', error)
+      },
     }
   )
 

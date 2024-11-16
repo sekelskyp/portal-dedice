@@ -398,7 +398,6 @@ export type UpdateBeneficiaryInput = {
 
 export type UploadDocumentInput = {
   file: Scalars['Upload']['input']
-  filename: Scalars['String']['input']
   inheritanceProcedureId: Scalars['ID']['input']
   taskId?: InputMaybe<Scalars['ID']['input']>
   userOwnerId?: InputMaybe<Scalars['ID']['input']>
@@ -441,12 +440,7 @@ export type CreateDocumentMutationVariables = Exact<{
 
 export type CreateDocumentMutation = {
   __typename?: 'Mutation'
-  createDocument: {
-    __typename?: 'Document'
-    id: string
-    fileType: string
-    createDate: any
-  }
+  createDocument: { __typename?: 'Document'; id: string }
 }
 
 export type GetAllProceduresQueryVariables = Exact<{ [key: string]: never }>
@@ -719,8 +713,6 @@ export const CreateDocumentDocument = {
               kind: 'SelectionSet',
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'fileType' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'createDate' } },
               ],
             },
           },
