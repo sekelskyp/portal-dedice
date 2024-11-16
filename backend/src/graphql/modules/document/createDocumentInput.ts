@@ -10,10 +10,10 @@ export class UploadDocumentInput {
   @Field()
   filename!: string
 
-  @Field(() => ID)
+  @Field(() => ID, { nullable: true })
   userOwnerId?: number
 
-  @Field(() => ID)
+  @Field(() => ID, { nullable: true })
   taskId?: number
 
   @Field(() => ID)
