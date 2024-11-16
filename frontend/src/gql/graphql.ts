@@ -29,6 +29,8 @@ export type Scalars = {
   Float: { input: number; output: number }
   /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format. */
   DateTimeISO: { input: any; output: any }
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: { input: any; output: any }
 }
 
 export type Asset = {
@@ -120,6 +122,18 @@ export type DeceasedPersonInput = {
   surname: Scalars['String']['input']
 }
 
+export type Document = {
+  __typename?: 'Document'
+  createDate: Scalars['DateTimeISO']['output']
+  fileData: Scalars['String']['output']
+  fileName: Scalars['String']['output']
+  fileType: Scalars['String']['output']
+  id: Scalars['ID']['output']
+  inheritanceProcedureId: Scalars['ID']['output']
+  taskId?: Maybe<Scalars['ID']['output']>
+  userOwnerId?: Maybe<Scalars['ID']['output']>
+}
+
 export type FindNotaryInput = {
   deceasedPersonDateOfDeath: Scalars['DateTimeISO']['input']
   postalCode: Scalars['String']['input']
@@ -132,6 +146,7 @@ export type InheritanceProcedure = {
   deceasedContactId?: Maybe<Scalars['ID']['output']>
   deceasedDateOfBirth?: Maybe<Scalars['DateTimeISO']['output']>
   deceasedDateOfDeath?: Maybe<Scalars['DateTimeISO']['output']>
+  documents?: Maybe<Array<Document>>
   endDate?: Maybe<Scalars['DateTimeISO']['output']>
   id: Scalars['ID']['output']
   mainContact?: Maybe<Contact>
@@ -162,11 +177,13 @@ export type Mutation = {
   createBeneficiaries: Array<Beneficiary>
   createBeneficiary: Beneficiary
   createContact: Scalars['Int']['output']
+  createDocument: Document
   createInheritanceProcedureFromForm: InheritanceProcedure
   createNotary: Notary
   createProcedure: Scalars['Int']['output']
   deleteBeneficiary: Scalars['Boolean']['output']
   deleteContactById: Scalars['Int']['output']
+  deleteDocumentsByIds: Scalars['Boolean']['output']
   deleteNotary: Notary
   deleteProceduresByIds: Array<Scalars['Int']['output']>
   removeBeneficiaryFromProcedure: Scalars['Boolean']['output']
@@ -217,6 +234,10 @@ export type MutationCreateContactArgs = {
   data: CreateContactInput
 }
 
+export type MutationCreateDocumentArgs = {
+  data: UploadDocumentInput
+}
+
 export type MutationCreateInheritanceProcedureFromFormArgs = {
   data: InheritanceProcedureFormDataInput
 }
@@ -235,6 +256,10 @@ export type MutationDeleteBeneficiaryArgs = {
 
 export type MutationDeleteContactByIdArgs = {
   id: Scalars['Int']['input']
+}
+
+export type MutationDeleteDocumentsByIdsArgs = {
+  ids: Array<Scalars['ID']['input']>
 }
 
 export type MutationDeleteNotaryArgs = {
@@ -293,6 +318,8 @@ export type Query = {
   getBeneficiariesByProcedureId: Array<Beneficiary>
   getBeneficiaryById?: Maybe<Beneficiary>
   getContactById?: Maybe<Contact>
+  getDocumentById?: Maybe<Document>
+  getDocumentsByIds: Array<Document>
   getNotaryById?: Maybe<Notary>
   getProcedureById?: Maybe<InheritanceProcedure>
   getProceduresByBeneficiaryId: Array<InheritanceProcedure>
@@ -319,6 +346,14 @@ export type QueryGetBeneficiaryByIdArgs = {
 
 export type QueryGetContactByIdArgs = {
   id: Scalars['Float']['input']
+}
+
+export type QueryGetDocumentByIdArgs = {
+  id: Scalars['ID']['input']
+}
+
+export type QueryGetDocumentsByIdsArgs = {
+  ids: Array<Scalars['ID']['input']>
 }
 
 export type QueryGetNotaryByIdArgs = {
@@ -361,6 +396,14 @@ export type UpdateBeneficiaryInput = {
   userId?: InputMaybe<Scalars['ID']['input']>
 }
 
+export type UploadDocumentInput = {
+  file: Scalars['Upload']['input']
+  filename: Scalars['String']['input']
+  inheritanceProcedureId: Scalars['ID']['input']
+  taskId?: InputMaybe<Scalars['ID']['input']>
+  userOwnerId?: InputMaybe<Scalars['ID']['input']>
+}
+
 export type User = {
   __typename?: 'User'
   beneficiaries: Array<Beneficiary>
@@ -390,6 +433,20 @@ export type GetProceduresByBeneficiaryIdQuery = {
       displayName?: string | null
     } | null
   }>
+}
+
+export type CreateDocumentMutationVariables = Exact<{
+  data: UploadDocumentInput
+}>
+
+export type CreateDocumentMutation = {
+  __typename?: 'Mutation'
+  createDocument: {
+    __typename?: 'Document'
+    id: string
+    fileType: string
+    createDate: any
+  }
 }
 
 export type GetAllProceduresQueryVariables = Exact<{ [key: string]: never }>
@@ -464,19 +521,6 @@ export type GetProcedureByIdQuery = {
       name: string
       value: number
     }> | null
-  } | null
-}
-
-export type GetProcedureNameQueryVariables = Exact<{
-  id: Scalars['Int']['input']
-}>
-
-export type GetProcedureNameQuery = {
-  __typename?: 'Query'
-  getProcedureById?: {
-    __typename?: 'InheritanceProcedure'
-    name: string
-    beneficiaries?: Array<{ __typename?: 'Beneficiary'; id: string }> | null
   } | null
 }
 
@@ -634,6 +678,59 @@ export const GetProceduresByBeneficiaryIdDocument = {
 } as unknown as DocumentNode<
   GetProceduresByBeneficiaryIdQuery,
   GetProceduresByBeneficiaryIdQueryVariables
+>
+export const CreateDocumentDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'CreateDocument' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'data' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'UploadDocumentInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'createDocument' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'data' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'data' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'fileType' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createDate' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateDocumentMutation,
+  CreateDocumentMutationVariables
 >
 export const GetAllProceduresDocument = {
   kind: 'Document',
@@ -872,64 +969,6 @@ export const GetProcedureByIdDocument = {
 } as unknown as DocumentNode<
   GetProcedureByIdQuery,
   GetProcedureByIdQueryVariables
->
-export const GetProcedureNameDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'GetProcedureName' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-          type: {
-            kind: 'NonNullType',
-            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'getProcedureById' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'id' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'id' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'beneficiaries' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  GetProcedureNameQuery,
-  GetProcedureNameQueryVariables
 >
 export const CreateProcedureDocument = {
   kind: 'Document',

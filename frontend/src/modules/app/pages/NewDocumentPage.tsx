@@ -1,14 +1,11 @@
 import { Heading, Spinner, Stack, Text } from '@chakra-ui/react'
-import { FaFileUpload } from 'react-icons/fa'
 import { LuFile } from 'react-icons/lu'
 import { useParams } from 'react-router-dom'
 
 import { useAuth } from '@frontend/modules/auth'
 import { AccordionHelper } from '@frontend/modules/wizard/components/accordion/AccordionHelper'
-import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
-import { route } from '@shared/route'
 
 import { DocumentUpload } from '../components/DocumentUpload'
 import { useProcedure } from '../hooks/useProcedure'
@@ -82,13 +79,6 @@ export function NewDocumentPage() {
           </Stack>
           <Stack gap={4} alignItems="center">
             <DocumentUpload />
-            <RouterNavLink
-              to={route.inheritanceProcedure(id)}
-              width="1/2"
-              textAlign="center"
-            >
-              Nahrát přílohu <FaFileUpload />
-            </RouterNavLink>
           </Stack>
         </Stack>
       </Stack>
