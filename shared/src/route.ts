@@ -10,6 +10,8 @@ export const route = {
   portal: () => `/portal/proceedings`,
   newProceeding: () => `/portal/newProceeding`,
   settings: () => `/portal/settings`,
+  chat: () => `/portal/chat/`,
+  chatId: (id = ':id', name = ':name') => `/portal/chat/${id}/${name}`,
   emailVerification: () => `/auth/email-verification`,
   confirmEmail: () => `/auth/confirm-email`,
   inheritanceProcedure: (id = ':id') => `/portal/inheritance-procedure/${id}`,

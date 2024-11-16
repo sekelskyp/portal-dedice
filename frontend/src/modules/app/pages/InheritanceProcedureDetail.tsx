@@ -105,6 +105,8 @@ const InheritanceProcedureDetail: React.FC = () => {
 
   const procedure = data?.getProcedureById
 
+  console.log(procedure)
+
   const totalAssetsValue =
     procedure?.procedureAssets?.reduce((sum, asset) => sum + asset.value, 0) ??
     0
@@ -301,10 +303,13 @@ const InheritanceProcedureDetail: React.FC = () => {
                       Přiložit přílohu
                       <FaCloudUploadAlt />
                     </RouterNavLink>
-                    <Button as={Link} disabled rounded="full">
+                    <RouterNavLink
+                      to={route.chatId(id, procedure.name)}
+                      rounded="full"
+                    >
                       Chat s notářem
                       <HiChat />
-                    </Button>
+                    </RouterNavLink>
                   </>
                 ) : (
                   <>

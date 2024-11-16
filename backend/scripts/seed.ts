@@ -6,6 +6,8 @@ import {
   asset,
   beneficiary,
   beneficiaryInheritanceProcedureRel,
+  chat,
+  chatMessage,
   contact,
   inheritanceProcedure,
   notary,
@@ -255,6 +257,8 @@ async function seed() {
     await db.delete(inheritanceProcedure)
     await db.delete(beneficiaryInheritanceProcedureRel)
     await db.delete(asset)
+    await db.delete(chat)
+    await db.delete(chatMessage)
     const { notaryIds } = await seedNotariesAndDateRules(db)
     await populateDatabase(db, notaryIds)
   } catch (error) {

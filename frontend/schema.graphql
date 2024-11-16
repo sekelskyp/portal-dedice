@@ -23,6 +23,20 @@ input BeneficiaryInput {
   surname: String!
 }
 
+type Chat {
+  chatMessages: [ChatMessage!]
+  id: ID!
+  inheritanceProcedureId: ID!
+}
+
+type ChatMessage {
+  body: String!
+  chatId: ID!
+  createdAt: DateTimeISO!
+  id: ID!
+  userId: ID!
+}
+
 type Contact {
   completeAddress: String
   displayName: String
@@ -125,6 +139,7 @@ type Mutation {
     procedureId: Int!
   ): Boolean!
   addBeneficiaryToProcedure(beneficiaryId: Int!, procedureId: Int!): Boolean!
+  addChatMessage(body: String!, procedureId: Int!, userId: Int!): ChatMessage!
   assignNotary(notaryId: Int!, procedureId: Int!): Boolean!
   changePassword(newPassword: String!, oldPassword: String!): User!
   closeProcedure(procedureId: Int!): Boolean!
@@ -163,6 +178,8 @@ type Notary {
 
 type Query {
   _empty: String!
+  chat(id: Int!): Chat!
+  chatByInheritanceProcedureId(inheritanceProcedureId: Int!): Chat!
   findNotary(input: FindNotaryInput!): Notary
   getAllContacts: [Contact!]!
   getAllProcedures: [InheritanceProcedure!]!
@@ -188,6 +205,10 @@ input RegisterInput {
 type SignInResponse {
   token: String!
   user: User!
+}
+
+type Subscription {
+  newChatMessage(procedureId: Int!): ChatMessage!
 }
 
 input UpdateBeneficiaryInput {
