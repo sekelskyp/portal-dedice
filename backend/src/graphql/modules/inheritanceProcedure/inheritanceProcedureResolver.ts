@@ -179,6 +179,14 @@ export class InheritanceProcedureResolver {
     )
   }
 
+  @Query(() => [Document])
+  async getDocumentsByProcedureId(
+    @Arg('notaryId', () => Int) procedureId: number,
+    @Ctx() context: CustomContext
+  ): Promise<Document[]> {
+    return await getDocumentsByProcedureId(procedureId, context)
+  }
+
   @Query(() => [InheritanceProcedure])
   async getProceduresByBeneficiaryId(
     @Arg('beneficiaryId', () => Int) beneficiaryId: number,
