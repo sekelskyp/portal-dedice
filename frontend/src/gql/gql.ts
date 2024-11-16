@@ -13,16 +13,16 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-  '\n  mutation addChatMessage($body: String!, $chatId: Int!, $userId: Int!) {\n    addChatMessage(body: $body, chatId: $chatId, userId: $userId) {\n      chatId\n      body\n      userId\n    }\n  }\n':
-    types.AddChatMessageDocument,
-  '\n  query GetProceduresByBeneficiaryId($beneficiaryId: Int!) {\n    getProceduresByBeneficiaryId(beneficiaryId: $beneficiaryId) {\n      id\n      name\n      startDate\n      state\n      deceasedContact {\n        displayName\n      }\n    }\n  }\n':
-    types.GetProceduresByBeneficiaryIdDocument,
-  '\n  query getProcedureIds($id: Int!) {\n    getProceduresByBeneficiaryId(beneficiaryId: $id) {\n      id\n    }\n  }\n':
-    types.GetProcedureIdsDocument,
   '\n  query getChat($inheritanceProcedureId: Int!) {\n    chatByInheritanceProcedureId(\n      inheritanceProcedureId: $inheritanceProcedureId\n    ) {\n      chatMessages {\n        body\n        chatId\n        createdAt\n        id\n        userId\n      }\n    }\n  }\n':
     types.GetChatDocument,
   '\n  subscription newChatMessage($chatId: Int!) {\n    newChatMessage(chatId: $chatId) {\n      chatId\n      body\n      userId\n      createdAt\n      id\n    }\n  }\n':
     types.NewChatMessageDocument,
+  '\n  mutation addMessage($body: String!, $chatId: Int!, $userId: Int!) {\n    addChatMessage(body: $body, chatId: $chatId, userId: $userId) {\n      chatId\n      body\n      userId\n    }\n  }\n':
+    types.AddMessageDocument,
+  '\n  query GetProceduresByBeneficiaryId($beneficiaryId: Int!) {\n    getProceduresByBeneficiaryId(beneficiaryId: $beneficiaryId) {\n      id\n      name\n      startDate\n      state\n      deceasedContact {\n        displayName\n      }\n    }\n  }\n':
+    types.GetProceduresByBeneficiaryIdDocument,
+  '\n  query getProcedureIds($id: Int!) {\n    getProceduresByBeneficiaryId(beneficiaryId: $id) {\n      id\n    }\n  }\n':
+    types.GetProcedureIdsDocument,
   '\n  query GetAllProcedures {\n    getAllProcedures {\n      id\n      name\n      startDate\n      state\n      deceasedContact {\n        displayName\n      }\n    }\n  }\n':
     types.GetAllProceduresDocument,
   '\n  query GetProcedureById($id: Int!) {\n    getProcedureById(id: $id) {\n      id\n      name\n      notary {\n        id\n        contact {\n          id\n          name\n          surname\n          email\n        }\n      }\n      mainContact {\n        id\n        name\n        surname\n        displayName\n        gender\n        phone\n        email\n        completeAddress\n        postalCode\n      }\n      beneficiaries {\n        id\n        userId\n        user {\n          id\n          email\n        }\n        contactId\n        contact {\n          id\n          email\n          name\n          surname\n        }\n        deceasedRelation\n      }\n      procedureAssets {\n        id\n        name\n        value\n      }\n      state\n    }\n  }\n':
@@ -59,8 +59,20 @@ export function gql(source: string): unknown
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  mutation addChatMessage($body: String!, $chatId: Int!, $userId: Int!) {\n    addChatMessage(body: $body, chatId: $chatId, userId: $userId) {\n      chatId\n      body\n      userId\n    }\n  }\n'
-): (typeof documents)['\n  mutation addChatMessage($body: String!, $chatId: Int!, $userId: Int!) {\n    addChatMessage(body: $body, chatId: $chatId, userId: $userId) {\n      chatId\n      body\n      userId\n    }\n  }\n']
+  source: '\n  query getChat($inheritanceProcedureId: Int!) {\n    chatByInheritanceProcedureId(\n      inheritanceProcedureId: $inheritanceProcedureId\n    ) {\n      chatMessages {\n        body\n        chatId\n        createdAt\n        id\n        userId\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query getChat($inheritanceProcedureId: Int!) {\n    chatByInheritanceProcedureId(\n      inheritanceProcedureId: $inheritanceProcedureId\n    ) {\n      chatMessages {\n        body\n        chatId\n        createdAt\n        id\n        userId\n      }\n    }\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  subscription newChatMessage($chatId: Int!) {\n    newChatMessage(chatId: $chatId) {\n      chatId\n      body\n      userId\n      createdAt\n      id\n    }\n  }\n'
+): (typeof documents)['\n  subscription newChatMessage($chatId: Int!) {\n    newChatMessage(chatId: $chatId) {\n      chatId\n      body\n      userId\n      createdAt\n      id\n    }\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  mutation addMessage($body: String!, $chatId: Int!, $userId: Int!) {\n    addChatMessage(body: $body, chatId: $chatId, userId: $userId) {\n      chatId\n      body\n      userId\n    }\n  }\n'
+): (typeof documents)['\n  mutation addMessage($body: String!, $chatId: Int!, $userId: Int!) {\n    addChatMessage(body: $body, chatId: $chatId, userId: $userId) {\n      chatId\n      body\n      userId\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -73,18 +85,6 @@ export function gql(
 export function gql(
   source: '\n  query getProcedureIds($id: Int!) {\n    getProceduresByBeneficiaryId(beneficiaryId: $id) {\n      id\n    }\n  }\n'
 ): (typeof documents)['\n  query getProcedureIds($id: Int!) {\n    getProceduresByBeneficiaryId(beneficiaryId: $id) {\n      id\n    }\n  }\n']
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function gql(
-  source: '\n  query getChat($inheritanceProcedureId: Int!) {\n    chatByInheritanceProcedureId(\n      inheritanceProcedureId: $inheritanceProcedureId\n    ) {\n      chatMessages {\n        body\n        chatId\n        createdAt\n        id\n        userId\n      }\n    }\n  }\n'
-): (typeof documents)['\n  query getChat($inheritanceProcedureId: Int!) {\n    chatByInheritanceProcedureId(\n      inheritanceProcedureId: $inheritanceProcedureId\n    ) {\n      chatMessages {\n        body\n        chatId\n        createdAt\n        id\n        userId\n      }\n    }\n  }\n']
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function gql(
-  source: '\n  subscription newChatMessage($chatId: Int!) {\n    newChatMessage(chatId: $chatId) {\n      chatId\n      body\n      userId\n      createdAt\n      id\n    }\n  }\n'
-): (typeof documents)['\n  subscription newChatMessage($chatId: Int!) {\n    newChatMessage(chatId: $chatId) {\n      chatId\n      body\n      userId\n      createdAt\n      id\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -303,7 +303,10 @@ const InheritanceProcedureDetail: React.FC = () => {
                       Přiložit přílohu
                       <FaCloudUploadAlt />
                     </RouterNavLink>
-                    <RouterNavLink to={route.chat(id, procedure.name)} rounded="full">
+                    <RouterNavLink
+                      to={route.chat(id, procedure.name)}
+                      rounded="full"
+                    >
                       Chat s notářem
                       <HiChat />
                     </RouterNavLink>
