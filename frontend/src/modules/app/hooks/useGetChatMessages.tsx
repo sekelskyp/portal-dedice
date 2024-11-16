@@ -9,19 +9,39 @@ export function useGetChat(proceedingId: string) {
     variables: { inheritanceProcedureId: +proceedingId },
   })
 
-  const subscriptionResponse = useSubscription(SUBSCRIPTION, {
+  useSubscription(SUBSCRIPTION, {
     variables: {
       chatId: +proceedingId,
     },
+    onSubscriptionData: ({ subscriptionData, client }) => {
+      const newMessage = subscriptionData.data?.newChatMessage
+      if (!newMessage) return
+
+      client.cache.updateQuery<{
+        chatByInheritanceProcedureId: {
+          chatMessages: ChatMessage[]
+        }
+      }>(
+        {
+          query: GET_CHAT_QUERY,
+          variables: { inheritanceProcedureId: +proceedingId },
+        },
+        (existing) => {
+          if (!existing) return existing
+
+          return {
+            chatByInheritanceProcedureId: {
+              ...existing.chatByInheritanceProcedureId,
+              chatMessages: [
+                ...(existing.chatByInheritanceProcedureId?.chatMessages || []),
+                newMessage,
+              ],
+            },
+          }
+        }
+      )
+    },
   })
 
-  const baseMessages: ChatMessage[] =
-    queryResponse.data?.chatByInheritanceProcedureId?.chatMessages ?? []
-
-  const subscriptionMessage: ChatMessage =
-    subscriptionResponse.data?.newChatMessage!
-
-  return subscriptionMessage
-    ? [...baseMessages, subscriptionMessage]
-    : baseMessages
+  return queryResponse.data?.chatByInheritanceProcedureId?.chatMessages ?? []
 }
