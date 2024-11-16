@@ -47,17 +47,30 @@ export class ChatResolver {
 
   @Mutation(() => ChatMessage)
   async addChatMessage(
-    @Arg('chatId', () => Int) chatId: number,
+    @Arg('procedureId', () => Int) procedureId: number,
     @Arg('userId', () => Int) userId: number,
     @Arg('body', () => String) body: string,
-    @Ctx() { chatMessageRepository, pubSub }: CustomContext
+    @Ctx() context: CustomContext
   ): Promise<ChatMessage> {
+    const { chatMessageRepository, pubSub, chatRepository } = context
+
+    // Get the chatId from the procedureId
+    const chat =
+      await chatRepository.getChatByInheritanceProcedureId(procedureId)
+    if (!chat) {
+      throw new Error('Chat not found for the given procedureId')
+    }
+    const chatId = chat.id
+
     const data = { chatId, userId, body, createdAt: new Date() }
     const { id } = await chatMessageRepository.addChatMessage(data)
     const chatMessage = await chatMessageRepository.getChatMessageById(id)
 
     // Publish the event
-    await pubSub.publish(NEW_CHAT_MESSAGE, { newChatMessage: chatMessage })
+    await pubSub.publish(NEW_CHAT_MESSAGE, {
+      newChatMessage: chatMessage,
+      procedureId,
+    })
 
     return chatMessage
   }
@@ -65,13 +78,15 @@ export class ChatResolver {
   @Subscription(() => ChatMessage, {
     topics: NEW_CHAT_MESSAGE,
     filter: ({ payload, args }) => {
-      return payload.newChatMessage.chatId === args.chatId
+      console.log('payload', payload)
+      return payload.procedureId === args.procedureId
     },
   })
   newChatMessage(
-    @Arg('chatId', () => Int) chatId: number,
+    @Arg('procedureId', () => Int) procedureId: number,
     @Root() payload: { newChatMessage: ChatMessage }
   ): ChatMessage {
+    console.log('payload.newMessage', payload.newChatMessage)
     return payload.newChatMessage
   }
 }
