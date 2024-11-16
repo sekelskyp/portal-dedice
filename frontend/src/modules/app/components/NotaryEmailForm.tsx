@@ -30,12 +30,12 @@ export function NotaryEmailForm({
   return (
     <Form onSubmit={onSubmit} resolver={zodResolver(schema)} noValidate>
       <Stack width="1/2" py={2}>
-        <InputFormControl name="subject" label="Předmět" required />
+        <InputFormControl name="subject" label="Předmět zprávy" required />
       </Stack>
       <Stack py={2}>
         <TextAreaFormControl
           name="content"
-          label="Obsah"
+          label="Text zprávy"
           placeholder="Text e-mailu..."
           height="150px"
           size="md"
