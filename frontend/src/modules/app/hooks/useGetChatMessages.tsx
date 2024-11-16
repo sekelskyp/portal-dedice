@@ -1,28 +1,27 @@
-import { useQuery } from '@apollo/client'
+import { useQuery, useSubscription } from '@apollo/client'
 
-import { gql } from '@frontend/gql'
-import { ChatMessage } from '@frontend/gql/graphql';
+import { ChatMessage } from '@frontend/gql/graphql'
 
-const GET_CHAT_QUERY = gql(/* GraphQL */ `
-  query getChat($inheritanceProcedureId: Int!) {
-    chatByInheritanceProcedureId(
-      inheritanceProcedureId: $inheritanceProcedureId
-    ) {
-      chatMessages {
-        body
-        chatId
-        createdAt
-        id
-        userId
-      }
-    }
-  }
-`)
+import { GET_CHAT_QUERY, SUBSCRIPTION } from '../chatOperations'
 
-export function useGetChat() {
-  const response = useQuery(GET_CHAT_QUERY, {
-    variables: { inheritanceProcedureId: 1 },
+export function useGetChat(proceedingId: string) {
+  const queryResponse = useQuery(GET_CHAT_QUERY, {
+    variables: { inheritanceProcedureId: +proceedingId },
   })
-  const messages: ChatMessage[] = response.data?.chatByInheritanceProcedureId?.chatMessages ?? [];
-  return messages
+
+  const subscriptionResponse = useSubscription(SUBSCRIPTION, {
+    variables: {
+      chatId: +proceedingId,
+    },
+  })
+
+  const baseMessages: ChatMessage[] =
+    queryResponse.data?.chatByInheritanceProcedureId?.chatMessages ?? []
+
+  const subscriptionMessage: ChatMessage =
+    subscriptionResponse.data?.newChatMessage!
+
+  return subscriptionMessage
+    ? [...baseMessages, subscriptionMessage]
+    : baseMessages
 }

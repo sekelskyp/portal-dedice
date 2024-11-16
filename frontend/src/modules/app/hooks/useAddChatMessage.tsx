@@ -5,13 +5,14 @@ import { gql } from '@frontend/gql'
 const ADD_MESSAGE_MUTATION = gql(/* GraphQL */ `
   mutation addChatMessage($body: String!, $chatId: Int!, $userId: Int!) {
     addChatMessage(body: $body, chatId: $chatId, userId: $userId) {
-      id
+      chatId
+      body
+      userId
     }
   }
 `)
 
 export function useAddChatMessage() {
-  const [addChatMessageRequest, addChatMessageRequestState] =
-    useMutation(ADD_MESSAGE_MUTATION)
-  return [addChatMessageRequest, addChatMessageRequestState] as const
+  const [addChatMessage, loading] = useMutation(ADD_MESSAGE_MUTATION)
+  return [addChatMessage, loading] as const
 }

@@ -17,8 +17,13 @@ export type ChatMessageFormProps = {
 
 export function ChatMessageForm({ onSubmit }: ChatMessageFormProps) {
   return (
-    <Form onSubmit={onSubmit} resolver={zodResolver(schema)} noValidate>
-      <HStack>
+    <Form
+      onSubmit={onSubmit}
+      resolver={zodResolver(schema)}
+      defaultValues={{ message: '' }}
+      noValidate
+    >
+      <HStack align="flex-start">
         <InputFormControl
           name="message"
           placeholder="Napište zprávu..."
