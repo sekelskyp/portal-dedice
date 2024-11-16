@@ -183,6 +183,7 @@ type Query {
   getContactById(id: Float!): Contact
   getDocumentById(id: ID!): Document
   getDocumentsByIds(ids: [ID!]!): [Document!]!
+  getDocumentsByProcedureId(notaryId: Int!): [Document!]!
   getNotaryById(id: Int!): Notary
   getProcedureById(id: Int!): InheritanceProcedure
   getProceduresByBeneficiaryId(beneficiaryId: Int!): [InheritanceProcedure!]!
@@ -215,7 +216,6 @@ scalar Upload
 
 input UploadDocumentInput {
   file: Upload!
-  filename: String!
   inheritanceProcedureId: ID!
   taskId: ID
   userOwnerId: ID
