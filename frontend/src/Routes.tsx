@@ -37,6 +37,7 @@ export function Routes() {
           />
           <Route path={route.newDocument()} element={<NewDocumentPage />} />
           <Route path={route.chat()} element={<ChatPage />} />
+          <Route path={route.chatId()} element={<ChatPage />} />
         </Route>
         <Route path={route.about()} element={<AboutPage />} />
         <Route path={route.guide()} element={<GuidePage />} />

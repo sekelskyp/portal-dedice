@@ -304,7 +304,7 @@ const InheritanceProcedureDetail: React.FC = () => {
                       <FaCloudUploadAlt />
                     </RouterNavLink>
                     <RouterNavLink
-                      to={route.chat(id, procedure.name)}
+                      to={route.chatId(id, procedure.name)}
                       rounded="full"
                     >
                       Chat s notářem

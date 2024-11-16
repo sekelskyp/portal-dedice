@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Box, Container, Heading, Tabs, Text, VStack } from '@chakra-ui/react'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -27,11 +27,14 @@ export default function ChatPage() {
     ? notaryProcedures.data?.getProceduresByNotaryId
     : beneficiaryProcedures.data?.getProceduresByBeneficiaryId
 
-  const chatGroups =
-    procedures?.map((procedure) => ({
-      id: procedure.id,
-      name: procedure.name,
-    })) ?? []
+  const chatGroups = useMemo(
+    () =>
+      procedures?.map((procedure) => ({
+        id: procedure.id,
+        name: procedure.name,
+      })) ?? [],
+    [procedures]
+  )
 
   const [addMessage] = useAddMessage()
   const navigate = useNavigate()
@@ -41,6 +44,12 @@ export default function ChatPage() {
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [])
+
+  useEffect(() => {
+    if (id) {
+      setValue(id.toString())
+    }
+  }, [id])
 
   useEffect(() => {
     scrollToBottom()
@@ -59,6 +68,13 @@ export default function ChatPage() {
     },
     [addMessage, id, user.user?.id, scrollToBottom]
   )
+
+  useEffect(() => {
+    if (!id && chatGroups.length > 0) {
+      const firstChat = chatGroups[0]
+      navigate(`/portal/chat/${firstChat.id}/${firstChat.name}`)
+    }
+  }, [id, chatGroups, navigate])
 
   const [value, setValue] = useState<string>(id!)
 
