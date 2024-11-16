@@ -29,8 +29,6 @@ export function Documents({ id }: { id: string }) {
 
   const documents = data?.getProcedureById?.documents
 
-  console.log('documents', documents)
-
   return (
     <Stack>
       <Heading>Dokumenty v řízení</Heading>
@@ -59,20 +57,23 @@ export function Documents({ id }: { id: string }) {
                     {document.fileName}
                   </Link>
                 </Stack>
-                <Text color="gray">
+                <Text color="gray" fontSize={{ base: 'sm', sm: 'md' }}>
                   {new Date(document.createDate).toLocaleString('cs-CZ')}
                 </Text>
               </Stack>
             ))}
           </Stack>
-          <RouterNavLink
-            to={route.newDocument(id)}
-            rounded="full"
-            width="fit-content"
-          >
-            Přiložit přílohu
-            <FaCloudUploadAlt />
-          </RouterNavLink>
+          <Stack alignItems="center" pt={4}>
+            <RouterNavLink
+              to={route.newDocument(id)}
+              rounded="full"
+              width="fit-content"
+              textAlign="center"
+            >
+              Přiložit přílohu
+              <FaCloudUploadAlt />
+            </RouterNavLink>
+          </Stack>
         </Stack>
       )}
     </Stack>

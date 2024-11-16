@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { gql } from '@frontend/gql'
 import { route } from '@shared/route'
@@ -12,12 +12,13 @@ const CREATE_DOCUMENT_MUTATION = gql(/* GraphQL */ `
 
 export function useCreateDocument() {
   const navigate = useNavigate()
+  const { id } = useParams()
 
   const [createDocumentRequest, createDocumentRequestState] = useMutation(
     CREATE_DOCUMENT_MUTATION,
     {
       onCompleted: () => {
-        navigate(route.portal())
+        navigate(route.inheritanceProcedure(id))
       },
       onError: (error) => {
         console.error('Error creating document:', error)
