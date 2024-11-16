@@ -14,7 +14,7 @@ import { Document } from './documentType'
 
 @Resolver()
 export class DocumentResolver {
-  @Mutation(() => Document)
+  @Mutation(() => ID)
   async createDocument(
     @Arg('data') data: UploadDocumentInput,
     @Ctx() context: CustomContext
