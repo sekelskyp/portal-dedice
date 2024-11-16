@@ -39,7 +39,7 @@ export const requestEmailVerification = async (
   const baseUrl = `${process.env.APP_BASE_URL_FRONTEND}`
   const confirmationLink = `${baseUrl}${route.emailVerification()}?token=${token}`
   // Render the template
-  const html = await renderTemplate('confirmation', {
+  const html = await renderTemplate('emailConfirmation', {
     confirmationLink,
   })
 
