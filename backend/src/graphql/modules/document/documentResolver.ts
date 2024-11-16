@@ -14,18 +14,18 @@ import { Document } from './documentType'
 
 @Resolver()
 export class DocumentResolver {
-  @Mutation(() => Document)
+  @Mutation(() => ID)
   async createDocument(
     @Arg('data') data: UploadDocumentInput,
     @Ctx() context: CustomContext
-  ): Promise<void> {
+  ): Promise<number> {
     const documentData: CreateDocumentInput = {
       file: data.file,
       userOwnerId: data.userOwnerId || null,
       taskId: data.taskId || null,
       inheritanceProcedureId: data.inheritanceProcedureId,
     }
-    await createDocument(documentData, context)
+    return await createDocument(documentData, context)
   }
 
   @Mutation(() => Boolean)
