@@ -5,6 +5,7 @@ import { InheritanceProcedureStateEnumType } from '@backend/db/schema'
 import { Asset } from '../asset/assetType'
 import { Beneficiary } from '../beneficiary/beneficiaryType'
 import { Contact } from '../contact/contactType'
+import { Document } from '../document/documentType'
 import { Notary } from '../notary/notaryType'
 
 @ObjectType()
@@ -53,4 +54,7 @@ export class InheritanceProcedure {
 
   @Field(() => [Asset], { nullable: true })
   procedureAssets?: Asset[]
+
+  @Field(() => [Document], { nullable: true })
+  documents?: Document[]
 }

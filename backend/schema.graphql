@@ -94,6 +94,17 @@ input DeceasedPersonInput {
   surname: String!
 }
 
+type Document {
+  createDate: DateTimeISO!
+  fileData: String!
+  fileName: String!
+  fileType: String!
+  id: ID!
+  inheritanceProcedureId: ID!
+  taskId: ID
+  userOwnerId: ID
+}
+
 input FindNotaryInput {
   deceasedPersonDateOfDeath: DateTimeISO!
   postalCode: String!
@@ -105,6 +116,7 @@ type InheritanceProcedure {
   deceasedContactId: ID
   deceasedDateOfBirth: DateTimeISO
   deceasedDateOfDeath: DateTimeISO
+  documents: [Document!]
   endDate: DateTimeISO
   id: ID!
   mainContact: Contact
@@ -134,11 +146,13 @@ type Mutation {
   createBeneficiaries(data: [CreateBeneficiaryInput!]!): [Beneficiary!]!
   createBeneficiary(data: CreateBeneficiaryInput!): Beneficiary!
   createContact(data: CreateContactInput!): Int!
+  createDocument(data: UploadDocumentInput!): Document!
   createInheritanceProcedureFromForm(data: InheritanceProcedureFormDataInput!): InheritanceProcedure!
   createNotary(data: CreateNotaryInput!): Notary!
   createProcedure(data: CreateInheritanceProcedureInput!): Int!
   deleteBeneficiary(id: Int!): Boolean!
   deleteContactById(id: Int!): Int!
+  deleteDocumentsByIds(ids: [ID!]!): Boolean!
   deleteNotary(id: Int!): Notary!
   deleteProceduresByIds(ids: [Int!]!): [Int!]!
   removeBeneficiaryFromProcedure(beneficiaryId: Int!, procedureId: Int!): Boolean!
@@ -167,6 +181,8 @@ type Query {
   getBeneficiariesByProcedureId(procedureId: Int!): [Beneficiary!]!
   getBeneficiaryById(id: Int!): Beneficiary
   getContactById(id: Float!): Contact
+  getDocumentById(id: ID!): Document
+  getDocumentsByIds(ids: [ID!]!): [Document!]!
   getNotaryById(id: Int!): Notary
   getProcedureById(id: Int!): InheritanceProcedure
   getProceduresByBeneficiaryId(beneficiaryId: Int!): [InheritanceProcedure!]!
@@ -192,6 +208,17 @@ input UpdateBeneficiaryInput {
   dateOfBirth: DateTimeISO
   deceasedRelation: String
   userId: ID
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+input UploadDocumentInput {
+  file: Upload!
+  filename: String!
+  inheritanceProcedureId: ID!
+  taskId: ID
+  userOwnerId: ID
 }
 
 type User {
