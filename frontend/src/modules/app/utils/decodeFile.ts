@@ -8,9 +8,12 @@ export function decodeFile({
   fileType: string
 }) {
   const byteChars = atob(fileData)
-  const byteNumbers = new Array(byteChars.length).map((_, i) =>
-    byteChars.charCodeAt(i)
-  )
+
+  const byteNumbers = new Array(byteChars.length)
+  for (let i = 0; i < byteChars.length; i++) {
+    byteNumbers[i] = byteChars.charCodeAt(i)
+  }
+
   const byteArray = new Uint8Array(byteNumbers)
 
   const blob = new Blob([byteArray], { type: fileType })
