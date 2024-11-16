@@ -52,7 +52,7 @@ export function EnhancedApolloProvider({ children }: Props) {
 
   const wsLink = new GraphQLWsLink(
     createClient({
-      url: 'ws://localhost:4000/graphql',
+      url: config.GRAPHQL_API.replace('http', 'ws'),
       on: {
         connected: () => console.log('WS Connected'),
         error: (error) => console.log('WS Error:', error),
@@ -73,7 +73,7 @@ export function EnhancedApolloProvider({ children }: Props) {
       )
     },
     wsLink,
-    httpLink // Your existing links array
+    httpLink
   )
 
   const cache = useMemo(() => new InMemoryCache(), [])
