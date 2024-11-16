@@ -9,6 +9,7 @@ import {
   float,
   foreignKey,
   int,
+  longtext,
   mysqlTable,
   primaryKey,
   text,
@@ -138,7 +139,7 @@ export const document = mysqlTable('document', {
   createDate: timestamp('create_date').defaultNow().notNull(),
   fileName: varchar('file_name', { length: 255 }).notNull(),
   fileType: varchar('file_type', { length: 100 }).notNull(),
-  fileData: text('file_data').notNull(),
+  fileData: longtext('file_data').notNull(),
 })
 
 // Define Chat Table

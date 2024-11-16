@@ -116,14 +116,17 @@ async function populateDatabase(
       {
         password: await hashPassword('heslo1234'),
         email: 'test.email1@email.com',
+        confirmed: true,
       },
       {
         password: await hashPassword('heslo1234'),
         email: 'test.email2@email.com',
+        confirmed: true,
       },
       {
         password: await hashPassword('heslo1234'),
         email: 'test.email3@email.com',
+        confirmed: true,
       },
     ])
     .$returningId()
