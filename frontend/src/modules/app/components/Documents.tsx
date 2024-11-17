@@ -89,13 +89,13 @@ export function Documents({ id }: { id: string }) {
                 <Stack
                   key={document.id}
                   direction={{ base: 'column', md: 'row' }}
-                  bg="gray.200"
+                  bg="bg.emphasized"
                   p={4}
                   borderRadius="2xl"
                   justifyContent="space-between"
                   alignItems="center"
                 >
-                  <Stack direction="row" alignItems="center">
+                  <Stack direction="row" alignItems="center" gap={4}>
                     <IoDocumentTextOutline size={24} />
                     <Link
                       onClick={handleFileShow(
@@ -109,7 +109,7 @@ export function Documents({ id }: { id: string }) {
                       {decodeURIComponent(escape(document.fileName))}
                     </Link>
                   </Stack>
-                  <Stack direction="row" alignItems="center">
+                  <Stack direction="row" gap={4} alignItems="center">
                     <Text color="gray" fontSize={{ base: 'sm', sm: 'md' }}>
                       {new Date(document.createDate).toLocaleString('cs-CZ')}
                     </Text>

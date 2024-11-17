@@ -11,7 +11,8 @@ export const colors = {
     '600': { value: '#575451' },
     '700': { value: '#383635' },
     '800': { value: '#21201f' },
-    '900': { value: '#1a1919' },
+    '900': { value: '#161514' },
+    '950': { value: '#0e0f0f' },
   },
   purple: {
     '50': { value: '#f7f6f9' },
