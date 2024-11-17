@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { Box, Stack } from '@chakra-ui/react'
+import { Box, FileUploadFileChangeDetails, Stack } from '@chakra-ui/react'
 import { FaFileUpload } from 'react-icons/fa'
 import { useParams } from 'react-router-dom'
 
@@ -7,7 +7,6 @@ import {
   Alert,
   Button,
   FileUploadDropzone,
-  FileUploadItem,
   FileUploadList,
   FileUploadRoot,
 } from '@frontend/shared/design-system/atoms/chakra'
@@ -30,7 +29,22 @@ export function DocumentUpload() {
   const [createDocumentRequest, createDocumentRequestState] =
     useCreateDocument()
 
+  const handleDataChange = useCallback(
+    (details: FileUploadFileChangeDetails) => {
+      handleFileUpload(details)
+      setShowEmptyFilesAlert(false)
+    },
+    [handleFileUpload]
+  )
+
+  const handleDataClear = useCallback(() => {
+    clearFiles()
+    setShowEmptyFilesAlert(false)
+    createDocumentRequestState.reset()
+  }, [clearFiles, createDocumentRequestState])
+
   const handleUpload = useCallback(async () => {
+    createDocumentRequestState.reset()
     if (files.length === 0) {
       setShowEmptyFilesAlert(true)
       return
@@ -47,7 +61,7 @@ export function DocumentUpload() {
         },
       })
     }
-  }, [createDocumentRequest, data, files])
+  }, [createDocumentRequest, data, files, createDocumentRequestState])
 
   return (
     <Box width="100%">
@@ -56,17 +70,18 @@ export function DocumentUpload() {
         maxFiles={1}
         maxFileSize={25000000}
         accept={acceptedFileTypes}
-        onFileChange={handleFileUpload}
+        onFileChange={handleDataChange}
       >
         <FileUploadDropzone
           label="Soubor lze vložit kliknutím nebo přetažením do této oblasti."
           description=".pdf, .docx (max. 25 MB)"
         />
-        <FileUploadList clearable>
-          {files.map((file) => (
-            <FileUploadItem key={file.name} file={file} onDelete={clearFiles} />
-          ))}
-        </FileUploadList>
+        <FileUploadList
+          files={files}
+          clearable
+          onDelete={handleDataClear}
+          showSize
+        />
       </FileUploadRoot>
       <Stack mt={4} alignItems="center">
         <Button
@@ -86,12 +101,12 @@ export function DocumentUpload() {
             title="Prosím, vložte soubor k nahrání."
           />
         )}
-        {createDocumentRequestState.error && (
+        {!showEmptyFilesAlert && createDocumentRequestState.error && (
           <Alert
             status="error"
             width="fit-content"
             alignItems="center"
-            title="Nepodařilo se nahrát přílohu. Zkuste to prosím znovu."
+            title={createDocumentRequestState.error.message}
           />
         )}
       </Stack>
