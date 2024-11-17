@@ -16,7 +16,6 @@ export const InputFormControl = ({
     <BaseFieldControl {...props}>
       {(field, disabled) => (
         <Input
-          {...props}
           {...field}
           value={field.value || ''}
           disabled={disabled}

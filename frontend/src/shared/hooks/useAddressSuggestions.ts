@@ -22,6 +22,28 @@ export interface Suggestion {
   zip?: string
 }
 
+export interface Address {
+  street: string
+  streetNumber: string
+  municipality: string
+  postCode: string
+}
+
+export function suggestionToAddress(suggestion: Suggestion): Address {
+  return {
+    street: suggestion.regionalStructure.find(
+      (x) => x.type === 'regional.street'
+    )?.name!,
+    streetNumber: suggestion.regionalStructure.find(
+      (x) => x.type === 'regional.address'
+    )?.name!,
+    municipality: suggestion.regionalStructure.find(
+      (x) => x.type === 'regional.municipality'
+    )?.name!,
+    postCode: suggestion.zip!,
+  }
+}
+
 export const suggestionSchema = z.object(
   {
     name: z.string(),

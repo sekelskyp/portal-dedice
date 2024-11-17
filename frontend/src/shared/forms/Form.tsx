@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react'
+import { createContext, type ReactNode } from 'react'
 import {
   type FieldValues,
   FormProvider,
@@ -12,27 +12,34 @@ export type FormProps<TFieldValues extends FieldValues = FieldValues> =
     children: ReactNode
     onSubmit: SubmitHandler<TFieldValues>
     noValidate?: boolean
+    loading?: boolean
   }
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const loadingContext = createContext(false)
 
 export function Form<TFieldValues extends FieldValues = FieldValues>({
   children,
   onSubmit,
   noValidate = false,
+  loading,
   ...rest
 }: FormProps<TFieldValues>) {
   const methods = useForm<TFieldValues>(rest)
 
   return (
-    <FormProvider {...methods}>
-      <form
-        onSubmit={methods.handleSubmit(onSubmit, (e) => {
-          console.debug('Cannot submit form value:', e)
-          return e
-        })}
-        noValidate={noValidate}
-      >
-        {children}
-      </form>
-    </FormProvider>
+    <loadingContext.Provider value={!!loading}>
+      <FormProvider {...methods}>
+        <form
+          onSubmit={methods.handleSubmit(onSubmit, (e) => {
+            console.debug('Cannot submit form value:', e)
+            return e
+          })}
+          noValidate={noValidate}
+        >
+          {children}
+        </form>
+      </FormProvider>
+    </loadingContext.Provider>
   )
 }

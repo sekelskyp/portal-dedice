@@ -83,7 +83,7 @@ export function getNotaryRepository(db: Db) {
           eq(notaryDateRule.startDay, dateOfDeathDayNumber)
         )
       )
-      .where(sql`LEFT(${contact.postalCode}, 2) = LEFT(${postalCode}, 2)`)
+      .where(sql`LEFT(${contact.addressPostCode}, 2) = LEFT(${postalCode}, 2)`)
       .groupBy(notary.id)
       .limit(1)
 

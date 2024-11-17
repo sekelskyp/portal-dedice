@@ -1,5 +1,5 @@
 import { HStack, Icon, Stack, Text, useBreakpoint } from '@chakra-ui/react'
-import { LuArchive, LuChevronDown, LuLogOut } from 'react-icons/lu'
+import { LuArchive, LuChevronDown, LuLogOut, LuUser2 } from 'react-icons/lu'
 
 import { useAuth } from '@frontend/modules/auth'
 import {
@@ -18,7 +18,7 @@ export const UserMenu = () => {
   const breakpoint = useBreakpoint({ breakpoints: ['base', 'sm'] })
   const isMobile = breakpoint === 'base'
 
-  const name = user?.displayName ?? 'Michal Dub'
+  const name = user?.contact?.displayName
 
   if (!user) return null
 
@@ -36,9 +36,11 @@ export const UserMenu = () => {
           <Avatar name={name} size="xs" />
           {!isMobile && (
             <Stack gap={0} lineHeight={1.25}>
-              <Text fontSize="xs" fontWeight="medium">
-                {name}
-              </Text>
+              {name && (
+                <Text fontSize="xs" fontWeight="medium">
+                  {name}
+                </Text>
+              )}
               <Text color="fg.muted" fontSize="xs">
                 {user.email}
               </Text>
@@ -53,6 +55,10 @@ export const UserMenu = () => {
         <RouterMenuItem value="portal" to={route.portal()}>
           <LuArchive />
           Moje řízení
+        </RouterMenuItem>
+        <RouterMenuItem value="profile" to={route.profile()}>
+          <LuUser2 />
+          Můj profil
         </RouterMenuItem>
         <MenuItem value="signOut" onClick={signOut}>
           <LuLogOut />

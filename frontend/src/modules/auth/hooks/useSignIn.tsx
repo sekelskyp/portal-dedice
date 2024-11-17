@@ -29,6 +29,9 @@ const SIGNIN_MUTATION = gql(/* GraphQL */ `
           id
           userId
         }
+        contact {
+          displayName
+        }
       }
       token
     }

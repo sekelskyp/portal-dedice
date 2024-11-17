@@ -11,13 +11,13 @@ const FIND_NOTARY_QUERY = gql(/* GraphQL */ `
         name
         surname
         displayName
-        completeAddress
         email
         gender
-        postalCode
         phone
-        email
-        gender
+        addressStreet
+        addressStreetNumber
+        addressMunicipality
+        addressPostCode
       }
     }
   }

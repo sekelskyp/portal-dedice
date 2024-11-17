@@ -6,12 +6,12 @@ import { z } from 'zod'
 
 import { Radio } from '@frontend/shared/design-system'
 import {
+  AddressGroupFormControl,
   DateFormControl,
   Form,
   RadioGroupFormControl,
   SubmitButton,
 } from '@frontend/shared/forms'
-import { AddressFormControl } from '@frontend/shared/forms/AddressFormControl'
 import {
   Suggestion,
   suggestionSchema,
@@ -43,11 +43,11 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
     },
   })
 
-  const watchedFields = watch(['sex', 'birthDate', 'address'])
+  const watchedFields = watch(['sex', 'birthDate'])
 
   useEffect(() => {
-    const [sex, birthDate, address] = watchedFields
-    if (!sex && !birthDate && !address) {
+    const [sex, birthDate] = watchedFields
+    if (!sex && !birthDate) {
       setTestatorData({})
     }
 
@@ -97,11 +97,7 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
               <Radio value="female">Žena</Radio>
             </RadioGroupFormControl>
             <DateFormControl name="birthDate" label="Datum narození" required />
-            <AddressFormControl
-              name="address"
-              label="Trvalé bydliště"
-              required
-            />
+            <AddressGroupFormControl label="Trvalé bydliště" />
             <Center>
               <SubmitButton>Potvrdit údaje</SubmitButton>
             </Center>

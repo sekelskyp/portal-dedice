@@ -51,13 +51,13 @@ const customConfig = defineConfig({
           DEFAULT: {
             value: {
               _light: 'white',
-              _dark: '{colors.gray.900}',
+              _dark: '{colors.gray.950}',
             },
           },
           panel: {
             value: {
               _light: '{colors.gray.50}',
-              _dark: '{colors.gray.800}',
+              _dark: '{colors.gray.900}',
             },
           },
           muted: {
@@ -70,7 +70,7 @@ const customConfig = defineConfig({
         border: {
           DEFAULT: {
             value: {
-              _light: '{colors.gray.100}',
+              _light: '{colors.gray.200}',
               _dark: '{colors.gray.800}',
             },
           },

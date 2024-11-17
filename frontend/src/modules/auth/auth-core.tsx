@@ -24,7 +24,9 @@ export type AuthUser = {
   isBeneficiary: boolean
   beneficiaries: { id: string }[]
   notaries: { id: string }[]
-  displayName: string
+  contact?: {
+    displayName?: string
+  } | null
 }
 
 const LOCAL_STORAGE_AUTH_KEY = 'project-auth'

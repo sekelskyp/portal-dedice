@@ -5,7 +5,10 @@ import { useAuth } from '@frontend/modules/auth'
 import { useCreateProcedure } from '@frontend/modules/auth/hooks/useCreateProcedure'
 import resources from '@frontend/resources'
 import { Alert } from '@frontend/shared/design-system'
-import { Suggestion } from '@frontend/shared/hooks/useAddressSuggestions'
+import {
+  Suggestion,
+  suggestionToAddress,
+} from '@frontend/shared/hooks/useAddressSuggestions'
 
 import { Beneficiary, ProceedingForm } from './ProceedingForm'
 
@@ -26,6 +29,8 @@ export function NewProceedingPage() {
       contactEmail: string
       beneficiaries: Beneficiary[]
     }) => {
+      const deceasedAddress = suggestionToAddress(variables.address)
+
       createProcedureRequest({
         variables: {
           data: {
@@ -34,7 +39,10 @@ export function NewProceedingPage() {
               surname: variables.surname,
               dateOfBirth: new Date(variables.dateOfBirth).toISOString(),
               dateOfDeath: new Date(variables.dateOfDeath).toISOString(),
-              completeAddress: `${variables.address.name}, ${variables.address.zip} ${variables.address.location}`,
+              addressStreet: deceasedAddress.street,
+              addressStreetNumber: deceasedAddress.streetNumber,
+              addressMunicipality: deceasedAddress.municipality,
+              addressPostCode: deceasedAddress.postCode,
             },
             contactPerson: {
               name: variables.contactName,

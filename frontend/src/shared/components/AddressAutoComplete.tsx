@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useMemo, useState } from 'react'
+import { forwardRef, useMemo } from 'react'
 import { Combobox, createListCollection } from '@ark-ui/react/combobox'
 import { Portal } from '@ark-ui/react/portal'
 import {
@@ -18,18 +18,27 @@ import useAddressSuggestions, {
 } from '../hooks/useAddressSuggestions'
 
 type PlacesAutoCompleteProps = {
-  value?: Suggestion
-  onChange: (value?: Suggestion | undefined) => void
+  value?: string
+  onChange: (value?: string | undefined) => void
   disabled?: boolean
+  onSuggestionSelected: (suggestion: Suggestion) => void
 }
 
 export const AddressAutoComplete = forwardRef(
-  ({ value, onChange, disabled, ...props }: PlacesAutoCompleteProps, ref) => {
-    const [query, setQuery] = useState(value?.name ?? '')
-    const { suggestions, loading } = useAddressSuggestions(query, {
+  (
+    {
+      value,
+      onChange,
+      disabled,
+      onSuggestionSelected,
+      ...props
+    }: PlacesAutoCompleteProps,
+    ref
+  ) => {
+    const { suggestions, loading } = useAddressSuggestions(value ?? '', {
       lang: 'cs',
       limit: 5,
-      enable: query.length > 3,
+      enable: (value ?? '').length > 3,
     })
 
     const collection = useMemo(
@@ -43,30 +52,29 @@ export const AddressAutoComplete = forwardRef(
       [suggestions]
     )
 
-    useEffect(() => {
-      setQuery(value?.name ?? '')
-    }, [value?.name])
-
     return (
       <Box asChild w="full" ref={ref}>
         <Combobox.Root
           collection={collection}
-          inputValue={query}
-          onInputValueChange={(value) => {
-            if (value.inputValue === query) return
+          inputValue={value}
+          onInputValueChange={(e) => {
+            if (e.inputValue === value) return
 
-            setQuery(value.inputValue)
+            console.log('inputValue', e.inputValue)
+            onChange(e.inputValue)
           }}
-          onValueChange={(details) => {
-            if (details.value.length === 0) {
-              setQuery('')
-              onChange?.(undefined)
-            } else {
-              const suggestion = details.value[0] as unknown as Suggestion
-              setQuery(suggestion.name)
-              onChange(suggestion)
+          onValueChange={(e) => {
+            if (e.value.length !== 0) {
+              const suggestion = e.value[0] as unknown as Suggestion
+              onSuggestionSelected?.(suggestion)
+              onChange(
+                suggestion.regionalStructure.find(
+                  (x) => x.type === 'regional.street'
+                )?.name
+              )
             }
           }}
+          allowCustomValue
           disabled={disabled}
           {...props}
         >
@@ -75,13 +83,12 @@ export const AddressAutoComplete = forwardRef(
               w="full"
               endElement={
                 <HStack mr={-2} gap={1}>
-                  {query && (
+                  {value && (
                     <Button
                       size="xs"
                       variant="ghost"
                       px={1}
                       onClick={() => {
-                        setQuery('')
                         onChange?.(undefined)
                       }}
                     >
@@ -104,7 +111,7 @@ export const AddressAutoComplete = forwardRef(
           <Portal>
             <Combobox.Positioner>
               <Combobox.Content>
-                {query.length > 3 && (
+                {(value ?? '').length > 3 && (
                   <Card.Root>
                     <Card.Body p={0}>
                       <Stack gap={1}>

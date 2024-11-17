@@ -1,7 +1,8 @@
 import { forwardRef } from 'react'
 import { Field as ChakraField } from '@chakra-ui/react'
 
-export interface FieldProps extends Omit<ChakraField.RootProps, 'label'> {
+export interface FieldProps
+  extends Omit<ChakraField.RootProps, 'label' | 'helperText'> {
   label?: React.ReactNode
   helperText?: React.ReactNode
   errorText?: React.ReactNode
