@@ -909,6 +909,46 @@ export type GetProcedureQuery = {
   } | null
 }
 
+export type ChatGetProcedureQueryVariables = Exact<{
+  id: Scalars['Int']['input']
+}>
+
+export type ChatGetProcedureQuery = {
+  __typename?: 'Query'
+  getProcedureById?: {
+    __typename?: 'InheritanceProcedure'
+    notary?: {
+      __typename?: 'Notary'
+      contact?: {
+        __typename?: 'Contact'
+        id: string
+        name: string
+        surname: string
+        email?: string | null
+      } | null
+    } | null
+    beneficiaries?: Array<{
+      __typename?: 'Beneficiary'
+      contact?: {
+        __typename?: 'Contact'
+        id: string
+        name: string
+        surname: string
+        displayName: string
+      } | null
+      user?: {
+        __typename?: 'User'
+        contact?: {
+          __typename?: 'Contact'
+          name: string
+          surname: string
+          displayName: string
+        } | null
+      } | null
+    }> | null
+  } | null
+}
+
 export type GetUserByIdQueryVariables = Exact<{
   getUserByIdId: Scalars['Float']['input']
 }>
@@ -2424,6 +2464,154 @@ export const GetProcedureDocument = {
     },
   ],
 } as unknown as DocumentNode<GetProcedureQuery, GetProcedureQueryVariables>
+export const ChatGetProcedureDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'ChatGetProcedure' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getProcedureById' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'id' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'id' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'notary' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'contact' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'name' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'surname' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'email' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'beneficiaries' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'contact' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'name' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'surname' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'displayName' },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'user' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'contact' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'name' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'surname' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: {
+                                      kind: 'Name',
+                                      value: 'displayName',
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ChatGetProcedureQuery,
+  ChatGetProcedureQueryVariables
+>
 export const GetUserByIdDocument = {
   kind: 'Document',
   definitions: [

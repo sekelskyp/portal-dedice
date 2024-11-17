@@ -51,6 +51,8 @@ const documents = {
     types.GetProcedureByIdDocument,
   '\n  query GetProcedure($id: Int!) {\n    getProcedureById(id: $id) {\n      notary {\n        contact {\n          id\n          name\n          surname\n          email\n        }\n      }\n      beneficiaries {\n        contact {\n          id\n          name\n          surname\n        }\n      }\n    }\n  }\n':
     types.GetProcedureDocument,
+  '\n  query ChatGetProcedure($id: Int!) {\n    getProcedureById(id: $id) {\n      notary {\n        contact {\n          id\n          name\n          surname\n          email\n        }\n      }\n      beneficiaries {\n        contact {\n          id\n          name\n          surname\n          displayName\n        }\n        user {\n          contact {\n            name\n            surname\n            displayName\n          }\n        }\n      }\n    }\n  }\n':
+    types.ChatGetProcedureDocument,
   '\n  query GetUserById($getUserByIdId: Float!) {\n    getUserById(id: $getUserByIdId) {\n      contact {\n        addressMunicipality\n        addressPostCode\n        addressStreet\n        addressStreetNumber\n        name\n        surname\n        displayName\n        email\n        gender\n        name\n        phone\n        surname\n      }\n    }\n  }\n':
     types.GetUserByIdDocument,
   '\n  mutation UpdateProfile($profileInput: ProfileInput!) {\n    updateProfile(profileInput: $profileInput) {\n      contact {\n        addressMunicipality\n        addressPostCode\n        addressStreet\n        addressStreetNumber\n        name\n        surname\n        displayName\n        email\n        gender\n        name\n        phone\n        surname\n      }\n    }\n  }\n':
@@ -195,6 +197,12 @@ export function gql(
 export function gql(
   source: '\n  query GetProcedure($id: Int!) {\n    getProcedureById(id: $id) {\n      notary {\n        contact {\n          id\n          name\n          surname\n          email\n        }\n      }\n      beneficiaries {\n        contact {\n          id\n          name\n          surname\n        }\n      }\n    }\n  }\n'
 ): (typeof documents)['\n  query GetProcedure($id: Int!) {\n    getProcedureById(id: $id) {\n      notary {\n        contact {\n          id\n          name\n          surname\n          email\n        }\n      }\n      beneficiaries {\n        contact {\n          id\n          name\n          surname\n        }\n      }\n    }\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  query ChatGetProcedure($id: Int!) {\n    getProcedureById(id: $id) {\n      notary {\n        contact {\n          id\n          name\n          surname\n          email\n        }\n      }\n      beneficiaries {\n        contact {\n          id\n          name\n          surname\n          displayName\n        }\n        user {\n          contact {\n            name\n            surname\n            displayName\n          }\n        }\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query ChatGetProcedure($id: Int!) {\n    getProcedureById(id: $id) {\n      notary {\n        contact {\n          id\n          name\n          surname\n          email\n        }\n      }\n      beneficiaries {\n        contact {\n          id\n          name\n          surname\n          displayName\n        }\n        user {\n          contact {\n            name\n            surname\n            displayName\n          }\n        }\n      }\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

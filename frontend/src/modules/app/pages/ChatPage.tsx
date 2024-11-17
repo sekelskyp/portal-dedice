@@ -17,7 +17,7 @@ import { useNotaryProcedures } from '../hooks/useNotaryProcedures'
 import { ChatMessageForm } from './ChatMessageForm'
 
 const GET_PROCEDURE = gql(/* GraphQL */ `
-  query GetProcedure($id: Int!) {
+  query ChatGetProcedure($id: Int!) {
     getProcedureById(id: $id) {
       notary {
         contact {
@@ -32,6 +32,14 @@ const GET_PROCEDURE = gql(/* GraphQL */ `
           id
           name
           surname
+          displayName
+        }
+        user {
+          contact {
+            name
+            surname
+            displayName
+          }
         }
       }
     }
@@ -51,11 +59,16 @@ export default function ChatPage() {
   const notaryDisplayName = `${procedure.notary?.contact?.name} ${procedure.notary?.contact?.surname}`
 
   const beneficiaryDisplayNames =
-    procedure.beneficiaries?.map((beneficiary) =>
-      beneficiary?.contact
-        ? `${beneficiary.contact.name} ${beneficiary.contact.surname}`.trim()
-        : ''
-    ) ?? []
+    procedure.beneficiaries
+      ?.map((beneficiary) => ({
+        ...beneficiary?.contact,
+        ...beneficiary.user?.contact,
+      }))
+      .map((contact) =>
+        contact?.displayName?.trim()
+          ? contact.displayName
+          : `${contact.name} ${contact.surname}`.trim()
+      ) ?? []
 
   const isNotary = user.user?.isNotary ?? false
 
