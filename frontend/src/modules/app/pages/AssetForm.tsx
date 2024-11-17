@@ -23,7 +23,6 @@ import { InputFormControl } from '@frontend/shared/forms/InputFormControl'
 import { SelectFormControl } from '@frontend/shared/forms/SelectFormControl'
 import { SubmitButton } from '@frontend/shared/forms/SubmitButton'
 
-
 const assetSchema = (sections: Record<string, boolean>) => {
   const schema: Record<string, z.ZodObject<Record<string, z.ZodTypeAny>>> = {}
   if (!sections.bankAccount) {
@@ -88,7 +87,10 @@ const bankAccountCollection = createListCollection({
   items: [
     { value: 'Air Bank', label: 'Air Bank' },
     { value: 'Česká spořitelna', label: 'Česká spořitelna' },
-    { value: 'Československá obchodní banka', label: 'Československá obchodní banka' },
+    {
+      value: 'Československá obchodní banka',
+      label: 'Československá obchodní banka',
+    },
     { value: 'Equa bank', label: 'Equa bank' },
     { value: 'Fio banka', label: 'Fio banka' },
     { value: 'Komerční banka', label: 'Komerční banka' },
@@ -177,7 +179,7 @@ const Section: React.FC<SectionProps> = ({
     </Box>
     <Separator mb={2} />
     <Box p={1} m={2} display="flex" alignItems="center">
-    <Box mr={2}>Ano</Box>
+      <Box mr={2}>Ano</Box>
       <Switch
         checked={selected}
         onChange={() => {
