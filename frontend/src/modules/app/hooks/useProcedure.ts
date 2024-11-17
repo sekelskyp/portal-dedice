@@ -24,8 +24,10 @@ const GET_PROCEDURE_QUERY = gql(/* GraphQL */ `
         gender
         phone
         email
-        completeAddress
-        postalCode
+        addressMunicipality
+        addressPostCode
+        addressStreet
+        addressStreetNumber
       }
       beneficiaries {
         id

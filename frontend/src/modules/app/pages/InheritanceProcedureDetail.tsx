@@ -219,10 +219,6 @@ const InheritanceProcedureDetail: React.FC = () => {
                       Modelace vyrovnaní
                       <FaCalculator />
                     </Button>
-                    <RouterNavLink to={route.newDocument(id)} rounded="full">
-                      Přiložit přílohu
-                      <FaCloudUploadAlt />
-                    </RouterNavLink>
                     <RouterNavLink
                       to={route.chatId(id, procedure.name)}
                       rounded="full"
