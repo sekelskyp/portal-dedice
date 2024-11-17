@@ -207,7 +207,7 @@
           "tableTo": "beneficiary",
           "columnsFrom": ["beneficiary_id"],
           "columnsTo": ["id"],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "ben_inher_proc_inher_id_fk": {
@@ -216,7 +216,7 @@
           "tableTo": "inheritance_procedure",
           "columnsFrom": ["inheritance_procedure_id"],
           "columnsTo": ["id"],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -348,7 +348,7 @@
           "tableTo": "inheritance_procedure",
           "columnsFrom": ["inheritance_procedure_id"],
           "columnsTo": ["id"],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -484,10 +484,30 @@
         "address_street": {
           "name": "address_street",
           "type": "varchar(100)",
+        "address_street": {
+          "name": "address_street",
+          "type": "varchar(100)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
+        "address_street_number": {
+          "name": "address_street_number",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "address_municipality": {
+          "name": "address_municipality",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "address_post_code": {
+          "name": "address_post_code",
+          "type": "varchar(10)",
         "address_street_number": {
           "name": "address_street_number",
           "type": "varchar(20)",
@@ -1076,7 +1096,7 @@
           "tableTo": "inheritance_procedure",
           "columnsFrom": ["inheritance_procedure_id"],
           "columnsTo": ["id"],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -1126,6 +1146,13 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
+        },
+        "contact_id": {
+          "name": "contact_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         }
       },
       "indexes": {
@@ -1133,6 +1160,17 @@
           "name": "user_email_unique_index",
           "columns": ["(lower(`email`))"],
           "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "user_contact_id_contact_id_fk": {
+          "name": "user_contact_id_contact_id_fk",
+          "tableFrom": "user",
+          "tableTo": "contact",
+          "columnsFrom": ["contact_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "foreignKeys": {

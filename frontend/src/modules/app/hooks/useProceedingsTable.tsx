@@ -1,7 +1,8 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
+import { Flex, IconButton, Stack, useBreakpoint } from '@chakra-ui/react'
 import { rankItem } from '@tanstack/match-sorter-utils'
 import {
-  ColumnDef,
+  createColumnHelper,
   FilterFn,
   getCoreRowModel,
   getFilteredRowModel,
@@ -10,13 +11,17 @@ import {
   PaginationState,
   useReactTable,
 } from '@tanstack/react-table'
-import { CgDetailsMore } from 'react-icons/cg'
+import { SquareArrowOutUpRight as SquareArrowOutUpRightIcon } from 'lucide-react'
+import { MdDelete } from 'react-icons/md'
 
+import { useAuth } from '@frontend/modules/auth'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { route } from '@shared/route'
 
 import { ProceedingsItem } from '../components/proceedings-table/ProceedingsTable'
 import { StatusBadge } from '../components/StatusBadge'
+
+import { useDeleteProcedure } from './useDeleteProcedure'
 
 const INITIAL_SORTING_STATE = [
   {
@@ -36,7 +41,27 @@ const fuzzyFilter: FilterFn<ProceedingsItem> = (
   return itemRank.passed
 }
 
+const columnHelper = createColumnHelper<ProceedingsItem>()
+
 export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
+  const { user } = useAuth()
+
+  const [deleteProcedureRequest] = useDeleteProcedure()
+
+  const handleProcedureDelete = useCallback(
+    (id: string) => {
+      deleteProcedureRequest({
+        variables: {
+          ids: [parseInt(id)],
+        },
+      })
+    },
+    [deleteProcedureRequest]
+  )
+
+  const breakpoint = useBreakpoint({ breakpoints: ['base', 'sm', 'xl'] })
+  const isMobile = breakpoint === 'base'
+  // const isDesktop = breakpoint === 'xl'
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -44,60 +69,84 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
 
   const [globalFilter, setGlobalFilter] = useState<string>('')
 
-  const columns = useMemo<ColumnDef<ProceedingsItem>[]>(
-    () => [
-      {
-        accessorKey: 'detail',
-        header: () => '',
-        size: 0,
-        cell: (info) => {
-          const id = info.row.original.id
-          return (
-            <RouterNavLink
-              key={id}
-              to={route.inheritanceProcedure(id.toString())}
-              size="sm"
-            >
-              <CgDetailsMore />
-            </RouterNavLink>
-          )
-        },
-        enableSorting: false,
-      },
-      {
-        accessorKey: 'name',
-        header: () => 'ID',
-        filterFn: 'includesString',
-        cell: (info) => info.getValue(),
-      },
-      {
-        accessorKey: 'deceasedContact.displayName',
+  const columns = useMemo(() => {
+    const columns = [
+      columnHelper.accessor('deceasedContact.displayName', {
         header: () => 'Zůstavitel',
         cell: (info) => {
           const name = info.getValue() as string
           return name
         },
-      },
-      {
-        accessorKey: 'startDate',
-        header: () => 'Datum založení',
-        cell: (info) => {
-          const date = info.getValue() as string
-          const formattedDate = date ? date.split('T')[0] : ''
-          return formattedDate
-        },
-      },
-      {
-        accessorKey: 'state',
+      }),
+    ]
+
+    if (!isMobile) {
+      columns.push(
+        columnHelper.accessor('name', {
+          header: () => 'ID',
+          cell: (info) => info.getValue(),
+        })
+      )
+      columns.push(
+        columnHelper.accessor('startDate', {
+          header: () => 'Datum zahájení',
+          cell: (info) => {
+            const date = info.getValue() as string
+            const formattedDate = date ? date.split('T')[0] : ''
+            return formattedDate
+          },
+        })
+      )
+    }
+
+    columns.push(
+      columnHelper.accessor('state', {
         header: () => 'Status',
         cell: (info) => {
           const state = info.getValue() as string
-          return <StatusBadge state={state} />
+          return (
+            <Flex justifyContent="start">
+              <StatusBadge state={state} />
+            </Flex>
+          )
         },
-      },
-    ],
-    []
-  )
+      })
+    )
+
+    columns.push(
+      columnHelper.accessor('id', {
+        header: () => '',
+        size: 0,
+        cell: (info) => {
+          const id = info.row.original.id
+          return (
+            <Stack direction="row" alignItems="center">
+              <RouterNavLink
+                key={id}
+                to={route.inheritanceProcedure(id.toString())}
+                size="xs"
+                variant="subtle"
+              >
+                <SquareArrowOutUpRightIcon />
+              </RouterNavLink>
+              {user?.isNotary && (
+                <IconButton
+                  borderRadius="xl"
+                  bg="red.600"
+                  onClick={() => handleProcedureDelete(id)}
+                >
+                  <MdDelete />
+                </IconButton>
+              )}
+            </Stack>
+          )
+        },
+        enableSorting: false,
+      })
+    )
+
+    return columns
+  }, [isMobile, handleProcedureDelete, user?.isNotary])
 
   const table = useReactTable({
     columns,

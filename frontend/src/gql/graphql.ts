@@ -713,6 +713,15 @@ export type DeleteDocumentMutation = {
   deleteDocumentsByIds: boolean
 }
 
+export type DeleteProcedureMutationVariables = Exact<{
+  ids: Array<Scalars['Int']['input']> | Scalars['Int']['input']
+}>
+
+export type DeleteProcedureMutation = {
+  __typename?: 'Mutation'
+  deleteProceduresByIds: Array<number>
+}
+
 export type GetAssetByIdQueryVariables = Exact<{
   id: Scalars['Int']['input']
 }>
@@ -833,7 +842,25 @@ export type GetProcedureByIdQuery = {
       userId?: string | null
       contactId?: string | null
       deceasedRelation?: string | null
-      user?: { __typename?: 'User'; id: string; email: string } | null
+      user?: {
+        __typename?: 'User'
+        id: string
+        email: string
+        contact?: {
+          __typename?: 'Contact'
+          id: string
+          name: string
+          surname: string
+          displayName: string
+          email?: string | null
+          phone?: string | null
+          addressStreet?: string | null
+          addressStreetNumber?: string | null
+          addressMunicipality?: string | null
+          addressPostCode?: string | null
+          gender?: string | null
+        } | null
+      } | null
       contact?: {
         __typename?: 'Contact'
         id: string
@@ -1649,6 +1676,57 @@ export const DeleteDocumentDocument = {
   DeleteDocumentMutation,
   DeleteDocumentMutationVariables
 >
+export const DeleteProcedureDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'DeleteProcedure' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'ids' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'ListType',
+              type: {
+                kind: 'NonNullType',
+                type: {
+                  kind: 'NamedType',
+                  name: { kind: 'Name', value: 'Int' },
+                },
+              },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'deleteProceduresByIds' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'ids' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'ids' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  DeleteProcedureMutation,
+  DeleteProcedureMutationVariables
+>
 export const GetAssetByIdDocument = {
   kind: 'Document',
   definitions: [
@@ -2102,6 +2180,74 @@ export const GetProcedureByIdDocument = {
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'email' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'contact' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'id' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'name' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'surname' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: {
+                                      kind: 'Name',
+                                      value: 'displayName',
+                                    },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'email' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'phone' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: {
+                                      kind: 'Name',
+                                      value: 'addressStreet',
+                                    },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: {
+                                      kind: 'Name',
+                                      value: 'addressStreetNumber',
+                                    },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: {
+                                      kind: 'Name',
+                                      value: 'addressMunicipality',
+                                    },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: {
+                                      kind: 'Name',
+                                      value: 'addressPostCode',
+                                    },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'gender' },
+                                  },
+                                ],
+                              },
                             },
                           ],
                         },

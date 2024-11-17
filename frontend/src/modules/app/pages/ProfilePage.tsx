@@ -169,10 +169,7 @@ const calculateDisplayName = (name?: string, surname?: string) => {
 }
 
 const NameGroupFormControl = () => {
-  const { watch, setValue } = useFormContext<ProfileInput>()
-
-  const name = watch('name')
-  const surname = watch('surname')
+  const { getValues, setValue } = useFormContext<ProfileInput>()
 
   const displayNameUpdater = (name?: string, surname?: string) => {
     setValue('displayName', calculateDisplayName(name, surname), {
@@ -186,14 +183,14 @@ const NameGroupFormControl = () => {
           name="name"
           label="Jméno"
           onChange={(changedName) => {
-            displayNameUpdater(changedName, surname)
+            displayNameUpdater(changedName, getValues('surname'))
           }}
         />
         <InputFormControl
           name="surname"
           label="Příjmení"
           onChange={(changedSurname) => {
-            displayNameUpdater(name, changedSurname)
+            displayNameUpdater(getValues('name'), changedSurname)
           }}
         />
       </HStack>

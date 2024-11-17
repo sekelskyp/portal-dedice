@@ -18,7 +18,9 @@ export function BeneficiaryBadge({
       <Avatar name={beneficiaryContact.name} size={{ base: 'md', sm: 'xl' }} />
       <Stack gap="0">
         <Text fontSize={{ base: 'md', md: 'lg' }} fontWeight="bold">
-          {beneficiaryContact.name} {beneficiaryContact.surname}
+          {!!beneficiaryContact.displayName.trim()
+            ? beneficiaryContact.displayName
+            : `${beneficiaryContact.name} ${beneficiaryContact.surname}`}
         </Text>
         <Text fontSize={{ base: 'sm', md: 'md' }} color="gray">
           {beneficiaryContact.email}

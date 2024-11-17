@@ -1,5 +1,5 @@
 import { Flex, Icon } from '@chakra-ui/react'
-import { LuMenu } from 'react-icons/lu'
+import { Menu as MenuIcon } from 'lucide-react'
 import { useMediaQuery } from 'usehooks-ts'
 
 import { useAuth } from '@frontend/modules/auth'
@@ -73,7 +73,7 @@ export function TopNavigation() {
           <MenuTrigger asChild>
             <Button variant="subtle" borderRadius="full">
               <Icon size="md" mx={-1.5}>
-                <LuMenu />
+                <MenuIcon />
               </Icon>
             </Button>
           </MenuTrigger>
