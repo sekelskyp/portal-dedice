@@ -6,6 +6,7 @@ import { HomePage } from '@frontend/modules/home/pages/HomePage'
 import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 import { route } from '@shared/route'
 
+import ChatPage from './modules/app/pages/ChatPage'
 import InheritanceProcedureDetail from './modules/app/pages/InheritanceProcedureDetail'
 import { NewDocumentPage } from './modules/app/pages/NewDocumentPage'
 import { NewProceedingPage } from './modules/app/pages/NewProceedingPage'
@@ -35,6 +36,8 @@ export function Routes() {
             element={<InheritanceProcedureDetail />}
           />
           <Route path={route.newDocument()} element={<NewDocumentPage />} />
+          <Route path={route.chat()} element={<ChatPage />} />
+          <Route path={route.chatId()} element={<ChatPage />} />
         </Route>
         <Route path={route.about()} element={<AboutPage />} />
         <Route path={route.guide()} element={<GuidePage />} />
