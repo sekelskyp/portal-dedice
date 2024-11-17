@@ -1,27 +1,49 @@
+import { useCallback } from 'react'
 import { Heading, Spinner, Stack, Text } from '@chakra-ui/react'
 import { LuFile } from 'react-icons/lu'
 import { useParams } from 'react-router-dom'
 
 import { useAuth } from '@frontend/modules/auth'
-import { Alert } from '@frontend/shared/design-system'
+import { Alert, toaster } from '@frontend/shared/design-system'
 import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
 
 import { BeneficiaryBadge } from '../components/BeneficiaryBadge'
 import { NotaryEmailForm } from '../components/NotaryEmailForm'
+import { useNotifyProcedureBeneficiaries } from '../hooks/useNotifyProcedureBeneficiaries'
 import { useProcedure } from '../hooks/useProcedure'
 
 export function NotaryEmailPage() {
   const { user, token } = useAuth()
   const { id } = useParams()
 
+  const [
+    notifyProcedureBeneficiariesRequest,
+    notifyProcedureBeneficiariesRequestState,
+  ] = useNotifyProcedureBeneficiaries()
+
   const { data, loading, error } = useProcedure({
     procedureId: parseInt(id ?? '0', 10),
   })
 
-  const handleNotaryEmailFormSubmit = () => {
-    console.log('submit')
-  }
+  const handleNotaryEmailFormSubmit = useCallback(
+    (variables: { html: string; subject: string }) => {
+      notifyProcedureBeneficiariesRequest({
+        variables: {
+          html: variables.html,
+          subject: variables.subject,
+          procedureId: parseInt(id ?? '0', 10),
+        },
+      }).then(() => {
+        toaster.create({
+          title: 'E-mail byl úspěšně odeslán.',
+          type: 'success',
+          duration: 5000,
+        })
+      })
+    },
+    [notifyProcedureBeneficiariesRequest, id]
+  )
 
   if (loading) {
     return <Spinner />
@@ -101,6 +123,7 @@ export function NotaryEmailPage() {
         <NotaryEmailForm
           onSubmit={handleNotaryEmailFormSubmit}
           procedureId={parseInt(id ?? '0', 10)}
+          requestState={notifyProcedureBeneficiariesRequestState}
         />
       </Stack>
     )

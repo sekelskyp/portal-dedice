@@ -606,6 +606,17 @@ export type GetAllProceduresQuery = {
   }>
 }
 
+export type NotifyProcedureBeneficiariesMutationVariables = Exact<{
+  html: Scalars['String']['input']
+  subject: Scalars['String']['input']
+  procedureId: Scalars['Int']['input']
+}>
+
+export type NotifyProcedureBeneficiariesMutation = {
+  __typename?: 'Mutation'
+  notifyProcedureBenficiaries: boolean
+}
+
 export type GetProcedureByIdQueryVariables = Exact<{
   id: Scalars['Int']['input']
 }>
@@ -1288,6 +1299,92 @@ export const GetAllProceduresDocument = {
 } as unknown as DocumentNode<
   GetAllProceduresQuery,
   GetAllProceduresQueryVariables
+>
+export const NotifyProcedureBeneficiariesDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'NotifyProcedureBeneficiaries' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'html' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'subject' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'procedureId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'notifyProcedureBenficiaries' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'html' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'html' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'subject' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'subject' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'procedureId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'procedureId' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  NotifyProcedureBeneficiariesMutation,
+  NotifyProcedureBeneficiariesMutationVariables
 >
 export const GetProcedureByIdDocument = {
   kind: 'Document',
