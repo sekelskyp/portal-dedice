@@ -33,6 +33,8 @@ const documents = {
     types.GetUserByIdDocument,
   '\n  mutation UpdateProfile($profileInput: ProfileInput!) {\n    updateProfile(profileInput: $profileInput) {\n      contact {\n        addressMunicipality\n        addressPostCode\n        addressStreet\n        addressStreetNumber\n        name\n        surname\n        displayName\n        email\n        gender\n        name\n        phone\n        surname\n      }\n    }\n  }\n':
     types.UpdateProfileDocument,
+  '\n  query RefetchUserById($getUserByIdId: Float!) {\n    getUserById(id: $getUserByIdId) {\n      id\n      email\n      confirmed\n      isNotary\n      isBeneficiary\n      beneficiaries {\n        id\n        dateOfBirth\n        deceasedRelation\n        userId\n        contactId\n      }\n      notaries {\n        contactId\n        id\n        userId\n      }\n      contact {\n        displayName\n      }\n    }\n  }\n':
+    types.RefetchUserByIdDocument,
   '\n  mutation createProcedure($data: InheritanceProcedureFormDataInput!) {\n    createInheritanceProcedureFromForm(data: $data) {\n      id\n    }\n  }\n':
     types.CreateProcedureDocument,
   '\n  mutation EmailVerification($token: String!) {\n    confirmEmailVerification(token: $token)\n  }\n':
@@ -41,7 +43,7 @@ const documents = {
     types.SignInDocument,
   '\n  mutation SignUp($registerInput: RegisterInput!) {\n    signUp(registerInput: $registerInput) {\n      id\n    }\n  }\n':
     types.SignUpDocument,
-  '\n  query FindNotary($input: FindNotaryInput!) {\n    findNotary(input: $input) {\n      contact {\n        id\n        name\n        surname\n        displayName\n        email\n        gender\n        phone\n        email\n        gender\n        addressStreet\n        addressStreetNumber\n        addressMunicipality\n        addressPostCode\n      }\n    }\n  }\n':
+  '\n  query FindNotary($input: FindNotaryInput!) {\n    findNotary(input: $input) {\n      contact {\n        id\n        name\n        surname\n        displayName\n        email\n        gender\n        phone\n        addressStreet\n        addressStreetNumber\n        addressMunicipality\n        addressPostCode\n      }\n    }\n  }\n':
     types.FindNotaryDocument,
 }
 
@@ -123,6 +125,12 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
+  source: '\n  query RefetchUserById($getUserByIdId: Float!) {\n    getUserById(id: $getUserByIdId) {\n      id\n      email\n      confirmed\n      isNotary\n      isBeneficiary\n      beneficiaries {\n        id\n        dateOfBirth\n        deceasedRelation\n        userId\n        contactId\n      }\n      notaries {\n        contactId\n        id\n        userId\n      }\n      contact {\n        displayName\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query RefetchUserById($getUserByIdId: Float!) {\n    getUserById(id: $getUserByIdId) {\n      id\n      email\n      confirmed\n      isNotary\n      isBeneficiary\n      beneficiaries {\n        id\n        dateOfBirth\n        deceasedRelation\n        userId\n        contactId\n      }\n      notaries {\n        contactId\n        id\n        userId\n      }\n      contact {\n        displayName\n      }\n    }\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
   source: '\n  mutation createProcedure($data: InheritanceProcedureFormDataInput!) {\n    createInheritanceProcedureFromForm(data: $data) {\n      id\n    }\n  }\n'
 ): (typeof documents)['\n  mutation createProcedure($data: InheritanceProcedureFormDataInput!) {\n    createInheritanceProcedureFromForm(data: $data) {\n      id\n    }\n  }\n']
 /**
@@ -147,8 +155,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query FindNotary($input: FindNotaryInput!) {\n    findNotary(input: $input) {\n      contact {\n        id\n        name\n        surname\n        displayName\n        email\n        gender\n        phone\n        email\n        gender\n        addressStreet\n        addressStreetNumber\n        addressMunicipality\n        addressPostCode\n      }\n    }\n  }\n'
-): (typeof documents)['\n  query FindNotary($input: FindNotaryInput!) {\n    findNotary(input: $input) {\n      contact {\n        id\n        name\n        surname\n        displayName\n        email\n        gender\n        phone\n        email\n        gender\n        addressStreet\n        addressStreetNumber\n        addressMunicipality\n        addressPostCode\n      }\n    }\n  }\n']
+  source: '\n  query FindNotary($input: FindNotaryInput!) {\n    findNotary(input: $input) {\n      contact {\n        id\n        name\n        surname\n        displayName\n        email\n        gender\n        phone\n        addressStreet\n        addressStreetNumber\n        addressMunicipality\n        addressPostCode\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query FindNotary($input: FindNotaryInput!) {\n    findNotary(input: $input) {\n      contact {\n        id\n        name\n        surname\n        displayName\n        email\n        gender\n        phone\n        addressStreet\n        addressStreetNumber\n        addressMunicipality\n        addressPostCode\n      }\n    }\n  }\n']
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {}

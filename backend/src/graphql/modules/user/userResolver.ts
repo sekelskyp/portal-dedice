@@ -23,6 +23,7 @@ import {
 import { CustomContext } from '@backend/types/types'
 
 import { Beneficiary } from '../beneficiary/beneficiaryType'
+import { Contact } from '../contact/contactType'
 import { Notary } from '../notary/notaryType'
 
 import { ProfileInput } from './profileInput'
@@ -70,6 +71,16 @@ export class UserResolver {
     @Ctx() context: CustomContext
   ): Promise<boolean> {
     return await isUserBeneficiary(user.id, context)
+  }
+
+  @FieldResolver(() => Contact, { nullable: true })
+  async contact(
+    @Root() user: User,
+    @Ctx() context: CustomContext
+  ): Promise<Contact | null> {
+    return user.contactId
+      ? await context.contactRepository.getContactById(user.contactId)
+      : null
   }
 
   // Fetch a user by ID
@@ -187,7 +198,7 @@ export class UserResolver {
 
     await updateProfile(context.authUser.userId, profileInput, context)
 
-    var user = await getUserById(context.authUser.userId, context)
+    const user = await getUserById(context.authUser.userId, context)
     if (!user) throw new Error('User not found after profile update')
 
     return user

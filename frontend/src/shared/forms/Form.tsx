@@ -1,4 +1,4 @@
-import { createContext, type ReactNode } from 'react'
+import { createContext, type ReactNode, useEffect } from 'react'
 import {
   type FieldValues,
   FormProvider,
@@ -23,9 +23,18 @@ export function Form<TFieldValues extends FieldValues = FieldValues>({
   onSubmit,
   noValidate = false,
   loading,
+  defaultValues,
   ...rest
 }: FormProps<TFieldValues>) {
-  const methods = useForm<TFieldValues>(rest)
+  const methods = useForm<TFieldValues>({ defaultValues, ...rest })
+
+  useEffect(() => {
+    if (defaultValues instanceof Promise) {
+      defaultValues.then((values) => methods.reset(values))
+    } else {
+      methods.reset(defaultValues as TFieldValues)
+    }
+  }, [defaultValues, methods])
 
   return (
     <loadingContext.Provider value={!!loading}>

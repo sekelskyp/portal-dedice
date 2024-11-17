@@ -9,7 +9,8 @@ import { Field, FieldProps, Skeleton } from '../design-system'
 
 import { loadingContext } from '.'
 
-export interface BaseFieldControlProps extends Omit<FieldProps, 'children'> {
+export interface BaseFieldControlProps
+  extends Omit<FieldProps, 'children' | 'onChange' | 'onBlur'> {
   name: string
   label?: ReactNode
   disabled?: boolean

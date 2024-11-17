@@ -21,7 +21,7 @@ type PlacesAutoCompleteProps = {
   value?: string
   onChange: (value?: string | undefined) => void
   disabled?: boolean
-  onSuggestionSelected: (suggestion: Suggestion) => void
+  onSuggestionSelected: (suggestion?: Suggestion) => void
 }
 
 export const AddressAutoComplete = forwardRef(
@@ -60,7 +60,6 @@ export const AddressAutoComplete = forwardRef(
           onInputValueChange={(e) => {
             if (e.inputValue === value) return
 
-            console.log('inputValue', e.inputValue)
             onChange(e.inputValue)
           }}
           onValueChange={(e) => {
@@ -89,7 +88,8 @@ export const AddressAutoComplete = forwardRef(
                       variant="ghost"
                       px={1}
                       onClick={() => {
-                        onChange?.(undefined)
+                        onChange?.('')
+                        onSuggestionSelected?.(undefined)
                       }}
                     >
                       <FiX />

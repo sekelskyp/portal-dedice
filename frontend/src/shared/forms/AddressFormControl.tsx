@@ -4,7 +4,7 @@ import { Suggestion } from '../hooks/useAddressSuggestions'
 import { BaseFieldControl, BaseFieldControlProps } from './BaseFieldControl'
 
 export interface AddressFormControlProps extends BaseFieldControlProps {
-  onSuggestionSelected: (suggestion: Suggestion) => void
+  onSuggestionSelected: (suggestion?: Suggestion) => void
 }
 
 export const AddressFormControl = ({

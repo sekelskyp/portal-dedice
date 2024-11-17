@@ -26,12 +26,19 @@ export const AddressGroupFormControl = ({ label }: { label: ReactNode }) => {
             <AddressFormControl
               flex={3}
               onSuggestionSelected={(suggestion) => {
-                console.log('suggestion', suggestion)
                 const address = suggestionToAddress(suggestion)
-                setValue('addressStreet', address.street)
-                setValue('addressStreetNumber', address.streetNumber)
-                setValue('addressMunicipality', address.municipality)
-                setValue('addressPostCode', address.postCode)
+                setValue('addressStreet', address.street, {
+                  shouldValidate: true,
+                })
+                setValue('addressStreetNumber', address.streetNumber, {
+                  shouldValidate: true,
+                })
+                setValue('addressMunicipality', address.municipality, {
+                  shouldValidate: true,
+                })
+                setValue('addressPostCode', address.postCode, {
+                  shouldValidate: true,
+                })
               }}
               name="addressStreet"
               label="Ulice"

@@ -658,6 +658,37 @@ export type UpdateProfileMutation = {
   }
 }
 
+export type RefetchUserByIdQueryVariables = Exact<{
+  getUserByIdId: Scalars['Float']['input']
+}>
+
+export type RefetchUserByIdQuery = {
+  __typename?: 'Query'
+  getUserById?: {
+    __typename?: 'User'
+    id: string
+    email: string
+    confirmed: boolean
+    isNotary: boolean
+    isBeneficiary: boolean
+    beneficiaries: Array<{
+      __typename?: 'Beneficiary'
+      id: string
+      dateOfBirth?: any | null
+      deceasedRelation?: string | null
+      userId?: string | null
+      contactId?: string | null
+    }>
+    notaries: Array<{
+      __typename?: 'Notary'
+      contactId?: string | null
+      id: string
+      userId?: string | null
+    }>
+    contact?: { __typename?: 'Contact'; displayName: string } | null
+  } | null
+}
+
 export type CreateProcedureMutationVariables = Exact<{
   data: InheritanceProcedureFormDataInput
 }>
@@ -1579,6 +1610,121 @@ export const UpdateProfileDocument = {
   UpdateProfileMutation,
   UpdateProfileMutationVariables
 >
+export const RefetchUserByIdDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'RefetchUserById' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'getUserByIdId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Float' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getUserById' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'id' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'getUserByIdId' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'confirmed' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'isNotary' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'isBeneficiary' },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'beneficiaries' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'dateOfBirth' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'deceasedRelation' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'userId' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'contactId' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'notaries' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'contactId' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'userId' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'contact' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'displayName' },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  RefetchUserByIdQuery,
+  RefetchUserByIdQueryVariables
+>
 export const CreateProcedureDocument = {
   kind: 'Document',
   definitions: [
@@ -1955,11 +2101,6 @@ export const FindNotaryDocument = {
                         name: { kind: 'Name', value: 'gender' },
                       },
                       { kind: 'Field', name: { kind: 'Name', value: 'phone' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'email' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'gender' },
-                      },
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'addressStreet' },

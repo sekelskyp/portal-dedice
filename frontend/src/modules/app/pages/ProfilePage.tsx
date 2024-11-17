@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { useMutation, useQuery } from '@apollo/client'
 import { Card, Heading, HStack, Stack } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -8,7 +7,7 @@ import { z } from 'zod'
 import { gql } from '@frontend/gql'
 import { ProfileInput } from '@frontend/gql/graphql'
 import { useAuth } from '@frontend/modules/auth'
-import { Radio } from '@frontend/shared/design-system'
+import { Radio, toaster } from '@frontend/shared/design-system'
 import {
   AddressGroupFormControl,
   Form,
@@ -68,10 +67,30 @@ export const ProfilePage = () => {
 
   const [updateProfile] = useMutation(UPDATE_PROFILE_MUTATION)
 
-  const onSubmit = (variables: ProfileInput) =>
-    updateProfile({
+  const onSubmit = (variables: ProfileInput) => {
+    console.log(variables)
+
+    return updateProfile({
       variables: { profileInput: variables },
     })
+      .then((res) => {
+        if (!res.data)
+          throw new Error('No data returned from updateProfile mutation')
+
+        toaster.success({ title: 'Profil byl úspěšně uložen' })
+        auth.signIn({
+          token: auth.token,
+          user: {
+            ...auth.user!,
+            id: auth.user!.id,
+            contact: res.data!.updateProfile.contact,
+          },
+        })
+      })
+      .catch(() => {
+        toaster.error({ title: 'Nepodařilo se uložit profil' })
+      })
+  }
 
   return (
     <Card.Root variant="subtle">
@@ -92,15 +111,16 @@ export const ProfilePage = () => {
 }
 
 const schema = z.object({
-  name: z.string(),
-  surname: z.string(),
-  displayName: z.string(),
-  email: z.string().nullable(),
-  phone: z.string().nullable(),
-  addressStreet: z.string().nullable(),
-  addressStreetNumber: z.string().nullable(),
-  addressMunicipality: z.string().nullable(),
-  addressPostCode: z.string().nullable(),
+  name: z.string().min(1),
+  surname: z.string().min(1),
+  displayName: z.string().min(1),
+  email: z.string().email().optional(),
+  phone: z.string().min(9).optional(),
+  addressStreet: z.string().optional(),
+  addressStreetNumber: z.string().optional(),
+  addressMunicipality: z.string().optional(),
+  addressPostCode: z.string().optional(),
+  gender: z.string().optional(),
 })
 
 const ProfileForm = ({
@@ -139,11 +159,11 @@ const ProfileForm = ({
   )
 }
 
-const calculateDisplayName = (name: string, surname: string) => {
+const calculateDisplayName = (name?: string, surname?: string) => {
   let displayName = ''
-  if (name) displayName += name
+  if (name?.trim()) displayName += name
 
-  if (surname) displayName += ` ${surname}`
+  if (surname?.trim()) displayName += ` ${surname}`
 
   return displayName
 }
@@ -153,20 +173,29 @@ const NameGroupFormControl = () => {
 
   const name = watch('name')
   const surname = watch('surname')
-  const displayName = watch('displayName')
 
-  useEffect(() => {
-    const calculatedDisplayName = calculateDisplayName(name, surname)
-    if (!displayName?.trim() || calculatedDisplayName.startsWith(displayName)) {
-      setValue('displayName', calculateDisplayName(name, surname))
-    }
-  }, [name, surname, displayName, setValue])
-
+  const displayNameUpdater = (name?: string, surname?: string) => {
+    setValue('displayName', calculateDisplayName(name, surname), {
+      shouldValidate: true,
+    })
+  }
   return (
     <>
       <HStack gap={4}>
-        <InputFormControl name="name" label="Jméno" />
-        <InputFormControl name="surname" label="Příjmení" />
+        <InputFormControl
+          name="name"
+          label="Jméno"
+          onChange={(changedName) => {
+            displayNameUpdater(changedName, surname)
+          }}
+        />
+        <InputFormControl
+          name="surname"
+          label="Příjmení"
+          onChange={(changedSurname) => {
+            displayNameUpdater(name, changedSurname)
+          }}
+        />
       </HStack>
       <InputFormControl
         name="displayName"

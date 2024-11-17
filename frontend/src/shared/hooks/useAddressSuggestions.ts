@@ -29,7 +29,16 @@ export interface Address {
   postCode: string
 }
 
-export function suggestionToAddress(suggestion: Suggestion): Address {
+export function suggestionToAddress(suggestion?: Suggestion): Address {
+  if (!suggestion) {
+    return {
+      street: '',
+      streetNumber: '',
+      municipality: '',
+      postCode: '',
+    }
+  }
+
   return {
     street: suggestion.regionalStructure.find(
       (x) => x.type === 'regional.street'
