@@ -5,6 +5,7 @@ import { IoDocumentTextOutline } from 'react-icons/io5'
 import { MdDelete } from 'react-icons/md'
 
 import { useAuth } from '@frontend/modules/auth'
+import { Alert } from '@frontend/shared/design-system'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { route } from '@shared/route'
 
@@ -60,49 +61,66 @@ export function Documents({ id }: { id: string }) {
 
   return (
     <Stack>
-      <Heading>Dokumenty v řízení</Heading>
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
+        <Heading>Dokumenty v řízení</Heading>
+        {documents.length > 0 && (
+          <Stack justifyContent="center" alignItems="center">
+            <Text textAlign="center" fontSize="lg" fontWeight="bold">
+              {documents.length} / 10
+            </Text>
+          </Stack>
+        )}
+      </Stack>
       {!user?.isNotary && (
-        <Stack direction="column" justifyContent="center" m={6}>
-          <Stack gapY={4}>
-            {documents?.map((document) => (
-              <Stack
-                key={document.id}
-                direction={{ base: 'column', md: 'row' }}
-                bg="gray.200"
-                p={4}
-                borderRadius="2xl"
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                <Stack direction="row" alignItems="center">
-                  <IoDocumentTextOutline size={24} />
-                  <Link
-                    onClick={handleFileShow(
-                      document.fileName,
-                      document.fileData,
-                      document.fileType
-                    )}
-                    wordBreak="break-word"
-                    fontSize={{ base: 'sm', sm: 'md' }}
-                  >
-                    {decodeURIComponent(escape(document.fileName))}
-                  </Link>
+        <Stack direction="column" justifyContent="center">
+          <Stack gapY={4} mx={6}>
+            {documents.length > 0 ? (
+              documents.map((document) => (
+                <Stack
+                  key={document.id}
+                  direction={{ base: 'column', md: 'row' }}
+                  bg="gray.200"
+                  p={4}
+                  borderRadius="2xl"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Stack direction="row" alignItems="center">
+                    <IoDocumentTextOutline size={24} />
+                    <Link
+                      onClick={handleFileShow(
+                        document.fileName,
+                        document.fileData,
+                        document.fileType
+                      )}
+                      wordBreak="break-word"
+                      fontSize={{ base: 'sm', sm: 'md' }}
+                    >
+                      {decodeURIComponent(escape(document.fileName))}
+                    </Link>
+                  </Stack>
+                  <Stack direction="row" alignItems="center">
+                    <Text color="gray" fontSize={{ base: 'sm', sm: 'md' }}>
+                      {new Date(document.createDate).toLocaleString('cs-CZ')}
+                    </Text>
+                    <IconButton
+                      variant="surface"
+                      colorPalette="red"
+                      size={{ base: 'xs', sm: 'sm', md: 'md' }}
+                      onClick={() => handleFileDelete(document.id)}
+                    >
+                      <MdDelete />
+                    </IconButton>
+                  </Stack>
                 </Stack>
-                <Stack direction="row" alignItems="center">
-                  <Text color="gray" fontSize={{ base: 'sm', sm: 'md' }}>
-                    {new Date(document.createDate).toLocaleString('cs-CZ')}
-                  </Text>
-                  <IconButton
-                    variant="surface"
-                    colorPalette="red"
-                    size={{ base: 'xs', sm: 'sm', md: 'md' }}
-                    onClick={() => handleFileDelete(document.id)}
-                  >
-                    <MdDelete />
-                  </IconButton>
-                </Stack>
-              </Stack>
-            ))}
+              ))
+            ) : (
+              <Alert
+                status="info"
+                title="Nebyly nalezeny žádné dokumenty."
+                width="fit-content"
+              />
+            )}
           </Stack>
           <Stack alignItems="center" pt={4}>
             <RouterNavLink
