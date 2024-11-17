@@ -84,7 +84,12 @@ export interface Beneficiary {
 
 export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
   return (
-    <Form onSubmit={onSubmit} resolver={zodResolver(schema)} noValidate>
+    <Form
+      onSubmit={onSubmit}
+      resolver={zodResolver(schema)}
+      noValidate
+      defaultValues={{ beneficiaries: [] }}
+    >
       <Stack gap={6}>
         <Stack gap={3}>
           <Text fontWeight="bold">
