@@ -12,6 +12,7 @@ export interface BeneficiaryData {
   deceasedRelation?: DeceasedRelationEnumType | null
   contactId?: number | null
   dateOfBirth?: Date | null
+  sendNotification?: boolean
 }
 
 export interface BeneficiaryInheritanceProcedureRelData {

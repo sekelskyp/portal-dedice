@@ -44,8 +44,10 @@ async function populateDatabase(
         gender: 'Male',
         phone: '+420666666661',
         email: 'gatyou@quacker.com',
-        completeAddress: 'Main Street 123, Brno, Czech Republic',
-        postalCode: '11000',
+        addressStreet: 'Main Street',
+        addressStreetNumber: '123',
+        addressMunicipality: 'Brno',
+        addressPostCode: '11000',
       },
       {
         name: 'Petr',
@@ -54,8 +56,10 @@ async function populateDatabase(
         gender: 'Male',
         phone: '+420555555551',
         email: 'hocpet@quacker.com',
-        completeAddress: 'Main Street 456, Brno, Czech Republic',
-        postalCode: '15000',
+        addressStreet: 'Main Street',
+        addressStreetNumber: '456',
+        addressMunicipality: 'Brno',
+        addressPostCode: '15000',
       },
       {
         name: 'Alice',
@@ -64,8 +68,10 @@ async function populateDatabase(
         gender: 'Female',
         phone: '+420444444441',
         email: 'novali@quacker.com',
-        completeAddress: 'Liberty Avenue 789, Prague, Czech Republic',
-        postalCode: '12000',
+        addressStreet: 'Liberty Avenue',
+        addressStreetNumber: '789',
+        addressMunicipality: 'Prague',
+        addressPostCode: '12000',
       },
       {
         name: 'Tomas',
@@ -74,8 +80,10 @@ async function populateDatabase(
         gender: 'Male',
         phone: '+420333333331',
         email: 'vestom@quacker.com',
-        completeAddress: 'Peace Square 321, Ostrava, Czech Republic',
-        postalCode: '13000',
+        addressStreet: 'Peace Square',
+        addressStreetNumber: '321',
+        addressMunicipality: 'Ostrava',
+        addressPostCode: '13000',
       },
       {
         name: 'Jan',
@@ -84,8 +92,10 @@ async function populateDatabase(
         gender: 'Male',
         phone: '+42033333333š',
         email: 'svojan@quacker.com',
-        completeAddress: 'Peace Square 321, Ostrava, Czech Republic',
-        postalCode: '13000',
+        addressStreet: 'Peace Square',
+        addressStreetNumber: '321',
+        addressMunicipality: 'Ostrava',
+        addressPostCode: '13000',
       },
       // main Contacts for inheritance procedures
       {
@@ -95,8 +105,10 @@ async function populateDatabase(
         gender: 'Male',
         phone: '+42033333333š',
         email: 'michalec@quacker.com',
-        completeAddress: 'Peace Square 321, Ostrava, Czech Republic',
-        postalCode: '13000',
+        addressStreet: 'Peace Square',
+        addressStreetNumber: '321',
+        addressMunicipality: 'Ostrava',
+        addressPostCode: '13000',
       },
       {
         name: 'Petr',
@@ -105,8 +117,10 @@ async function populateDatabase(
         gender: 'Male',
         phone: '+42033333333š',
         email: 'hochman@quacker.com',
-        completeAddress: 'Peace Square 321, Ostrava, Czech Republic',
-        postalCode: '13000',
+        addressStreet: 'Peace Square',
+        addressStreetNumber: '321',
+        addressMunicipality: 'Ostrava',
+        addressPostCode: '13000',
       },
     ])
     .$returningId()
@@ -118,14 +132,17 @@ async function populateDatabase(
       {
         password: await hashPassword('heslo1234'),
         email: 'test.email1@email.com',
+        confirmed: true,
       },
       {
         password: await hashPassword('heslo1234'),
         email: 'test.email2@email.com',
+        confirmed: true,
       },
       {
         password: await hashPassword('heslo1234'),
         email: 'test.email3@email.com',
+        confirmed: true,
       },
     ])
     .$returningId()
@@ -229,12 +246,14 @@ async function populateDatabase(
 
       value: 100_000,
       name: 'Auto',
+      type: 'Automobile',
     },
     {
       inheritanceProcedureId: inheritanceId1,
 
       value: 200_000,
       name: 'Dům',
+      type: 'Other',
     },
   ])
   console.log('Population data seeded successfully.')

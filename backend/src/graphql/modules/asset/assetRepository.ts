@@ -1,6 +1,6 @@
 import { eq, inArray } from 'drizzle-orm'
 
-import { asset } from '@backend/db/schema'
+import { asset, AssetTypeEnumType } from '@backend/db/schema'
 import { Db } from '@backend/types/types'
 
 export interface AssetData {
@@ -8,6 +8,12 @@ export interface AssetData {
   value: number
   name: string
   description?: string | null
+  type: AssetTypeEnumType
+  bankName?: string | null
+  carMakeName?: string | null
+  carRegistrationDate?: Date | null
+  carType?: string | null
+  cin?: string | null
 }
 
 export function getAssetRepository(db: Db) {

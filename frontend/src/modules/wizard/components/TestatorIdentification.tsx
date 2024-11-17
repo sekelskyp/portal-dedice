@@ -55,7 +55,7 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
       }}
     >
       <Container
-        maxW="2xl"
+        maxW="4xl"
         width="100%"
         px={{ base: 4, sm: 8, md: 12, lg: 16 }}
         py={{ base: 2, sm: 4 }}

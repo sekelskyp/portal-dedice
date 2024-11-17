@@ -6,6 +6,12 @@ import { AssetCopy } from './assetCopy'
 import { CreateAssetInput } from './createAssetInput'
 import { UpdateAssetInput } from './updateAssetInput'
 
+function checkCarRegistrationDate(registrationDate: Date | null | undefined) {
+  if (registrationDate && registrationDate > new Date()) {
+    throw new Error('Není možné zadat datum registrace vozu v budoucnosti.')
+  }
+}
+
 @Resolver(() => AssetCopy)
 export class AssetResolver {
   // Query to get an asset by ID
@@ -23,6 +29,7 @@ export class AssetResolver {
     @Arg('data') data: CreateAssetInput,
     @Ctx() { assetRepository }: CustomContext
   ): Promise<AssetCopy> {
+    checkCarRegistrationDate(data.carRegistrationDate)
     const assetId = await assetRepository.createAsset(data)
     return await assetRepository.getAssetById(assetId)
   }
@@ -34,6 +41,7 @@ export class AssetResolver {
     @Arg('data') data: UpdateAssetInput,
     @Ctx() { assetRepository }: CustomContext
   ): Promise<AssetCopy | null> {
+    checkCarRegistrationDate(data.carRegistrationDate)
     const asset = await assetRepository.getAssetById(id)
     if (!asset) {
       throw new Error('Asset not found')
