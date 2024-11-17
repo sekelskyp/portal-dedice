@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "bc080a58-1262-4600-a87b-6a01c5451409",
+  "id": "441ca030-fd14-45c3-aed6-1fa9b32306cf",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "asset": {
@@ -42,16 +42,44 @@
           "notNull": false,
           "autoincrement": false
         },
-        "bankName": {
-          "name": "bankName",
+        "type": {
+          "name": "type",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "bank_name": {
+          "name": "bank_name",
           "type": "varchar(100)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "carMakeName": {
-          "name": "carMakeName",
+        "car_make_name": {
+          "name": "car_make_name",
           "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "car_registration_date": {
+          "name": "car_registration_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "car_type": {
+          "name": "car_type",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "cin": {
+          "name": "cin",
+          "type": "varchar(8)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -369,7 +397,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'2024-11-17 15:57:18.054'"
+          "default": "'2024-11-17 16:45:05.374'"
         }
       },
       "indexes": {},

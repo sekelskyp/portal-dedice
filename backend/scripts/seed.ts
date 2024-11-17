@@ -232,12 +232,14 @@ async function populateDatabase(
 
       value: 100_000,
       name: 'Auto',
+      type: 'Automobile',
     },
     {
       inheritanceProcedureId: inheritanceId1,
 
       value: 200_000,
       name: 'Dům',
+      type: 'Other',
     },
   ])
   console.log('Population data seeded successfully.')
