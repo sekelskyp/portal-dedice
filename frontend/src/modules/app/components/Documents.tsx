@@ -7,10 +7,12 @@ import { MdDelete } from 'react-icons/md'
 import { useAuth } from '@frontend/modules/auth'
 import { Alert } from '@frontend/shared/design-system'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
+import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
 import { route } from '@shared/route'
 
 import { useDeleteDocument } from '../hooks/useDeleteDocument'
 import { useGetDocuments } from '../hooks/useGetDocuments'
+import { useProcedure } from '../hooks/useProcedure'
 import { decodeFile } from '../utils/decodeFile'
 
 interface DocumentType {
@@ -22,9 +24,11 @@ interface DocumentType {
 }
 
 export function Documents({ id }: { id: string }) {
-  const { user } = useAuth()
+  const { user, token } = useAuth()
 
   const [documents, setDocuments] = useState<DocumentType[]>([])
+
+  const procedure = useProcedure({ procedureId: parseInt(id) })
 
   const { data } = useGetDocuments({
     procedureId: parseInt(id),
@@ -59,19 +63,25 @@ export function Documents({ id }: { id: string }) {
     }
   }, [data])
 
-  return (
-    <Stack>
-      <Stack direction="row" alignItems="center" justifyContent="space-between">
-        <Heading>Dokumenty v řízení</Heading>
-        {documents.length > 0 && (
-          <Stack justifyContent="center" alignItems="center">
-            <Text textAlign="center" fontSize="lg" fontWeight="bold">
-              {documents.length} / 10
-            </Text>
-          </Stack>
-        )}
-      </Stack>
-      {!user?.isNotary && (
+  if (!token) {
+    return <UnauthorizedPage />
+  } else {
+    return (
+      <Stack>
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+        >
+          <Heading>Dokumenty v řízení</Heading>
+          {documents.length > 0 && (
+            <Stack justifyContent="center" alignItems="center">
+              <Text textAlign="center" fontSize="lg" fontWeight="bold">
+                {documents.length} / 10
+              </Text>
+            </Stack>
+          )}
+        </Stack>
         <Stack direction="column" justifyContent="center">
           <Stack gapY={4} mx={6}>
             {documents.length > 0 ? (
@@ -103,14 +113,18 @@ export function Documents({ id }: { id: string }) {
                     <Text color="gray" fontSize={{ base: 'sm', sm: 'md' }}>
                       {new Date(document.createDate).toLocaleString('cs-CZ')}
                     </Text>
-                    <IconButton
-                      variant="surface"
-                      colorPalette="red"
-                      size={{ base: 'xs', sm: 'sm', md: 'md' }}
-                      onClick={() => handleFileDelete(document.id)}
-                    >
-                      <MdDelete />
-                    </IconButton>
+                    {procedure?.data?.getProcedureById?.beneficiaries?.some(
+                      (item) => item.id === user?.beneficiaries[0]?.id
+                    ) && (
+                      <IconButton
+                        variant="surface"
+                        colorPalette="red"
+                        size={{ base: 'xs', sm: 'sm', md: 'md' }}
+                        onClick={() => handleFileDelete(document.id)}
+                      >
+                        <MdDelete />
+                      </IconButton>
+                    )}
                   </Stack>
                 </Stack>
               ))
@@ -134,7 +148,7 @@ export function Documents({ id }: { id: string }) {
             </RouterNavLink>
           </Stack>
         </Stack>
-      )}
-    </Stack>
-  )
+      </Stack>
+    )
+  }
 }
