@@ -6,16 +6,12 @@ import { z } from 'zod'
 
 import resources from '@frontend/resources'
 import {
+  AddressGroupFormControl,
   DateFormControl,
   Form,
   InputFormControl,
   SubmitButton,
 } from '@frontend/shared/forms'
-import { AddressFormControl } from '@frontend/shared/forms/AddressFormControl'
-import {
-  Suggestion,
-  suggestionSchema,
-} from '@frontend/shared/hooks/useAddressSuggestions'
 
 const benefciarySchema = z.object({
   name: z
@@ -43,7 +39,6 @@ const schema = z
     dateOfDeath: z
       .date({ required_error: 'Datum narození je povinné.' })
       .max(new Date(), 'Datum narození musí být v minulosti.'),
-    address: suggestionSchema,
     contactName: z
       .string({ required_error: 'Jméno je povinné' })
       .min(1, 'Jméno je povinné'),
@@ -54,6 +49,10 @@ const schema = z
       .string({ required_error: 'Zadejte validní e-mailovou adresu' })
       .email('Zadejte validní e-mailovou adresu'),
     beneficiaries: z.array(benefciarySchema),
+    addressStreet: z.string().min(1, 'Ulice je povinná.'),
+    addressStreetNumber: z.string().min(1, 'Číslo popisné je povinné.'),
+    addressMunicipality: z.string().min(1, 'Obec je povinná.'),
+    addressPostCode: z.string().min(1, 'PSČ je povinné.'),
   })
   .refine((data) => data.dateOfBirth < data.dateOfDeath, {
     message: 'Datum úmrtí musí být po datumu narození',
@@ -66,7 +65,10 @@ export type ProceedingFormProps = {
     surname: string
     dateOfBirth: string
     dateOfDeath: string
-    address: Suggestion
+    addressStreet: string
+    addressStreetNumber: string
+    addressMunicipality: string
+    addressPostCode: string
     contactName: string
     contactSurname: string
     contactEmail: string
@@ -110,11 +112,9 @@ export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
             label={resources.portal.forms.proceedingForm.dateOfDeath}
             required
           ></DateFormControl>
-          <AddressFormControl
-            name="address"
+          <AddressGroupFormControl
             label={resources.portal.forms.proceedingForm.address}
-            required
-          ></AddressFormControl>
+          />
         </Stack>
         <Stack>
           <Text fontWeight="bold">

@@ -12,4 +12,17 @@ export const cardSlotRecipe = defineSlotRecipe({
       p: { base: 4, sm: 6 },
     },
   },
+  defaultVariants: {
+    visual: 'subtle',
+  },
+  variants: {
+    visual: {
+      subtle: {
+        root: {
+          bg: 'bg.panel',
+          borderColor: 'bg.panel',
+        },
+      },
+    },
+  },
 })

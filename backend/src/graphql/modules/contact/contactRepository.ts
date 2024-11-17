@@ -7,12 +7,14 @@ import { contact, GenderEnumType, notary } from '../../../db/schema'
 export interface ContactData {
   name: string
   surname: string
-  displayName?: string
-  phone?: string
-  gender?: GenderEnumType
-  email?: string
-  completeAddress?: string
-  postalCode?: string
+  displayName: string
+  phone?: string | null
+  gender?: GenderEnumType | null
+  email?: string | null
+  addressStreet?: string | null
+  addressStreetNumber?: string | null
+  addressMunicipality?: string | null
+  addressPostCode?: string | null
 }
 
 function getDefaultDisplayName(data: ContactData): string {
@@ -62,6 +64,13 @@ export function getContactRepository(db: Db) {
     return result ? result.contact : null
   }
 
+  async function updateContact(
+    contactId: number,
+    data: Partial<Omit<ContactData, 'id'>>
+  ): Promise<void> {
+    await db.update(contact).set(data).where(eq(contact.id, contactId))
+  }
+
   return {
     getContactById,
     getAllContacts,
@@ -70,5 +79,6 @@ export function getContactRepository(db: Db) {
     deleteContactsByIds,
     getContactByNotaryId,
     createContacts,
+    updateContact,
   }
 }

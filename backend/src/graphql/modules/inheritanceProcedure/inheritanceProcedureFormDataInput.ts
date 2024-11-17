@@ -15,7 +15,16 @@ class DeceasedPersonInput {
   dateOfDeath!: Date
 
   @Field()
-  completeAddress!: string
+  addressStreet!: string
+
+  @Field()
+  addressStreetNumber!: string
+
+  @Field()
+  addressMunicipality!: string
+
+  @Field()
+  addressPostCode!: string
 }
 
 @InputType()

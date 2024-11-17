@@ -11,6 +11,7 @@ import InheritanceProcedureDetail from './modules/app/pages/InheritanceProcedure
 import { NewDocumentPage } from './modules/app/pages/NewDocumentPage'
 import { NewProceedingPage } from './modules/app/pages/NewProceedingPage'
 import { Proceedings } from './modules/app/pages/Proceedings'
+import { ProfilePage } from './modules/app/pages/ProfilePage'
 import { ConfirmEmailPage } from './modules/auth/pages/ConfirmEmailPage'
 import { EmailVerification } from './modules/auth/pages/EmailVerification'
 import { PasswordResetPage } from './modules/auth/pages/PasswordResetPage'
@@ -38,6 +39,7 @@ export function Routes() {
           <Route path={route.newDocument()} element={<NewDocumentPage />} />
           <Route path={route.chat()} element={<ChatPage />} />
           <Route path={route.chatId()} element={<ChatPage />} />
+          <Route path={route.profile()} element={<ProfilePage />} />
         </Route>
         <Route path={route.about()} element={<AboutPage />} />
         <Route path={route.guide()} element={<GuidePage />} />

@@ -3,7 +3,7 @@ import { Field, InputType } from 'type-graphql'
 import { GenderEnumType } from '@backend/db/schema'
 
 @InputType()
-export class CreateContactInput {
+export class ProfileInput {
   @Field()
   name!: string
 
@@ -11,13 +11,13 @@ export class CreateContactInput {
   surname!: string
 
   @Field({ nullable: true })
+  displayName!: string
+
+  @Field({ nullable: true })
   email?: string
 
   @Field({ nullable: true })
   phone?: string
-
-  @Field({ nullable: true })
-  displayName?: string
 
   @Field(() => String, { nullable: true })
   gender?: GenderEnumType

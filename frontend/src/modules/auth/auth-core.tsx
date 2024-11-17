@@ -24,6 +24,9 @@ export type AuthUser = {
   isBeneficiary: boolean
   beneficiaries: { id: string }[]
   notaries: { id: string }[]
+  contact?: {
+    displayName?: string
+  } | null
 }
 
 const LOCAL_STORAGE_AUTH_KEY = 'project-auth'
@@ -97,6 +100,7 @@ function usePersistedAuth(
   const [state, setStateRaw] = useState(() => getStorageState(defaultState))
 
   const setState = useCallback((newState: AuthState) => {
+    console.log('setState', newState)
     setStateRaw(newState)
     setStorageState(newState)
   }, [])

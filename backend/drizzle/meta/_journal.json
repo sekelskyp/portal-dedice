@@ -22,6 +22,20 @@
       "when": 1731595927620,
       "tag": "0002_complex_masked_marvel",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1731847054966,
+      "tag": "0003_polite_sabretooth",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1731848374582,
+      "tag": "0004_harsh_ricochet",
+      "breakpoints": true
     }
   ]
 }

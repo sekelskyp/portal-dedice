@@ -26,7 +26,7 @@ const sideBarItems: SideBarItem[] = [
   },
   {
     label: resources.portal.sideBar.profile,
-    to: route.portal(),
+    to: route.profile(),
     icon: <LuUser2 />,
   },
   {

@@ -1,14 +1,24 @@
 import { AddressAutoComplete } from '../components/AddressAutoComplete'
+import { Suggestion } from '../hooks/useAddressSuggestions'
 
 import { BaseFieldControl, BaseFieldControlProps } from './BaseFieldControl'
 
-export interface ZipCodeControlProps extends BaseFieldControlProps {}
+export interface AddressFormControlProps extends BaseFieldControlProps {
+  onSuggestionSelected: (suggestion?: Suggestion) => void
+}
 
-export const AddressFormControl = (props: ZipCodeControlProps) => {
+export const AddressFormControl = ({
+  onSuggestionSelected,
+  ...baseProps
+}: AddressFormControlProps) => {
   return (
-    <BaseFieldControl {...props}>
+    <BaseFieldControl {...baseProps}>
       {(field, disabled) => (
-        <AddressAutoComplete {...props} {...field} disabled={disabled} />
+        <AddressAutoComplete
+          onSuggestionSelected={onSuggestionSelected}
+          {...field}
+          disabled={disabled}
+        />
       )}
     </BaseFieldControl>
   )

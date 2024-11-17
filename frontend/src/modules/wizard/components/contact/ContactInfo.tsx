@@ -5,9 +5,9 @@ import { ContactInfoItem, ContactInfoItemProps } from './ContactInfoItem'
 
 interface ContactInfoProps {
   contactInfo: {
-    phone: string
-    email: string
-    completeAddress: string
+    phone?: string
+    email?: string
+    completeAddress?: string
   }
 }
 
@@ -20,15 +20,15 @@ export function ContactInfo({ contactInfo }: ContactInfoProps) {
   const contactIcons: ContactInfoItemProps[] = [
     {
       icon: <FiPhone size={iconBreakpoints} />,
-      text: contactInfo.phone,
+      text: contactInfo.phone!,
     },
     {
       icon: <FiMail size={iconBreakpoints} />,
-      text: contactInfo.email,
+      text: contactInfo.email!,
     },
     {
       icon: <FiMapPin size={iconBreakpoints} />,
-      text: contactInfo.completeAddress,
+      text: contactInfo.completeAddress!,
     },
   ]
 

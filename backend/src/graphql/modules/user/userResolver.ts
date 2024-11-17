@@ -18,12 +18,15 @@ import {
   isUserNotary,
   loginUser,
   registerUser,
+  updateProfile,
 } from '@backend/services/userService'
 import { CustomContext } from '@backend/types/types'
 
 import { Beneficiary } from '../beneficiary/beneficiaryType'
+import { Contact } from '../contact/contactType'
 import { Notary } from '../notary/notaryType'
 
+import { ProfileInput } from './profileInput'
 import { RegisterInput } from './registerInput'
 import { SignInResponse } from './signInResponseType'
 import { User } from './userType'
@@ -68,6 +71,16 @@ export class UserResolver {
     @Ctx() context: CustomContext
   ): Promise<boolean> {
     return await isUserBeneficiary(user.id, context)
+  }
+
+  @FieldResolver(() => Contact, { nullable: true })
+  async contact(
+    @Root() user: User,
+    @Ctx() context: CustomContext
+  ): Promise<Contact | null> {
+    return user.contactId
+      ? await context.contactRepository.getContactById(user.contactId)
+      : null
   }
 
   // Fetch a user by ID
@@ -135,11 +148,10 @@ export class UserResolver {
     @Arg('newPassword') newPassword: string,
     @Ctx() context: CustomContext
   ): Promise<void> {
-    if (!context.authUser) {
-      throw new Error('User is not authenticated')
-    }
+    if (!context.authUser) throw new Error('User is not authenticated')
+
     return await changeUserPassword(
-      context.authUser.id,
+      context.authUser.userId,
       oldPassword,
       newPassword,
       context
@@ -175,5 +187,20 @@ export class UserResolver {
   ): Promise<boolean> {
     await confirmEmailVerification(token, context)
     return true
+  }
+
+  @Mutation(() => User)
+  async updateProfile(
+    @Arg('profileInput') profileInput: ProfileInput,
+    @Ctx() context: CustomContext
+  ): Promise<User> {
+    if (!context.authUser) throw new Error('User is not authenticated')
+
+    await updateProfile(context.authUser.userId, profileInput, context)
+
+    const user = await getUserById(context.authUser.userId, context)
+    if (!user) throw new Error('User not found after profile update')
+
+    return user
   }
 }

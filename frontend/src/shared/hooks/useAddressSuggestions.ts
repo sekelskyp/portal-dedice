@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { z } from 'zod'
 
 interface Position {
   lon: number
@@ -22,27 +21,36 @@ export interface Suggestion {
   zip?: string
 }
 
-export const suggestionSchema = z.object(
-  {
-    name: z.string(),
-    label: z.string(),
-    position: z.object({
-      lon: z.number(),
-      lat: z.number(),
-    }),
-    type: z.string(),
-    location: z.string(),
-    regionalStructure: z.array(
-      z.object({
-        name: z.string(),
-        type: z.string(),
-        isoCode: z.string().optional(),
-      })
-    ),
-    zip: z.string().min(1),
-  },
-  { required_error: 'Adresa je povinná' }
-)
+export interface Address {
+  street: string
+  streetNumber: string
+  municipality: string
+  postCode: string
+}
+
+export function suggestionToAddress(suggestion?: Suggestion): Address {
+  if (!suggestion) {
+    return {
+      street: '',
+      streetNumber: '',
+      municipality: '',
+      postCode: '',
+    }
+  }
+
+  return {
+    street: suggestion.regionalStructure.find(
+      (x) => x.type === 'regional.street'
+    )?.name!,
+    streetNumber: suggestion.regionalStructure.find(
+      (x) => x.type === 'regional.address'
+    )?.name!,
+    municipality: suggestion.regionalStructure.find(
+      (x) => x.type === 'regional.municipality'
+    )?.name!,
+    postCode: suggestion.zip!,
+  }
+}
 
 interface UseAddressSuggestionsOptions {
   lang?: string
