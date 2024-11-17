@@ -7,6 +7,7 @@ import { CustomContext } from '../types/types'
 
 import { sendEmail } from './emailService'
 import { hashPassword } from './passwordHashService'
+import { renderTemplate } from './templateService'
 
 const RESET_TOKEN_EXPIRATION_HOURS = 1 // Token expires in 1 hour
 
@@ -43,12 +44,15 @@ export const requestPasswordReset = async (
   // Generate the reset link
   const baseUrl = `${process.env.APP_BASE_URL_FRONTEND}`
   const resetLink = `${baseUrl}${route.resetPassword()}?token=${token}`
-
+  // Render the template
+  const html = await renderTemplate('passwordReset', {
+    resetLink,
+  })
   // Send the email with the reset link
   await sendEmail({
     to: userRecord.email,
     subject: 'Password Reset Request',
-    text: `You requested a password reset. Click the link to reset your password: ${resetLink}`,
+    html,
   })
 }
 

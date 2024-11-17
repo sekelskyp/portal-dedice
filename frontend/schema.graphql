@@ -13,6 +13,7 @@ type Beneficiary {
   deceasedRelation: String
   id: ID!
   inheritanceProcedures: [InheritanceProcedure!]!
+  sendNotifications: Boolean!
   user: User
   userId: ID
 }
@@ -21,6 +22,20 @@ input BeneficiaryInput {
   email: String!
   name: String!
   surname: String!
+}
+
+type Chat {
+  chatMessages: [ChatMessage!]
+  id: ID!
+  inheritanceProcedureId: ID!
+}
+
+type ChatMessage {
+  body: String!
+  chatId: ID!
+  createdAt: DateTimeISO!
+  id: ID!
+  userId: ID!
 }
 
 type Contact {
@@ -137,6 +152,7 @@ type Mutation {
     procedureId: Int!
   ): Boolean!
   addBeneficiaryToProcedure(beneficiaryId: Int!, procedureId: Int!): Boolean!
+  addChatMessage(body: String!, procedureId: Int!, userId: Int!): ChatMessage!
   assignNotary(notaryId: Int!, procedureId: Int!): Boolean!
   changePassword(newPassword: String!, oldPassword: String!): User!
   closeProcedure(procedureId: Int!): Boolean!
@@ -155,6 +171,11 @@ type Mutation {
   deleteDocumentsByIds(ids: [ID!]!): Boolean!
   deleteNotary(id: Int!): Notary!
   deleteProceduresByIds(ids: [Int!]!): [Int!]!
+  notifyProcedureBenficiaries(
+    html: String!
+    procedureId: Int!
+    subject: String!
+  ): Boolean!
   removeBeneficiaryFromProcedure(
     beneficiaryId: Int!
     procedureId: Int!
@@ -177,6 +198,8 @@ type Notary {
 
 type Query {
   _empty: String!
+  chat(id: Int!): Chat!
+  chatByInheritanceProcedureId(inheritanceProcedureId: Int!): Chat!
   findNotary(input: FindNotaryInput!): Notary
   getAllContacts: [Contact!]!
   getAllProcedures: [InheritanceProcedure!]!
@@ -205,6 +228,10 @@ input RegisterInput {
 type SignInResponse {
   token: String!
   user: User!
+}
+
+type Subscription {
+  newChatMessage(procedureId: Int!): ChatMessage!
 }
 
 input UpdateBeneficiaryInput {

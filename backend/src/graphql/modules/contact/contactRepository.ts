@@ -25,6 +25,14 @@ export function getContactRepository(db: Db) {
     return result
   }
 
+  async function getContactsByIds(id: number[]) {
+    const result = await db
+      .select()
+      .from(contact)
+      .where(inArray(contact.id, id))
+    return result
+  }
+
   async function getAllContacts() {
     return await db.select().from(contact)
   }
@@ -64,6 +72,7 @@ export function getContactRepository(db: Db) {
 
   return {
     getContactById,
+    getContactsByIds,
     getAllContacts,
     createContact,
     deleteContactById,

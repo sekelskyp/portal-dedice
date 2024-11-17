@@ -54,6 +54,8 @@ const InheritanceProcedureDetail: React.FC = () => {
 
   const procedure = data?.getProcedureById
 
+  console.log(procedure)
+
   const totalAssetsValue =
     procedure?.procedureAssets?.reduce((sum, asset) => sum + asset.value, 0) ??
     0
@@ -180,7 +182,7 @@ const InheritanceProcedureDetail: React.FC = () => {
                   <Documents id={id ?? ''} />
                 </Tabs.Content>
                 <Tabs.Content value="assets">
-                <Assets id={id ?? ''} />
+                  <Assets id={id ?? ''} />
                 </Tabs.Content>
               </Tabs.Root>
             </Card.Body>
@@ -192,10 +194,13 @@ const InheritanceProcedureDetail: React.FC = () => {
                       Modelace vyrovnaní
                       <FaCalculator />
                     </Button>
-                    <Button as={Link} disabled rounded="full">
+                    <RouterNavLink
+                      to={route.chatId(id, procedure.name)}
+                      rounded="full"
+                    >
                       Chat s notářem
                       <HiChat />
-                    </Button>
+                    </RouterNavLink>
                   </>
                 ) : (
                   <>

@@ -1,1 +1,0 @@
-ALTER TABLE `document` MODIFY COLUMN `file_data` longtext NOT NULL;

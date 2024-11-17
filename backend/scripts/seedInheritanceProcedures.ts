@@ -1,5 +1,7 @@
 import { MySql2Database } from 'drizzle-orm/mysql2'
 
+import { getChatMessageRepository } from '../src/graphql/modules/chat/chatMessageRepository'
+import { getChatRepository } from '../src/graphql/modules/chat/chatRepository'
 import { getContactRepository } from '../src/graphql/modules/contact/contactRepository'
 import { getInheritanceProcedureRepository } from '../src/graphql/modules/inheritanceProcedure/inheritaceProcedureRepository'
 import {
@@ -16,12 +18,16 @@ export async function seedInheritanceProcedures(
 
   const inheritanceProcedureRepository = getInheritanceProcedureRepository(db)
   const contactRepository = getContactRepository(db)
+  const chatRepository = getChatRepository(db)
+  const chatMessageRepository = getChatMessageRepository(db)
 
   const proceduresIds: number[] = []
   for (const data of inheritanceProcedureData) {
     const procedureId = await createProcedure(data, {
       inheritanceProcedureRepository,
       contactRepository,
+      chatRepository,
+      chatMessageRepository,
     } as CustomContext)
     proceduresIds.push(procedureId)
   }

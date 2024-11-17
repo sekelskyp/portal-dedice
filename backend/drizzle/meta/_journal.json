@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1730649562999,
-      "tag": "0000_even_kabuki",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1730722931073,
-      "tag": "0001_cultured_ultimatum",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1731764344411,
-      "tag": "0002_jittery_forgotten_one",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1731769457403,
-      "tag": "0003_known_argent",
+      "when": 1731857994030,
+      "tag": "0000_hesitant_hawkeye",
       "breakpoints": true
     }
   ]

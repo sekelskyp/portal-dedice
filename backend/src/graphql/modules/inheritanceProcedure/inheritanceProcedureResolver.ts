@@ -19,6 +19,7 @@ import {
   createProcedure,
   createProcedureFromFormData,
   deleteProceduresByIds,
+  notifyProcedureBeneficiaries,
   removeBeneficiaryFromProcedure,
 } from '../../../services/inheritanceProcedureService'
 import { CustomContext } from '../../../types/types'
@@ -232,5 +233,16 @@ export class InheritanceProcedureResolver {
     @Ctx() context: CustomContext
   ): Promise<number[]> {
     return await deleteProceduresByIds(ids, context)
+  }
+
+  @Mutation(() => Boolean)
+  async notifyProcedureBenficiaries(
+    @Arg('procedureId', () => Int) procedureId: number,
+    @Arg('subject') subject: string,
+    @Arg('html') html: string,
+    @Ctx() context: CustomContext
+  ): Promise<boolean> {
+    await notifyProcedureBeneficiaries(procedureId, subject, html, context)
+    return true
   }
 }

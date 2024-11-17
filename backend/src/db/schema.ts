@@ -83,6 +83,7 @@ export const beneficiary = mysqlTable('beneficiary', {
   }),
   contactId: int('contact_id').references(() => contact.id),
   dateOfBirth: date('date_of_birth'),
+  sendNotifications: boolean('send_notifications').default(true).notNull(),
 })
 
 // Define InheritanceProcedure Table
@@ -160,6 +161,7 @@ export const chatMessage = mysqlTable('chat_message', {
     .references(() => user.id)
     .notNull(), // FK to User
   body: text('body').notNull(),
+  createdAt: datetime('created_at').notNull().default(new Date()),
 })
 
 // Define Task Table

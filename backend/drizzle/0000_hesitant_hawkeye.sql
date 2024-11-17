@@ -13,6 +13,7 @@ CREATE TABLE `beneficiary` (
 	`deceased_relation` varchar(6),
 	`contact_id` int,
 	`date_of_birth` date,
+	`send_notifications` boolean NOT NULL DEFAULT true,
 	CONSTRAINT `beneficiary_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
@@ -45,6 +46,7 @@ CREATE TABLE `chat_message` (
 	`chat_id` int NOT NULL,
 	`user_id` int NOT NULL,
 	`body` text NOT NULL,
+	`created_at` datetime NOT NULL DEFAULT '2024-11-17 15:39:54.013',
 	CONSTRAINT `chat_message_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
@@ -66,10 +68,10 @@ CREATE TABLE `document` (
 	`inheritance_procedure_id` int NOT NULL,
 	`task_id` int,
 	`user_owner_id` int,
-	`create_date` timestamp DEFAULT (now()),
+	`create_date` timestamp NOT NULL DEFAULT (now()),
 	`file_name` varchar(255) NOT NULL,
 	`file_type` varchar(100) NOT NULL,
-	`file_data` binary,
+	`file_data` longtext NOT NULL,
 	CONSTRAINT `document_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
@@ -89,7 +91,7 @@ CREATE TABLE `inheritance_procedure` (
 	`start_date` date NOT NULL,
 	`end_date` date,
 	`main_contact_id` int,
-	`deceased_contact_id` int NOT NULL,
+	`deceased_contact_id` int,
 	`date_of_birth` date,
 	`date_of_death` date,
 	CONSTRAINT `inheritance_procedure_id` PRIMARY KEY(`id`)
