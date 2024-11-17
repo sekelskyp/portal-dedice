@@ -20,7 +20,7 @@ export function StepperProgress({
         display="flex"
         alignItems="center"
         justifyContent="space-between"
-        my="8"
+        m={4}
       >
         <StepperCategory step={step} index={1} />
         <StepperProgressBar progress={questionsProgress} />

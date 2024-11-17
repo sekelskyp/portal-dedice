@@ -38,6 +38,7 @@ const GET_PROCEDURE_QUERY = gql(/* GraphQL */ `
           id
           name
           surname
+          displayName
           email
         }
       }
@@ -49,8 +50,10 @@ const GET_PROCEDURE_QUERY = gql(/* GraphQL */ `
         gender
         phone
         email
-        completeAddress
-        postalCode
+        addressStreet
+        addressStreetNumber
+        addressMunicipality
+        addressPostCode
       }
       beneficiaries {
         id
@@ -65,6 +68,7 @@ const GET_PROCEDURE_QUERY = gql(/* GraphQL */ `
           email
           name
           surname
+          displayName
         }
         deceasedRelation
       }

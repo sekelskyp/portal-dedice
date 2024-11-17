@@ -6,8 +6,6 @@ import { route } from '@shared/route'
 
 import { useAuth } from '../auth-core'
 
-//TODO: return beneficaries and notaries in the response
-
 const SIGNIN_MUTATION = gql(/* GraphQL */ `
   mutation SignIn($login: String!, $password: String!) {
     signIn(login: $login, password: $password) {
@@ -28,6 +26,9 @@ const SIGNIN_MUTATION = gql(/* GraphQL */ `
           contactId
           id
           userId
+        }
+        contact {
+          displayName
         }
       }
       token

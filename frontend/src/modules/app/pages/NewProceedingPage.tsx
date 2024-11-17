@@ -5,7 +5,6 @@ import { useAuth } from '@frontend/modules/auth'
 import { useCreateProcedure } from '@frontend/modules/auth/hooks/useCreateProcedure'
 import resources from '@frontend/resources'
 import { Alert } from '@frontend/shared/design-system'
-import { Suggestion } from '@frontend/shared/hooks/useAddressSuggestions'
 
 import { Beneficiary, ProceedingForm } from './ProceedingForm'
 
@@ -20,11 +19,14 @@ export function NewProceedingPage() {
       surname: string
       dateOfBirth: string
       dateOfDeath: string
-      address: Suggestion
       contactName: string
       contactSurname: string
       contactEmail: string
       beneficiaries: Beneficiary[]
+      addressStreet: string
+      addressStreetNumber: string
+      addressMunicipality: string
+      addressPostCode: string
     }) => {
       createProcedureRequest({
         variables: {
@@ -34,7 +36,10 @@ export function NewProceedingPage() {
               surname: variables.surname,
               dateOfBirth: new Date(variables.dateOfBirth).toISOString(),
               dateOfDeath: new Date(variables.dateOfDeath).toISOString(),
-              completeAddress: `${variables.address.name}, ${variables.address.zip} ${variables.address.location}`,
+              addressStreet: variables.addressStreet,
+              addressStreetNumber: variables.addressStreetNumber,
+              addressMunicipality: variables.addressMunicipality,
+              addressPostCode: variables.addressPostCode,
             },
             contactPerson: {
               name: variables.contactName,

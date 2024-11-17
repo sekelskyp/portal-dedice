@@ -30,6 +30,7 @@ export {
   type SelectRootProps,
   SelectTrigger,
   SelectValueText,
+  Skeleton,
   Toaster,
   toaster,
   Tooltip,

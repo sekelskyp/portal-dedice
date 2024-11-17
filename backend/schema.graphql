@@ -43,14 +43,16 @@ type ChatMessage {
 }
 
 type Contact {
-  completeAddress: String
-  displayName: String
+  addressMunicipality: String
+  addressPostCode: String
+  addressStreet: String
+  addressStreetNumber: String
+  displayName: String!
   email: String
   gender: String
   id: ID!
   name: String!
   phone: String
-  postalCode: String
   surname: String!
 }
 
@@ -68,13 +70,15 @@ input CreateBeneficiaryInput {
 }
 
 input CreateContactInput {
-  completeAddress: String
+  addressMunicipality: String
+  addressPostCode: String
+  addressStreet: String
+  addressStreetNumber: String
   displayName: String
   email: String
   gender: String
   name: String!
   phone: String
-  postalCode: String
   surname: String!
 }
 
@@ -101,7 +105,10 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 scalar DateTimeISO
 
 input DeceasedPersonInput {
-  completeAddress: String!
+  addressMunicipality: String!
+  addressPostCode: String!
+  addressStreet: String!
+  addressStreetNumber: String!
   dateOfBirth: DateTimeISO!
   dateOfDeath: DateTimeISO!
   name: String!
@@ -109,8 +116,8 @@ input DeceasedPersonInput {
 }
 
 input FindNotaryInput {
+  addressPostCode: String!
   deceasedPersonDateOfDeath: DateTimeISO!
-  postalCode: String!
 }
 
 type InheritanceProcedure {
@@ -162,6 +169,7 @@ type Mutation {
   signIn(login: String!, password: String!): SignInResponse!
   signUp(registerInput: RegisterInput!): User!
   updateBeneficiary(data: UpdateBeneficiaryInput!, id: Int!): Beneficiary!
+  updateProfile(profileInput: ProfileInput!): User!
 }
 
 type Notary {
@@ -171,6 +179,19 @@ type Notary {
   inheritanceProcedures: [InheritanceProcedure!]!
   user: User
   userId: ID
+}
+
+input ProfileInput {
+  addressMunicipality: String
+  addressPostCode: String
+  addressStreet: String
+  addressStreetNumber: String
+  displayName: String
+  email: String
+  gender: String
+  name: String!
+  phone: String
+  surname: String!
 }
 
 type Query {
@@ -218,6 +239,8 @@ input UpdateBeneficiaryInput {
 type User {
   beneficiaries: [Beneficiary!]!
   confirmed: Boolean!
+  contact: Contact
+  contactId: ID
   email: String!
   id: ID!
   isBeneficiary: Boolean!

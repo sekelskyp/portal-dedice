@@ -1,3 +1,5 @@
+import { Contact } from '@backend/graphql/modules/contact/contactType'
+
 import { createToken } from '../libs/jwt'
 import { CustomContext } from '../types/types'
 
@@ -161,4 +163,22 @@ export async function isUserBeneficiary(
   const beneficiaries =
     await beneficiaryRepository.getBeneficiariesByUserId(userId)
   return beneficiaries.length > 0
+}
+
+export async function updateProfile(
+  userId: number,
+  contact: Omit<Contact, 'id'>,
+  context: CustomContext
+) {
+  const { userRepository, contactRepository } = context
+
+  const user = await userRepository.getUserById(userId)
+
+  if (user?.contactId) {
+    await contactRepository.updateContact(user.contactId, contact)
+    return
+  }
+
+  const contactId = await contactRepository.createContact(contact)
+  await userRepository.updateUser(userId, { contactId })
 }

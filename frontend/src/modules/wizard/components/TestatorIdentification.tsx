@@ -1,21 +1,16 @@
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import { Card, Center, Container, Stack, Text } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { Radio } from '@frontend/shared/design-system'
 import {
+  AddressGroupFormControl,
   DateFormControl,
   Form,
   RadioGroupFormControl,
   SubmitButton,
 } from '@frontend/shared/forms'
-import { AddressFormControl } from '@frontend/shared/forms/AddressFormControl'
-import {
-  Suggestion,
-  suggestionSchema,
-} from '@frontend/shared/hooks/useAddressSuggestions'
 
 import { TestatorDataContext } from '../pages/WizardStepPage'
 
@@ -24,7 +19,10 @@ const schema = z.object({
   birthDate: z
     .date({ required_error: 'Datum narození je povinné.' })
     .max(new Date(), 'Datum narození musí být v minulosti.'),
-  address: suggestionSchema,
+  addressStreet: z.string().min(1, 'Ulice je povinná.'),
+  addressStreetNumber: z.string().min(1, 'Číslo popisné je povinné.'),
+  addressMunicipality: z.string().min(1, 'Obec je povinná.'),
+  addressPostCode: z.string().min(1, 'PSČ je povinné.'),
 })
 
 type NextStepProps = {
@@ -34,28 +32,9 @@ type NextStepProps = {
 export function TestatorIdentification({ nextStep }: NextStepProps) {
   const testatorDataContext = useContext(TestatorDataContext)
   const { testatorData, setTestatorData } = testatorDataContext
-  const { watch, trigger } = useForm({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      sex: testatorData.sex || '',
-      birthDate: testatorData.birthDate || undefined!,
-      address: (testatorData.address as Suggestion) || undefined,
-    },
-  })
-
-  const watchedFields = watch(['sex', 'birthDate', 'address'])
-
-  useEffect(() => {
-    const [sex, birthDate, address] = watchedFields
-    if (!sex && !birthDate && !address) {
-      setTestatorData({})
-    }
-
-    // Trigger validation for the address field when it changes
-    trigger('address')
-  }, [watchedFields, setTestatorData, trigger])
 
   const onSubmit = async (data: z.infer<typeof schema>) => {
+    console.log('onSubmit', data)
     const updatedTestatorData = {
       ...testatorData,
       ...data,
@@ -72,7 +51,7 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
       defaultValues={{
         sex: testatorData.sex || '',
         birthDate: testatorData.birthDate || undefined!,
-        address: (testatorData.address as Suggestion) || undefined,
+        addressStreet: testatorData.addressStreet || '',
       }}
     >
       <Container
@@ -93,15 +72,11 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
               required
               size={{ base: 'sm', md: 'md' }}
             >
-              <Radio value="male">Muž</Radio>
-              <Radio value="female">Žena</Radio>
+              <Radio value="Male">Muž</Radio>
+              <Radio value="Female">Žena</Radio>
             </RadioGroupFormControl>
             <DateFormControl name="birthDate" label="Datum narození" required />
-            <AddressFormControl
-              name="address"
-              label="Trvalé bydliště"
-              required
-            />
+            <AddressGroupFormControl label="Trvalé bydliště" />
             <Center>
               <SubmitButton>Potvrdit údaje</SubmitButton>
             </Center>

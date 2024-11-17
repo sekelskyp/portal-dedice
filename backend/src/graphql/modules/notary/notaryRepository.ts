@@ -69,7 +69,7 @@ export function getNotaryRepository(db: Db) {
   async function findAvailableNotary(
     dateOfDeathMonthNumber: number,
     dateOfDeathDayNumber: number,
-    postalCode: string
+    addressPostCode: string
   ) {
     const result = await db
       .select({ id: notary.id })
@@ -83,7 +83,9 @@ export function getNotaryRepository(db: Db) {
           eq(notaryDateRule.startDay, dateOfDeathDayNumber)
         )
       )
-      .where(sql`LEFT(${contact.postalCode}, 2) = LEFT(${postalCode}, 2)`)
+      .where(
+        sql`LEFT(${contact.addressPostCode}, 2) = LEFT(${addressPostCode}, 2)`
+      )
       .groupBy(notary.id)
       .limit(1)
 

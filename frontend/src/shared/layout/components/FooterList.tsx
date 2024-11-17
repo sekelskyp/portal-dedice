@@ -9,11 +9,11 @@ type FooterListProps = {
 
 export function FooterList({ title, links }: FooterListProps) {
   return (
-    <Stack direction="column" textAlign={{ base: 'center', md: 'left' }}>
+    <Stack>
       <Heading size={{ base: 'sm', md: 'md' }}>{title}</Heading>
       <List.Root>
         {links.map((link) => (
-          <List.Item key={link.id} textAlign="left">
+          <List.Item key={link.id} whiteSpace="nowrap">
             <RouterLink to={link.link}>{link.title}</RouterLink>
           </List.Item>
         ))}
