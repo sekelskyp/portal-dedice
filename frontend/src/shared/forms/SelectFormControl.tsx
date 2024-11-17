@@ -11,10 +11,12 @@ import { BaseFieldControl, BaseFieldControlProps } from './BaseFieldControl'
 
 export interface SelectControlProps
   extends Omit<SelectRootProps, 'name'>,
-    BaseFieldControlProps {}
+    BaseFieldControlProps {
+  placeholder?: string
+}
 
 export const SelectFormControl = (props: SelectControlProps) => {
-  const { children, ...rest } = props
+  const { children, placeholder, ...rest } = props
 
   const multiple = rest.multiple
 
@@ -31,7 +33,7 @@ export const SelectFormControl = (props: SelectControlProps) => {
           disabled={disabled}
         >
           <SelectTrigger>
-            <SelectValueText />
+            <SelectValueText placeholder={placeholder} />
           </SelectTrigger>
           <SelectContent>
             {rest.collection.items.map((item) => (

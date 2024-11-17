@@ -19,5 +19,7 @@ export const route = {
   inheritanceProcedure: (id = ':id') => `/portal/inheritance-procedure/${id}`,
   newDocument: (id = ':id') =>
     `/portal/inheritance-procedure/${id}/new-document`,
+  newAsset: (id = ':id') => `/portal/inheritance-procedure/${id}/assets`,
+  newEmail: (id = ':id') => `/portal/inheritance-procedure/${id}/new-email`,
   profile: () => `/portal/profile`,
 }

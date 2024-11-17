@@ -9,8 +9,10 @@ import { route } from '@shared/route'
 import ChatHistoryPage from './modules/app/pages/ChatHistoryPage'
 import ChatPage from './modules/app/pages/ChatPage'
 import InheritanceProcedureDetail from './modules/app/pages/InheritanceProcedureDetail'
+import { NewAssetPage } from './modules/app/pages/NewAssetPage'
 import { NewDocumentPage } from './modules/app/pages/NewDocumentPage'
 import { NewProceedingPage } from './modules/app/pages/NewProceedingPage'
+import { NotaryEmailPage } from './modules/app/pages/NotaryEmailPage'
 import { Proceedings } from './modules/app/pages/Proceedings'
 import { ProfilePage } from './modules/app/pages/ProfilePage'
 import { ConfirmEmailPage } from './modules/auth/pages/ConfirmEmailPage'
@@ -38,6 +40,8 @@ export function Routes() {
             element={<InheritanceProcedureDetail />}
           />
           <Route path={route.newDocument()} element={<NewDocumentPage />} />
+          <Route path={route.newEmail()} element={<NotaryEmailPage />} />
+          <Route path={route.newAsset()} element={<NewAssetPage />} />
           <Route path={route.chat()} element={<ChatPage />} />
           <Route path={route.chatId()} element={<ChatPage />} />
           <Route path={route.chatIdHistory()} element={<ChatHistoryPage />} />

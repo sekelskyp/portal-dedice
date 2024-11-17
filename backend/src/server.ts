@@ -24,6 +24,7 @@ import { getBeneficiaryRepository } from '@backend/graphql/modules/beneficiary/b
 import { BeneficiaryResolver } from '@backend/graphql/modules/beneficiary/beneficiaryResolver'
 import { getContactRepository } from '@backend/graphql/modules/contact/contactRepository'
 import { ContactResolver } from '@backend/graphql/modules/contact/contactResolver'
+import { getDocumentRepository } from '@backend/graphql/modules/document/documentRepository'
 import { getEmailConfirmationTokenRepository } from '@backend/graphql/modules/emailConfirmationToken/emailConfirmationTokenRepository'
 import { EmptyResolver } from '@backend/graphql/modules/empty/emptyResolver'
 import { getInheritanceProcedureRepository } from '@backend/graphql/modules/inheritanceProcedure/inheritaceProcedureRepository'
@@ -39,9 +40,11 @@ import { mockResolvers } from '@backend/mocks/mocks'
 import { CustomContext } from '@backend/types/types'
 
 import { getAssetRepository } from './graphql/modules/asset/assetRepository'
+import { AssetResolver } from './graphql/modules/asset/assetResolver'
 import { getChatMessageRepository } from './graphql/modules/chat/chatMessageRepository'
 import { getChatRepository } from './graphql/modules/chat/chatRepository'
 import { ChatResolver } from './graphql/modules/chat/chatResolver'
+import { DocumentResolver } from './graphql/modules/document/documentResolver'
 
 const init = async () => {
   const app = express()
@@ -59,7 +62,8 @@ const init = async () => {
       InheritanceProcedureResolver,
       NotaryResolver,
       ContactResolver,
-      //AssetResolver,
+      AssetResolver,
+      DocumentResolver,
       ChatResolver,
     ],
     pubSub,
@@ -148,6 +152,7 @@ const init = async () => {
         drizzle.db
       ),
       assetRepository: getAssetRepository(drizzle.db),
+      documentRepository: getDocumentRepository(drizzle.db),
       chatRepository: getChatRepository(drizzle.db),
       chatMessageRepository: getChatMessageRepository(drizzle.db),
       pubSub, // Add PubSub to the HTTP context

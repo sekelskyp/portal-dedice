@@ -1,1 +1,0 @@
-ALTER TABLE `chat_message` ADD `created_at` datetime DEFAULT '2024-11-14 14:52:07.613' NOT NULL;

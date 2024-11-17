@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "b5e84385-e732-4041-9980-985e27dd1da8",
+  "id": "441ca030-fd14-45c3-aed6-1fa9b32306cf",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "asset": {
@@ -38,6 +38,48 @@
         "description": {
           "name": "description",
           "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "bank_name": {
+          "name": "bank_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "car_make_name": {
+          "name": "car_make_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "car_registration_date": {
+          "name": "car_registration_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "car_type": {
+          "name": "car_type",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "cin": {
+          "name": "cin",
+          "type": "varchar(8)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -100,6 +142,14 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
+        },
+        "send_notifications": {
+          "name": "send_notifications",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": true
         }
       },
       "indexes": {},
@@ -340,6 +390,14 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'2024-11-17 16:45:05.374'"
         }
       },
       "indexes": {},
@@ -483,7 +541,7 @@
           "name": "create_date",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "(now())"
         },
@@ -503,9 +561,9 @@
         },
         "file_data": {
           "name": "file_data",
-          "type": "binary",
+          "type": "longtext",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         }
       },
@@ -656,7 +714,7 @@
           "name": "deceased_contact_id",
           "type": "int",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         },
         "date_of_birth": {

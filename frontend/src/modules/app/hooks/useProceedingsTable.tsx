@@ -102,6 +102,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
           const id = info.row.original.id
           return (
             <RouterNavLink
+              key={id}
               to={route.inheritanceProcedure(id.toString())}
               size="xs"
               variant="ghost"

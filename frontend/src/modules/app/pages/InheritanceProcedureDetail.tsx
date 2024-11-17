@@ -1,5 +1,4 @@
 import React from 'react'
-import { useQuery } from '@apollo/client'
 import {
   Box,
   Button,
@@ -8,87 +7,33 @@ import {
   HStack,
   Spinner,
   Stack,
-  Table,
   Tabs,
   Text,
 } from '@chakra-ui/react'
-import { FaCalculator, FaCloudUploadAlt } from 'react-icons/fa'
+import { FaCalculator } from 'react-icons/fa'
+import { FiSend } from 'react-icons/fi'
 import { HiChat } from 'react-icons/hi'
 import { LuFile } from 'react-icons/lu'
 import { Link, useParams } from 'react-router-dom'
 
-import { gql } from '@frontend/gql'
 import { useAuth } from '@frontend/modules/auth'
 import { Alert } from '@frontend/shared/design-system'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
 import { route } from '@shared/route'
 
+import { Assets } from '../components/Assets'
 import { BeneficiaryBadge } from '../components/BeneficiaryBadge'
+import { Documents } from '../components/Documents'
 import { StatusBadge } from '../components/StatusBadge'
-
-const GET_PROCEDURE_QUERY = gql(/* GraphQL */ `
-  query GetProcedureById($id: Int!) {
-    getProcedureById(id: $id) {
-      id
-      name
-      notary {
-        id
-        contact {
-          id
-          name
-          surname
-          displayName
-          email
-        }
-      }
-      mainContact {
-        id
-        name
-        surname
-        displayName
-        gender
-        phone
-        email
-        addressStreet
-        addressStreetNumber
-        addressMunicipality
-        addressPostCode
-      }
-      beneficiaries {
-        id
-        userId
-        user {
-          id
-          email
-        }
-        contactId
-        contact {
-          id
-          email
-          name
-          surname
-          displayName
-        }
-        deceasedRelation
-      }
-      procedureAssets {
-        id
-        name
-        value
-      }
-      state
-    }
-  }
-`)
+import { useProcedure } from '../hooks/useProcedure'
 
 const InheritanceProcedureDetail: React.FC = () => {
   const user = useAuth()
   const { id } = useParams()
 
-  const idInt = parseInt(id ?? '0', 10)
-  const { loading, error, data } = useQuery(GET_PROCEDURE_QUERY, {
-    variables: { id: idInt },
+  const { data, loading, error } = useProcedure({
+    procedureId: parseInt(id ?? '0', 10),
   })
 
   if (loading) {
@@ -108,6 +53,8 @@ const InheritanceProcedureDetail: React.FC = () => {
   }
 
   const procedure = data?.getProcedureById
+
+  console.log(procedure)
 
   const totalAssetsValue =
     procedure?.procedureAssets?.reduce((sum, asset) => sum + asset.value, 0) ??
@@ -216,58 +163,7 @@ const InheritanceProcedureDetail: React.FC = () => {
                       {totalAssetsValue},- Kč
                     </Text>
                   )}
-                  <Heading
-                    size={{ base: 'lg', lg: 'xl' }}
-                    py={4}
-                    textAlign={{ base: 'center', lg: 'left' }}
-                  >
-                    Děděné položky
-                  </Heading>
-                  {procedure.procedureAssets?.length === 0 ? (
-                    <Stack alignItems={{ base: 'center', lg: 'start' }}>
-                      <Text fontSize="md">Tyto hodnoty zatím neznáme.</Text>
-                      <Button
-                        as={Link}
-                        disabled
-                        width="fit-content"
-                        rounded="full"
-                      >
-                        Modelace
-                        <FaCalculator />
-                      </Button>
-                    </Stack>
-                  ) : (
-                    <Table.Root size={{ base: 'sm', md: 'lg' }}>
-                      <Table.Header>
-                        <Table.Row>
-                          <Table.ColumnHeader
-                            textAlign="center"
-                            fontWeight="bold"
-                          >
-                            Název
-                          </Table.ColumnHeader>
-                          <Table.ColumnHeader
-                            textAlign="center"
-                            fontWeight="bold"
-                          >
-                            Hodnota
-                          </Table.ColumnHeader>
-                        </Table.Row>
-                      </Table.Header>
-                      <Table.Body>
-                        {procedure.procedureAssets?.map((item) => (
-                          <Table.Row key={item.id}>
-                            <Table.Cell textAlign="center">
-                              {item.name}
-                            </Table.Cell>
-                            <Table.Cell textAlign="center">
-                              {item.value},- Kč
-                            </Table.Cell>
-                          </Table.Row>
-                        ))}
-                      </Table.Body>
-                    </Table.Root>
-                  )}
+
                   <Heading
                     size={{ base: 'lg', lg: 'xl' }}
                     py={4}
@@ -281,54 +177,49 @@ const InheritanceProcedureDetail: React.FC = () => {
                   >
                     Tuto hodnotu zatím neznáme.
                   </Text>
-                  <Heading
-                    size={{ base: 'lg', lg: 'xl' }}
-                    py={4}
-                    textAlign={{ base: 'center', lg: 'left' }}
+                  <Stack
+                    direction={{ base: 'column', lg: 'row' }}
+                    justifyContent="center"
                   >
-                    Dokumenty
-                  </Heading>
+                    {!user.user?.isNotary ? (
+                      <>
+                        <Button as={Link} disabled rounded="full">
+                          Modelace vyrovnaní
+                          <FaCalculator />
+                        </Button>
+                        <RouterNavLink
+                          to={route.chatId(id, procedure.name)}
+                          rounded="full"
+                        >
+                          Chat s notářem
+                          <HiChat />
+                        </RouterNavLink>
+                        <RouterNavLink
+                          to={route.chatIdHistory(id, procedure.name)}
+                          rounded="full"
+                        >
+                          Chatová historie řízení
+                          <HiChat />
+                        </RouterNavLink>
+                      </>
+                    ) : (
+                      <>
+                        <RouterNavLink to={route.newEmail(id)} rounded={'full'}>
+                          Hromadná zpráva všem dědicům
+                          <FiSend />
+                        </RouterNavLink>
+                      </>
+                    )}
+                  </Stack>
                 </Tabs.Content>
-                <Tabs.Content value="documents">Dokumenty TODO</Tabs.Content>
-                <Tabs.Content value="assets">Majetek TODO</Tabs.Content>
+                <Tabs.Content value="documents">
+                  <Documents id={id ?? ''} />
+                </Tabs.Content>
+                <Tabs.Content value="assets">
+                  <Assets id={id ?? ''} />
+                </Tabs.Content>
               </Tabs.Root>
             </Card.Body>
-            <Card.Footer justifyContent="center">
-              <Stack direction={{ base: 'column', lg: 'row' }}>
-                {!user.user?.isNotary ? (
-                  <>
-                    <Button as={Link} disabled rounded="full">
-                      Modelace vyrovnaní
-                      <FaCalculator />
-                    </Button>
-                    <RouterNavLink to={route.newDocument(id)} rounded="full">
-                      Přiložit přílohu
-                      <FaCloudUploadAlt />
-                    </RouterNavLink>
-                    <RouterNavLink
-                      to={route.chatId(id, procedure.name)}
-                      rounded="full"
-                    >
-                      Chat s notářem
-                      <HiChat />
-                    </RouterNavLink>
-                    <RouterNavLink
-                      to={route.chatIdHistory(id, procedure.name)}
-                      rounded="full"
-                    >
-                      Chatová historie řízení
-                      <HiChat />
-                    </RouterNavLink>
-                  </>
-                ) : (
-                  <>
-                    <Button as={Link} disabled>
-                      Hromadná zpráva všem zůstavitelům
-                    </Button>
-                  </>
-                )}
-              </Stack>
-            </Card.Footer>
           </Card.Root>
         ) : (
           <Text>No procedure found</Text>
