@@ -2,21 +2,7 @@ import { useQuery } from '@apollo/client'
 
 import { gql } from '@frontend/gql'
 
-//const GET_PROCEDURES_BY_NOTARY_ID = gql(/* GraphQL */ `
-//  query GetProceduresByNotaryId($notaryId: Int!) {
-//    getProceduresByNotaryId(notaryId: $notaryId) {
-//      id
-//      name
-//      startDate
-//      state
-//      deceasedContact {
-//        displayName
-//      }
-//    }
-//  }
-//`)
-
-const GET_ALL_PROCEDURES = gql(/* GraphQL */ `
+export const GET_ALL_PROCEDURES = gql(/* GraphQL */ `
   query GetAllProcedures {
     getAllProcedures {
       id
