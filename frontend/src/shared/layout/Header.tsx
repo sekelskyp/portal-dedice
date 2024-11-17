@@ -1,12 +1,17 @@
-import { Box, Container, Heading, HStack, Image } from '@chakra-ui/react'
+import { Box, Container, Flex, Heading, HStack, Image } from '@chakra-ui/react'
 import { useTheme } from 'next-themes'
 import { Link } from 'react-router-dom'
 
+import { useAuth } from '@frontend/modules/auth'
+import { route } from '@shared/route'
+
 import { TopNavigation } from '../navigation/organisms/TopNavigation'
+
+import { UserMenu } from './components/UserMenu'
 
 export const Header = () => {
   return (
-    <Box bg="bg.muted">
+    <Box bg="bg.panel">
       <Container
         maxW="container.xl"
         py={4}
@@ -18,7 +23,10 @@ export const Header = () => {
       >
         <HStack>
           <AppLink />
-          <TopNavigation />
+          <Flex gap={2} flexDirection={{ base: 'row-reverse', sm: 'initial' }}>
+            <TopNavigation />
+            <UserMenu />
+          </Flex>
         </HStack>
       </Container>
     </Box>
@@ -28,15 +36,18 @@ export const Header = () => {
 const AppLink = () => {
   const theme = useTheme()
   const isDark = theme.resolvedTheme === 'dark'
+
+  const { user } = useAuth()
+
   return (
-    <HStack asChild gap={4}>
-      <Link to="/">
+    <HStack asChild gap={4} alignItems="center">
+      <Link to={user ? route.portal() : '/'}>
         <Image
-          h={10}
+          h={8}
           src={isDark ? '/logo-dark.png' : '/logo.png'}
           opacity={isDark ? 0.8 : 1}
         />
-        <Heading size="lg" whiteSpace="nowrap">
+        <Heading mt={1} size="lg" whiteSpace="nowrap">
           Portál Dědice
         </Heading>
       </Link>

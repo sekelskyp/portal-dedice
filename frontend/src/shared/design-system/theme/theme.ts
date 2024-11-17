@@ -51,13 +51,13 @@ const customConfig = defineConfig({
           DEFAULT: {
             value: {
               _light: 'white',
-              _dark: '{colors.gray.900}',
+              _dark: '{colors.gray.950}',
             },
           },
           panel: {
             value: {
               _light: '{colors.gray.50}',
-              _dark: '{colors.gray.800}',
+              _dark: '{colors.gray.900}',
             },
           },
           muted: {
@@ -71,9 +71,14 @@ const customConfig = defineConfig({
           DEFAULT: {
             value: {
               _light: '{colors.gray.200}',
-              _dark: '{colors.gray.700}',
+              _dark: '{colors.gray.800}',
             },
           },
+        },
+      },
+      shadows: {
+        card: {
+          value: '0px 2px 16px -4px rgba(	50, 46, 42, 0.1)',
         },
       },
     },

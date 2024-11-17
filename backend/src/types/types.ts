@@ -44,6 +44,6 @@ export type CustomContext = {
 }
 
 export type JWTPayload = {
-  id: number
+  userId: number
   iat: number
 }

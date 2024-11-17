@@ -1,14 +1,27 @@
-import { ReactNode } from 'react'
-import { FieldErrorText } from '@chakra-ui/react'
+import { ReactNode, useContext } from 'react'
 import {
   ControllerRenderProps,
   FieldValues,
   useController,
 } from 'react-hook-form'
 
-import { Field } from '../design-system'
+import { Field, FieldProps, Skeleton } from '../design-system'
 
-export interface BaseFieldControlProps {
+import { loadingContext } from '.'
+
+export interface BaseFieldControlProps
+  extends Omit<
+    FieldProps,
+    | 'children'
+    | 'onChange'
+    | 'onBlur'
+    | 'defaultValue'
+    | 'ids'
+    | 'orientation'
+    | 'color'
+    | 'content'
+    | 'translate'
+  > {
   name: string
   label?: ReactNode
   disabled?: boolean
@@ -21,6 +34,7 @@ export const BaseFieldControl = ({
   label,
   disabled,
   required,
+  ...rest
 }: BaseFieldControlProps & {
   children: (
     field: ControllerRenderProps<FieldValues, string>,
@@ -31,6 +45,8 @@ export const BaseFieldControl = ({
     name,
   })
 
+  const loading = useContext(loadingContext)
+
   const {
     fieldState: { error },
   } = field
@@ -38,9 +54,17 @@ export const BaseFieldControl = ({
   const fieldDisabled = !!disabled || field.formState.isSubmitting
 
   return (
-    <Field invalid={!!error} label={label} required={required}>
-      {children(field.field, fieldDisabled)}
-      <FieldErrorText>{error?.message}</FieldErrorText>
+    <Field
+      invalid={!!error}
+      errorText={error?.message}
+      helperText={rest.helperText}
+      label={label}
+      required={required}
+      {...rest}
+    >
+      <Skeleton loading={loading} w="full">
+        {children(field.field, fieldDisabled)}
+      </Skeleton>
     </Field>
   )
 }

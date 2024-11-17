@@ -54,8 +54,6 @@ const InheritanceProcedureDetail: React.FC = () => {
 
   const procedure = data?.getProcedureById
 
-  console.log(procedure)
-
   const totalAssetsValue =
     procedure?.procedureAssets?.reduce((sum, asset) => sum + asset.value, 0) ??
     0
@@ -213,6 +211,42 @@ const InheritanceProcedureDetail: React.FC = () => {
                 </Tabs.Content>
               </Tabs.Root>
             </Card.Body>
+            <Card.Footer justifyContent="center">
+              <Stack direction={{ base: 'column', lg: 'row' }}>
+                {!user.user?.isNotary ? (
+                  <>
+                    <Button as={Link} disabled rounded="full">
+                      Modelace vyrovnaní
+                      <FaCalculator />
+                    </Button>
+                    <RouterNavLink to={route.newDocument(id)} rounded="full">
+                      Přiložit přílohu
+                      <FaCloudUploadAlt />
+                    </RouterNavLink>
+                    <RouterNavLink
+                      to={route.chatId(id, procedure.name)}
+                      rounded="full"
+                    >
+                      Chat s notářem
+                      <HiChat />
+                    </RouterNavLink>
+                    <RouterNavLink
+                      to={route.chatIdHistory(id, procedure.name)}
+                      rounded="full"
+                    >
+                      Chatová historie řízení
+                      <HiChat />
+                    </RouterNavLink>
+                  </>
+                ) : (
+                  <>
+                    <Button as={Link} disabled>
+                      Hromadná zpráva všem zůstavitelům
+                    </Button>
+                  </>
+                )}
+              </Stack>
+            </Card.Footer>
           </Card.Root>
         ) : (
           <Text>No procedure found</Text>

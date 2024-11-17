@@ -1,6 +1,7 @@
 import { Field, ID, ObjectType } from 'type-graphql'
 
 import { Beneficiary } from '../beneficiary/beneficiaryType'
+import { Contact } from '../contact/contactType'
 import { Notary } from '../notary/notaryType'
 
 @ObjectType()
@@ -29,4 +30,10 @@ export class User {
 
   @Field()
   isBeneficiary?: boolean
+
+  @Field(() => ID, { nullable: true })
+  contactId?: number | null
+
+  @Field(() => Contact, { nullable: true })
+  contact?: Contact
 }

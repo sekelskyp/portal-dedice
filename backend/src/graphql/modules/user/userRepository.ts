@@ -8,12 +8,14 @@ export interface UserDbRecord {
   email: string
   password: string
   confirmed: boolean
+  contactId: number | null
 }
 
 export interface UserUpdateData {
   email: string
   password: string
   confirmed: boolean
+  contactId?: number
 }
 
 export function getUserRepository(db: Db) {

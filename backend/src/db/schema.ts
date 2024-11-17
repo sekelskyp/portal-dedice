@@ -51,6 +51,7 @@ export const user = mysqlTable(
     email: varchar('email', { length: 100 }).notNull(),
     password: varchar('password', { length: 255 }).notNull(),
     confirmed: boolean('confirmed').default(false).notNull(),
+    contactId: int('contact_id').references(() => contact.id),
   },
   (table) => ({
     loginUniqueIndex: uniqueIndex('user_email_unique_index').on(
@@ -71,8 +72,10 @@ export const contact = mysqlTable('contact', {
   }),
   phone: char('phone', { length: 15 }),
   email: varchar('email', { length: 255 }),
-  completeAddress: varchar('complete_address', { length: 255 }),
-  postalCode: varchar('postal_code', { length: 8 }),
+  addressStreet: varchar('address_street', { length: 100 }),
+  addressStreetNumber: varchar('address_street_number', { length: 20 }),
+  addressMunicipality: varchar('address_municipality', { length: 100 }),
+  addressPostCode: varchar('address_post_code', { length: 10 }),
 })
 
 // Define Notary Table

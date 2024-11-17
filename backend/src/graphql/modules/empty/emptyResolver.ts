@@ -11,6 +11,6 @@ export class EmptyResolver {
     if (!authUser) {
       throw new GraphQLError('Unauthorized')
     }
-    return `User id ${authUser.id} Hello, World! ${formatDate(new Date())}`
+    return `User id ${authUser.userId} Hello, World! ${formatDate(new Date())}`
   }
 }

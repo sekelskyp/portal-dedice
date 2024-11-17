@@ -1,7 +1,7 @@
 import { CustomContext } from '@backend/types/types'
 
 export interface FindAvailableNotaryInput {
-  postalCode: string
+  addressPostCode: string
   dateOfDeath: Date
 }
 
@@ -9,18 +9,18 @@ export async function findAvailableNotary(
   input: FindAvailableNotaryInput,
   context: CustomContext
 ) {
-  const { dateOfDeath, postalCode } = input
+  const { dateOfDeath, addressPostCode } = input
   const birthMonth = dateOfDeath.getMonth() + 1
   const birthDay = dateOfDeath.getDate()
 
   const notary = await context.notaryRepository.findAvailableNotary(
     birthMonth,
     birthDay,
-    postalCode
+    addressPostCode
   )
 
   if (!notary) {
-    throw new Error(`Žádný notář nebyl nazelen pro PSČ: ${postalCode}`)
+    throw new Error(`Žádný notář nebyl nazelen pro PSČ: ${addressPostCode}`)
   }
 
   return notary

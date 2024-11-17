@@ -85,14 +85,16 @@ export type ChatMessage = {
 
 export type Contact = {
   __typename?: 'Contact'
-  completeAddress?: Maybe<Scalars['String']['output']>
-  displayName?: Maybe<Scalars['String']['output']>
+  addressMunicipality?: Maybe<Scalars['String']['output']>
+  addressPostCode?: Maybe<Scalars['String']['output']>
+  addressStreet?: Maybe<Scalars['String']['output']>
+  addressStreetNumber?: Maybe<Scalars['String']['output']>
+  displayName: Scalars['String']['output']
   email?: Maybe<Scalars['String']['output']>
   gender?: Maybe<Scalars['String']['output']>
   id: Scalars['ID']['output']
   name: Scalars['String']['output']
   phone?: Maybe<Scalars['String']['output']>
-  postalCode?: Maybe<Scalars['String']['output']>
   surname: Scalars['String']['output']
 }
 
@@ -123,13 +125,15 @@ export type CreateBeneficiaryInput = {
 }
 
 export type CreateContactInput = {
-  completeAddress?: InputMaybe<Scalars['String']['input']>
+  addressMunicipality?: InputMaybe<Scalars['String']['input']>
+  addressPostCode?: InputMaybe<Scalars['String']['input']>
+  addressStreet?: InputMaybe<Scalars['String']['input']>
+  addressStreetNumber?: InputMaybe<Scalars['String']['input']>
   displayName?: InputMaybe<Scalars['String']['input']>
   email?: InputMaybe<Scalars['String']['input']>
   gender?: InputMaybe<Scalars['String']['input']>
   name: Scalars['String']['input']
   phone?: InputMaybe<Scalars['String']['input']>
-  postalCode?: InputMaybe<Scalars['String']['input']>
   surname: Scalars['String']['input']
 }
 
@@ -151,7 +155,10 @@ export type CreateNotaryInput = {
 }
 
 export type DeceasedPersonInput = {
-  completeAddress: Scalars['String']['input']
+  addressMunicipality: Scalars['String']['input']
+  addressPostCode: Scalars['String']['input']
+  addressStreet: Scalars['String']['input']
+  addressStreetNumber: Scalars['String']['input']
   dateOfBirth: Scalars['DateTimeISO']['input']
   dateOfDeath: Scalars['DateTimeISO']['input']
   name: Scalars['String']['input']
@@ -171,8 +178,8 @@ export type Document = {
 }
 
 export type FindNotaryInput = {
+  addressPostCode: Scalars['String']['input']
   deceasedPersonDateOfDeath: Scalars['DateTimeISO']['input']
-  postalCode: Scalars['String']['input']
 }
 
 export type InheritanceProcedure = {
@@ -233,6 +240,7 @@ export type Mutation = {
   signUp: User
   updateAsset?: Maybe<AssetCopy>
   updateBeneficiary: Beneficiary
+  updateProfile: User
 }
 
 export type MutationAddBeneficiariesToProcedureArgs = {
@@ -364,6 +372,10 @@ export type MutationUpdateBeneficiaryArgs = {
   id: Scalars['Int']['input']
 }
 
+export type MutationUpdateProfileArgs = {
+  profileInput: ProfileInput
+}
+
 export type Notary = {
   __typename?: 'Notary'
   contact?: Maybe<Contact>
@@ -372,6 +384,19 @@ export type Notary = {
   inheritanceProcedures: Array<InheritanceProcedure>
   user?: Maybe<User>
   userId?: Maybe<Scalars['ID']['output']>
+}
+
+export type ProfileInput = {
+  addressMunicipality?: InputMaybe<Scalars['String']['input']>
+  addressPostCode?: InputMaybe<Scalars['String']['input']>
+  addressStreet?: InputMaybe<Scalars['String']['input']>
+  addressStreetNumber?: InputMaybe<Scalars['String']['input']>
+  displayName?: InputMaybe<Scalars['String']['input']>
+  email?: InputMaybe<Scalars['String']['input']>
+  gender?: InputMaybe<Scalars['String']['input']>
+  name: Scalars['String']['input']
+  phone?: InputMaybe<Scalars['String']['input']>
+  surname: Scalars['String']['input']
 }
 
 export type Query = {
@@ -432,7 +457,7 @@ export type QueryGetBeneficiaryByIdArgs = {
 }
 
 export type QueryGetContactByIdArgs = {
-  id: Scalars['Float']['input']
+  id: Scalars['Int']['input']
 }
 
 export type QueryGetDocumentByIdArgs = {
@@ -520,6 +545,8 @@ export type User = {
   __typename?: 'User'
   beneficiaries: Array<Beneficiary>
   confirmed: Scalars['Boolean']['output']
+  contact?: Maybe<Contact>
+  contactId?: Maybe<Scalars['ID']['output']>
   email: Scalars['String']['output']
   id: Scalars['ID']['output']
   isBeneficiary: Scalars['Boolean']['output']
@@ -633,10 +660,7 @@ export type GetProceduresByBeneficiaryIdQuery = {
     name: string
     startDate: any
     state: string
-    deceasedContact?: {
-      __typename?: 'Contact'
-      displayName?: string | null
-    } | null
+    deceasedContact?: { __typename?: 'Contact'; displayName: string } | null
   }>
 }
 
@@ -729,10 +753,7 @@ export type GetAllProceduresQuery = {
     name: string
     startDate: any
     state: string
-    deceasedContact?: {
-      __typename?: 'Contact'
-      displayName?: string | null
-    } | null
+    deceasedContact?: { __typename?: 'Contact'; displayName: string } | null
   }>
 }
 
@@ -766,6 +787,7 @@ export type GetProcedureByIdQuery = {
         id: string
         name: string
         surname: string
+        displayName: string
         email?: string | null
       } | null
     } | null
@@ -774,12 +796,14 @@ export type GetProcedureByIdQuery = {
       id: string
       name: string
       surname: string
-      displayName?: string | null
+      displayName: string
       gender?: string | null
       phone?: string | null
       email?: string | null
-      completeAddress?: string | null
-      postalCode?: string | null
+      addressStreet?: string | null
+      addressStreetNumber?: string | null
+      addressMunicipality?: string | null
+      addressPostCode?: string | null
     } | null
     beneficiaries?: Array<{
       __typename?: 'Beneficiary'
@@ -794,6 +818,7 @@ export type GetProcedureByIdQuery = {
         email?: string | null
         name: string
         surname: string
+        displayName: string
       } | null
     }> | null
     procedureAssets?: Array<{
@@ -857,6 +882,7 @@ export type SignInMutation = {
         id: string
         userId?: string | null
       }>
+      contact?: { __typename?: 'Contact'; displayName: string } | null
     }
   }
 }
@@ -883,12 +909,14 @@ export type FindNotaryQuery = {
       id: string
       name: string
       surname: string
-      displayName?: string | null
-      completeAddress?: string | null
+      displayName: string
       email?: string | null
       gender?: string | null
-      postalCode?: string | null
       phone?: string | null
+      addressStreet?: string | null
+      addressStreetNumber?: string | null
+      addressMunicipality?: string | null
+      addressPostCode?: string | null
     } | null
   } | null
 }
@@ -1800,6 +1828,10 @@ export const GetProcedureByIdDocument = {
                             },
                             {
                               kind: 'Field',
+                              name: { kind: 'Name', value: 'displayName' },
+                            },
+                            {
+                              kind: 'Field',
                               name: { kind: 'Name', value: 'email' },
                             },
                           ],
@@ -1832,11 +1864,19 @@ export const GetProcedureByIdDocument = {
                       { kind: 'Field', name: { kind: 'Name', value: 'email' } },
                       {
                         kind: 'Field',
-                        name: { kind: 'Name', value: 'completeAddress' },
+                        name: { kind: 'Name', value: 'addressStreet' },
                       },
                       {
                         kind: 'Field',
-                        name: { kind: 'Name', value: 'postalCode' },
+                        name: { kind: 'Name', value: 'addressStreetNumber' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'addressMunicipality' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'addressPostCode' },
                       },
                     ],
                   },
@@ -1894,6 +1934,10 @@ export const GetProcedureByIdDocument = {
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'surname' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'displayName' },
                             },
                           ],
                         },
@@ -2165,6 +2209,19 @@ export const SignInDocument = {
                           ],
                         },
                       },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'contact' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'displayName' },
+                            },
+                          ],
+                        },
+                      },
                     ],
                   },
                 },
@@ -2286,24 +2343,27 @@ export const FindNotaryDocument = {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'displayName' },
                       },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'completeAddress' },
-                      },
                       { kind: 'Field', name: { kind: 'Name', value: 'email' } },
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'gender' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'postalCode' },
                       },
                       { kind: 'Field', name: { kind: 'Name', value: 'phone' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'email' } },
                       {
                         kind: 'Field',
-                        name: { kind: 'Name', value: 'gender' },
+                        name: { kind: 'Name', value: 'addressStreet' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'addressStreetNumber' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'addressMunicipality' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'addressPostCode' },
                       },
                     ],
                   },

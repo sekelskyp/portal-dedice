@@ -13,8 +13,8 @@ export class Contact {
   @Field()
   surname!: string
 
-  @Field(() => String, { nullable: true })
-  displayName?: string | null
+  @Field(() => String, { nullable: false })
+  displayName!: string
 
   @Field(() => String, { nullable: true })
   gender?: GenderEnumType | null
@@ -26,8 +26,14 @@ export class Contact {
   email?: string | null
 
   @Field(() => String, { nullable: true })
-  completeAddress?: string | null
+  addressStreet?: string | null
 
   @Field(() => String, { nullable: true })
-  postalCode?: string | null
+  addressStreetNumber?: string | null
+
+  @Field(() => String, { nullable: true })
+  addressMunicipality?: string | null
+
+  @Field(() => String, { nullable: true })
+  addressPostCode?: string | null
 }

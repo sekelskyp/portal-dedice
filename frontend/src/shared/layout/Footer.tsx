@@ -1,4 +1,14 @@
-import { Box, Heading, Image, Separator, Stack, Text } from '@chakra-ui/react'
+import {
+  Box,
+  Container,
+  Grid,
+  Heading,
+  HStack,
+  Image,
+  Separator,
+  Stack,
+  Text,
+} from '@chakra-ui/react'
 import { useTheme } from 'next-themes'
 
 import { ColorModeButton } from '../design-system/atoms/chakra'
@@ -11,64 +21,56 @@ export const Footer = () => {
   const isDark = theme.resolvedTheme === 'dark'
 
   return (
-    <Box bg="bg.muted" pb={4}>
-      <Stack px={6}>
+    <Box bg="bg.panel" pb={4}>
+      <Container as={Stack} px={2}>
         <Stack
           direction={{ base: 'column', md: 'row' }}
-          alignItems="center"
           p={4}
+          gap={8}
           justifyContent="space-between"
         >
-          <Stack
-            direction={{ base: 'column', md: 'row' }}
-            alignItems="center"
-            py={0}
-          >
+          <HStack py={0} maxW={{ base: 'full', md: '2xs', lg: 'full' }}>
             <Image
-              h={{ base: 16, md: 20 }}
+              h={{ base: 12, lg: 16 }}
               src={isDark ? '/logo-dark.png' : '/logo.png'}
               opacity={isDark ? 0.8 : 1}
               alt="logo"
             />
-            <Stack
-              direction="column"
-              ml={{ base: 0, md: 8 }}
-              gap={0}
-              pr={{ base: 0, md: 8 }}
-            >
-              <Heading
-                size={{ base: 'lg', lg: 'xl' }}
-                whiteSpace="nowrap"
-                textAlign={{ base: 'center', md: 'left' }}
-              >
+            <Stack direction="column" ml={{ base: 4, md: 8 }} gap={0}>
+              <Heading size={{ base: 'lg', lg: 'xl' }} whiteSpace="nowrap">
                 Portál Dědice
               </Heading>
-              <Text
-                fontSize={{ base: 'sm', md: 'md', lg: 'lg' }}
-                color="fg/50"
-                textAlign={{ base: 'center', md: 'left' }}
-              >
+              <Text fontSize={{ base: 'sm', md: 'md', lg: 'lg' }} color="fg/50">
                 Nová éra digitalizace pozůstalostního řízení
               </Text>
             </Stack>
-          </Stack>
-          <Stack
-            direction={{ base: 'column', md: 'row' }}
-            gap={{ base: 4, md: 12 }}
+          </HStack>
+          <Grid
+            w={{ base: 'full', md: 'auto' }}
+            templateColumns={{
+              base: '1fr 1fr',
+              sm: `repeat(${footerLinks.length}, 1fr)`,
+            }}
+            alignItems={'end'}
+            gap={{ base: 4, md: 8, lg: 12 }}
           >
             {footerLinks.map((footerLink) => (
               <FooterList key={footerLink.id} {...footerLink} />
             ))}
-          </Stack>
+          </Grid>
         </Stack>
         <Stack alignItems="center">
-          <Separator width="95%" borderColor="gray.400" mt={6} />
+          <Separator
+            width="95%"
+            borderColor="gray.400"
+            mt={{ base: 0, md: 6 }}
+          />
           <Text fontSize={{ base: 'sm', md: 'md' }} mt={2} textAlign="center">
             © 2024 Vytvořeno na VŠE ve spolupráci s Applifting.
           </Text>
           <ColorModeButton />
         </Stack>
-      </Stack>
+      </Container>
     </Box>
   )
 }

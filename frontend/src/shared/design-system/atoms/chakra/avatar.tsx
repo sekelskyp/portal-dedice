@@ -20,7 +20,11 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
     const { name, src, srcSet, loading, icon, fallback, children, ...rest } =
       props
     return (
-      <ChakraAvatar.Root ref={ref} {...rest}>
+      <ChakraAvatar.Root
+        ref={ref}
+        {...rest}
+        colorPalette={pickPalette(name ?? '')}
+      >
         <AvatarFallback name={name} icon={icon}>
           {fallback}
         </AvatarFallback>
@@ -58,6 +62,15 @@ function getInitials(name: string) {
   return firstName && lastName
     ? `${firstName.charAt(0)}${lastName.charAt(0)}`
     : firstName.charAt(0)
+}
+
+const colorPalette = ['red', 'blue', 'green', 'yellow', 'purple', 'orange']
+
+const pickPalette = (name: string) => {
+  const index =
+    name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) %
+    colorPalette.length
+  return colorPalette[index]
 }
 
 interface AvatarGroupProps extends GroupProps, SlotRecipeProps<'avatar'> {}

@@ -24,7 +24,10 @@ interface InheritanceProcedureFormData {
     surname: string
     dateOfBirth: Date
     dateOfDeath: Date
-    completeAddress: string
+    addressStreet: string
+    addressStreetNumber: string
+    addressMunicipality: string
+    addressPostCode: string
   }
   contactPerson: {
     name: string
@@ -49,25 +52,6 @@ function generateProcedureName(
   const initialsSurname = surname.slice(0, 2).toUpperCase()
 
   return `${formattedDate}_${initialName}${initialsSurname}`
-}
-
-function extractAndFormatCzechPostalCode(
-  completeAddress: string
-): string | null {
-  // Match the Czech postal code format of 5 digits, with an optional space between the third and fourth digits
-  const postalCodeMatch = completeAddress.match(/\b\d{3} ?\d{2}\b/)
-
-  // If a match is found, format it to include a space between the third and fourth digits
-  if (postalCodeMatch) {
-    const formattedPostalCode = postalCodeMatch[0].replace(
-      /(\d{3}) ?(\d{2})/,
-      '$1 $2'
-    )
-    return formattedPostalCode
-  }
-
-  // Return null if no postal code is found in the expected format
-  return null
 }
 
 // Function to create a new procedure
@@ -219,29 +203,23 @@ export async function createProcedureFromFormData(
     beneficiaryRepository,
   } = context
 
-  // Extract and validate the postal code from the deceased person's address
-  const deceasedPostalCode = extractAndFormatCzechPostalCode(
-    data.deceasedPerson.completeAddress
-  )
-  if (!deceasedPostalCode) {
-    throw new Error(
-      'Invalid or missing postal code in the deceased person address'
-    )
-  }
-
   // Create entries for the contact person and deceased person
   const [contactPersonId, deceasedContactId] =
     await contactRepository.createContacts([
       {
         name: data.contactPerson.name,
         surname: data.contactPerson.surname,
+        displayName: `${data.contactPerson.name} ${data.contactPerson.surname}`,
         email: data.contactPerson.email,
       },
       {
         name: data.deceasedPerson.name,
         surname: data.deceasedPerson.surname,
-        completeAddress: data.deceasedPerson.completeAddress,
-        postalCode: deceasedPostalCode,
+        displayName: `${data.deceasedPerson.name} ${data.deceasedPerson.surname}`,
+        addressStreet: data.deceasedPerson.addressStreet,
+        addressStreetNumber: data.deceasedPerson.addressStreetNumber,
+        addressMunicipality: data.deceasedPerson.addressMunicipality,
+        addressPostCode: data.deceasedPerson.addressPostCode,
       },
     ])
 
@@ -270,6 +248,7 @@ export async function createProcedureFromFormData(
     const beneficiaryContactsData = data.beneficiaries.map((beneficiary) => ({
       name: beneficiary.name,
       surname: beneficiary.surname,
+      displayName: `${beneficiary.name} ${beneficiary.surname}`,
       email: beneficiary.email,
     }))
 
@@ -304,7 +283,7 @@ export async function createProcedureFromFormData(
   // Find an available notary based on postal code and date of death
   const [notary] = await findAvailableNotary(
     {
-      postalCode: deceasedPostalCode,
+      addressPostCode: data.deceasedPerson.addressPostCode,
       dateOfDeath: data.deceasedPerson.dateOfDeath,
     },
     context

@@ -19,7 +19,7 @@ export class ContactResolver {
   // Get a contact by ID
   @Query(() => Contact, { nullable: true })
   async getContactById(
-    @Arg('id') id: number,
+    @Arg('id', () => Int) id: number,
     @Ctx() { contactRepository }: CustomContext
   ): Promise<Contact | null> {
     return await contactRepository.getContactById(id)
