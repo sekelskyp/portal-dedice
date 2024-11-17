@@ -17,7 +17,6 @@ import {
   uniqueIndex,
   varchar,
 } from 'drizzle-orm/mysql-core'
-import { send } from 'process'
 
 const taskTypeEnum = ['Upload Document', 'Set Up Meeting', 'Custom'] as const
 export type TaskTypeEnumType = (typeof taskTypeEnum)[number]
