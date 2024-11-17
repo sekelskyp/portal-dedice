@@ -52,7 +52,7 @@ CREATE TABLE `chat_message` (
 	`chat_id` int NOT NULL,
 	`user_id` int NOT NULL,
 	`body` text NOT NULL,
-	`created_at` datetime NOT NULL DEFAULT '2024-11-17 16:45:05.374',
+	`created_at` datetime NOT NULL DEFAULT '2024-11-17 22:44:56.492',
 	CONSTRAINT `chat_message_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
@@ -64,8 +64,10 @@ CREATE TABLE `contact` (
 	`gender` varchar(7),
 	`phone` char(15),
 	`email` varchar(255),
-	`complete_address` varchar(255),
-	`postal_code` varchar(8),
+	`address_street` varchar(100),
+	`address_street_number` varchar(20),
+	`address_municipality` varchar(100),
+	`address_post_code` varchar(10),
 	CONSTRAINT `contact_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
@@ -153,32 +155,34 @@ CREATE TABLE `user` (
 	`email` varchar(100) NOT NULL,
 	`password` varchar(255) NOT NULL,
 	`confirmed` boolean NOT NULL DEFAULT false,
+	`contact_id` int,
 	CONSTRAINT `user_id` PRIMARY KEY(`id`),
 	CONSTRAINT `user_email_unique_index` UNIQUE((lower(`email`)))
 );
 --> statement-breakpoint
-ALTER TABLE `asset` ADD CONSTRAINT `asset_inheritance_procedure_id_inheritance_procedure_id_fk` FOREIGN KEY (`inheritance_procedure_id`) REFERENCES `inheritance_procedure`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `asset` ADD CONSTRAINT `asset_inheritance_procedure_id_inheritance_procedure_id_fk` FOREIGN KEY (`inheritance_procedure_id`) REFERENCES `inheritance_procedure`(`id`) ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `beneficiary` ADD CONSTRAINT `beneficiary_user_id_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE `beneficiary` ADD CONSTRAINT `beneficiary_contact_id_contact_id_fk` FOREIGN KEY (`contact_id`) REFERENCES `contact`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `beneficiary` ADD CONSTRAINT `beneficiary_contact_id_contact_id_fk` FOREIGN KEY (`contact_id`) REFERENCES `contact`(`id`) ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `beneficiary_inheritance_procedure_rel` ADD CONSTRAINT `ben_inher_proc_ben_id_fk` FOREIGN KEY (`beneficiary_id`) REFERENCES `beneficiary`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `beneficiary_inheritance_procedure_rel` ADD CONSTRAINT `ben_inher_proc_inher_id_fk` FOREIGN KEY (`inheritance_procedure_id`) REFERENCES `inheritance_procedure`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE `beneficiary_meeting_rel` ADD CONSTRAINT `beneficiary_meeting_rel_beneficiary_id_beneficiary_id_fk` FOREIGN KEY (`beneficiary_id`) REFERENCES `beneficiary`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE `beneficiary_meeting_rel` ADD CONSTRAINT `beneficiary_meeting_rel_meeting_id_meeting_id_fk` FOREIGN KEY (`meeting_id`) REFERENCES `meeting`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `beneficiary_meeting_rel` ADD CONSTRAINT `beneficiary_meeting_rel_beneficiary_id_beneficiary_id_fk` FOREIGN KEY (`beneficiary_id`) REFERENCES `beneficiary`(`id`) ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `beneficiary_meeting_rel` ADD CONSTRAINT `beneficiary_meeting_rel_meeting_id_meeting_id_fk` FOREIGN KEY (`meeting_id`) REFERENCES `meeting`(`id`) ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `beneficiary_task_rel` ADD CONSTRAINT `beneficiary_task_rel_beneficiary_id_beneficiary_id_fk` FOREIGN KEY (`beneficiary_id`) REFERENCES `beneficiary`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `beneficiary_task_rel` ADD CONSTRAINT `beneficiary_task_rel_task_id_task_id_fk` FOREIGN KEY (`task_id`) REFERENCES `task`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `chat` ADD CONSTRAINT `chat_inheritance_procedure_id_inheritance_procedure_id_fk` FOREIGN KEY (`inheritance_procedure_id`) REFERENCES `inheritance_procedure`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `chat_message` ADD CONSTRAINT `chat_message_chat_id_chat_id_fk` FOREIGN KEY (`chat_id`) REFERENCES `chat`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `chat_message` ADD CONSTRAINT `chat_message_user_id_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE `document` ADD CONSTRAINT `document_inheritance_procedure_id_inheritance_procedure_id_fk` FOREIGN KEY (`inheritance_procedure_id`) REFERENCES `inheritance_procedure`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `document` ADD CONSTRAINT `document_inheritance_procedure_id_inheritance_procedure_id_fk` FOREIGN KEY (`inheritance_procedure_id`) REFERENCES `inheritance_procedure`(`id`) ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `document` ADD CONSTRAINT `document_task_id_task_id_fk` FOREIGN KEY (`task_id`) REFERENCES `task`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `document` ADD CONSTRAINT `document_user_owner_id_user_id_fk` FOREIGN KEY (`user_owner_id`) REFERENCES `user`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `email_confirmation_token` ADD CONSTRAINT `email_confirmation_token_user_id_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `inheritance_procedure` ADD CONSTRAINT `inheritance_procedure_notary_id_notary_id_fk` FOREIGN KEY (`notary_id`) REFERENCES `notary`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE `inheritance_procedure` ADD CONSTRAINT `inheritance_procedure_main_contact_id_contact_id_fk` FOREIGN KEY (`main_contact_id`) REFERENCES `contact`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE `inheritance_procedure` ADD CONSTRAINT `inheritance_procedure_deceased_contact_id_contact_id_fk` FOREIGN KEY (`deceased_contact_id`) REFERENCES `contact`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `inheritance_procedure` ADD CONSTRAINT `inheritance_procedure_main_contact_id_contact_id_fk` FOREIGN KEY (`main_contact_id`) REFERENCES `contact`(`id`) ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `inheritance_procedure` ADD CONSTRAINT `inheritance_procedure_deceased_contact_id_contact_id_fk` FOREIGN KEY (`deceased_contact_id`) REFERENCES `contact`(`id`) ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `meeting` ADD CONSTRAINT `meeting_notary_id_notary_id_fk` FOREIGN KEY (`notary_id`) REFERENCES `notary`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `notary` ADD CONSTRAINT `notary_contact_id_contact_id_fk` FOREIGN KEY (`contact_id`) REFERENCES `contact`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `notary` ADD CONSTRAINT `notary_user_id_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `notary_date_rule` ADD CONSTRAINT `notary_date_rule_notary_id_notary_id_fk` FOREIGN KEY (`notary_id`) REFERENCES `notary`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `password_reset_token` ADD CONSTRAINT `password_reset_token_user_id_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE `task` ADD CONSTRAINT `task_inheritance_procedure_id_inheritance_procedure_id_fk` FOREIGN KEY (`inheritance_procedure_id`) REFERENCES `inheritance_procedure`(`id`) ON DELETE no action ON UPDATE no action;
+ALTER TABLE `task` ADD CONSTRAINT `task_inheritance_procedure_id_inheritance_procedure_id_fk` FOREIGN KEY (`inheritance_procedure_id`) REFERENCES `inheritance_procedure`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `user` ADD CONSTRAINT `user_contact_id_contact_id_fk` FOREIGN KEY (`contact_id`) REFERENCES `contact`(`id`) ON DELETE no action ON UPDATE no action;

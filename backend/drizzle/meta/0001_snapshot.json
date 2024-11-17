@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "c1baff96-561d-4e3d-8dd4-ca5ddd554b27",
-  "prevId": "a9bcc973-7fe5-4b65-bfc8-8f6f28bfa250",
+  "id": "3bfed5d6-1517-4709-9b33-01325cca5696",
+  "prevId": "6b5e4df6-7a80-48df-8db7-96b8dde5fbd6",
   "tables": {
     "asset": {
       "name": "asset",
@@ -41,6 +41,48 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "bank_name": {
+          "name": "bank_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "car_make_name": {
+          "name": "car_make_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "car_registration_date": {
+          "name": "car_registration_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "car_type": {
+          "name": "car_type",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "cin": {
+          "name": "cin",
+          "type": "varchar(8)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         }
       },
       "indexes": {},
@@ -51,7 +93,7 @@
           "tableTo": "inheritance_procedure",
           "columnsFrom": ["inheritance_procedure_id"],
           "columnsTo": ["id"],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -100,6 +142,14 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
+        },
+        "send_notifications": {
+          "name": "send_notifications",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": true
         }
       },
       "indexes": {},
@@ -119,7 +169,7 @@
           "tableTo": "contact",
           "columnsFrom": ["contact_id"],
           "columnsTo": ["id"],
-          "onDelete": "no action",
+          "onDelete": "set null",
           "onUpdate": "no action"
         }
       },
@@ -157,7 +207,7 @@
           "tableTo": "beneficiary",
           "columnsFrom": ["beneficiary_id"],
           "columnsTo": ["id"],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "ben_inher_proc_inher_id_fk": {
@@ -166,7 +216,7 @@
           "tableTo": "inheritance_procedure",
           "columnsFrom": ["inheritance_procedure_id"],
           "columnsTo": ["id"],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -204,7 +254,7 @@
           "tableTo": "beneficiary",
           "columnsFrom": ["beneficiary_id"],
           "columnsTo": ["id"],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "beneficiary_meeting_rel_meeting_id_meeting_id_fk": {
@@ -213,7 +263,7 @@
           "tableTo": "meeting",
           "columnsFrom": ["meeting_id"],
           "columnsTo": ["id"],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -347,7 +397,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'2024-11-17 12:58:35.908'"
+          "default": "'2024-11-17 22:52:13.307'"
         }
       },
       "indexes": {},
@@ -505,7 +555,7 @@
           "name": "create_date",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "(now())"
         },
@@ -525,9 +575,9 @@
         },
         "file_data": {
           "name": "file_data",
-          "type": "binary",
+          "type": "longtext",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         }
       },
@@ -539,7 +589,7 @@
           "tableTo": "inheritance_procedure",
           "columnsFrom": ["inheritance_procedure_id"],
           "columnsTo": ["id"],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "document_task_id_task_id_fk": {
@@ -713,7 +763,7 @@
           "tableTo": "contact",
           "columnsFrom": ["main_contact_id"],
           "columnsTo": ["id"],
-          "onDelete": "no action",
+          "onDelete": "set null",
           "onUpdate": "no action"
         },
         "inheritance_procedure_deceased_contact_id_contact_id_fk": {
@@ -722,7 +772,7 @@
           "tableTo": "contact",
           "columnsFrom": ["deceased_contact_id"],
           "columnsTo": ["id"],
-          "onDelete": "no action",
+          "onDelete": "set null",
           "onUpdate": "no action"
         }
       },
@@ -1108,10 +1158,7 @@
   "_meta": {
     "schemas": {},
     "tables": {},
-    "columns": {
-      "\"contact\".\"complete_address\"": "\"contact\".\"address_street\"",
-      "\"contact\".\"postal_code\"": "\"contact\".\"address_street_number\""
-    }
+    "columns": {}
   },
   "internal": {
     "tables": {},

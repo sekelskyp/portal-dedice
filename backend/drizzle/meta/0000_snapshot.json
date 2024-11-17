@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "441ca030-fd14-45c3-aed6-1fa9b32306cf",
+  "id": "6b5e4df6-7a80-48df-8db7-96b8dde5fbd6",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "asset": {
@@ -93,7 +93,7 @@
           "tableTo": "inheritance_procedure",
           "columnsFrom": ["inheritance_procedure_id"],
           "columnsTo": ["id"],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -169,7 +169,7 @@
           "tableTo": "contact",
           "columnsFrom": ["contact_id"],
           "columnsTo": ["id"],
-          "onDelete": "no action",
+          "onDelete": "set null",
           "onUpdate": "no action"
         }
       },
@@ -254,7 +254,7 @@
           "tableTo": "beneficiary",
           "columnsFrom": ["beneficiary_id"],
           "columnsTo": ["id"],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "beneficiary_meeting_rel_meeting_id_meeting_id_fk": {
@@ -263,7 +263,7 @@
           "tableTo": "meeting",
           "columnsFrom": ["meeting_id"],
           "columnsTo": ["id"],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -397,7 +397,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'2024-11-17 16:45:05.374'"
+          "default": "'2024-11-17 22:44:56.492'"
         }
       },
       "indexes": {},
@@ -481,16 +481,30 @@
           "notNull": false,
           "autoincrement": false
         },
-        "complete_address": {
-          "name": "complete_address",
-          "type": "varchar(255)",
+        "address_street": {
+          "name": "address_street",
+          "type": "varchar(100)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "postal_code": {
-          "name": "postal_code",
-          "type": "varchar(8)",
+        "address_street_number": {
+          "name": "address_street_number",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "address_municipality": {
+          "name": "address_municipality",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "address_post_code": {
+          "name": "address_post_code",
+          "type": "varchar(10)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -575,7 +589,7 @@
           "tableTo": "inheritance_procedure",
           "columnsFrom": ["inheritance_procedure_id"],
           "columnsTo": ["id"],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "document_task_id_task_id_fk": {
@@ -749,7 +763,7 @@
           "tableTo": "contact",
           "columnsFrom": ["main_contact_id"],
           "columnsTo": ["id"],
-          "onDelete": "no action",
+          "onDelete": "set null",
           "onUpdate": "no action"
         },
         "inheritance_procedure_deceased_contact_id_contact_id_fk": {
@@ -758,7 +772,7 @@
           "tableTo": "contact",
           "columnsFrom": ["deceased_contact_id"],
           "columnsTo": ["id"],
-          "onDelete": "no action",
+          "onDelete": "set null",
           "onUpdate": "no action"
         }
       },
@@ -1105,6 +1119,13 @@
           "notNull": true,
           "autoincrement": false,
           "default": false
+        },
+        "contact_id": {
+          "name": "contact_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         }
       },
       "indexes": {
@@ -1114,7 +1135,17 @@
           "isUnique": true
         }
       },
-      "foreignKeys": {},
+      "foreignKeys": {
+        "user_contact_id_contact_id_fk": {
+          "name": "user_contact_id_contact_id_fk",
+          "tableFrom": "user",
+          "tableTo": "contact",
+          "columnsFrom": ["contact_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {
         "user_id": {
           "name": "user_id",

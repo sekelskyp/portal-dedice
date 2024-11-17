@@ -93,7 +93,9 @@ export const beneficiary = mysqlTable('beneficiary', {
     length: 6,
     enum: deceasedRelationEnum,
   }),
-  contactId: int('contact_id').references(() => contact.id),
+  contactId: int('contact_id').references(() => contact.id, {
+    onDelete: 'set null',
+  }),
   dateOfBirth: date('date_of_birth'),
   sendNotifications: boolean('send_notifications').default(true).notNull(),
 })
@@ -112,9 +114,13 @@ export const inheritanceProcedure = mysqlTable('inheritance_procedure', {
   startDate: date('start_date').notNull(),
   endDate: date('end_date'),
   // main Contact
-  mainContactId: int('main_contact_id').references(() => contact.id),
+  mainContactId: int('main_contact_id').references(() => contact.id, {
+    onDelete: 'set null',
+  }),
   // deceased person info
-  deceasedContactId: int('deceased_contact_id').references(() => contact.id),
+  deceasedContactId: int('deceased_contact_id').references(() => contact.id, {
+    onDelete: 'set null',
+  }),
   deceasedDateOfBirth: date('date_of_birth'),
   deceasedDateOfDeath: date('date_of_death'),
 })
@@ -134,7 +140,7 @@ export const meeting = mysqlTable('meeting', {
 export const asset = mysqlTable('asset', {
   id: int('id').primaryKey().autoincrement(),
   inheritanceProcedureId: int('inheritance_procedure_id')
-    .references(() => inheritanceProcedure.id)
+    .references(() => inheritanceProcedure.id, { onDelete: 'cascade' })
     .notNull(), // FK to InheritanceProcedure
   value: float('value').notNull(),
   name: varchar('name', { length: 100 }).notNull(),
@@ -154,7 +160,7 @@ export const asset = mysqlTable('asset', {
 export const document = mysqlTable('document', {
   id: int('id').primaryKey().autoincrement(),
   inheritanceProcedureId: int('inheritance_procedure_id')
-    .references(() => inheritanceProcedure.id)
+    .references(() => inheritanceProcedure.id, { onDelete: 'cascade' })
     .notNull(), // FK to InheritanceProcedure
   taskId: int('task_id').references(() => task.id), // FK to Task
   userOwnerId: int('user_owner_id').references(() => user.id), // FK to User
@@ -168,7 +174,7 @@ export const document = mysqlTable('document', {
 export const chat = mysqlTable('chat', {
   id: int('id').primaryKey().autoincrement(),
   inheritanceProcedureId: int('inheritance_procedure_id')
-    .references(() => inheritanceProcedure.id)
+    .references(() => inheritanceProcedure.id, { onDelete: 'cascade' })
     .notNull(), // FK to InheritanceProcedure
 })
 
@@ -200,7 +206,7 @@ export const task = mysqlTable('task', {
   label: varchar('label', { length: 100 }).notNull(),
   description: text('description'),
   inheritanceProcedureId: int('inheritance_procedure_id')
-    .references(() => inheritanceProcedure.id)
+    .references(() => inheritanceProcedure.id, { onDelete: 'cascade' })
     .notNull(), // FK to InheritanceProcedure
 })
 
@@ -209,10 +215,10 @@ export const beneficiaryMeetingRel = mysqlTable(
   'beneficiary_meeting_rel',
   {
     beneficiaryId: int('beneficiary_id')
-      .references(() => beneficiary.id)
+      .references(() => beneficiary.id, { onDelete: 'cascade' })
       .notNull(), // FK to Beneficiary
     meetingId: int('meeting_id')
-      .references(() => meeting.id)
+      .references(() => meeting.id, { onDelete: 'cascade' })
       .notNull(), // FK to Meeting
   },
   (table) => ({
@@ -238,12 +244,12 @@ export const beneficiaryInheritanceProcedureRel = mysqlTable(
       columns: [table.beneficiaryId],
       foreignColumns: [beneficiary.id],
       name: 'ben_inher_proc_ben_id_fk', // Custom short name for FK
-    }),
+    }).onDelete('cascade'),
     inheritanceProcedureFk: foreignKey({
       columns: [table.inheritanceProcedureId],
       foreignColumns: [inheritanceProcedure.id],
       name: 'ben_inher_proc_inher_id_fk', // Custom short name for FK
-    }),
+    }).onDelete('cascade'),
   })
 )
 

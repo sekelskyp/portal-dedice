@@ -160,14 +160,12 @@ export async function deleteProceduresByIds(
   // Step 1: Fetch the procedures to get the associated contact IDs
   const procedures =
     await inheritanceProcedureRepository.getProceduresByIds(ids)
-
   // Step 2: Extract mainContactIds and deceasedContactIds
   const contactIdsToDelete = procedures.reduce<number[]>((acc, procedure) => {
     if (procedure.mainContactId) acc.push(procedure.mainContactId)
     if (procedure.deceasedContactId) acc.push(procedure.deceasedContactId)
     return acc
   }, [])
-
   // Step 4: Delete the associated contacts in bulk
   if (contactIdsToDelete.length > 0) {
     await contactRepository.deleteContactsByIds(contactIdsToDelete)
