@@ -183,7 +183,7 @@ type Query {
   getBeneficiariesByIds(ids: [Int!]!): [Beneficiary!]!
   getBeneficiariesByProcedureId(procedureId: Int!): [Beneficiary!]!
   getBeneficiaryById(id: Int!): Beneficiary
-  getContactById(id: Float!): Contact
+  getContactById(id: Int!): Contact
   getNotaryById(id: Int!): Notary
   getProcedureById(id: Int!): InheritanceProcedure
   getProceduresByBeneficiaryId(beneficiaryId: Int!): [InheritanceProcedure!]!

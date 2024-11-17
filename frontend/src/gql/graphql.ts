@@ -351,7 +351,7 @@ export type QueryGetBeneficiaryByIdArgs = {
 }
 
 export type QueryGetContactByIdArgs = {
-  id: Scalars['Float']['input']
+  id: Scalars['Int']['input']
 }
 
 export type QueryGetNotaryByIdArgs = {
@@ -466,6 +466,31 @@ export type NewChatMessageSubscription = {
   }
 }
 
+export type GetBeneficiariesByProcedureIdQueryVariables = Exact<{
+  procedureId: Scalars['Int']['input']
+}>
+
+export type GetBeneficiariesByProcedureIdQuery = {
+  __typename?: 'Query'
+  getBeneficiariesByProcedureId: Array<{
+    __typename?: 'Beneficiary'
+    contactId?: string | null
+    userId?: string | null
+  }>
+}
+
+export type GetContactByIdQueryVariables = Exact<{
+  id: Scalars['Int']['input']
+}>
+
+export type GetContactByIdQuery = {
+  __typename?: 'Query'
+  getContactById?: {
+    __typename?: 'Contact'
+    displayName?: string | null
+  } | null
+}
+
 export type GetProceduresByBeneficiaryIdQueryVariables = Exact<{
   beneficiaryId: Scalars['Int']['input']
 }>
@@ -512,6 +537,36 @@ export type GetAllProceduresQuery = {
       displayName?: string | null
     } | null
   }>
+}
+
+export type GetProcedureQueryVariables = Exact<{
+  id: Scalars['Int']['input']
+}>
+
+export type GetProcedureQuery = {
+  __typename?: 'Query'
+  getProcedureById?: {
+    __typename?: 'InheritanceProcedure'
+    notary?: {
+      __typename?: 'Notary'
+      contact?: {
+        __typename?: 'Contact'
+        id: string
+        name: string
+        surname: string
+        email?: string | null
+      } | null
+    } | null
+    beneficiaries?: Array<{
+      __typename?: 'Beneficiary'
+      contact?: {
+        __typename?: 'Contact'
+        id: string
+        name: string
+        surname: string
+      } | null
+    }> | null
+  } | null
 }
 
 export type GetProcedureByIdQueryVariables = Exact<{
@@ -886,6 +941,103 @@ export const NewChatMessageDocument = {
   NewChatMessageSubscription,
   NewChatMessageSubscriptionVariables
 >
+export const GetBeneficiariesByProcedureIdDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetBeneficiariesByProcedureId' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'procedureId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getBeneficiariesByProcedureId' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'procedureId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'procedureId' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'contactId' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'userId' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetBeneficiariesByProcedureIdQuery,
+  GetBeneficiariesByProcedureIdQueryVariables
+>
+export const GetContactByIdDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetContactById' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getContactById' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'id' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'id' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'displayName' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetContactByIdQuery, GetContactByIdQueryVariables>
 export const GetProceduresByBeneficiaryIdDocument = {
   kind: 'Document',
   definitions: [
@@ -1045,6 +1197,114 @@ export const GetAllProceduresDocument = {
   GetAllProceduresQuery,
   GetAllProceduresQueryVariables
 >
+export const GetProcedureDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetProcedure' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getProcedureById' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'id' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'id' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'notary' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'contact' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'name' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'surname' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'email' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'beneficiaries' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'contact' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'name' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'surname' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetProcedureQuery, GetProcedureQueryVariables>
 export const GetProcedureByIdDocument = {
   kind: 'Document',
   definitions: [
