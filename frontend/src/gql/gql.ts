@@ -35,6 +35,8 @@ const documents = {
     types.DeleteAssetDocument,
   '\n  mutation DeleteDocument($id: ID!) {\n    deleteDocumentsByIds(ids: [$id])\n  }\n':
     types.DeleteDocumentDocument,
+  '\n  mutation DeleteProcedure($ids: [Int!]!) {\n    deleteProceduresByIds(ids: $ids)\n  }\n':
+    types.DeleteProcedureDocument,
   '\n  query getAssetById($id: Int!) {\n    getAssetById(id: $id) {\n      id\n      type\n      name\n      value\n      description\n      bankName\n      carMakeName\n      carRegistrationDate\n      carType\n      cin\n    }\n  }\n':
     types.GetAssetByIdDocument,
   '\n  query getProcedureIds($id: Int!) {\n    getProceduresByBeneficiaryId(beneficiaryId: $id) {\n      id\n    }\n  }\n':
@@ -145,6 +147,12 @@ export function gql(
 export function gql(
   source: '\n  mutation DeleteDocument($id: ID!) {\n    deleteDocumentsByIds(ids: [$id])\n  }\n'
 ): (typeof documents)['\n  mutation DeleteDocument($id: ID!) {\n    deleteDocumentsByIds(ids: [$id])\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  mutation DeleteProcedure($ids: [Int!]!) {\n    deleteProceduresByIds(ids: $ids)\n  }\n'
+): (typeof documents)['\n  mutation DeleteProcedure($ids: [Int!]!) {\n    deleteProceduresByIds(ids: $ids)\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
