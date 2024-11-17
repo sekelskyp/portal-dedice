@@ -1,0 +1,38 @@
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>{{subject}}</title>
+    <style>
+      body { font-family: 'Inter', sans-serif; background-color: #f7f8fa; /*
+      primary text color */ margin: 0; padding: 0; line-height: 1.6; } .header {
+      background-color: #f7f0eb; /* Updated color for the header */ padding:
+      20px; text-align: center; border-bottom: 1px solid #e5e7eb; /* border
+      color */ } .header img { height: 40px; /* Adjusted logo height */
+      vertical-align: middle; margin-right: 10px; opacity: 1; /* Default opacity
+      */ } .header h1 { display: inline-block; font-size: 1.5rem; margin: 0;
+      vertical-align: middle; color: #2a3348; /* primary text color */ }
+      .container { max-width: 600px; margin: 20px auto; padding: 20px;
+      background-color: white; border: 1px solid #e5e7eb; /* border color */
+      border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); } .footer {
+      text-align: center; margin-top: 20px; font-size: 0.875rem; color: #6b7280;
+      /* muted text color */ } .footer a { color: #2a3348; /* link color */
+      text-decoration: none; }
+    </style>
+  </head>
+  <body>
+    <div class='header'>
+      <h1>Portál Dědice</h1>
+    </div>
+    <div class='container'>
+      {{{body}}}
+    </div>
+    <div class='footer'>
+      <p>© 2024 Portál Dědice</p>
+      <p>
+        Vytvořeno ve spolupráci s Applifting.
+        <a href='{{mainPageUrl}}'>Navštivte naši stránku</a>.
+      </p>
+    </div>
+  </body>
+</html>
