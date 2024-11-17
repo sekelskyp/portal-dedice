@@ -512,10 +512,7 @@ export type GetContactByIdQueryVariables = Exact<{
 
 export type GetContactByIdQuery = {
   __typename?: 'Query'
-  getContactById?: {
-    __typename?: 'Contact'
-    displayName?: string | null
-  } | null
+  getContactById?: { __typename?: 'Contact'; displayName: string } | null
 }
 
 export type GetProceduresByBeneficiaryIdQueryVariables = Exact<{
