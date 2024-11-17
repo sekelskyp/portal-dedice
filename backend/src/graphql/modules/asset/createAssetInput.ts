@@ -13,4 +13,10 @@ export class CreateAssetInput {
 
   @Field(() => String, { nullable: true })
   description?: string | null
+
+  @Field(() => String, { nullable: true })
+  bankName?: string | null
+
+  @Field(() => String, { nullable: true })
+  carMakeName?: string | null
 }

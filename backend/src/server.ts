@@ -39,6 +39,7 @@ import { mockResolvers } from '@backend/mocks/mocks'
 import { CustomContext } from '@backend/types/types'
 
 import { getAssetRepository } from './graphql/modules/asset/assetRepository'
+import { AssetResolver } from './graphql/modules/asset/assetResolver'
 import { getChatMessageRepository } from './graphql/modules/chat/chatMessageRepository'
 import { getChatRepository } from './graphql/modules/chat/chatRepository'
 import { ChatResolver } from './graphql/modules/chat/chatResolver'
@@ -59,7 +60,7 @@ const init = async () => {
       InheritanceProcedureResolver,
       NotaryResolver,
       ContactResolver,
-      //AssetResolver,
+      AssetResolver,
       ChatResolver,
     ],
     pubSub,

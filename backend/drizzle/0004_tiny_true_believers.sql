@@ -1,0 +1,1 @@
+ALTER TABLE `chat_message` MODIFY COLUMN `created_at` datetime NOT NULL DEFAULT '2024-11-17 15:48:15.867';

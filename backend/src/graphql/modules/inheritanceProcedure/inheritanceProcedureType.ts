@@ -2,7 +2,7 @@ import { Field, ID, ObjectType } from 'type-graphql'
 
 import { InheritanceProcedureStateEnumType } from '@backend/db/schema'
 
-import { Asset } from '../asset/assetType'
+import { AssetCopy } from '../asset/assetCopy'
 import { Beneficiary } from '../beneficiary/beneficiaryType'
 import { Contact } from '../contact/contactType'
 import { Notary } from '../notary/notaryType'
@@ -51,6 +51,6 @@ export class InheritanceProcedure {
   @Field(() => Date, { nullable: true })
   deceasedDateOfDeath?: Date | null
 
-  @Field(() => [Asset], { nullable: true })
-  procedureAssets?: Asset[]
+  @Field(() => [AssetCopy], { nullable: true })
+  procedureAssets?: AssetCopy[]
 }

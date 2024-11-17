@@ -126,6 +126,8 @@ export const asset = mysqlTable('asset', {
   value: float('value').notNull(),
   name: varchar('name', { length: 100 }).notNull(),
   description: text('description'),
+  bankName: varchar('bankName', { length: 100 }),
+  carMakeName: varchar('carMakeName', { length: 100 }),
 })
 
 // Define Document Table
