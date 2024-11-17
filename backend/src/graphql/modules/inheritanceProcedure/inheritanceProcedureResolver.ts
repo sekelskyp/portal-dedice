@@ -219,6 +219,14 @@ export class InheritanceProcedureResolver {
     return await assetRepository.getAssetsByProcedureId(procedure.id)
   }
 
+  @Query(() => [AssetCopy])
+  async getAssetsByProcedureId(
+    @Arg('procedureId', () => Int) procedureId: number,
+    @Ctx() { assetRepository }: CustomContext
+  ): Promise<AssetCopy[]> {
+    return await assetRepository.getAssetsByProcedureId(procedureId)
+  }
+
   @Mutation(() => InheritanceProcedure)
   async createInheritanceProcedureFromForm(
     @Arg('data') data: InheritanceProcedureFormDataInput,
