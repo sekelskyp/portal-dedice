@@ -87,7 +87,7 @@ export class NotaryResolver {
     @Ctx() context: CustomContext
   ): Promise<Notary | null> {
     const findAvailableNotaryInput = {
-      postalCode: input.postalCode,
+      addressPostCode: input.addressPostCode,
       dateOfDeath: input.deceasedPersonDateOfDeath,
     }
 

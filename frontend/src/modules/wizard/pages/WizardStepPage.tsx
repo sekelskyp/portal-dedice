@@ -1,7 +1,6 @@
 import { createContext, Dispatch, SetStateAction, useState } from 'react'
 import { Box, Heading, Stack } from '@chakra-ui/react'
 
-import { Suggestion } from '@frontend/shared/hooks/useAddressSuggestions'
 import { Page } from '@frontend/shared/layout'
 
 import { NotaryAssignment } from '../components/NotaryAssignment'
@@ -17,7 +16,10 @@ import questionData from '../questions.json'
 type TestatorData = {
   sex?: string
   birthDate?: Date
-  address?: Suggestion
+  addressStreet?: string
+  addressStreetNumber?: string
+  addressMunicipality?: string
+  addressPostCode?: string
 }
 
 interface TestatorDataContextProps {

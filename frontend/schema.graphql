@@ -111,8 +111,8 @@ input DeceasedPersonInput {
 }
 
 input FindNotaryInput {
+  addressPostCode: String!
   deceasedPersonDateOfDeath: DateTimeISO!
-  postalCode: String!
 }
 
 type InheritanceProcedure {

@@ -281,7 +281,7 @@ export async function createProcedureFromFormData(
   // Find an available notary based on postal code and date of death
   const [notary] = await findAvailableNotary(
     {
-      postalCode: data.deceasedPerson.addressPostCode,
+      addressPostCode: data.deceasedPerson.addressPostCode,
       dateOfDeath: data.deceasedPerson.dateOfDeath,
     },
     context

@@ -46,7 +46,7 @@ export function NotaryAssignment({
 
   const { notary, loading, error } = useGetNotary(
     testatorData.birthDate,
-    testatorData.address
+    testatorData.addressPostCode
   )
 
   if (loading) return <Text>Loading...</Text>
@@ -88,7 +88,13 @@ export function NotaryAssignment({
           direction={{ base: 'column', md: 'column', lg: 'row' }}
           gap={8}
         >
-          <ContactInfo contactInfo={notary} />
+          <ContactInfo
+            contactInfo={{
+              email: notary.email,
+              phone: notary.phone,
+              completeAddress: `${notary.addressStreet} ${notary.addressStreetNumber}, ${notary.addressMunicipality} ${notary.addressPostCode}`,
+            }}
+          />
           <AccordionHelper items={dummy_data} />
         </Stack>
       </Container>
