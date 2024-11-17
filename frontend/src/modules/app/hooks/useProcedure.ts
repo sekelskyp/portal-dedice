@@ -14,6 +14,7 @@ const GET_PROCEDURE_QUERY = gql(/* GraphQL */ `
           name
           surname
           email
+          displayName
         }
       }
       mainContact {
@@ -42,6 +43,7 @@ const GET_PROCEDURE_QUERY = gql(/* GraphQL */ `
           email
           name
           surname
+          displayName
         }
         deceasedRelation
       }

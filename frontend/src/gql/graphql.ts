@@ -810,6 +810,7 @@ export type GetProcedureByIdQuery = {
         name: string
         surname: string
         email?: string | null
+        displayName: string
       } | null
     } | null
     mainContact?: {
@@ -839,6 +840,7 @@ export type GetProcedureByIdQuery = {
         email?: string | null
         name: string
         surname: string
+        displayName: string
       } | null
     }> | null
     procedureAssets?: Array<{
@@ -2025,6 +2027,10 @@ export const GetProcedureByIdDocument = {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'email' },
                             },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'displayName' },
+                            },
                           ],
                         },
                       },
@@ -2125,6 +2131,10 @@ export const GetProcedureByIdDocument = {
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'surname' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'displayName' },
                             },
                           ],
                         },
