@@ -411,9 +411,11 @@ export type AssetSummary = {
   onSubmit: (variables: AssetFormData) => void
 }
 
+
 export const AssetForm: React.FC<{
+  inheritanceProcedureId: number
   onSubmit: (data: AssetFormData) => void
-}> = ({ onSubmit }) => {
+}> = ({ inheritanceProcedureId, onSubmit }) => {
   const [sections, setSections] = useState({
     bankAccount: false,
     company: false,
@@ -427,6 +429,7 @@ export const AssetForm: React.FC<{
   })
 
   const { setValue } = methods
+
 
   const handleSetSelected =
     (section: keyof typeof sections) =>
@@ -443,7 +446,7 @@ export const AssetForm: React.FC<{
       }
     }
 
-  const handleSubmit: SubmitHandler<AssetFormData> = (data) => {
+  const handleSubmit: SubmitHandler<AssetFormData> = async (data) => {
     const filteredData: AssetFormData = Object.keys(data)
       .filter((key) => !sections[key as keyof typeof sections])
       .reduce(
