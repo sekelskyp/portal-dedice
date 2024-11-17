@@ -54,9 +54,9 @@ const InheritanceProcedureDetail: React.FC = () => {
 
   const procedure = data?.getProcedureById
 
-  const totalAssetsValue =
-    procedure?.procedureAssets?.reduce((sum, asset) => sum + asset.value, 0) ??
-    0
+  const assets = procedure?.procedureAssets ?? []
+
+  const totalAssetsValue = assets.reduce((sum, asset) => sum + asset.value, 0)
 
   if (!user.token) {
     return <UnauthorizedPage />
@@ -121,10 +121,13 @@ const InheritanceProcedureDetail: React.FC = () => {
                       Výpis dědiců
                     </Heading>
                     {procedure.beneficiaries?.map((beneficiary) =>
-                      beneficiary.contact ? (
+                      !!beneficiary.user?.contact || !!beneficiary.contact ? (
                         <BeneficiaryBadge
                           key={beneficiary.id}
-                          beneficiaryContact={beneficiary.contact}
+                          beneficiaryContact={{
+                            ...beneficiary.contact!,
+                            ...beneficiary.user?.contact!,
+                          }}
                         />
                       ) : (
                         <Alert status="warning" key={beneficiary.id}>
@@ -140,7 +143,7 @@ const InheritanceProcedureDetail: React.FC = () => {
                   >
                     Celková hodnota majetku
                   </Heading>
-                  {procedure.procedureAssets?.length === 0 ? (
+                  {assets.length === 0 ? (
                     <Stack alignItems={{ base: 'center', lg: 'start' }}>
                       <Text fontSize="md">Tuto hodnotu zatím neznáme.</Text>
                       <Button

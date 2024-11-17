@@ -36,6 +36,19 @@ const GET_PROCEDURE_QUERY = gql(/* GraphQL */ `
         user {
           id
           email
+          contact {
+            id
+            name
+            surname
+            displayName
+            email
+            phone
+            addressStreet
+            addressStreetNumber
+            addressMunicipality
+            addressPostCode
+            gender
+          }
         }
         contactId
         contact {
