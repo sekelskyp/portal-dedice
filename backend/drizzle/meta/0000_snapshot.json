@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "6b5e4df6-7a80-48df-8db7-96b8dde5fbd6",
+  "id": "e9091ca8-082e-43da-b87f-0421d44923df",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "asset": {
@@ -397,7 +397,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'2024-11-17 22:44:56.492'"
+          "default": "'2024-11-17 23:04:10.677'"
         }
       },
       "indexes": {},
@@ -484,30 +484,10 @@
         "address_street": {
           "name": "address_street",
           "type": "varchar(100)",
-        "address_street": {
-          "name": "address_street",
-          "type": "varchar(100)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "address_street_number": {
-          "name": "address_street_number",
-          "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "address_municipality": {
-          "name": "address_municipality",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "address_post_code": {
-          "name": "address_post_code",
-          "type": "varchar(10)",
         "address_street_number": {
           "name": "address_street_number",
           "type": "varchar(20)",
@@ -1146,13 +1126,6 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
-        },
-        "contact_id": {
-          "name": "contact_id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
         }
       },
       "indexes": {
@@ -1160,17 +1133,6 @@
           "name": "user_email_unique_index",
           "columns": ["(lower(`email`))"],
           "isUnique": true
-        }
-      },
-      "foreignKeys": {
-        "user_contact_id_contact_id_fk": {
-          "name": "user_contact_id_contact_id_fk",
-          "tableFrom": "user",
-          "tableTo": "contact",
-          "columnsFrom": ["contact_id"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
         }
       },
       "foreignKeys": {
