@@ -1,11 +1,11 @@
 import React, { ReactElement } from 'react'
 import { HStack, Icon, Separator, Text, VStack } from '@chakra-ui/react'
 import {
-  LuArchive,
-  LuMessagesSquare,
-  LuSettings,
-  LuUser2,
-} from 'react-icons/lu'
+  ArchiveIcon,
+  MessagesSquareIcon,
+  SettingsIcon,
+  User2Icon,
+} from 'lucide-react'
 import { useMediaQuery } from 'usehooks-ts'
 
 import resources from '@frontend/resources'
@@ -22,22 +22,22 @@ const sideBarItems: SideBarItem[] = [
   {
     label: resources.portal.sideBar.proceedings,
     to: route.portal(),
-    icon: <LuArchive />,
+    icon: <ArchiveIcon />,
   },
   {
     label: resources.portal.sideBar.profile,
     to: route.profile(),
-    icon: <LuUser2 />,
+    icon: <User2Icon />,
   },
   {
     label: 'Chat',
     to: route.chat(),
-    icon: <LuMessagesSquare />,
+    icon: <MessagesSquareIcon />,
   },
   {
     label: resources.portal.sideBar.settings,
     to: route.settings(),
-    icon: <LuSettings />,
+    icon: <SettingsIcon />,
   },
 ]
 

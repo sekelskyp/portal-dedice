@@ -105,7 +105,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
               key={id}
               to={route.inheritanceProcedure(id.toString())}
               size="xs"
-              variant="ghost"
+              variant="subtle"
             >
               <SquareArrowOutUpRightIcon />
             </RouterNavLink>
