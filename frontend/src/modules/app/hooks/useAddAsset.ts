@@ -18,7 +18,7 @@ const CREATE_ASSET = gql`
 `
 
 interface CreateAssetInput {
-  inheritanceProcedureId: number  // Changed from procedureId
+  inheritanceProcedureId: number // Changed from procedureId
   type: string
   name: string
   value: number

@@ -1,4 +1,3 @@
-
 import { gql, useMutation } from '@apollo/client'
 
 const DELETE_ASSET = gql`

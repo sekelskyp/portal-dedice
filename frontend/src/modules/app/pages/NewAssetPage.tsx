@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { Container, Heading, HStack, Text, VStack } from '@chakra-ui/react'
-import { useNavigate,useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useMediaQuery } from 'usehooks-ts'
 
 import { Page } from '@frontend/shared/layout/Page'
@@ -16,31 +16,34 @@ export const NewAssetPage = () => {
   const { addAsset: createAssetRequest } = useAddAsset()
   const isMobile = useMediaQuery('(max-width: 768px)')
 
-  const handleFormSubmit = useCallback((formData: AssetFormData) => {
-    if (!id) {
-      console.error('No procedure ID provided')
-      return
-    }
-
-    const assets = mapFormDataToAssets(formData)
-    
-    const createAssets = async () => {
-      for (const asset of assets) {
-        try {
-          await createAssetRequest({
-            inheritanceProcedureId: parseInt(id, 10),
-            value: 0,
-            ...asset,
-          })
-        } catch (error) {
-          console.error('Error creating asset:', error)
-        }
+  const handleFormSubmit = useCallback(
+    (formData: AssetFormData) => {
+      if (!id) {
+        console.error('No procedure ID provided')
+        return
       }
-      navigate(route.inheritanceProcedure(id))
-    }
 
-    createAssets()
-  }, [createAssetRequest, id, navigate])
+      const assets = mapFormDataToAssets(formData)
+
+      const createAssets = async () => {
+        for (const asset of assets) {
+          try {
+            await createAssetRequest({
+              inheritanceProcedureId: parseInt(id, 10),
+              value: 0,
+              ...asset,
+            })
+          } catch (error) {
+            console.error('Error creating asset:', error)
+          }
+        }
+        navigate(route.inheritanceProcedure(id))
+      }
+
+      createAssets()
+    },
+    [createAssetRequest, id, navigate]
+  )
 
   if (!id) {
     return <div>Missing procedure ID</div>
@@ -64,9 +67,9 @@ export const NewAssetPage = () => {
             </Text>
           </Container>
           <Container maxW="container.lg">
-            <AssetForm 
-              onSubmit={handleFormSubmit} 
-              inheritanceProcedureId={parseInt(id, 10)} 
+            <AssetForm
+              onSubmit={handleFormSubmit}
+              inheritanceProcedureId={parseInt(id, 10)}
             />
           </Container>
         </VStack>
@@ -80,9 +83,9 @@ export const NewAssetPage = () => {
             </Text>
           </Container>
           <Container maxW="container.lg" flex={2}>
-            <AssetForm 
-              onSubmit={handleFormSubmit} 
-              inheritanceProcedureId={parseInt(id, 10)} 
+            <AssetForm
+              onSubmit={handleFormSubmit}
+              inheritanceProcedureId={parseInt(id, 10)}
             />
           </Container>
         </HStack>

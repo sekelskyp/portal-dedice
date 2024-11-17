@@ -411,7 +411,6 @@ export type AssetSummary = {
   onSubmit: (variables: AssetFormData) => void
 }
 
-
 export const AssetForm: React.FC<{
   inheritanceProcedureId: number
   onSubmit: (data: AssetFormData) => void
@@ -429,7 +428,6 @@ export const AssetForm: React.FC<{
   })
 
   const { setValue } = methods
-
 
   const handleSetSelected =
     (section: keyof typeof sections) =>
