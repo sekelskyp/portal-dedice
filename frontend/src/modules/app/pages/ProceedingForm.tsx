@@ -118,6 +118,7 @@ export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
             required
           ></DateFormControl>
           <AddressGroupFormControl
+            required
             label={resources.portal.forms.proceedingForm.address}
           />
         </Stack>

@@ -7,7 +7,13 @@ import { suggestionToAddress } from '../hooks/useAddressSuggestions'
 
 import { AddressFormControl, InputFormControl } from '.'
 
-export const AddressGroupFormControl = ({ label }: { label: ReactNode }) => {
+export const AddressGroupFormControl = ({
+  label,
+  required,
+}: {
+  label: ReactNode
+  required?: boolean
+}) => {
   const { setValue } = useFormContext()
 
   return (
@@ -24,6 +30,7 @@ export const AddressGroupFormControl = ({ label }: { label: ReactNode }) => {
         <Stack gap={4} w={'full'}>
           <HStack gap={4}>
             <AddressFormControl
+              required={required}
               flex={3}
               onSuggestionSelected={(suggestion) => {
                 const address = suggestionToAddress(suggestion)
@@ -45,6 +52,7 @@ export const AddressGroupFormControl = ({ label }: { label: ReactNode }) => {
             />
             <InputFormControl
               flex={2}
+              required={required}
               name="addressStreetNumber"
               label="Číslo popisné a orientační"
             />
@@ -52,10 +60,16 @@ export const AddressGroupFormControl = ({ label }: { label: ReactNode }) => {
           <HStack gap={4}>
             <InputFormControl
               flex={3}
+              required={required}
               name="addressMunicipality"
               label="Obec"
             />
-            <InputFormControl flex={2} name="addressPostCode" label="PSČ" />
+            <InputFormControl
+              flex={2}
+              required={required}
+              name="addressPostCode"
+              label="PSČ"
+            />
           </HStack>
         </Stack>
       </Fieldset.Content>

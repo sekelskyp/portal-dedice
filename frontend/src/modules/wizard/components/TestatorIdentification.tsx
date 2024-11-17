@@ -76,7 +76,7 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
               <Radio value="Female">Žena</Radio>
             </RadioGroupFormControl>
             <DateFormControl name="birthDate" label="Datum narození" required />
-            <AddressGroupFormControl label="Trvalé bydliště" />
+            <AddressGroupFormControl required label="Trvalé bydliště" />
             <Center>
               <SubmitButton>Potvrdit údaje</SubmitButton>
             </Center>
