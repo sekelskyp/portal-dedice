@@ -109,8 +109,6 @@ const InheritanceProcedureDetail: React.FC = () => {
 
   const procedure = data?.getProcedureById
 
-  console.log(procedure)
-
   const totalAssetsValue =
     procedure?.procedureAssets?.reduce((sum, asset) => sum + asset.value, 0) ??
     0
@@ -312,6 +310,13 @@ const InheritanceProcedureDetail: React.FC = () => {
                       rounded="full"
                     >
                       Chat s notářem
+                      <HiChat />
+                    </RouterNavLink>
+                    <RouterNavLink
+                      to={route.chatIdHistory(id, procedure.name)}
+                      rounded="full"
+                    >
+                      Chatová historie řízení
                       <HiChat />
                     </RouterNavLink>
                   </>

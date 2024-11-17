@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Box, Container, Heading, Tabs, Text, VStack } from '@chakra-ui/react'
+import { useQuery } from '@apollo/client'
+import { Box, Container, Flex, Tabs, Text, VStack } from '@chakra-ui/react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useMediaQuery } from 'usehooks-ts'
 
+import { gql } from '@frontend/gql'
 import { useAuth } from '@frontend/modules/auth'
 import { Page } from '@frontend/shared/layout'
 
@@ -13,15 +16,53 @@ import { useNotaryProcedures } from '../hooks/useNotaryProcedures'
 
 import { ChatMessageForm } from './ChatMessageForm'
 
+const GET_PROCEDURE = gql(/* GraphQL */ `
+  query GetProcedure($id: Int!) {
+    getProcedureById(id: $id) {
+      notary {
+        contact {
+          id
+          name
+          surname
+          email
+        }
+      }
+      beneficiaries {
+        contact {
+          id
+          name
+          surname
+        }
+      }
+    }
+  }
+`)
+
 export default function ChatPage() {
   const user = useAuth()
   const { id } = useParams()
   const messages = useGetMessages(id!)
 
-  const isNotary = user.user?.isNotary
+  const procedure =
+    useQuery(GET_PROCEDURE, {
+      variables: { id: +id! },
+    }).data?.getProcedureById ?? {}
+
+  const notaryDisplayName = `${procedure.notary?.contact?.name} ${procedure.notary?.contact?.surname}`
+
+  const beneficiaryDisplayNames =
+    procedure.beneficiaries?.map((beneficiary) =>
+      beneficiary?.contact
+        ? `${beneficiary.contact.name} ${beneficiary.contact.surname}`.trim()
+        : ''
+    ) ?? []
+
+  const isNotary = user.user?.isNotary ?? false
 
   const notaryProcedures = useNotaryProcedures()
   const beneficiaryProcedures = useBeneficiaryProcedures()
+
+  const allNames = [...beneficiaryDisplayNames, notaryDisplayName].join(', ')
 
   const procedures = isNotary
     ? notaryProcedures.data?.getProceduresByNotaryId
@@ -51,10 +92,6 @@ export default function ChatPage() {
     }
   }, [id])
 
-  useEffect(() => {
-    scrollToBottom()
-  }, [messages, scrollToBottom])
-
   const handleChatMessageFormSubmit = useCallback(
     async (data: { message: string }) => {
       await addMessage({
@@ -77,7 +114,7 @@ export default function ChatPage() {
   }, [id, chatGroups, navigate])
 
   const [value, setValue] = useState<string>(id!)
-
+  const isMobile = useMediaQuery('(max-width: 425px)')
   return (
     <Page>
       <Container maxW={'4xl'}>
@@ -92,6 +129,8 @@ export default function ChatPage() {
               navigate(`/portal/chat/${selectedGroup.id}/${selectedGroup.name}`)
             }
           }}
+          orientation={'horizontal'}
+          style={{ height: '100%' }}
         >
           <Tabs.List>
             {chatGroups.map((group) => (
@@ -102,14 +141,27 @@ export default function ChatPage() {
             <Tabs.Indicator />
           </Tabs.List>
           {chatGroups.map((group) => (
-            <Tabs.Content key={group.id} value={group.id.toString()}>
+            <Tabs.Content
+              key={group.id}
+              value={group.id.toString()}
+              style={{ height: isMobile ? 'calc(100vh - 200px)' : 'auto' }}
+            >
               {value === group.id.toString() && (
-                <>
-                  <Heading>Společný chat řízení </Heading>
-                  <Box position="relative" height="calc(80vh - 200px)">
+                <Flex direction="column" h="100%">
+                  <Text
+                    fontSize={isMobile ? 'sm' : 'lg'}
+                    fontWeight="bold"
+                    p={4}
+                    maxLines={2}
+                  >
+                    Chat s uživateli: {allNames}
+                  </Text>
+                  <Box flex={1} position="relative">
                     <Box
                       overflowY="auto"
-                      maxH="calc(100% - 100px)"
+                      height={
+                        isMobile ? 'calc(100vh - 300px)' : 'calc(80vh - 200px)'
+                      }
                       p={4}
                       mt={4}
                       mb={20}
@@ -123,25 +175,32 @@ export default function ChatPage() {
                             body={message.body}
                             createdAt={message.createdAt}
                             currentUserId={+user.user?.id!}
+                            procedureId={+id!}
+                            notaryDisplayName={notaryDisplayName}
+                            isNotary={isNotary}
+                            isMobile={isMobile}
                           />
                         ))}
-                        <div ref={messagesEndRef} />
                       </VStack>
+                      <div ref={messagesEndRef} />
                     </Box>
                     <Box
                       position="absolute"
                       bottom={0}
                       left={0}
                       right={0}
-                      p={4}
+                      p={2} // Reduced padding
                       bg="white"
                       borderTop="1px solid"
                       borderColor="gray.200"
+                      width="100%"
+                      maxWidth={isMobile ? '100%' : '4xl'} // Match container width
+                      mx="auto"
                     >
                       <ChatMessageForm onSubmit={handleChatMessageFormSubmit} />
                     </Box>
                   </Box>
-                </>
+                </Flex>
               )}
             </Tabs.Content>
           ))}
