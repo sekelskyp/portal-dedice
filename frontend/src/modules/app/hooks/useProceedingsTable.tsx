@@ -10,7 +10,7 @@ import {
   PaginationState,
   useReactTable,
 } from '@tanstack/react-table'
-import { HiViewList } from 'react-icons/hi'
+import { CgDetailsMore } from 'react-icons/cg'
 
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { route } from '@shared/route'
@@ -54,10 +54,11 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
           const id = info.row.original.id
           return (
             <RouterNavLink
+              key={id}
               to={route.inheritanceProcedure(id.toString())}
               size="sm"
             >
-              <HiViewList />
+              <CgDetailsMore />
             </RouterNavLink>
           )
         },
