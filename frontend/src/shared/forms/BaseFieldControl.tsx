@@ -12,7 +12,15 @@ import { loadingContext } from '.'
 export interface BaseFieldControlProps
   extends Omit<
     FieldProps,
-    'children' | 'onChange' | 'onBlur' | 'defaultValue' | 'ids' | 'orientation'
+    | 'children'
+    | 'onChange'
+    | 'onBlur'
+    | 'defaultValue'
+    | 'ids'
+    | 'orientation'
+    | 'color'
+    | 'content'
+    | 'translate'
   > {
   name: string
   label?: ReactNode
