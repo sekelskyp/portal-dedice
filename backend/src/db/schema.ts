@@ -1,7 +1,6 @@
 import { SQL, sql } from 'drizzle-orm'
 import {
   AnyMySqlColumn,
-  binary,
   boolean,
   char,
   check,
@@ -10,6 +9,7 @@ import {
   float,
   foreignKey,
   int,
+  longtext,
   mysqlTable,
   primaryKey,
   text,
@@ -33,6 +33,15 @@ export type InheritanceProcedureStateEnumType =
 
 const deceasedRelationEnum = ['Spouse', 'Child', 'Parent', 'Other'] as const
 export type DeceasedRelationEnumType = (typeof deceasedRelationEnum)[number]
+
+const assetTypeEnum = [
+  'Financial instrument',
+  'Company',
+  'Automobile',
+  'Valuables',
+  'Other',
+] as const
+export type AssetTypeEnumType = (typeof assetTypeEnum)[number]
 
 // Define User Table
 export const user = mysqlTable(
@@ -83,6 +92,7 @@ export const beneficiary = mysqlTable('beneficiary', {
   }),
   contactId: int('contact_id').references(() => contact.id),
   dateOfBirth: date('date_of_birth'),
+  sendNotifications: boolean('send_notifications').default(true).notNull(),
 })
 
 // Define InheritanceProcedure Table
@@ -126,6 +136,15 @@ export const asset = mysqlTable('asset', {
   value: float('value').notNull(),
   name: varchar('name', { length: 100 }).notNull(),
   description: text('description'),
+  type: varchar('type', {
+    length: 20,
+    enum: assetTypeEnum,
+  }).notNull(),
+  bankName: varchar('bank_name', { length: 100 }),
+  carMakeName: varchar('car_make_name', { length: 100 }),
+  carRegistrationDate: date('car_registration_date'),
+  carType: varchar('car_type', { length: 20 }),
+  cin: varchar('cin', { length: 8 }),
 })
 
 // Define Document Table
@@ -136,10 +155,10 @@ export const document = mysqlTable('document', {
     .notNull(), // FK to InheritanceProcedure
   taskId: int('task_id').references(() => task.id), // FK to Task
   userOwnerId: int('user_owner_id').references(() => user.id), // FK to User
-  createDate: timestamp('create_date').defaultNow(),
+  createDate: timestamp('create_date').defaultNow().notNull(),
   fileName: varchar('file_name', { length: 255 }).notNull(),
   fileType: varchar('file_type', { length: 100 }).notNull(),
-  fileData: binary('file_data'),
+  fileData: longtext('file_data').notNull(),
 })
 
 // Define Chat Table
@@ -160,6 +179,7 @@ export const chatMessage = mysqlTable('chat_message', {
     .references(() => user.id)
     .notNull(), // FK to User
   body: text('body').notNull(),
+  createdAt: datetime('created_at').notNull().default(new Date()),
 })
 
 // Define Task Table

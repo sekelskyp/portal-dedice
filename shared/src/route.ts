@@ -2,7 +2,6 @@ export const route = {
   home: () => `/`,
   signIn: () => `/auth/signin`,
   signUp: () => `/auth/signup`,
-  signOut: () => `/auth/signout`,
   resetPassword: () => `/auth/passwordReset`,
   about: () => `/about`,
   guide: () => `/guide`,
@@ -11,7 +10,13 @@ export const route = {
   portal: () => `/portal/proceedings`,
   newProceeding: () => `/portal/newProceeding`,
   settings: () => `/portal/settings`,
+  chat: () => `/portal/chat/`,
+  chatId: (id = ':id', name = ':name') => `/portal/chat/${id}/${name}`,
   emailVerification: () => `/auth/email-verification`,
   confirmEmail: () => `/auth/confirm-email`,
   inheritanceProcedure: (id = ':id') => `/portal/inheritance-procedure/${id}`,
+  newDocument: (id = ':id') =>
+    `/portal/inheritance-procedure/${id}/new-document`,
+  newAsset: (id = ':id') => `/portal/inheritance-procedure/${id}/assets`,
+  newEmail: (id = ':id') => `/portal/inheritance-procedure/${id}/new-email`,
 }

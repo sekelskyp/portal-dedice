@@ -6,6 +6,8 @@ import {
   asset,
   beneficiary,
   beneficiaryInheritanceProcedureRel,
+  chat,
+  chatMessage,
   contact,
   inheritanceProcedure,
   notary,
@@ -116,14 +118,17 @@ async function populateDatabase(
       {
         password: await hashPassword('heslo1234'),
         email: 'test.email1@email.com',
+        confirmed: true,
       },
       {
         password: await hashPassword('heslo1234'),
         email: 'test.email2@email.com',
+        confirmed: true,
       },
       {
         password: await hashPassword('heslo1234'),
         email: 'test.email3@email.com',
+        confirmed: true,
       },
     ])
     .$returningId()
@@ -227,12 +232,14 @@ async function populateDatabase(
 
       value: 100_000,
       name: 'Auto',
+      type: 'Automobile',
     },
     {
       inheritanceProcedureId: inheritanceId1,
 
       value: 200_000,
       name: 'Dům',
+      type: 'Other',
     },
   ])
   console.log('Population data seeded successfully.')
@@ -255,6 +262,8 @@ async function seed() {
     await db.delete(inheritanceProcedure)
     await db.delete(beneficiaryInheritanceProcedureRel)
     await db.delete(asset)
+    await db.delete(chat)
+    await db.delete(chatMessage)
     const { notaryIds } = await seedNotariesAndDateRules(db)
     await populateDatabase(db, notaryIds)
   } catch (error) {

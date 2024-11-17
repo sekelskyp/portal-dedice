@@ -62,10 +62,18 @@ interface VisibilityProps {
 
 interface FileUploadItemProps extends VisibilityProps {
   file: File
+  onDelete?: (file: File) => void
 }
 
-const FileUploadItem = (props: FileUploadItemProps) => {
-  const { file, showSize, clearable } = props
+export const FileUploadItem = (props: FileUploadItemProps) => {
+  const { file, showSize, clearable, onDelete } = props
+
+  const handleDelete = () => {
+    if (onDelete) {
+      onDelete(file)
+    }
+  }
+
   return (
     <ChakraFileUpload.Item file={file}>
       <ChakraFileUpload.ItemPreview asChild>
@@ -85,7 +93,12 @@ const FileUploadItem = (props: FileUploadItemProps) => {
 
       {clearable && (
         <ChakraFileUpload.ItemDeleteTrigger asChild>
-          <IconButton variant="ghost" color="fg.muted" size="xs">
+          <IconButton
+            variant="ghost"
+            color="fg.muted"
+            size="xs"
+            onClick={handleDelete}
+          >
             <LuX />
           </IconButton>
         </ChakraFileUpload.ItemDeleteTrigger>
@@ -98,11 +111,12 @@ interface FileUploadListProps
   extends VisibilityProps,
     ChakraFileUpload.ItemGroupProps {
   files?: File[]
+  onDelete?: (file: File) => void
 }
 
 export const FileUploadList = forwardRef<HTMLUListElement, FileUploadListProps>(
   function FileUploadList(props, ref) {
-    const { showSize, clearable, files, ...rest } = props
+    const { showSize, clearable, files, onDelete, ...rest } = props
 
     const fileUpload = useFileUploadContext()
     const acceptedFiles = files ?? fileUpload.acceptedFiles
@@ -117,6 +131,7 @@ export const FileUploadList = forwardRef<HTMLUListElement, FileUploadListProps>(
             file={file}
             showSize={showSize}
             clearable={clearable}
+            onDelete={onDelete}
           />
         ))}
       </ChakraFileUpload.ItemGroup>

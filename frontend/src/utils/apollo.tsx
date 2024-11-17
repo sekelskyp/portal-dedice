@@ -7,30 +7,29 @@ import {
   ApolloProvider,
   from,
   InMemoryCache,
+  split,
 } from '@apollo/client'
 import { NetworkError } from '@apollo/client/errors'
 import { onError } from '@apollo/client/link/error'
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
+import { getMainDefinition } from '@apollo/client/utilities'
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs'
 import { GraphQLFormattedError } from 'graphql'
-import { useNavigate } from 'react-router-dom'
+import { createClient } from 'graphql-ws'
 
 import { config } from '@frontend/config'
 import { useAuth } from '@frontend/modules/auth'
-import { route } from '@shared/route'
 
 type Props = {
   children: ReactNode
 }
 
 export function EnhancedApolloProvider({ children }: Props) {
-  const navigate = useNavigate()
   const { token, signOut } = useAuth()
 
   const handleSignOut = useCallback(() => {
     signOut()
-    navigate(route.signIn())
-    window.location.reload()
-  }, [signOut, navigate])
+  }, [signOut])
 
   const authLink = new ApolloLink((operation, forward) => {
     operation.setContext({
@@ -51,10 +50,36 @@ export function EnhancedApolloProvider({ children }: Props) {
     }
   })
 
+  const wsLink = new GraphQLWsLink(
+    createClient({
+      url: config.GRAPHQL_API.replace('http', 'ws'),
+      on: {
+        connected: () => console.log('WS Connected'),
+        error: (error) => console.log('WS Error:', error),
+        closed: () => console.log('WS Closed'),
+      },
+    })
+  )
+
+  const httpLink = from([logoutLink, authLink, uploadLink])
+
+  // Create the split link
+  const splitLink = split(
+    ({ query }) => {
+      const definition = getMainDefinition(query)
+      return (
+        definition.kind === 'OperationDefinition' &&
+        definition.operation === 'subscription'
+      )
+    },
+    wsLink,
+    httpLink
+  )
+
   const cache = useMemo(() => new InMemoryCache(), [])
 
   const client = new ApolloClient({
-    link: from([logoutLink, authLink, uploadLink]),
+    link: splitLink,
     cache,
     defaultOptions: {
       watchQuery: {

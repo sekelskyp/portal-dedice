@@ -9,6 +9,8 @@ import {
   Root,
 } from 'type-graphql'
 
+import { getDocumentsByProcedureId } from '@backend/services/documentService'
+
 import {
   addBeneficiariesToProcedure,
   addBeneficiaryToProcedure,
@@ -17,12 +19,14 @@ import {
   createProcedure,
   createProcedureFromFormData,
   deleteProceduresByIds,
+  notifyProcedureBeneficiaries,
   removeBeneficiaryFromProcedure,
 } from '../../../services/inheritanceProcedureService'
 import { CustomContext } from '../../../types/types'
-import { Asset } from '../asset/assetType'
+import { AssetCopy } from '../asset/assetCopy'
 import { Beneficiary } from '../beneficiary/beneficiaryType'
 import { Contact } from '../contact/contactType'
+import { Document } from '../document/documentType'
 import { Notary } from '../notary/notaryType'
 
 import { CreateInheritanceProcedureInput } from './createInheritanceProcedureInput'
@@ -176,6 +180,14 @@ export class InheritanceProcedureResolver {
     )
   }
 
+  @Query(() => [Document])
+  async getDocumentsByProcedureId(
+    @Arg('notaryId', () => Int) procedureId: number,
+    @Ctx() context: CustomContext
+  ): Promise<Document[]> {
+    return await getDocumentsByProcedureId(procedureId, context)
+  }
+
   @Query(() => [InheritanceProcedure])
   async getProceduresByBeneficiaryId(
     @Arg('beneficiaryId', () => Int) beneficiaryId: number,
@@ -190,12 +202,20 @@ export class InheritanceProcedureResolver {
     }))
   }
 
+  @FieldResolver(() => [Document], { nullable: true })
+  async documents(
+    @Root() procedure: InheritanceProcedure,
+    @Ctx() context: CustomContext
+  ): Promise<Document[]> {
+    return await getDocumentsByProcedureId(procedure.id, context)
+  }
+
   // Field Resolver to fetch the assets associated with the procedure
-  @FieldResolver(() => [Asset], { nullable: true })
+  @FieldResolver(() => [AssetCopy], { nullable: true })
   async procedureAssets(
     @Root() procedure: InheritanceProcedure,
     @Ctx() { assetRepository }: CustomContext
-  ): Promise<Asset[]> {
+  ): Promise<AssetCopy[]> {
     return await assetRepository.getAssetsByProcedureId(procedure.id)
   }
 
@@ -213,5 +233,16 @@ export class InheritanceProcedureResolver {
     @Ctx() context: CustomContext
   ): Promise<number[]> {
     return await deleteProceduresByIds(ids, context)
+  }
+
+  @Mutation(() => Boolean)
+  async notifyProcedureBenficiaries(
+    @Arg('procedureId', () => Int) procedureId: number,
+    @Arg('subject') subject: string,
+    @Arg('html') html: string,
+    @Ctx() context: CustomContext
+  ): Promise<boolean> {
+    await notifyProcedureBeneficiaries(procedureId, subject, html, context)
+    return true
   }
 }

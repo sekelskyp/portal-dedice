@@ -2,7 +2,9 @@ import { InheritanceProcedureStateEnumType } from '@backend/db/schema'
 
 import { CustomContext } from '../types/types'
 
+import { sendEmail } from './emailService'
 import { findAvailableNotary } from './notaryAssignmentService'
+import { renderTemplate } from './templateService'
 
 export interface InheritanceProcedureData {
   notaryId?: number | null
@@ -90,6 +92,10 @@ export async function createProcedure(
     ...data,
     name: procedureName,
   })
+  await context.chatRepository.createChat({
+    inheritanceProcedureId: procedureId.id,
+  })
+
   return procedureId.id
 }
 
@@ -309,4 +315,85 @@ export async function createProcedureFromFormData(
 
   // Return the created procedure with its details
   return await inheritanceProcedureRepository.getProcedureById(procedureId)
+}
+
+// Remove a beneficiary from a procedure
+export async function notifyProcedureBeneficiaries(
+  procedureId: number,
+  subject: string,
+  messageBody: string,
+  context: CustomContext
+): Promise<void> {
+  const {
+    beneficiaryRepository,
+    contactRepository,
+    inheritanceProcedureRepository,
+  } = context
+
+  // Fetch procedure
+  const procedure =
+    await inheritanceProcedureRepository.getProcedureById(procedureId)
+  if (!procedure) {
+    throw new Error('Procedure not found')
+  }
+
+  if (!procedure.notaryId) {
+    throw new Error('Procedure not assigned to a notary')
+  }
+
+  // Fetch notary contact
+  const notaryContact = await contactRepository.getContactByNotaryId(
+    procedure.notaryId
+  )
+  if (!notaryContact) {
+    throw new Error('Notary contact not found')
+  }
+
+  // Fetch all beneficiaries and their contacts in one go
+  const beneficiaries =
+    await beneficiaryRepository.getBeneficiariesByProcedureId(procedureId)
+  const contactIds = beneficiaries
+    .map((beneficiary) => beneficiary.beneficiary.contactId)
+    .filter((contactId) => contactId !== null)
+
+  const contacts = await contactRepository.getContactsByIds(contactIds) // Bulk fetch contacts
+  const contactsMap = new Map(contacts.map((contact) => [contact.id, contact]))
+
+  // Loop through beneficiaries and send notifications
+  for (const beneficiary of beneficiaries) {
+    const contactId = beneficiary.beneficiary.contactId
+    if (!contactId) continue
+
+    const contact = contactsMap.get(contactId)
+    if (
+      !beneficiary.beneficiary.sendNotifications ||
+      !contact ||
+      !contact.email
+    )
+      continue
+
+    try {
+      // Render the template
+      const html = await renderTemplate('notification', {
+        recipientName: contact.displayName,
+        messageBody,
+        procedureName: procedure.name,
+        senderName: notaryContact.displayName,
+        senderEmail: notaryContact.email,
+      })
+
+      // Send the email
+      await sendEmail({
+        to: contact.email,
+        subject,
+        html,
+      })
+    } catch (error) {
+      console.error(
+        `Failed to notify beneficiary ${contact.displayName}:`,
+        error
+      )
+      continue // Continue notifying other beneficiaries
+    }
+  }
 }

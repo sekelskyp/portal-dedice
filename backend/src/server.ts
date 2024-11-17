@@ -9,11 +9,14 @@ import {
 } from '@apollo/server/express4'
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
 import { addMocksToSchema } from '@graphql-tools/mock'
+import { createPubSub } from '@graphql-yoga/subscription'
 import cors from 'cors'
 import express from 'express'
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js'
+import { useServer } from 'graphql-ws/lib/use/ws'
 import * as http from 'http'
 import { buildSchema } from 'type-graphql'
+import { WebSocketServer } from 'ws'
 
 import { MOCKS, PORT } from '@backend/config'
 import { getConnection } from '@backend/db/db'
@@ -21,6 +24,7 @@ import { getBeneficiaryRepository } from '@backend/graphql/modules/beneficiary/b
 import { BeneficiaryResolver } from '@backend/graphql/modules/beneficiary/beneficiaryResolver'
 import { getContactRepository } from '@backend/graphql/modules/contact/contactRepository'
 import { ContactResolver } from '@backend/graphql/modules/contact/contactResolver'
+import { getDocumentRepository } from '@backend/graphql/modules/document/documentRepository'
 import { getEmailConfirmationTokenRepository } from '@backend/graphql/modules/emailConfirmationToken/emailConfirmationTokenRepository'
 import { EmptyResolver } from '@backend/graphql/modules/empty/emptyResolver'
 import { getInheritanceProcedureRepository } from '@backend/graphql/modules/inheritanceProcedure/inheritaceProcedureRepository'
@@ -36,11 +40,19 @@ import { mockResolvers } from '@backend/mocks/mocks'
 import { CustomContext } from '@backend/types/types'
 
 import { getAssetRepository } from './graphql/modules/asset/assetRepository'
+import { AssetResolver } from './graphql/modules/asset/assetResolver'
+import { getChatMessageRepository } from './graphql/modules/chat/chatMessageRepository'
+import { getChatRepository } from './graphql/modules/chat/chatRepository'
+import { ChatResolver } from './graphql/modules/chat/chatResolver'
+import { DocumentResolver } from './graphql/modules/document/documentResolver'
 
 const init = async () => {
   const app = express()
 
   const httpServer = http.createServer(app)
+
+  // Create PubSub instance
+  const pubSub = createPubSub()
 
   const schema = await buildSchema({
     resolvers: [
@@ -50,10 +62,44 @@ const init = async () => {
       InheritanceProcedureResolver,
       NotaryResolver,
       ContactResolver,
-      //AssetResolver,
+      AssetResolver,
+      DocumentResolver,
+      ChatResolver,
     ],
+    pubSub,
     emitSchemaFile: true,
   })
+
+  const wsServer = new WebSocketServer({
+    server: httpServer,
+    path: '/graphql',
+  })
+
+  wsServer.on('connection', (socket) => {
+    console.log('WebSocket connected')
+
+    socket.on('message', (message) => {
+      console.log('Received:', message.toString())
+    })
+
+    socket.on('close', () => {
+      console.log('WebSocket disconnected')
+    })
+
+    socket.on('error', (error) => {
+      console.error('WebSocket error:', error)
+    })
+  })
+
+  // useServer is not react hook so disable eslint for next line
+  // eslint-disable-next-line
+  const wsServerCleanUp = useServer(
+    {
+      schema,
+      context: async () => ({ pubSub }),
+    },
+    wsServer
+  )
 
   const server = new ApolloServer({
     schema: MOCKS
@@ -62,7 +108,18 @@ const init = async () => {
           resolvers: mockResolvers,
         })
       : schema,
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    plugins: [
+      ApolloServerPluginDrainHttpServer({ httpServer }),
+      {
+        async serverWillStart() {
+          return {
+            async drainServer() {
+              await wsServerCleanUp.dispose()
+            },
+          }
+        },
+      },
+    ],
   })
 
   await server.start()
@@ -95,6 +152,10 @@ const init = async () => {
         drizzle.db
       ),
       assetRepository: getAssetRepository(drizzle.db),
+      documentRepository: getDocumentRepository(drizzle.db),
+      chatRepository: getChatRepository(drizzle.db),
+      chatMessageRepository: getChatMessageRepository(drizzle.db),
+      pubSub, // Add PubSub to the HTTP context
     }
   }
 

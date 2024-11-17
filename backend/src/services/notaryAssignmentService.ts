@@ -1,5 +1,3 @@
-// notaryAssignmentService.ts
-
 import { CustomContext } from '@backend/types/types'
 
 export interface FindAvailableNotaryInput {

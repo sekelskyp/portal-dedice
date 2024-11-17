@@ -6,13 +6,16 @@ import { HomePage } from '@frontend/modules/home/pages/HomePage'
 import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 import { route } from '@shared/route'
 
+import ChatPage from './modules/app/pages/ChatPage'
 import InheritanceProcedureDetail from './modules/app/pages/InheritanceProcedureDetail'
+import { NewAssetPage } from './modules/app/pages/NewAssetPage'
+import { NewDocumentPage } from './modules/app/pages/NewDocumentPage'
 import { NewProceedingPage } from './modules/app/pages/NewProceedingPage'
+import { NotaryEmailPage } from './modules/app/pages/NotaryEmailPage'
 import { Proceedings } from './modules/app/pages/Proceedings'
 import { ConfirmEmailPage } from './modules/auth/pages/ConfirmEmailPage'
 import { EmailVerification } from './modules/auth/pages/EmailVerification'
 import { PasswordResetPage } from './modules/auth/pages/PasswordResetPage'
-import { SignOutPage } from './modules/auth/pages/SignOut'
 import { AboutPage } from './modules/static-pages/pages/AboutPage'
 import { BlogPage } from './modules/static-pages/pages/BlogPage'
 import { GuidePage } from './modules/static-pages/pages/GuidePage'
@@ -31,15 +34,19 @@ export function Routes() {
           <Route path={route.portal()} element={<Proceedings />} />
           <Route path={route.newProceeding()} element={<NewProceedingPage />} />
           <Route
-            path={route.inheritanceProcedure(':id')}
+            path={route.inheritanceProcedure()}
             element={<InheritanceProcedureDetail />}
           />
+          <Route path={route.newDocument()} element={<NewDocumentPage />} />
+          <Route path={route.newEmail()} element={<NotaryEmailPage />} />
+          <Route path={route.newAsset()} element={<NewAssetPage />} />
+          <Route path={route.chat()} element={<ChatPage />} />
+          <Route path={route.chatId()} element={<ChatPage />} />
         </Route>
         <Route path={route.about()} element={<AboutPage />} />
         <Route path={route.guide()} element={<GuidePage />} />
         <Route path={route.blog()} element={<BlogPage />} />
         <Route path={route.wizard()} element={<WizardPage />} />
-        <Route path={route.signOut()} element={<SignOutPage />} />
         <Route path={route.confirmEmail()} element={<ConfirmEmailPage />} />
         <Route path={route.resetPassword()} element={<PasswordResetPage />} />
         <Route

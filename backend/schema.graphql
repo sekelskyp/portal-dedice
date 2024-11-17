@@ -3,11 +3,17 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
-type Asset {
+type AssetCopy {
+  bankName: String
+  carMakeName: String
+  carRegistrationDate: DateTimeISO
+  carType: String
+  cin: String
   description: String
   id: ID!
   inheritanceProcedureId: ID!
   name: String!
+  type: String!
   value: Float!
 }
 
@@ -18,6 +24,7 @@ type Beneficiary {
   deceasedRelation: String
   id: ID!
   inheritanceProcedures: [InheritanceProcedure!]!
+  sendNotifications: Boolean!
   user: User
   userId: ID
 }
@@ -26,6 +33,20 @@ input BeneficiaryInput {
   email: String!
   name: String!
   surname: String!
+}
+
+type Chat {
+  chatMessages: [ChatMessage!]
+  id: ID!
+  inheritanceProcedureId: ID!
+}
+
+type ChatMessage {
+  body: String!
+  chatId: ID!
+  createdAt: DateTimeISO!
+  id: ID!
+  userId: ID!
 }
 
 type Contact {
@@ -44,6 +65,19 @@ input ContactPersonInput {
   email: String!
   name: String!
   surname: String!
+}
+
+input CreateAssetInput {
+  bankName: String
+  carMakeName: String
+  carRegistrationDate: DateTimeISO
+  carType: String
+  cin: String
+  description: String
+  inheritanceProcedureId: ID!
+  name: String!
+  type: String!
+  value: Float!
 }
 
 input CreateBeneficiaryInput {
@@ -94,6 +128,17 @@ input DeceasedPersonInput {
   surname: String!
 }
 
+type Document {
+  createDate: DateTimeISO!
+  fileData: String!
+  fileName: String!
+  fileType: String!
+  id: ID!
+  inheritanceProcedureId: ID!
+  taskId: ID
+  userOwnerId: ID
+}
+
 input FindNotaryInput {
   deceasedPersonDateOfDeath: DateTimeISO!
   postalCode: String!
@@ -105,6 +150,7 @@ type InheritanceProcedure {
   deceasedContactId: ID
   deceasedDateOfBirth: DateTimeISO
   deceasedDateOfDeath: DateTimeISO
+  documents: [Document!]
   endDate: DateTimeISO
   id: ID!
   mainContact: Contact
@@ -112,7 +158,7 @@ type InheritanceProcedure {
   name: String!
   notary: Notary
   notaryId: ID
-  procedureAssets: [Asset!]
+  procedureAssets: [AssetCopy!]
   startDate: DateTimeISO!
   state: String!
 }
@@ -127,25 +173,32 @@ input InheritanceProcedureFormDataInput {
 type Mutation {
   addBeneficiariesToProcedure(beneficiaryIds: [Int!]!, procedureId: Int!): Boolean!
   addBeneficiaryToProcedure(beneficiaryId: Int!, procedureId: Int!): Boolean!
+  addChatMessage(body: String!, procedureId: Int!, userId: Int!): ChatMessage!
   assignNotary(notaryId: Int!, procedureId: Int!): Boolean!
   changePassword(newPassword: String!, oldPassword: String!): User!
   closeProcedure(procedureId: Int!): Boolean!
   confirmEmailVerification(token: String!): Boolean!
+  createAsset(data: CreateAssetInput!): AssetCopy!
   createBeneficiaries(data: [CreateBeneficiaryInput!]!): [Beneficiary!]!
   createBeneficiary(data: CreateBeneficiaryInput!): Beneficiary!
   createContact(data: CreateContactInput!): Int!
+  createDocument(data: UploadDocumentInput!): ID!
   createInheritanceProcedureFromForm(data: InheritanceProcedureFormDataInput!): InheritanceProcedure!
   createNotary(data: CreateNotaryInput!): Notary!
   createProcedure(data: CreateInheritanceProcedureInput!): Int!
+  deleteAsset(id: Int!): Boolean!
   deleteBeneficiary(id: Int!): Boolean!
   deleteContactById(id: Int!): Int!
+  deleteDocumentsByIds(ids: [ID!]!): Boolean!
   deleteNotary(id: Int!): Notary!
   deleteProceduresByIds(ids: [Int!]!): [Int!]!
+  notifyProcedureBenficiaries(html: String!, procedureId: Int!, subject: String!): Boolean!
   removeBeneficiaryFromProcedure(beneficiaryId: Int!, procedureId: Int!): Boolean!
   requestPasswordReset(email: String!): Boolean!
   resetPassword(newPassword: String!, token: String!): Boolean!
   signIn(login: String!, password: String!): SignInResponse!
   signUp(registerInput: RegisterInput!): User!
+  updateAsset(data: UpdateAssetInput!, id: Int!): AssetCopy
   updateBeneficiary(data: UpdateBeneficiaryInput!, id: Int!): Beneficiary!
 }
 
@@ -160,13 +213,19 @@ type Notary {
 
 type Query {
   _empty: String!
+  chat(id: Int!): Chat!
+  chatByInheritanceProcedureId(inheritanceProcedureId: Int!): Chat!
   findNotary(input: FindNotaryInput!): Notary
   getAllContacts: [Contact!]!
   getAllProcedures: [InheritanceProcedure!]!
+  getAssetById(id: Int!): AssetCopy
   getBeneficiariesByIds(ids: [Int!]!): [Beneficiary!]!
   getBeneficiariesByProcedureId(procedureId: Int!): [Beneficiary!]!
   getBeneficiaryById(id: Int!): Beneficiary
   getContactById(id: Float!): Contact
+  getDocumentById(id: ID!): Document
+  getDocumentsByIds(ids: [ID!]!): [Document!]!
+  getDocumentsByProcedureId(notaryId: Int!): [Document!]!
   getNotaryById(id: Int!): Notary
   getProcedureById(id: Int!): InheritanceProcedure
   getProceduresByBeneficiaryId(beneficiaryId: Int!): [InheritanceProcedure!]!
@@ -187,11 +246,38 @@ type SignInResponse {
   user: User!
 }
 
+type Subscription {
+  newChatMessage(procedureId: Int!): ChatMessage!
+}
+
+input UpdateAssetInput {
+  bankName: String
+  carMakeName: String
+  carRegistrationDate: DateTimeISO
+  carType: String
+  cin: String
+  description: String
+  inheritanceProcedureId: ID!
+  name: String!
+  type: String!
+  value: Float!
+}
+
 input UpdateBeneficiaryInput {
   contactId: ID
   dateOfBirth: DateTimeISO
   deceasedRelation: String
   userId: ID
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+input UploadDocumentInput {
+  file: Upload!
+  inheritanceProcedureId: ID!
+  taskId: ID
+  userOwnerId: ID
 }
 
 type User {

@@ -3,11 +3,11 @@ import nodemailer from 'nodemailer'
 export const sendEmail = async ({
   to,
   subject,
-  text,
+  html,
 }: {
   to: string
   subject: string
-  text: string
+  html: string
 }) => {
   const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST,
@@ -23,6 +23,6 @@ export const sendEmail = async ({
     from: process.env.EMAIL_USERNAME,
     to,
     subject,
-    text,
+    html,
   })
 }
