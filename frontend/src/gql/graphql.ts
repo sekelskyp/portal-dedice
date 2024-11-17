@@ -833,7 +833,25 @@ export type GetProcedureByIdQuery = {
       userId?: string | null
       contactId?: string | null
       deceasedRelation?: string | null
-      user?: { __typename?: 'User'; id: string; email: string } | null
+      user?: {
+        __typename?: 'User'
+        id: string
+        email: string
+        contact?: {
+          __typename?: 'Contact'
+          id: string
+          name: string
+          surname: string
+          displayName: string
+          email?: string | null
+          phone?: string | null
+          addressStreet?: string | null
+          addressStreetNumber?: string | null
+          addressMunicipality?: string | null
+          addressPostCode?: string | null
+          gender?: string | null
+        } | null
+      } | null
       contact?: {
         __typename?: 'Contact'
         id: string
@@ -2102,6 +2120,74 @@ export const GetProcedureByIdDocument = {
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'email' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'contact' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'id' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'name' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'surname' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: {
+                                      kind: 'Name',
+                                      value: 'displayName',
+                                    },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'email' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'phone' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: {
+                                      kind: 'Name',
+                                      value: 'addressStreet',
+                                    },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: {
+                                      kind: 'Name',
+                                      value: 'addressStreetNumber',
+                                    },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: {
+                                      kind: 'Name',
+                                      value: 'addressMunicipality',
+                                    },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: {
+                                      kind: 'Name',
+                                      value: 'addressPostCode',
+                                    },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'gender' },
+                                  },
+                                ],
+                              },
                             },
                           ],
                         },

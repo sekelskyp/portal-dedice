@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react'
+import { Flex, useBreakpoint } from '@chakra-ui/react'
 import { rankItem } from '@tanstack/match-sorter-utils'
 import {
-  ColumnDef,
+  createColumnHelper,
   FilterFn,
   getCoreRowModel,
   getFilteredRowModel,
@@ -10,7 +11,7 @@ import {
   PaginationState,
   useReactTable,
 } from '@tanstack/react-table'
-import { CgDetailsMore } from 'react-icons/cg'
+import { SquareArrowOutUpRight as SquareArrowOutUpRightIcon } from 'lucide-react'
 
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { route } from '@shared/route'
@@ -36,7 +37,12 @@ const fuzzyFilter: FilterFn<ProceedingsItem> = (
   return itemRank.passed
 }
 
+const columnHelper = createColumnHelper<ProceedingsItem>()
+
 export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
+  const breakpoint = useBreakpoint({ breakpoints: ['base', 'sm', 'xl'] })
+  const isMobile = breakpoint === 'base'
+  // const isDesktop = breakpoint === 'xl'
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -44,10 +50,52 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
 
   const [globalFilter, setGlobalFilter] = useState<string>('')
 
-  const columns = useMemo<ColumnDef<ProceedingsItem>[]>(
-    () => [
-      {
-        accessorKey: 'detail',
+  const columns = useMemo(() => {
+    const columns = [
+      columnHelper.accessor('deceasedContact.displayName', {
+        header: () => 'Zůstavitel',
+        cell: (info) => {
+          const name = info.getValue() as string
+          return name
+        },
+      }),
+    ]
+
+    if (!isMobile) {
+      columns.push(
+        columnHelper.accessor('name', {
+          header: () => 'ID',
+          cell: (info) => info.getValue(),
+        })
+      )
+      columns.push(
+        columnHelper.accessor('startDate', {
+          header: () => 'Datum zahájení',
+          cell: (info) => {
+            const date = info.getValue() as string
+            const formattedDate = date ? date.split('T')[0] : ''
+            return formattedDate
+          },
+        })
+      )
+    }
+
+    columns.push(
+      columnHelper.accessor('state', {
+        header: () => '',
+        cell: (info) => {
+          const state = info.getValue() as string
+          return (
+            <Flex justifyContent="end">
+              <StatusBadge state={state} />
+            </Flex>
+          )
+        },
+      })
+    )
+
+    columns.push(
+      columnHelper.accessor('id', {
         header: () => '',
         size: 0,
         cell: (info) => {
@@ -56,48 +104,19 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
             <RouterNavLink
               key={id}
               to={route.inheritanceProcedure(id.toString())}
-              size="sm"
+              size="xs"
+              variant="subtle"
             >
-              <CgDetailsMore />
+              <SquareArrowOutUpRightIcon />
             </RouterNavLink>
           )
         },
         enableSorting: false,
-      },
-      {
-        accessorKey: 'name',
-        header: () => 'ID',
-        filterFn: 'includesString',
-        cell: (info) => info.getValue(),
-      },
-      {
-        accessorKey: 'deceasedContact.displayName',
-        header: () => 'Zůstavitel',
-        cell: (info) => {
-          const name = info.getValue() as string
-          return name
-        },
-      },
-      {
-        accessorKey: 'startDate',
-        header: () => 'Datum založení',
-        cell: (info) => {
-          const date = info.getValue() as string
-          const formattedDate = date ? date.split('T')[0] : ''
-          return formattedDate
-        },
-      },
-      {
-        accessorKey: 'state',
-        header: () => 'Status',
-        cell: (info) => {
-          const state = info.getValue() as string
-          return <StatusBadge state={state} />
-        },
-      },
-    ],
-    []
-  )
+      })
+    )
+
+    return columns
+  }, [isMobile])
 
   const table = useReactTable({
     columns,

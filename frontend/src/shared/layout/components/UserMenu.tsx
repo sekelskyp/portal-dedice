@@ -1,5 +1,10 @@
 import { HStack, Icon, Stack, Text, useBreakpoint } from '@chakra-ui/react'
-import { LuArchive, LuChevronDown, LuLogOut, LuUser2 } from 'react-icons/lu'
+import {
+  ArchiveIcon,
+  ChevronDown as ChevronDownIcon,
+  LogOutIcon,
+  User2Icon,
+} from 'lucide-react'
 
 import { useAuth } from '@frontend/modules/auth'
 import {
@@ -47,21 +52,27 @@ export const UserMenu = () => {
             </Stack>
           )}
           <Icon size="sm" color="fg.subtle">
-            <LuChevronDown />
+            <ChevronDownIcon />
           </Icon>
         </Button>
       </MenuTrigger>
       <MenuContent>
         <RouterMenuItem value="portal" to={route.portal()}>
-          <LuArchive />
+          <Icon>
+            <ArchiveIcon />
+          </Icon>
           Moje řízení
         </RouterMenuItem>
         <RouterMenuItem value="profile" to={route.profile()}>
-          <LuUser2 />
+          <Icon>
+            <User2Icon />
+          </Icon>
           Můj profil
         </RouterMenuItem>
         <MenuItem value="signOut" onClick={signOut}>
-          <LuLogOut />
+          <Icon>
+            <LogOutIcon />
+          </Icon>
           Odhlásit se
         </MenuItem>
       </MenuContent>

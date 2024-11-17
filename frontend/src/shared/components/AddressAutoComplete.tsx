@@ -56,7 +56,7 @@ export const AddressAutoComplete = forwardRef(
       <Box asChild w="full" ref={ref}>
         <Combobox.Root
           collection={collection}
-          inputValue={value}
+          inputValue={value ?? ''}
           onInputValueChange={(e) => {
             if (e.inputValue === value) return
 
