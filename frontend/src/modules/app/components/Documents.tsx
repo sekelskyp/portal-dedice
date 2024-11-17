@@ -83,7 +83,7 @@ export function Documents({ id }: { id: string }) {
           )}
         </Stack>
         <Stack direction="column" justifyContent="center">
-          <Stack gapY={4} mx={6}>
+          <Stack gapY={4} mx={0}>
             {documents.length > 0 ? (
               documents.map((document) => (
                 <Stack
