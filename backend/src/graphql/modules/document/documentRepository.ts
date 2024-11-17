@@ -1,4 +1,4 @@
-import { eq, inArray } from 'drizzle-orm'
+import { count, eq, inArray } from 'drizzle-orm'
 
 import { document } from '@backend/db/schema'
 import { Db } from '@backend/types/types'
@@ -37,6 +37,15 @@ export function getDocumentRepository(db: Db) {
       .from(document)
       .where(eq(document.inheritanceProcedureId, procedureId))
     return results
+  }
+
+  async function getDocumentCountByProcedureId(procedureId: number) {
+    const result = await db
+      .select({ count: count() }) // Use raw SQL to count rows
+      .from(document)
+      .where(eq(document.inheritanceProcedureId, procedureId))
+
+    return result[0].count // Extract the count from the result
   }
 
   async function updateDocumentById(id: number, data: Partial<DocumentData>) {
@@ -80,5 +89,6 @@ export function getDocumentRepository(db: Db) {
     deleteDocumentsByProcedureId,
     deleteDocumentsByIds,
     getDocumentsByIds,
+    getDocumentCountByProcedureId,
   }
 }

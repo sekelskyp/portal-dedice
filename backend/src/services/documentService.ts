@@ -11,6 +11,7 @@ export interface CreateDocumentInput {
 }
 
 const MAX_FILE_SIZE = 25 * 1024 * 1024 // 25MB in bytes
+const MAX_DOCUMENTS_PER_PROCEDURE = 10
 
 async function encodeFileToBase64(file: FileUpload): Promise<string> {
   const { createReadStream }: FileUpload = await file
@@ -51,6 +52,14 @@ export async function createDocument(
   context: CustomContext
 ): Promise<number> {
   const { documentRepository } = context
+  const documentCount = await documentRepository.getDocumentCountByProcedureId(
+    input.inheritanceProcedureId
+  )
+  if (documentCount >= MAX_DOCUMENTS_PER_PROCEDURE) {
+    throw new Error(
+      `Překročen limit dokumentů pro toto řízení. Maximální povolený počet je ${MAX_DOCUMENTS_PER_PROCEDURE}.`
+    )
+  }
   const file = await input.file
   const fileData = await encodeFileToBase64(file)
   const documentData: DocumentData = {
@@ -61,6 +70,7 @@ export async function createDocument(
     taskId: input.taskId || null,
     inheritanceProcedureId: input.inheritanceProcedureId,
   }
+
   const [document] = await documentRepository.createDocument(documentData)
   if (!document) {
     throw new Error('Failed to create document')
