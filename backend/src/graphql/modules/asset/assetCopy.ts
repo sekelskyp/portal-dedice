@@ -1,4 +1,6 @@
-import { Field, ID, ObjectType } from 'type-graphql'
+import { Field, Float, ID, ObjectType } from 'type-graphql'
+
+import { AssetTypeEnumType } from '@backend/db/schema'
 
 /**
  * AssetCopy type is a copy of Asset
@@ -19,18 +21,30 @@ export class AssetCopy {
   @Field(() => ID)
   inheritanceProcedureId!: number
 
-  @Field()
+  @Field(() => Float)
   value!: number
 
-  @Field()
+  @Field(() => String)
   name!: string
 
   @Field(() => String, { nullable: true })
   description?: string | null
 
-  @Field(() => String, { nullable: true })
-  bankName!: string | null
+  @Field(() => String)
+  type!: AssetTypeEnumType
 
   @Field(() => String, { nullable: true })
-  carMakeName!: string | null
+  bankName?: string | null
+
+  @Field(() => String, { nullable: true })
+  carMakeName?: string | null
+
+  @Field(() => Date, { nullable: true })
+  carRegistrationDate?: Date | null
+
+  @Field(() => String, { nullable: true })
+  carType?: string | null
+
+  @Field(() => String, { nullable: true })
+  cin?: string | null
 }

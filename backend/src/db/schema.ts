@@ -34,6 +34,15 @@ export type InheritanceProcedureStateEnumType =
 const deceasedRelationEnum = ['Spouse', 'Child', 'Parent', 'Other'] as const
 export type DeceasedRelationEnumType = (typeof deceasedRelationEnum)[number]
 
+const assetTypeEnum = [
+  'Financial instrument',
+  'Company',
+  'Automobile',
+  'Valuables',
+  'Other',
+] as const
+export type AssetTypeEnumType = (typeof assetTypeEnum)[number]
+
 // Define User Table
 export const user = mysqlTable(
   'user',
@@ -127,8 +136,15 @@ export const asset = mysqlTable('asset', {
   value: float('value').notNull(),
   name: varchar('name', { length: 100 }).notNull(),
   description: text('description'),
-  bankName: varchar('bankName', { length: 100 }),
-  carMakeName: varchar('carMakeName', { length: 100 }),
+  type: varchar('type', {
+    length: 20,
+    enum: assetTypeEnum,
+  }).notNull(),
+  bankName: varchar('bank_name', { length: 100 }),
+  carMakeName: varchar('car_make_name', { length: 100 }),
+  carRegistrationDate: date('car_registration_date'),
+  carType: varchar('car_type', { length: 20 }),
+  cin: varchar('cin', { length: 8 }),
 })
 
 // Define Document Table

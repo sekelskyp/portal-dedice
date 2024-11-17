@@ -6,10 +6,14 @@
 type AssetCopy {
   bankName: String
   carMakeName: String
+  carRegistrationDate: DateTimeISO
+  carType: String
+  cin: String
   description: String
   id: ID!
   inheritanceProcedureId: ID!
   name: String!
+  type: String!
   value: Float!
 }
 
@@ -66,9 +70,13 @@ input ContactPersonInput {
 input CreateAssetInput {
   bankName: String
   carMakeName: String
+  carRegistrationDate: DateTimeISO
+  carType: String
+  cin: String
   description: String
   inheritanceProcedureId: ID!
   name: String!
+  type: String!
   value: Float!
 }
 
@@ -245,10 +253,14 @@ type Subscription {
 input UpdateAssetInput {
   bankName: String
   carMakeName: String
+  carRegistrationDate: DateTimeISO
+  carType: String
+  cin: String
   description: String
-  inheritanceProcedureId: ID
-  name: String
-  value: Float
+  inheritanceProcedureId: ID!
+  name: String!
+  type: String!
+  value: Float!
 }
 
 input UpdateBeneficiaryInput {
