@@ -177,6 +177,33 @@ const InheritanceProcedureDetail: React.FC = () => {
                   >
                     Tuto hodnotu zatím neznáme.
                   </Text>
+                  <Stack
+                    direction={{ base: 'column', lg: 'row' }}
+                    justifyContent="center"
+                  >
+                    {!user.user?.isNotary ? (
+                      <>
+                        <Button as={Link} disabled rounded="full">
+                          Modelace vyrovnaní
+                          <FaCalculator />
+                        </Button>
+                        <RouterNavLink
+                          to={route.chatId(id, procedure.name)}
+                          rounded="full"
+                        >
+                          Chat s notářem
+                          <HiChat />
+                        </RouterNavLink>
+                      </>
+                    ) : (
+                      <>
+                        <RouterNavLink to={route.newEmail(id)} rounded={'full'}>
+                          Hromadná zpráva všem dědicům
+                          <FiSend />
+                        </RouterNavLink>
+                      </>
+                    )}
+                  </Stack>
                 </Tabs.Content>
                 <Tabs.Content value="documents">
                   <Documents id={id ?? ''} />
@@ -186,32 +213,6 @@ const InheritanceProcedureDetail: React.FC = () => {
                 </Tabs.Content>
               </Tabs.Root>
             </Card.Body>
-            <Card.Footer justifyContent="center">
-              <Stack direction={{ base: 'column', lg: 'row' }}>
-                {!user.user?.isNotary ? (
-                  <>
-                    <Button as={Link} disabled rounded="full">
-                      Modelace vyrovnaní
-                      <FaCalculator />
-                    </Button>
-                    <RouterNavLink
-                      to={route.chatId(id, procedure.name)}
-                      rounded="full"
-                    >
-                      Chat s notářem
-                      <HiChat />
-                    </RouterNavLink>
-                  </>
-                ) : (
-                  <>
-                    <RouterNavLink to={route.newEmail(id)} rounded={'full'}>
-                      Hromadná zpráva všem dědicům
-                      <FiSend />
-                    </RouterNavLink>
-                  </>
-                )}
-              </Stack>
-            </Card.Footer>
           </Card.Root>
         ) : (
           <Text>No procedure found</Text>

@@ -219,6 +219,7 @@ type Query {
   getAllContacts: [Contact!]!
   getAllProcedures: [InheritanceProcedure!]!
   getAssetById(id: Int!): AssetCopy
+  getAssetsByProcedureId(procedureId: Int!): [AssetCopy!]!
   getBeneficiariesByIds(ids: [Int!]!): [Beneficiary!]!
   getBeneficiariesByProcedureId(procedureId: Int!): [Beneficiary!]!
   getBeneficiaryById(id: Int!): Beneficiary

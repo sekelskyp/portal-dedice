@@ -136,17 +136,19 @@ export function Documents({ id }: { id: string }) {
               />
             )}
           </Stack>
-          <Stack alignItems="center" pt={4}>
-            <RouterNavLink
-              to={route.newDocument(id)}
-              rounded="full"
-              width="fit-content"
-              textAlign="center"
-            >
-              Přiložit přílohu
-              <FaCloudUploadAlt />
-            </RouterNavLink>
-          </Stack>
+          {!user?.isNotary && (
+            <Stack alignItems="center" pt={4}>
+              <RouterNavLink
+                to={route.newDocument(id)}
+                rounded="full"
+                width="fit-content"
+                textAlign="center"
+              >
+                Přiložit přílohu
+                <FaCloudUploadAlt />
+              </RouterNavLink>
+            </Stack>
+          )}
         </Stack>
       </Stack>
     )
