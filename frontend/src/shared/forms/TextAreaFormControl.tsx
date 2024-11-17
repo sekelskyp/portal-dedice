@@ -18,7 +18,6 @@ export const TextAreaFormControl = ({
     <BaseFieldControl {...props}>
       {(field, disabled) => (
         <Textarea
-          {...props}
           {...field}
           value={field.value || ''}
           disabled={disabled}
