@@ -1,5 +1,5 @@
 import { Badge, BadgeProps, useBreakpointValue } from '@chakra-ui/react'
-import { FaCheck, FaTimesCircle } from 'react-icons/fa'
+import { Check as CheckIcon, History as HistoryIcon } from 'lucide-react'
 
 const statusMapping = {
   InProgress: 'Probíhající',
@@ -14,7 +14,7 @@ export function StatusBadge({
   const stateMapped = statusMapping[stateValue]
 
   const component = useBreakpointValue({
-    base: stateMapped === 'Probíhající' ? <FaCheck /> : <FaTimesCircle />,
+    base: stateMapped === 'Probíhající' ? <CheckIcon /> : <HistoryIcon />,
     md: stateMapped,
   })
 
