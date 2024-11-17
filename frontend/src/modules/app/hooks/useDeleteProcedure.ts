@@ -22,7 +22,7 @@ export function useDeleteProcedure() {
       },
       onError: (error) => {
         toaster.create({
-          title: error.message,
+          title: 'Při mazání řízení došlo k chybě.',
           type: 'error',
           duration: 5000,
         })
