@@ -713,6 +713,15 @@ export type DeleteDocumentMutation = {
   deleteDocumentsByIds: boolean
 }
 
+export type DeleteProcedureMutationVariables = Exact<{
+  ids: Array<Scalars['Int']['input']> | Scalars['Int']['input']
+}>
+
+export type DeleteProcedureMutation = {
+  __typename?: 'Mutation'
+  deleteProceduresByIds: Array<number>
+}
+
 export type GetAssetByIdQueryVariables = Exact<{
   id: Scalars['Int']['input']
 }>
@@ -1666,6 +1675,57 @@ export const DeleteDocumentDocument = {
 } as unknown as DocumentNode<
   DeleteDocumentMutation,
   DeleteDocumentMutationVariables
+>
+export const DeleteProcedureDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'DeleteProcedure' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'ids' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'ListType',
+              type: {
+                kind: 'NonNullType',
+                type: {
+                  kind: 'NamedType',
+                  name: { kind: 'Name', value: 'Int' },
+                },
+              },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'deleteProceduresByIds' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'ids' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'ids' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  DeleteProcedureMutation,
+  DeleteProcedureMutationVariables
 >
 export const GetAssetByIdDocument = {
   kind: 'Document',

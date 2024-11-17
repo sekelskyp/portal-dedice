@@ -76,7 +76,9 @@ export default function ChatPage() {
               mt={4}
               mb={20}
             >
-              {messages.length === 0 && <Text>No messages yet</Text>}
+              {messages.length === 0 && (
+                <Text>Tento chat zatím nemá žádné zprávy.</Text>
+              )}
               <VStack gap={4} align={'stretch'}>
                 {messages.map((message) => (
                   <Message

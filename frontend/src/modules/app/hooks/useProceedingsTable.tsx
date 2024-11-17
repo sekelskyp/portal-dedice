@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react'
-import { Flex, useBreakpoint } from '@chakra-ui/react'
+import { useCallback, useMemo, useState } from 'react'
+import { Flex, IconButton, Stack, useBreakpoint } from '@chakra-ui/react'
 import { rankItem } from '@tanstack/match-sorter-utils'
 import {
   createColumnHelper,
@@ -12,12 +12,16 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { SquareArrowOutUpRight as SquareArrowOutUpRightIcon } from 'lucide-react'
+import { MdDelete } from 'react-icons/md'
 
+import { useAuth } from '@frontend/modules/auth'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { route } from '@shared/route'
 
 import { ProceedingsItem } from '../components/proceedings-table/ProceedingsTable'
 import { StatusBadge } from '../components/StatusBadge'
+
+import { useDeleteProcedure } from './useDeleteProcedure'
 
 const INITIAL_SORTING_STATE = [
   {
@@ -40,6 +44,21 @@ const fuzzyFilter: FilterFn<ProceedingsItem> = (
 const columnHelper = createColumnHelper<ProceedingsItem>()
 
 export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
+  const { user } = useAuth()
+
+  const [deleteProcedureRequest] = useDeleteProcedure()
+
+  const handleProcedureDelete = useCallback(
+    (id: string) => {
+      deleteProcedureRequest({
+        variables: {
+          ids: [parseInt(id)],
+        },
+      })
+    },
+    [deleteProcedureRequest]
+  )
+
   const breakpoint = useBreakpoint({ breakpoints: ['base', 'sm', 'xl'] })
   const isMobile = breakpoint === 'base'
   // const isDesktop = breakpoint === 'xl'
@@ -82,11 +101,11 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
 
     columns.push(
       columnHelper.accessor('state', {
-        header: () => '',
+        header: () => 'Status',
         cell: (info) => {
           const state = info.getValue() as string
           return (
-            <Flex justifyContent="end">
+            <Flex justifyContent="start">
               <StatusBadge state={state} />
             </Flex>
           )
@@ -101,14 +120,25 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
         cell: (info) => {
           const id = info.row.original.id
           return (
-            <RouterNavLink
-              key={id}
-              to={route.inheritanceProcedure(id.toString())}
-              size="xs"
-              variant="subtle"
-            >
-              <SquareArrowOutUpRightIcon />
-            </RouterNavLink>
+            <Stack direction="row" alignItems="center">
+              <RouterNavLink
+                key={id}
+                to={route.inheritanceProcedure(id.toString())}
+                size="xs"
+                variant="subtle"
+              >
+                <SquareArrowOutUpRightIcon />
+              </RouterNavLink>
+              {user?.isNotary && (
+                <IconButton
+                  borderRadius="xl"
+                  bg="red.600"
+                  onClick={() => handleProcedureDelete(id)}
+                >
+                  <MdDelete />
+                </IconButton>
+              )}
+            </Stack>
           )
         },
         enableSorting: false,
@@ -116,7 +146,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
     )
 
     return columns
-  }, [isMobile])
+  }, [isMobile, handleProcedureDelete, user?.isNotary])
 
   const table = useReactTable({
     columns,
