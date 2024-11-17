@@ -18,11 +18,20 @@ export const NewAssetPage = () => {
   return (
     <Page>
       {isMobile ? (
-        <VStack borderWidth={1} gap={6} borderRadius={4} py={4} justifyContent={'center'}>
-            <Container>
-              <Heading size={'4xl'}>Určení Majetku</Heading>
-              <Text>Formulář pro určení majetku zůstavitele. V případě, že zůstavitel nevlastní některé z typu majetku, zaškrtněte "Ne".</Text>
-            </Container>
+        <VStack
+          borderWidth={1}
+          gap={6}
+          borderRadius={4}
+          py={4}
+          justifyContent={'center'}
+        >
+          <Container>
+            <Heading size={'4xl'}>Určení Majetku</Heading>
+            <Text>
+              Formulář pro určení majetku zůstavitele. V případě, že zůstavitel
+              nevlastní některé z typu majetku, zaškrtněte "Ne".
+            </Text>
+          </Container>
           <Container maxW="container.lg">
             <AssetForm onSubmit={handleFormSubmit} />
             {summary && (
@@ -37,10 +46,13 @@ export const NewAssetPage = () => {
         </VStack>
       ) : (
         <HStack flex={1} borderWidth={1} gap={6} borderRadius={4} py={4}>
-            <Container maxW={'30%'}>
-              <Heading size={'4xl'}>Určení Majetku</Heading>
-              <Text fontSize={{ base: 'lg', md: 'sm' }}>Formulář pro určení majetku zůstavitele. V případě, že zůstavitel nevlastní některé z typu majetku, zaškrtněte "Ne".</Text>
-            </Container>
+          <Container maxW={'30%'}>
+            <Heading size={'4xl'}>Určení Majetku</Heading>
+            <Text fontSize={{ base: 'lg', md: 'sm' }}>
+              Formulář pro určení majetku zůstavitele. V případě, že zůstavitel
+              nevlastní některé z typu majetku, zaškrtněte "Ne".
+            </Text>
+          </Container>
           <Container maxW="container.lg" flex={2}>
             <AssetForm onSubmit={handleFormSubmit} />
             {summary && (

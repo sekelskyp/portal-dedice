@@ -8,6 +8,8 @@ export interface AssetData {
   value: number
   name: string
   description?: string | null
+  bankName?: string | null
+  carMakeName?: string | null
 }
 
 export function getAssetRepository(db: Db) {

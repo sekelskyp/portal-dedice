@@ -1,5 +1,5 @@
 import { Heading, Stack } from '@chakra-ui/react'
-import { FaCalculator} from 'react-icons/fa'
+import { FaCalculator } from 'react-icons/fa'
 
 import { useAuth } from '@frontend/modules/auth'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
@@ -17,9 +17,13 @@ export function Assets({ id }: { id: string }) {
           justifyContent="center"
         >
           {' '}
-          <RouterNavLink to={route.newAsset(id)} width="fit-content" rounded={'full'}>
-                      Přidat/upravit Majetek
-                      <FaCalculator />
+          <RouterNavLink
+            to={route.newAsset(id)}
+            width="fit-content"
+            rounded={'full'}
+          >
+            Přidat/upravit Majetek
+            <FaCalculator />
           </RouterNavLink>
         </Stack>
       )}

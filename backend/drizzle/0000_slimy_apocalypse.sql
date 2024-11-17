@@ -4,6 +4,8 @@ CREATE TABLE `asset` (
 	`value` float NOT NULL,
 	`name` varchar(100) NOT NULL,
 	`description` text,
+	`bankName` varchar(100),
+	`carMakeName` varchar(100),
 	CONSTRAINT `asset_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
@@ -46,7 +48,7 @@ CREATE TABLE `chat_message` (
 	`chat_id` int NOT NULL,
 	`user_id` int NOT NULL,
 	`body` text NOT NULL,
-	`created_at` datetime NOT NULL DEFAULT '2024-11-17 15:39:54.013',
+	`created_at` datetime NOT NULL DEFAULT '2024-11-17 15:57:18.054',
 	CONSTRAINT `chat_message_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
