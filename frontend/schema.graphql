@@ -1,8 +1,14 @@
-type Asset {
+type AssetCopy {
+  bankName: String
+  carMakeName: String
+  carRegistrationDate: DateTimeISO
+  carType: String
+  cin: String
   description: String
   id: ID!
   inheritanceProcedureId: ID!
   name: String!
+  type: String!
   value: Float!
 }
 
@@ -54,6 +60,19 @@ input ContactPersonInput {
   email: String!
   name: String!
   surname: String!
+}
+
+input CreateAssetInput {
+  bankName: String
+  carMakeName: String
+  carRegistrationDate: DateTimeISO
+  carType: String
+  cin: String
+  description: String
+  inheritanceProcedureId: ID!
+  name: String!
+  type: String!
+  value: Float!
 }
 
 input CreateBeneficiaryInput {
@@ -134,7 +153,7 @@ type InheritanceProcedure {
   name: String!
   notary: Notary
   notaryId: ID
-  procedureAssets: [Asset!]
+  procedureAssets: [AssetCopy!]
   startDate: DateTimeISO!
   state: String!
 }
@@ -157,6 +176,7 @@ type Mutation {
   changePassword(newPassword: String!, oldPassword: String!): User!
   closeProcedure(procedureId: Int!): Boolean!
   confirmEmailVerification(token: String!): Boolean!
+  createAsset(data: CreateAssetInput!): AssetCopy!
   createBeneficiaries(data: [CreateBeneficiaryInput!]!): [Beneficiary!]!
   createBeneficiary(data: CreateBeneficiaryInput!): Beneficiary!
   createContact(data: CreateContactInput!): Int!
@@ -166,6 +186,7 @@ type Mutation {
   ): InheritanceProcedure!
   createNotary(data: CreateNotaryInput!): Notary!
   createProcedure(data: CreateInheritanceProcedureInput!): Int!
+  deleteAsset(id: Int!): Boolean!
   deleteBeneficiary(id: Int!): Boolean!
   deleteContactById(id: Int!): Int!
   deleteDocumentsByIds(ids: [ID!]!): Boolean!
@@ -184,6 +205,7 @@ type Mutation {
   resetPassword(newPassword: String!, token: String!): Boolean!
   signIn(login: String!, password: String!): SignInResponse!
   signUp(registerInput: RegisterInput!): User!
+  updateAsset(data: UpdateAssetInput!, id: Int!): AssetCopy
   updateBeneficiary(data: UpdateBeneficiaryInput!, id: Int!): Beneficiary!
 }
 
@@ -203,6 +225,8 @@ type Query {
   findNotary(input: FindNotaryInput!): Notary
   getAllContacts: [Contact!]!
   getAllProcedures: [InheritanceProcedure!]!
+  getAssetById(id: Int!): AssetCopy
+  getAssetsByProcedureId(procedureId: Int!): [AssetCopy!]!
   getBeneficiariesByIds(ids: [Int!]!): [Beneficiary!]!
   getBeneficiariesByProcedureId(procedureId: Int!): [Beneficiary!]!
   getBeneficiaryById(id: Int!): Beneficiary
@@ -232,6 +256,19 @@ type SignInResponse {
 
 type Subscription {
   newChatMessage(procedureId: Int!): ChatMessage!
+}
+
+input UpdateAssetInput {
+  bankName: String
+  carMakeName: String
+  carRegistrationDate: DateTimeISO
+  carType: String
+  cin: String
+  description: String
+  inheritanceProcedureId: ID!
+  name: String!
+  type: String!
+  value: Float!
 }
 
 input UpdateBeneficiaryInput {
