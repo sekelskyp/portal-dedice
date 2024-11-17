@@ -28,6 +28,9 @@ export class Beneficiary {
   @Field(() => User, { nullable: true })
   user?: User
 
+  @Field()
+  sendNotifications!: boolean
+
   @Field(() => [InheritanceProcedure])
   inheritanceProcedures?: InheritanceProcedure[]
 }

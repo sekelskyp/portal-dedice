@@ -1,0 +1,2 @@
+ALTER TABLE `chat_message` MODIFY COLUMN `created_at` datetime NOT NULL DEFAULT '2024-11-17 14:41:58.927';--> statement-breakpoint
+ALTER TABLE `beneficiary` ADD `send_notifications` boolean DEFAULT true NOT NULL;

@@ -17,6 +17,7 @@ import {
   uniqueIndex,
   varchar,
 } from 'drizzle-orm/mysql-core'
+import { send } from 'process'
 
 const taskTypeEnum = ['Upload Document', 'Set Up Meeting', 'Custom'] as const
 export type TaskTypeEnumType = (typeof taskTypeEnum)[number]
@@ -83,6 +84,7 @@ export const beneficiary = mysqlTable('beneficiary', {
   }),
   contactId: int('contact_id').references(() => contact.id),
   dateOfBirth: date('date_of_birth'),
+  sendNotifications: boolean('send_notifications').default(true).notNull(),
 })
 
 // Define InheritanceProcedure Table

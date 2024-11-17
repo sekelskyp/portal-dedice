@@ -18,6 +18,7 @@ type Beneficiary {
   deceasedRelation: String
   id: ID!
   inheritanceProcedures: [InheritanceProcedure!]!
+  sendNotifications: Boolean!
   user: User
   userId: ID
 }
@@ -156,6 +157,7 @@ type Mutation {
   deleteContactById(id: Int!): Int!
   deleteNotary(id: Int!): Notary!
   deleteProceduresByIds(ids: [Int!]!): [Int!]!
+  notifyProcedureBenficiaries(html: String!, procedureId: Int!, subject: String!): Boolean!
   removeBeneficiaryFromProcedure(beneficiaryId: Int!, procedureId: Int!): Boolean!
   requestPasswordReset(email: String!): Boolean!
   resetPassword(newPassword: String!, token: String!): Boolean!
