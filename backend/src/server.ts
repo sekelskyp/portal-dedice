@@ -9,11 +9,14 @@ import {
 } from '@apollo/server/express4'
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
 import { addMocksToSchema } from '@graphql-tools/mock'
+import { createPubSub } from '@graphql-yoga/subscription'
 import cors from 'cors'
 import express from 'express'
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js'
+import { useServer } from 'graphql-ws/lib/use/ws'
 import * as http from 'http'
 import { buildSchema } from 'type-graphql'
+import { WebSocketServer } from 'ws'
 
 import { MOCKS, PORT } from '@backend/config'
 import { getConnection } from '@backend/db/db'
@@ -36,11 +39,17 @@ import { mockResolvers } from '@backend/mocks/mocks'
 import { CustomContext } from '@backend/types/types'
 
 import { getAssetRepository } from './graphql/modules/asset/assetRepository'
+import { getChatMessageRepository } from './graphql/modules/chat/chatMessageRepository'
+import { getChatRepository } from './graphql/modules/chat/chatRepository'
+import { ChatResolver } from './graphql/modules/chat/chatResolver'
 
 const init = async () => {
   const app = express()
 
   const httpServer = http.createServer(app)
+
+  // Create PubSub instance
+  const pubSub = createPubSub()
 
   const schema = await buildSchema({
     resolvers: [
@@ -51,9 +60,42 @@ const init = async () => {
       NotaryResolver,
       ContactResolver,
       //AssetResolver,
+      ChatResolver,
     ],
+    pubSub,
     emitSchemaFile: true,
   })
+
+  const wsServer = new WebSocketServer({
+    server: httpServer,
+    path: '/graphql',
+  })
+
+  wsServer.on('connection', (socket) => {
+    console.log('WebSocket connected')
+
+    socket.on('message', (message) => {
+      console.log('Received:', message.toString())
+    })
+
+    socket.on('close', () => {
+      console.log('WebSocket disconnected')
+    })
+
+    socket.on('error', (error) => {
+      console.error('WebSocket error:', error)
+    })
+  })
+
+  // useServer is not react hook so disable eslint for next line
+  // eslint-disable-next-line
+  const wsServerCleanUp = useServer(
+    {
+      schema,
+      context: async () => ({ pubSub }),
+    },
+    wsServer
+  )
 
   const server = new ApolloServer({
     schema: MOCKS
@@ -62,7 +104,18 @@ const init = async () => {
           resolvers: mockResolvers,
         })
       : schema,
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    plugins: [
+      ApolloServerPluginDrainHttpServer({ httpServer }),
+      {
+        async serverWillStart() {
+          return {
+            async drainServer() {
+              await wsServerCleanUp.dispose()
+            },
+          }
+        },
+      },
+    ],
   })
 
   await server.start()
@@ -95,6 +148,9 @@ const init = async () => {
         drizzle.db
       ),
       assetRepository: getAssetRepository(drizzle.db),
+      chatRepository: getChatRepository(drizzle.db),
+      chatMessageRepository: getChatMessageRepository(drizzle.db),
+      pubSub, // Add PubSub to the HTTP context
     }
   }
 

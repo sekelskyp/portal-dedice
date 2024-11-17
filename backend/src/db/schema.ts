@@ -160,6 +160,7 @@ export const chatMessage = mysqlTable('chat_message', {
     .references(() => user.id)
     .notNull(), // FK to User
   body: text('body').notNull(),
+  createdAt: datetime('created_at').notNull().default(new Date()),
 })
 
 // Define Task Table

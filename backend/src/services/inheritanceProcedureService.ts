@@ -90,6 +90,10 @@ export async function createProcedure(
     ...data,
     name: procedureName,
   })
+  await context.chatRepository.createChat({
+    inheritanceProcedureId: procedureId.id,
+  })
+
   return procedureId.id
 }
 
