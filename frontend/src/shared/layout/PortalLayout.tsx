@@ -17,10 +17,10 @@ export const PortalLayout = () => {
         <Grid
           templateColumns={{
             base: '1fr',
-            md: 'repeat(5, 1fr)',
-            xl: 'repeat(6, 1fr)',
+            md: 'auto repeat(4, 1fr)',
+            xl: 'auto repeat(5, 1fr)',
           }}
-          gap={{ base: 4, sm: 6, md: 8 }}
+          gap={{ base: 4, md: 6 }}
         >
           <GridItem colSpan={1}>
             <SideBar />

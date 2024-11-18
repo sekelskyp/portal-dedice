@@ -1,12 +1,22 @@
-import React, { ReactElement } from 'react'
-import { HStack, Icon, Separator, Text, VStack } from '@chakra-ui/react'
+import React, { ReactElement, useEffect } from 'react'
+import {
+  HStack,
+  Icon,
+  IconButton,
+  Separator,
+  Text,
+  useBreakpoint,
+  useDisclosure,
+  VStack,
+} from '@chakra-ui/react'
 import {
   ArchiveIcon,
+  ChevronsLeft,
+  ChevronsRight,
   MessagesSquareIcon,
   SettingsIcon,
   User2Icon,
 } from 'lucide-react'
-import { useMediaQuery } from 'usehooks-ts'
 
 import resources from '@frontend/resources'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms/RouterNavLink'
@@ -42,9 +52,21 @@ const sideBarItems: SideBarItem[] = [
 ]
 
 export default function SideBar() {
-  const isMobile = useMediaQuery('(max-width: 425px)')
+  const breakpoint = useBreakpoint({ breakpoints: ['base', 'sm', 'lg'] })
+  const isMobile = breakpoint === 'base'
+  const isTablet = breakpoint === 'sm'
+  const isDesktop = breakpoint === 'lg'
+  const { open, onToggle, onClose, onOpen } = useDisclosure({
+    defaultOpen: isDesktop,
+  })
+
+  useEffect(() => {
+    if (isTablet || isDesktop) onClose()
+    if (isDesktop) onOpen()
+  }, [isMobile, isDesktop, isTablet, onClose, onOpen])
+
   return !isMobile ? (
-    <VStack align="left" gap={0}>
+    <VStack align="left" gap={0} bg="bg.panel" borderRadius="md" p={2}>
       {sideBarItems.map(({ to, label, icon, ...rest }, index) => (
         <React.Fragment key={index}>
           <RouterNavLink
@@ -56,15 +78,27 @@ export default function SideBar() {
             asChild
             letterSpacing={0.5}
             gap={6}
+            px={4}
           >
             {icon}
-            {label}
+            {open && label}
           </RouterNavLink>
           {index !== sideBarItems.length - 1 && (
             <Separator borderColor="bg.muted" mx={1} w={'calc(100% - 8px)'} />
           )}
         </React.Fragment>
       ))}
+      <HStack alignSelf="end" mt={2} w="full">
+        <IconButton
+          variant="ghost"
+          size="2xs"
+          onClick={onToggle}
+          w="full"
+          color="fg.subtle"
+        >
+          {open ? <ChevronsLeft /> : <ChevronsRight />}
+        </IconButton>
+      </HStack>
     </VStack>
   ) : (
     <HStack align="top" justifyContent="space-between" gap={1} flexWrap="wrap">
