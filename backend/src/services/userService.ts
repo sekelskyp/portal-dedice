@@ -56,23 +56,25 @@ export async function registerUser(
 
   // Hash the password and create the user
   const hashedPassword = await hashPassword(password)
+  const displayName = `${name} ${surname}`
+  const userContactId = await contactRepository.createContact({
+    name: name,
+    surname: surname,
+    displayName: displayName,
+  })
   const userId = await userRepository.createUser({
     email,
     password: hashedPassword,
+    contactId: userContactId,
   })
   const newUser = await userRepository.getUserById(userId)
   if (!newUser) {
     throw new Error('Failed to retrieve the newly created user')
   }
-  const displayName = `${name} ${surname}`
-  await contactRepository.createContact({
-    name: name,
-    surname: surname,
-    displayName: displayName,
-  })
   // Create a beneficiary record linked to the new user
   await beneficiaryRepository.createBeneficiary({
     userId: newUser.id,
+    contactId: userContactId,
   })
   await sendEmailVerification(newUser.id, email, context)
   return newUser

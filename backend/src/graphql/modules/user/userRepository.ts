@@ -3,19 +3,19 @@ import { eq, inArray } from 'drizzle-orm'
 import { notary, user } from '@backend/db/schema'
 import { type Db } from '@backend/types/types'
 
+export interface UserData {
+  email: string
+  password: string
+  confirmed?: boolean
+  contactId?: number
+}
+
 export interface UserDbRecord {
   id: number
   email: string
   password: string
   confirmed: boolean
   contactId: number | null
-}
-
-export interface UserUpdateData {
-  email: string
-  password: string
-  confirmed: boolean
-  contactId?: number
 }
 
 export function getUserRepository(db: Db) {
@@ -46,16 +46,10 @@ export function getUserRepository(db: Db) {
     return result ? result.user : null
   }
 
-  async function createUser({
-    email,
-    password,
-  }: {
-    email: string
-    password: string
-  }): Promise<number> {
+  async function createUser(userData: UserData): Promise<number> {
     const resultingIds = await db
       .insert(user)
-      .values({ email, password })
+      .values(userData) // Passing the whole object as `userData`
       .$returningId()
 
     return resultingIds[0].id
@@ -68,7 +62,7 @@ export function getUserRepository(db: Db) {
 
   async function updateUser(
     userId: number,
-    data: Partial<UserUpdateData>
+    data: Partial<UserData>
   ): Promise<void> {
     await db.update(user).set(data).where(eq(user.id, userId))
   }
