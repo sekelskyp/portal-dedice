@@ -112,7 +112,7 @@ export const AddressAutoComplete = forwardRef(
             <Combobox.Positioner>
               <Combobox.Content>
                 {(value ?? '').length > 3 && (
-                  <Card.Root>
+                  <Card.Root variant="elevated">
                     <Card.Body p={0}>
                       <Stack gap={1}>
                         {collection.items.map((item) => (

@@ -66,7 +66,7 @@ export const DateInput = forwardRef(
                 <DatePicker.View view="day">
                   <DatePicker.Context>
                     {(datePicker) => (
-                      <Card.Root>
+                      <Card.Root variant="elevated">
                         <Card.Body as={Stack} gap={4} p={3}>
                           <HStack>
                             <NativeSelectRoot size="xs" variant="plain">
@@ -152,7 +152,7 @@ export const DateInput = forwardRef(
                 <DatePicker.View view="month">
                   <DatePicker.Context>
                     {(datePicker) => (
-                      <Card.Root>
+                      <Card.Root variant="elevated">
                         <Card.Body as={Stack} gap={4} p={3}>
                           <HStack>
                             <NativeSelectRoot size="xs" variant="plain">
@@ -236,7 +236,7 @@ export const DateInput = forwardRef(
                 <DatePicker.View view="year">
                   <DatePicker.Context>
                     {(datePicker) => (
-                      <Card.Root>
+                      <Card.Root variant="elevated">
                         <Card.Body as={Stack} gap={4} p={3}>
                           <HStack>
                             <NativeSelectRoot size="xs" variant="plain">
