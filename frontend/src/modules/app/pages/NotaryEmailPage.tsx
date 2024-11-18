@@ -105,17 +105,18 @@ export function NotaryEmailPage() {
           <Heading>Dědici</Heading>
           <Stack direction={{ base: 'column', md: 'row' }} alignItems="start">
             {procedure.beneficiaries?.map((beneficiary) =>
-              beneficiary.contact ? (
+              !!beneficiary.user?.contact || !!beneficiary.contact ? (
                 <BeneficiaryBadge
                   key={beneficiary.id}
-                  beneficiaryContact={beneficiary.contact}
+                  beneficiaryContact={{
+                    ...beneficiary.contact!,
+                    ...beneficiary.user?.contact!,
+                  }}
                 />
               ) : (
-                <>
-                  <Alert status="warning" key={beneficiary.id}>
-                    Dědic bez kontaktních údajů.
-                  </Alert>
-                </>
+                <Alert status="warning" key={beneficiary.id}>
+                  Dědic bez kontaktních údajů.
+                </Alert>
               )
             )}
           </Stack>
