@@ -133,16 +133,19 @@ async function populateDatabase(
         password: await hashPassword('heslo1234'),
         email: 'test.email1@email.com',
         confirmed: true,
+        contactId: beneficiaryContactId1.id,
       },
       {
         password: await hashPassword('heslo1234'),
         email: 'test.email2@email.com',
         confirmed: true,
+        contactId: beneficiaryContactId2.id,
       },
       {
         password: await hashPassword('heslo1234'),
         email: 'test.email3@email.com',
         confirmed: true,
+        contactId: beneficiaryContactId3.id,
       },
     ])
     .$returningId()
@@ -181,11 +184,13 @@ async function populateDatabase(
         email: 'test.notary1@quacker.cz',
         password: await hashPassword('heslo1234'),
         confirmed: true,
+        contactId: notaryContactId1.id,
       },
       {
         email: 'test.notary2@quacker.cz',
         password: await hashPassword('heslo1234'),
         confirmed: true,
+        contactId: notaryContactId1.id,
       },
     ])
     .$returningId()
