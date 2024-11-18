@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { Stack, Text } from '@chakra-ui/react'
+import { Card, Heading, Text } from '@chakra-ui/react'
 
 import { useAuth } from '@frontend/modules/auth'
 import { useCreateProcedure } from '@frontend/modules/auth/hooks/useCreateProcedure'
@@ -56,22 +56,24 @@ export function NewProceedingPage() {
   )
 
   return (
-    <Stack gap={6}>
-      <Stack>
-        <Text fontSize="xl" fontWeight="bold">
+    <Card.Root>
+      <Card.Header>
+        <Heading size={{ base: 'xl', sm: '2xl' }}>
           {resources.portal.pages.newProceeding.title}
-        </Text>
+        </Heading>
         <Text fontSize="sm">
           {resources.portal.pages.newProceeding.subtitle}
         </Text>
-      </Stack>
-      <ProceedingForm onSubmit={handleProceedingFormSubmit}></ProceedingForm>
-      {createProcedureRequestState.error ? (
-        <Alert
-          status="error"
-          title={createProcedureRequestState.error.message}
-        />
-      ) : null}
-    </Stack>
+      </Card.Header>
+      <Card.Body>
+        <ProceedingForm onSubmit={handleProceedingFormSubmit}></ProceedingForm>
+        {createProcedureRequestState.error ? (
+          <Alert
+            status="error"
+            title={createProcedureRequestState.error.message}
+          />
+        ) : null}
+      </Card.Body>
+    </Card.Root>
   )
 }

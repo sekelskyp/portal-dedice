@@ -1,3 +1,17 @@
+type Asset {
+  bankName: String
+  carMakeName: String
+  carRegistrationDate: DateTimeISO
+  carType: String
+  cin: String
+  description: String
+  id: ID!
+  inheritanceProcedureId: ID!
+  name: String!
+  type: String!
+  value: Float!
+}
+
 type AssetCopy {
   bankName: String
   carMakeName: String
@@ -141,6 +155,17 @@ type Document {
   userOwnerId: ID
 }
 
+type DocumentCopy {
+  createDate: DateTimeISO!
+  fileData: String!
+  fileName: String!
+  fileType: String!
+  id: ID!
+  inheritanceProcedureId: ID!
+  taskId: ID
+  userOwnerId: ID
+}
+
 input FindNotaryInput {
   addressPostCode: String!
   deceasedPersonDateOfDeath: DateTimeISO!
@@ -160,7 +185,7 @@ type InheritanceProcedure {
   name: String!
   notary: Notary
   notaryId: ID
-  procedureAssets: [AssetCopy!]
+  procedureAssets: [Asset!]
   startDate: DateTimeISO!
   state: String!
 }
@@ -247,13 +272,13 @@ type Query {
   getAllContacts: [Contact!]!
   getAllProcedures: [InheritanceProcedure!]!
   getAssetById(id: Int!): AssetCopy
-  getAssetsByProcedureId(procedureId: Int!): [AssetCopy!]!
+  getAssetsByProcedureId(procedureId: Int!): [Asset!]!
   getBeneficiariesByIds(ids: [Int!]!): [Beneficiary!]!
   getBeneficiariesByProcedureId(procedureId: Int!): [Beneficiary!]!
   getBeneficiaryById(id: Int!): Beneficiary
   getContactById(id: Int!): Contact
-  getDocumentById(id: ID!): Document
-  getDocumentsByIds(ids: [ID!]!): [Document!]!
+  getDocumentById(id: ID!): DocumentCopy
+  getDocumentsByIds(ids: [ID!]!): [DocumentCopy!]!
   getDocumentsByProcedureId(notaryId: Int!): [Document!]!
   getNotaryById(id: Int!): Notary
   getProcedureById(id: Int!): InheritanceProcedure

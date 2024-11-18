@@ -80,8 +80,12 @@ const resources = {
         email: 'Emailová adresa',
         groups: {
           deceased: 'Identifikace zůstavitele',
+          deceasedHelper: 'Vyplňte prosím informace o zůstaviteli.',
           contactPerson: 'Kontaktní osoba',
+          contactPersonHelper: 'Vyplňte prosím informace o kontaktní osobě.',
           beneficiaries: 'Dědici po zůstaviteli',
+          beneficiariesHelper:
+            'Přidejte všechny dědice, kteří se mají podílet na dědictví.',
         },
         addBeneficiary: 'Přidat dědice',
         createProceeding: 'Založit řízení',

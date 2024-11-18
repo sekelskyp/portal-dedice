@@ -33,6 +33,21 @@ export type Scalars = {
   Upload: { input: any; output: any }
 }
 
+export type Asset = {
+  __typename?: 'Asset'
+  bankName?: Maybe<Scalars['String']['output']>
+  carMakeName?: Maybe<Scalars['String']['output']>
+  carRegistrationDate?: Maybe<Scalars['DateTimeISO']['output']>
+  carType?: Maybe<Scalars['String']['output']>
+  cin?: Maybe<Scalars['String']['output']>
+  description?: Maybe<Scalars['String']['output']>
+  id: Scalars['ID']['output']
+  inheritanceProcedureId: Scalars['ID']['output']
+  name: Scalars['String']['output']
+  type: Scalars['String']['output']
+  value: Scalars['Float']['output']
+}
+
 export type AssetCopy = {
   __typename?: 'AssetCopy'
   bankName?: Maybe<Scalars['String']['output']>
@@ -177,6 +192,18 @@ export type Document = {
   userOwnerId?: Maybe<Scalars['ID']['output']>
 }
 
+export type DocumentCopy = {
+  __typename?: 'DocumentCopy'
+  createDate: Scalars['DateTimeISO']['output']
+  fileData: Scalars['String']['output']
+  fileName: Scalars['String']['output']
+  fileType: Scalars['String']['output']
+  id: Scalars['ID']['output']
+  inheritanceProcedureId: Scalars['ID']['output']
+  taskId?: Maybe<Scalars['ID']['output']>
+  userOwnerId?: Maybe<Scalars['ID']['output']>
+}
+
 export type FindNotaryInput = {
   addressPostCode: Scalars['String']['input']
   deceasedPersonDateOfDeath: Scalars['DateTimeISO']['input']
@@ -197,7 +224,7 @@ export type InheritanceProcedure = {
   name: Scalars['String']['output']
   notary?: Maybe<Notary>
   notaryId?: Maybe<Scalars['ID']['output']>
-  procedureAssets?: Maybe<Array<AssetCopy>>
+  procedureAssets?: Maybe<Array<Asset>>
   startDate: Scalars['DateTimeISO']['output']
   state: Scalars['String']['output']
 }
@@ -408,13 +435,13 @@ export type Query = {
   getAllContacts: Array<Contact>
   getAllProcedures: Array<InheritanceProcedure>
   getAssetById?: Maybe<AssetCopy>
-  getAssetsByProcedureId: Array<AssetCopy>
+  getAssetsByProcedureId: Array<Asset>
   getBeneficiariesByIds: Array<Beneficiary>
   getBeneficiariesByProcedureId: Array<Beneficiary>
   getBeneficiaryById?: Maybe<Beneficiary>
   getContactById?: Maybe<Contact>
-  getDocumentById?: Maybe<Document>
-  getDocumentsByIds: Array<Document>
+  getDocumentById?: Maybe<DocumentCopy>
+  getDocumentsByIds: Array<DocumentCopy>
   getDocumentsByProcedureId: Array<Document>
   getNotaryById?: Maybe<Notary>
   getProcedureById?: Maybe<InheritanceProcedure>
@@ -613,7 +640,7 @@ export type GetAssetsByProcedureIdQueryVariables = Exact<{
 export type GetAssetsByProcedureIdQuery = {
   __typename?: 'Query'
   getAssetsByProcedureId: Array<{
-    __typename?: 'AssetCopy'
+    __typename?: 'Asset'
     id: string
     type: string
     name: string
@@ -871,7 +898,7 @@ export type GetProcedureByIdQuery = {
       } | null
     }> | null
     procedureAssets?: Array<{
-      __typename?: 'AssetCopy'
+      __typename?: 'Asset'
       id: string
       name: string
       value: number
@@ -1049,7 +1076,19 @@ export type SignInMutation = {
         id: string
         userId?: string | null
       }>
-      contact?: { __typename?: 'Contact'; displayName: string } | null
+      contact?: {
+        __typename?: 'Contact'
+        name: string
+        surname: string
+        displayName: string
+        email?: string | null
+        phone?: string | null
+        addressStreet?: string | null
+        addressStreetNumber?: string | null
+        addressMunicipality?: string | null
+        addressPostCode?: string | null
+        gender?: string | null
+      } | null
     }
   }
 }
@@ -3046,7 +3085,49 @@ export const SignInDocument = {
                           selections: [
                             {
                               kind: 'Field',
+                              name: { kind: 'Name', value: 'name' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'surname' },
+                            },
+                            {
+                              kind: 'Field',
                               name: { kind: 'Name', value: 'displayName' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'email' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'phone' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'addressStreet' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: {
+                                kind: 'Name',
+                                value: 'addressStreetNumber',
+                              },
+                            },
+                            {
+                              kind: 'Field',
+                              name: {
+                                kind: 'Name',
+                                value: 'addressMunicipality',
+                              },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'addressPostCode' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'gender' },
                             },
                           ],
                         },

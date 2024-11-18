@@ -1,10 +1,20 @@
-import { HStack, IconButton, Stack, Text } from '@chakra-ui/react'
+import {
+  Card,
+  Fieldset,
+  Grid,
+  HStack,
+  IconButton,
+  Input,
+  Stack,
+} from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useFieldArray } from 'react-hook-form'
 import { LuPlus, LuTrash2 } from 'react-icons/lu'
 import { z } from 'zod'
 
+import { useAuth } from '@frontend/modules/auth'
 import resources from '@frontend/resources'
+import { Field } from '@frontend/shared/design-system'
 import {
   AddressGroupFormControl,
   DateFormControl,
@@ -91,61 +101,77 @@ export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
       defaultValues={{ beneficiaries: [] }}
     >
       <Stack gap={6}>
-        <Stack gap={3}>
-          <Text fontWeight="bold">
-            {resources.portal.forms.proceedingForm.groups.deceased}
-          </Text>
-          <HStack gap={6}>
+        <Fieldset.Root size="lg">
+          <Stack>
+            <Fieldset.Legend>
+              {resources.portal.forms.proceedingForm.groups.deceased}
+            </Fieldset.Legend>
+            <Fieldset.HelperText>
+              {resources.portal.forms.proceedingForm.groups.deceasedHelper}
+            </Fieldset.HelperText>
+          </Stack>
+          <Fieldset.Content>
+            <Stack direction={{ base: 'column', sm: 'row' }} gap={4}>
+              <InputFormControl
+                name="name"
+                label={resources.portal.forms.proceedingForm.name}
+                required
+              ></InputFormControl>
+              <InputFormControl
+                name="surname"
+                label={resources.portal.forms.proceedingForm.surname}
+                required
+              ></InputFormControl>
+            </Stack>
+            <Stack direction={{ base: 'column', sm: 'row' }} gap={4}>
+              <DateFormControl
+                name="dateOfBirth"
+                label={resources.portal.forms.proceedingForm.dateOfBirth}
+                required
+              ></DateFormControl>
+              <DateFormControl
+                name="dateOfDeath"
+                label={resources.portal.forms.proceedingForm.dateOfDeath}
+                required
+              ></DateFormControl>
+            </Stack>
+            <AddressGroupFormControl
+              required
+              label={resources.portal.forms.proceedingForm.address}
+            />
+          </Fieldset.Content>
+        </Fieldset.Root>
+        <Fieldset.Root size="lg">
+          <Stack>
+            <Fieldset.Legend>
+              {resources.portal.forms.proceedingForm.groups.contactPerson}
+            </Fieldset.Legend>
+            <Fieldset.HelperText>
+              {resources.portal.forms.proceedingForm.groups.contactPersonHelper}
+            </Fieldset.HelperText>
+          </Stack>
+          <Fieldset.Content>
+            <Stack direction={{ base: 'column', sm: 'row' }} gap={6}>
+              <InputFormControl
+                name="contactName"
+                label={resources.portal.forms.proceedingForm.name}
+                required
+              ></InputFormControl>
+              <InputFormControl
+                name="contactSurname"
+                label={resources.portal.forms.proceedingForm.surname}
+                required
+              ></InputFormControl>
+            </Stack>
             <InputFormControl
-              name="name"
-              label={resources.portal.forms.proceedingForm.name}
+              name="contactEmail"
+              label={resources.portal.forms.proceedingForm.email}
               required
             ></InputFormControl>
-            <InputFormControl
-              name="surname"
-              label={resources.portal.forms.proceedingForm.surname}
-              required
-            ></InputFormControl>
-          </HStack>
-          <DateFormControl
-            name="dateOfBirth"
-            label={resources.portal.forms.proceedingForm.dateOfBirth}
-            required
-          ></DateFormControl>
-          <DateFormControl
-            name="dateOfDeath"
-            label={resources.portal.forms.proceedingForm.dateOfDeath}
-            required
-          ></DateFormControl>
-          <AddressGroupFormControl
-            required
-            label={resources.portal.forms.proceedingForm.address}
-          />
-        </Stack>
-        <Stack>
-          <Text fontWeight="bold">
-            {resources.portal.forms.proceedingForm.groups.contactPerson}
-          </Text>
-          <HStack gap={6}>
-            <InputFormControl
-              name="contactName"
-              label={resources.portal.forms.proceedingForm.name}
-              required
-            ></InputFormControl>
-            <InputFormControl
-              name="contactSurname"
-              label={resources.portal.forms.proceedingForm.surname}
-              required
-            ></InputFormControl>
-          </HStack>
-          <InputFormControl
-            name="contactEmail"
-            label={resources.portal.forms.proceedingForm.email}
-            required
-          ></InputFormControl>
-        </Stack>
+          </Fieldset.Content>
+        </Fieldset.Root>
         <BeneficiarySection />
-        <SubmitButton>
+        <SubmitButton alignSelf="center">
           {resources.portal.forms.proceedingForm.createProceeding}
         </SubmitButton>
       </Stack>
@@ -155,60 +181,99 @@ export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
 
 const BeneficiarySection = () => {
   const beneficiaries = useFieldArray({ name: 'beneficiaries' })
+  const { user } = useAuth()
 
   return (
-    <Stack>
-      <Text fontWeight="bold">
-        {resources.portal.forms.proceedingForm.groups.beneficiaries}
-      </Text>
-      <Stack gap={6}>
-        {beneficiaries.fields.map((field, index) => (
-          <Stack key={field.id}>
-            <Text fontSize="sm" fontWeight="bold">{`Dědic ${index + 1}`}</Text>
-            <HStack gap={6}>
-              <InputFormControl
-                name={`beneficiaries.${index}.name`}
-                label={resources.portal.forms.proceedingForm.name}
-                required
-              ></InputFormControl>
-              <InputFormControl
-                name={`beneficiaries.${index}.surname`}
-                label={resources.portal.forms.proceedingForm.surname}
-                required
-              ></InputFormControl>
-            </HStack>
-            <InputFormControl
-              name={`beneficiaries.${index}.email`}
-              label={resources.portal.forms.proceedingForm.email}
-              required
-            ></InputFormControl>
-            <IconButton
-              alignSelf="flex-start"
-              onClick={() => beneficiaries.remove(index)}
-              p={4}
-              bg={{ base: 'red.500', _hover: 'red.600' }}
-            >
-              <LuTrash2 />
-              Odstranit
-            </IconButton>
-          </Stack>
-        ))}
+    <Fieldset.Root size="lg">
+      <Stack>
+        <Fieldset.Legend>
+          {resources.portal.forms.proceedingForm.groups.beneficiaries}
+        </Fieldset.Legend>
+        <Fieldset.HelperText fontSize="xs">
+          {resources.portal.forms.proceedingForm.groups.beneficiariesHelper}
+        </Fieldset.HelperText>
       </Stack>
-      <IconButton
-        onClick={() =>
-          beneficiaries.append({
-            name: '',
-            surname: '',
-            email: '',
-          })
-        }
-        alignSelf="flex-start"
-        p={4}
-        my={4}
-      >
-        <LuPlus></LuPlus>
-        {resources.portal.forms.proceedingForm.addBeneficiary}
-      </IconButton>
-    </Stack>
+
+      <Fieldset.Content>
+        <Grid gap={6} templateColumns={{ base: '1fr', xl: '1fr 1fr' }}>
+          <Card.Root bg="blackAlpha.100" size="sm">
+            <Card.Header color="fg.subtle">Dědic (Vy)</Card.Header>
+            <Card.Body as={Stack}>
+              <HStack gap={4}>
+                <Field
+                  label={resources.portal.forms.proceedingForm.name}
+                  disabled
+                >
+                  <Input value={user?.contact?.name} />
+                </Field>
+
+                <Field
+                  label={resources.portal.forms.proceedingForm.surname}
+                  disabled
+                >
+                  <Input value={user?.contact?.surname} />
+                </Field>
+              </HStack>
+              <Field
+                label={resources.portal.forms.proceedingForm.email}
+                disabled
+              >
+                <Input value={user?.contact?.email ?? user?.email} />
+              </Field>
+            </Card.Body>
+          </Card.Root>
+
+          {beneficiaries.fields.map((field, index) => (
+            <Card.Root key={field.id} bg="bg.muted" size="sm">
+              <Card.Header>{`Dědic ${index + 1}`}</Card.Header>
+              <Card.Body as={Stack}>
+                <HStack gap={4}>
+                  <InputFormControl
+                    name={`beneficiaries.${index}.name`}
+                    label={resources.portal.forms.proceedingForm.name}
+                    required
+                  ></InputFormControl>
+                  <InputFormControl
+                    name={`beneficiaries.${index}.surname`}
+                    label={resources.portal.forms.proceedingForm.surname}
+                    required
+                  ></InputFormControl>
+                </HStack>
+                <HStack gap={4}>
+                  <InputFormControl
+                    name={`beneficiaries.${index}.email`}
+                    label={resources.portal.forms.proceedingForm.email}
+                    required
+                  ></InputFormControl>
+                  <IconButton
+                    alignSelf="end"
+                    onClick={() => beneficiaries.remove(index)}
+                    p={4}
+                    bg={{ base: 'red.500', _hover: 'red.600' }}
+                  >
+                    <LuTrash2 />
+                    Odstranit
+                  </IconButton>
+                </HStack>
+              </Card.Body>
+            </Card.Root>
+          ))}
+        </Grid>
+        <IconButton
+          onClick={() =>
+            beneficiaries.append({
+              name: '',
+              surname: '',
+              email: '',
+            })
+          }
+          alignSelf="flex-start"
+          p={4}
+        >
+          <LuPlus></LuPlus>
+          {resources.portal.forms.proceedingForm.addBeneficiary}
+        </IconButton>
+      </Fieldset.Content>
+    </Fieldset.Root>
   )
 }

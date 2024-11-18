@@ -28,7 +28,7 @@ export const AddressGroupFormControl = ({
 
       <Fieldset.Content>
         <Stack gap={4} w={'full'}>
-          <HStack gap={4}>
+          <Stack direction={{ base: 'column', sm: 'row' }} gap={4}>
             <AddressFormControl
               required={required}
               flex={3}
@@ -56,16 +56,16 @@ export const AddressGroupFormControl = ({
               name="addressStreetNumber"
               label="Číslo popisné a orientační"
             />
-          </HStack>
+          </Stack>
           <HStack gap={4}>
             <InputFormControl
-              flex={3}
+              flex={2}
               required={required}
               name="addressMunicipality"
               label="Obec"
             />
             <InputFormControl
-              flex={2}
+              flex={1}
               required={required}
               name="addressPostCode"
               label="PSČ"

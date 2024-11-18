@@ -26,6 +26,15 @@ export type AuthUser = {
   notaries: { id: string }[]
   contact?: {
     displayName?: string
+    name?: string
+    surname?: string
+    email?: string | null
+    phone?: string | null
+    addressStreet?: string | null
+    addressStreetNumber?: string | null
+    addressMunicipality?: string | null
+    addressPostCode?: string | null
+    gender?: string | null
   } | null
 }
 
