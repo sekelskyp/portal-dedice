@@ -114,13 +114,13 @@ const schema = z.object({
   name: z.string().min(1),
   surname: z.string().min(1),
   displayName: z.string().min(1),
-  email: z.string().email().optional(),
-  phone: z.string().min(9).optional(),
-  addressStreet: z.string().optional(),
-  addressStreetNumber: z.string().optional(),
-  addressMunicipality: z.string().optional(),
-  addressPostCode: z.string().optional(),
-  gender: z.string().optional(),
+  email: z.string().email().optional().nullish(),
+  phone: z.string().min(9).optional().nullish(),
+  addressStreet: z.string().optional().nullish(),
+  addressStreetNumber: z.string().optional().nullish(),
+  addressMunicipality: z.string().optional().nullish(),
+  addressPostCode: z.string().optional().nullish(),
+  gender: z.string().optional().nullish(),
 })
 
 const ProfileForm = ({
