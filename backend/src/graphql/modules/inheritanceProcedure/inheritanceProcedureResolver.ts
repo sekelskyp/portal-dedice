@@ -23,7 +23,7 @@ import {
   removeBeneficiaryFromProcedure,
 } from '../../../services/inheritanceProcedureService'
 import { CustomContext } from '../../../types/types'
-import { AssetCopy } from '../asset/assetCopy'
+import { Asset } from '../asset/assetType'
 import { Beneficiary } from '../beneficiary/beneficiaryType'
 import { Contact } from '../contact/contactType'
 import { Document } from '../document/documentType'
@@ -211,19 +211,19 @@ export class InheritanceProcedureResolver {
   }
 
   // Field Resolver to fetch the assets associated with the procedure
-  @FieldResolver(() => [AssetCopy], { nullable: true })
+  @FieldResolver(() => [Asset], { nullable: true })
   async procedureAssets(
     @Root() procedure: InheritanceProcedure,
     @Ctx() { assetRepository }: CustomContext
-  ): Promise<AssetCopy[]> {
+  ): Promise<Asset[]> {
     return await assetRepository.getAssetsByProcedureId(procedure.id)
   }
 
-  @Query(() => [AssetCopy])
+  @Query(() => [Asset])
   async getAssetsByProcedureId(
     @Arg('procedureId', () => Int) procedureId: number,
     @Ctx() { assetRepository }: CustomContext
-  ): Promise<AssetCopy[]> {
+  ): Promise<Asset[]> {
     return await assetRepository.getAssetsByProcedureId(procedureId)
   }
 
