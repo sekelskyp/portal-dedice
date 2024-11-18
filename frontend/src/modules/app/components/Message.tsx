@@ -94,7 +94,9 @@ export function Message({
       >
         {(isMobile || !isCurrentUser) && (
           <Avatar
-            name={isNotary ? notaryDisplayName : userDisplayName}
+            name={
+              isCurrentUser && isNotary ? notaryDisplayName : userDisplayName
+            }
             bg={isCurrentUser ? 'blue.100' : 'gray.100'}
             size={isMobile ? 'sm' : 'md'}
           />
@@ -111,7 +113,7 @@ export function Message({
           boxShadow="md"
         >
           <Text fontSize={isMobile ? 'sm' : 'lg'}>
-            {isNotary ? notaryDisplayName : userDisplayName}
+            {isCurrentUser && isNotary ? notaryDisplayName : userDisplayName}
           </Text>
           <Text color="gray.600" wordBreak="break-word">
             {body}
@@ -122,7 +124,9 @@ export function Message({
         </Box>
         {!isMobile && isCurrentUser && (
           <Avatar
-            name={isNotary ? notaryDisplayName : userDisplayName}
+            name={
+              isCurrentUser && isNotary ? notaryDisplayName : userDisplayName
+            }
             bg={'blue.100'}
             size="md"
           />
