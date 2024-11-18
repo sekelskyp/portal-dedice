@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Card,
+  Grid,
   Heading,
   HStack,
   Spinner,
@@ -78,139 +79,146 @@ const InheritanceProcedureDetail: React.FC = () => {
                   <Tabs.Trigger value="assets"> Majetek</Tabs.Trigger>
                 </Tabs.List>
                 <Tabs.Content value="detail">
-                  <Stack>
-                    <Heading
-                      size={'xl'}
-                      textAlign={{ base: 'center', lg: 'left' }}
+                  <Stack gap={4}>
+                    <Grid
+                      gap={4}
+                      templateColumns={{ base: '1fr', lg: '1fr 1fr' }}
                     >
-                      Hlavní kontaktní osoba
-                    </Heading>
-                    {procedure.mainContact ? (
-                      <BeneficiaryBadge
-                        beneficiaryContact={procedure.mainContact}
-                      />
-                    ) : (
-                      <Alert status="warning">
-                        Dědic bez kontaktních údajů.
-                      </Alert>
-                    )}
-                  </Stack>
-                  <Stack>
-                    <Heading
-                      size={'xl'}
-                      textAlign={{ base: 'center', lg: 'left' }}
-                    >
-                      Přiřazený notář
-                    </Heading>
-                    {procedure.notary?.contact ? (
-                      <BeneficiaryBadge
-                        beneficiaryContact={procedure.notary.contact}
-                      />
-                    ) : (
-                      <Alert status="warning">
-                        Notář bez kontaktních údajů.
-                      </Alert>
-                    )}
-                  </Stack>
-                  <Stack>
+                      <Stack>
+                        <Heading
+                          size={{ base: 'lg', lg: 'xl' }}
+                          textAlign={{ base: 'center', lg: 'left' }}
+                        >
+                          Hlavní kontaktní osoba
+                        </Heading>
+                        {procedure.mainContact ? (
+                          <BeneficiaryBadge
+                            beneficiaryContact={procedure.mainContact}
+                          />
+                        ) : (
+                          <Alert status="warning">
+                            Dědic bez kontaktních údajů.
+                          </Alert>
+                        )}
+                      </Stack>
+                      <Stack>
+                        <Heading
+                          size={{ base: 'lg', lg: 'xl' }}
+                          textAlign={{ base: 'center', lg: 'left' }}
+                        >
+                          Přiřazený notář
+                        </Heading>
+                        {procedure.notary?.contact ? (
+                          <BeneficiaryBadge
+                            beneficiaryContact={procedure.notary.contact}
+                          />
+                        ) : (
+                          <Alert status="warning">
+                            Notář bez kontaktních údajů.
+                          </Alert>
+                        )}
+                      </Stack>
+                    </Grid>
+                    <Stack>
+                      <Heading
+                        size={{ base: 'lg', lg: 'xl' }}
+                        textAlign={{ base: 'center', lg: 'left' }}
+                      >
+                        Seznam dědiců
+                      </Heading>
+                      {procedure.beneficiaries?.map((beneficiary) =>
+                        !!beneficiary.user?.contact || !!beneficiary.contact ? (
+                          <BeneficiaryBadge
+                            key={beneficiary.id}
+                            beneficiaryContact={{
+                              ...beneficiary.contact!,
+                              ...beneficiary.user?.contact!,
+                            }}
+                          />
+                        ) : (
+                          <Alert status="warning" key={beneficiary.id}>
+                            Dědic bez kontaktních údajů.
+                          </Alert>
+                        )
+                      )}
+                    </Stack>
                     <Heading
                       size={{ base: 'lg', lg: 'xl' }}
-                      py={4}
                       textAlign={{ base: 'center', lg: 'left' }}
                     >
-                      Výpis dědiců
+                      Celková hodnota majetku
                     </Heading>
-                    {procedure.beneficiaries?.map((beneficiary) =>
-                      !!beneficiary.user?.contact || !!beneficiary.contact ? (
-                        <BeneficiaryBadge
-                          key={beneficiary.id}
-                          beneficiaryContact={{
-                            ...beneficiary.contact!,
-                            ...beneficiary.user?.contact!,
-                          }}
-                        />
-                      ) : (
-                        <Alert status="warning" key={beneficiary.id}>
-                          Dědic bez kontaktních údajů.
-                        </Alert>
-                      )
-                    )}
-                  </Stack>
-                  <Heading
-                    size={{ base: 'lg', lg: 'xl' }}
-                    py={4}
-                    textAlign={{ base: 'center', lg: 'left' }}
-                  >
-                    Celková hodnota majetku
-                  </Heading>
-                  {assets.length === 0 ? (
-                    <Stack alignItems={{ base: 'center', lg: 'start' }}>
-                      <Text fontSize="md">Tuto hodnotu zatím neznáme.</Text>
-                      <Button
-                        as={Link}
-                        disabled
-                        width="fit-content"
-                        rounded="full"
-                      >
-                        Modelace
-                        <FaCalculator />
-                      </Button>
-                    </Stack>
-                  ) : (
-                    <Text
-                      fontSize="lg"
-                      textAlign={{ base: 'center', lg: 'left' }}
-                    >
-                      {totalAssetsValue},- Kč
-                    </Text>
-                  )}
-
-                  <Heading
-                    size={{ base: 'lg', lg: 'xl' }}
-                    py={4}
-                    textAlign={{ base: 'center', lg: 'left' }}
-                  >
-                    Návrh vypořádaní ze strany zůstavitele
-                  </Heading>
-                  <Text
-                    fontSize="md"
-                    textAlign={{ base: 'center', lg: 'left' }}
-                  >
-                    Tuto hodnotu zatím neznáme.
-                  </Text>
-                  <Stack
-                    direction={{ base: 'column', lg: 'row' }}
-                    justifyContent="center"
-                  >
-                    {!user.user?.isNotary ? (
-                      <>
-                        <Button as={Link} disabled rounded="full">
-                          Modelace vyrovnaní
+                    {assets.length === 0 ? (
+                      <Stack alignItems={{ base: 'center', lg: 'start' }}>
+                        <Text fontSize="md">Tuto hodnotu zatím neznáme.</Text>
+                        <Button
+                          as={Link}
+                          disabled
+                          width="fit-content"
+                          rounded="full"
+                        >
+                          Modelace
                           <FaCalculator />
                         </Button>
-                        <RouterNavLink
-                          to={route.chatId(id, procedure.name)}
-                          rounded="full"
-                        >
-                          Chat s notářem
-                          <HiChat />
-                        </RouterNavLink>
-                        <RouterNavLink
-                          to={route.chatIdHistory(id, procedure.name)}
-                          rounded="full"
-                        >
-                          Chatová historie řízení
-                          <HiChat />
-                        </RouterNavLink>
-                      </>
+                      </Stack>
                     ) : (
-                      <>
-                        <RouterNavLink to={route.newEmail(id)} rounded={'full'}>
-                          Hromadná zpráva všem dědicům
-                          <FiSend />
-                        </RouterNavLink>
-                      </>
+                      <Text
+                        fontSize="lg"
+                        textAlign={{ base: 'center', lg: 'left' }}
+                      >
+                        {totalAssetsValue},- Kč
+                      </Text>
                     )}
+
+                    <Heading
+                      size={{ base: 'lg', lg: 'xl' }}
+                      textAlign={{ base: 'center', lg: 'left' }}
+                    >
+                      Návrh vypořádaní ze strany zůstavitele
+                    </Heading>
+                    <Text
+                      fontSize="md"
+                      textAlign={{ base: 'center', lg: 'left' }}
+                    >
+                      Tuto hodnotu zatím neznáme.
+                    </Text>
+                    <Stack
+                      direction={{ base: 'column', lg: 'row' }}
+                      justifyContent="center"
+                    >
+                      {!user.user?.isNotary ? (
+                        <>
+                          <Button as={Link} disabled rounded="full">
+                            Modelace vyrovnaní
+                            <FaCalculator />
+                          </Button>
+                          <RouterNavLink
+                            to={route.chatId(id, procedure.name)}
+                            rounded="full"
+                          >
+                            Chat s notářem
+                            <HiChat />
+                          </RouterNavLink>
+                          <RouterNavLink
+                            to={route.chatIdHistory(id, procedure.name)}
+                            rounded="full"
+                          >
+                            Chatová historie řízení
+                            <HiChat />
+                          </RouterNavLink>
+                        </>
+                      ) : (
+                        <>
+                          <RouterNavLink
+                            to={route.newEmail(id)}
+                            rounded={'full'}
+                          >
+                            Hromadná zpráva všem dědicům
+                            <FiSend />
+                          </RouterNavLink>
+                        </>
+                      )}
+                    </Stack>
                   </Stack>
                 </Tabs.Content>
                 <Tabs.Content value="documents">

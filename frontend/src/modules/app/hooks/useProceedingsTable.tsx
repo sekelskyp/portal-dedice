@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
-import { Flex, IconButton, Stack, useBreakpoint } from '@chakra-ui/react'
+import { Flex, Icon, IconButton, Stack, useBreakpoint } from '@chakra-ui/react'
 import { rankItem } from '@tanstack/match-sorter-utils'
 import {
   createColumnHelper,
@@ -91,7 +91,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
         columnHelper.accessor('startDate', {
           header: () => 'Datum zahájení',
           cell: (info) => {
-            const date = info.getValue() as string
+            const date = info.getValue()
             const formattedDate = date ? date.split('T')[0] : ''
             return formattedDate
           },
@@ -121,14 +121,6 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
           const id = info.row.original.id
           return (
             <Stack direction="row" alignItems="center">
-              <RouterNavLink
-                key={id}
-                to={route.inheritanceProcedure(id.toString())}
-                size="xs"
-                variant="subtle"
-              >
-                <SquareArrowOutUpRightIcon />
-              </RouterNavLink>
               {user?.isNotary && (
                 <IconButton
                   borderRadius="xl"
@@ -138,6 +130,17 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
                   <MdDelete />
                 </IconButton>
               )}
+              <RouterNavLink
+                key={id}
+                to={route.inheritanceProcedure(id.toString())}
+                size="md"
+                variant="subtle"
+                borderRadius="xl"
+              >
+                <Icon mx={-1} size="lg">
+                  <SquareArrowOutUpRightIcon />
+                </Icon>
+              </RouterNavLink>
             </Stack>
           )
         },
