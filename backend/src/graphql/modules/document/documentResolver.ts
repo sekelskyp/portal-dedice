@@ -10,7 +10,7 @@ import {
 import { CustomContext } from '@backend/types/types'
 
 import { UploadDocumentInput } from './createDocumentInput'
-import { Document } from './documentType'
+import { DocumentCopy } from './documentCopy'
 
 @Resolver()
 export class DocumentResolver {
@@ -37,7 +37,7 @@ export class DocumentResolver {
     return true
   }
 
-  @Query(() => Document, { nullable: true })
+  @Query(() => DocumentCopy, { nullable: true })
   async getDocumentById(
     @Arg('id', () => ID) id: number,
     @Ctx() context: CustomContext
@@ -45,7 +45,7 @@ export class DocumentResolver {
     return await getDocumentById(id, context)
   }
 
-  @Query(() => [Document])
+  @Query(() => [DocumentCopy])
   async getDocumentsByIds(
     @Arg('ids', () => [ID]) ids: number[],
     @Ctx() context: CustomContext
