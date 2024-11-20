@@ -23,7 +23,7 @@ export function DocumentUpload() {
     procedureId: parseInt(id ?? '0', 10),
   })
 
-  const { files, handleFileUpload, clearFiles, acceptedFileTypes } =
+  const { files, handleFileUpload, clearFiles, ACCEPTED_FILE_TYPES } =
     useDocumentUpload()
 
   const [createDocumentRequest, createDocumentRequestState] =
@@ -69,7 +69,7 @@ export function DocumentUpload() {
         alignItems="stretch"
         maxFiles={1}
         maxFileSize={25000000}
-        accept={acceptedFileTypes}
+        accept={ACCEPTED_FILE_TYPES}
         onFileChange={handleDataChange}
       >
         <FileUploadDropzone
@@ -89,16 +89,16 @@ export function DocumentUpload() {
           w="1/2"
           textAlign="center"
           loading={createDocumentRequestState.loading}
-          loadingText="Probíhá nahrávání..."
+          loadingText="Probíhá nahrávání přílohy..."
         >
-          Nahrát přílohu <FaFileUpload />
+          Nahrát vloženou přílohu <FaFileUpload />
         </Button>
         {showEmptyFilesAlert && (
           <Alert
             status="error"
             width="fit-content"
             alignItems="center"
-            title="Prosím, vložte soubor k nahrání."
+            title="Pro nahrání přílohy je nutné vložit soubor."
           />
         )}
         {!showEmptyFilesAlert && createDocumentRequestState.error && (
