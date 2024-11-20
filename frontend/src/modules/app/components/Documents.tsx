@@ -6,10 +6,12 @@ import { MdDelete } from 'react-icons/md'
 
 import { useAuth } from '@frontend/modules/auth'
 import { Alert } from '@frontend/shared/design-system'
+import { useActionDialog } from '@frontend/shared/hooks/useActionDialog'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
 import { route } from '@shared/route'
 
+import { ActionDialog } from '../../../shared/components/ActionDialog'
 import { useDeleteDocument } from '../hooks/useDeleteDocument'
 import { useGetDocuments } from '../hooks/useGetDocuments'
 import { useProcedure } from '../hooks/useProcedure'
@@ -33,6 +35,8 @@ export function Documents({ id }: { id: string }) {
   const { data } = useGetDocuments({
     procedureId: parseInt(id),
   })
+
+  const { toggleDialog, isOpen, selectedId } = useActionDialog()
 
   const [deleteDocumentRequest] = useDeleteDocument()
 
@@ -68,6 +72,16 @@ export function Documents({ id }: { id: string }) {
   } else {
     return (
       <Stack>
+        {selectedId !== undefined ? (
+          <ActionDialog
+            title="Smazání dokumentu"
+            text="Opravdu chcete tento dokument smazat?"
+            onConfirm={handleFileDelete}
+            isOpen={isOpen}
+            toggle={toggleDialog}
+            selectedId={selectedId}
+          />
+        ) : null}
         <Stack
           direction="row"
           alignItems="center"
@@ -120,7 +134,7 @@ export function Documents({ id }: { id: string }) {
                         variant="surface"
                         colorPalette="red"
                         size={{ base: 'xs', sm: 'sm', md: 'md' }}
-                        onClick={() => handleFileDelete(document.id)}
+                        onClick={() => toggleDialog(true, document.id)}
                       >
                         <MdDelete />
                       </IconButton>

@@ -46,8 +46,7 @@ export function useDocumentUpload() {
         })
         return
       }
-    }
-    if (acceptedFiles.length > 0) {
+    } else if (acceptedFiles.length > 0) {
       const file = acceptedFiles[0] as File
       if (
         file &&
