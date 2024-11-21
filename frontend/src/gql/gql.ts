@@ -37,11 +37,13 @@ const documents = {
     types.DeleteDocumentDocument,
   '\n  mutation DeleteProcedure($ids: [Int!]!) {\n    deleteProceduresByIds(ids: $ids)\n  }\n':
     types.DeleteProcedureDocument,
+  '\n  query GetDocumentById($id: ID!) {\n    getDocumentById(id: $id) {\n      fileData\n      fileType\n      fileName\n      createDate\n    }\n  }\n':
+    types.GetDocumentByIdDocument,
   '\n  query getAssetById($id: Int!) {\n    getAssetById(id: $id) {\n      id\n      type\n      name\n      value\n      description\n      bankName\n      carMakeName\n      carRegistrationDate\n      carType\n      cin\n    }\n  }\n':
     types.GetAssetByIdDocument,
   '\n  query getProcedureIds($id: Int!) {\n    getProceduresByBeneficiaryId(beneficiaryId: $id) {\n      id\n    }\n  }\n':
     types.GetProcedureIdsDocument,
-  '\n  query GetDocumentsByProcedureId($procedureId: Int!) {\n    getProcedureById(id: $procedureId) {\n      documents {\n        id\n        fileName\n        createDate\n        fileData\n        fileType\n      }\n    }\n  }\n':
+  '\n  query GetDocumentsByProcedureId($procedureId: Int!) {\n    getProcedureById(id: $procedureId) {\n      documents {\n        id\n        fileName\n        createDate\n        fileType\n      }\n    }\n  }\n':
     types.GetDocumentsByProcedureIdDocument,
   '\n  query GetAllProcedures {\n    getAllProcedures {\n      id\n      name\n      startDate\n      state\n      deceasedContact {\n        displayName\n      }\n    }\n  }\n':
     types.GetAllProceduresDocument,
@@ -159,6 +161,12 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
+  source: '\n  query GetDocumentById($id: ID!) {\n    getDocumentById(id: $id) {\n      fileData\n      fileType\n      fileName\n      createDate\n    }\n  }\n'
+): (typeof documents)['\n  query GetDocumentById($id: ID!) {\n    getDocumentById(id: $id) {\n      fileData\n      fileType\n      fileName\n      createDate\n    }\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
   source: '\n  query getAssetById($id: Int!) {\n    getAssetById(id: $id) {\n      id\n      type\n      name\n      value\n      description\n      bankName\n      carMakeName\n      carRegistrationDate\n      carType\n      cin\n    }\n  }\n'
 ): (typeof documents)['\n  query getAssetById($id: Int!) {\n    getAssetById(id: $id) {\n      id\n      type\n      name\n      value\n      description\n      bankName\n      carMakeName\n      carRegistrationDate\n      carType\n      cin\n    }\n  }\n']
 /**
@@ -171,8 +179,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query GetDocumentsByProcedureId($procedureId: Int!) {\n    getProcedureById(id: $procedureId) {\n      documents {\n        id\n        fileName\n        createDate\n        fileData\n        fileType\n      }\n    }\n  }\n'
-): (typeof documents)['\n  query GetDocumentsByProcedureId($procedureId: Int!) {\n    getProcedureById(id: $procedureId) {\n      documents {\n        id\n        fileName\n        createDate\n        fileData\n        fileType\n      }\n    }\n  }\n']
+  source: '\n  query GetDocumentsByProcedureId($procedureId: Int!) {\n    getProcedureById(id: $procedureId) {\n      documents {\n        id\n        fileName\n        createDate\n        fileType\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query GetDocumentsByProcedureId($procedureId: Int!) {\n    getProcedureById(id: $procedureId) {\n      documents {\n        id\n        fileName\n        createDate\n        fileType\n      }\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

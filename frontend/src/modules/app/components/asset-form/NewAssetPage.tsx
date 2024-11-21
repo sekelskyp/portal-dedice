@@ -6,9 +6,8 @@ import { useMediaQuery } from 'usehooks-ts'
 import { Page } from '@frontend/shared/layout/Page'
 import { route } from '@shared/route'
 
-import { useAddAsset } from '../hooks/useAddAsset'
-
-import { AssetForm, AssetFormData } from './AssetForm'
+import { useAddAsset } from '../../hooks/useAddAsset'
+import { AssetForm, AssetFormData } from '../asset-form/AssetForm'
 
 export const NewAssetPage = () => {
   const { id } = useParams<{ id: string }>()

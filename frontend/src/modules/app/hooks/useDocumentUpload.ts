@@ -3,10 +3,13 @@ import { FileUploadFileChangeDetails } from '@chakra-ui/react'
 
 import { toaster } from '@frontend/shared/design-system'
 
+const MAX_FILE_SIZE = 25000000
+const TOAST_DURATION = 5000
+
 export function useDocumentUpload() {
   const [{ files }, setState] = useState<{ files: File[] }>({ files: [] })
 
-  const acceptedFileTypes = [
+  const ACCEPTED_FILE_TYPES = [
     'application/pdf',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   ]
@@ -15,31 +18,52 @@ export function useDocumentUpload() {
     const { acceptedFiles, rejectedFiles } = details
 
     if (rejectedFiles.length > 0) {
-      toaster.create({
-        title: 'Nahrání souboru se nezdařilo.',
-        type: 'error',
-        duration: 5000,
-      })
-      return
-    }
-    if (acceptedFiles.length > 0) {
-      const file = acceptedFiles[0] as File
-      if (
-        file &&
-        acceptedFileTypes.includes(file.type) &&
-        file.size <= 25000000
-      ) {
-        setState({ files: [file] })
+      const file = rejectedFiles[0].file as File
+      if (!file) {
         toaster.create({
-          title: 'Soubor byl úspěšně nahrán.',
-          type: 'success',
-          duration: 5000,
+          title: 'Soubor je poškozený nebo neplatný.',
+          type: 'error',
+          duration: TOAST_DURATION,
+        })
+      } else if (file.size > MAX_FILE_SIZE) {
+        toaster.create({
+          title: 'Soubor je příliš velký. Maximální velikost je 25 MB.',
+          type: 'error',
+          duration: TOAST_DURATION,
+        })
+      } else if (!ACCEPTED_FILE_TYPES.includes(file.type)) {
+        toaster.create({
+          title:
+            'Soubor má neplatný formát. Povolené formáty jsou .pdf a .docx.',
+          type: 'error',
+          duration: TOAST_DURATION,
         })
       } else {
         toaster.create({
-          title: 'Nahrání souboru se nezdařilo.',
+          title: 'Při vložení souboru došlo k neočekávané chybě.',
           type: 'error',
-          duration: 5000,
+          duration: TOAST_DURATION,
+        })
+        return
+      }
+    } else if (acceptedFiles.length > 0) {
+      const file = acceptedFiles[0] as File
+      if (
+        file &&
+        ACCEPTED_FILE_TYPES.includes(file.type) &&
+        file.size <= MAX_FILE_SIZE
+      ) {
+        setState({ files: [file] })
+        toaster.create({
+          title: 'Soubor byl úspěsně vložen.',
+          type: 'success',
+          duration: TOAST_DURATION,
+        })
+      } else {
+        toaster.create({
+          title: 'Při vložení souboru došlo k neočekávané chybě.',
+          type: 'error',
+          duration: TOAST_DURATION,
         })
       }
     }
@@ -53,6 +77,6 @@ export function useDocumentUpload() {
     files,
     handleFileUpload,
     clearFiles,
-    acceptedFileTypes,
+    ACCEPTED_FILE_TYPES,
   }
 }

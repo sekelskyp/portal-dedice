@@ -749,6 +749,21 @@ export type DeleteProcedureMutation = {
   deleteProceduresByIds: Array<number>
 }
 
+export type GetDocumentByIdQueryVariables = Exact<{
+  id: Scalars['ID']['input']
+}>
+
+export type GetDocumentByIdQuery = {
+  __typename?: 'Query'
+  getDocumentById?: {
+    __typename?: 'DocumentCopy'
+    fileData: string
+    fileType: string
+    fileName: string
+    createDate: any
+  } | null
+}
+
 export type GetAssetByIdQueryVariables = Exact<{
   id: Scalars['Int']['input']
 }>
@@ -795,7 +810,6 @@ export type GetDocumentsByProcedureIdQuery = {
       id: string
       fileName: string
       createDate: any
-      fileData: string
       fileType: string
     }> | null
   } | null
@@ -1806,6 +1820,57 @@ export const DeleteProcedureDocument = {
   DeleteProcedureMutation,
   DeleteProcedureMutationVariables
 >
+export const GetDocumentByIdDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetDocumentById' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getDocumentById' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'id' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'id' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'fileData' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'fileType' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'fileName' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createDate' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetDocumentByIdQuery,
+  GetDocumentByIdQueryVariables
+>
 export const GetAssetByIdDocument = {
   kind: 'Document',
   definitions: [
@@ -1964,10 +2029,6 @@ export const GetDocumentsByProcedureIdDocument = {
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'createDate' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'fileData' },
                       },
                       {
                         kind: 'Field',

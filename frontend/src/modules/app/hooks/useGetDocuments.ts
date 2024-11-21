@@ -9,7 +9,6 @@ const GET_DOCUMENTS_BY_PROCEDURE_ID = gql(/* GraphQL */ `
         id
         fileName
         createDate
-        fileData
         fileType
       }
     }

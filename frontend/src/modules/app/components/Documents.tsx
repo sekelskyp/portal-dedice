@@ -6,11 +6,14 @@ import { MdDelete } from 'react-icons/md'
 
 import { useAuth } from '@frontend/modules/auth'
 import { Alert } from '@frontend/shared/design-system'
+import { useActionDialog } from '@frontend/shared/hooks/useActionDialog'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
 import { route } from '@shared/route'
 
+import { ActionDialog } from '../../../shared/components/ActionDialog'
 import { useDeleteDocument } from '../hooks/useDeleteDocument'
+import { useDocument } from '../hooks/useDocument'
 import { useGetDocuments } from '../hooks/useGetDocuments'
 import { useProcedure } from '../hooks/useProcedure'
 import { decodeFile } from '../utils/decodeFile'
@@ -18,7 +21,6 @@ import { decodeFile } from '../utils/decodeFile'
 interface DocumentType {
   id: string
   fileName: string
-  fileData: string
   fileType: string
   createDate: string
 }
@@ -34,16 +36,32 @@ export function Documents({ id }: { id: string }) {
     procedureId: parseInt(id),
   })
 
+  const { toggleDialog, isOpen, selectedId } = useActionDialog()
+
   const [deleteDocumentRequest] = useDeleteDocument()
 
+  const { getDocument } = useDocument()
+
   const handleFileShow = (
+    documentId: string,
     fileName: string,
-    fileData: string,
     fileType: string
   ) => {
-    return (event: React.MouseEvent<HTMLAnchorElement>) => {
+    return async (event: React.MouseEvent<HTMLAnchorElement>) => {
       event.preventDefault()
-      decodeFile({ fileName, fileData, fileType })
+      const { data } = await getDocument({
+        variables: {
+          id: documentId,
+        },
+      })
+
+      if (data?.getDocumentById) {
+        decodeFile({
+          fileName,
+          fileData: data.getDocumentById.fileData,
+          fileType,
+        })
+      }
     }
   }
 
@@ -68,6 +86,17 @@ export function Documents({ id }: { id: string }) {
   } else {
     return (
       <Stack>
+        {selectedId !== undefined ? (
+          <ActionDialog
+            title="Smazání dokumentu"
+            text="Opravdu chcete tento dokument smazat?"
+            actionText="Dokument byl úspěšně smazán."
+            onConfirm={handleFileDelete}
+            isOpen={isOpen}
+            toggle={toggleDialog}
+            selectedId={selectedId}
+          />
+        ) : null}
         <Stack
           direction="row"
           alignItems="center"
@@ -99,8 +128,8 @@ export function Documents({ id }: { id: string }) {
                     <IoDocumentTextOutline size={24} />
                     <Link
                       onClick={handleFileShow(
+                        document.id,
                         document.fileName,
-                        document.fileData,
                         document.fileType
                       )}
                       wordBreak="break-word"
@@ -120,7 +149,7 @@ export function Documents({ id }: { id: string }) {
                         variant="surface"
                         colorPalette="red"
                         size={{ base: 'xs', sm: 'sm', md: 'md' }}
-                        onClick={() => handleFileDelete(document.id)}
+                        onClick={() => toggleDialog(true, document.id)}
                       >
                         <MdDelete />
                       </IconButton>
