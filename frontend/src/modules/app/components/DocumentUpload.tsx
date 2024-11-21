@@ -9,6 +9,7 @@ import {
   FileUploadDropzone,
   FileUploadList,
   FileUploadRoot,
+  toaster,
 } from '@frontend/shared/design-system/atoms/chakra'
 
 import { useCreateDocument } from '../hooks/useCreateDocument'
@@ -41,6 +42,11 @@ export function DocumentUpload() {
     clearFiles()
     setShowEmptyFilesAlert(false)
     createDocumentRequestState.reset()
+    toaster.create({
+      title: 'Vložená příloha byla odebrána.',
+      type: 'warning',
+      duration: 5000,
+    })
   }, [clearFiles, createDocumentRequestState])
 
   const handleUpload = useCallback(async () => {
