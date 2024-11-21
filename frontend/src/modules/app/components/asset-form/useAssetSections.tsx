@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { AssetFormData } from './AssetForm'
 
 export const useAssetSections = (defaultValues?: AssetFormData) => {
-  // Invert the logic: section should be false (visible) when there's data
   const [sections, setSections] = useState({
     bankAccount: defaultValues?.bankAccount ? false : true,
     company: defaultValues?.company ? false : true,

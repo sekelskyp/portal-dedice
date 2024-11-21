@@ -1,6 +1,8 @@
 import React from 'react'
+import { Button, HStack, VStack } from '@chakra-ui/react'
 import { createListCollection } from '@chakra-ui/react/collection'
-import { Controller, useFormContext } from 'react-hook-form'
+import { Controller, useFieldArray, useFormContext } from 'react-hook-form'
+import { FaPlus, FaTrash } from 'react-icons/fa'
 
 import resources from '@frontend/resources'
 import { InputFormControl } from '@frontend/shared/forms/InputFormControl'
@@ -74,12 +76,14 @@ export const CarSection: React.FC<CarSectionProps> = ({
   selected,
   setSelected,
 }) => {
-  const { setValue } = useFormContext()
+  const { setValue, control } = useFormContext()
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'car',
+  })
 
   const clearFields = () => {
-    setValue('car.brand', '')
-    setValue('car.year', 0)
-    setValue('car.description', '')
+    setValue('car', [])
   }
 
   return (
@@ -91,38 +95,65 @@ export const CarSection: React.FC<CarSectionProps> = ({
     >
       {!selected && (
         <>
-          <Controller
-            name="car.brand"
-            render={({ field }) => (
-              <SelectFormControl
-                {...field}
-                label="Auto"
-                collection={carBrandCollection}
-                placeholder="Vyberte značku auta"
-              />
-            )}
-          />
-          <Controller
-            name="car.year"
-            render={({ field }) => (
-              <InputFormControl
-                {...field}
-                label="Rok registrace"
-                type="number"
-                placeholder="Zadejte rok registrace"
-              />
-            )}
-          />
-          <Controller
-            name="car.description"
-            render={({ field }) => (
-              <InputFormControl
-                {...field}
-                label="Popis"
-                placeholder="Zadejte popis auta"
-              />
-            )}
-          />
+          {fields.map((field, index) => (
+            <React.Fragment key={field.id}>
+              <HStack alignItems="flex-start">
+                <VStack flex={1}>
+                  <Controller
+                    name={`car.${index}.brand`}
+                    render={({ field }) => (
+                      <SelectFormControl
+                        {...field}
+                        label="Auto"
+                        collection={carBrandCollection}
+                        placeholder="Vyberte značku auta"
+                      />
+                    )}
+                  />
+                  <Controller
+                    name={`car.${index}.year`}
+                    render={({ field }) => (
+                      <InputFormControl
+                        {...field}
+                        label="Rok registrace"
+                        type="number"
+                        placeholder="Zadejte rok registrace"
+                      />
+                    )}
+                  />
+                  <Controller
+                    name={`car.${index}.description`}
+                    render={({ field }) => (
+                      <InputFormControl
+                        {...field}
+                        label="Popis"
+                        placeholder="Zadejte popis auta"
+                      />
+                    )}
+                  />
+                </VStack>
+              </HStack>
+              <HStack my={2} justifyContent={'space-between'}>
+                <Button
+                  onClick={() =>
+                    append({ brand: '', year: '', description: '' })
+                  }
+                  width="fit-content"
+                >
+                  <FaPlus />
+                </Button>
+                {fields.length > 1 && (
+                  <Button
+                    aria-label="Remove car"
+                    bg={'red'}
+                    onClick={() => remove(index)}
+                  >
+                    <FaTrash />
+                  </Button>
+                )}
+              </HStack>
+            </React.Fragment>
+          ))}
         </>
       )}
     </Section>

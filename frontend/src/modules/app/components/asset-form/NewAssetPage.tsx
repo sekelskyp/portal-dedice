@@ -30,7 +30,6 @@ export const NewAssetPage = () => {
       const assets = mapFormDataToAssets(formData)
 
       try {
-        // Delete existing assets first
         if (existingAssets?.getAssetsByProcedureId?.length > 0) {
           await Promise.all(
             existingAssets.getAssetsByProcedureId.map((asset: Asset) =>
@@ -39,15 +38,11 @@ export const NewAssetPage = () => {
           )
         }
 
-        // Create new assets one at a time to prevent duplicates
         for (const asset of assets) {
           await createAssetRequest({
             inheritanceProcedureId: parseInt(id, 10),
             value: 0,
             ...asset,
-            carRegistrationDate: asset.carRegistrationDate
-              ? new Date(asset.carRegistrationDate)
-              : undefined,
           })
         }
 
@@ -59,13 +54,11 @@ export const NewAssetPage = () => {
     [createAssetRequest, deleteAsset, id, navigate, existingAssets]
   )
 
-  // Transform existing assets to form data
   const defaultValues = useMemo(() => {
     if (!existingAssets?.getAssetsByProcedureId) return undefined
 
     const formData: AssetFormData = {}
 
-    // Group assets by type first
     const groupedAssets = existingAssets.getAssetsByProcedureId.reduce(
       (acc: Record<string, Asset[]>, asset: Asset) => {
         if (!acc[asset.type]) {
@@ -77,7 +70,6 @@ export const NewAssetPage = () => {
       {}
     )
 
-    // Process grouped assets
     if (groupedAssets['Financial instrument']?.length > 0) {
       formData.bankAccount = {
         bank: groupedAssets['Financial instrument'].map(
@@ -86,21 +78,20 @@ export const NewAssetPage = () => {
       }
     }
 
-    if (groupedAssets['Company']?.[0]) {
-      formData.company = {
-        ico: groupedAssets['Company'][0].cin || '',
-      }
+    if (groupedAssets['Company']) {
+      formData.company = groupedAssets['Company'].map((asset: Asset) => ({
+        ico: asset.cin || '',
+      }))
     }
 
-    if (groupedAssets['Automobile']?.[0]) {
-      const car = groupedAssets['Automobile'][0]
-      formData.car = {
+    if (groupedAssets['Automobile']) {
+      formData.car = groupedAssets['Automobile'].map((car: Asset) => ({
         brand: car.carMakeName || '',
         year: car.carRegistrationDate
           ? new Date(car.carRegistrationDate).getFullYear()
           : undefined,
-        description: car.description || '', // Changed from carType to description
-      }
+        description: car.carType || '',
+      }))
     }
 
     if (groupedAssets['Valuables']?.[0]) {
@@ -148,7 +139,7 @@ export const NewAssetPage = () => {
           </Container>
         </VStack>
       ) : (
-        <HStack flex={1} borderWidth={1} gap={6} borderRadius={4} py={4}>
+        <HStack borderWidth={1} gap={6} borderRadius={4} py={4}>
           <Container maxW={'30%'}>
             <Heading size={'4xl'}>Určení Majetku</Heading>
             <Text fontSize={{ base: 'lg', md: 'sm' }}>
@@ -173,7 +164,6 @@ function mapFormDataToAssets(data: AssetFormData) {
   const assets = []
 
   if (data.bankAccount?.bank?.length) {
-    // Create separate asset for each bank
     data.bankAccount.bank.forEach((bank) => {
       assets.push({
         type: 'Financial instrument',
@@ -184,25 +174,27 @@ function mapFormDataToAssets(data: AssetFormData) {
     })
   }
 
-  if (data.company?.ico) {
-    assets.push({
-      type: 'Company',
-      name: 'Obchodní společnost',
-      description: `IČO: ${data.company.ico}`,
-      cin: data.company.ico,
+  if (data.company?.length) {
+    data.company.forEach((company) => {
+      assets.push({
+        type: 'Company',
+        name: 'Obchodní společnost',
+        description: `IČO: ${company.ico}`,
+        cin: company.ico,
+      })
     })
   }
 
-  if (data.car?.brand) {
-    assets.push({
-      type: 'Automobile',
-      name: `Auto ${data.car.brand}`,
-      description: data.car.description || '',
-      carMakeName: data.car.brand,
-      carType: data.car.description || '', // Also store in carType
-      carRegistrationDate: data.car.year
-        ? new Date(data.car.year, 0, 1).toISOString()
-        : undefined,
+  if (data.car?.length) {
+    data.car.forEach((car) => {
+      assets.push({
+        type: 'Automobile',
+        name: `Auto ${car.brand}`,
+        description: car.description,
+        carMakeName: car.brand,
+        carType: car.description,
+        carRegistrationDate: new Date(car.year!, 0, 1),
+      })
     })
   }
 
