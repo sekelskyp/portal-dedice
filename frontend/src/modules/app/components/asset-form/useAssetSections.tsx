@@ -1,12 +1,15 @@
 import { useState } from 'react'
 
-export const useAssetSections = () => {
+import { AssetFormData } from './AssetForm'
+
+export const useAssetSections = (defaultValues?: AssetFormData) => {
+  // Invert the logic: section should be false (visible) when there's data
   const [sections, setSections] = useState({
-    bankAccount: false,
-    company: false,
-    car: false,
-    valuables: false,
-    others: false,
+    bankAccount: defaultValues?.bankAccount ? false : true,
+    company: defaultValues?.company ? false : true,
+    car: defaultValues?.car ? false : true,
+    valuables: defaultValues?.valuables ? false : true,
+    others: defaultValues?.others ? false : true,
   })
 
   const handleSetSelected =

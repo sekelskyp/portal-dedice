@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { VStack } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
@@ -40,8 +40,9 @@ const assetSchema = (sections: Record<string, boolean>) => {
   if (!sections.bankAccount) {
     schema.bankAccount = z.object({
       bank: z
-        .array(z.string({ required_error: 'Vyberte bankovní instituci' }))
-        .min(1, { message: 'Vyberte alespoň jednu bankovní instituci' }),
+        .array(z.string())
+        .min(1, { message: 'Vyberte alespoň jednu bankovní instituci' })
+        .optional(),
     })
   }
 
@@ -60,11 +61,13 @@ const assetSchema = (sections: Record<string, boolean>) => {
         message: 'Vyberte značku',
       }),
       year: z
-        .string({ required_error: 'Zadejte rok' })
-        .min(1, { message: 'Zadejte rok' })
+        .union([z.string(), z.number()])
+        .transform((val) => val.toString())
         .refine(
-          (val) =>
-            Number(val) >= 1900 && Number(val) <= new Date().getFullYear(),
+          (val) => {
+            const num = Number(val)
+            return num >= 1900 && num <= new Date().getFullYear()
+          },
           {
             message: 'Zadejte platný rok',
           }
@@ -108,12 +111,29 @@ export type AssetSummary = {
 export const AssetForm: React.FC<{
   inheritanceProcedureId: number
   onSubmit: (data: AssetFormData) => void
-}> = ({ inheritanceProcedureId, onSubmit }) => {
-  const { sections, handleSetSelected } = useAssetSections()
+  defaultValues?: AssetFormData
+}> = ({ inheritanceProcedureId, onSubmit, defaultValues }) => {
+  const { sections, handleSetSelected } = useAssetSections(defaultValues)
 
   const methods = useForm<AssetFormData>({
     resolver: zodResolver(assetSchema(sections)),
+    defaultValues,
+    mode: 'onChange',
   })
+
+  // Force reset when defaultValues change
+  useEffect(() => {
+    if (defaultValues) {
+      methods.reset(defaultValues)
+
+      // Also update sections to show fields with data
+      Object.entries(defaultValues).forEach(([key, value]) => {
+        if (value && Object.keys(value).length > 0) {
+          handleSetSelected(key as keyof typeof sections)(false)
+        }
+      })
+    }
+  }, [defaultValues, methods, handleSetSelected])
 
   const handleSubmit: SubmitHandler<AssetFormData> = async (data) => {
     const filteredData: AssetFormData = Object.keys(data)
@@ -130,6 +150,7 @@ export const AssetForm: React.FC<{
       <Form
         onSubmit={handleSubmit}
         resolver={zodResolver(assetSchema(sections))}
+        defaultValues={defaultValues}
         noValidate
       >
         <VStack align="stretch">

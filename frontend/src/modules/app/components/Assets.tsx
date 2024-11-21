@@ -62,11 +62,11 @@ const AssetGroup = ({
   const getAssetDetails = (asset: Asset) => {
     switch (asset.type) {
       case 'Financial instrument':
-        return `Banka: ${asset.bankName}`
+        return `${asset.bankName}`
       case 'Company':
         return `IČO: ${asset.cin}`
       case 'Automobile':
-        return `${asset.carMakeName} (${new Date(asset.carRegistrationDate!).getFullYear()}) - ${asset.description}`
+        return `${asset.carMakeName} (${new Date(asset.carRegistrationDate!).getFullYear()}) ${asset.description}`
       default:
         return asset.description
     }

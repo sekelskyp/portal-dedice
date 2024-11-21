@@ -1,22 +1,27 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Container, Heading, HStack, Text, VStack } from '@chakra-ui/react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useMediaQuery } from 'usehooks-ts'
 
+import { Asset } from '@frontend/gql/graphql'
 import { Page } from '@frontend/shared/layout/Page'
 import { route } from '@shared/route'
 
 import { useAddAsset } from '../../hooks/useAddAsset'
+import { useDeleteAsset } from '../../hooks/useDeleteAsset'
+import { useGetAssets } from '../../hooks/useGetAsset'
 import { AssetForm, AssetFormData } from '../asset-form/AssetForm'
 
 export const NewAssetPage = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { addAsset: createAssetRequest } = useAddAsset()
+  const { removeAsset: deleteAsset } = useDeleteAsset()
+  const { data: existingAssets } = useGetAssets(parseInt(id!, 10))
   const isMobile = useMediaQuery('(max-width: 768px)')
 
   const handleFormSubmit = useCallback(
-    (formData: AssetFormData) => {
+    async (formData: AssetFormData) => {
       if (!id) {
         console.error('No procedure ID provided')
         return
@@ -24,25 +29,94 @@ export const NewAssetPage = () => {
 
       const assets = mapFormDataToAssets(formData)
 
-      const createAssets = async () => {
-        for (const asset of assets) {
-          try {
-            await createAssetRequest({
-              inheritanceProcedureId: parseInt(id, 10),
-              value: 0,
-              ...asset,
-            })
-          } catch (error) {
-            console.error('Error creating asset:', error)
-          }
+      try {
+        // Delete existing assets first
+        if (existingAssets?.getAssetsByProcedureId?.length > 0) {
+          await Promise.all(
+            existingAssets.getAssetsByProcedureId.map((asset: Asset) =>
+              deleteAsset(parseInt(asset.id, 10))
+            )
+          )
         }
-        navigate(route.inheritanceProcedure(id))
-      }
 
-      createAssets()
+        // Create new assets one at a time to prevent duplicates
+        for (const asset of assets) {
+          await createAssetRequest({
+            inheritanceProcedureId: parseInt(id, 10),
+            value: 0,
+            ...asset,
+            carRegistrationDate: asset.carRegistrationDate
+              ? new Date(asset.carRegistrationDate)
+              : undefined,
+          })
+        }
+
+        navigate(route.inheritanceProcedure(id))
+      } catch (error) {
+        console.error('Error managing assets:', error)
+      }
     },
-    [createAssetRequest, id, navigate]
+    [createAssetRequest, deleteAsset, id, navigate, existingAssets]
   )
+
+  // Transform existing assets to form data
+  const defaultValues = useMemo(() => {
+    if (!existingAssets?.getAssetsByProcedureId) return undefined
+
+    const formData: AssetFormData = {}
+
+    // Group assets by type first
+    const groupedAssets = existingAssets.getAssetsByProcedureId.reduce(
+      (acc: Record<string, Asset[]>, asset: Asset) => {
+        if (!acc[asset.type]) {
+          acc[asset.type] = []
+        }
+        acc[asset.type].push(asset)
+        return acc
+      },
+      {}
+    )
+
+    // Process grouped assets
+    if (groupedAssets['Financial instrument']?.length > 0) {
+      formData.bankAccount = {
+        bank: groupedAssets['Financial instrument'].map(
+          (asset: Asset) => asset.bankName || ''
+        ),
+      }
+    }
+
+    if (groupedAssets['Company']?.[0]) {
+      formData.company = {
+        ico: groupedAssets['Company'][0].cin || '',
+      }
+    }
+
+    if (groupedAssets['Automobile']?.[0]) {
+      const car = groupedAssets['Automobile'][0]
+      formData.car = {
+        brand: car.carMakeName || '',
+        year: car.carRegistrationDate
+          ? new Date(car.carRegistrationDate).getFullYear()
+          : undefined,
+        description: car.description || '', // Changed from carType to description
+      }
+    }
+
+    if (groupedAssets['Valuables']?.[0]) {
+      formData.valuables = {
+        description: groupedAssets['Valuables'][0].description || '',
+      }
+    }
+
+    if (groupedAssets['Other']?.[0]) {
+      formData.others = {
+        description: groupedAssets['Other'][0].description || '',
+      }
+    }
+
+    return formData
+  }, [existingAssets])
 
   if (!id) {
     return <div>Missing procedure ID</div>
@@ -69,6 +143,7 @@ export const NewAssetPage = () => {
             <AssetForm
               onSubmit={handleFormSubmit}
               inheritanceProcedureId={parseInt(id, 10)}
+              defaultValues={defaultValues}
             />
           </Container>
         </VStack>
@@ -85,6 +160,7 @@ export const NewAssetPage = () => {
             <AssetForm
               onSubmit={handleFormSubmit}
               inheritanceProcedureId={parseInt(id, 10)}
+              defaultValues={defaultValues}
             />
           </Container>
         </HStack>
@@ -97,11 +173,14 @@ function mapFormDataToAssets(data: AssetFormData) {
   const assets = []
 
   if (data.bankAccount?.bank?.length) {
-    assets.push({
-      type: 'Financial instrument',
-      name: 'Bankovní účet',
-      description: `Bankovní účty: ${data.bankAccount.bank.join(', ')}`,
-      bankName: data.bankAccount.bank.join(', '),
+    // Create separate asset for each bank
+    data.bankAccount.bank.forEach((bank) => {
+      assets.push({
+        type: 'Financial instrument',
+        name: 'Bankovní účet',
+        description: `Bankovní účet: ${bank}`,
+        bankName: bank,
+      })
     })
   }
 
@@ -118,10 +197,12 @@ function mapFormDataToAssets(data: AssetFormData) {
     assets.push({
       type: 'Automobile',
       name: `Auto ${data.car.brand}`,
-      description: data.car.description,
+      description: data.car.description || '',
       carMakeName: data.car.brand,
-      carType: data.car.description,
-      carRegistrationDate: new Date(data.car.year!, 0, 1),
+      carType: data.car.description || '', // Also store in carType
+      carRegistrationDate: data.car.year
+        ? new Date(data.car.year, 0, 1).toISOString()
+        : undefined,
     })
   }
 
