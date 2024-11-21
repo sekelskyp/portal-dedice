@@ -34,11 +34,9 @@ export type AssetFormData = {
   }
 }
 
-
-
 const assetSchema = (sections: Record<string, boolean>) => {
   const schema: Record<string, z.ZodObject<Record<string, z.ZodTypeAny>>> = {}
-  
+
   if (!sections.bankAccount) {
     schema.bankAccount = z.object({
       bank: z
@@ -46,7 +44,7 @@ const assetSchema = (sections: Record<string, boolean>) => {
         .min(1, { message: 'Vyberte alespoň jednu bankovní instituci' }),
     })
   }
-  
+
   if (!sections.company) {
     schema.company = z.object({
       ico: z
@@ -55,7 +53,7 @@ const assetSchema = (sections: Record<string, boolean>) => {
         .regex(/^\d{8}$/, { message: 'Zadejte platné IČO (8 číslic)' }),
     })
   }
-  
+
   if (!sections.car) {
     schema.car = z.object({
       brand: z.string({ required_error: 'Vyberte značku' }).min(1, {
@@ -78,7 +76,7 @@ const assetSchema = (sections: Record<string, boolean>) => {
         .min(1, { message: 'Zadejte popis zůstavitelova auta' }),
     })
   }
-  
+
   if (!sections.valuables) {
     schema.valuables = z.object({
       description: z
@@ -89,7 +87,7 @@ const assetSchema = (sections: Record<string, boolean>) => {
         .max(300, { message: 'Maximálně 300 znaků' }),
     })
   }
-  
+
   if (!sections.others) {
     schema.others = z.object({
       description: z
@@ -98,7 +96,7 @@ const assetSchema = (sections: Record<string, boolean>) => {
         .max(300, { message: 'Maximálně 300 znaků' }),
     })
   }
-  
+
   return z.object(schema)
 }
 
@@ -137,16 +135,18 @@ export const AssetForm: React.FC<{
         <VStack align="stretch">
           <BankAccountSection
             selected={sections.bankAccount}
-            setSelected={handleSetSelected('bankAccount')} 
-            bankAccountCollection={[]}          />
+            setSelected={handleSetSelected('bankAccount')}
+            bankAccountCollection={[]}
+          />
           <CompanySection
             selected={sections.company}
             setSelected={handleSetSelected('company')}
           />
           <CarSection
             selected={sections.car}
-            setSelected={handleSetSelected('car')} 
-            bankAccountCollection={[]}          />
+            setSelected={handleSetSelected('car')}
+            bankAccountCollection={[]}
+          />
           <ValuablesSection
             selected={sections.valuables}
             setSelected={handleSetSelected('valuables')}

@@ -9,120 +9,122 @@ import { SelectFormControl } from '@frontend/shared/forms/SelectFormControl'
 import { Section } from './Sections'
 
 interface CarSectionProps {
-  selected: boolean;
+  selected: boolean
   setSelected: React.Dispatch<React.SetStateAction<boolean>>
-  bankAccountCollection: { id: string; name: string }[]; 
+  bankAccountCollection: { id: string; name: string }[]
 }
 
 const carBrandCollection = createListCollection({
-    items: [
-      { value: 'Škoda', label: 'Škoda' },
-      { value: 'BMW', label: 'BMW' },
-      { value: 'Audi', label: 'Audi' },
-      { value: 'Mercedes-Benz', label: 'Mercedes-Benz' },
-      { value: 'Volkswagen', label: 'Volkswagen' },
-      { value: 'Toyota', label: 'Toyota' },
-      { value: 'Honda', label: 'Honda' },
-      { value: 'Ford', label: 'Ford' },
-      { value: 'Chevrolet', label: 'Chevrolet' },
-      { value: 'Nissan', label: 'Nissan' },
-      { value: 'Hyundai', label: 'Hyundai' },
-      { value: 'Kia', label: 'Kia' },
-      { value: 'Peugeot', label: 'Peugeot' },
-      { value: 'Renault', label: 'Renault' },
-      { value: 'Fiat', label: 'Fiat' },
-      { value: 'Citroën', label: 'Citroën' },
-      { value: 'Mazda', label: 'Mazda' },
-      { value: 'Subaru', label: 'Subaru' },
-      { value: 'Mitsubishi', label: 'Mitsubishi' },
-      { value: 'Suzuki', label: 'Suzuki' },
-      { value: 'Volvo', label: 'Volvo' },
-      { value: 'Jaguar', label: 'Jaguar' },
-      { value: 'Land Rover', label: 'Land Rover' },
-      { value: 'Porsche', label: 'Porsche' },
-      { value: 'Tesla', label: 'Tesla' },
-      { value: 'Lexus', label: 'Lexus' },
-      { value: 'Infiniti', label: 'Infiniti' },
-      { value: 'Acura', label: 'Acura' },
-      { value: 'Alfa Romeo', label: 'Alfa Romeo' },
-      { value: 'Aston Martin', label: 'Aston Martin' },
-      { value: 'Bentley', label: 'Bentley' },
-      { value: 'Bugatti', label: 'Bugatti' },
-      { value: 'Cadillac', label: 'Cadillac' },
-      { value: 'Chrysler', label: 'Chrysler' },
-      { value: 'Dodge', label: 'Dodge' },
-      { value: 'Ferrari', label: 'Ferrari' },
-      { value: 'Genesis', label: 'Genesis' },
-      { value: 'GMC', label: 'GMC' },
-      { value: 'Hummer', label: 'Hummer' },
-      { value: 'Jeep', label: 'Jeep' },
-      { value: 'Lamborghini', label: 'Lamborghini' },
-      { value: 'Lincoln', label: 'Lincoln' },
-      { value: 'Maserati', label: 'Maserati' },
-      { value: 'McLaren', label: 'McLaren' },
-      { value: 'Mini', label: 'Mini' },
-      { value: 'Pagani', label: 'Pagani' },
-      { value: 'Rolls-Royce', label: 'Rolls-Royce' },
-      { value: 'Saab', label: 'Saab' },
-      { value: 'Smart', label: 'Smart' },
-      { value: 'Tata', label: 'Tata' },
-      { value: 'Vauxhall', label: 'Vauxhall' },
-    ],
-  })
+  items: [
+    { value: 'Škoda', label: 'Škoda' },
+    { value: 'BMW', label: 'BMW' },
+    { value: 'Audi', label: 'Audi' },
+    { value: 'Mercedes-Benz', label: 'Mercedes-Benz' },
+    { value: 'Volkswagen', label: 'Volkswagen' },
+    { value: 'Toyota', label: 'Toyota' },
+    { value: 'Honda', label: 'Honda' },
+    { value: 'Ford', label: 'Ford' },
+    { value: 'Chevrolet', label: 'Chevrolet' },
+    { value: 'Nissan', label: 'Nissan' },
+    { value: 'Hyundai', label: 'Hyundai' },
+    { value: 'Kia', label: 'Kia' },
+    { value: 'Peugeot', label: 'Peugeot' },
+    { value: 'Renault', label: 'Renault' },
+    { value: 'Fiat', label: 'Fiat' },
+    { value: 'Citroën', label: 'Citroën' },
+    { value: 'Mazda', label: 'Mazda' },
+    { value: 'Subaru', label: 'Subaru' },
+    { value: 'Mitsubishi', label: 'Mitsubishi' },
+    { value: 'Suzuki', label: 'Suzuki' },
+    { value: 'Volvo', label: 'Volvo' },
+    { value: 'Jaguar', label: 'Jaguar' },
+    { value: 'Land Rover', label: 'Land Rover' },
+    { value: 'Porsche', label: 'Porsche' },
+    { value: 'Tesla', label: 'Tesla' },
+    { value: 'Lexus', label: 'Lexus' },
+    { value: 'Infiniti', label: 'Infiniti' },
+    { value: 'Acura', label: 'Acura' },
+    { value: 'Alfa Romeo', label: 'Alfa Romeo' },
+    { value: 'Aston Martin', label: 'Aston Martin' },
+    { value: 'Bentley', label: 'Bentley' },
+    { value: 'Bugatti', label: 'Bugatti' },
+    { value: 'Cadillac', label: 'Cadillac' },
+    { value: 'Chrysler', label: 'Chrysler' },
+    { value: 'Dodge', label: 'Dodge' },
+    { value: 'Ferrari', label: 'Ferrari' },
+    { value: 'Genesis', label: 'Genesis' },
+    { value: 'GMC', label: 'GMC' },
+    { value: 'Hummer', label: 'Hummer' },
+    { value: 'Jeep', label: 'Jeep' },
+    { value: 'Lamborghini', label: 'Lamborghini' },
+    { value: 'Lincoln', label: 'Lincoln' },
+    { value: 'Maserati', label: 'Maserati' },
+    { value: 'McLaren', label: 'McLaren' },
+    { value: 'Mini', label: 'Mini' },
+    { value: 'Pagani', label: 'Pagani' },
+    { value: 'Rolls-Royce', label: 'Rolls-Royce' },
+    { value: 'Saab', label: 'Saab' },
+    { value: 'Smart', label: 'Smart' },
+    { value: 'Tata', label: 'Tata' },
+    { value: 'Vauxhall', label: 'Vauxhall' },
+  ],
+})
 
+export const CarSection: React.FC<CarSectionProps> = ({
+  selected,
+  setSelected,
+}) => {
+  const { setValue } = useFormContext()
 
-export const CarSection: React.FC<CarSectionProps> = ({ selected, setSelected }) => {
-    const { setValue } = useFormContext()
-  
-    const clearFields = () => {
-      setValue('car.brand', '')
-      setValue('car.year', 0)
-      setValue('car.description', '')
-    }
-  
-    return (
-      <Section
-        title={resources.portal.forms.assetForm.groups.car}
-        selected={selected}
-        setSelected={setSelected}
-        clearFields={clearFields}
-      >
-        {!selected && (
-          <>
-            <Controller
-              name="car.brand"
-              render={({ field }) => (
-                <SelectFormControl
-                  {...field}
-                  label="Auto"
-                  collection={carBrandCollection}
-                  placeholder="Vyberte značku auta"
-                />
-              )}
-            />
-            <Controller
-              name="car.year"
-              render={({ field }) => (
-                <InputFormControl
-                  {...field}
-                  label="Rok registrace"
-                  type="number"
-                  placeholder="Zadejte rok registrace"
-                />
-              )}
-            />
-            <Controller
-              name="car.description"
-              render={({ field }) => (
-                <InputFormControl
-                  {...field}
-                  label="Popis"
-                  placeholder="Zadejte popis auta"
-                />
-              )}
-            />
-          </>
-        )}
-      </Section>
-    )
+  const clearFields = () => {
+    setValue('car.brand', '')
+    setValue('car.year', 0)
+    setValue('car.description', '')
   }
+
+  return (
+    <Section
+      title={resources.portal.forms.assetForm.groups.car}
+      selected={selected}
+      setSelected={setSelected}
+      clearFields={clearFields}
+    >
+      {!selected && (
+        <>
+          <Controller
+            name="car.brand"
+            render={({ field }) => (
+              <SelectFormControl
+                {...field}
+                label="Auto"
+                collection={carBrandCollection}
+                placeholder="Vyberte značku auta"
+              />
+            )}
+          />
+          <Controller
+            name="car.year"
+            render={({ field }) => (
+              <InputFormControl
+                {...field}
+                label="Rok registrace"
+                type="number"
+                placeholder="Zadejte rok registrace"
+              />
+            )}
+          />
+          <Controller
+            name="car.description"
+            render={({ field }) => (
+              <InputFormControl
+                {...field}
+                label="Popis"
+                placeholder="Zadejte popis auta"
+              />
+            )}
+          />
+        </>
+      )}
+    </Section>
+  )
+}

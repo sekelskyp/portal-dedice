@@ -8,9 +8,9 @@ import { SelectFormControl } from '@frontend/shared/forms/SelectFormControl'
 import { Section } from './Sections'
 
 interface BankAccountSectionProps {
-  selected: boolean;
+  selected: boolean
   setSelected: React.Dispatch<React.SetStateAction<boolean>>
-  bankAccountCollection: { id: string; name: string }[]; 
+  bankAccountCollection: { id: string; name: string }[]
 }
 
 const bankAccountCollection = createListCollection({
@@ -32,8 +32,6 @@ const bankAccountCollection = createListCollection({
   ],
 })
 
-
-
 export const BankAccountSection: React.FC<BankAccountSectionProps> = ({
   selected,
   setSelected,
@@ -43,7 +41,6 @@ export const BankAccountSection: React.FC<BankAccountSectionProps> = ({
   const clearFields = () => {
     setValue('bankAccount.bank', [])
   }
-
 
   return (
     <Section
