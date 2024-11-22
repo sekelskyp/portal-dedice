@@ -17,7 +17,9 @@ export const CompanySection: React.FC<CompanySectionProps> = ({
   selected,
   setSelected,
 }) => {
-  const { setValue, control } = useFormContext()
+  const { setValue, control, watch } = useFormContext()
+  const company = watch('company')
+  const hasExistingData = company && company.length > 0
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'company',
@@ -39,6 +41,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({
       selected={selected}
       setSelected={setSelected}
       clearFields={clearFields}
+      hideSwitch={hasExistingData}
     >
       {!selected && (
         <>

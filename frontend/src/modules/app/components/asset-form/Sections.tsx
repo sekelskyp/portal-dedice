@@ -10,6 +10,7 @@ interface SectionProps {
   selected: boolean
   setSelected: React.Dispatch<React.SetStateAction<boolean>>
   clearFields?: () => void
+  hideSwitch?: boolean
 }
 
 export const Section: React.FC<SectionProps> = ({
@@ -18,6 +19,7 @@ export const Section: React.FC<SectionProps> = ({
   selected,
   setSelected,
   clearFields,
+  hideSwitch,
 }) => (
   <Box
     borderWidth="1px"
@@ -41,19 +43,21 @@ export const Section: React.FC<SectionProps> = ({
       </Heading>
     </Box>
     <Separator mb={4} />
-    <Box p={2} display="flex" alignItems="center" mb={4}>
-      <Box mr={3}>Ano</Box>
-      <Switch
-        checked={selected}
-        onChange={() => {
-          setSelected((prev) => !prev)
-          if (!selected && clearFields) {
-            clearFields()
-          }
-        }}
-      />
-      <Box ml={3}>Ne</Box>
-    </Box>
-    <Box flex={1}>{!selected && children}</Box>
+    {!hideSwitch && (
+      <Box p={2} display="flex" alignItems="center" mb={4}>
+        <Box mr={3}>Ano</Box>
+        <Switch
+          checked={selected}
+          onChange={() => {
+            setSelected((prev) => !prev)
+            if (!selected && clearFields) {
+              clearFields()
+            }
+          }}
+        />
+        <Box ml={3}>Ne</Box>
+      </Box>
+    )}
+    <Box flex={1}>{(!selected || hideSwitch) && children}</Box>
   </Box>
 )

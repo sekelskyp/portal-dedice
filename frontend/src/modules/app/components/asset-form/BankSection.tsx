@@ -36,7 +36,9 @@ export const BankAccountSection: React.FC<BankAccountSectionProps> = ({
   selected,
   setSelected,
 }) => {
-  const { setValue } = useFormContext()
+  const { setValue, watch } = useFormContext()
+  const bankAccount = watch('bankAccount')
+  const hasExistingData = bankAccount?.bank && bankAccount.bank.length > 0
 
   const clearFields = () => {
     setValue('bankAccount.bank', [])
@@ -48,6 +50,7 @@ export const BankAccountSection: React.FC<BankAccountSectionProps> = ({
       selected={selected}
       setSelected={setSelected}
       clearFields={clearFields}
+      hideSwitch={hasExistingData}
     >
       {!selected && (
         <Controller

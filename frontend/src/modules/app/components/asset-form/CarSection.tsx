@@ -76,7 +76,9 @@ export const CarSection: React.FC<CarSectionProps> = ({
   selected,
   setSelected,
 }) => {
-  const { setValue, control } = useFormContext()
+  const { setValue, control, watch } = useFormContext()
+  const car = watch('car')
+  const hasExistingData = car && car.length > 0
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'car',
@@ -98,6 +100,7 @@ export const CarSection: React.FC<CarSectionProps> = ({
       selected={selected}
       setSelected={setSelected}
       clearFields={clearFields}
+      hideSwitch={hasExistingData}
     >
       {!selected && (
         <>
