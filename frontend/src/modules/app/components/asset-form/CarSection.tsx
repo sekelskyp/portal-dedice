@@ -86,6 +86,12 @@ export const CarSection: React.FC<CarSectionProps> = ({
     setValue('car', [])
   }
 
+  React.useEffect(() => {
+    if (fields.length === 0) {
+      append({ brand: '', year: '', description: '' })
+    }
+  }, [append, fields.length])
+
   return (
     <Section
       title={resources.portal.forms.assetForm.groups.car}
@@ -97,8 +103,8 @@ export const CarSection: React.FC<CarSectionProps> = ({
         <>
           {fields.map((field, index) => (
             <React.Fragment key={field.id}>
-              <HStack alignItems="flex-start">
-                <VStack flex={1}>
+              <VStack gap={4} width="100%" mb={4}>
+                <HStack width="100%" alignItems="flex-start" gap={4}>
                   <Controller
                     name={`car.${index}.brand`}
                     render={({ field }) => (
@@ -107,6 +113,7 @@ export const CarSection: React.FC<CarSectionProps> = ({
                         label="Auto"
                         collection={carBrandCollection}
                         placeholder="Vyberte značku auta"
+                        flex={1}
                       />
                     )}
                   />
@@ -117,41 +124,44 @@ export const CarSection: React.FC<CarSectionProps> = ({
                         {...field}
                         label="Rok registrace"
                         type="number"
-                        placeholder="Zadejte rok registrace"
+                        placeholder="Rok"
+                        width="150px"
                       />
                     )}
                   />
-                  <Controller
-                    name={`car.${index}.description`}
-                    render={({ field }) => (
-                      <InputFormControl
-                        {...field}
-                        label="Popis"
-                        placeholder="Zadejte popis auta"
-                      />
-                    )}
-                  />
-                </VStack>
-              </HStack>
-              <HStack my={2} justifyContent={'space-between'}>
-                <Button
-                  onClick={() =>
-                    append({ brand: '', year: '', description: '' })
-                  }
-                  width="fit-content"
-                >
-                  <FaPlus />
-                </Button>
-                {fields.length > 1 && (
+                </HStack>
+                <Controller
+                  name={`car.${index}.description`}
+                  render={({ field }) => (
+                    <InputFormControl
+                      {...field}
+                      label="Popis"
+                      placeholder="Zadejte popis auta"
+                      width="100%"
+                    />
+                  )}
+                />
+                <HStack width="100%" justifyContent="space-between">
                   <Button
-                    aria-label="Remove car"
-                    bg={'red'}
-                    onClick={() => remove(index)}
+                    onClick={() =>
+                      append({ brand: '', year: '', description: '' })
+                    }
+                    size="sm"
                   >
-                    <FaTrash />
+                    <FaPlus />
                   </Button>
-                )}
-              </HStack>
+                  {fields.length > 1 && (
+                    <Button
+                      aria-label="Remove car"
+                      onClick={() => remove(index)}
+                      bg="red.500"
+                      size="sm"
+                    >
+                      <FaTrash />
+                    </Button>
+                  )}
+                </HStack>
+              </VStack>
             </React.Fragment>
           ))}
         </>

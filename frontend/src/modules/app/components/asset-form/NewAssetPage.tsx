@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
-import { Container, Heading, HStack, Text, VStack } from '@chakra-ui/react'
+import { Container, Heading, Text, VStack } from '@chakra-ui/react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useMediaQuery } from 'usehooks-ts'
 
 import { Asset } from '@frontend/gql/graphql'
 import { Page } from '@frontend/shared/layout/Page'
@@ -18,7 +17,6 @@ export const NewAssetPage = () => {
   const { addAsset: createAssetRequest } = useAddAsset()
   const { removeAsset: deleteAsset } = useDeleteAsset()
   const { data: existingAssets } = useGetAssets(parseInt(id!, 10))
-  const isMobile = useMediaQuery('(max-width: 768px)')
 
   const handleFormSubmit = useCallback(
     async (formData: AssetFormData) => {
@@ -115,47 +113,29 @@ export const NewAssetPage = () => {
 
   return (
     <Page>
-      {isMobile ? (
-        <VStack
+      <VStack gap={8} width="100%" align="stretch">
+        <Container
+          maxW="100%"
+          px={{ base: 4, md: 8 }}
+          py={{ base: 6, md: 12 }}
           borderWidth={1}
-          gap={6}
-          borderRadius={4}
-          py={4}
-          justifyContent={'center'}
+          borderRadius={3}
         >
-          <Container>
-            <Heading size={'4xl'}>Určení Majetku</Heading>
-            <Text>
-              Formulář pro určení majetku zůstavitele. V případě, že zůstavitel
-              nevlastní některé z typu majetku, zaškrtněte "Ne".
-            </Text>
-          </Container>
-          <Container maxW="container.lg">
-            <AssetForm
-              onSubmit={handleFormSubmit}
-              inheritanceProcedureId={parseInt(id, 10)}
-              defaultValues={defaultValues}
-            />
-          </Container>
-        </VStack>
-      ) : (
-        <HStack borderWidth={1} gap={6} borderRadius={4} py={4}>
-          <Container maxW={'30%'}>
-            <Heading size={'4xl'}>Určení Majetku</Heading>
-            <Text fontSize={{ base: 'lg', md: 'sm' }}>
-              Formulář pro určení majetku zůstavitele. V případě, že zůstavitel
-              nevlastní některé z typu majetku, zaškrtněte "Ne".
-            </Text>
-          </Container>
-          <Container maxW="container.lg" flex={2}>
-            <AssetForm
-              onSubmit={handleFormSubmit}
-              inheritanceProcedureId={parseInt(id, 10)}
-              defaultValues={defaultValues}
-            />
-          </Container>
-        </HStack>
-      )}
+          <Heading justifySelf="center" size="xl" mb={4}>
+            Majetek zůstavitele
+          </Heading>
+          <Text fontSize="lg" color="gray.600" maxW="800px" mx="auto">
+            Pro každý typ majetku prosím zvolte, zda jej zůstavitel vlastnil či
+            nikoliv. V případě, že majetek vlastnil, vyplňte příslušné údaje v
+            dané sekci.
+          </Text>
+          <AssetForm
+            onSubmit={handleFormSubmit}
+            inheritanceProcedureId={parseInt(id, 10)}
+            defaultValues={defaultValues}
+          />
+        </Container>
+      </VStack>
     </Page>
   )
 }

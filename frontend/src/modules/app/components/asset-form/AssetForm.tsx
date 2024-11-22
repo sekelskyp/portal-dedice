@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { VStack } from '@chakra-ui/react'
+import { Grid, VStack } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -158,33 +158,50 @@ export const AssetForm: React.FC<{
         defaultValues={defaultValues}
         noValidate
       >
-        <VStack align="stretch">
-          <BankAccountSection
-            selected={sections.bankAccount}
-            setSelected={handleSetSelected('bankAccount')}
-            bankAccountCollection={[]}
-          />
-          <CompanySection
-            selected={sections.company}
-            setSelected={handleSetSelected('company')}
-          />
-          <CarSection
-            selected={sections.car}
-            setSelected={handleSetSelected('car')}
-            bankAccountCollection={[]}
-          />
-          <ValuablesSection
-            selected={sections.valuables}
-            setSelected={handleSetSelected('valuables')}
-          />
-          <OthersSection
-            selected={sections.others}
-            setSelected={handleSetSelected('others')}
-          />
-          <SubmitButton type="submit" colorScheme="blue">
+        <Grid
+          templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }}
+          gap={{ base: 6, md: 12 }}
+          width="100%"
+          py={8}
+        >
+          <VStack gap={{ base: 6, md: 12 }} align="stretch">
+            <CompanySection
+              selected={sections.company}
+              setSelected={handleSetSelected('company')}
+            />
+            <ValuablesSection
+              selected={sections.valuables}
+              setSelected={handleSetSelected('valuables')}
+            />
+            <OthersSection
+              selected={sections.others}
+              setSelected={handleSetSelected('others')}
+            />
+          </VStack>
+          <VStack gap={{ base: 6, md: 12 }} align="stretch">
+            <BankAccountSection
+              selected={sections.bankAccount}
+              setSelected={handleSetSelected('bankAccount')}
+              bankAccountCollection={[]}
+            />
+            <CarSection
+              selected={sections.car}
+              setSelected={handleSetSelected('car')}
+              bankAccountCollection={[]}
+            />
+          </VStack>
+
+          <SubmitButton
+            type="submit"
+            colorScheme="blue"
+            justifySelf={'center'}
+            gridColumn={{ base: '1', md: 'span 2' }}
+            width={{ base: '100%', sm: '50%' }}
+            mt={8}
+          >
             Uložit majetek
           </SubmitButton>
-        </VStack>
+        </Grid>
       </Form>
     </FormProvider>
   )
