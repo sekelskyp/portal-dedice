@@ -20,14 +20,10 @@ export const NewAssetPage = () => {
 
   const handleFormSubmit = useCallback(
     async (formData: AssetFormData) => {
-      if (!id) {
-        console.error('No procedure ID provided')
-        return
-      }
-
-      const assets = mapFormDataToAssets(formData)
+      if (!id) return
 
       try {
+        // Delete existing assets
         if (existingAssets?.getAssetsByProcedureId?.length > 0) {
           await Promise.all(
             existingAssets.getAssetsByProcedureId.map((asset: Asset) =>
@@ -36,13 +32,17 @@ export const NewAssetPage = () => {
           )
         }
 
-        for (const asset of assets) {
-          await createAssetRequest({
-            inheritanceProcedureId: parseInt(id, 10),
-            value: 0,
-            ...asset,
-          })
-        }
+        // Create new assets
+        const assets = mapFormDataToAssets(formData)
+        await Promise.all(
+          assets.map((asset) =>
+            createAssetRequest({
+              inheritanceProcedureId: parseInt(id, 10),
+              value: 0,
+              ...asset,
+            })
+          )
+        )
 
         navigate(route.inheritanceProcedure(id))
       } catch (error) {

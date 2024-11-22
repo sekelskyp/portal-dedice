@@ -31,6 +31,7 @@ export const Section: React.FC<SectionProps> = ({
     flexDirection="column"
     bg="white"
     shadow="sm"
+    transition="all 0.2s"
   >
     <Box
       display="flex"
@@ -47,17 +48,28 @@ export const Section: React.FC<SectionProps> = ({
       <Box p={2} display="flex" alignItems="center" mb={4}>
         <Box mr={3}>Ano</Box>
         <Switch
-          checked={selected}
+          checked={!selected}
           onChange={() => {
-            setSelected((prev) => !prev)
-            if (!selected && clearFields) {
-              clearFields()
+            setSelected(!selected)
+            if (selected && clearFields) {
+              requestAnimationFrame(clearFields)
             }
           }}
+          transition="opacity 0.2s"
         />
         <Box ml={3}>Ne</Box>
       </Box>
     )}
-    <Box flex={1}>{(!selected || hideSwitch) && children}</Box>
+    <Box
+      flex={1}
+      visibility={!selected || hideSwitch ? 'visible' : 'hidden'}
+      opacity={!selected || hideSwitch ? 1 : 0}
+      transition="all 0.2s"
+      transform={
+        !selected || hideSwitch ? 'translateY(0)' : 'translateY(-10px)'
+      }
+    >
+      {children}
+    </Box>
   </Box>
 )

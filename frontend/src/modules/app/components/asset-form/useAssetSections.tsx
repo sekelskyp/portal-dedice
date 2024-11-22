@@ -11,20 +11,23 @@ export const useAssetSections = (defaultValues?: AssetFormData) => {
     others: defaultValues?.others ? false : true,
   })
 
+  const [visibleSections, setVisibleSections] = useState({
+    bankAccount: false,
+    company: false,
+    car: false,
+    valuables: false,
+    others: false,
+  })
+
   const handleSetSelected =
-    (section: keyof typeof sections) =>
-    (value: React.SetStateAction<boolean>) => {
-      setSections((prev) => ({
-        ...prev,
-        [section]:
-          typeof value === 'function'
-            ? (value as (prevState: boolean) => boolean)(prev[section])
-            : value,
-      }))
+    (section: keyof typeof sections) => (value: boolean) => {
+      setSections((prev) => ({ ...prev, [section]: value }))
+      setVisibleSections((prev) => ({ ...prev, [section]: !value }))
     }
 
   return {
     sections,
+    visibleSections,
     setSections,
     handleSetSelected,
   }
