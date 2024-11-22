@@ -22,6 +22,7 @@ import {
   assetTypeEnum,
   genderEnum,
   inheritanceProcedureStateEnum,
+  userTypeEnum,
 } from '@shared/enums'
 
 // Define User Table
@@ -32,6 +33,10 @@ export const user = mysqlTable(
     email: varchar('email', { length: 100 }).notNull(),
     password: varchar('password', { length: 255 }).notNull(),
     confirmed: boolean('confirmed').default(false).notNull(),
+    type: varchar('type', {
+      length: 6,
+      enum: userTypeEnum,
+    }),
     notaryId: int('notary_id').references(() => notary.id),
     sendNotifications: boolean('send_notifications').default(true).notNull(),
     name: varchar('name', { length: 125 }).notNull(),
@@ -71,14 +76,13 @@ export const notary = mysqlTable('notary', {
   postalCode: varchar('postal_code', { length: 10 }),
 })
 
-// Define Beneficiary Table
+// Define Beneficiary Table (create new beneficiary for each new proceeding)
 export const beneficiary = mysqlTable('beneficiary', {
   id: int('id').primaryKey().autoincrement(),
   userId: int('user_id')
     .references(() => user.id)
     .notNull(),
   proceedingId: int('proceeding_id').references(() => proceeding.id),
-  dateOfBirth: date('date_of_birth'),
 })
 
 // Define InheritanceProcedure Table
@@ -187,31 +191,6 @@ export const beneficiaryMeetingRel = mysqlTable(
     compositePk: primaryKey({
       columns: [table.beneficiaryId, table.meetingId], // Composite Primary Key
     }),
-  })
-)
-
-// Define BeneficiaryInheritanceProcedureRel Table for M2M between Beneficiary and InheritanceProcedure with Composite Key
-export const beneficiaryInheritanceProcedureRel = mysqlTable(
-  'beneficiary_inheritance_procedure_rel',
-  {
-    beneficiaryId: int('beneficiary_id').notNull(),
-    inheritanceProcedureId: int('inheritance_procedure_id').notNull(),
-  },
-  (table) => ({
-    pk: primaryKey({
-      columns: [table.beneficiaryId, table.inheritanceProcedureId],
-      name: 'ben_inher_proc_pk', // Shorter custom name for PK
-    }),
-    beneficiaryFk: foreignKey({
-      columns: [table.beneficiaryId],
-      foreignColumns: [beneficiary.id],
-      name: 'ben_inher_proc_ben_id_fk', // Custom short name for FK
-    }).onDelete('cascade'),
-    inheritanceProcedureFk: foreignKey({
-      columns: [table.inheritanceProcedureId],
-      foreignColumns: [proceeding.id],
-      name: 'ben_inher_proc_inher_id_fk', // Custom short name for FK
-    }).onDelete('cascade'),
   })
 )
 
