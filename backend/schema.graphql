@@ -17,20 +17,6 @@ type Asset {
   value: Float!
 }
 
-type AssetCopy {
-  bankName: String
-  carMakeName: String
-  carRegistrationDate: DateTimeISO
-  carType: String
-  cin: String
-  description: String
-  id: ID!
-  inheritanceProcedureId: ID!
-  name: String!
-  type: String!
-  value: Float!
-}
-
 type Beneficiary {
   contact: Contact
   contactId: ID
@@ -160,17 +146,6 @@ type Document {
   userOwnerId: ID
 }
 
-type DocumentCopy {
-  createDate: DateTimeISO!
-  fileData: String!
-  fileName: String!
-  fileType: String!
-  id: ID!
-  inheritanceProcedureId: ID!
-  taskId: ID
-  userOwnerId: ID
-}
-
 input FindNotaryInput {
   addressPostCode: String!
   deceasedPersonDateOfDeath: DateTimeISO!
@@ -210,7 +185,7 @@ type Mutation {
   changePassword(newPassword: String!, oldPassword: String!): User!
   closeProcedure(procedureId: Int!): Boolean!
   confirmEmailVerification(token: String!): Boolean!
-  createAsset(data: CreateAssetInput!): AssetCopy!
+  createAsset(data: CreateAssetInput!): Asset!
   createBeneficiaries(data: [CreateBeneficiaryInput!]!): [Beneficiary!]!
   createBeneficiary(data: CreateBeneficiaryInput!): Beneficiary!
   createContact(data: CreateContactInput!): Int!
@@ -230,7 +205,7 @@ type Mutation {
   resetPassword(newPassword: String!, token: String!): Boolean!
   signIn(login: String!, password: String!): SignInResponse!
   signUp(registerInput: RegisterInput!): User!
-  updateAsset(data: UpdateAssetInput!, id: Int!): AssetCopy
+  updateAsset(data: UpdateAssetInput!, id: Int!): Asset
   updateBeneficiary(data: UpdateBeneficiaryInput!, id: Int!): Beneficiary!
   updateProfile(profileInput: ProfileInput!): User!
 }
@@ -264,14 +239,14 @@ type Query {
   findNotary(input: FindNotaryInput!): Notary
   getAllContacts: [Contact!]!
   getAllProcedures: [InheritanceProcedure!]!
-  getAssetById(id: Int!): AssetCopy
+  getAssetById(id: Int!): Asset
   getAssetsByProcedureId(procedureId: Int!): [Asset!]!
   getBeneficiariesByIds(ids: [Int!]!): [Beneficiary!]!
   getBeneficiariesByProcedureId(procedureId: Int!): [Beneficiary!]!
   getBeneficiaryById(id: Int!): Beneficiary
   getContactById(id: Int!): Contact
-  getDocumentById(id: ID!): DocumentCopy
-  getDocumentsByIds(ids: [ID!]!): [DocumentCopy!]!
+  getDocumentById(id: ID!): Document
+  getDocumentsByIds(ids: [ID!]!): [Document!]!
   getDocumentsByProcedureId(notaryId: Int!): [Document!]!
   getNotaryById(id: Int!): Notary
   getProcedureById(id: Int!): InheritanceProcedure

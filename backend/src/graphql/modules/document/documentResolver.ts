@@ -1,5 +1,6 @@
 import { Arg, Ctx, ID, Mutation, Query, Resolver } from 'type-graphql'
 
+import { Document } from '@backend/graphql/modules/document/documentType'
 import {
   createDocument,
   CreateDocumentInput,
@@ -10,7 +11,6 @@ import {
 import { CustomContext } from '@backend/types/types'
 
 import { UploadDocumentInput } from './createDocumentInput'
-import { DocumentCopy } from './documentCopy'
 
 @Resolver()
 export class DocumentResolver {
@@ -37,7 +37,7 @@ export class DocumentResolver {
     return true
   }
 
-  @Query(() => DocumentCopy, { nullable: true })
+  @Query(() => Document, { nullable: true })
   async getDocumentById(
     @Arg('id', () => ID) id: number,
     @Ctx() context: CustomContext
@@ -45,7 +45,7 @@ export class DocumentResolver {
     return await getDocumentById(id, context)
   }
 
-  @Query(() => [DocumentCopy])
+  @Query(() => [Document])
   async getDocumentsByIds(
     @Arg('ids', () => [ID]) ids: number[],
     @Ctx() context: CustomContext

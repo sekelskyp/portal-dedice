@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from 'type-graphql'
+import { Field, Float, ID, ObjectType } from 'type-graphql'
 
 import { AssetTypeEnumType } from '@backend/db/schema'
 
@@ -10,10 +10,10 @@ export class Asset {
   @Field(() => ID)
   inheritanceProcedureId!: number
 
-  @Field()
+  @Field(() => Float)
   value!: number
 
-  @Field()
+  @Field(() => String)
   name!: string
 
   @Field(() => String, { nullable: true })

@@ -1,11 +1,11 @@
 import { Field, ID, ObjectType } from 'type-graphql'
 
 import { InheritanceProcedureStateEnumType } from '@backend/db/schema'
+import { Asset } from '@backend/graphql/modules/asset/assetType'
+import { Document } from '@backend/graphql/modules/document/documentType'
 
-import { Asset } from '../asset/assetType'
 import { Beneficiary } from '../beneficiary/beneficiaryType'
 import { Contact } from '../contact/contactType'
-import { Document } from '../document/documentType'
 import { Notary } from '../notary/notaryType'
 
 @ObjectType()

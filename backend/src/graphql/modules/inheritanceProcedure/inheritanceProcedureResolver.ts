@@ -9,6 +9,8 @@ import {
   Root,
 } from 'type-graphql'
 
+import { Asset } from '@backend/graphql/modules/asset/assetType'
+import { Document } from '@backend/graphql/modules/document/documentType'
 import { getDocumentsByProcedureId } from '@backend/services/documentService'
 
 import {
@@ -23,10 +25,8 @@ import {
   removeBeneficiaryFromProcedure,
 } from '../../../services/inheritanceProcedureService'
 import { CustomContext } from '../../../types/types'
-import { Asset } from '../asset/assetType'
 import { Beneficiary } from '../beneficiary/beneficiaryType'
 import { Contact } from '../contact/contactType'
-import { Document } from '../document/documentType'
 import { Notary } from '../notary/notaryType'
 
 import { CreateInheritanceProcedureInput } from './createInheritanceProcedureInput'
