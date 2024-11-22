@@ -16,16 +16,22 @@ export const useAssetSections = (defaultValues?: AssetFormData) => {
 
   const [sections, setSections] = useState(initialSections)
 
-  const handleSetSelected = useCallback((section: keyof typeof sections) => {
-    return function toggleSection() {
-      setSections((prev) => ({
-        ...prev,
-        [section]: !prev[section],
-      }))
-    }
-  }, [])
+  const handleSetSelected = useCallback(
+    (section: keyof typeof sections) =>
+      (value: React.SetStateAction<boolean>) => {
+        setSections((prev) => ({
+          ...prev,
+          [section]: typeof value === 'function' ? value(prev[section]) : value,
+        }))
+      },
+    []
+  )
 
-  return { sections, setSections, handleSetSelected }
+  return {
+    sections,
+    setSections,
+    handleSetSelected,
+  }
 }
 
 export default useAssetSections

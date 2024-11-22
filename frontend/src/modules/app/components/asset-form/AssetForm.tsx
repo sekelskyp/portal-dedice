@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { Grid, VStack } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
@@ -13,12 +13,6 @@ import { CompanySection } from './CompanySection'
 import { OthersSection } from './OthersSection'
 import { useAssetSections } from './useAssetSections'
 import { ValuablesSection } from './ValuablesSection'
-
-const MemoizedCompanySection = React.memo(CompanySection)
-const MemoizedValuablesSection = React.memo(ValuablesSection)
-const MemoizedOthersSection = React.memo(OthersSection)
-const MemoizedBankAccountSection = React.memo(BankAccountSection)
-const MemoizedCarSection = React.memo(CarSection)
 
 export type AssetFormData = {
   bankAccount?: {
@@ -130,22 +124,38 @@ export const AssetForm: React.FC<{
   ({ inheritanceProcedureId, onSubmit, defaultValues, isSubmitting }) => {
     const { sections, handleSetSelected } = useAssetSections(defaultValues)
 
+    const validationSchema = useMemo(() => assetSchema(sections), [sections])
+
     const methods = useForm<AssetFormData>({
-      resolver: useMemo(() => zodResolver(assetSchema(sections)), [sections]),
+      resolver: zodResolver(validationSchema),
       defaultValues,
-      mode: 'onChange',
-      shouldUnregister: false,
-      criteriaMode: 'firstError',
+      mode: 'onBlur', // Change validation mode to reduce immediate validations
     })
 
-    const values = methods.getValues()
-    const filteredData = useMemo(() => {
-      return Object.fromEntries(
-        Object.entries(values).filter(
-          ([key]) => !sections[key as keyof typeof sections]
-        )
-      )
-    }, [sections, values])
+    useEffect(() => {
+      if (defaultValues) {
+        methods.reset(defaultValues)
+        Object.entries(defaultValues).forEach(([key, value]) => {
+          if (value && Object.keys(value).length > 0) {
+            handleSetSelected(key as keyof typeof sections)(false)
+          }
+        })
+      }
+    }, [defaultValues, methods, handleSetSelected])
+
+    const filteredData = useMemo(
+      () =>
+        Object.keys(methods.getValues())
+          .filter((key) => !sections[key as keyof typeof sections])
+          .reduce(
+            (acc, key) => ({
+              ...acc,
+              [key]: methods.getValues()[key as keyof AssetFormData],
+            }),
+            {}
+          ),
+      [sections, methods]
+    )
 
     const handleSubmit = useCallback<SubmitHandler<AssetFormData>>(
       async (data) => {
@@ -154,47 +164,14 @@ export const AssetForm: React.FC<{
       [filteredData, onSubmit]
     )
 
-    const formSections = useMemo(
-      () => ({
-        company: (
-          <MemoizedCompanySection
-            selected={sections.company}
-            setSelected={handleSetSelected('company')}
-          />
-        ),
-        valuables: (
-          <MemoizedValuablesSection
-            selected={sections.valuables}
-            setSelected={handleSetSelected('valuables')}
-          />
-        ),
-        others: (
-          <MemoizedOthersSection
-            selected={sections.others}
-            setSelected={handleSetSelected('others')}
-          />
-        ),
-        bankAccount: (
-          <MemoizedBankAccountSection
-            selected={sections.bankAccount}
-            setSelected={handleSetSelected('bankAccount')}
-            bankAccountCollection={[]}
-          />
-        ),
-        car: (
-          <MemoizedCarSection
-            selected={sections.car}
-            setSelected={handleSetSelected('car')}
-            bankAccountCollection={[]}
-          />
-        ),
-      }),
-      [sections, handleSetSelected]
-    )
-
     return (
       <FormProvider {...methods}>
-        <Form onSubmit={handleSubmit}>
+        <Form
+          onSubmit={handleSubmit}
+          resolver={zodResolver(assetSchema(sections))}
+          defaultValues={defaultValues}
+          noValidate
+        >
           <Grid
             templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }}
             gap={{ base: 6, md: 12 }}
@@ -202,13 +179,30 @@ export const AssetForm: React.FC<{
             py={8}
           >
             <VStack gap={{ base: 6, md: 12 }} align="stretch">
-              {formSections.company}
-              {formSections.valuables}
-              {formSections.others}
+              <CompanySection
+                selected={sections.company}
+                setSelected={handleSetSelected('company')}
+              />
+              <ValuablesSection
+                selected={sections.valuables}
+                setSelected={handleSetSelected('valuables')}
+              />
+              <OthersSection
+                selected={sections.others}
+                setSelected={handleSetSelected('others')}
+              />
             </VStack>
             <VStack gap={{ base: 6, md: 12 }} align="stretch">
-              {formSections.bankAccount}
-              {formSections.car}
+              <BankAccountSection
+                selected={sections.bankAccount}
+                setSelected={handleSetSelected('bankAccount')}
+                bankAccountCollection={[]}
+              />
+              <CarSection
+                selected={sections.car}
+                setSelected={handleSetSelected('car')}
+                bankAccountCollection={[]}
+              />
             </VStack>
 
             <SubmitButton
