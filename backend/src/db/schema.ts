@@ -7,7 +7,6 @@ import {
   date,
   datetime,
   float,
-  foreignKey,
   int,
   longtext,
   mysqlTable,
