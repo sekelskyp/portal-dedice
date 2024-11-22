@@ -68,7 +68,7 @@ export const address = mysqlTable('address', {
 export const notary = mysqlTable('notary', {
   id: int('id').primaryKey().autoincrement(),
   // area for which is notary assigned (right now matching uses postal code to assign notary)
-  postalCode: varchar('postal_code', { length: 10 }).notNull(),
+  postalCode: varchar('postal_code', { length: 10 }),
 })
 
 // Define Beneficiary Table
