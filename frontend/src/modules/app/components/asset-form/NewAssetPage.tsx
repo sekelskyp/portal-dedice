@@ -87,15 +87,12 @@ export const NewAssetPage = () => {
       const assets = memoizedAssets
 
       try {
-        // Delete existing assets in a single batch operation
         if (existingAssets?.getAssetsByProcedureId?.length) {
           const deletePromises = existingAssets.getAssetsByProcedureId.map(
             (asset: Asset) => deleteAsset(parseInt(asset.id, 10))
           )
           await Promise.all(deletePromises)
         }
-
-        // Create new assets in parallel batches
         const createPromises = assets.map((asset) =>
           createAssetRequest({
             inheritanceProcedureId: parseInt(id, 10),
