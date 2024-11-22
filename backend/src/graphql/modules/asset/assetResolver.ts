@@ -1,8 +1,8 @@
 import { Arg, Ctx, Int, Mutation, Query, Resolver } from 'type-graphql'
 
+import { Asset } from '@backend/graphql/modules/asset/assetType'
 import { CustomContext } from '@backend/types/types'
 
-import { AssetCopy } from './assetCopy'
 import { CreateAssetInput } from './createAssetInput'
 import { UpdateAssetInput } from './updateAssetInput'
 
@@ -12,35 +12,35 @@ function checkCarRegistrationDate(registrationDate: Date | null | undefined) {
   }
 }
 
-@Resolver(() => AssetCopy)
+@Resolver(() => Asset)
 export class AssetResolver {
   // Query to get an asset by ID
-  @Query(() => AssetCopy, { nullable: true })
+  @Query(() => Asset, { nullable: true })
   async getAssetById(
     @Arg('id', () => Int) id: number,
     @Ctx() { assetRepository }: CustomContext
-  ): Promise<AssetCopy | null> {
+  ): Promise<Asset | null> {
     return await assetRepository.getAssetById(id)
   }
 
   // Mutation to create a new asset
-  @Mutation(() => AssetCopy)
+  @Mutation(() => Asset)
   async createAsset(
     @Arg('data') data: CreateAssetInput,
     @Ctx() { assetRepository }: CustomContext
-  ): Promise<AssetCopy> {
+  ): Promise<Asset> {
     checkCarRegistrationDate(data.carRegistrationDate)
     const assetId = await assetRepository.createAsset(data)
     return await assetRepository.getAssetById(assetId)
   }
 
   // Mutation to update an existing asset
-  @Mutation(() => AssetCopy, { nullable: true })
+  @Mutation(() => Asset, { nullable: true })
   async updateAsset(
     @Arg('id', () => Int) id: number,
     @Arg('data') data: UpdateAssetInput,
     @Ctx() { assetRepository }: CustomContext
-  ): Promise<AssetCopy | null> {
+  ): Promise<Asset | null> {
     checkCarRegistrationDate(data.carRegistrationDate)
     const asset = await assetRepository.getAssetById(id)
     if (!asset) {
