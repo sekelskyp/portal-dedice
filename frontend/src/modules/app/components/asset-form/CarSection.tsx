@@ -1,8 +1,8 @@
 import React from 'react'
-import { Button, HStack, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, VStack } from '@chakra-ui/react'
 import { createListCollection } from '@chakra-ui/react/collection'
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form'
-import { FaPlus, FaTrash } from 'react-icons/fa'
+import { FaPlus, FaTimes, FaTrash } from 'react-icons/fa'
 
 import resources from '@frontend/resources'
 import { InputFormControl } from '@frontend/shared/forms/InputFormControl'
@@ -78,7 +78,13 @@ export const CarSection: React.FC<CarSectionProps> = ({
 }) => {
   const { setValue, control, watch } = useFormContext()
   const car = watch('car')
-  const hasExistingData = car && car.length > 0
+  const hasExistingData =
+    car &&
+    car.length > 0 &&
+    car.some(
+      (item: { brand: string; year: string; description: string }) =>
+        item.brand || item.year || item.description
+    )
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'car',
@@ -108,18 +114,37 @@ export const CarSection: React.FC<CarSectionProps> = ({
             <React.Fragment key={field.id}>
               <VStack gap={4} width="100%" mb={4}>
                 <HStack width="100%" alignItems="flex-start" gap={4}>
-                  <Controller
-                    name={`car.${index}.brand`}
-                    render={({ field }) => (
-                      <SelectFormControl
-                        {...field}
-                        label="Auto"
-                        collection={carBrandCollection}
-                        placeholder="Vyberte značku auta"
-                        flex={1}
-                      />
+                  <Box position="relative" flex={1}>
+                    <Controller
+                      name={`car.${index}.brand`}
+                      render={({ field }) => (
+                        <SelectFormControl
+                          {...field}
+                          label="Auto"
+                          collection={carBrandCollection}
+                          placeholder="Vyberte značku auta"
+                        />
+                      )}
+                    />
+                    {watch(`car.${index}.brand`) && (
+                      <Button
+                        position="absolute"
+                        right="8"
+                        top="70%"
+                        transform="translateY(-50%)"
+                        size="xs"
+                        variant="ghost"
+                        p={1}
+                        minW="auto"
+                        h="auto"
+                        color="gray.500"
+                        _hover={{ color: 'gray.700' }}
+                        onClick={() => setValue(`car.${index}.brand`, '')}
+                      >
+                        <FaTimes size="10px" />
+                      </Button>
                     )}
-                  />
+                  </Box>
                   <Controller
                     name={`car.${index}.year`}
                     render={({ field }) => (

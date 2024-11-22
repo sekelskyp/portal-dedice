@@ -1,6 +1,8 @@
 import React from 'react'
+import { Box, Button } from '@chakra-ui/react'
 import { createListCollection } from '@chakra-ui/react/collection'
 import { Controller, useFormContext } from 'react-hook-form'
+import { FaTimes } from 'react-icons/fa'
 
 import resources from '@frontend/resources'
 import { SelectFormControl } from '@frontend/shared/forms/SelectFormControl'
@@ -53,18 +55,38 @@ export const BankAccountSection: React.FC<BankAccountSectionProps> = ({
       hideSwitch={hasExistingData}
     >
       {!selected && (
-        <Controller
-          name="bankAccount.bank"
-          render={({ field }) => (
-            <SelectFormControl
-              {...field}
-              label="Bankovní účet"
-              collection={bankAccountCollection}
-              placeholder="Vyberte bankovní instituci"
-              multiple
-            />
+        <Box position="relative">
+          <Controller
+            name="bankAccount.bank"
+            render={({ field }) => (
+              <SelectFormControl
+                {...field}
+                label="Bankovní účet"
+                collection={bankAccountCollection}
+                placeholder="Vyberte bankovní instituci"
+                multiple
+              />
+            )}
+          />
+          {watch('bankAccount.bank')?.length > 0 && (
+            <Button
+              position="absolute"
+              right="8"
+              top="70%"
+              transform="translateY(-50%)"
+              size="xs"
+              variant="ghost"
+              p={1}
+              minW="auto"
+              h="auto"
+              color="gray.500"
+              _hover={{ color: 'gray.700' }}
+              onClick={() => setValue('bankAccount.bank', [])}
+            >
+              <FaTimes size="10px" />
+            </Button>
           )}
-        />
+        </Box>
       )}
     </Section>
   )

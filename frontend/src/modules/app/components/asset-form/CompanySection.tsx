@@ -19,7 +19,10 @@ export const CompanySection: React.FC<CompanySectionProps> = ({
 }) => {
   const { setValue, control, watch } = useFormContext()
   const company = watch('company')
-  const hasExistingData = company && company.length > 0
+  const hasExistingData =
+    company &&
+    company.length > 0 &&
+    company.some((item: { ico: string }) => item.ico)
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'company',
