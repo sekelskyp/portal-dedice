@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { Grid, VStack } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
@@ -110,7 +110,6 @@ const assetSchema = (sections: Record<string, boolean>) => {
 
   return z.object(schema)
 }
-
 export type AssetSummary = {
   errorMessage?: string
   onSubmit: (variables: AssetFormData) => void
@@ -125,10 +124,12 @@ export const AssetForm: React.FC<{
   ({ inheritanceProcedureId, onSubmit, defaultValues, isSubmitting }) => {
     const { sections, handleSetSelected } = useAssetSections(defaultValues)
 
+    const validationSchema = useMemo(() => assetSchema(sections), [sections])
+
     const methods = useForm<AssetFormData>({
-      resolver: zodResolver(assetSchema(sections)),
+      resolver: zodResolver(validationSchema),
       defaultValues,
-      mode: 'onChange',
+      mode: 'onBlur', // Change validation mode to reduce immediate validations
     })
 
     useEffect(() => {
@@ -142,15 +143,26 @@ export const AssetForm: React.FC<{
       }
     }, [defaultValues, methods, handleSetSelected])
 
-    const handleSubmit: SubmitHandler<AssetFormData> = async (data) => {
-      const filteredData: AssetFormData = Object.keys(data)
-        .filter((key) => !sections[key as keyof typeof sections])
-        .reduce(
-          (acc, key) => ({ ...acc, [key]: data[key as keyof AssetFormData] }),
-          {}
-        )
-      onSubmit(filteredData)
-    }
+    const filteredData = useMemo(
+      () =>
+        Object.keys(methods.getValues())
+          .filter((key) => !sections[key as keyof typeof sections])
+          .reduce(
+            (acc, key) => ({
+              ...acc,
+              [key]: methods.getValues()[key as keyof AssetFormData],
+            }),
+            {}
+          ),
+      [sections, methods]
+    )
+
+    const handleSubmit = useCallback<SubmitHandler<AssetFormData>>(
+      async (data) => {
+        onSubmit(filteredData)
+      },
+      [filteredData, onSubmit]
+    )
 
     return (
       <FormProvider {...methods}>
