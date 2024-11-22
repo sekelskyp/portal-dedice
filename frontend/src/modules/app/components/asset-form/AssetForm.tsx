@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 import { Grid, VStack } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
@@ -110,6 +110,7 @@ const assetSchema = (sections: Record<string, boolean>) => {
 
   return z.object(schema)
 }
+
 export type AssetSummary = {
   errorMessage?: string
   onSubmit: (variables: AssetFormData) => void
@@ -119,109 +120,89 @@ export const AssetForm: React.FC<{
   inheritanceProcedureId: number
   onSubmit: (data: AssetFormData) => void
   defaultValues?: AssetFormData
-  isSubmitting?: boolean
-}> = React.memo(
-  ({ inheritanceProcedureId, onSubmit, defaultValues, isSubmitting }) => {
-    const { sections, handleSetSelected } = useAssetSections(defaultValues)
+}> = ({ inheritanceProcedureId, onSubmit, defaultValues }) => {
+  const { sections, handleSetSelected } = useAssetSections(defaultValues)
 
-    const validationSchema = useMemo(() => assetSchema(sections), [sections])
+  const methods = useForm<AssetFormData>({
+    resolver: zodResolver(assetSchema(sections)),
+    defaultValues,
+    mode: 'onChange',
+  })
 
-    const methods = useForm<AssetFormData>({
-      resolver: zodResolver(validationSchema),
-      defaultValues,
-      mode: 'onBlur', // Change validation mode to reduce immediate validations
-    })
+  useEffect(() => {
+    if (defaultValues) {
+      methods.reset(defaultValues)
+      Object.entries(defaultValues).forEach(([key, value]) => {
+        if (value && Object.keys(value).length > 0) {
+          handleSetSelected(key as keyof typeof sections)(false)
+        }
+      })
+    }
+  }, [defaultValues, methods, handleSetSelected])
 
-    useEffect(() => {
-      if (defaultValues) {
-        methods.reset(defaultValues)
-        Object.entries(defaultValues).forEach(([key, value]) => {
-          if (value && Object.keys(value).length > 0) {
-            handleSetSelected(key as keyof typeof sections)(false)
-          }
-        })
-      }
-    }, [defaultValues, methods, handleSetSelected])
-
-    const filteredData = useMemo(
-      () =>
-        Object.keys(methods.getValues())
-          .filter((key) => !sections[key as keyof typeof sections])
-          .reduce(
-            (acc, key) => ({
-              ...acc,
-              [key]: methods.getValues()[key as keyof AssetFormData],
-            }),
-            {}
-          ),
-      [sections, methods]
-    )
-
-    const handleSubmit = useCallback<SubmitHandler<AssetFormData>>(
-      async (data) => {
-        onSubmit(filteredData)
-      },
-      [filteredData, onSubmit]
-    )
-
-    return (
-      <FormProvider {...methods}>
-        <Form
-          onSubmit={handleSubmit}
-          resolver={zodResolver(assetSchema(sections))}
-          defaultValues={defaultValues}
-          noValidate
-        >
-          <Grid
-            templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }}
-            gap={{ base: 6, md: 12 }}
-            width="100%"
-            py={8}
-          >
-            <VStack gap={{ base: 6, md: 12 }} align="stretch">
-              <CompanySection
-                selected={sections.company}
-                setSelected={handleSetSelected('company')}
-              />
-              <ValuablesSection
-                selected={sections.valuables}
-                setSelected={handleSetSelected('valuables')}
-              />
-              <OthersSection
-                selected={sections.others}
-                setSelected={handleSetSelected('others')}
-              />
-            </VStack>
-            <VStack gap={{ base: 6, md: 12 }} align="stretch">
-              <BankAccountSection
-                selected={sections.bankAccount}
-                setSelected={handleSetSelected('bankAccount')}
-                bankAccountCollection={[]}
-              />
-              <CarSection
-                selected={sections.car}
-                setSelected={handleSetSelected('car')}
-                bankAccountCollection={[]}
-              />
-            </VStack>
-
-            <SubmitButton
-              type="submit"
-              colorScheme="blue"
-              justifySelf={'center'}
-              gridColumn={{ base: '1', md: 'span 2' }}
-              width={{ base: '100%', sm: '50%' }}
-              mt={8}
-              loading={isSubmitting}
-              loadingText="Ukládám majetek..."
-            >
-              Uložit majetek
-            </SubmitButton>
-          </Grid>
-        </Form>
-      </FormProvider>
-    )
+  const handleSubmit: SubmitHandler<AssetFormData> = async (data) => {
+    const filteredData: AssetFormData = Object.keys(data)
+      .filter((key) => !sections[key as keyof typeof sections])
+      .reduce(
+        (acc, key) => ({ ...acc, [key]: data[key as keyof AssetFormData] }),
+        {}
+      )
+    onSubmit(filteredData)
   }
-)
 
-AssetForm.displayName = 'AssetForm'
+  return (
+    <FormProvider {...methods}>
+      <Form
+        onSubmit={handleSubmit}
+        resolver={zodResolver(assetSchema(sections))}
+        defaultValues={defaultValues}
+        noValidate
+      >
+        <Grid
+          templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }}
+          gap={{ base: 6, md: 12 }}
+          width="100%"
+          py={8}
+        >
+          <VStack gap={{ base: 6, md: 12 }} align="stretch">
+            <CompanySection
+              selected={sections.company}
+              setSelected={handleSetSelected('company')}
+            />
+            <ValuablesSection
+              selected={sections.valuables}
+              setSelected={handleSetSelected('valuables')}
+            />
+            <OthersSection
+              selected={sections.others}
+              setSelected={handleSetSelected('others')}
+            />
+          </VStack>
+          <VStack gap={{ base: 6, md: 12 }} align="stretch">
+            <BankAccountSection
+              selected={sections.bankAccount}
+              setSelected={handleSetSelected('bankAccount')}
+              bankAccountCollection={[]}
+            />
+            <CarSection
+              selected={sections.car}
+              setSelected={handleSetSelected('car')}
+              bankAccountCollection={[]}
+            />
+          </VStack>
+
+          <SubmitButton
+            type="submit"
+            colorScheme="blue"
+            justifySelf={'center'}
+            gridColumn={{ base: '1', md: 'span 2' }}
+            width={{ base: '100%', sm: '50%' }}
+            mt={8}
+          >
+            Uložit majetek
+          </SubmitButton>
+        </Grid>
+      </Form>
+    </FormProvider>
+  )
+}

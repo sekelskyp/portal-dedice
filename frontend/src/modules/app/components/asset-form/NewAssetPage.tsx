@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Container, Heading, Text, VStack } from '@chakra-ui/react'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -17,7 +17,40 @@ export const NewAssetPage = () => {
   const { addAsset: createAssetRequest } = useAddAsset()
   const { removeAsset: deleteAsset } = useDeleteAsset()
   const { data: existingAssets } = useGetAssets(parseInt(id!, 10))
-  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const handleFormSubmit = useCallback(
+    async (formData: AssetFormData) => {
+      if (!id) {
+        console.error('No procedure ID provided')
+        return
+      }
+
+      const assets = mapFormDataToAssets(formData)
+
+      try {
+        if (existingAssets?.getAssetsByProcedureId?.length > 0) {
+          await Promise.all(
+            existingAssets.getAssetsByProcedureId.map((asset: Asset) =>
+              deleteAsset(parseInt(asset.id, 10))
+            )
+          )
+        }
+
+        for (const asset of assets) {
+          await createAssetRequest({
+            inheritanceProcedureId: parseInt(id, 10),
+            value: 0,
+            ...asset,
+          })
+        }
+
+        navigate(route.inheritanceProcedure(id))
+      } catch (error) {
+        console.error('Error managing assets:', error)
+      }
+    },
+    [createAssetRequest, deleteAsset, id, navigate, existingAssets]
+  )
 
   const defaultValues = useMemo(() => {
     if (!existingAssets?.getAssetsByProcedureId) return undefined
@@ -74,54 +107,6 @@ export const NewAssetPage = () => {
     return formData
   }, [existingAssets])
 
-  const memoizedAssets = useMemo(
-    () => mapFormDataToAssets(defaultValues || {}),
-    [defaultValues]
-  )
-
-  const handleFormSubmit = useCallback(
-    async (formData: AssetFormData) => {
-      if (!id) return
-
-      setIsSubmitting(true)
-      const assets = memoizedAssets
-
-      try {
-        // Delete existing assets in a single batch operation
-        if (existingAssets?.getAssetsByProcedureId?.length) {
-          const deletePromises = existingAssets.getAssetsByProcedureId.map(
-            (asset: Asset) => deleteAsset(parseInt(asset.id, 10))
-          )
-          await Promise.all(deletePromises)
-        }
-
-        // Create new assets in parallel batches
-        const createPromises = assets.map((asset) =>
-          createAssetRequest({
-            inheritanceProcedureId: parseInt(id, 10),
-            value: 0,
-            ...asset,
-          })
-        )
-
-        await Promise.all(createPromises)
-        navigate(route.inheritanceProcedure(id))
-      } catch (error) {
-        console.error('Error managing assets:', error)
-      } finally {
-        setIsSubmitting(false)
-      }
-    },
-    [
-      createAssetRequest,
-      deleteAsset,
-      id,
-      navigate,
-      existingAssets,
-      memoizedAssets,
-    ]
-  )
-
   if (!id) {
     return <div>Missing procedure ID</div>
   }
@@ -157,7 +142,6 @@ export const NewAssetPage = () => {
             onSubmit={handleFormSubmit}
             inheritanceProcedureId={parseInt(id, 10)}
             defaultValues={defaultValues}
-            isSubmitting={isSubmitting}
           />
         </Container>
       </VStack>
