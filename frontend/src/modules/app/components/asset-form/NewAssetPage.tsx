@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { Container, Heading, Text, VStack } from '@chakra-ui/react'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -17,6 +17,7 @@ export const NewAssetPage = () => {
   const { addAsset: createAssetRequest } = useAddAsset()
   const { removeAsset: deleteAsset } = useDeleteAsset()
   const { data: existingAssets } = useGetAssets(parseInt(id!, 10))
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleFormSubmit = useCallback(
     async (formData: AssetFormData) => {
@@ -25,9 +26,11 @@ export const NewAssetPage = () => {
         return
       }
 
+      setIsSubmitting(true)
       const assets = mapFormDataToAssets(formData)
 
       try {
+        // Delete existing assets in bulk
         if (existingAssets?.getAssetsByProcedureId?.length > 0) {
           await Promise.all(
             existingAssets.getAssetsByProcedureId.map((asset: Asset) =>
@@ -36,17 +39,26 @@ export const NewAssetPage = () => {
           )
         }
 
-        for (const asset of assets) {
-          await createAssetRequest({
-            inheritanceProcedureId: parseInt(id, 10),
-            value: 0,
-            ...asset,
-          })
+        // Create new assets in chunks of 5 to avoid overwhelming the server
+        const chunkSize = 5
+        for (let i = 0; i < assets.length; i += chunkSize) {
+          const chunk = assets.slice(i, i + chunkSize)
+          await Promise.all(
+            chunk.map((asset) =>
+              createAssetRequest({
+                inheritanceProcedureId: parseInt(id, 10),
+                value: 0,
+                ...asset,
+              })
+            )
+          )
         }
 
         navigate(route.inheritanceProcedure(id))
       } catch (error) {
         console.error('Error managing assets:', error)
+      } finally {
+        setIsSubmitting(false)
       }
     },
     [createAssetRequest, deleteAsset, id, navigate, existingAssets]
@@ -142,6 +154,7 @@ export const NewAssetPage = () => {
             onSubmit={handleFormSubmit}
             inheritanceProcedureId={parseInt(id, 10)}
             defaultValues={defaultValues}
+            isSubmitting={isSubmitting}
           />
         </Container>
       </VStack>
