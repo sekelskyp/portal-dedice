@@ -19,13 +19,30 @@ export const Section: React.FC<SectionProps> = ({
   setSelected,
   clearFields,
 }) => (
-  <Box>
-    <Box display="flex" justifyContent="space-between" alignItems="center">
-      <Heading as={'h3'}>{title}</Heading>
+  <Box
+    borderWidth="1px"
+    borderRadius="lg"
+    p={6}
+    width="100%"
+    minH="200px"
+    display="flex"
+    flexDirection="column"
+    bg="white"
+    shadow="sm"
+  >
+    <Box
+      display="flex"
+      justifyContent="space-between"
+      alignItems="center"
+      mb={4}
+    >
+      <Heading as="h3" size="md">
+        {title}
+      </Heading>
     </Box>
-    <Separator mb={2} />
-    <Box p={1} m={2} display="flex" alignItems="center">
-      <Box mr={2}>Ano</Box>
+    <Separator mb={4} />
+    <Box p={2} display="flex" alignItems="center" mb={4}>
+      <Box mr={3}>Ano</Box>
       <Switch
         checked={selected}
         onChange={() => {
@@ -35,8 +52,8 @@ export const Section: React.FC<SectionProps> = ({
           }
         }}
       />
-      <Box ml={2}>Ne</Box>
+      <Box ml={3}>Ne</Box>
     </Box>
-    {!selected && children}
+    <Box flex={1}>{!selected && children}</Box>
   </Box>
 )

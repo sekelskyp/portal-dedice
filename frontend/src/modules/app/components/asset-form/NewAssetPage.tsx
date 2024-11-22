@@ -121,10 +121,19 @@ export const NewAssetPage = () => {
           borderWidth={1}
           borderRadius={3}
         >
-          <Heading justifySelf="center" size="xl" mb={4}>
+          <Heading
+            size={{ base: '2xl', md: '4xl' }}
+            mb={4}
+            textAlign={{ base: 'center', md: 'left' }}
+          >
             Majetek zůstavitele
           </Heading>
-          <Text fontSize="lg" color="gray.600" maxW="800px" mx="auto">
+          <Text
+            fontSize={{ base: 'sm', md: 'lg' }}
+            color="gray.600"
+            maxW="650px"
+            textAlign={{ base: 'center', md: 'left' }}
+          >
             Pro každý typ majetku prosím zvolte, zda jej zůstavitel vlastnil či
             nikoliv. V případě, že majetek vlastnil, vyplňte příslušné údaje v
             dané sekci.
