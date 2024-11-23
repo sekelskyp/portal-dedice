@@ -1,8 +1,11 @@
 import { Field, ID, ObjectType } from 'type-graphql'
 
-import { Beneficiary } from '../beneficiary/beneficiaryType'
-import { Contact } from '../contact/contactType'
-import { Notary } from '../notary/notaryType'
+import {
+  genderEnum,
+  GenderEnumType,
+  userTypeEnum,
+  UserTypeEnumType,
+} from '@shared/enums'
 
 @ObjectType()
 export class User {
@@ -18,22 +21,30 @@ export class User {
   @Field()
   confirmed!: boolean
 
-  @Field(() => [Notary])
-  notaries?: Notary[]
+  @Field(() => userTypeEnum)
+  type!: UserTypeEnumType
 
-  @Field(() => [Beneficiary])
-  beneficiaries?: Beneficiary[]
-
-  // Computed fields
-  @Field()
-  isNotary?: boolean
+  @Field(() => ID)
+  notaryId!: number | null
 
   @Field()
-  isBeneficiary?: boolean
+  sendNotifications!: boolean
 
-  @Field(() => ID, { nullable: true })
-  contactId?: number | null
+  @Field()
+  name!: string
 
-  @Field(() => Contact, { nullable: true })
-  contact?: Contact
+  @Field()
+  surname!: string
+
+  @Field()
+  displayName!: string
+
+  @Field(() => genderEnum)
+  gender!: GenderEnumType | null
+
+  @Field()
+  phone!: string | null
+
+  @Field(() => ID)
+  addressId!: number | null
 }

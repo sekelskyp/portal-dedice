@@ -1,6 +1,6 @@
 import { Field, InputType } from 'type-graphql'
 
-import { GenderEnumType } from '@backend/db/schema'
+import { GenderEnumType } from '@shared/enums'
 
 @InputType()
 export class ProfileInput {
@@ -12,9 +12,6 @@ export class ProfileInput {
 
   @Field({ nullable: true })
   displayName!: string
-
-  @Field({ nullable: true })
-  email?: string
 
   @Field({ nullable: true })
   phone?: string

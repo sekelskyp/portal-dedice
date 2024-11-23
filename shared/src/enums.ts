@@ -1,6 +1,6 @@
 // User Type
 export const userTypeEnum = ['User', 'Notary', 'Admin'] as const
-export type UserTypeEnumType = (typeof genderEnum)[number]
+export type UserTypeEnumType = (typeof userTypeEnum)[number]
 
 // Gender
 export const genderEnum = ['Male', 'Female', 'Other'] as const

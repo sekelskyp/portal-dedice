@@ -1,10 +1,11 @@
 import { createPubSub } from '@graphql-yoga/subscription'
 import { MySql2Database } from 'drizzle-orm/mysql2'
 
-import { getAssetRepository } from '@backend/graphql/modules/asset/assetRepository'
+import { type getAddressRepository } from '@backend/graphql/modules/address/addressRepository'
+import { type getAssetRepository } from '@backend/graphql/modules/asset/assetRepository'
 import { type getBeneficiaryRepository } from '@backend/graphql/modules/beneficiary/beneficiaryRepository'
-import { getChatMessageRepository } from '@backend/graphql/modules/chat/chatMessageRepository'
-import { getChatRepository } from '@backend/graphql/modules/chat/chatRepository'
+import { type getChatMessageRepository } from '@backend/graphql/modules/chat/chatMessageRepository'
+import { type getChatRepository } from '@backend/graphql/modules/chat/chatRepository'
 import { type getContactRepository } from '@backend/graphql/modules/contact/contactRepository'
 import { type getDocumentRepository } from '@backend/graphql/modules/document/documentRepository'
 import { type getEmailConfirmationTokenRepository } from '@backend/graphql/modules/emailConfirmationToken/emailConfirmationTokenRepository'
@@ -38,6 +39,7 @@ export type CustomContext = {
   >
   assetRepository: ReturnType<typeof getAssetRepository>
   documentRepository: ReturnType<typeof getDocumentRepository>
+  addressRepository: ReturnType<typeof getAddressRepository>
   chatRepository: ReturnType<typeof getChatRepository>
   chatMessageRepository: ReturnType<typeof getChatMessageRepository>
   pubSub: ReturnType<typeof createPubSub>

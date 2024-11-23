@@ -20,11 +20,18 @@ import { WebSocketServer } from 'ws'
 
 import { MOCKS, PORT } from '@backend/config'
 import { getConnection } from '@backend/db/db'
+import { getAddressRepository } from '@backend/graphql/modules/address/addressRepository'
+import { getAssetRepository } from '@backend/graphql/modules/asset/assetRepository'
+import { AssetResolver } from '@backend/graphql/modules/asset/assetResolver'
 import { getBeneficiaryRepository } from '@backend/graphql/modules/beneficiary/beneficiaryRepository'
 import { BeneficiaryResolver } from '@backend/graphql/modules/beneficiary/beneficiaryResolver'
+import { getChatMessageRepository } from '@backend/graphql/modules/chat/chatMessageRepository'
+import { getChatRepository } from '@backend/graphql/modules/chat/chatRepository'
+import { ChatResolver } from '@backend/graphql/modules/chat/chatResolver'
 import { getContactRepository } from '@backend/graphql/modules/contact/contactRepository'
 import { ContactResolver } from '@backend/graphql/modules/contact/contactResolver'
 import { getDocumentRepository } from '@backend/graphql/modules/document/documentRepository'
+import { DocumentResolver } from '@backend/graphql/modules/document/documentResolver'
 import { getEmailConfirmationTokenRepository } from '@backend/graphql/modules/emailConfirmationToken/emailConfirmationTokenRepository'
 import { EmptyResolver } from '@backend/graphql/modules/empty/emptyResolver'
 import { getInheritanceProcedureRepository } from '@backend/graphql/modules/inheritanceProcedure/inheritaceProcedureRepository'
@@ -38,13 +45,6 @@ import { UserResolver } from '@backend/graphql/modules/user/userResolver'
 import { parseAndVerifyJWT } from '@backend/libs/jwt'
 import { mockResolvers } from '@backend/mocks/mocks'
 import { CustomContext } from '@backend/types/types'
-
-import { getAssetRepository } from './graphql/modules/asset/assetRepository'
-import { AssetResolver } from './graphql/modules/asset/assetResolver'
-import { getChatMessageRepository } from './graphql/modules/chat/chatMessageRepository'
-import { getChatRepository } from './graphql/modules/chat/chatRepository'
-import { ChatResolver } from './graphql/modules/chat/chatResolver'
-import { DocumentResolver } from './graphql/modules/document/documentResolver'
 
 const init = async () => {
   const app = express()
@@ -153,6 +153,7 @@ const init = async () => {
       ),
       assetRepository: getAssetRepository(drizzle.db),
       documentRepository: getDocumentRepository(drizzle.db),
+      addressRepository: getAddressRepository(drizzle.db),
       chatRepository: getChatRepository(drizzle.db),
       chatMessageRepository: getChatMessageRepository(drizzle.db),
       pubSub, // Add PubSub to the HTTP context
