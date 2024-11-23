@@ -77,28 +77,25 @@ export const CarSection: React.FC<CarSectionProps> = ({
   setSelected,
 }) => {
   const { setValue, control, watch } = useFormContext()
-  const car = watch('car')
-  const hasExistingData =
-    car &&
-    car.length > 0 &&
-    car.some(
-      (item: { brand: string; year: string; description: string }) =>
-        item.brand || item.year || item.description
-    )
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'car',
+    shouldUnregister: false,
   })
 
+  React.useEffect(() => {
+    if (!selected && fields.length === 0) {
+      append({ brand: '', year: '', description: '' }, { shouldFocus: false })
+    }
+  }, [selected, fields.length, append])
+
   const clearFields = () => {
-    setValue('car', [])
+    setValue('car', [{ brand: '', year: '', description: '' }], {
+      shouldValidate: true,
+    })
   }
 
-  React.useEffect(() => {
-    if (fields.length === 0) {
-      append({ brand: '', year: '', description: '' })
-    }
-  }, [append, fields.length])
+  const hasExistingData = fields.length > 0
 
   return (
     <Section
