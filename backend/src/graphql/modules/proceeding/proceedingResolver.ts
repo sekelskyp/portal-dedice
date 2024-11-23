@@ -11,7 +11,7 @@ import {
 
 import { Asset } from '@backend/graphql/modules/asset/assetType'
 import { Document } from '@backend/graphql/modules/document/documentType'
-import { getDocumentsByProcedureId } from '@backend/services/documentService'
+import { getDocumentsByProceedingId } from '@backend/services/documentService'
 
 import {
   addBeneficiariesToProceeding,
@@ -19,7 +19,6 @@ import {
   closeProceeding,
   createProceeding,
   deleteBeneficiaryFromProceeding,
-  deleteProceduresByIds,
   notifyProceedingBeneficiaries,
 } from '../../../services/proceedingService'
 import { CustomContext } from '../../../types/types'
@@ -76,7 +75,7 @@ export class InheritanceProcedureResolver {
     @Arg('proceedingId', () => Int) proceedingId: number,
     @Ctx() context: CustomContext
   ): Promise<Document[]> {
-    return await getDocumentsByProcedureId(proceedingId, context)
+    return await getDocumentsByProceedingId(proceedingId, context)
   }
 
   // Query to get assets by proceeding ID
@@ -129,11 +128,7 @@ export class InheritanceProcedureResolver {
     @Arg('beneficiaryId', () => Int) beneficiaryId: number,
     @Ctx() context: CustomContext
   ): Promise<boolean> {
-    await deleteBeneficiaryFromProceeding(
-      proceedingId,
-      [beneficiaryId],
-      context
-    )
+    await deleteBeneficiaryFromProceeding(proceedingId, beneficiaryId, context)
     return true
   }
 
@@ -149,11 +144,12 @@ export class InheritanceProcedureResolver {
 
   // Mutation to delete proceedings by IDs
   @Mutation(() => [Int])
-  async deleteProceduresByIds(
+  async deleteProceedingsByIds(
     @Arg('ids', () => [Int]) ids: number[],
     @Ctx() context: CustomContext
-  ): Promise<number[]> {
-    return await deleteProceduresByIds(ids, context)
+  ): Promise<boolean> {
+    await context.proceedingRepository.deleteProceedingsByIds(ids)
+    return true
   }
 
   // Mutation to notify beneficiaries of a proceeding
@@ -215,7 +211,7 @@ export class InheritanceProcedureResolver {
     @Root() proceeding: Proceeding,
     @Ctx() context: CustomContext
   ): Promise<Document[]> {
-    return await getDocumentsByProcedureId(proceeding.id, context)
+    return await getDocumentsByProceedingId(proceeding.id, context)
   }
 
   // Field Resolver to fetch assets

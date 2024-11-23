@@ -7,12 +7,6 @@ export class UploadDocumentInput {
   @Field(() => GraphQLUpload)
   file!: FileUpload
 
-  @Field(() => ID, { nullable: true })
-  userOwnerId?: number
-
-  @Field(() => ID, { nullable: true })
-  taskId?: number
-
   @Field(() => ID)
   inheritanceProcedureId!: number
 }

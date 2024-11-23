@@ -85,13 +85,7 @@ export class UserResolver {
     @Arg('registerInput') registerInput: RegisterInput,
     @Ctx() context: CustomContext
   ): Promise<User> {
-    const userRecordId = await registerUser(
-      registerInput.email,
-      registerInput.password,
-      registerInput.name,
-      registerInput.surname,
-      context
-    )
+    const userRecordId = await registerUser(registerInput, context)
 
     if (!userRecordId) {
       throw new Error('Registration failed')

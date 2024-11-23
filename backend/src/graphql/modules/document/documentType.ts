@@ -17,12 +17,6 @@ export class Document {
   @Field(() => Date)
   createDate!: Date
 
-  @Field(() => ID, { nullable: true })
-  userOwnerId!: number | null
-
-  @Field(() => ID, { nullable: true })
-  taskId!: number | null
-
   @Field(() => ID)
-  inheritanceProcedureId!: number
+  proceedingId!: number
 }

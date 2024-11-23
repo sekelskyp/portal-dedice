@@ -1,11 +1,11 @@
 import { Field, Float, ID, InputType } from 'type-graphql'
 
-import { AssetTypeEnumType } from '@backend/db/schema'
+import { AssetTypeEnumType } from '@shared/enums'
 
 @InputType()
-export class UpdateAssetInput {
+export class AssetInput {
   @Field(() => ID)
-  inheritanceProcedureId!: number
+  proceedingId!: number
 
   @Field(() => Float)
   value!: number

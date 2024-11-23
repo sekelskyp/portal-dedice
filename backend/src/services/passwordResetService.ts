@@ -46,6 +46,7 @@ export const requestPasswordReset = async (
   const resetLink = `${baseUrl}${route.resetPassword()}?token=${token}`
   // Render the template
   const html = await renderTemplate('passwordReset', {
+    userDisplayName: userRecord.displayName,
     resetLink,
   })
   // Send the email with the reset link
@@ -85,7 +86,9 @@ export const resetPassword = async (
   const hashedPassword = await hashPassword(newPassword)
 
   // Update the user's password
-  await userRepository.updateUser(userRecord.id, { password: hashedPassword })
+  await userRepository.updateUserById(userRecord.id, {
+    password: hashedPassword,
+  })
 
   // Delete the reset token after it's used
   await passwordResetTokenRepository.deleteTokenById(resetTokenRecord.id)

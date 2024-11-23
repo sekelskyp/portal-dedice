@@ -34,19 +34,23 @@ export const requestEmailVerification = async (
     token,
     expiresAt,
   })
-
+  const user = await context.userRepository.getUserById(userId)
+  if (!user) {
+    throw new Error('Záznam uživatele nebyl nalezen')
+  }
   // Generate the confirmation link
   const baseUrl = `${process.env.APP_BASE_URL_FRONTEND}`
   const confirmationLink = `${baseUrl}${route.emailVerification()}?token=${token}`
   // Render the template
   const html = await renderTemplate('emailConfirmation', {
+    userDisplayName: user.displayName,
     confirmationLink,
   })
 
   // Send the email with the confirmation link
   await sendEmail({
     to: email,
-    subject: 'Email Confirmation Request',
+    subject: 'Žádost o ověření e-mailu',
     html,
   })
 }
@@ -80,7 +84,7 @@ export const verifyEmail = async (
     throw new Error('User not found')
   }
 
-  await userRepository.updateUser(userRecord.id, { confirmed: true })
+  await userRepository.updateUserById(userRecord.id, { confirmed: true })
 
   // Delete the confirmation token after it's used
   await emailConfirmationTokenRepository.deleteTokenById(

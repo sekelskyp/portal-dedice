@@ -3,9 +3,9 @@ import { Arg, Ctx, Int, Mutation, Query, Resolver } from 'type-graphql'
 import { Asset } from '@backend/graphql/modules/asset/assetType'
 import { CustomContext } from '@backend/types/types'
 
-import { CreateAssetInput } from './createAssetInput'
-import { UpdateAssetInput } from './updateAssetInput'
+import { AssetInput } from './assetInput'
 
+// Utility function to check car registration date validity
 function checkCarRegistrationDate(registrationDate: Date | null | undefined) {
   if (registrationDate && registrationDate > new Date()) {
     throw new Error('Není možné zadat datum registrace vozu v budoucnosti.')
@@ -14,6 +14,10 @@ function checkCarRegistrationDate(registrationDate: Date | null | undefined) {
 
 @Resolver(() => Asset)
 export class AssetResolver {
+  // ----------------------------------
+  // QUERIES
+  // ----------------------------------
+
   // Query to get an asset by ID
   @Query(() => Asset, { nullable: true })
   async getAssetById(
@@ -23,22 +27,30 @@ export class AssetResolver {
     return await assetRepository.getAssetById(id)
   }
 
+  // ----------------------------------
+  // MUTATIONS
+  // ----------------------------------
+
   // Mutation to create a new asset
   @Mutation(() => Asset)
   async createAsset(
-    @Arg('data') data: CreateAssetInput,
+    @Arg('data') data: AssetInput,
     @Ctx() { assetRepository }: CustomContext
   ): Promise<Asset> {
     checkCarRegistrationDate(data.carRegistrationDate)
     const assetId = await assetRepository.createAsset(data)
-    return await assetRepository.getAssetById(assetId)
+    const asset = await assetRepository.getAssetById(assetId)
+    if (!asset) {
+      throw new Error('Asset was created but could not be fetched')
+    }
+    return asset
   }
 
   // Mutation to update an existing asset
   @Mutation(() => Asset, { nullable: true })
   async updateAsset(
     @Arg('id', () => Int) id: number,
-    @Arg('data') data: UpdateAssetInput,
+    @Arg('data') data: AssetInput,
     @Ctx() { assetRepository }: CustomContext
   ): Promise<Asset | null> {
     checkCarRegistrationDate(data.carRegistrationDate)

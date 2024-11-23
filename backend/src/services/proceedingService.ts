@@ -93,7 +93,7 @@ export async function createProceeding(
   )
   // 5) create chat for proceeding
   await context.chatRepository.createChat({
-    inheritanceProcedureId: proceedingId,
+    proceedingId: proceedingId,
   })
   // 6) return proceeding id
   return proceedingId

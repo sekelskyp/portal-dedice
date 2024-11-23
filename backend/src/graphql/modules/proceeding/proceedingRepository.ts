@@ -1,8 +1,7 @@
 import { eq, inArray, InferInsertModel, InferSelectModel } from 'drizzle-orm'
 
+import { beneficiary, proceeding } from '@backend/db/schema'
 import { type Db } from '@backend/types/types'
-
-import { beneficiary, proceeding } from '../../../db/schema'
 
 export interface ProceedingEntity extends InferSelectModel<typeof proceeding> {}
 export interface ProceedingInsertInput
@@ -46,8 +45,6 @@ export function getProceedingRepository(db: Db) {
   }
 
   async function deleteProceedingsByIds(ids: number[]): Promise<void> {
-    // Select all the records that match the given IDs
-    // Delete the records
     await db.delete(proceeding).where(inArray(proceeding.id, ids))
   }
 

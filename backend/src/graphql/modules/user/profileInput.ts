@@ -5,13 +5,13 @@ import { GenderEnumType } from '@shared/enums'
 @InputType()
 export class ProfileInput {
   @Field()
-  name!: string
+  name?: string
 
   @Field()
-  surname!: string
+  surname?: string
 
   @Field({ nullable: true })
-  displayName!: string
+  displayName?: string
 
   @Field({ nullable: true })
   phone?: string
@@ -20,14 +20,14 @@ export class ProfileInput {
   gender?: GenderEnumType
 
   @Field(() => String, { nullable: true })
-  addressStreet?: string
+  street?: string
 
   @Field(() => String, { nullable: true })
-  addressStreetNumber?: string
+  streetNumber?: string
 
   @Field(() => String, { nullable: true })
-  addressMunicipality?: string
+  municipality?: string
 
   @Field(() => String, { nullable: true })
-  addressPostCode?: string
+  postalCode?: string
 }
