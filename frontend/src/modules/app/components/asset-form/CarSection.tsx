@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Button, HStack, VStack } from '@chakra-ui/react'
 import { createListCollection } from '@chakra-ui/react/collection'
-import { Controller, useFieldArray, useFormContext } from 'react-hook-form'
+import { Controller } from 'react-hook-form'
 import { FaPlus, FaTimes, FaTrash } from 'react-icons/fa'
 
 import resources from '@frontend/resources'
@@ -9,6 +9,7 @@ import { InputFormControl } from '@frontend/shared/forms/InputFormControl'
 import { SelectFormControl } from '@frontend/shared/forms/SelectFormControl'
 
 import { Section } from './Sections'
+import { useAssetSection } from './useAssetSection'
 
 interface CarSectionProps {
   selected: boolean
@@ -76,24 +77,11 @@ export const CarSection: React.FC<CarSectionProps> = ({
   selected,
   setSelected,
 }) => {
-  const { setValue, control, watch } = useFormContext()
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'car',
-    shouldUnregister: false,
-  })
-
-  React.useEffect(() => {
-    if (!selected && fields.length === 0) {
-      append({ brand: '', year: '', description: '' }, { shouldFocus: false })
-    }
-  }, [selected, fields.length, append])
-
-  const clearFields = () => {
-    setValue('car', [{ brand: '', year: '', description: '' }], {
-      shouldValidate: true,
-    })
-  }
+  const { fields, append, remove, setValue, watch } = useAssetSection(
+    'car',
+    selected,
+    { brand: '', year: '', description: '' }
+  )
 
   const hasExistingData = fields.length > 0
 
@@ -102,7 +90,11 @@ export const CarSection: React.FC<CarSectionProps> = ({
       title={resources.portal.forms.assetForm.groups.car}
       selected={selected}
       setSelected={setSelected}
-      clearFields={clearFields}
+      clearFields={() =>
+        setValue('car', [{ brand: '', year: '', description: '' }], {
+          shouldValidate: true,
+        })
+      }
       hideSwitch={hasExistingData}
     >
       {!selected && (

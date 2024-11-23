@@ -1,12 +1,13 @@
 import React from 'react'
 import { Button, HStack, VStack } from '@chakra-ui/react'
-import { Controller, useFieldArray, useFormContext } from 'react-hook-form'
+import { Controller } from 'react-hook-form'
 import { FaPlus, FaTrash } from 'react-icons/fa'
 
 import resources from '@frontend/resources'
 import { InputFormControl } from '@frontend/shared/forms/InputFormControl'
 
 import { Section } from './Sections'
+import { useAssetSection } from './useAssetSection'
 
 interface CompanySectionProps {
   selected: boolean
@@ -17,33 +18,24 @@ export const CompanySection: React.FC<CompanySectionProps> = ({
   selected,
   setSelected,
 }) => {
-  const { setValue, control, watch } = useFormContext()
+  const { fields, append, remove, setValue, watch } = useAssetSection(
+    'company',
+    selected,
+    { ico: '' }
+  )
+
   const company = watch('company')
   const hasExistingData =
     company &&
     company.length > 0 &&
     company.some((item: { ico: string }) => item.ico)
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'company',
-  })
-
-  const clearFields = () => {
-    setValue('company', [])
-  }
-
-  React.useEffect(() => {
-    if (fields.length === 0) {
-      append({ ico: '' })
-    }
-  }, [append, fields.length])
 
   return (
     <Section
       title={resources.portal.forms.assetForm.groups.company}
       selected={selected}
       setSelected={setSelected}
-      clearFields={clearFields}
+      clearFields={() => setValue('company', [])}
       hideSwitch={hasExistingData}
     >
       {!selected && (

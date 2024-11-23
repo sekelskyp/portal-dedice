@@ -1,13 +1,14 @@
 import React from 'react'
 import { Box, Button } from '@chakra-ui/react'
 import { createListCollection } from '@chakra-ui/react/collection'
-import { Controller, useFormContext } from 'react-hook-form'
+import { Controller } from 'react-hook-form'
 import { FaTimes } from 'react-icons/fa'
 
 import resources from '@frontend/resources'
 import { SelectFormControl } from '@frontend/shared/forms/SelectFormControl'
 
 import { Section } from './Sections'
+import { useAssetSection } from './useAssetSection'
 
 interface BankAccountSectionProps {
   selected: boolean
@@ -38,13 +39,14 @@ export const BankAccountSection: React.FC<BankAccountSectionProps> = ({
   selected,
   setSelected,
 }) => {
-  const { setValue, watch } = useFormContext()
+  const { setValue, watch, clearFields } = useAssetSection(
+    'bankAccount',
+    selected,
+    { bank: [] }
+  )
+
   const bankAccount = watch('bankAccount')
   const hasExistingData = bankAccount?.bank && bankAccount.bank.length > 0
-
-  const clearFields = () => {
-    setValue('bankAccount.bank', [])
-  }
 
   return (
     <Section
