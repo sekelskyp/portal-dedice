@@ -70,11 +70,10 @@ export function getNotaryRepository(db: Db) {
     dateOfDeathMonthNumber: number,
     dateOfDeathDayNumber: number,
     addressPostCode: string
-  ) {
+  ): Promise<number | null> {
     const result = await db
       .select({ id: notary.id })
       .from(notary)
-      .leftJoin(contact, eq(notary.contactId, contact.id))
       .leftJoin(
         notaryDateRule,
         and(
@@ -83,17 +82,10 @@ export function getNotaryRepository(db: Db) {
           eq(notaryDateRule.startDay, dateOfDeathDayNumber)
         )
       )
-      .where(
-        sql`LEFT(${contact.addressPostCode}, 2) = LEFT(${addressPostCode}, 2)`
-      )
+      .where(sql`LEFT(${notary.postalCode}, 2) = LEFT(${addressPostCode}, 2)`)
       .groupBy(notary.id)
       .limit(1)
-
-    if (result.length === 0) {
-      throw new Error('Notář nebyl nalezen.')
-    }
-
-    return await db.select().from(notary).where(eq(notary.id, result[0].id))
+    return result[0].id || null
   }
 
   return {

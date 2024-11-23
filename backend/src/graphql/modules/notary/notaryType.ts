@@ -1,7 +1,7 @@
 import { Field, ID, ObjectType } from 'type-graphql'
 
 import { Contact } from '../contact/contactType'
-import { InheritanceProcedure } from '../inheritanceProcedure/inheritanceProcedureType'
+import { Proceeding } from '../proceeding/proceedingType'
 import { User } from '../user/userType'
 
 @ObjectType()

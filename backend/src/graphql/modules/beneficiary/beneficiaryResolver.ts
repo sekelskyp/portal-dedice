@@ -11,7 +11,7 @@ import {
 
 import { CustomContext } from '@backend/types/types'
 
-import { InheritanceProcedure } from '../inheritanceProcedure/inheritanceProcedureType'
+import { Proceeding } from '../proceeding/proceedingType'
 import { User } from '../user/userType'
 
 import { BeneficiaryInput } from './beneficiaryInput'
@@ -104,18 +104,14 @@ export class BeneficiaryResolver {
   // FIELD RESOLVERS
   // ===============================
 
-  @FieldResolver(() => [InheritanceProcedure])
+  @FieldResolver(() => [Proceeding])
   async inheritanceProceedings(
     @Root() beneficiary: Beneficiary,
-    @Ctx() { inheritanceProcedureRepository }: CustomContext
-  ): Promise<InheritanceProcedure[]> {
-    const procedureRecords =
-      await inheritanceProcedureRepository.getProceduresByBeneficiaryId(
-        beneficiary.id
-      )
-    return procedureRecords.map((record) => ({
-      ...record.inheritance_procedure,
-    }))
+    @Ctx() { proceedingRepository }: CustomContext
+  ): Promise<Proceeding[]> {
+    return await proceedingRepository.getBeneficiaryProceedingsForUser(
+      beneficiary.userId
+    )
   }
 
   @FieldResolver(() => User, { nullable: true })

@@ -13,7 +13,7 @@ import { CustomContext } from '@backend/types/types'
 
 import { findAvailableNotary } from '../../../services/notaryAssignmentService'
 import { Contact } from '../contact/contactType'
-import { InheritanceProcedure } from '../inheritanceProcedure/inheritanceProcedureType'
+import { Proceeding } from '../proceeding/proceedingType'
 import { User } from '../user/userType'
 
 import { CreateNotaryInput } from './createNotaryInput'

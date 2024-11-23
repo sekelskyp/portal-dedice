@@ -8,20 +8,15 @@ export interface FindAvailableNotaryInput {
 export async function findAvailableNotary(
   input: FindAvailableNotaryInput,
   context: CustomContext
-) {
+): Promise<number | null> {
   const { dateOfDeath, addressPostCode } = input
   const birthMonth = dateOfDeath.getMonth() + 1
   const birthDay = dateOfDeath.getDate()
 
-  const notary = await context.notaryRepository.findAvailableNotary(
+  const notaryId = await context.notaryRepository.findAvailableNotary(
     birthMonth,
     birthDay,
     addressPostCode
   )
-
-  if (!notary) {
-    throw new Error(`Žádný notář nebyl nazelen pro PSČ: ${addressPostCode}`)
-  }
-
-  return notary
+  return notaryId
 }

@@ -34,15 +34,15 @@ export function getAddressRepository(db: Db) {
   }
 
   // Delete an Address by ID
-  async function deleteAddressById(id: number): Promise<void> {
-    await db.delete(address).where(eq(address.id, id))
+  async function deleteAddressesByIds(ids: number[]): Promise<void> {
+    await db.delete(address).where(inArray(address.id, ids))
   }
 
   return {
     getAddressById,
     getAddressesByIds,
     createAddress,
-    deleteAddressById,
+    deleteAddressesByIds,
     updateAddressById,
   }
 }

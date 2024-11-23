@@ -7,9 +7,8 @@ export const genderEnum = ['Male', 'Female', 'Other'] as const
 export type GenderEnumType = (typeof genderEnum)[number]
 
 // Inheritance Procedure
-export const inheritanceProcedureStateEnum = ['InProgress', 'Closed'] as const
-export type InheritanceProcedureStateEnumType =
-  (typeof inheritanceProcedureStateEnum)[number]
+export const proceedingStateEnum = ['InProgress', 'Closed'] as const
+export type ProceedingStateEnumType = (typeof proceedingStateEnum)[number]
 
 // Deceased Relation
 export const deceasedRelationEnum = [

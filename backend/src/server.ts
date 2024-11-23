@@ -21,6 +21,7 @@ import { WebSocketServer } from 'ws'
 import { MOCKS, PORT } from '@backend/config'
 import { getConnection } from '@backend/db/db'
 import { getAddressRepository } from '@backend/graphql/modules/address/addressRepository'
+import { AddressResolver } from '@backend/graphql/modules/address/addressResolver'
 import { getAssetRepository } from '@backend/graphql/modules/asset/assetRepository'
 import { AssetResolver } from '@backend/graphql/modules/asset/assetResolver'
 import { getBeneficiaryRepository } from '@backend/graphql/modules/beneficiary/beneficiaryRepository'
@@ -28,18 +29,16 @@ import { BeneficiaryResolver } from '@backend/graphql/modules/beneficiary/benefi
 import { getChatMessageRepository } from '@backend/graphql/modules/chat/chatMessageRepository'
 import { getChatRepository } from '@backend/graphql/modules/chat/chatRepository'
 import { ChatResolver } from '@backend/graphql/modules/chat/chatResolver'
-import { getContactRepository } from '@backend/graphql/modules/contact/contactRepository'
-import { ContactResolver } from '@backend/graphql/modules/contact/contactResolver'
 import { getDocumentRepository } from '@backend/graphql/modules/document/documentRepository'
 import { DocumentResolver } from '@backend/graphql/modules/document/documentResolver'
 import { getEmailConfirmationTokenRepository } from '@backend/graphql/modules/emailConfirmationToken/emailConfirmationTokenRepository'
 import { EmptyResolver } from '@backend/graphql/modules/empty/emptyResolver'
-import { getInheritanceProcedureRepository } from '@backend/graphql/modules/inheritanceProcedure/inheritaceProcedureRepository'
-import { InheritanceProcedureResolver } from '@backend/graphql/modules/inheritanceProcedure/inheritanceProcedureResolver'
 import { getNotaryRepository } from '@backend/graphql/modules/notary/notaryRepository'
 import { NotaryResolver } from '@backend/graphql/modules/notary/notaryResolver'
 import { getNotaryDateRuleRepository } from '@backend/graphql/modules/notaryDateRule/notaryDateRuleRepository'
 import { getPasswordResetTokenRepository } from '@backend/graphql/modules/passwordResetToken/passwordResetTokenRepository'
+import { getProceedingRepository } from '@backend/graphql/modules/proceeding/proceedingRepository'
+import { InheritanceProcedureResolver } from '@backend/graphql/modules/proceeding/proceedingResolver'
 import { getUserRepository } from '@backend/graphql/modules/user/userRepository'
 import { UserResolver } from '@backend/graphql/modules/user/userResolver'
 import { parseAndVerifyJWT } from '@backend/libs/jwt'
@@ -61,10 +60,10 @@ const init = async () => {
       BeneficiaryResolver,
       InheritanceProcedureResolver,
       NotaryResolver,
-      ContactResolver,
       AssetResolver,
       DocumentResolver,
       ChatResolver,
+      AddressResolver,
     ],
     pubSub,
     emitSchemaFile: true,
@@ -141,10 +140,7 @@ const init = async () => {
       authUser,
       notaryRepository: getNotaryRepository(drizzle.db),
       userRepository: getUserRepository(drizzle.db),
-      contactRepository: getContactRepository(drizzle.db),
-      inheritanceProcedureRepository: getInheritanceProcedureRepository(
-        drizzle.db
-      ),
+      proceedingRepository: getProceedingRepository(drizzle.db),
       beneficiaryRepository: getBeneficiaryRepository(drizzle.db),
       notaryDateRuleRepository: getNotaryDateRuleRepository(drizzle.db),
       passwordResetTokenRepository: getPasswordResetTokenRepository(drizzle.db),

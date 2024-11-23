@@ -20,7 +20,7 @@ import {
 import {
   assetTypeEnum,
   genderEnum,
-  inheritanceProcedureStateEnum,
+  proceedingStateEnum,
   userTypeEnum,
 } from '@shared/enums'
 
@@ -79,9 +79,11 @@ export const notary = mysqlTable('notary', {
 export const beneficiary = mysqlTable('beneficiary', {
   id: int('id').primaryKey().autoincrement(),
   userId: int('user_id')
-    .references(() => user.id)
+    .references(() => user.id, { onDelete: 'cascade' })
     .notNull(),
-  proceedingId: int('proceeding_id').references(() => proceeding.id),
+  proceedingId: int('proceeding_id').references(() => proceeding.id, {
+    onDelete: 'cascade',
+  }),
 })
 
 // Define InheritanceProcedure Table
@@ -91,14 +93,15 @@ export const proceeding = mysqlTable('proceeding', {
   name: varchar('name', { length: 100 }).notNull(),
   state: varchar('state', {
     length: 10,
-    enum: inheritanceProcedureStateEnum,
+    enum: proceedingStateEnum,
   })
     .default('InProgress')
     .notNull(),
   startDate: date('start_date').notNull(),
   endDate: date('end_date'),
   mainBeneficiaryId: int('main_beneficiary_id').references(
-    (): AnyMySqlColumn => beneficiary.id
+    (): AnyMySqlColumn => beneficiary.id,
+    { onDelete: 'cascade' }
   ),
   // deceased person info
   deceasedName: varchar('name', { length: 125 }).notNull(),
