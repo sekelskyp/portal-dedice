@@ -24,16 +24,16 @@ export const SelectFormControl = (props: SelectControlProps) => {
     <BaseFieldControl {...rest}>
       {({ value, onChange, onBlur }, disabled) => (
         <SelectRoot
-          value={multiple ? value : [value]}
-          onValueChange={(value) =>
-            onChange(multiple ? value.value : value.value[0])
-          }
+          value={multiple ? value || [] : value ? [value] : []}
+          onValueChange={({ value }) => onChange(multiple ? value : value[0])}
           onBlur={onBlur}
           {...rest}
           disabled={disabled}
         >
           <SelectTrigger>
-            <SelectValueText placeholder={placeholder} />
+            <SelectValueText placeholder={placeholder}>
+              {(items) => items.map((i) => i.label).join(', ')}
+            </SelectValueText>
           </SelectTrigger>
           <SelectContent>
             {rest.collection.items.map((item) => (

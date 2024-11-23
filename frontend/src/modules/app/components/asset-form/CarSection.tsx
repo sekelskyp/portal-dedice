@@ -1,12 +1,15 @@
 import React from 'react'
+import { Box, Button, HStack, VStack } from '@chakra-ui/react'
 import { createListCollection } from '@chakra-ui/react/collection'
-import { Controller, useFormContext } from 'react-hook-form'
+import { Controller } from 'react-hook-form'
+import { FaPlus, FaTimes, FaTrash } from 'react-icons/fa'
 
 import resources from '@frontend/resources'
 import { InputFormControl } from '@frontend/shared/forms/InputFormControl'
 import { SelectFormControl } from '@frontend/shared/forms/SelectFormControl'
 
 import { Section } from './Sections'
+import { useAssetSection } from './useAssetSection'
 
 interface CarSectionProps {
   selected: boolean
@@ -74,55 +77,110 @@ export const CarSection: React.FC<CarSectionProps> = ({
   selected,
   setSelected,
 }) => {
-  const { setValue } = useFormContext()
+  const { fields, append, remove, setValue, watch } = useAssetSection(
+    'car',
+    selected,
+    { brand: '', year: '', description: '' }
+  )
 
-  const clearFields = () => {
-    setValue('car.brand', '')
-    setValue('car.year', 0)
-    setValue('car.description', '')
-  }
+  const hasExistingData = fields.length > 0
 
   return (
     <Section
       title={resources.portal.forms.assetForm.groups.car}
       selected={selected}
       setSelected={setSelected}
-      clearFields={clearFields}
+      clearFields={() =>
+        setValue('car', [{ brand: '', year: '', description: '' }], {
+          shouldValidate: true,
+        })
+      }
+      hideSwitch={hasExistingData}
     >
       {!selected && (
         <>
-          <Controller
-            name="car.brand"
-            render={({ field }) => (
-              <SelectFormControl
-                {...field}
-                label="Auto"
-                collection={carBrandCollection}
-                placeholder="Vyberte značku auta"
-              />
-            )}
-          />
-          <Controller
-            name="car.year"
-            render={({ field }) => (
-              <InputFormControl
-                {...field}
-                label="Rok registrace"
-                type="number"
-                placeholder="Zadejte rok registrace"
-              />
-            )}
-          />
-          <Controller
-            name="car.description"
-            render={({ field }) => (
-              <InputFormControl
-                {...field}
-                label="Popis"
-                placeholder="Zadejte popis auta"
-              />
-            )}
-          />
+          {fields.map((field, index) => (
+            <React.Fragment key={field.id}>
+              <VStack gap={4} width="100%" mb={4}>
+                <HStack width="100%" alignItems="flex-start" gap={4}>
+                  <Box position="relative" flex={1}>
+                    <Controller
+                      name={`car.${index}.brand`}
+                      render={({ field }) => (
+                        <SelectFormControl
+                          {...field}
+                          label="Auto"
+                          collection={carBrandCollection}
+                          placeholder="Vyberte značku auta"
+                        />
+                      )}
+                    />
+                    {watch(`car.${index}.brand`) && (
+                      <Button
+                        position="absolute"
+                        right="8"
+                        top="70%"
+                        transform="translateY(-50%)"
+                        size="xs"
+                        variant="ghost"
+                        p={1}
+                        minW="auto"
+                        h="auto"
+                        color="gray.500"
+                        _hover={{ color: 'gray.700' }}
+                        onClick={() => setValue(`car.${index}.brand`, '')}
+                      >
+                        <FaTimes size="10px" />
+                      </Button>
+                    )}
+                  </Box>
+                  <Controller
+                    name={`car.${index}.year`}
+                    render={({ field }) => (
+                      <InputFormControl
+                        {...field}
+                        label="Rok registrace"
+                        type="number"
+                        placeholder="Rok"
+                        width="150px"
+                      />
+                    )}
+                  />
+                </HStack>
+                <Controller
+                  name={`car.${index}.description`}
+                  render={({ field }) => (
+                    <InputFormControl
+                      {...field}
+                      label="Popis"
+                      placeholder="Zadejte popis auta"
+                      width="100%"
+                    />
+                  )}
+                />
+                <HStack width="100%" justifyContent="space-between">
+                  <Button
+                    onClick={() =>
+                      append({ brand: '', year: '', description: '' })
+                    }
+                    size="sm"
+                  >
+                    <FaPlus />
+                  </Button>
+                  {fields.length > 1 && (
+                    <Button
+                      aria-label="Remove car"
+                      onClick={() => remove(index)}
+                      bg="red.500"
+                      size="sm"
+                    >
+                      <FaTrash />
+                    </Button>
+                  )}
+                </HStack>
+              </VStack>
+            </React.Fragment>
+          ))}
         </>
       )}
     </Section>
