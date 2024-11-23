@@ -14,6 +14,13 @@ export function getAddressRepository(db: Db) {
     return result.id
   }
 
+  async function createAddresses(
+    data: AddressInsertInput[]
+  ): Promise<number[]> {
+    const result = await db.insert(address).values(data).$returningId()
+    return result.map((r) => r.id)
+  }
+
   // Get an Address by ID
   async function getAddressById(id: number): Promise<AddressEntity | null> {
     const [result] = await db.select().from(address).where(eq(address.id, id))
@@ -39,6 +46,7 @@ export function getAddressRepository(db: Db) {
   }
 
   return {
+    createAddresses,
     getAddressById,
     getAddressesByIds,
     createAddress,

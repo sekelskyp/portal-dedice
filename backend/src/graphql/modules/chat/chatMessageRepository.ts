@@ -1,18 +1,17 @@
-import { eq } from 'drizzle-orm'
+import { eq, InferInsertModel, InferSelectModel } from 'drizzle-orm'
 
+import { chatMessage } from '@backend/db/schema'
 import { Db } from '@backend/types/types'
 
-import { chatMessage } from '../../../db/schema'
-
-export interface ChatMessageData {
-  chatId: number
-  userId: number
-  body: string
-  createdAt: Date
-}
+export interface ChatMessageEntity
+  extends InferSelectModel<typeof chatMessage> {}
+export interface ChatMessageInsertInput
+  extends InferInsertModel<Omit<typeof chatMessage, 'id'>> {}
 
 export function getChatMessageRepository(db: Db) {
-  async function getChatMessagesByChatId(chatId: number) {
+  async function getChatMessagesByChatId(
+    chatId: number
+  ): Promise<ChatMessageEntity[]> {
     return await db
       .select()
       .from(chatMessage)
@@ -20,7 +19,9 @@ export function getChatMessageRepository(db: Db) {
       .orderBy(chatMessage.createdAt)
   }
 
-  async function getChatMessageById(id: number) {
+  async function getChatMessageById(
+    id: number
+  ): Promise<ChatMessageEntity | null> {
     const [result] = await db
       .select()
       .from(chatMessage)
@@ -28,9 +29,11 @@ export function getChatMessageRepository(db: Db) {
     return result || null
   }
 
-  async function createChatMessage(data: ChatMessageData) {
+  async function createChatMessage(
+    data: ChatMessageInsertInput
+  ): Promise<number> {
     const [result] = await db.insert(chatMessage).values(data).$returningId()
-    return result
+    return result.id
   }
 
   return {

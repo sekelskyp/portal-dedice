@@ -35,7 +35,9 @@ export const user = mysqlTable(
     type: varchar('type', {
       length: 6,
       enum: userTypeEnum,
-    }).notNull(),
+    })
+      .notNull()
+      .default('User'),
     notaryId: int('notary_id').references(() => notary.id),
     sendNotifications: boolean('send_notifications').default(true).notNull(),
     name: varchar('name', { length: 125 }).notNull(),

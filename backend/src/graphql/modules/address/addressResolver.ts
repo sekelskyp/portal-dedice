@@ -1,4 +1,3 @@
-import { add } from 'date-fns'
 import { Arg, Ctx, Int, Mutation, Query, Resolver } from 'type-graphql'
 
 import { CustomContext } from '@backend/types/types'
@@ -56,7 +55,7 @@ export class AddressResolver {
     if (!address) {
       throw new Error('Adresa nebyla nalezena')
     }
-    await addressRepository.deleteAddressById(id)
+    await addressRepository.deleteAddressesByIds([id])
     return true
   }
 }

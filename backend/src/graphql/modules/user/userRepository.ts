@@ -20,8 +20,12 @@ export function getUserRepository(db: Db) {
 
   async function createUser(data: UserInsertInput): Promise<number> {
     const resultingIds = await db.insert(user).values(data).$returningId()
-
     return resultingIds[0].id
+  }
+
+  async function createUsers(data: UserInsertInput[]): Promise<number[]> {
+    const resultingIds = await db.insert(user).values(data).$returningId()
+    return resultingIds.map((result) => result.id)
   }
 
   async function getUserByEmail(email: string): Promise<UserEntity | null> {
@@ -52,6 +56,7 @@ export function getUserRepository(db: Db) {
     getUserById,
     getUsersByIds,
     createUser,
+    createUsers,
     getUserByEmail,
     updateUserById,
     deleteUsersByIds,
