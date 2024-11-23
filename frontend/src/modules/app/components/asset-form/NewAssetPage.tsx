@@ -23,7 +23,6 @@ export const NewAssetPage = () => {
       if (!id) return
 
       try {
-        // Delete existing assets
         if (existingAssets?.getAssetsByProcedureId?.length > 0) {
           await Promise.all(
             existingAssets.getAssetsByProcedureId.map((asset: Asset) =>
@@ -31,8 +30,6 @@ export const NewAssetPage = () => {
             )
           )
         }
-
-        // Create new assets
         const assets = mapFormDataToAssets(formData)
         await Promise.all(
           assets.map((asset) =>
