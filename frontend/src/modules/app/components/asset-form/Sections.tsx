@@ -46,7 +46,7 @@ export const Section: React.FC<SectionProps> = ({
     <Separator mb={4} />
     {!hideSwitch && (
       <Box p={2} display="flex" alignItems="center" mb={4}>
-        <Box mr={3}>Ano</Box>
+        <Box mr={3}>Ne</Box>
         <Switch
           checked={!selected}
           onChange={() => {
@@ -57,7 +57,7 @@ export const Section: React.FC<SectionProps> = ({
           }}
           transition="opacity 0.2s"
         />
-        <Box ml={3}>Ne</Box>
+        <Box ml={3}>Ano</Box>
       </Box>
     )}
     <Box
