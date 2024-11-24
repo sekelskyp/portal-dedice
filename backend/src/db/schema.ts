@@ -105,7 +105,7 @@ export const proceeding = mysqlTable('proceeding', {
     (): AnyMySqlColumn => beneficiary.id
   ),
   // deceased person info
-  deceasedName: varchar('name', { length: 125 }).notNull(),
+  deceasedName: varchar('deceased_name', { length: 125 }).notNull(),
   deceasedSurname: varchar('surname', { length: 125 }).notNull(),
   deceasedDisplayName: varchar('display_name', { length: 255 }).notNull(),
   deceasedAddressId: int('address_id')

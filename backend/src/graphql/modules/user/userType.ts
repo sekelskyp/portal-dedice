@@ -1,11 +1,6 @@
 import { Field, ID, ObjectType } from 'type-graphql'
 
-import {
-  genderEnum,
-  GenderEnumType,
-  userTypeEnum,
-  UserTypeEnumType,
-} from '@shared/enums'
+import { GenderEnumType, UserTypeEnumType } from '@shared/enums'
 
 @ObjectType()
 export class User {
@@ -21,7 +16,7 @@ export class User {
   @Field()
   confirmed!: boolean
 
-  @Field(() => userTypeEnum)
+  @Field(() => String)
   type!: UserTypeEnumType
 
   @Field(() => ID)
@@ -39,10 +34,10 @@ export class User {
   @Field()
   displayName!: string
 
-  @Field(() => genderEnum)
+  @Field(() => String, { nullable: true })
   gender!: GenderEnumType | null
 
-  @Field()
+  @Field(() => String, { nullable: true })
   phone!: string | null
 
   @Field(() => ID)

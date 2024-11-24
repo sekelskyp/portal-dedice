@@ -1,9 +1,58 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "e9091ca8-082e-43da-b87f-0421d44923df",
+  "id": "ba917eec-7bfe-470a-911d-e56c58ac509a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
+    "address": {
+      "name": "address",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "street": {
+          "name": "street",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "street_number": {
+          "name": "street_number",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "municipality": {
+          "name": "municipality",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "postal_code": {
+          "name": "postal_code",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "address_id": {
+          "name": "address_id",
+          "columns": ["id"]
+        }
+      },
+      "uniqueConstraints": {}
+    },
     "asset": {
       "name": "asset",
       "columns": {
@@ -14,8 +63,8 @@
           "notNull": true,
           "autoincrement": true
         },
-        "inheritance_procedure_id": {
-          "name": "inheritance_procedure_id",
+        "proceeding_id": {
+          "name": "proceeding_id",
           "type": "int",
           "primaryKey": false,
           "notNull": true,
@@ -87,11 +136,11 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "asset_inheritance_procedure_id_inheritance_procedure_id_fk": {
-          "name": "asset_inheritance_procedure_id_inheritance_procedure_id_fk",
+        "asset_proceeding_id_proceeding_id_fk": {
+          "name": "asset_proceeding_id_proceeding_id_fk",
           "tableFrom": "asset",
-          "tableTo": "inheritance_procedure",
-          "columnsFrom": ["inheritance_procedure_id"],
+          "tableTo": "proceeding",
+          "columnsFrom": ["proceeding_id"],
           "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
@@ -119,37 +168,15 @@
           "name": "user_id",
           "type": "int",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
-        "deceased_relation": {
-          "name": "deceased_relation",
-          "type": "varchar(6)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "contact_id": {
-          "name": "contact_id",
+        "proceeding_id": {
+          "name": "proceeding_id",
           "type": "int",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
-        },
-        "date_of_birth": {
-          "name": "date_of_birth",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "send_notifications": {
-          "name": "send_notifications",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": true
         }
       },
       "indexes": {},
@@ -160,16 +187,16 @@
           "tableTo": "user",
           "columnsFrom": ["user_id"],
           "columnsTo": ["id"],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "beneficiary_contact_id_contact_id_fk": {
-          "name": "beneficiary_contact_id_contact_id_fk",
+        "beneficiary_proceeding_id_proceeding_id_fk": {
+          "name": "beneficiary_proceeding_id_proceeding_id_fk",
           "tableFrom": "beneficiary",
-          "tableTo": "contact",
-          "columnsFrom": ["contact_id"],
+          "tableTo": "proceeding",
+          "columnsFrom": ["proceeding_id"],
           "columnsTo": ["id"],
-          "onDelete": "set null",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -177,53 +204,6 @@
         "beneficiary_id": {
           "name": "beneficiary_id",
           "columns": ["id"]
-        }
-      },
-      "uniqueConstraints": {}
-    },
-    "beneficiary_inheritance_procedure_rel": {
-      "name": "beneficiary_inheritance_procedure_rel",
-      "columns": {
-        "beneficiary_id": {
-          "name": "beneficiary_id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "inheritance_procedure_id": {
-          "name": "inheritance_procedure_id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "ben_inher_proc_ben_id_fk": {
-          "name": "ben_inher_proc_ben_id_fk",
-          "tableFrom": "beneficiary_inheritance_procedure_rel",
-          "tableTo": "beneficiary",
-          "columnsFrom": ["beneficiary_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "ben_inher_proc_inher_id_fk": {
-          "name": "ben_inher_proc_inher_id_fk",
-          "tableFrom": "beneficiary_inheritance_procedure_rel",
-          "tableTo": "inheritance_procedure",
-          "columnsFrom": ["inheritance_procedure_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "ben_inher_proc_pk": {
-          "name": "ben_inher_proc_pk",
-          "columns": ["beneficiary_id", "inheritance_procedure_id"]
         }
       },
       "uniqueConstraints": {}
@@ -275,53 +255,6 @@
       },
       "uniqueConstraints": {}
     },
-    "beneficiary_task_rel": {
-      "name": "beneficiary_task_rel",
-      "columns": {
-        "beneficiary_id": {
-          "name": "beneficiary_id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "task_id": {
-          "name": "task_id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "beneficiary_task_rel_beneficiary_id_beneficiary_id_fk": {
-          "name": "beneficiary_task_rel_beneficiary_id_beneficiary_id_fk",
-          "tableFrom": "beneficiary_task_rel",
-          "tableTo": "beneficiary",
-          "columnsFrom": ["beneficiary_id"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "beneficiary_task_rel_task_id_task_id_fk": {
-          "name": "beneficiary_task_rel_task_id_task_id_fk",
-          "tableFrom": "beneficiary_task_rel",
-          "tableTo": "task",
-          "columnsFrom": ["task_id"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "beneficiary_task_rel_beneficiary_id_task_id_pk": {
-          "name": "beneficiary_task_rel_beneficiary_id_task_id_pk",
-          "columns": ["beneficiary_id", "task_id"]
-        }
-      },
-      "uniqueConstraints": {}
-    },
     "chat": {
       "name": "chat",
       "columns": {
@@ -332,8 +265,8 @@
           "notNull": true,
           "autoincrement": true
         },
-        "inheritance_procedure_id": {
-          "name": "inheritance_procedure_id",
+        "proceeding_id": {
+          "name": "proceeding_id",
           "type": "int",
           "primaryKey": false,
           "notNull": true,
@@ -342,11 +275,11 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "chat_inheritance_procedure_id_inheritance_procedure_id_fk": {
-          "name": "chat_inheritance_procedure_id_inheritance_procedure_id_fk",
+        "chat_proceeding_id_proceeding_id_fk": {
+          "name": "chat_proceeding_id_proceeding_id_fk",
           "tableFrom": "chat",
-          "tableTo": "inheritance_procedure",
-          "columnsFrom": ["inheritance_procedure_id"],
+          "tableTo": "proceeding",
+          "columnsFrom": ["proceeding_id"],
           "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
@@ -397,7 +330,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'2024-11-17 23:04:10.677'"
+          "default": "'2024-11-24 13:58:10.440'"
         }
       },
       "indexes": {},
@@ -429,97 +362,6 @@
       },
       "uniqueConstraints": {}
     },
-    "contact": {
-      "name": "contact",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": true
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(125)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "surname": {
-          "name": "surname",
-          "type": "varchar(125)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "display_name": {
-          "name": "display_name",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "gender": {
-          "name": "gender",
-          "type": "varchar(7)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "phone": {
-          "name": "phone",
-          "type": "char(15)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "email": {
-          "name": "email",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "address_street": {
-          "name": "address_street",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "address_street_number": {
-          "name": "address_street_number",
-          "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "address_municipality": {
-          "name": "address_municipality",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "address_post_code": {
-          "name": "address_post_code",
-          "type": "varchar(10)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "contact_id": {
-          "name": "contact_id",
-          "columns": ["id"]
-        }
-      },
-      "uniqueConstraints": {}
-    },
     "document": {
       "name": "document",
       "columns": {
@@ -530,25 +372,11 @@
           "notNull": true,
           "autoincrement": true
         },
-        "inheritance_procedure_id": {
-          "name": "inheritance_procedure_id",
+        "proceeding_id": {
+          "name": "proceeding_id",
           "type": "int",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false
-        },
-        "task_id": {
-          "name": "task_id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "user_owner_id": {
-          "name": "user_owner_id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": false,
           "autoincrement": false
         },
         "create_date": {
@@ -583,31 +411,13 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "document_inheritance_procedure_id_inheritance_procedure_id_fk": {
-          "name": "document_inheritance_procedure_id_inheritance_procedure_id_fk",
+        "document_proceeding_id_proceeding_id_fk": {
+          "name": "document_proceeding_id_proceeding_id_fk",
           "tableFrom": "document",
-          "tableTo": "inheritance_procedure",
-          "columnsFrom": ["inheritance_procedure_id"],
+          "tableTo": "proceeding",
+          "columnsFrom": ["proceeding_id"],
           "columnsTo": ["id"],
           "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "document_task_id_task_id_fk": {
-          "name": "document_task_id_task_id_fk",
-          "tableFrom": "document",
-          "tableTo": "task",
-          "columnsFrom": ["task_id"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "document_user_owner_id_user_id_fk": {
-          "name": "document_user_owner_id_user_id_fk",
-          "tableFrom": "document",
-          "tableTo": "user",
-          "columnsFrom": ["user_owner_id"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
@@ -666,119 +476,6 @@
       "compositePrimaryKeys": {
         "email_confirmation_token_id": {
           "name": "email_confirmation_token_id",
-          "columns": ["id"]
-        }
-      },
-      "uniqueConstraints": {}
-    },
-    "inheritance_procedure": {
-      "name": "inheritance_procedure",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": true
-        },
-        "notary_id": {
-          "name": "notary_id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "state": {
-          "name": "state",
-          "type": "varchar(10)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'InProgress'"
-        },
-        "start_date": {
-          "name": "start_date",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "end_date": {
-          "name": "end_date",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "main_contact_id": {
-          "name": "main_contact_id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "deceased_contact_id": {
-          "name": "deceased_contact_id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "date_of_birth": {
-          "name": "date_of_birth",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "date_of_death": {
-          "name": "date_of_death",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "inheritance_procedure_notary_id_notary_id_fk": {
-          "name": "inheritance_procedure_notary_id_notary_id_fk",
-          "tableFrom": "inheritance_procedure",
-          "tableTo": "notary",
-          "columnsFrom": ["notary_id"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "inheritance_procedure_main_contact_id_contact_id_fk": {
-          "name": "inheritance_procedure_main_contact_id_contact_id_fk",
-          "tableFrom": "inheritance_procedure",
-          "tableTo": "contact",
-          "columnsFrom": ["main_contact_id"],
-          "columnsTo": ["id"],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        },
-        "inheritance_procedure_deceased_contact_id_contact_id_fk": {
-          "name": "inheritance_procedure_deceased_contact_id_contact_id_fk",
-          "tableFrom": "inheritance_procedure",
-          "tableTo": "contact",
-          "columnsFrom": ["deceased_contact_id"],
-          "columnsTo": ["id"],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "inheritance_procedure_id": {
-          "name": "inheritance_procedure_id",
           "columns": ["id"]
         }
       },
@@ -853,42 +550,16 @@
           "notNull": true,
           "autoincrement": true
         },
-        "contact_id": {
-          "name": "contact_id",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "int",
+        "postal_code": {
+          "name": "postal_code",
+          "type": "varchar(10)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "notary_contact_id_contact_id_fk": {
-          "name": "notary_contact_id_contact_id_fk",
-          "tableFrom": "notary",
-          "tableTo": "contact",
-          "columnsFrom": ["contact_id"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "notary_user_id_user_id_fk": {
-          "name": "notary_user_id_user_id_fk",
-          "tableFrom": "notary",
-          "tableTo": "user",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {
         "notary_id": {
           "name": "notary_id",
@@ -1015,8 +686,8 @@
       },
       "uniqueConstraints": {}
     },
-    "task": {
-      "name": "task",
+    "proceeding": {
+      "name": "proceeding",
       "columns": {
         "id": {
           "name": "id",
@@ -1025,44 +696,87 @@
           "notNull": true,
           "autoincrement": true
         },
-        "type": {
-          "name": "type",
-          "type": "varchar(15)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "deadline": {
-          "name": "deadline",
-          "type": "date",
+        "notary_id": {
+          "name": "notary_id",
+          "type": "int",
           "primaryKey": false,
           "notNull": false,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true,
           "autoincrement": false
         },
         "state": {
           "name": "state",
           "type": "varchar(10)",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'InProgress'"
         },
-        "label": {
-          "name": "label",
-          "type": "varchar(100)",
+        "start_date": {
+          "name": "start_date",
+          "type": "date",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "description": {
-          "name": "description",
-          "type": "text",
+        "end_date": {
+          "name": "end_date",
+          "type": "date",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "inheritance_procedure_id": {
-          "name": "inheritance_procedure_id",
+        "main_beneficiary_id": {
+          "name": "main_beneficiary_id",
           "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "deceased_name": {
+          "name": "deceased_name",
+          "type": "varchar(125)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "surname": {
+          "name": "surname",
+          "type": "varchar(125)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "display_name": {
+          "name": "display_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "address_id": {
+          "name": "address_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "date_of_birth": {
+          "name": "date_of_birth",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "date_of_death": {
+          "name": "date_of_death",
+          "type": "date",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -1070,19 +784,37 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "task_inheritance_procedure_id_inheritance_procedure_id_fk": {
-          "name": "task_inheritance_procedure_id_inheritance_procedure_id_fk",
-          "tableFrom": "task",
-          "tableTo": "inheritance_procedure",
-          "columnsFrom": ["inheritance_procedure_id"],
+        "proceeding_notary_id_notary_id_fk": {
+          "name": "proceeding_notary_id_notary_id_fk",
+          "tableFrom": "proceeding",
+          "tableTo": "notary",
+          "columnsFrom": ["notary_id"],
           "columnsTo": ["id"],
-          "onDelete": "cascade",
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "proceeding_main_beneficiary_id_beneficiary_id_fk": {
+          "name": "proceeding_main_beneficiary_id_beneficiary_id_fk",
+          "tableFrom": "proceeding",
+          "tableTo": "beneficiary",
+          "columnsFrom": ["main_beneficiary_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "proceeding_address_id_address_id_fk": {
+          "name": "proceeding_address_id_address_id_fk",
+          "tableFrom": "proceeding",
+          "tableTo": "address",
+          "columnsFrom": ["address_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
-        "task_id": {
-          "name": "task_id",
+        "proceeding_id": {
+          "name": "proceeding_id",
           "columns": ["id"]
         }
       },
@@ -1120,8 +852,66 @@
           "autoincrement": false,
           "default": false
         },
-        "contact_id": {
-          "name": "contact_id",
+        "type": {
+          "name": "type",
+          "type": "varchar(6)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'User'"
+        },
+        "notary_id": {
+          "name": "notary_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "send_notifications": {
+          "name": "send_notifications",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(125)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "surname": {
+          "name": "surname",
+          "type": "varchar(125)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "display_name": {
+          "name": "display_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "gender": {
+          "name": "gender",
+          "type": "varchar(7)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "phone": {
+          "name": "phone",
+          "type": "char(15)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "address_id": {
+          "name": "address_id",
           "type": "int",
           "primaryKey": false,
           "notNull": false,
@@ -1136,11 +926,20 @@
         }
       },
       "foreignKeys": {
-        "user_contact_id_contact_id_fk": {
-          "name": "user_contact_id_contact_id_fk",
+        "user_notary_id_notary_id_fk": {
+          "name": "user_notary_id_notary_id_fk",
           "tableFrom": "user",
-          "tableTo": "contact",
-          "columnsFrom": ["contact_id"],
+          "tableTo": "notary",
+          "columnsFrom": ["notary_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_address_id_address_id_fk": {
+          "name": "user_address_id_address_id_fk",
+          "tableFrom": "user",
+          "tableTo": "address",
+          "columnsFrom": ["address_id"],
           "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"

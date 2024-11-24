@@ -46,10 +46,12 @@ export async function loginUser(
 
   // Find user by email
   const foundUser = await userRepository.getUserByEmail(login.toLowerCase())
+  console.log('foundUser', foundUser)
   if (!foundUser) throw new Error(errorMessage)
 
   // Validate password
   const isPasswordValid = await comparePassword(password, foundUser.password)
+  console.log('isPasswordValid', isPasswordValid)
   if (!isPasswordValid) throw new Error(errorMessage)
 
   // Check if user is confirmed

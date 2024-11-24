@@ -1,6 +1,6 @@
 import { Field, ID, ObjectType } from 'type-graphql'
 
-import { proceedingStateEnum, ProceedingStateEnumType } from '@shared/enums'
+import { ProceedingStateEnumType } from '@shared/enums'
 
 @ObjectType()
 export class Proceeding {
@@ -13,7 +13,7 @@ export class Proceeding {
   @Field()
   name!: string
 
-  @Field(() => proceedingStateEnum)
+  @Field(() => String)
   state!: ProceedingStateEnumType
 
   @Field()

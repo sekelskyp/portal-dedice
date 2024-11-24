@@ -14,8 +14,8 @@
     "build-watch": "nodemon --watch ./src --exec \"yarn build\"",
     "postbuild": "nodetouch tmp/restart.txt",
     "db:migrations:generate": "drizzle-kit generate",
-    "db:migrate": "ts-node -r dotenv-flow/config ./scripts/migrate.ts",
-    "db:seed": "ts-node -r dotenv-flow/config ./scripts/seed.ts"
+    "db:migrate": "ts-node -r tsconfig-paths/register -r dotenv-flow/config ./scripts/migrate.ts",
+    "db:seed": "ts-node -r tsconfig-paths/register -r dotenv-flow/config ./scripts/seed.ts"
   },
   "dependencies": {
     "@apollo/server": "^4.11.0",
