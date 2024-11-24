@@ -27,6 +27,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777111222',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Staroměstské náměstí',
@@ -58,6 +59,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777222333',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Karlův most',
@@ -89,6 +91,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777333444',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Václavské náměstí',
@@ -120,6 +123,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777444555',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Vinohrady',
@@ -151,6 +155,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777555666',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Malá Strana',
@@ -182,6 +187,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777666777',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Letná',
@@ -215,6 +221,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777333444',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Václavské náměstí',
@@ -240,6 +247,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777444555',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Karlovo náměstí',
@@ -265,6 +273,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777555666',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Karlovo náměstí',
@@ -290,6 +299,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777666777',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Na Příkopě',
@@ -317,6 +327,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777888999',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Vinohradská',
@@ -348,6 +359,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777999000',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Žižkova',
@@ -379,6 +391,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777000111',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Olšanská',
@@ -410,6 +423,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777111222',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Jičínská',
@@ -441,6 +455,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777222333',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Husitská',
@@ -486,6 +501,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777444555',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Modřanská',
@@ -511,6 +527,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777555666',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Branická',
@@ -536,6 +553,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777666777',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Podolská',
@@ -561,6 +579,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777777888',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Nad Malým Mýtem',
@@ -586,6 +605,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777888999',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Lhotka',
@@ -611,6 +631,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777888999',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Lhotka',
@@ -636,6 +657,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777888999',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Lhotka',
@@ -661,6 +683,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777888999',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Lhotka',
@@ -686,6 +709,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777888999',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Lhotka',
@@ -711,6 +735,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777888999',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Lhotka',
@@ -736,6 +761,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777888999',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Lhotka',
@@ -761,6 +787,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777888999',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Lhotka',
@@ -788,6 +815,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777123456',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Radlická',
@@ -809,6 +837,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777234567',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Nádražní',
@@ -830,6 +859,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777345678',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Štefánikova',
@@ -853,6 +883,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777456789',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Strakonická',
@@ -874,6 +905,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777567890',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Vítězná',
@@ -897,6 +929,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777678901',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Šaldova',
@@ -919,6 +952,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777567890',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Ocelářská',
@@ -940,6 +974,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777234567',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Vysočanská',
@@ -964,6 +999,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777956789',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Horní Měcholupy',
@@ -987,6 +1023,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777123456',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Na Petynce',
@@ -1008,6 +1045,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777234567',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Pod Kaštany',
@@ -1029,6 +1067,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777345678',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'V Šáreckém údolí',
@@ -1050,6 +1089,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777456789',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Na Ořechovce',
@@ -1071,6 +1111,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777567890',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Zelená',
@@ -1092,6 +1133,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777678901',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Evropská',
@@ -1114,6 +1156,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777789012',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Na Špitálce',
@@ -1136,6 +1179,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777890123',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Střešovická',
@@ -1157,6 +1201,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777901234',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Na Bateriích',
@@ -1177,6 +1222,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777345123',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Letenská',
@@ -1195,6 +1241,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777456234',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Milady Horákové',
@@ -1213,6 +1260,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777567345',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'U Sparty',
@@ -1231,6 +1279,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777678456',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'U Výstaviště',
@@ -1251,6 +1300,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777789012',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Křižíkova',
@@ -1274,6 +1324,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777890123',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Karlínské náměstí',
@@ -1292,6 +1343,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777901234',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Pernerova',
@@ -1314,6 +1366,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777012345',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Thámova',
@@ -1332,6 +1385,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777123456',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Šaldova',
@@ -1356,6 +1410,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777234567',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Prosecká',
@@ -1377,6 +1432,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777345678',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Vysočanská',
@@ -1398,6 +1454,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777456789',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Kolbenova',
@@ -1419,6 +1476,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777567890',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Ocelářská',
@@ -1440,6 +1498,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777678901',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Letňanská',
@@ -1465,6 +1524,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777789012',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Vršovická',
@@ -1487,6 +1547,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777890123',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Eden Street',
@@ -1509,6 +1570,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777901234',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Záběhlická',
@@ -1531,6 +1593,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777912345',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Michle',
@@ -1553,6 +1616,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777923456',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Vinohrady',
@@ -1575,6 +1639,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777934567',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Zahradní Město',
@@ -1596,6 +1661,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777945678',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Strašnice',
@@ -1618,6 +1684,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Male',
       phone: '+420777956789',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Horní Měcholupy',
@@ -1640,6 +1707,7 @@ export const notarySeedDataValues: NotarySeedData[] = [
       gender: 'Female',
       phone: '+420777967890',
       type: 'Notary',
+      confirmed: true,
     },
     address: {
       street: 'Hostivařská',

@@ -102,8 +102,7 @@ export const proceeding = mysqlTable('proceeding', {
   startDate: date('start_date').notNull(),
   endDate: date('end_date'),
   mainBeneficiaryId: int('main_beneficiary_id').references(
-    (): AnyMySqlColumn => beneficiary.id,
-    { onDelete: 'cascade' }
+    (): AnyMySqlColumn => beneficiary.id
   ),
   // deceased person info
   deceasedName: varchar('name', { length: 125 }).notNull(),

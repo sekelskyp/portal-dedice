@@ -5,6 +5,7 @@ import { getAddressRepository } from '../src/graphql/modules/address/addressRepo
 import { getNotaryRepository } from '../src/graphql/modules/notary/notaryRepository'
 import { getNotaryDateRuleRepository } from '../src/graphql/modules/notaryDateRule/notaryDateRuleRepository'
 import { getUserRepository } from '../src/graphql/modules/user/userRepository'
+import { hashPassword } from '../src/services/passwordHashService'
 
 export async function seedNotariesAndDateRules(
   db: MySql2Database<typeof import('../src/db/schema')>
@@ -34,11 +35,14 @@ export async function seedNotariesAndDateRules(
 
     // Step 4: Insert users and link them to notaries
     console.log('Inserting users...')
-    const userValues = notarySeedDataValues.map((notary, index) => ({
-      ...notary.user,
-      addressId: addressIds[index], // Link user to address
-      notaryId: notaryIds[index], // Link user to notary
-    }))
+    const userValues = await notarySeedDataValues.map(
+      async (notary, index) => ({
+        ...notary.user,
+        password: await hashPassword('heslo1234'),
+        addressId: addressIds[index], // Link user to address
+        notaryId: notaryIds[index], // Link user to notary
+      })
+    )
     const userIds = await userRepository.createUsers(userValues)
     console.log('User IDs:', userIds)
 

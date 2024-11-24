@@ -20,8 +20,8 @@ interface CreateProceedingData {
   }
 }
 
-// Private helper function to generate a unique name for a new procedure
-function generateProceedingName(
+// helper function to generate a unique name for a new procedure
+export function generateProceedingName(
   name: string,
   surname: string,
   startDate: Date
