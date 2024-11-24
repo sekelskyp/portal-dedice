@@ -3,7 +3,8 @@ import { Card, Image, Text } from '@chakra-ui/react'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { route } from '@shared/route'
 
-interface ArticleCardProps {
+export type Article = {
+  id: number
   title: string
   description: string
   createDate: string
@@ -15,10 +16,10 @@ export function ArticleCard({
   description,
   createDate,
   imageUrl,
-}: ArticleCardProps) {
+}: Article) {
   return (
     <Card.Root
-      maxW="md"
+      maxW={{ base: 'sm', md: 'md' }}
       borderRadius="xl"
       borderWidth="1px"
       borderColor="gray.200"
