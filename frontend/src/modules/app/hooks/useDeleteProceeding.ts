@@ -3,19 +3,21 @@ import { useMutation } from '@apollo/client'
 import { gql } from '@frontend/gql'
 import { toaster } from '@frontend/shared/design-system'
 
-import { GET_ALL_PROCEDURES } from './useNotaryProcedures'
+import { GET_ALL_PROCEEDINGS } from './useNotaryProcedures'
 
-const DELETE_PROCEDURE_MUTATION = gql(/* GraphQL */ `
-  mutation DeleteProcedure($ids: [Int!]!) {
-    deleteProceduresByIds(ids: $ids)
+//TODO: fix query and components
+
+const DELETE_PROCEEDING_MUTATION = gql(/* GraphQL */ `
+  mutation DeleteProceeding($ids: [Int!]!) {
+    deleteProceedingsByIds(ids: $ids)
   }
 `)
 
-export function useDeleteProcedure() {
-  const [deleteProcedureRequest, deleteProcedureRequestState] = useMutation(
-    DELETE_PROCEDURE_MUTATION,
+export function useDeleteProceeding() {
+  const [deleteProceedingRequest, deleteProceedingRequestState] = useMutation(
+    DELETE_PROCEEDING_MUTATION,
     {
-      refetchQueries: [GET_ALL_PROCEDURES],
+      refetchQueries: [GET_ALL_PROCEEDINGS],
       onCompleted: () => {
         toaster.create({
           title: 'Řízení bylo úspěšně smazáno.',
@@ -33,5 +35,5 @@ export function useDeleteProcedure() {
     }
   )
 
-  return [deleteProcedureRequest, deleteProcedureRequestState] as const
+  return [deleteProceedingRequest, deleteProceedingRequestState] as const
 }

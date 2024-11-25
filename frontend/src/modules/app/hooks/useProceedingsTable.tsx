@@ -21,7 +21,7 @@ import { route } from '@shared/route'
 import { ProceedingsItem } from '../components/proceedings-table/ProceedingsTable'
 import { StatusBadge } from '../components/StatusBadge'
 
-import { useDeleteProcedure } from './useDeleteProcedure'
+import { useDeleteProceeding } from './useDeleteProceeding'
 
 const INITIAL_SORTING_STATE = [
   {
@@ -46,7 +46,7 @@ const columnHelper = createColumnHelper<ProceedingsItem>()
 export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
   const { user } = useAuth()
 
-  const [deleteProcedureRequest] = useDeleteProcedure()
+  const [deleteProcedureRequest] = useDeleteProceeding()
 
   const handleProcedureDelete = useCallback(
     (id: string) => {

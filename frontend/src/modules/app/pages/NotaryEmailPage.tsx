@@ -11,7 +11,7 @@ import { UnauthorizedPage } from '@frontend/shared/navigation/pages/Unauthorized
 import { BeneficiaryBadge } from '../components/BeneficiaryBadge'
 import { NotaryEmailForm } from '../components/NotaryEmailForm'
 import { useNotifyProcedureBeneficiaries } from '../hooks/useNotifyProcedureBeneficiaries'
-import { useProcedure } from '../hooks/useProcedure'
+import { useProceeding } from '../hooks/useProceeding'
 
 export function NotaryEmailPage() {
   const { user, token } = useAuth()
@@ -22,8 +22,8 @@ export function NotaryEmailPage() {
     notifyProcedureBeneficiariesRequestState,
   ] = useNotifyProcedureBeneficiaries()
 
-  const { data, loading, error } = useProcedure({
-    procedureId: parseInt(id ?? '0', 10),
+  const { data, loading, error } = useProceeding({
+    proceedingId: parseInt(id ?? '0', 10),
   })
 
   const handleNotaryEmailFormSubmit = useCallback(

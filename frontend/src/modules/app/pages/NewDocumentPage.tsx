@@ -8,15 +8,17 @@ import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
 
 import { DocumentUpload } from '../components/DocumentUpload'
-import { useProcedure } from '../hooks/useProcedure'
+import { useProceeding } from '../hooks/useProceeding'
 import { documentTypes } from '../utils/documentTypes'
+
+//TODO: fix query and components
 
 export function NewDocumentPage() {
   const user = useAuth()
   const { id } = useParams()
 
-  const { data, loading, error } = useProcedure({
-    procedureId: parseInt(id ?? '0', 10),
+  const { data, loading, error } = useProceeding({
+    proceedingId: parseInt(id ?? '0', 10),
   })
 
   if (loading) {
@@ -27,7 +29,7 @@ export function NewDocumentPage() {
     return <NotFoundPage />
   }
 
-  const procedure = data?.getProcedureById
+  const procedure = data?.getProceedingById
 
   const userBeneficiaryId = user.user?.beneficiaries[0]?.id
   const procedureBeneficiaryIds = procedure?.beneficiaries?.map((b) => b.id)

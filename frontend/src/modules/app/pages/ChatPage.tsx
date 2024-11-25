@@ -4,47 +4,19 @@ import { Box, Container, Flex, Tabs, Text, VStack } from '@chakra-ui/react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useMediaQuery } from 'usehooks-ts'
 
-import { gql } from '@frontend/gql'
 import { useAuth } from '@frontend/modules/auth'
 import { Page } from '@frontend/shared/layout'
 
 import { Message } from '../components/Message'
 import { useAddMessage } from '../hooks/useAddMessage'
-import { useBeneficiaryProcedures } from '../hooks/useBeneficiaryProcedures'
+import { useBeneficiaryProceedings } from '../hooks/useBeneficiaryProceedings'
 import { useGetMessages } from '../hooks/useGetMessages'
 import { useNotaryProcedures } from '../hooks/useNotaryProcedures'
+import { GET_PROCEEDING_QUERY } from '../hooks/useProceeding'
 
 import { ChatMessageForm } from './ChatMessageForm'
 
-const GET_PROCEDURE = gql(/* GraphQL */ `
-  query ChatGetProcedure($id: Int!) {
-    getProcedureById(id: $id) {
-      notary {
-        contact {
-          id
-          name
-          surname
-          email
-        }
-      }
-      beneficiaries {
-        contact {
-          id
-          name
-          surname
-          displayName
-        }
-        user {
-          contact {
-            name
-            surname
-            displayName
-          }
-        }
-      }
-    }
-  }
-`)
+//TODO: fix query and components
 
 export default function ChatPage() {
   const user = useAuth()
@@ -52,7 +24,7 @@ export default function ChatPage() {
   const messages = useGetMessages(id!)
 
   const procedure =
-    useQuery(GET_PROCEDURE, {
+    useQuery(GET_PROCEEDING_QUERY, {
       variables: { id: +id! },
     }).data?.getProcedureById ?? {}
 
@@ -73,7 +45,7 @@ export default function ChatPage() {
   const isNotary = user.user?.isNotary ?? false
 
   const notaryProcedures = useNotaryProcedures()
-  const beneficiaryProcedures = useBeneficiaryProcedures()
+  const beneficiaryProcedures = useBeneficiaryProceedings()
 
   const allNames = [...beneficiaryDisplayNames, notaryDisplayName].join(', ')
 

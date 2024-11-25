@@ -7,6 +7,8 @@ import { ProceedingsTableFooter } from './ProceedingsTableFooter'
 import { ProceedingsTableHeader } from './ProceedingsTableHeader'
 import { ProceedingsTableSearchBar } from './ProceedingsTableSearchBar'
 
+//TODO: fix new proceedings structure (contact)
+
 export type ProceedingsItem = {
   id: string
   name: string

@@ -4,16 +4,18 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { gql } from '@frontend/gql'
 import { route } from '@shared/route'
 
-const NOTIFY_PROCEDURE_BENEFICIARIES = gql(/* GraphQL */ `
+//TODO: fix query and components
+
+const NOTIFY_PROCEEDING_BENEFICIARIES = gql(/* GraphQL */ `
   mutation NotifyProcedureBeneficiaries(
     $html: String!
     $subject: String!
     $procedureId: Int!
   ) {
-    notifyProcedureBenficiaries(
+    notifyProcedureBeneficiaries(
       html: $html
       subject: $subject
-      procedureId: $procedureId
+      proceedingId: $procedureId
     )
   }
 `)
@@ -25,7 +27,7 @@ export function useNotifyProcedureBeneficiaries() {
   const [
     notifyProcedureBeneficiariesRequest,
     notifyProcedureBeneficiariesRequestState,
-  ] = useMutation(NOTIFY_PROCEDURE_BENEFICIARIES, {
+  ] = useMutation(NOTIFY_PROCEEDING_BENEFICIARIES, {
     onCompleted: () => {
       navigate(route.inheritanceProcedure(id))
     },

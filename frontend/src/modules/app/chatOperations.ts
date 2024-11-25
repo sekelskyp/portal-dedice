@@ -1,8 +1,10 @@
 import { gql } from '@frontend/gql'
 
+//TODO: fix query and components
+
 export const ADD_MESSAGE_MUTATION = gql(/* GraphQL */ `
-  mutation addMessage($body: String!, $procedureId: Int!, $userId: Int!) {
-    addChatMessage(body: $body, procedureId: $procedureId, userId: $userId) {
+  mutation addMessage($body: String!, $proceedingId: Int!, $userId: Int!) {
+    addChatMessage(body: $body, proceedingId: $proceedingId, userId: $userId) {
       chatId
       body
       userId
@@ -10,11 +12,11 @@ export const ADD_MESSAGE_MUTATION = gql(/* GraphQL */ `
   }
 `)
 
+//TODO: fix query and components
+
 export const GET_MESSAGES_QUERY = gql(/* GraphQL */ `
-  query getChat($inheritanceProcedureId: Int!) {
-    chatByInheritanceProcedureId(
-      inheritanceProcedureId: $inheritanceProcedureId
-    ) {
+  query getChat($proceedingId: Int!) {
+    chatByProceedingId(proceedingId: $proceedingId) {
       chatMessages {
         body
         chatId

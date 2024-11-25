@@ -3,6 +3,8 @@ import { HStack, Stack, Text } from '@chakra-ui/react'
 import { Contact } from '@frontend/gql/graphql'
 import { Avatar } from '@frontend/shared/design-system'
 
+//TODO: fix new contact structure
+
 export function BeneficiaryBadge({
   beneficiaryContact,
 }: {

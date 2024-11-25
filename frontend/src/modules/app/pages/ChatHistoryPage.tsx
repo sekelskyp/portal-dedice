@@ -3,34 +3,14 @@ import { Box, Container, Flex, Text, VStack } from '@chakra-ui/react'
 import { useParams } from 'react-router-dom'
 import { useMediaQuery } from 'usehooks-ts'
 
-import { gql } from '@frontend/gql'
 import { useAuth } from '@frontend/modules/auth'
 import { Page } from '@frontend/shared/layout'
 
 import { Message } from '../components/Message'
 import { useGetMessages } from '../hooks/useGetMessages'
+import { GET_PROCEEDING_QUERY } from '../hooks/useProceeding'
 
-const GET_PROCEDURE = gql(/* GraphQL */ `
-  query GetProcedure($id: Int!) {
-    getProcedureById(id: $id) {
-      notary {
-        contact {
-          id
-          name
-          surname
-          email
-        }
-      }
-      beneficiaries {
-        contact {
-          id
-          name
-          surname
-        }
-      }
-    }
-  }
-`)
+//TODO: fix query and components
 
 export default function ChatPage() {
   const user = useAuth()
@@ -38,9 +18,9 @@ export default function ChatPage() {
   const messages = useGetMessages(id!)
 
   const procedure =
-    useQuery(GET_PROCEDURE, {
+    useQuery(GET_PROCEEDING_QUERY, {
       variables: { id: +id! },
-    }).data?.getProcedureById ?? {}
+    }).data?.getProceedingById ?? {}
 
   const notaryDisplayName = `${procedure.notary?.contact?.name} ${procedure.notary?.contact?.surname}`
 

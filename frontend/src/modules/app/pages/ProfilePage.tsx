@@ -16,44 +16,40 @@ import {
   SubmitButton,
 } from '@frontend/shared/forms'
 
+//TODO: fix query and components
+
 const GET_PROFILE_QUERY = gql(/* GraphQL */ `
   query GetUserById($getUserByIdId: Float!) {
     getUserById(id: $getUserByIdId) {
-      contact {
-        addressMunicipality
-        addressPostCode
-        addressStreet
-        addressStreetNumber
-        name
-        surname
-        displayName
-        email
-        gender
-        name
-        phone
-        surname
+      address {
+        municipality
+        postalCode
+        street
+        streetNumber
       }
     }
   }
 `)
 
+//TODO: fix query and components
+
 const UPDATE_PROFILE_MUTATION = gql(/* GraphQL */ `
   mutation UpdateProfile($profileInput: ProfileInput!) {
     updateProfile(profileInput: $profileInput) {
-      contact {
-        addressMunicipality
-        addressPostCode
-        addressStreet
-        addressStreetNumber
-        name
-        surname
-        displayName
-        email
-        gender
-        name
-        phone
-        surname
+      address {
+        municipality
+        postalCode
+        street
+        streetNumber
       }
+      name
+      surname
+      displayName
+      email
+      gender
+      name
+      phone
+      surname
     }
   }
 `)

@@ -16,18 +16,20 @@ interface MessageProps {
   isMobile: boolean
 }
 
+//TODO: fix query and components
+
 const GET_BENEFICIARIES = gql(/* GraphQL */ `
-  query GetBeneficiariesByProcedureId($procedureId: Int!) {
-    getBeneficiariesByProcedureId(procedureId: $procedureId) {
-      contactId
+  query GetBeneficiariesByProceedingId($proceedingId: Int!) {
+    getBeneficiariesByProceedingId(proceedingId: $proceedingId) {
+      #contactId //TODO: fix
       userId
     }
   }
 `)
-
+//TODO fix query (it used to get contact that is now moved to user??)
 const GET_DISPLAYNAME = gql(/* GraphQL */ `
-  query GetContactById($id: Int!) {
-    getContactById(id: $id) {
+  query GetContactById($id: Float!) {
+    getUserById(id: $id) {
       displayName
     }
   }

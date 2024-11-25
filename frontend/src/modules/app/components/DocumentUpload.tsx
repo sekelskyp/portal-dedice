@@ -14,14 +14,14 @@ import {
 
 import { useCreateDocument } from '../hooks/useCreateDocument'
 import { useDocumentUpload } from '../hooks/useDocumentUpload'
-import { useProcedure } from '../hooks/useProcedure'
+import { useProceeding } from '../hooks/useProceeding'
 
 export function DocumentUpload() {
   const { id } = useParams()
   const [showEmptyFilesAlert, setShowEmptyFilesAlert] = useState(false)
 
-  const { data } = useProcedure({
-    procedureId: parseInt(id ?? '0', 10),
+  const { data } = useProceeding({
+    proceedingId: parseInt(id ?? '0', 10),
   })
 
   const { files, handleFileUpload, clearFiles, ACCEPTED_FILE_TYPES } =

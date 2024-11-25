@@ -1,7 +1,9 @@
 import { gql, useMutation } from '@apollo/client'
 
+//TODO: fix query and components
+
 const CREATE_ASSET = gql`
-  mutation createAsset($data: CreateAssetInput!) {
+  mutation createAsset($data: AssetInput!) {
     createAsset(data: $data) {
       id
       type
@@ -16,6 +18,8 @@ const CREATE_ASSET = gql`
     }
   }
 `
+
+//TODO: fix CreateAssetInput
 
 interface CreateAssetInput {
   inheritanceProcedureId: number // Changed from procedureId

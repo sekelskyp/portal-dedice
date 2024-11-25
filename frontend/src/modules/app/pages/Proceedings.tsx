@@ -12,13 +12,13 @@ import {
   ProceedingsItem,
   ProceedingsTable,
 } from '../components/proceedings-table/ProceedingsTable'
-import { useBeneficiaryProcedures } from '../hooks/useBeneficiaryProcedures'
+import { useBeneficiaryProceedings } from '../hooks/useBeneficiaryProceedings'
 import { useNotaryProcedures } from '../hooks/useNotaryProcedures'
 import { proceedingsNavigation } from '../utils/proceedingsNavigation'
 
 export function Proceedings() {
   const user = useAuth()
-  const beneficiaryProcedures = useBeneficiaryProcedures()
+  const beneficiaryProcedures = useBeneficiaryProceedings()
   const notaryProcedures = useNotaryProcedures()
 
   let procedures: ProceedingsItem[] = []

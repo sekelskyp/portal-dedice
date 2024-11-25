@@ -10,11 +10,13 @@ import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { route } from '@shared/route'
 
 import { useDeleteAsset } from '../hooks/useDeleteAsset'
-import { useProcedure } from '../hooks/useProcedure'
+import { useProceeding } from '../hooks/useProceeding'
+
+//TODO: fix query and components
 
 const GET_ASSETS = gql`
-  query getAssetsByProcedureId($procedureId: Int!) {
-    getAssetsByProcedureId(procedureId: $procedureId) {
+  query getAssetsByProceedingId($proceedingId: Int!) {
+    getAssetsByProceedingId(proceedingId: $proceedingId) {
       id
       type
       name
@@ -55,7 +57,7 @@ const AssetGroup = ({
 
   const { user } = useAuth()
 
-  const procedure = useProcedure({ procedureId: parseInt(id ?? '0', 10) })
+  const procedure = useProceeding({ proceedingId: parseInt(id ?? '0', 10) })
 
   if (assets.length === 0) return null
 

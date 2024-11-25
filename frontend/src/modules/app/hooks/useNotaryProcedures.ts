@@ -2,27 +2,27 @@ import { useQuery } from '@apollo/client'
 
 import { gql } from '@frontend/gql'
 
-export const GET_ALL_PROCEDURES = gql(/* GraphQL */ `
-  query GetAllProcedures {
-    getAllProcedures {
+//TODO: fix query and components
+
+export const GET_ALL_PROCEEDINGS = gql(/* GraphQL */ `
+  query GetAllProceedings {
+    getAllProceedings {
       id
       name
       startDate
       state
-      deceasedContact {
-        displayName
-      }
+      deceasedDisplayName
     }
   }
 `)
 
 export function useNotaryProcedures() {
-  const { data, loading, error } = useQuery(GET_ALL_PROCEDURES)
+  const { data, loading, error } = useQuery(GET_ALL_PROCEEDINGS)
 
   const cleanData = data
     ? {
         ...data,
-        getProceduresByNotaryId: data.getAllProcedures.map(
+        getProceduresByNotaryId: data.getAllProceedings.map(
           ({ __typename, ...procedure }) => procedure
         ),
       }

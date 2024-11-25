@@ -6,6 +6,8 @@ import { route } from '@shared/route'
 
 import { useAuth } from '../auth-core'
 
+//TODO: fix query and components
+
 const SIGNIN_MUTATION = gql(/* GraphQL */ `
   mutation SignIn($login: String!, $password: String!) {
     signIn(login: $login, password: $password) {
@@ -13,32 +15,33 @@ const SIGNIN_MUTATION = gql(/* GraphQL */ `
         id
         email
         confirmed
-        isNotary
-        isBeneficiary
+        #isNotary
+        #isBeneficiary
+        type
         beneficiaries {
           id
-          dateOfBirth
-          deceasedRelation
-          userId
-          contactId
+          #dateOfBirth
+          #deceasedRelation
+          #userId
+          #contactId
         }
-        notaries {
-          contactId
-          id
-          userId
+        #notaries {
+        #contactId
+        #id
+        #userId
+        #}
+        name
+        surname
+        displayName
+        email
+        phone
+        address {
+          street
+          streetNumber
+          municipality
+          postalCode
         }
-        contact {
-          name
-          surname
-          displayName
-          email
-          phone
-          addressStreet
-          addressStreetNumber
-          addressMunicipality
-          addressPostCode
-          gender
-        }
+        gender
       }
       token
     }

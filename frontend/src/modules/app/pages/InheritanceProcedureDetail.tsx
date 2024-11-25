@@ -27,14 +27,16 @@ import { Assets } from '../components/Assets'
 import { BeneficiaryBadge } from '../components/BeneficiaryBadge'
 import { Documents } from '../components/Documents'
 import { StatusBadge } from '../components/StatusBadge'
-import { useProcedure } from '../hooks/useProcedure'
+import { useProceeding } from '../hooks/useProceeding'
+
+//TODO: fix query and components
 
 const InheritanceProcedureDetail: React.FC = () => {
   const user = useAuth()
   const { id } = useParams()
 
-  const { data, loading, error } = useProcedure({
-    procedureId: parseInt(id ?? '0', 10),
+  const { data, loading, error } = useProceeding({
+    proceedingId: parseInt(id ?? '0', 10),
   })
 
   if (loading) {

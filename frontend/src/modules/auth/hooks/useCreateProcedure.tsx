@@ -4,11 +4,13 @@ import { useNavigate } from 'react-router-dom'
 import { gql } from '@frontend/gql'
 import { route } from '@shared/route'
 
+//TODO: move this to add folder and fix imports
+
+//TODO: fix query and components
+
 const PROCEEDING_MUTATION = gql(/* GraphQL */ `
-  mutation createProcedure($data: InheritanceProcedureFormDataInput!) {
-    createInheritanceProcedureFromForm(data: $data) {
-      id
-    }
+  mutation createProceeding($data: CreateProceedingInput!) {
+    createProceeding(data: $data)
   }
 `)
 
