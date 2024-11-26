@@ -47,7 +47,7 @@ const AssetGroup = ({
   const getAssetDetails = (asset: Asset) => {
     switch (asset.type) {
       case 'Financial instrument':
-        return `${asset.bankName}`
+        return asset.bankName
       case 'Company':
         return `IČO: ${asset.cin}`
       case 'Automobile':

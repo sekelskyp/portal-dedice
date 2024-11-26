@@ -138,12 +138,14 @@ function mapFormDataToAssets(data: AssetFormData): Array<{
   const assets = []
 
   if (data.bankAccount?.bank?.length) {
-    assets.push({
-      type: 'Financial instrument',
-      name: 'Bankovní účty',
-      description: `Bankovní účty: ${data.bankAccount.bank.join(', ')}`,
-      bankName: data.bankAccount.bank.join(', '),
-      value: 0,
+    data.bankAccount.bank.forEach((bank) => {
+      assets.push({
+        type: 'Financial instrument',
+        name: `Bankovní účet`,
+        description: `Bankovní účet ve ${bank}`,
+        bankName: bank,
+        value: 0,
+      })
     })
   }
 
