@@ -22,7 +22,7 @@ export default function ChatPage() {
   const { id } = useParams()
   const messages = useGetMessages(id!)
 
-  const proceeding = useProceeding({ proceedingId: +id! }).data
+  const proceeding = useProceeding(+id!).data
     ?.getProceedingById
 
   const notaryDisplayName = proceeding?.notary?.user?.displayName ?? ''

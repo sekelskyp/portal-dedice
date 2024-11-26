@@ -17,8 +17,7 @@ export default function ChatPage() {
   const messages = useGetMessages(id!)
   const isNotary = user.user?.type === 'Notary'
 
-  const proceeding = useProceeding({ proceedingId: +id! }).data
-    ?.getProceedingById
+  const proceeding = useProceeding(+id!).data?.getProceedingById
 
   const notaryDisplayName = proceeding?.notary?.user?.displayName ?? ''
 

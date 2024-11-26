@@ -15,13 +15,14 @@ import { useProceeding } from '../hooks/useProceeding'
 //TODO: fix query and components
 
 const GET_ASSETS = gql`
-  query getAssetsByProceedingId($proceedingId: Int!) {
+  query GetAssetsByProceedingId($proceedingId: Int!) {
     getAssetsByProceedingId(proceedingId: $proceedingId) {
       id
-      type
-      name
+      proceedingId
       value
+      name
       description
+      type
       bankName
       carMakeName
       carRegistrationDate
@@ -57,7 +58,8 @@ const AssetGroup = ({
 
   const { user } = useAuth()
 
-  const procedure = useProceeding({ proceedingId: parseInt(id ?? '0', 10) })
+  const proceedingId = id ?? '0'
+  const procedure = useProceeding(+proceedingId)
 
   if (assets.length === 0) return null
 
@@ -86,7 +88,7 @@ const AssetGroup = ({
               <Text fontWeight="bold">{asset.name}</Text>
               <Text>{getAssetDetails(asset)}</Text>
             </Box>
-            {procedure?.data?.getProcedureById?.beneficiaries?.some(
+            {procedure?.data?.getProceedingById?.beneficiaries?.some(
               (item) => item.id === user?.beneficiaries[0]?.id
             ) && (
               <Button
@@ -107,8 +109,9 @@ const AssetGroup = ({
 
 export function Assets({ id }: { id: string }) {
   const { user } = useAuth()
+  const isNotary = user?.type === 'Notary'
   const { data, loading, error } = useQuery(GET_ASSETS, {
-    variables: { procedureId: parseInt(id, 10) },
+    variables: { proceedingId: +id },
   })
   const { removeAsset } = useDeleteAsset()
 
@@ -120,7 +123,9 @@ export function Assets({ id }: { id: string }) {
     }
   }
 
-  const assets = data?.getAssetsByProcedureId || []
+  const assets = data?.getAssetsByProceedingId || []
+
+  console.log(assets)
 
   if (loading) return <Text>Načítání...</Text>
   if (error) return <Text color="red.500">Chyba při načítání majetku</Text>
@@ -134,7 +139,7 @@ export function Assets({ id }: { id: string }) {
           status="info"
           title="V řízení není evidován žádný majetek."
         />
-        {!user?.isNotary && (
+        {isNotary && (
           <Stack
             direction={{ base: 'column', lg: 'row' }}
             justifyContent="center"
@@ -187,7 +192,7 @@ export function Assets({ id }: { id: string }) {
           />
         ))}
       </Stack>
-      {!user?.isNotary && (
+      {isNotary && (
         <Stack
           direction={{ base: 'column', lg: 'row' }}
           justifyContent="center"

@@ -80,7 +80,6 @@ export type AssetInput = {
 export type Beneficiary = {
   __typename?: 'Beneficiary'
   id: Scalars['ID']['output']
-  inheritanceProceedings: Array<Proceeding>
   proceedingId?: Maybe<Scalars['ID']['output']>
   user?: Maybe<User>
   userId: Scalars['ID']['output']
@@ -309,7 +308,6 @@ export type MutationUpdateProfileArgs = {
 export type Notary = {
   __typename?: 'Notary'
   id: Scalars['ID']['output']
-  inheritanceProcedures: Array<Proceeding>
   postalCode?: Maybe<Scalars['String']['output']>
   user?: Maybe<User>
 }
@@ -325,6 +323,7 @@ export type Proceeding = {
   documents: Array<Document>
   endDate?: Maybe<Scalars['DateTimeISO']['output']>
   id: Scalars['ID']['output']
+  mainBeneficiary?: Maybe<Beneficiary>
   mainBeneficiaryId?: Maybe<Scalars['ID']['output']>
   name: Scalars['String']['output']
   notary?: Maybe<Notary>
@@ -473,7 +472,7 @@ export type UploadDocumentInput = {
 export type User = {
   __typename?: 'User'
   address?: Maybe<Address>
-  addressId: Scalars['ID']['output']
+  addressId?: Maybe<Scalars['ID']['output']>
   beneficiaries: Array<Beneficiary>
   confirmed: Scalars['Boolean']['output']
   displayName: Scalars['String']['output']
@@ -481,7 +480,7 @@ export type User = {
   gender?: Maybe<Scalars['String']['output']>
   id: Scalars['ID']['output']
   name: Scalars['String']['output']
-  notaryId: Scalars['ID']['output']
+  notaryId?: Maybe<Scalars['ID']['output']>
   password: Scalars['String']['output']
   phone?: Maybe<Scalars['String']['output']>
   sendNotifications: Scalars['Boolean']['output']
@@ -549,10 +548,11 @@ export type GetAssetsByProceedingIdQuery = {
   getAssetsByProceedingId: Array<{
     __typename?: 'Asset'
     id: string
-    type: string
-    name: string
+    proceedingId: string
     value: number
+    name: string
     description?: string | null
+    type: string
     bankName?: string | null
     carMakeName?: string | null
     carRegistrationDate?: any | null
@@ -732,57 +732,77 @@ export type NotifyProcedureBeneficiariesMutation = {
 }
 
 export type GetProceedingByIdQueryVariables = Exact<{
-  id: Scalars['Int']['input']
+  getProceedingByIdId: Scalars['Int']['input']
 }>
 
 export type GetProceedingByIdQuery = {
   __typename?: 'Query'
   getProceedingById?: {
     __typename?: 'Proceeding'
-    id: string
     name: string
-    mainBeneficiaryId?: string | null
+    deceasedDisplayName: string
+    deceasedDateOfDeath: any
+    deceasedDateOfBirth: any
+    deceasedAddressId: string
+    id: string
     state: string
-    notary?: {
-      __typename?: 'Notary'
+    notaryId?: string | null
+    procedureAssets?: Array<{
+      __typename?: 'Asset'
       id: string
-      user?: {
-        __typename?: 'User'
-        id: string
-        name: string
-        surname: string
-        email: string
-        displayName: string
-      } | null
-    } | null
+      proceedingId: string
+      value: number
+      name: string
+      description?: string | null
+      type: string
+      bankName?: string | null
+      carMakeName?: string | null
+      carRegistrationDate?: any | null
+      carType?: string | null
+      cin?: string | null
+    }> | null
     beneficiaries?: Array<{
       __typename?: 'Beneficiary'
       id: string
-      userId: string
       user?: {
         __typename?: 'User'
+        displayName: string
+        email: string
+        phone?: string | null
         id: string
+        name: string
+        surname: string
+      } | null
+    }> | null
+    documents: Array<{
+      __typename?: 'Document'
+      id: string
+      fileData: string
+      fileName: string
+      fileType: string
+      createDate: any
+      proceedingId: string
+    }>
+    notary?: {
+      __typename?: 'Notary'
+      user?: {
+        __typename?: 'User'
+        displayName: string
         email: string
         name: string
         surname: string
-        displayName: string
         phone?: string | null
-        gender?: string | null
+        id: string
         address?: {
           __typename?: 'Address'
+          id: string
           street: string
           streetNumber: string
           municipality: string
           postalCode: string
         } | null
       } | null
-    }> | null
-    procedureAssets?: Array<{
-      __typename?: 'Asset'
-      id: string
-      name: string
-      value: number
-    }> | null
+    } | null
   } | null
 }
 
@@ -858,7 +878,7 @@ export type SignInMutation = {
     token: string
     user: {
       __typename?: 'User'
-      addressId: string
+      addressId?: string | null
       confirmed: boolean
       displayName: string
       email: string
@@ -1138,7 +1158,7 @@ export const GetAssetsByProceedingIdDocument = {
     {
       kind: 'OperationDefinition',
       operation: 'query',
-      name: { kind: 'Name', value: 'getAssetsByProceedingId' },
+      name: { kind: 'Name', value: 'GetAssetsByProceedingId' },
       variableDefinitions: [
         {
           kind: 'VariableDefinition',
@@ -1172,10 +1192,14 @@ export const GetAssetsByProceedingIdDocument = {
               kind: 'SelectionSet',
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'proceedingId' },
+                },
                 { kind: 'Field', name: { kind: 'Name', value: 'value' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'type' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'bankName' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'carMakeName' } },
                 {
@@ -1881,7 +1905,10 @@ export const GetProceedingByIdDocument = {
       variableDefinitions: [
         {
           kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'getProceedingByIdId' },
+          },
           type: {
             kind: 'NonNullType',
             type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
@@ -1900,57 +1927,50 @@ export const GetProceedingByIdDocument = {
                 name: { kind: 'Name', value: 'id' },
                 value: {
                   kind: 'Variable',
-                  name: { kind: 'Name', value: 'id' },
+                  name: { kind: 'Name', value: 'getProceedingByIdId' },
                 },
               },
             ],
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 {
                   kind: 'Field',
-                  name: { kind: 'Name', value: 'notary' },
+                  name: { kind: 'Name', value: 'procedureAssets' },
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
                       { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       {
                         kind: 'Field',
-                        name: { kind: 'Name', value: 'user' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'id' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'name' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'surname' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'email' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'displayName' },
-                            },
-                          ],
-                        },
+                        name: { kind: 'Name', value: 'proceedingId' },
                       },
+                      { kind: 'Field', name: { kind: 'Name', value: 'value' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'description' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'bankName' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'carMakeName' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'carRegistrationDate' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'carType' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'cin' } },
                     ],
                   },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'mainBeneficiaryId' },
                 },
                 {
                   kind: 'Field',
@@ -1961,21 +1981,25 @@ export const GetProceedingByIdDocument = {
                       { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       {
                         kind: 'Field',
-                        name: { kind: 'Name', value: 'userId' },
-                      },
-                      {
-                        kind: 'Field',
                         name: { kind: 'Name', value: 'user' },
                         selectionSet: {
                           kind: 'SelectionSet',
                           selections: [
                             {
                               kind: 'Field',
-                              name: { kind: 'Name', value: 'id' },
+                              name: { kind: 'Name', value: 'displayName' },
                             },
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'email' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'phone' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
                             },
                             {
                               kind: 'Field',
@@ -1985,24 +2009,84 @@ export const GetProceedingByIdDocument = {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'surname' },
                             },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'displayName' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'phone' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'gender' },
-                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'deceasedDisplayName' },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'deceasedDateOfDeath' },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'deceasedDateOfBirth' },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'deceasedAddressId' },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'documents' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'fileData' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'fileName' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'fileType' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'createDate' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'proceedingId' },
+                      },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'state' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'notaryId' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'notary' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'user' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'address' },
                               selectionSet: {
                                 kind: 'SelectionSet',
                                 selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'id' },
+                                  },
                                   {
                                     kind: 'Field',
                                     name: { kind: 'Name', value: 'street' },
@@ -2028,25 +2112,36 @@ export const GetProceedingByIdDocument = {
                                 ],
                               },
                             },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'displayName' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'email' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'name' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'surname' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'phone' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
                           ],
                         },
                       },
                     ],
                   },
                 },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'procedureAssets' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'value' } },
-                    ],
-                  },
-                },
-                { kind: 'Field', name: { kind: 'Name', value: 'state' } },
               ],
             },
           },

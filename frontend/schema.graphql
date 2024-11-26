@@ -42,7 +42,6 @@ input AssetInput {
 
 type Beneficiary {
   id: ID!
-  inheritanceProceedings: [Proceeding!]!
   proceedingId: ID
   user: User
   userId: ID!
@@ -150,7 +149,6 @@ type Mutation {
 
 type Notary {
   id: ID!
-  inheritanceProcedures: [Proceeding!]!
   postalCode: String
   user: User
 }
@@ -165,6 +163,7 @@ type Proceeding {
   documents: [Document!]!
   endDate: DateTimeISO
   id: ID!
+  mainBeneficiary: Beneficiary
   mainBeneficiaryId: ID
   name: String!
   notary: Notary
@@ -238,7 +237,7 @@ input UploadDocumentInput {
 
 type User {
   address: Address
-  addressId: ID!
+  addressId: ID
   beneficiaries: [Beneficiary!]!
   confirmed: Boolean!
   displayName: String!
@@ -246,7 +245,7 @@ type User {
   gender: String
   id: ID!
   name: String!
-  notaryId: ID!
+  notaryId: ID
   password: String!
   phone: String
   sendNotifications: Boolean!

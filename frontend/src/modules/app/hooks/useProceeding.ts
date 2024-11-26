@@ -6,54 +6,73 @@ import { gql } from '@frontend/gql'
 //TODO: this whole query is cooked, especially contact and main beneficiary
 
 export const GET_PROCEEDING_QUERY = gql(/* GraphQL */ `
-  query GetProceedingById($id: Int!) {
-    getProceedingById(id: $id) {
-      id
-      name
-      notary {
+  query GetProceedingById($getProceedingByIdId: Int!) {
+    getProceedingById(id: $getProceedingByIdId) {
+      procedureAssets {
         id
-        user {
-          id
-          name
-          surname
-          email
-          displayName
-        }
+        proceedingId
+        value
+        name
+        description
+        type
+        bankName
+        carMakeName
+        carRegistrationDate
+        carType
+        cin
       }
-      mainBeneficiaryId
       beneficiaries {
         id
-        userId
         user {
-          id
+          displayName
           email
+          phone
+          id
           name
           surname
-          displayName
-          phone
-          gender
+        }
+      }
+      name
+      deceasedDisplayName
+      deceasedDateOfDeath
+      deceasedDateOfBirth
+      deceasedAddressId
+      documents {
+        id
+        fileData
+        fileName
+        fileType
+        createDate
+        proceedingId
+      }
+      id
+      state
+      notaryId
+      notary {
+        user {
           address {
+            id
             street
             streetNumber
             municipality
             postalCode
           }
+          displayName
+          email
+          name
+          surname
+          phone
+          id
         }
       }
-      procedureAssets {
-        id
-        name
-        value
-      }
-      state
     }
   }
 `)
 
-export function useProceeding({ proceedingId }: { proceedingId: number }) {
+export function useProceeding(proceedingId: number) {
   const { data, loading, error } = useQuery(GET_PROCEEDING_QUERY, {
     variables: {
-      id: proceedingId,
+      getProceedingByIdId: proceedingId,
     },
   })
 

@@ -35,9 +35,13 @@ const InheritanceProcedureDetail: React.FC = () => {
   const user = useAuth()
   const { id } = useParams()
 
-  const { data, loading, error } = useProceeding({
-    proceedingId: parseInt(id ?? '0', 10),
-  })
+  const { data, loading, error } = useProceeding(+id!)
+
+  const procedure = data?.getProceedingById
+
+  const assets = procedure?.procedureAssets
+
+  const totalAssetsValue = assets?.reduce((sum, asset) => sum + asset.value, 0)
 
   if (loading) {
     return (
@@ -54,12 +58,6 @@ const InheritanceProcedureDetail: React.FC = () => {
       </Box>
     )
   }
-
-  const procedure = data?.getProcedureById
-
-  const assets = procedure?.procedureAssets ?? []
-
-  const totalAssetsValue = assets.reduce((sum, asset) => sum + asset.value, 0)
 
   if (!user.token) {
     return <UnauthorizedPage />
@@ -93,15 +91,18 @@ const InheritanceProcedureDetail: React.FC = () => {
                         >
                           Hlavní kontaktní osoba
                         </Heading>
-                        {procedure.mainContact ? (
+                        {/*
+
+                        {procedure.mainBeneficiaryId ? (
                           <BeneficiaryBadge
-                            beneficiaryContact={procedure.mainContact}
+                          beneficiaryContact={procedure.mainBeneficiaryId}
                           />
-                        ) : (
-                          <Alert status="warning">
+                          ) : (
+                            <Alert status="warning">
                             Dědic bez kontaktních údajů.
-                          </Alert>
-                        )}
+                            </Alert>
+                            )}
+                        */}
                       </Stack>
                       <Stack>
                         <Heading
@@ -110,9 +111,9 @@ const InheritanceProcedureDetail: React.FC = () => {
                         >
                           Přiřazený notář
                         </Heading>
-                        {procedure.notary?.contact ? (
+                        {procedure.notary?.user ? (
                           <BeneficiaryBadge
-                            beneficiaryContact={procedure.notary.contact}
+                            beneficiaryContact={procedure.notary?.user}
                           />
                         ) : (
                           <Alert status="warning">
@@ -129,12 +130,11 @@ const InheritanceProcedureDetail: React.FC = () => {
                         Seznam dědiců
                       </Heading>
                       {procedure.beneficiaries?.map((beneficiary) =>
-                        !!beneficiary.user?.contact || !!beneficiary.contact ? (
+                        !!beneficiary.user ? (
                           <BeneficiaryBadge
                             key={beneficiary.id}
                             beneficiaryContact={{
-                              ...beneficiary.contact!,
-                              ...beneficiary.user?.contact!,
+                              ...beneficiary.user,
                             }}
                           />
                         ) : (
@@ -150,7 +150,7 @@ const InheritanceProcedureDetail: React.FC = () => {
                     >
                       Celková hodnota majetku
                     </Heading>
-                    {assets.length === 0 ? (
+                    {assets?.length === 0 ? (
                       <Stack alignItems={{ base: 'center', lg: 'start' }}>
                         <Text fontSize="md">Tuto hodnotu zatím neznáme.</Text>
                         <Button
@@ -188,7 +188,7 @@ const InheritanceProcedureDetail: React.FC = () => {
                       direction={{ base: 'column', lg: 'row' }}
                       justifyContent="center"
                     >
-                      {!user.user?.isNotary ? (
+                      {user.user?.type === 'Notary' ? (
                         <>
                           <Button as={Link} disabled rounded="full">
                             Modelace vyrovnaní
