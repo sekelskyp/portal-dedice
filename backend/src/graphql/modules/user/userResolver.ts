@@ -162,17 +162,6 @@ export class UserResolver {
   }
 
   // FIELD RESOLVERS
-  // Field resolver for Beneficiaries (ensures an empty array if no beneficiaries are found)
-  @FieldResolver(() => [Beneficiary])
-  async beneficiaries(
-    @Root() user: User,
-    @Ctx() { beneficiaryRepository }: CustomContext
-  ): Promise<Beneficiary[]> {
-    const beneficiaries = await beneficiaryRepository.getBeneficiariesByUserId(
-      user.id
-    )
-    return beneficiaries || []
-  }
 
   @FieldResolver(() => Address, { nullable: true })
   async address(

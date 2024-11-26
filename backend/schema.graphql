@@ -234,7 +234,6 @@ input UploadDocumentInput {
 type User {
   address: Address
   addressId: ID
-  beneficiaries: [Beneficiary!]!
   confirmed: Boolean!
   displayName: String!
   email: String!
