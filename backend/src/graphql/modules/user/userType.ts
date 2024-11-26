@@ -19,7 +19,7 @@ export class User {
   @Field(() => String)
   type!: UserTypeEnumType
 
-  @Field(() => ID)
+  @Field(() => ID, { nullable: true })
   notaryId!: number | null
 
   @Field()
@@ -40,6 +40,6 @@ export class User {
   @Field(() => String, { nullable: true })
   phone!: string | null
 
-  @Field(() => ID)
+  @Field(() => ID, { nullable: true })
   addressId!: number | null
 }

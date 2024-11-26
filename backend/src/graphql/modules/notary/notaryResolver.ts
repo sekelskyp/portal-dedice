@@ -12,7 +12,6 @@ import {
 import { CustomContext } from '@backend/types/types'
 
 import { findAvailableNotary } from '../../../services/notaryAssignmentService'
-import { Proceeding } from '../proceeding/proceedingType'
 import { User } from '../user/userType'
 
 import { CreateNotaryInput } from './createNotaryInput'
@@ -90,16 +89,16 @@ export class NotaryResolver {
   // Field Resolvers
   // ----------------------------------
 
-  @FieldResolver(() => [Proceeding])
-  async inheritanceProcedures(
-    @Root() user: User,
-    @Ctx() { proceedingRepository }: CustomContext
-  ): Promise<Proceeding[]> {
-    const notaries = await proceedingRepository.getProceedingsByNotaryId(
-      user.id
-    )
-    return notaries || []
-  }
+  // @FieldResolver(() => [Proceeding])
+  // async inheritanceProcedures(
+  //   @Root() user: User,
+  //   @Ctx() { proceedingRepository }: CustomContext
+  // ): Promise<Proceeding[]> {
+  //   const notaries = await proceedingRepository.getProceedingsByNotaryId(
+  //     user.id
+  //   )
+  //   return notaries || []
+  // }
 
   @FieldResolver(() => User, { nullable: true })
   async user(

@@ -170,7 +170,7 @@ export class InheritanceProcedureResolver {
 
   // Field Resolver to fetch the main beneficiary
   @FieldResolver(() => Beneficiary, { nullable: true })
-  async mainBeneficiaryId(
+  async mainBeneficiary(
     @Root() proceeding: Proceeding,
     @Ctx() { beneficiaryRepository }: CustomContext
   ): Promise<Beneficiary | null> {
@@ -195,6 +195,7 @@ export class InheritanceProcedureResolver {
   }
 
   // Field Resolver to fetch beneficiaries
+  // TODO - I would like to get rid of this and use query instead. Depends on FE willingness
   @FieldResolver(() => [Beneficiary], { nullable: true })
   async beneficiaries(
     @Root() proceeding: Proceeding,

@@ -104,15 +104,15 @@ export class BeneficiaryResolver {
   // FIELD RESOLVERS
   // ===============================
 
-  @FieldResolver(() => [Proceeding])
-  async inheritanceProceedings(
-    @Root() beneficiary: Beneficiary,
-    @Ctx() { proceedingRepository }: CustomContext
-  ): Promise<Proceeding[]> {
-    return await proceedingRepository.getBeneficiaryProceedingsForUser(
-      beneficiary.userId
-    )
-  }
+  // @FieldResolver(() => [Proceeding])
+  // async inheritanceProceedings(
+  //   @Root() beneficiary: Beneficiary,
+  //   @Ctx() { proceedingRepository }: CustomContext
+  // ): Promise<Proceeding[]> {
+  //   return await proceedingRepository.getBeneficiaryProceedingsForUser(
+  //     beneficiary.userId
+  //   )
+  // }
 
   @FieldResolver(() => User, { nullable: true })
   async user(
