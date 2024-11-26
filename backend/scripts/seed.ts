@@ -37,6 +37,8 @@ async function populateDatabase(
     addressId4,
     addressId5,
     addressId6,
+    deceasedAddressId1,
+    deceasedAddressId2,
   ] = await db
     .insert(address)
     .values([
@@ -83,6 +85,19 @@ async function populateDatabase(
         streetNumber: '321',
         municipality: 'Ostrava',
         postalCode: '13000',
+      },
+      // deceased addresses
+      {
+        street: 'Main Street',
+        streetNumber: '888',
+        municipality: 'Brno',
+        postalCode: '11000',
+      },
+      {
+        street: 'Main Street',
+        streetNumber: '777',
+        municipality: 'Brno',
+        postalCode: '15000',
       },
     ])
     .$returningId()
@@ -190,7 +205,7 @@ async function populateDatabase(
         deceasedName: 'Alice',
         deceasedSurname: 'Novakova',
         deceasedDisplayName: 'Alice Novakova',
-        deceasedAddressId: addressId3.id,
+        deceasedAddressId: deceasedAddressId1.id,
         deceasedDateOfBirth: new Date('1940-01-01'),
         deceasedDateOfDeath: new Date('2023-12-31'),
       },
@@ -202,7 +217,7 @@ async function populateDatabase(
         deceasedName: 'Jan',
         deceasedSurname: 'Svoboda',
         deceasedDisplayName: 'Jan Svoboda',
-        deceasedAddressId: addressId4.id,
+        deceasedAddressId: deceasedAddressId2.id,
         deceasedDateOfBirth: new Date('1940-01-01'),
         deceasedDateOfDeath: new Date('2023-12-31'),
       },

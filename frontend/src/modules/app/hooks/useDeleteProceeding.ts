@@ -26,6 +26,7 @@ export function useDeleteProceeding() {
         })
       },
       onError: (error) => {
+        console.log(error)
         toaster.create({
           title: 'Při mazání řízení došlo k chybě.',
           type: 'error',

@@ -15,6 +15,8 @@ import { SquareArrowOutUpRight as SquareArrowOutUpRightIcon } from 'lucide-react
 import { MdDelete } from 'react-icons/md'
 
 import { useAuth } from '@frontend/modules/auth'
+import { ActionDialog } from '@frontend/shared/components/ActionDialog'
+import { useActionDialog } from '@frontend/shared/hooks/useActionDialog'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { route } from '@shared/route'
 
@@ -47,18 +49,19 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
   const { user } = useAuth()
   const isNotary = user?.type === 'Notary'
 
+  const { toggleDialog, isOpen, selectedId } = useActionDialog()
+
   const [deleteProcedureRequest] = useDeleteProceeding()
 
-  const handleProcedureDelete = useCallback(
-    (id: string) => {
+  const handleProcedureDelete = useCallback(() => {
+    if (selectedId) {
       deleteProcedureRequest({
         variables: {
-          ids: [parseInt(id)],
+          ids: [parseInt(selectedId)],
         },
       })
-    },
-    [deleteProcedureRequest]
-  )
+    }
+  }, [deleteProcedureRequest, selectedId])
 
   const breakpoint = useBreakpoint({ breakpoints: ['base', 'sm', 'xl'] })
   const isMobile = breakpoint === 'base'
@@ -121,11 +124,22 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
           const id = info.row.original.id
           return (
             <Stack direction="row" alignItems="center">
+              {selectedId !== undefined ? (
+                <ActionDialog
+                  title="Smazání řízení"
+                  text="Opravdu chcete toto řízení smazat?"
+                  onConfirm={handleProcedureDelete}
+                  isOpen={isOpen}
+                  toggle={toggleDialog}
+                  selectedId={selectedId}
+                />
+              ) : null}
               {isNotary && (
                 <IconButton
                   borderRadius="xl"
                   bg="red.600"
-                  onClick={() => handleProcedureDelete(id)}
+                  //onClick={() => handleProcedureDelete(id)}
+                  onClick={() => toggleDialog(true, id)}
                 >
                   <MdDelete />
                 </IconButton>
@@ -149,7 +163,14 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
     )
 
     return columns
-  }, [isMobile, handleProcedureDelete, isNotary])
+  }, [
+    isMobile,
+    handleProcedureDelete,
+    isNotary,
+    isOpen,
+    toggleDialog,
+    selectedId,
+  ])
 
   const table = useReactTable({
     columns,

@@ -91,7 +91,6 @@ export function Documents({ id }: { id: string }) {
           <ActionDialog
             title="Smazání dokumentu"
             text="Opravdu chcete tento dokument smazat?"
-            actionText="Dokument byl úspěšně smazán."
             onConfirm={handleFileDelete}
             isOpen={isOpen}
             toggle={toggleDialog}
