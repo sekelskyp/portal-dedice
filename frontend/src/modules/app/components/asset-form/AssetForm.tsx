@@ -120,7 +120,8 @@ export const AssetForm: React.FC<{
   inheritanceProcedureId: number
   onSubmit: (data: AssetFormData) => Promise<void>
   defaultValues?: AssetFormData
-}> = ({ inheritanceProcedureId, onSubmit, defaultValues }) => {
+  isEditMode?: boolean
+}> = ({ inheritanceProcedureId, onSubmit, defaultValues, isEditMode }) => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { sections, visibleSections, handleSetSelected } = useAssetSections(
     defaultValues
@@ -142,9 +143,19 @@ export const AssetForm: React.FC<{
   useEffect(() => {
     if (defaultValues) {
       methods.reset(defaultValues)
+      // Initialize sections based on default values
+      const updatedSections = {} as Record<string, boolean>
       Object.entries(defaultValues).forEach(([key, value]) => {
-        if (value && Object.keys(value).length > 0) {
+        const hasValue =
+          value &&
+          (Array.isArray(value)
+            ? value.length > 0
+            : typeof value === 'object'
+              ? Object.keys(value).length > 0
+              : Boolean(value))
+        if (hasValue) {
           handleSetSelected(key as keyof typeof sections)(false)
+          updatedSections[key] = false
         }
       })
     }
@@ -216,7 +227,7 @@ export const AssetForm: React.FC<{
             loading={isSubmitting}
             loadingText="Ukládám..."
           >
-            Uložit majetek
+            {isEditMode ? 'Upravit majetek' : 'Uložit majetek'}
           </SubmitButton>
         </Grid>
       </Form>

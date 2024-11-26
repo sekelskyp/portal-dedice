@@ -19,8 +19,10 @@ const GET_ASSETS = gql`
 `
 
 export const useGetAssets = (proceedingId?: number) => {
-  return useQuery(GET_ASSETS, {
+  const { data, loading } = useQuery(GET_ASSETS, {
     variables: { proceedingId },
     skip: !proceedingId,
   })
+
+  return { data, loading }
 }

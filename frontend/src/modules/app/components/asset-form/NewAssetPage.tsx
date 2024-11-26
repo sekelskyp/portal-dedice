@@ -1,12 +1,12 @@
 import React, { useCallback, useMemo } from 'react'
-import { Container, Heading, Text, VStack } from '@chakra-ui/react'
+import { Container, Heading, Spinner, Text, VStack } from '@chakra-ui/react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { Asset } from '@frontend/gql/graphql'
 import { Page } from '@frontend/shared/layout/Page'
 import { route } from '@shared/route'
 
-import { useAddAsset } from '../../hooks/useAddAsset'
+import { AssetType, useAddAsset } from '../../hooks/useAddAsset'
 import { useDeleteAsset } from '../../hooks/useDeleteAsset'
 import { useGetAssets } from '../../hooks/useGetAsset'
 import { AssetForm, AssetFormData } from '../asset-form/AssetForm'
@@ -16,7 +16,7 @@ export const NewAssetPage = () => {
   const navigate = useNavigate()
   const { addAsset: createAssetRequest } = useAddAsset()
   const { removeAsset: deleteAsset } = useDeleteAsset()
-  const { data: existingAssets } = useGetAssets(parseInt(id!, 10))
+  const { data: existingAssets, loading } = useGetAssets(parseInt(id!, 10))
 
   const handleFormSubmit = useCallback(
     async (formData: AssetFormData) => {
@@ -37,6 +37,7 @@ export const NewAssetPage = () => {
               inheritanceProcedureId: parseInt(id, 10),
               value: 0,
               ...asset,
+              type: asset.type as AssetType,
             })
           )
         )
@@ -108,6 +109,18 @@ export const NewAssetPage = () => {
     return <div>Missing procedure ID</div>
   }
 
+  if (loading) {
+    return (
+      <Page>
+        <Container centerContent>
+          <Spinner />
+        </Container>
+      </Page>
+    )
+  }
+
+  const isEditMode = existingAssets?.getAssetsByProcedureId?.length > 0
+
   return (
     <Page>
       <VStack gap={8} width="100%" align="stretch">
@@ -123,7 +136,7 @@ export const NewAssetPage = () => {
             mb={4}
             textAlign={{ base: 'center', md: 'left' }}
           >
-            Majetek zůstavitele
+            {isEditMode ? 'Upravit majetek zůstavitele' : 'Majetek zůstavitele'}
           </Heading>
           <Text
             fontSize={{ base: 'sm', md: 'lg' }}
@@ -139,6 +152,7 @@ export const NewAssetPage = () => {
             onSubmit={handleFormSubmit}
             inheritanceProcedureId={parseInt(id, 10)}
             defaultValues={defaultValues}
+            isEditMode={isEditMode}
           />
         </Container>
       </VStack>
@@ -146,41 +160,59 @@ export const NewAssetPage = () => {
   )
 }
 
-function mapFormDataToAssets(data: AssetFormData) {
+function mapFormDataToAssets(data: AssetFormData): Array<{
+  type: string
+  name: string
+  description?: string
+  bankName?: string
+  cin?: string
+  carMakeName?: string
+  carType?: string
+  carRegistrationDate?: Date
+  value?: number
+}> {
   const assets = []
 
   if (data.bankAccount?.bank?.length) {
     data.bankAccount.bank.forEach((bank) => {
-      assets.push({
-        type: 'Financial instrument',
-        name: 'Bankovní účet',
-        description: `Bankovní účet: ${bank}`,
-        bankName: bank,
-      })
+      if (bank) {
+        assets.push({
+          type: 'Financial instrument',
+          name: 'Bankovní účet',
+          description: `Bankovní účet: ${bank}`,
+          bankName: bank,
+          value: 0,
+        })
+      }
     })
   }
 
   if (data.company?.length) {
     data.company.forEach((company) => {
-      assets.push({
-        type: 'Company',
-        name: 'Obchodní společnost',
-        description: `IČO: ${company.ico}`,
-        cin: company.ico,
-      })
+      if (company.ico) {
+        assets.push({
+          type: 'Company',
+          name: 'Obchodní společnost',
+          description: `IČO: ${company.ico}`,
+          cin: company.ico,
+          value: 0,
+        })
+      }
     })
   }
-
   if (data.car?.length) {
     data.car.forEach((car) => {
-      assets.push({
-        type: 'Automobile',
-        name: `Auto ${car.brand}`,
-        description: car.description,
-        carMakeName: car.brand,
-        carType: car.description,
-        carRegistrationDate: new Date(car.year!, 0, 1),
-      })
+      if (car.brand) {
+        assets.push({
+          type: 'Automobile',
+          name: `Auto ${car.brand}`,
+          description: car.description || undefined,
+          carMakeName: car.brand,
+          carType: car.description,
+          carRegistrationDate: car.year ? new Date(car.year, 0, 1) : undefined,
+          value: 0,
+        })
+      }
     })
   }
 
@@ -189,6 +221,7 @@ function mapFormDataToAssets(data: AssetFormData) {
       type: 'Valuables',
       name: 'Cennosti',
       description: data.valuables.description,
+      value: 0,
     })
   }
 
@@ -197,6 +230,7 @@ function mapFormDataToAssets(data: AssetFormData) {
       type: 'Other',
       name: 'Ostatní majetek',
       description: data.others.description,
+      value: 0,
     })
   }
 

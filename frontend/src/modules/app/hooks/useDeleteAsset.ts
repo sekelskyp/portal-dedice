@@ -8,7 +8,25 @@ const DELETE_ASSET = gql`
 
 export const useDeleteAsset = () => {
   const [deleteAsset, { loading }] = useMutation(DELETE_ASSET, {
-    refetchQueries: ['getAssetsByProcedureId'], // match exact query name from useGetAsset
+    update(cache, { data }) {
+      if (data?.deleteAsset) {
+        try {
+          cache.modify({
+            fields: {
+              getAssetsByProceedingId(existingAssets = [], { readField }) {
+                return existingAssets.filter(
+                  (assetRef: any) =>
+                    readField('id', assetRef) !== data.deleteAsset
+                )
+              },
+            },
+          })
+        } catch (error) {
+          console.error('Cache update failed:', error)
+        }
+      }
+    },
+    refetchQueries: ['GetAssetsByProcedureId'], // Add this back as fallback
   })
 
   const removeAsset = async (id: number) => {

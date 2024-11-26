@@ -4,19 +4,19 @@ import { AssetFormData } from './AssetForm'
 
 export const useAssetSections = (defaultValues?: AssetFormData) => {
   const [sections, setSections] = useState({
-    bankAccount: defaultValues?.bankAccount ? false : true,
-    company: defaultValues?.company ? false : true,
-    car: defaultValues?.car ? false : true,
-    valuables: defaultValues?.valuables ? false : true,
-    others: defaultValues?.others ? false : true,
+    bankAccount: !defaultValues?.bankAccount?.bank?.length,
+    company: !defaultValues?.company?.length,
+    car: !defaultValues?.car?.length,
+    valuables: !defaultValues?.valuables?.description,
+    others: !defaultValues?.others?.description,
   })
 
   const [visibleSections, setVisibleSections] = useState({
-    bankAccount: false,
-    company: false,
-    car: false,
-    valuables: false,
-    others: false,
+    bankAccount: !!defaultValues?.bankAccount?.bank?.length,
+    company: !!defaultValues?.company?.length,
+    car: !!defaultValues?.car?.length,
+    valuables: !!defaultValues?.valuables?.description,
+    others: !!defaultValues?.others?.description,
   })
 
   const handleSetSelected =
