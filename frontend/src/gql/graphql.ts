@@ -725,7 +725,7 @@ export type GetProceedingsByNotaryIdQuery = {
 export type NotifyProcedureBeneficiariesMutationVariables = Exact<{
   html: Scalars['String']['input']
   subject: Scalars['String']['input']
-  procedureId: Scalars['Int']['input']
+  proceedingId: Scalars['Int']['input']
 }>
 
 export type NotifyProcedureBeneficiariesMutation = {
@@ -1884,7 +1884,7 @@ export const NotifyProcedureBeneficiariesDocument = {
           kind: 'VariableDefinition',
           variable: {
             kind: 'Variable',
-            name: { kind: 'Name', value: 'procedureId' },
+            name: { kind: 'Name', value: 'proceedingId' },
           },
           type: {
             kind: 'NonNullType',
@@ -1920,7 +1920,7 @@ export const NotifyProcedureBeneficiariesDocument = {
                 name: { kind: 'Name', value: 'proceedingId' },
                 value: {
                   kind: 'Variable',
-                  name: { kind: 'Name', value: 'procedureId' },
+                  name: { kind: 'Name', value: 'proceedingId' },
                 },
               },
             ],

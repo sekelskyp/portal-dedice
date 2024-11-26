@@ -3,8 +3,6 @@ import { useQuery } from '@apollo/client'
 import { gql } from '@frontend/gql'
 import { useAuth } from '@frontend/modules/auth'
 
-//TODO: fix query and components
-
 export const GET_PROCEEDINGS_BY_NOTARY_ID = gql(/* GraphQL */ `
   query GetProceedingsByNotaryId($userId: Int!) {
     getNotaryProceedingsForUser(userId: $userId) {

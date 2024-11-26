@@ -6,14 +6,13 @@ import { toaster } from '@frontend/shared/design-system'
 const MAX_FILE_SIZE = 25000000
 const TOAST_DURATION = 5000
 const MAX_FILE_COUNT = 1
+const ACCEPTED_FILE_TYPES = [
+  'application/pdf',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+]
 
 export function useDocumentUpload() {
   const [{ files }, setState] = useState<{ files: File[] }>({ files: [] })
-
-  const ACCEPTED_FILE_TYPES = [
-    'application/pdf',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  ]
 
   const handleFileUpload = (details: FileUploadFileChangeDetails) => {
     const { acceptedFiles, rejectedFiles } = details
