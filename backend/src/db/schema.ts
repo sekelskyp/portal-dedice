@@ -102,15 +102,14 @@ export const proceeding = mysqlTable('proceeding', {
   startDate: date('start_date').notNull(),
   endDate: date('end_date'),
   mainBeneficiaryId: int('main_beneficiary_id').references(
-    (): AnyMySqlColumn => beneficiary.id
+    (): AnyMySqlColumn => beneficiary.id,
+    { onDelete: 'set null' }
   ),
   // deceased person info
   deceasedName: varchar('deceased_name', { length: 125 }).notNull(),
   deceasedSurname: varchar('surname', { length: 125 }).notNull(),
   deceasedDisplayName: varchar('display_name', { length: 255 }).notNull(),
-  deceasedAddressId: int('address_id')
-    .references(() => address.id)
-    .notNull(),
+  deceasedAddressId: int('address_id').references(() => address.id),
   deceasedDateOfBirth: date('date_of_birth').notNull(),
   deceasedDateOfDeath: date('date_of_death').notNull(),
 })

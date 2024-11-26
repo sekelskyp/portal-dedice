@@ -31,8 +31,8 @@ export class Proceeding {
   @Field()
   deceasedDisplayName!: string
 
-  @Field(() => ID)
-  deceasedAddressId!: number
+  @Field(() => ID, { nullable: true })
+  deceasedAddressId!: number | null
 
   @Field(() => Date)
   deceasedDateOfBirth!: Date

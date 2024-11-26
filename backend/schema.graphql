@@ -132,7 +132,7 @@ type Mutation {
   deleteBeneficiaries(id: Int!): Boolean!
   deleteDocumentsByIds(ids: [ID!]!): Boolean!
   deleteNotary(id: Int!): Boolean!
-  deleteProceedingsByIds(ids: [Int!]!): [Int!]!
+  deleteProceedingsByIds(ids: [Int!]!): Boolean!
   notifyProcedureBeneficiaries(html: String!, proceedingId: Int!, subject: String!): Boolean!
   removeBeneficiaryFromProceeding(beneficiaryId: Int!, proceedingId: Int!): Boolean!
   requestPasswordReset(email: String!): Boolean!
@@ -153,7 +153,7 @@ type Notary {
 
 type Proceeding {
   beneficiaries: [Beneficiary!]
-  deceasedAddressId: ID!
+  deceasedAddressId: ID
   deceasedDateOfBirth: DateTimeISO!
   deceasedDateOfDeath: DateTimeISO!
   deceasedDisplayName: String!
