@@ -1,6 +1,6 @@
 import { eq, inArray, InferInsertModel, InferSelectModel } from 'drizzle-orm'
 
-import { beneficiary, proceeding } from '@backend/db/schema'
+import { beneficiary, notary, proceeding, user } from '@backend/db/schema'
 import { type Db } from '@backend/types/types'
 
 export interface ProceedingEntity extends InferSelectModel<typeof proceeding> {}
@@ -85,8 +85,11 @@ export function getProceedingRepository(db: Db) {
     const results = await db
       .select()
       .from(proceeding)
-      .where(eq(proceeding.notaryId, userId))
-    return results
+      .innerJoin(notary, eq(proceeding.notaryId, notary.id))
+      .innerJoin(user, eq(user.notaryId, notary.id))
+      .where(eq(user.id, userId))
+    // Return only the proceeding data
+    return results.map((record) => ({ ...record.proceeding }))
   }
 
   return {
