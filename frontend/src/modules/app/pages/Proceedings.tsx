@@ -1,4 +1,12 @@
-import { Button, Card, Heading, HStack, Stack, Text } from '@chakra-ui/react'
+import {
+  Button,
+  Card,
+  Heading,
+  HStack,
+  Spinner,
+  Stack,
+  Text,
+} from '@chakra-ui/react'
 import { MdNoteAdd } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 
@@ -24,7 +32,7 @@ export function Proceedings() {
 
   const data = {
     proceedings: isNotary
-      ? notaryProceedings.data?.getProceduresByNotaryId
+      ? notaryProceedings.data?.getNotaryProceedingsForUser
       : beneficiaryProceedings.data?.getBeneficiaryProceedingsForUser,
     loading: isNotary
       ? notaryProceedings.loading
@@ -34,7 +42,13 @@ export function Proceedings() {
 
   let procedures: ProceedingsItem[] = []
 
-  if (data.loading) return <Text>Loading...</Text>
+  if (data.loading)
+    return (
+      <Stack direction="row" justifyItems="center">
+        <Spinner />
+        <Text>Načítání...</Text>
+      </Stack>
+    )
   if (data.error) return <Text>Error: {data.error.message}</Text>
   if (data.proceedings) {
     procedures = data.proceedings.map((item) => ({
@@ -53,7 +67,7 @@ export function Proceedings() {
             flexWrap="wrap"
           >
             <Heading size={{ base: 'xl', sm: '2xl' }}>Moje řízení</Heading>
-            {isNotary && (
+            {!isNotary && (
               <RouterNavLink
                 to={route.newProceeding()}
                 size={{ base: 'sm', sm: 'lg' }}
@@ -76,7 +90,7 @@ export function Proceedings() {
             )}
           </Card.Body>
         </Card.Root>
-        {isNotary && (
+        {!isNotary && (
           <Stack gap={4} alignItems={{ base: 'center', sm: 'start' }}>
             <Heading size={{ base: 'xl', sm: '2xl' }}>Další možnosti</Heading>
             {proceedingsNavigation.map((item, index) => (

@@ -37,9 +37,9 @@ const InheritanceProcedureDetail: React.FC = () => {
 
   const { data, loading, error } = useProceeding(+id!)
 
-  const procedure = data?.getProceedingById
+  const proceeding = data?.getProceedingById
 
-  const assets = procedure?.procedureAssets
+  const assets = proceeding?.procedureAssets
 
   const totalAssetsValue = assets?.reduce((sum, asset) => sum + asset.value, 0)
 
@@ -64,12 +64,12 @@ const InheritanceProcedureDetail: React.FC = () => {
   } else {
     return (
       <Stack display="flex" alignItems="center" justifyContent="center">
-        {procedure ? (
+        {proceeding ? (
           <Card.Root w="full">
             <Card.Header as={HStack} gap={4}>
               <LuFile size={24} />
-              <Heading>{procedure?.name}</Heading>
-              <StatusBadge ml="auto" state={procedure.state} />
+              <Heading>{proceeding?.name}</Heading>
+              <StatusBadge ml="auto" state={proceeding.state} />
             </Card.Header>
             <Card.Body gap={4}>
               <Tabs.Root defaultValue="detail" size={{ base: 'sm', md: 'lg' }}>
@@ -91,18 +91,18 @@ const InheritanceProcedureDetail: React.FC = () => {
                         >
                           Hlavní kontaktní osoba
                         </Heading>
-                        {/*
 
-                        {procedure.mainBeneficiaryId ? (
+                        {proceeding.mainBeneficiary?.user ? (
                           <BeneficiaryBadge
-                          beneficiaryContact={procedure.mainBeneficiaryId}
+                            beneficiaryContact={
+                              proceeding.mainBeneficiary?.user
+                            }
                           />
-                          ) : (
-                            <Alert status="warning">
+                        ) : (
+                          <Alert status="warning">
                             Dědic bez kontaktních údajů.
-                            </Alert>
-                            )}
-                        */}
+                          </Alert>
+                        )}
                       </Stack>
                       <Stack>
                         <Heading
@@ -111,9 +111,9 @@ const InheritanceProcedureDetail: React.FC = () => {
                         >
                           Přiřazený notář
                         </Heading>
-                        {procedure.notary?.user ? (
+                        {proceeding.notary?.user ? (
                           <BeneficiaryBadge
-                            beneficiaryContact={procedure.notary?.user}
+                            beneficiaryContact={proceeding.notary?.user}
                           />
                         ) : (
                           <Alert status="warning">
@@ -129,7 +129,7 @@ const InheritanceProcedureDetail: React.FC = () => {
                       >
                         Seznam dědiců
                       </Heading>
-                      {procedure.beneficiaries?.map((beneficiary) =>
+                      {proceeding.beneficiaries?.map((beneficiary) =>
                         !!beneficiary.user ? (
                           <BeneficiaryBadge
                             key={beneficiary.id}
@@ -188,21 +188,21 @@ const InheritanceProcedureDetail: React.FC = () => {
                       direction={{ base: 'column', lg: 'row' }}
                       justifyContent="center"
                     >
-                      {user.user?.type === 'Notary' ? (
+                      {user.user?.type === 'User' ? (
                         <>
                           <Button as={Link} disabled rounded="full">
                             Modelace vyrovnaní
                             <FaCalculator />
                           </Button>
                           <RouterNavLink
-                            to={route.chatId(id, procedure.name)}
+                            to={route.chatId(id, proceeding.name)}
                             rounded="full"
                           >
                             Chat s notářem
                             <HiChat />
                           </RouterNavLink>
                           <RouterNavLink
-                            to={route.chatIdHistory(id, procedure.name)}
+                            to={route.chatIdHistory(id, proceeding.name)}
                             rounded="full"
                           >
                             Chatová historie řízení
@@ -233,7 +233,7 @@ const InheritanceProcedureDetail: React.FC = () => {
             </Card.Body>
           </Card.Root>
         ) : (
-          <Text>No procedure found</Text>
+          <Text>Řízení nebylo nalezeno.</Text>
         )}
       </Stack>
     )

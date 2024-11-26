@@ -11,15 +11,11 @@ import { DocumentUpload } from '../components/DocumentUpload'
 import { useProceeding } from '../hooks/useProceeding'
 import { documentTypes } from '../utils/documentTypes'
 
-//TODO: fix query and components
-
 export function NewDocumentPage() {
   const user = useAuth()
   const { id } = useParams()
 
-  const { data, loading, error } = useProceeding({
-    proceedingId: parseInt(id ?? '0', 10),
-  })
+  const { data, loading, error } = useProceeding(parseInt(id ?? '0', 10))
 
   if (loading) {
     return <Spinner />
@@ -29,15 +25,12 @@ export function NewDocumentPage() {
     return <NotFoundPage />
   }
 
-  const procedure = data?.getProceedingById
+  const proceeding = data?.getProceedingById
+  const proceedingBeneficiaryIds = proceeding?.beneficiaries?.map(
+    (b) => b.user?.id
+  )
 
-  const userBeneficiaryId = user.user?.beneficiaries[0]?.id
-  const procedureBeneficiaryIds = procedure?.beneficiaries?.map((b) => b.id)
-
-  if (
-    !userBeneficiaryId ||
-    !procedureBeneficiaryIds?.includes(userBeneficiaryId)
-  ) {
+  if (!user.user?.id || !proceedingBeneficiaryIds?.includes(user.user?.id)) {
     return <UnauthorizedPage />
   }
 
@@ -65,7 +58,7 @@ export function NewDocumentPage() {
             justifyContent={{ base: 'center', md: 'start' }}
           >
             <LuFile size={24} />
-            <Heading>{procedure?.name}</Heading>
+            <Heading>{proceeding?.name}</Heading>
           </Stack>
         </Stack>
         <Stack direction="column" gap={4}>
