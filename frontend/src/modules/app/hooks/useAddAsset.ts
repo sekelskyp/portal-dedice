@@ -25,6 +25,23 @@ const CREATE_ASSET = gql`
   }
 `
 
+const UPDATE_ASSET = gql`
+  mutation UpdateAsset($id: Int!, $data: AssetInput!) {
+    updateAsset(id: $id, data: $data) {
+      id
+      type
+      name
+      value
+      description
+      bankName
+      carMakeName
+      carRegistrationDate
+      carType
+      cin
+    }
+  }
+`
+
 export interface CreateAssetInput {
   proceedingId: number
   type: AssetType
@@ -42,6 +59,7 @@ export const useAddAsset = () => {
   const [createAsset, { loading, error }] = useMutation(CREATE_ASSET, {
     refetchQueries: ['getAssetsByProcedureId'],
   })
+  const [updateAsset] = useMutation(UPDATE_ASSET)
 
   const addAsset = async (
     data: Omit<CreateAssetInput, 'proceedingId'> & {
@@ -65,5 +83,5 @@ export const useAddAsset = () => {
     }
   }
 
-  return { addAsset, loading, error }
+  return { addAsset, updateAsset, loading, error }
 }

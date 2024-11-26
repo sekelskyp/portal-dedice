@@ -7,15 +7,13 @@ import { Page } from '@frontend/shared/layout/Page'
 import { route } from '@shared/route'
 
 import { AssetType, useAddAsset } from '../../hooks/useAddAsset'
-import { useDeleteAsset } from '../../hooks/useDeleteAsset'
-import { useGetAssets } from '../../hooks/useGetAsset'
+import { mapAssetsToFormData, useGetAssets } from '../../hooks/useGetAsset'
 import { AssetForm, AssetFormData } from '../asset-form/AssetForm'
 
 export const NewAssetPage = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { addAsset: createAssetRequest } = useAddAsset()
-  const { removeAsset: deleteAsset } = useDeleteAsset()
   const { data: existingAssets, loading } = useGetAssets(parseInt(id!, 10))
 
   const handleFormSubmit = useCallback(
@@ -23,23 +21,37 @@ export const NewAssetPage = () => {
       if (!id) return
 
       try {
-        if (existingAssets?.getAssetsByProcedureId?.length > 0) {
-          await Promise.all(
-            existingAssets.getAssetsByProcedureId.map((asset: Asset) =>
-              deleteAsset(parseInt(asset.id, 10))
-            )
-          )
-        }
         const assets = mapFormDataToAssets(formData)
+        const existingAssetsByType =
+          existingAssets?.getAssetsByProcedureId?.reduce(
+            (acc: Record<string, Asset>, asset: Asset) => {
+              acc[asset.type] = asset
+              return acc
+            },
+            {}
+          ) || {}
+
         await Promise.all(
-          assets.map((asset) =>
-            createAssetRequest({
-              inheritanceProcedureId: parseInt(id, 10),
-              value: 0,
-              ...asset,
-              type: asset.type as AssetType,
-            })
-          )
+          assets.map(async (asset) => {
+            const existingAsset = existingAssetsByType[asset.type]
+            if (existingAsset) {
+              // Update existing asset
+              return updateAsset(parseInt(existingAsset.id, 10), {
+                // inheritanceProcedureId: parseInt(id, 10),
+                value: 0,
+                ...asset,
+                type: asset.type as AssetType,
+              })
+            } else {
+              // Create new asset if it doesn't exist
+              return createAssetRequest({
+                inheritanceProcedureId: parseInt(id, 10),
+                value: 0,
+                ...asset,
+                type: asset.type as AssetType,
+              })
+            }
+          })
         )
 
         navigate(route.inheritanceProcedure(id))
@@ -47,62 +59,16 @@ export const NewAssetPage = () => {
         console.error('Error managing assets:', error)
       }
     },
-    [createAssetRequest, deleteAsset, id, navigate, existingAssets]
+    [createAssetRequest, id, navigate, existingAssets]
   )
 
   const defaultValues = useMemo(() => {
-    if (!existingAssets?.getAssetsByProcedureId) return undefined
-
-    const formData: AssetFormData = {}
-
-    const groupedAssets = existingAssets.getAssetsByProcedureId.reduce(
-      (acc: Record<string, Asset[]>, asset: Asset) => {
-        if (!acc[asset.type]) {
-          acc[asset.type] = []
-        }
-        acc[asset.type].push(asset)
-        return acc
-      },
-      {}
-    )
-
-    if (groupedAssets['Financial instrument']?.length > 0) {
-      formData.bankAccount = {
-        bank: groupedAssets['Financial instrument'].map(
-          (asset: Asset) => asset.bankName || ''
-        ),
-      }
+    const assets = existingAssets?.getAssetsByProceedingId
+    if (!assets?.length) {
+      return undefined
     }
 
-    if (groupedAssets['Company']) {
-      formData.company = groupedAssets['Company'].map((asset: Asset) => ({
-        ico: asset.cin || '',
-      }))
-    }
-
-    if (groupedAssets['Automobile']) {
-      formData.car = groupedAssets['Automobile'].map((car: Asset) => ({
-        brand: car.carMakeName || '',
-        year: car.carRegistrationDate
-          ? new Date(car.carRegistrationDate).getFullYear()
-          : undefined,
-        description: car.carType || '',
-      }))
-    }
-
-    if (groupedAssets['Valuables']?.[0]) {
-      formData.valuables = {
-        description: groupedAssets['Valuables'][0].description || '',
-      }
-    }
-
-    if (groupedAssets['Other']?.[0]) {
-      formData.others = {
-        description: groupedAssets['Other'][0].description || '',
-      }
-    }
-
-    return formData
+    return mapAssetsToFormData(assets)
   }, [existingAssets])
 
   if (!id) {
@@ -152,7 +118,7 @@ export const NewAssetPage = () => {
             onSubmit={handleFormSubmit}
             inheritanceProcedureId={parseInt(id, 10)}
             defaultValues={defaultValues}
-            isEditMode={isEditMode}
+            isEditMode={!!defaultValues}
           />
         </Container>
       </VStack>
@@ -235,4 +201,20 @@ function mapFormDataToAssets(data: AssetFormData): Array<{
   }
 
   return assets
+}
+function updateAsset(
+  arg0: number,
+  arg1: {
+    type: AssetType
+    name: string
+    description?: string
+    bankName?: string
+    cin?: string
+    carMakeName?: string
+    carType?: string
+    carRegistrationDate?: Date
+    value: number
+  }
+): Promise<void> {
+  throw new Error('Function not implemented.')
 }

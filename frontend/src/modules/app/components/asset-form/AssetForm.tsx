@@ -122,6 +122,8 @@ export const AssetForm: React.FC<{
   defaultValues?: AssetFormData
   isEditMode?: boolean
 }> = ({ inheritanceProcedureId, onSubmit, defaultValues, isEditMode }) => {
+  console.log('Form default values:', defaultValues) // Debug log
+
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { sections, visibleSections, handleSetSelected } = useAssetSections(
     defaultValues
@@ -129,7 +131,7 @@ export const AssetForm: React.FC<{
     sections: Record<string, boolean>
     visibleSections: Record<string, boolean>
     handleSetSelected: (
-      key: keyof typeof sections
+      section: string
     ) => React.Dispatch<React.SetStateAction<boolean>>
   }
 
@@ -137,39 +139,37 @@ export const AssetForm: React.FC<{
     resolver: zodResolver(assetSchema(sections)),
     defaultValues,
     mode: 'onChange',
-    shouldUnregister: false,
   })
 
   useEffect(() => {
     if (defaultValues) {
+      console.log('Resetting form with values:', defaultValues) // Debug log
       methods.reset(defaultValues)
-      // Initialize sections based on default values
-      const updatedSections = {} as Record<string, boolean>
-      Object.entries(defaultValues).forEach(([key, value]) => {
-        const hasValue =
-          value &&
-          (Array.isArray(value)
-            ? value.length > 0
-            : typeof value === 'object'
-              ? Object.keys(value).length > 0
-              : Boolean(value))
-        if (hasValue) {
-          handleSetSelected(key as keyof typeof sections)(false)
-          updatedSections[key] = false
-        }
-      })
     }
-  }, [defaultValues, methods, handleSetSelected])
+  }, [defaultValues, methods])
 
   const handleSubmit: SubmitHandler<AssetFormData> = async (data) => {
     try {
       setIsSubmitting(true)
-      const filteredData: AssetFormData = Object.keys(data)
-        .filter((key) => visibleSections[key as keyof typeof sections])
-        .reduce(
-          (acc, key) => ({ ...acc, [key]: data[key as keyof AssetFormData] }),
-          {}
-        )
+      const filteredData = {} as AssetFormData
+
+      // Only include sections that are visible and have data
+      if (visibleSections.bankAccount && data.bankAccount) {
+        filteredData.bankAccount = data.bankAccount
+      }
+      if (visibleSections.company && data.company) {
+        filteredData.company = data.company
+      }
+      if (visibleSections.car && data.car) {
+        filteredData.car = data.car
+      }
+      if (visibleSections.valuables && data.valuables) {
+        filteredData.valuables = data.valuables
+      }
+      if (visibleSections.others && data.others) {
+        filteredData.others = data.others
+      }
+
       await onSubmit(filteredData)
     } finally {
       setIsSubmitting(false)
