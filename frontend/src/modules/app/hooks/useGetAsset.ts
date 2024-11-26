@@ -1,8 +1,8 @@
 import { gql, useQuery } from '@apollo/client'
 
 export const GET_ASSETS = gql`
-  query getAssetsByProcedureId($proceedingId: Int!) {
-    getAssetsByProceedingId(proceedingId: $proceedingId) {
+  query getAssetsByProcedureId($procedureId: Int!) {
+    getAssetsByProceedingId(proceedingId: $procedureId) {
       id
       proceedingId
       type
@@ -20,7 +20,7 @@ export const GET_ASSETS = gql`
 
 export const useGetAssets = (proceedingId?: number) => {
   const { data, loading, error } = useQuery(GET_ASSETS, {
-    variables: { proceedingId },
+    variables: { procedureId: proceedingId },
     skip: !proceedingId,
   })
 
