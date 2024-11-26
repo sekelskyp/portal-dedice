@@ -1,5 +1,5 @@
-import React from 'react'
-import { VStack } from '@chakra-ui/react'
+import React, { useEffect, useState } from 'react'
+import { Grid, VStack } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -18,14 +18,14 @@ export type AssetFormData = {
   bankAccount?: {
     bank?: string[]
   }
-  company?: {
+  company?: Array<{
     ico?: string
-  }
-  car?: {
+  }>
+  car?: Array<{
     brand?: string
     year?: number
     description?: string
-  }
+  }>
   valuables?: {
     description?: string
   }
@@ -35,46 +35,57 @@ export type AssetFormData = {
 }
 
 const assetSchema = (sections: Record<string, boolean>) => {
-  const schema: Record<string, z.ZodObject<Record<string, z.ZodTypeAny>>> = {}
+  const schema: Record<string, z.ZodTypeAny> = {}
 
   if (!sections.bankAccount) {
     schema.bankAccount = z.object({
       bank: z
-        .array(z.string({ required_error: 'Vyberte bankovní instituci' }))
-        .min(1, { message: 'Vyberte alespoň jednu bankovní instituci' }),
+        .array(z.string())
+        .min(1, { message: 'Vyberte alespoň jednu bankovní instituci' })
+        .optional(),
     })
   }
 
   if (!sections.company) {
-    schema.company = z.object({
-      ico: z
-        .string({ required_error: 'Zadejte IČO' })
-        .min(1, { message: 'Zadejte IČO' })
-        .regex(/^\d{8}$/, { message: 'Zadejte platné IČO (8 číslic)' }),
-    })
+    schema.company = z
+      .array(
+        z.object({
+          ico: z
+            .string({ required_error: 'Zadejte IČO' })
+            .min(1, { message: 'Zadejte IČO' })
+            .regex(/^\d{8}$/, { message: 'Zadejte platné IČO (8 číslic)' }),
+        })
+      )
+      .min(1, { message: 'Přidejte alespoň jednu společnost' })
   }
 
   if (!sections.car) {
-    schema.car = z.object({
-      brand: z.string({ required_error: 'Vyberte značku' }).min(1, {
-        message: 'Vyberte značku',
-      }),
-      year: z
-        .string({ required_error: 'Zadejte rok' })
-        .min(1, { message: 'Zadejte rok' })
-        .refine(
-          (val) =>
-            Number(val) >= 1900 && Number(val) <= new Date().getFullYear(),
-          {
-            message: 'Zadejte platný rok',
-          }
-        ),
-      description: z
-        .string({
-          required_error: 'Zadejte popis zůstavitelova auta',
+    schema.car = z
+      .array(
+        z.object({
+          brand: z.string({ required_error: 'Vyberte značku' }).min(1, {
+            message: 'Vyberte značku',
+          }),
+          year: z
+            .union([z.string(), z.number()])
+            .transform((val) => val.toString())
+            .refine(
+              (val) => {
+                const num = Number(val)
+                return num >= 1900 && num <= new Date().getFullYear()
+              },
+              {
+                message: 'Zadejte platný rok',
+              }
+            ),
+          description: z
+            .string({
+              required_error: 'Zadejte popis zůstavitelova auta',
+            })
+            .min(1, { message: 'Zadejte popis zůstavitelova auta' }),
         })
-        .min(1, { message: 'Zadejte popis zůstavitelova auta' }),
-    })
+      )
+      .min(1, { message: 'Přidejte alespoň jedno auto' })
   }
 
   if (!sections.valuables) {
@@ -107,22 +118,51 @@ export type AssetSummary = {
 
 export const AssetForm: React.FC<{
   inheritanceProcedureId: number
-  onSubmit: (data: AssetFormData) => void
-}> = ({ inheritanceProcedureId, onSubmit }) => {
-  const { sections, handleSetSelected } = useAssetSections()
+  onSubmit: (data: AssetFormData) => Promise<void>
+  defaultValues?: AssetFormData
+}> = ({ inheritanceProcedureId, onSubmit, defaultValues }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { sections, visibleSections, handleSetSelected } = useAssetSections(
+    defaultValues
+  ) as {
+    sections: Record<string, boolean>
+    visibleSections: Record<string, boolean>
+    handleSetSelected: (
+      key: keyof typeof sections
+    ) => React.Dispatch<React.SetStateAction<boolean>>
+  }
 
   const methods = useForm<AssetFormData>({
     resolver: zodResolver(assetSchema(sections)),
+    defaultValues,
+    mode: 'onChange',
+    shouldUnregister: false,
   })
 
+  useEffect(() => {
+    if (defaultValues) {
+      methods.reset(defaultValues)
+      Object.entries(defaultValues).forEach(([key, value]) => {
+        if (value && Object.keys(value).length > 0) {
+          handleSetSelected(key as keyof typeof sections)(false)
+        }
+      })
+    }
+  }, [defaultValues, methods, handleSetSelected])
+
   const handleSubmit: SubmitHandler<AssetFormData> = async (data) => {
-    const filteredData: AssetFormData = Object.keys(data)
-      .filter((key) => !sections[key as keyof typeof sections])
-      .reduce(
-        (acc, key) => ({ ...acc, [key]: data[key as keyof AssetFormData] }),
-        {}
-      )
-    onSubmit(filteredData)
+    try {
+      setIsSubmitting(true)
+      const filteredData: AssetFormData = Object.keys(data)
+        .filter((key) => visibleSections[key as keyof typeof sections])
+        .reduce(
+          (acc, key) => ({ ...acc, [key]: data[key as keyof AssetFormData] }),
+          {}
+        )
+      await onSubmit(filteredData)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -130,35 +170,55 @@ export const AssetForm: React.FC<{
       <Form
         onSubmit={handleSubmit}
         resolver={zodResolver(assetSchema(sections))}
+        defaultValues={defaultValues}
         noValidate
       >
-        <VStack align="stretch">
-          <BankAccountSection
-            selected={sections.bankAccount}
-            setSelected={handleSetSelected('bankAccount')}
-            bankAccountCollection={[]}
-          />
-          <CompanySection
-            selected={sections.company}
-            setSelected={handleSetSelected('company')}
-          />
-          <CarSection
-            selected={sections.car}
-            setSelected={handleSetSelected('car')}
-            bankAccountCollection={[]}
-          />
-          <ValuablesSection
-            selected={sections.valuables}
-            setSelected={handleSetSelected('valuables')}
-          />
-          <OthersSection
-            selected={sections.others}
-            setSelected={handleSetSelected('others')}
-          />
-          <SubmitButton type="submit" colorScheme="blue">
+        <Grid
+          templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }}
+          gap={{ base: 6, md: 12 }}
+          width="100%"
+          py={8}
+        >
+          <VStack gap={{ base: 6, md: 12 }} align="stretch">
+            <CompanySection
+              selected={sections.company}
+              setSelected={handleSetSelected('company')}
+            />
+            <ValuablesSection
+              selected={sections.valuables}
+              setSelected={handleSetSelected('valuables')}
+            />
+            <OthersSection
+              selected={sections.others}
+              setSelected={handleSetSelected('others')}
+            />
+          </VStack>
+          <VStack gap={{ base: 6, md: 12 }} align="stretch">
+            <BankAccountSection
+              selected={sections.bankAccount}
+              setSelected={handleSetSelected('bankAccount')}
+              bankAccountCollection={[]}
+            />
+            <CarSection
+              selected={sections.car}
+              setSelected={handleSetSelected('car')}
+              bankAccountCollection={[]}
+            />
+          </VStack>
+
+          <SubmitButton
+            type="submit"
+            colorScheme="blue"
+            justifySelf={'center'}
+            gridColumn={{ base: '1', md: 'span 2' }}
+            width={{ base: '100%', sm: '50%' }}
+            mt={8}
+            loading={isSubmitting}
+            loadingText="Ukládám..."
+          >
             Uložit majetek
           </SubmitButton>
-        </VStack>
+        </Grid>
       </Form>
     </FormProvider>
   )

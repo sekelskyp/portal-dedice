@@ -15,7 +15,10 @@ export const ValuablesSection: React.FC<ValuablesSectionProps> = ({
   selected,
   setSelected,
 }) => {
-  const { setValue } = useFormContext()
+  const { setValue, watch } = useFormContext()
+  const valuables = watch('valuables')
+  const hasExistingData =
+    valuables?.description && valuables.description.length > 0
 
   const clearFields = () => {
     setValue('valuables.description', '')
@@ -27,6 +30,7 @@ export const ValuablesSection: React.FC<ValuablesSectionProps> = ({
       selected={selected}
       setSelected={setSelected}
       clearFields={clearFields}
+      hideSwitch={hasExistingData}
     >
       {!selected && (
         <Controller
