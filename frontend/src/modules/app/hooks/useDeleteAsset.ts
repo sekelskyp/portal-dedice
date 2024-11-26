@@ -15,7 +15,7 @@ export const useDeleteAsset = () => {
             fields: {
               getAssetsByProceedingId(existingAssets = [], { readField }) {
                 return existingAssets.filter(
-                  (assetRef: any) =>
+                  (assetRef: { id: number }) =>
                     readField('id', assetRef) !== data.deleteAsset
                 )
               },
