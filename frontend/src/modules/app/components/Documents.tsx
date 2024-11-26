@@ -27,10 +27,11 @@ interface DocumentType {
 
 export function Documents({ id }: { id: string }) {
   const { user, token } = useAuth()
+  const isNotary = user?.type === 'Notary'
 
   const [documents, setDocuments] = useState<DocumentType[]>([])
 
-  const procedure = useProceeding({ proceedingId: parseInt(id) })
+  const procedure = useProceeding(parseInt(id))
 
   const { data } = useGetDocuments({
     proceedingId: parseInt(id),
@@ -76,8 +77,8 @@ export function Documents({ id }: { id: string }) {
   }
 
   useEffect(() => {
-    if (data?.getProcedureById?.documents) {
-      setDocuments(data.getProcedureById.documents)
+    if (data?.getDocumentsByProceedingId) {
+      setDocuments(data.getDocumentsByProceedingId)
     }
   }, [data])
 
@@ -165,7 +166,7 @@ export function Documents({ id }: { id: string }) {
               />
             )}
           </Stack>
-          {!user?.isNotary && (
+          {!isNotary && (
             <Stack alignItems="center" pt={4}>
               <RouterNavLink
                 to={route.newDocument(id)}

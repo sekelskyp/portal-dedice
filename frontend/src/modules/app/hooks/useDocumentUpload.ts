@@ -5,6 +5,7 @@ import { toaster } from '@frontend/shared/design-system'
 
 const MAX_FILE_SIZE = 25000000
 const TOAST_DURATION = 5000
+const MAX_FILE_COUNT = 1
 
 export function useDocumentUpload() {
   const [{ files }, setState] = useState<{ files: File[] }>({ files: [] })
@@ -78,5 +79,7 @@ export function useDocumentUpload() {
     handleFileUpload,
     clearFiles,
     ACCEPTED_FILE_TYPES,
+    MAX_FILE_SIZE,
+    MAX_FILE_COUNT,
   }
 }

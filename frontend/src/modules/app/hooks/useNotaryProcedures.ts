@@ -1,12 +1,13 @@
 import { useQuery } from '@apollo/client'
 
 import { gql } from '@frontend/gql'
+import { useAuth } from '@frontend/modules/auth'
 
 //TODO: fix query and components
 
-export const GET_ALL_PROCEEDINGS = gql(/* GraphQL */ `
-  query GetAllProceedings {
-    getAllProceedings {
+export const GET_PROCEEDINGS_BY_NOTARY_ID = gql(/* GraphQL */ `
+  query GetProceedingsByNotaryId($userId: Int!) {
+    getNotaryProceedingsForUser(userId: $userId) {
       id
       name
       startDate
@@ -17,8 +18,16 @@ export const GET_ALL_PROCEEDINGS = gql(/* GraphQL */ `
 `)
 
 export function useNotaryProcedures() {
-  const { data, loading, error } = useQuery(GET_ALL_PROCEEDINGS)
+  const auth = useAuth()
+  const id = auth.user?.id ?? '0'
 
+  const { data, loading, error } = useQuery(GET_PROCEEDINGS_BY_NOTARY_ID, {
+    variables: {
+      userId: +id,
+    },
+  })
+
+  /*
   const cleanData = data
     ? {
         ...data,
@@ -27,6 +36,7 @@ export function useNotaryProcedures() {
         ),
       }
     : null
+  */
 
-  return { data: cleanData, loading, error }
+  return { data, loading, error }
 }

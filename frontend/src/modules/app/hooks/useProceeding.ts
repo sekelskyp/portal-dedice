@@ -2,9 +2,6 @@ import { useQuery } from '@apollo/client'
 
 import { gql } from '@frontend/gql'
 
-//TODO: fix query and components
-//TODO: this whole query is cooked, especially contact and main beneficiary
-
 export const GET_PROCEEDING_QUERY = gql(/* GraphQL */ `
   query GetProceedingById($getProceedingByIdId: Int!) {
     getProceedingById(id: $getProceedingByIdId) {
@@ -20,6 +17,17 @@ export const GET_PROCEEDING_QUERY = gql(/* GraphQL */ `
         carRegistrationDate
         carType
         cin
+      }
+      mainBeneficiary {
+        id
+        user {
+          displayName
+          email
+          phone
+          id
+          name
+          surname
+        }
       }
       beneficiaries {
         id
