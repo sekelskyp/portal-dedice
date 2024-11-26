@@ -26,19 +26,19 @@ export const useAssetSections = (defaultValues?: AssetFormData) => {
   useEffect(() => {
     if (defaultValues) {
       const newSections = {
-        bankAccount: !defaultValues.bankAccount?.bank?.length,
-        company: !defaultValues.company?.length,
-        car: !defaultValues.car?.length,
-        valuables: !defaultValues.valuables?.description,
-        others: !defaultValues.others?.description,
+        bankAccount: !defaultValues?.bankAccount?.bank?.length,
+        company: !defaultValues?.company?.length,
+        car: !defaultValues?.car?.length,
+        valuables: !defaultValues?.valuables?.description,
+        others: !defaultValues?.others?.description,
       }
       setSections(newSections)
       setVisibleSections({
-        bankAccount: !newSections.bankAccount,
-        company: !newSections.company,
-        car: !newSections.car,
-        valuables: !newSections.valuables,
-        others: !newSections.others,
+        bankAccount: (defaultValues?.bankAccount?.bank?.length ?? 0) > 0,
+        company: (defaultValues?.company?.length ?? 0) > 0,
+        car: (defaultValues?.car?.length ?? 0) > 0,
+        valuables: !!defaultValues?.valuables?.description,
+        others: !!defaultValues?.others?.description,
       })
     }
   }, [defaultValues])

@@ -8,12 +8,14 @@ import { route } from '@shared/route'
 
 import { AssetType, useAddAsset } from '../../hooks/useAddAsset'
 import { mapAssetsToFormData, useGetAssets } from '../../hooks/useGetAsset'
+import { useUpdateAsset } from '../../hooks/useUpdateAsset'
 import { AssetForm, AssetFormData } from '../asset-form/AssetForm'
 
 export const NewAssetPage = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { addAsset: createAssetRequest } = useAddAsset()
+  const { updateAsset } = useUpdateAsset()
   const { data: existingAssets, loading } = useGetAssets(parseInt(id!, 10))
 
   const handleFormSubmit = useCallback(
@@ -35,20 +37,16 @@ export const NewAssetPage = () => {
           assets.map(async (asset) => {
             const existingAsset = existingAssetsByType[asset.type]
             if (existingAsset) {
-              // Update existing asset
-              return updateAsset(parseInt(existingAsset.id, 10), {
-                // inheritanceProcedureId: parseInt(id, 10),
-                value: 0,
+              return updateAsset(parseInt(existingAsset.id), {
                 ...asset,
                 type: asset.type as AssetType,
               })
             } else {
-              // Create new asset if it doesn't exist
               return createAssetRequest({
                 inheritanceProcedureId: parseInt(id, 10),
-                value: 0,
                 ...asset,
                 type: asset.type as AssetType,
+                value: asset.value ?? 0,
               })
             }
           })
@@ -59,7 +57,7 @@ export const NewAssetPage = () => {
         console.error('Error managing assets:', error)
       }
     },
-    [createAssetRequest, id, navigate, existingAssets]
+    [createAssetRequest, updateAsset, id, navigate, existingAssets]
   )
 
   const defaultValues = useMemo(() => {
@@ -140,16 +138,12 @@ function mapFormDataToAssets(data: AssetFormData): Array<{
   const assets = []
 
   if (data.bankAccount?.bank?.length) {
-    data.bankAccount.bank.forEach((bank) => {
-      if (bank) {
-        assets.push({
-          type: 'Financial instrument',
-          name: 'Bankovní účet',
-          description: `Bankovní účet: ${bank}`,
-          bankName: bank,
-          value: 0,
-        })
-      }
+    assets.push({
+      type: 'Financial instrument',
+      name: 'Bankovní účty',
+      description: `Bankovní účty: ${data.bankAccount.bank.join(', ')}`,
+      bankName: data.bankAccount.bank.join(', '),
+      value: 0,
     })
   }
 
@@ -201,20 +195,4 @@ function mapFormDataToAssets(data: AssetFormData): Array<{
   }
 
   return assets
-}
-function updateAsset(
-  arg0: number,
-  arg1: {
-    type: AssetType
-    name: string
-    description?: string
-    bankName?: string
-    cin?: string
-    carMakeName?: string
-    carType?: string
-    carRegistrationDate?: Date
-    value: number
-  }
-): Promise<void> {
-  throw new Error('Function not implemented.')
 }

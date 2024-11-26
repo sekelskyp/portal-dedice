@@ -1,18 +1,45 @@
-import { useMutation } from '@apollo/client'
+import { gql, useMutation } from '@apollo/client'
 
-import { CreateAssetInput, UPDATE_ASSET } from './useAddAsset'
+import { AssetType, CreateAssetInput } from './useAddAsset'
+
+export const UPDATE_ASSET = gql`
+  mutation UpdateAsset($id: Int!, $data: AssetInput!) {
+    updateAsset(id: $id, data: $data) {
+      id
+      type
+      name
+      value
+      description
+      bankName
+      carMakeName
+      carRegistrationDate
+      carType
+      cin
+    }
+  }
+`
 
 export const useUpdateAsset = () => {
-  const [updateAsset, { loading, error }] = useMutation(UPDATE_ASSET, {
+  const [updateAssetMutation, { loading, error }] = useMutation(UPDATE_ASSET, {
     refetchQueries: ['getAssetsByProcedureId'],
   })
 
-  const updateAssetFn = async (id: number, data: Partial<CreateAssetInput>) => {
+  const updateAsset = async (id: number, data: Partial<CreateAssetInput>) => {
     try {
-      const response = await updateAsset({
+      const response = await updateAssetMutation({
         variables: {
           id,
-          data,
+          data: {
+            type: data.type as AssetType,
+            name: data.name,
+            value: data.value || 0,
+            description: data.description,
+            bankName: data.bankName,
+            carMakeName: data.carMakeName,
+            carRegistrationDate: data.carRegistrationDate,
+            carType: data.carType,
+            cin: data.cin,
+          },
         },
       })
       return response.data.updateAsset
@@ -22,5 +49,5 @@ export const useUpdateAsset = () => {
     }
   }
 
-  return { updateAsset: updateAssetFn, loading, error }
+  return { updateAsset, loading, error }
 }

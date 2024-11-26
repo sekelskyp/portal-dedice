@@ -39,10 +39,7 @@ const assetSchema = (sections: Record<string, boolean>) => {
 
   if (!sections.bankAccount) {
     schema.bankAccount = z.object({
-      bank: z
-        .array(z.string())
-        .min(1, { message: 'Vyberte alespoň jednu bankovní instituci' })
-        .optional(),
+      bank: z.array(z.string()).optional(),
     })
   }
 
@@ -153,8 +150,11 @@ export const AssetForm: React.FC<{
       setIsSubmitting(true)
       const filteredData = {} as AssetFormData
 
-      // Only include sections that are visible and have data
-      if (visibleSections.bankAccount && data.bankAccount) {
+      if (data.bankAccount?.bank?.length) {
+        filteredData.bankAccount = data.bankAccount
+      }
+
+      if (visibleSections.bankAccount && data.bankAccount?.bank?.length) {
         filteredData.bankAccount = data.bankAccount
       }
       if (visibleSections.company && data.company) {
@@ -170,7 +170,11 @@ export const AssetForm: React.FC<{
         filteredData.others = data.others
       }
 
+      console.log('Submitting data:', filteredData) // Debug log
       await onSubmit(filteredData)
+    } catch (error) {
+      console.error('Form submission error:', error)
+      throw error
     } finally {
       setIsSubmitting(false)
     }

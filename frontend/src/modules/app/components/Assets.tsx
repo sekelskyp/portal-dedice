@@ -118,23 +118,22 @@ export function Assets({ id }: { id: string }) {
   const { data, loading, error } = useQuery(GET_ASSETS, {
     variables: { procedureId: +id },
   })
-  const { removeAsset } = useDeleteAsset()
+  const { removeAsset } = useDeleteAsset(+id)
 
   const handleDelete = async (assetId: number | string) => {
-    if (window.confirm('Opravdu chcete smazat tento majetek?')) {
-      try {
-        await removeAsset(Number(assetId))
-        toaster.create({
-          title: 'Majetek byl úspěšně smazán',
-          type: 'success',
-        })
-      } catch (error) {
-        toaster.create({
-          title: 'Nepodařilo se smazat majetek',
-          type: 'error',
-        })
-        console.error('Failed to delete asset:', error)
-      }
+    if (!window.confirm('Opravdu chcete smazat tento majetek?')) return
+
+    try {
+      await removeAsset(Number(assetId))
+      toaster.create({
+        title: 'Majetek byl úspěšně smazán',
+        type: 'success',
+      })
+    } catch (error) {
+      toaster.create({
+        title: 'Nepodařilo se smazat majetek',
+        type: 'error',
+      })
     }
   }
 

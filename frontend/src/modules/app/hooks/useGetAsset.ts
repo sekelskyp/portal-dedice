@@ -1,5 +1,7 @@
 import { gql, useQuery } from '@apollo/client'
 
+import { AssetFormData } from '../components/asset-form/AssetForm'
+
 export const GET_ASSETS = gql`
   query getAssetsByProcedureId($procedureId: Int!) {
     getAssetsByProceedingId(proceedingId: $procedureId) {
@@ -50,47 +52,41 @@ interface Asset {
   description?: string
 }
 
-export const mapAssetsToFormData = (
-  assets: Asset[]
-): Record<string, unknown> => {
-  const formData: Record<
-    string,
-    | {
-        [key: string]:
-          | string
-          | number
-          | string[]
-          | undefined
-          | { [key: string]: string | number | string[] | undefined }[]
-      }
-    | { ico?: string }[]
-    | { brand?: string; year?: number; description?: string }[]
-  > = {}
+export const mapAssetsToFormData = (assets: Asset[]): AssetFormData => {
+  const formData: AssetFormData = {}
+
+  const bankAssets = assets.filter(
+    (asset) => asset.type === 'Financial instrument'
+  )
+  if (bankAssets.length > 0) {
+    formData.bankAccount = {
+      bank: bankAssets
+        .map((asset) => asset.bankName)
+        .filter(Boolean) as string[],
+    }
+  }
 
   assets.forEach((asset) => {
     switch (asset.type) {
-      case 'Financial instrument':
-        formData.bankAccount = {
-          bank: asset.bankName ? [asset.bankName] : [],
+      case 'Company':
+        if (!formData.company) {
+          formData.company = []
+        }
+        if (asset.cin) {
+          formData.company.push({ ico: asset.cin })
         }
         break
-      case 'Company':
-        formData.company = [
-          {
-            ico: asset.cin,
-          },
-        ]
-        break
       case 'Automobile':
-        formData.car = [
-          {
-            brand: asset.carMakeName,
-            year: asset.carRegistrationDate
-              ? new Date(asset.carRegistrationDate).getFullYear()
-              : undefined,
-            description: asset.description,
-          },
-        ]
+        if (!formData.car) {
+          formData.car = []
+        }
+        formData.car.push({
+          brand: asset.carMakeName,
+          year: asset.carRegistrationDate
+            ? new Date(asset.carRegistrationDate).getFullYear()
+            : undefined,
+          description: asset.description,
+        })
         break
       case 'Valuables':
         formData.valuables = {
