@@ -1,5 +1,13 @@
 import { useContext } from 'react'
-import { Button, Container, Flex, Heading, Stack, Text } from '@chakra-ui/react'
+import {
+  Button,
+  Container,
+  Flex,
+  Heading,
+  Spinner,
+  Stack,
+  Text,
+} from '@chakra-ui/react'
 
 import { Avatar, Tooltip } from '@frontend/shared/design-system'
 import { SimpleCentered } from '@frontend/shared/design-system/atoms/CTA/SimpleCentered'
@@ -49,7 +57,13 @@ export function NotaryAssignment({
     testatorData.addressPostCode
   )
 
-  if (loading) return <Text>Loading...</Text>
+  if (loading)
+    return (
+      <Stack direction="row" justifyItems="center">
+        <Spinner />
+        <Text>Načítání...</Text>
+      </Stack>
+    )
   if (error)
     return (
       <NotaryAssignmentError
@@ -92,7 +106,7 @@ export function NotaryAssignment({
             contactInfo={{
               email: notary.email,
               phone: notary.phone,
-              completeAddress: `${notary.addressStreet} ${notary.addressStreetNumber}, ${notary.addressMunicipality} ${notary.addressPostCode}`,
+              completeAddress: `${notary.address.street} ${notary.address.streetNumber}, ${notary.address.municipality} ${notary.address.postalCode}`,
             }}
           />
           <AccordionHelper items={dummy_data} />

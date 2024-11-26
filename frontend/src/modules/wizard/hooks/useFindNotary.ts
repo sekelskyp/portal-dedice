@@ -1,13 +1,12 @@
 import { useQuery } from '@apollo/client'
 import gql from 'graphql-tag'
 
-//TODO: fix query and components
-
 const FIND_NOTARY_QUERY = gql(/* GraphQL */ `
   query FindNotary($input: FindNotaryInput!) {
     findNotary(input: $input) {
       id
       user {
+        id
         name
         surname
         displayName
@@ -35,7 +34,7 @@ export function useGetNotary(birthDate?: Date, addressPostCode?: string) {
     },
   })
 
-  const notary = data?.findNotary.contact
+  const notary = data?.findNotary.user
 
   return { notary, data, loading, error } as const
 }

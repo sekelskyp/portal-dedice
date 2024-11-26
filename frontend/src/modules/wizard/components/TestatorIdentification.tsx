@@ -34,7 +34,6 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
   const { testatorData, setTestatorData } = testatorDataContext
 
   const onSubmit = async (data: z.infer<typeof schema>) => {
-    console.log('onSubmit', data)
     const updatedTestatorData = {
       ...testatorData,
       ...data,
@@ -52,6 +51,9 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
         sex: testatorData.sex || '',
         birthDate: testatorData.birthDate || undefined!,
         addressStreet: testatorData.addressStreet || '',
+        addressMunicipality: testatorData.addressMunicipality || '',
+        addressPostCode: testatorData.addressPostCode || '',
+        addressStreetNumber: testatorData.addressStreetNumber || '',
       }}
     >
       <Container

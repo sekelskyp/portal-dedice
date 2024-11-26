@@ -17,10 +17,15 @@ export function ContactInfo({ contactInfo }: ContactInfoProps) {
     sm: '20px',
     md: '24px',
   })
+
+  const formatPhoneNumber = (phone: string) => {
+    return phone.replace(/(\d{3})(?=\d)/g, '$1 ')
+  }
+
   const contactIcons: ContactInfoItemProps[] = [
     {
       icon: <FiPhone size={iconBreakpoints} />,
-      text: contactInfo.phone!,
+      text: contactInfo.phone ? formatPhoneNumber(contactInfo.phone) : '',
     },
     {
       icon: <FiMail size={iconBreakpoints} />,
