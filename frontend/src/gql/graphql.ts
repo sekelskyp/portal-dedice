@@ -628,6 +628,15 @@ export type CreateDocumentMutation = {
   createDocument: string
 }
 
+export type CreateProceedingMutationVariables = Exact<{
+  data: CreateProceedingInput
+}>
+
+export type CreateProceedingMutation = {
+  __typename?: 'Mutation'
+  createProceeding: number
+}
+
 export type DeleteAssetMutationVariables = Exact<{
   id: Scalars['Int']['input']
 }>
@@ -671,7 +680,7 @@ export type GetDocumentByIdQuery = {
 }
 
 export type GetAssetsByProcedureIdQueryVariables = Exact<{
-  proceedingId: Scalars['Int']['input']
+  procedureId: Scalars['Int']['input']
 }>
 
 export type GetAssetsByProcedureIdQuery = {
@@ -864,15 +873,6 @@ export type UpdateProfileMutation = {
   }
 }
 
-export type CreateProceedingMutationVariables = Exact<{
-  data: CreateProceedingInput
-}>
-
-export type CreateProceedingMutation = {
-  __typename?: 'Mutation'
-  createProceeding: number
-}
-
 export type EmailVerificationMutationVariables = Exact<{
   token: Scalars['String']['input']
 }>
@@ -937,6 +937,7 @@ export type FindNotaryQuery = {
     id: string
     user?: {
       __typename?: 'User'
+      id: string
       name: string
       surname: string
       displayName: string
@@ -1506,6 +1507,51 @@ export const CreateDocumentDocument = {
   CreateDocumentMutation,
   CreateDocumentMutationVariables
 >
+export const CreateProceedingDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'createProceeding' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'data' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'CreateProceedingInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'createProceeding' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'data' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'data' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateProceedingMutation,
+  CreateProceedingMutationVariables
+>
 export const DeleteAssetDocument = {
   kind: 'Document',
   definitions: [
@@ -1703,7 +1749,7 @@ export const GetAssetsByProcedureIdDocument = {
           kind: 'VariableDefinition',
           variable: {
             kind: 'Variable',
-            name: { kind: 'Name', value: 'proceedingId' },
+            name: { kind: 'Name', value: 'procedureId' },
           },
           type: {
             kind: 'NonNullType',
@@ -1723,7 +1769,7 @@ export const GetAssetsByProcedureIdDocument = {
                 name: { kind: 'Name', value: 'proceedingId' },
                 value: {
                   kind: 'Variable',
-                  name: { kind: 'Name', value: 'proceedingId' },
+                  name: { kind: 'Name', value: 'procedureId' },
                 },
               },
             ],
@@ -2415,51 +2461,6 @@ export const UpdateProfileDocument = {
   UpdateProfileMutation,
   UpdateProfileMutationVariables
 >
-export const CreateProceedingDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'createProceeding' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'data' } },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'CreateProceedingInput' },
-            },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'createProceeding' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'data' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'data' },
-                },
-              },
-            ],
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  CreateProceedingMutation,
-  CreateProceedingMutationVariables
->
 export const EmailVerificationDocument = {
   kind: 'Document',
   definitions: [
@@ -2748,6 +2749,7 @@ export const FindNotaryDocument = {
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                       {
                         kind: 'Field',

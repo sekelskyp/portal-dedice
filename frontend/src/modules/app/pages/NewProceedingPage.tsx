@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
 import { Card, Heading, Text } from '@chakra-ui/react'
 
+import { useCreateProcedure } from '@frontend/modules/app/hooks/useCreateProcedure'
 import { useAuth } from '@frontend/modules/auth'
-import { useCreateProcedure } from '@frontend/modules/auth/hooks/useCreateProcedure'
 import resources from '@frontend/resources'
 import { Alert } from '@frontend/shared/design-system'
 
