@@ -1,4 +1,3 @@
-import { useQuery } from '@apollo/client'
 import { Box, Container, Flex, Text, VStack } from '@chakra-ui/react'
 import { useParams } from 'react-router-dom'
 import { useMediaQuery } from 'usehooks-ts'
@@ -8,7 +7,7 @@ import { Page } from '@frontend/shared/layout'
 
 import { Message } from '../components/Message'
 import { useGetMessages } from '../hooks/useGetMessages'
-import { GET_PROCEEDING_QUERY } from '../hooks/useProceeding'
+import { useProceeding } from '../hooks/useProceeding'
 
 //TODO: fix query and components
 
@@ -16,22 +15,17 @@ export default function ChatPage() {
   const user = useAuth()
   const { id } = useParams()
   const messages = useGetMessages(id!)
+  const isNotary = user.user?.type === 'Notary'
 
-  const procedure =
-    useQuery(GET_PROCEEDING_QUERY, {
-      variables: { id: +id! },
-    }).data?.getProceedingById ?? {}
+  const proceeding = useProceeding({ proceedingId: +id! }).data
+    ?.getProceedingById
 
-  const notaryDisplayName = `${procedure.notary?.contact?.name} ${procedure.notary?.contact?.surname}`
+  const notaryDisplayName = proceeding?.notary?.user?.displayName ?? ''
 
   const beneficiaryDisplayNames =
-    procedure.beneficiaries?.map((beneficiary) =>
-      beneficiary?.contact
-        ? `${beneficiary.contact.name} ${beneficiary.contact.surname}`.trim()
-        : ''
+    proceeding?.beneficiaries?.map(
+      (beneficiary) => beneficiary.user?.displayName
     ) ?? []
-
-  const isNotary = user.user?.isNotary ?? false
 
   const allNames = [...beneficiaryDisplayNames, notaryDisplayName].join(', ')
 

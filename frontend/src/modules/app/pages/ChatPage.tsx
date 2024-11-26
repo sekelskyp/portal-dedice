@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useQuery } from '@apollo/client'
 import { Box, Container, Flex, Tabs, Text, VStack } from '@chakra-ui/react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useMediaQuery } from 'usehooks-ts'
@@ -12,7 +11,7 @@ import { useAddMessage } from '../hooks/useAddMessage'
 import { useBeneficiaryProceedings } from '../hooks/useBeneficiaryProceedings'
 import { useGetMessages } from '../hooks/useGetMessages'
 import { useNotaryProcedures } from '../hooks/useNotaryProcedures'
-import { GET_PROCEEDING_QUERY } from '../hooks/useProceeding'
+import { useProceeding } from '../hooks/useProceeding'
 
 import { ChatMessageForm } from './ChatMessageForm'
 
@@ -23,26 +22,17 @@ export default function ChatPage() {
   const { id } = useParams()
   const messages = useGetMessages(id!)
 
-  const procedure =
-    useQuery(GET_PROCEEDING_QUERY, {
-      variables: { id: +id! },
-    }).data?.getProcedureById ?? {}
+  const proceeding = useProceeding({ proceedingId: +id! }).data
+    ?.getProceedingById
 
-  const notaryDisplayName = `${procedure.notary?.contact?.name} ${procedure.notary?.contact?.surname}`
+  const notaryDisplayName = proceeding?.notary?.user?.displayName ?? ''
 
   const beneficiaryDisplayNames =
-    procedure.beneficiaries
-      ?.map((beneficiary) => ({
-        ...beneficiary?.contact,
-        ...beneficiary.user?.contact,
-      }))
-      .map((contact) =>
-        contact?.displayName?.trim()
-          ? contact.displayName
-          : `${contact.name} ${contact.surname}`.trim()
-      ) ?? []
+    proceeding?.beneficiaries?.map(
+      (beneficiary) => beneficiary.user?.displayName
+    ) ?? []
 
-  const isNotary = user.user?.isNotary ?? false
+  const isNotary = user.user?.type === 'Notary'
 
   const notaryProcedures = useNotaryProcedures()
   const beneficiaryProcedures = useBeneficiaryProceedings()
@@ -51,7 +41,7 @@ export default function ChatPage() {
 
   const procedures = isNotary
     ? notaryProcedures.data?.getProceduresByNotaryId
-    : beneficiaryProcedures.data?.getProceduresByBeneficiaryId
+    : beneficiaryProcedures.data?.getBeneficiaryProceedingsForUser
 
   const chatGroups = useMemo(
     () =>
@@ -82,7 +72,7 @@ export default function ChatPage() {
       await addMessage({
         variables: {
           body: data.message,
-          procedureId: +id!,
+          proceedingId: +id!,
           userId: +user.user?.id!,
         },
       })

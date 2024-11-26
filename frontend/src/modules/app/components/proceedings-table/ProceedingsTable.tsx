@@ -14,9 +14,7 @@ export type ProceedingsItem = {
   name: string
   startDate: string
   state: string
-  deceasedContact?: {
-    displayName: string
-  } | null
+  deceasedDisplayName: string
 }
 
 export function ProceedingsTable({ data }: { data: ProceedingsItem[] }) {

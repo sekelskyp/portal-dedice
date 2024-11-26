@@ -17,25 +17,29 @@ type AuthState = {
 }
 
 export type AuthUser = {
-  id: string
-  email: string
-  confirmed: boolean
-  isNotary: boolean
-  isBeneficiary: boolean
+  addressId: string
+  address?:
+    | {
+        id: string
+        municipality: string
+        postalCode: string
+        street: string
+        streetNumber: string
+      }
+    | null
+    | undefined
   beneficiaries: { id: string }[]
-  notaries: { id: string }[]
-  contact?: {
-    displayName?: string
-    name?: string
-    surname?: string
-    email?: string | null
-    phone?: string | null
-    addressStreet?: string | null
-    addressStreetNumber?: string | null
-    addressMunicipality?: string | null
-    addressPostCode?: string | null
-    gender?: string | null
-  } | null
+  confirmed: boolean
+  displayName: string
+  email: string
+  gender?: string | null | undefined
+  id: string
+  name: string
+  //notaryId: string
+  phone?: string | null | undefined
+  sendNotifications: boolean
+  surname: string
+  type: string
 }
 
 const LOCAL_STORAGE_AUTH_KEY = 'project-auth'

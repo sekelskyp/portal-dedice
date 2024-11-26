@@ -20,14 +20,16 @@ const GET_PROCEEDINGS_BY_BENEFICIARY_ID = gql(/* GraphQL */ `
 export function useBeneficiaryProceedings() {
   const auth = useAuth()
   //TODO: fix new user id
-  const id = parseInt(auth.user?.beneficiaries[0]?.id ?? '0', 10)
+
+  const id = auth.user?.id ?? '0'
 
   const { data, loading, error } = useQuery(GET_PROCEEDINGS_BY_BENEFICIARY_ID, {
     variables: {
-      userId: id,
+      userId: +id,
     },
   })
 
+  /*
   const cleanData = data
     ? {
         ...data,
@@ -37,6 +39,8 @@ export function useBeneficiaryProceedings() {
           ),
       }
     : null
+  */
+  //console.log(cleanData)
 
-  return { data: cleanData, loading, error }
+  return { data, loading, error }
 }

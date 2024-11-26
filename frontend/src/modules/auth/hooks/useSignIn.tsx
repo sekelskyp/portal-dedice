@@ -12,36 +12,28 @@ const SIGNIN_MUTATION = gql(/* GraphQL */ `
   mutation SignIn($login: String!, $password: String!) {
     signIn(login: $login, password: $password) {
       user {
-        id
-        email
-        confirmed
-        #isNotary
-        #isBeneficiary
-        type
-        beneficiaries {
-          id
-          #dateOfBirth
-          #deceasedRelation
-          #userId
-          #contactId
-        }
-        #notaries {
-        #contactId
-        #id
-        #userId
-        #}
-        name
-        surname
-        displayName
-        email
-        phone
+        addressId
         address {
-          street
-          streetNumber
+          id
           municipality
           postalCode
+          street
+          streetNumber
         }
+        beneficiaries {
+          id
+        }
+        confirmed
+        displayName
+        email
         gender
+        id
+        name
+        #notaryId
+        phone
+        sendNotifications
+        surname
+        type
       }
       token
     }

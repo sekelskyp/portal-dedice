@@ -45,6 +45,7 @@ const columnHelper = createColumnHelper<ProceedingsItem>()
 
 export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
   const { user } = useAuth()
+  const isNotary = user?.type === 'Notary'
 
   const [deleteProcedureRequest] = useDeleteProceeding()
 
@@ -71,7 +72,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
 
   const columns = useMemo(() => {
     const columns = [
-      columnHelper.accessor('deceasedContact.displayName', {
+      columnHelper.accessor('deceasedDisplayName', {
         header: () => 'Zůstavitel',
         cell: (info) => {
           const name = info.getValue() as string
@@ -121,7 +122,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
           const id = info.row.original.id
           return (
             <Stack direction="row" alignItems="center">
-              {user?.isNotary && (
+              {isNotary && (
                 <IconButton
                   borderRadius="xl"
                   bg="red.600"
@@ -149,7 +150,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
     )
 
     return columns
-  }, [isMobile, handleProcedureDelete, user?.isNotary])
+  }, [isMobile, handleProcedureDelete, isNotary])
 
   const table = useReactTable({
     columns,

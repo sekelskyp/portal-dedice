@@ -6,7 +6,7 @@ import { GET_MESSAGES_QUERY, MESSAGE_SUBSCRIPTION } from '../chatOperations'
 
 export function useGetMessages(proceedingId: string) {
   const queryResponse = useQuery(GET_MESSAGES_QUERY, {
-    variables: { inheritanceProcedureId: +proceedingId },
+    variables: { proceedingId: +proceedingId },
   })
 
   useSubscription(MESSAGE_SUBSCRIPTION, {
@@ -43,5 +43,5 @@ export function useGetMessages(proceedingId: string) {
     },
   })
 
-  return queryResponse.data?.chatByInheritanceProcedureId?.chatMessages ?? []
+  return queryResponse.data?.chatByProceedingId.chatMessages ?? []
 }

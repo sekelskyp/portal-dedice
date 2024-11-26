@@ -18,29 +18,29 @@ import { proceedingsNavigation } from '../utils/proceedingsNavigation'
 
 export function Proceedings() {
   const user = useAuth()
-  const beneficiaryProcedures = useBeneficiaryProceedings()
-  const notaryProcedures = useNotaryProcedures()
+  const isNotary = user.user?.type === 'Notary'
+  const beneficiaryProceedings = useBeneficiaryProceedings()
+  const notaryProceedings = useNotaryProcedures()
+
+  const data = {
+    proceedings: isNotary
+      ? notaryProceedings.data?.getProceduresByNotaryId
+      : beneficiaryProceedings.data?.getBeneficiaryProceedingsForUser,
+    loading: isNotary
+      ? notaryProceedings.loading
+      : beneficiaryProceedings.loading,
+    error: isNotary ? notaryProceedings.error : beneficiaryProceedings.error,
+  }
 
   let procedures: ProceedingsItem[] = []
 
-  const { data, loading, error } = user.user?.isNotary
-    ? notaryProcedures
-    : beneficiaryProcedures
-
-  if (loading) return <Text>Loading...</Text>
-  if (error) return <Text>Error: {error.message}</Text>
-  if (data) {
-    if ('getProceduresByNotaryId' in data) {
-      procedures = data.getProceduresByNotaryId.map((item) => ({
-        ...item,
-        id: String(item.id),
-      }))
-    } else if ('getProceduresByBeneficiaryId' in data) {
-      procedures = data.getProceduresByBeneficiaryId.map((item) => ({
-        ...item,
-        id: String(item.id),
-      }))
-    }
+  if (data.loading) return <Text>Loading...</Text>
+  if (data.error) return <Text>Error: {data.error.message}</Text>
+  if (data.proceedings) {
+    procedures = data.proceedings.map((item) => ({
+      ...item,
+      id: String(item.id),
+    }))
   }
 
   if (user.token) {
@@ -53,7 +53,7 @@ export function Proceedings() {
             flexWrap="wrap"
           >
             <Heading size={{ base: 'xl', sm: '2xl' }}>Moje řízení</Heading>
-            {!user.user?.isNotary && (
+            {isNotary && (
               <RouterNavLink
                 to={route.newProceeding()}
                 size={{ base: 'sm', sm: 'lg' }}
@@ -76,7 +76,7 @@ export function Proceedings() {
             )}
           </Card.Body>
         </Card.Root>
-        {!user.user?.isNotary && (
+        {isNotary && (
           <Stack gap={4} alignItems={{ base: 'center', sm: 'start' }}>
             <Heading size={{ base: 'xl', sm: '2xl' }}>Další možnosti</Heading>
             {proceedingsNavigation.map((item, index) => (
