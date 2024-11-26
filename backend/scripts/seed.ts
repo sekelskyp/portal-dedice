@@ -132,6 +132,18 @@ async function populateDatabase(
         confirmed: true,
         type: 'User',
       },
+      {
+        name: 'Radek',
+        surname: 'Lochman',
+        displayName: 'Radek Lochman',
+        gender: 'Male',
+        phone: '+420555555555',
+        email: 'locrad@quacker.com',
+        password: await hashPassword('password123'),
+        addressId: addressId4.id,
+        confirmed: true,
+        type: 'User',
+      },
       // notaries
       {
         name: 'Jan',
@@ -144,6 +156,7 @@ async function populateDatabase(
         addressId: addressId5.id,
         confirmed: true,
         type: 'Notary',
+        notaryId: notaryId1.id,
       },
       {
         name: 'Tomas',
@@ -156,6 +169,7 @@ async function populateDatabase(
         addressId: addressId6.id,
         confirmed: true,
         type: 'Notary',
+        notaryId: notaryId2.id,
       },
     ])
     .$returningId()

@@ -11,7 +11,6 @@ import {
 
 import { CustomContext } from '@backend/types/types'
 
-import { Proceeding } from '../proceeding/proceedingType'
 import { User } from '../user/userType'
 
 import { BeneficiaryInput } from './beneficiaryInput'

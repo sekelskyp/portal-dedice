@@ -44,12 +44,16 @@ export function getUserRepository(db: Db) {
     await db.delete(user).where(inArray(user.id, ids))
   }
 
-  async function getUserByNotaryId(notaryId: number): Promise<UserEntity> {
+  async function getUserByNotaryId(
+    notaryId: number
+  ): Promise<UserEntity | null> {
     const [result] = await db
       .select()
       .from(user)
       .where(eq(user.notaryId, notaryId))
-    return result
+    console.log('repository notaryId', notaryId)
+    console.log('repository result', result)
+    return result || null
   }
 
   return {
