@@ -2,8 +2,6 @@ import { useQuery } from '@apollo/client'
 
 import { gql } from '@frontend/gql'
 
-//TODO: fix query and components
-
 const GET_DOCUMENTS_BY_PROCEEDING_ID = gql(/* GraphQL */ `
   query GetDocumentsByProceedingId($proceedingId: Int!) {
     getDocumentsByProceedingId(proceedingId: $proceedingId) {

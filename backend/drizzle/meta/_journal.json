@@ -15,6 +15,20 @@
       "when": 1732613247677,
       "tag": "0001_rich_bruce_banner",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1732648343361,
+      "tag": "0002_stormy_lorna_dane",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1732648460564,
+      "tag": "0003_puzzling_odin",
+      "breakpoints": true
     }
   ]
 }

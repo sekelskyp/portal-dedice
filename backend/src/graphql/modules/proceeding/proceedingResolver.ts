@@ -19,6 +19,7 @@ import {
   closeProceeding,
   createProceeding,
   deleteBeneficiaryFromProceeding,
+  deleteProceedingsByIds,
   notifyProceedingBeneficiaries,
 } from '../../../services/proceedingService'
 import { CustomContext } from '../../../types/types'
@@ -143,12 +144,12 @@ export class InheritanceProcedureResolver {
   }
 
   // Mutation to delete proceedings by IDs
-  @Mutation(() => [Int])
+  @Mutation(() => Boolean)
   async deleteProceedingsByIds(
     @Arg('ids', () => [Int]) ids: number[],
     @Ctx() context: CustomContext
   ): Promise<boolean> {
-    await context.proceedingRepository.deleteProceedingsByIds(ids)
+    await deleteProceedingsByIds(ids, context)
     return true
   }
 

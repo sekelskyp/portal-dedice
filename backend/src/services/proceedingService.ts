@@ -190,19 +190,22 @@ export async function deleteBeneficiaryFromProceeding(
   return beneficiaryRepository.deleteBeneficiariesByIds([beneficiaryId])
 }
 
-export async function deleteProceduresByIds(
+export async function deleteProceedingsByIds(
   ids: number[],
   context: CustomContext
 ): Promise<void> {
   // Step 1: Fetch the procedures to get the associated contact IDs
   const proceedings =
     await context.proceedingRepository.getProceedingsByIds(ids)
-  // Step 2: Extract mainContactIds and deceasedContactIds
+  if (proceedings.length === 0) {
+    throw new Error('Žádné řízení nebylo nalezeno')
+  }
+  // Step 2: Extract address ids
   const addressIdsToDelete = proceedings.reduce<number[]>((acc, proceeding) => {
     if (proceeding.deceasedAddressId) acc.push(proceeding.deceasedAddressId)
     return acc
   }, [])
-  // Step 4: Delete the associated contacts in bulk
+  // Step 4: Delete the associated addresses in bulk
   if (addressIdsToDelete.length > 0) {
     await context.addressRepository.deleteAddressesByIds(addressIdsToDelete)
   }
@@ -297,11 +300,15 @@ export async function assignNotaryToProcedure(
   if (proceeding.state === 'Closed') {
     throw new Error('Notář nemůže být přiřazen k uzavřenému řízení')
   }
+  const addressErrorMsg = 'Adresa zemřelého nebyla nalezena'
+  if (!proceeding.deceasedAddressId) {
+    throw new Error(addressErrorMsg)
+  }
   const deceasedAddress = await context.addressRepository.getAddressById(
     proceeding.deceasedAddressId
   )
   if (!deceasedAddress) {
-    throw new Error('Adresa zemřelého nebyla nalezena')
+    throw new Error(addressErrorMsg)
   }
   // Find an available notary for the procedure
   const notaryId = await findAvailableNotary(
