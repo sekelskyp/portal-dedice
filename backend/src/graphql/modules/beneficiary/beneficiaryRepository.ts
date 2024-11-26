@@ -37,7 +37,7 @@ export function getBeneficiaryRepository(db: Db) {
     return await db
       .select()
       .from(beneficiary)
-      .where(eq(beneficiary.id, proceedingId))
+      .where(eq(beneficiary.proceedingId, proceedingId))
   }
 
   // Create a new beneficiary
