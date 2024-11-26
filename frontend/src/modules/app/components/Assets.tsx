@@ -109,7 +109,7 @@ const AssetGroup = ({
                 {getAssetDetails(asset)}
               </VStack>
               {procedureData?.getProceedingById?.beneficiaries?.some(
-                (item) => item.id === user?.beneficiaries[0]?.id
+                (item) => item.user?.id === user?.id?.toString()
               ) && (
                 <Button
                   aria-label="Delete asset"

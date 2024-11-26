@@ -143,7 +143,7 @@ export function Documents({ id }: { id: string }) {
                       {new Date(document.createDate).toLocaleString('cs-CZ')}
                     </Text>
                     {procedure?.data?.getProceedingById?.beneficiaries?.some(
-                      (item) => item.id === user?.beneficiaries[0]?.id
+                      (item) => item.user?.id === user?.id?.toString()
                     ) && (
                       <IconButton
                         variant="surface"
