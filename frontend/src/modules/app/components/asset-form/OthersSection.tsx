@@ -15,7 +15,9 @@ export const OthersSection: React.FC<OthersSectionProps> = ({
   selected,
   setSelected,
 }) => {
-  const { setValue } = useFormContext()
+  const { setValue, watch } = useFormContext()
+  const others = watch('others')
+  const hasExistingData = others?.description && others.description.length > 0
 
   const clearFields = () => {
     setValue('others.description', '')
@@ -27,6 +29,7 @@ export const OthersSection: React.FC<OthersSectionProps> = ({
       selected={selected}
       setSelected={setSelected}
       clearFields={clearFields}
+      hideSwitch={hasExistingData}
     >
       {!selected && (
         <Controller

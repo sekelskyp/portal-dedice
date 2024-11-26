@@ -10,6 +10,7 @@ interface SectionProps {
   selected: boolean
   setSelected: React.Dispatch<React.SetStateAction<boolean>>
   clearFields?: () => void
+  hideSwitch?: boolean
 }
 
 export const Section: React.FC<SectionProps> = ({
@@ -18,25 +19,57 @@ export const Section: React.FC<SectionProps> = ({
   selected,
   setSelected,
   clearFields,
+  hideSwitch,
 }) => (
-  <Box>
-    <Box display="flex" justifyContent="space-between" alignItems="center">
-      <Heading as={'h3'}>{title}</Heading>
+  <Box
+    borderWidth="1px"
+    borderRadius="lg"
+    p={6}
+    width="100%"
+    minH="200px"
+    display="flex"
+    flexDirection="column"
+    bg="white"
+    shadow="sm"
+    transition="all 0.2s"
+  >
+    <Box
+      display="flex"
+      justifyContent="space-between"
+      alignItems="center"
+      mb={4}
+    >
+      <Heading as="h3" size="md">
+        {title}
+      </Heading>
     </Box>
-    <Separator mb={2} />
-    <Box p={1} m={2} display="flex" alignItems="center">
-      <Box mr={2}>Ano</Box>
-      <Switch
-        checked={selected}
-        onChange={() => {
-          setSelected((prev) => !prev)
-          if (!selected && clearFields) {
-            clearFields()
-          }
-        }}
-      />
-      <Box ml={2}>Ne</Box>
+    <Separator mb={4} />
+    {!hideSwitch && (
+      <Box p={2} display="flex" alignItems="center" mb={4}>
+        <Box mr={3}>Ne</Box>
+        <Switch
+          checked={!selected}
+          onChange={() => {
+            setSelected(!selected)
+            if (selected && clearFields) {
+              requestAnimationFrame(clearFields)
+            }
+          }}
+          transition="opacity 0.2s"
+        />
+        <Box ml={3}>Ano</Box>
+      </Box>
+    )}
+    <Box
+      flex={1}
+      visibility={!selected || hideSwitch ? 'visible' : 'hidden'}
+      opacity={!selected || hideSwitch ? 1 : 0}
+      transition="all 0.2s"
+      transform={
+        !selected || hideSwitch ? 'translateY(0)' : 'translateY(-10px)'
+      }
+    >
+      {children}
     </Box>
-    {!selected && children}
   </Box>
 )
