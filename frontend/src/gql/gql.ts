@@ -45,7 +45,7 @@ const documents = {
     types.GetDocumentsByProceedingIdDocument,
   '\n  query GetProceedingsByNotaryId($userId: Int!) {\n    getNotaryProceedingsForUser(userId: $userId) {\n      id\n      name\n      startDate\n      state\n      deceasedDisplayName\n    }\n  }\n':
     types.GetProceedingsByNotaryIdDocument,
-  '\n  mutation NotifyProcedureBeneficiaries(\n    $html: String!\n    $subject: String!\n    $procedureId: Int!\n  ) {\n    notifyProcedureBeneficiaries(\n      html: $html\n      subject: $subject\n      proceedingId: $procedureId\n    )\n  }\n':
+  '\n  mutation NotifyProcedureBeneficiaries(\n    $html: String!\n    $subject: String!\n    $proceedingId: Int!\n  ) {\n    notifyProcedureBeneficiaries(\n      html: $html\n      subject: $subject\n      proceedingId: $proceedingId\n    )\n  }\n':
     types.NotifyProcedureBeneficiariesDocument,
   '\n  query GetProceedingById($getProceedingByIdId: Int!) {\n    getProceedingById(id: $getProceedingByIdId) {\n      procedureAssets {\n        id\n        proceedingId\n        value\n        name\n        description\n        type\n        bankName\n        carMakeName\n        carRegistrationDate\n        carType\n        cin\n      }\n      mainBeneficiary {\n        id\n        user {\n          displayName\n          email\n          phone\n          id\n          name\n          surname\n        }\n      }\n      beneficiaries {\n        id\n        user {\n          displayName\n          email\n          phone\n          id\n          name\n          surname\n        }\n      }\n      name\n      deceasedDisplayName\n      deceasedDateOfDeath\n      deceasedDateOfBirth\n      deceasedAddressId\n      documents {\n        id\n        fileData\n        fileName\n        fileType\n        createDate\n        proceedingId\n      }\n      id\n      state\n      notaryId\n      notary {\n        user {\n          address {\n            id\n            street\n            streetNumber\n            municipality\n            postalCode\n          }\n          displayName\n          email\n          name\n          surname\n          phone\n          id\n        }\n      }\n    }\n  }\n':
     types.GetProceedingByIdDocument,
@@ -179,8 +179,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  mutation NotifyProcedureBeneficiaries(\n    $html: String!\n    $subject: String!\n    $procedureId: Int!\n  ) {\n    notifyProcedureBeneficiaries(\n      html: $html\n      subject: $subject\n      proceedingId: $procedureId\n    )\n  }\n'
-): (typeof documents)['\n  mutation NotifyProcedureBeneficiaries(\n    $html: String!\n    $subject: String!\n    $procedureId: Int!\n  ) {\n    notifyProcedureBeneficiaries(\n      html: $html\n      subject: $subject\n      proceedingId: $procedureId\n    )\n  }\n']
+  source: '\n  mutation NotifyProcedureBeneficiaries(\n    $html: String!\n    $subject: String!\n    $proceedingId: Int!\n  ) {\n    notifyProcedureBeneficiaries(\n      html: $html\n      subject: $subject\n      proceedingId: $proceedingId\n    )\n  }\n'
+): (typeof documents)['\n  mutation NotifyProcedureBeneficiaries(\n    $html: String!\n    $subject: String!\n    $proceedingId: Int!\n  ) {\n    notifyProcedureBeneficiaries(\n      html: $html\n      subject: $subject\n      proceedingId: $proceedingId\n    )\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

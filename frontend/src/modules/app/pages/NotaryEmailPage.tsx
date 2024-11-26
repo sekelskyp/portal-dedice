@@ -10,29 +10,28 @@ import { UnauthorizedPage } from '@frontend/shared/navigation/pages/Unauthorized
 
 import { BeneficiaryBadge } from '../components/BeneficiaryBadge'
 import { NotaryEmailForm } from '../components/NotaryEmailForm'
-import { useNotifyProcedureBeneficiaries } from '../hooks/useNotifyProcedureBeneficiaries'
+import { useNotifyBeneficiaries } from '../hooks/useNotifyBeneficiaries'
 import { useProceeding } from '../hooks/useProceeding'
 
 export function NotaryEmailPage() {
   const { user, token } = useAuth()
   const { id } = useParams()
+  const isNotary = user?.type === 'Notary'
 
   const [
-    notifyProcedureBeneficiariesRequest,
-    notifyProcedureBeneficiariesRequestState,
-  ] = useNotifyProcedureBeneficiaries()
+    notifyProceedingBeneficiariesRequest,
+    notifyProceedingBeneficiariesRequestState,
+  ] = useNotifyBeneficiaries()
 
-  const { data, loading, error } = useProceeding({
-    proceedingId: parseInt(id ?? '0', 10),
-  })
+  const { data, loading, error } = useProceeding(parseInt(id ?? '0', 10))
 
   const handleNotaryEmailFormSubmit = useCallback(
     (variables: { html: string; subject: string }) => {
-      notifyProcedureBeneficiariesRequest({
+      notifyProceedingBeneficiariesRequest({
         variables: {
           html: variables.html,
           subject: variables.subject,
-          procedureId: parseInt(id ?? '0', 10),
+          proceedingId: parseInt(id ?? '0', 10),
         },
       }).then(() => {
         toaster.create({
@@ -42,7 +41,7 @@ export function NotaryEmailPage() {
         })
       })
     },
-    [notifyProcedureBeneficiariesRequest, id]
+    [notifyProceedingBeneficiariesRequest, id]
   )
 
   if (loading) {
@@ -53,13 +52,13 @@ export function NotaryEmailPage() {
     return <NotFoundPage />
   }
 
-  if (!user?.isNotary) {
+  if (!isNotary) {
     return <NotFoundPage />
   }
 
-  const procedure = data?.getProcedureById
+  const proceeding = data?.getProceedingById
 
-  if (!procedure) {
+  if (!proceeding) {
     return <NotFoundPage />
   }
 
@@ -86,7 +85,7 @@ export function NotaryEmailPage() {
           justifyContent={{ base: 'center', md: 'start' }}
         >
           <LuFile size={24} />
-          <Heading>{procedure?.name}</Heading>
+          <Heading>{proceeding?.name}</Heading>
         </Stack>
         <Text
           fontSize={{ base: 'sm', md: 'md' }}
@@ -97,20 +96,19 @@ export function NotaryEmailPage() {
         </Text>
         <Stack alignItems="start">
           <Heading>Notář</Heading>
-          {procedure.notary?.contact ? (
-            <BeneficiaryBadge beneficiaryContact={procedure.notary.contact} />
+          {proceeding.notary?.user ? (
+            <BeneficiaryBadge beneficiaryContact={proceeding.notary?.user} />
           ) : (
             <Alert status="warning">Notář bez kontaktních údajů.</Alert>
           )}
           <Heading>Dědici</Heading>
           <Stack direction={{ base: 'column', md: 'row' }} alignItems="start">
-            {procedure.beneficiaries?.map((beneficiary) =>
-              !!beneficiary.user?.contact || !!beneficiary.contact ? (
+            {proceeding.beneficiaries?.map((beneficiary) =>
+              !!beneficiary.user ? (
                 <BeneficiaryBadge
                   key={beneficiary.id}
                   beneficiaryContact={{
-                    ...beneficiary.contact!,
-                    ...beneficiary.user?.contact!,
+                    ...beneficiary.user,
                   }}
                 />
               ) : (
@@ -124,7 +122,7 @@ export function NotaryEmailPage() {
         <NotaryEmailForm
           onSubmit={handleNotaryEmailFormSubmit}
           procedureId={parseInt(id ?? '0', 10)}
-          requestState={notifyProcedureBeneficiariesRequestState}
+          requestState={notifyProceedingBeneficiariesRequestState}
         />
       </Stack>
     )

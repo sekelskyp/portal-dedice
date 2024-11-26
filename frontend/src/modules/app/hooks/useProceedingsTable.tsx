@@ -62,7 +62,6 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
 
   const breakpoint = useBreakpoint({ breakpoints: ['base', 'sm', 'xl'] })
   const isMobile = breakpoint === 'base'
-  // const isDesktop = breakpoint === 'xl'
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
