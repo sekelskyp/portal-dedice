@@ -1,6 +1,6 @@
 import { gql, useQuery } from '@apollo/client'
 
-const GET_ASSETS = gql`
+export const GET_ASSETS = gql`
   query getAssetsByProcedureId($proceedingId: Int!) {
     getAssetsByProceedingId(proceedingId: $proceedingId) {
       id

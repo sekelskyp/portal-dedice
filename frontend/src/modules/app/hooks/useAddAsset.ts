@@ -25,7 +25,7 @@ const CREATE_ASSET = gql`
   }
 `
 
-const UPDATE_ASSET = gql`
+export const UPDATE_ASSET = gql`
   mutation UpdateAsset($id: Int!, $data: AssetInput!) {
     updateAsset(id: $id, data: $data) {
       id

@@ -28,7 +28,6 @@ export type AuthUser = {
       }
     | null
     | undefined
-  beneficiaries: { id: string }[]
   confirmed: boolean
   displayName: string
   email: string

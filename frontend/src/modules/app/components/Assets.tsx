@@ -1,4 +1,4 @@
-import { gql, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import { Box, Heading, HStack, Stack, Text, VStack } from '@chakra-ui/react'
 import { FaMoneyBill, FaTimes } from 'react-icons/fa'
 import { useParams } from 'react-router-dom'
@@ -11,27 +11,10 @@ import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { route } from '@shared/route'
 
 import { useDeleteAsset } from '../hooks/useDeleteAsset'
+import { GET_ASSETS } from '../hooks/useGetAsset'
 import { useProceeding } from '../hooks/useProceeding'
 
 //TODO: fix query and components
-
-const GET_ASSETS = gql`
-  query GetAssetsByProcedureId($procedureId: Int!) {
-    getAssetsByProceedingId(proceedingId: $procedureId) {
-      id
-      proceedingId
-      type
-      name
-      value
-      description
-      bankName
-      carMakeName
-      carRegistrationDate
-      carType
-      cin
-    }
-  }
-`
 
 interface Asset {
   id: number

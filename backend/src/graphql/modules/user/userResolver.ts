@@ -21,8 +21,6 @@ import {
 } from '@backend/services/userService'
 import { CustomContext } from '@backend/types/types'
 
-import { Beneficiary } from '../beneficiary/beneficiaryType'
-
 import { ProfileInput } from './profileInput'
 import { RegisterInput } from './registerInput'
 import { SignInResponse } from './signInResponseType'

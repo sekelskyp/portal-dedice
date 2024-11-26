@@ -20,16 +20,12 @@ const SIGNIN_MUTATION = gql(/* GraphQL */ `
           street
           streetNumber
         }
-        beneficiaries {
-          id
-        }
         confirmed
         displayName
         email
         gender
         id
         name
-        #notaryId
         phone
         sendNotifications
         surname
@@ -46,7 +42,7 @@ export function useSignIn() {
 
   const [signInRequest, signInRequestState] = useMutation(SIGNIN_MUTATION, {
     onCompleted: ({ signIn: { user, token } }) => {
-      auth.signIn({ token, user })
+      auth.signIn({ token, user: { ...user, addressId: user.addressId ?? '' } })
       navigate(route.portal())
     },
     onError: () => {},

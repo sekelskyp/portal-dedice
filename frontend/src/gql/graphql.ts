@@ -164,7 +164,7 @@ export type Mutation = {
   deleteBeneficiaries: Scalars['Boolean']['output']
   deleteDocumentsByIds: Scalars['Boolean']['output']
   deleteNotary: Scalars['Boolean']['output']
-  deleteProceedingsByIds: Array<Scalars['Int']['output']>
+  deleteProceedingsByIds: Scalars['Boolean']['output']
   notifyProcedureBeneficiaries: Scalars['Boolean']['output']
   removeBeneficiaryFromProceeding: Scalars['Boolean']['output']
   requestPasswordReset: Scalars['Boolean']['output']
@@ -315,7 +315,7 @@ export type Notary = {
 export type Proceeding = {
   __typename?: 'Proceeding'
   beneficiaries?: Maybe<Array<Beneficiary>>
-  deceasedAddressId: Scalars['ID']['output']
+  deceasedAddressId?: Maybe<Scalars['ID']['output']>
   deceasedDateOfBirth: Scalars['DateTimeISO']['output']
   deceasedDateOfDeath: Scalars['DateTimeISO']['output']
   deceasedDisplayName: Scalars['String']['output']
@@ -473,7 +473,6 @@ export type User = {
   __typename?: 'User'
   address?: Maybe<Address>
   addressId?: Maybe<Scalars['ID']['output']>
-  beneficiaries: Array<Beneficiary>
   confirmed: Scalars['Boolean']['output']
   displayName: Scalars['String']['output']
   email: Scalars['String']['output']
@@ -539,28 +538,6 @@ export type NewChatMessageSubscription = {
   }
 }
 
-export type GetAssetsByProceedingIdQueryVariables = Exact<{
-  proceedingId: Scalars['Int']['input']
-}>
-
-export type GetAssetsByProceedingIdQuery = {
-  __typename?: 'Query'
-  getAssetsByProceedingId: Array<{
-    __typename?: 'Asset'
-    id: string
-    proceedingId: string
-    value: number
-    name: string
-    description?: string | null
-    type: string
-    bankName?: string | null
-    carMakeName?: string | null
-    carRegistrationDate?: any | null
-    carType?: string | null
-    cin?: string | null
-  }>
-}
-
 export type GetBeneficiariesByProceedingIdQueryVariables = Exact<{
   proceedingId: Scalars['Int']['input']
 }>
@@ -591,6 +568,7 @@ export type CreateAssetMutation = {
   createAsset: {
     __typename?: 'Asset'
     id: string
+    proceedingId: string
     type: string
     name: string
     value: number
@@ -601,6 +579,28 @@ export type CreateAssetMutation = {
     carType?: string | null
     cin?: string | null
   }
+}
+
+export type UpdateAssetMutationVariables = Exact<{
+  id: Scalars['Int']['input']
+  data: AssetInput
+}>
+
+export type UpdateAssetMutation = {
+  __typename?: 'Mutation'
+  updateAsset?: {
+    __typename?: 'Asset'
+    id: string
+    type: string
+    name: string
+    value: number
+    description?: string | null
+    bankName?: string | null
+    carMakeName?: string | null
+    carRegistrationDate?: any | null
+    carType?: string | null
+    cin?: string | null
+  } | null
 }
 
 export type GetProceedingsByBeneficiaryIdQueryVariables = Exact<{
@@ -652,7 +652,7 @@ export type DeleteProceedingMutationVariables = Exact<{
 
 export type DeleteProceedingMutation = {
   __typename?: 'Mutation'
-  deleteProceedingsByIds: Array<number>
+  deleteProceedingsByIds: boolean
 }
 
 export type GetDocumentByIdQueryVariables = Exact<{
@@ -670,15 +670,16 @@ export type GetDocumentByIdQuery = {
   } | null
 }
 
-export type GetAssetByIdQueryVariables = Exact<{
-  id: Scalars['Int']['input']
+export type GetAssetsByProcedureIdQueryVariables = Exact<{
+  proceedingId: Scalars['Int']['input']
 }>
 
-export type GetAssetByIdQuery = {
+export type GetAssetsByProcedureIdQuery = {
   __typename?: 'Query'
-  getAssetById?: {
+  getAssetsByProceedingId: Array<{
     __typename?: 'Asset'
     id: string
+    proceedingId: string
     type: string
     name: string
     value: number
@@ -688,7 +689,7 @@ export type GetAssetByIdQuery = {
     carRegistrationDate?: any | null
     carType?: string | null
     cin?: string | null
-  } | null
+  }>
 }
 
 export type GetDocumentsByProceedingIdQueryVariables = Exact<{
@@ -745,7 +746,7 @@ export type GetProceedingByIdQuery = {
     deceasedDisplayName: string
     deceasedDateOfDeath: any
     deceasedDateOfBirth: any
-    deceasedAddressId: string
+    deceasedAddressId?: string | null
     id: string
     state: string
     notaryId?: string | null
@@ -912,7 +913,6 @@ export type SignInMutation = {
         street: string
         streetNumber: string
       } | null
-      beneficiaries: Array<{ __typename?: 'Beneficiary'; id: string }>
     }
   }
 }
@@ -1167,73 +1167,6 @@ export const NewChatMessageDocument = {
   NewChatMessageSubscription,
   NewChatMessageSubscriptionVariables
 >
-export const GetAssetsByProceedingIdDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'GetAssetsByProceedingId' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'proceedingId' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'getAssetsByProceedingId' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'proceedingId' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'proceedingId' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'proceedingId' },
-                },
-                { kind: 'Field', name: { kind: 'Name', value: 'value' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'bankName' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'carMakeName' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'carRegistrationDate' },
-                },
-                { kind: 'Field', name: { kind: 'Name', value: 'carType' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'cin' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  GetAssetsByProceedingIdQuery,
-  GetAssetsByProceedingIdQueryVariables
->
 export const GetBeneficiariesByProceedingIdDocument = {
   kind: 'Document',
   definitions: [
@@ -1370,6 +1303,10 @@ export const CreateAssetDocument = {
               kind: 'SelectionSet',
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'proceedingId' },
+                },
                 { kind: 'Field', name: { kind: 'Name', value: 'type' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'value' } },
@@ -1390,6 +1327,82 @@ export const CreateAssetDocument = {
     },
   ],
 } as unknown as DocumentNode<CreateAssetMutation, CreateAssetMutationVariables>
+export const UpdateAssetDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'UpdateAsset' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'data' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'AssetInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'updateAsset' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'id' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'id' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'data' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'data' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'value' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'bankName' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'carMakeName' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'carRegistrationDate' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'carType' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'cin' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<UpdateAssetMutation, UpdateAssetMutationVariables>
 export const GetProceedingsByBeneficiaryIdDocument = {
   kind: 'Document',
   definitions: [
@@ -1499,7 +1512,7 @@ export const DeleteAssetDocument = {
     {
       kind: 'OperationDefinition',
       operation: 'mutation',
-      name: { kind: 'Name', value: 'deleteAsset' },
+      name: { kind: 'Name', value: 'DeleteAsset' },
       variableDefinitions: [
         {
           kind: 'VariableDefinition',
@@ -1678,17 +1691,20 @@ export const GetDocumentByIdDocument = {
   GetDocumentByIdQuery,
   GetDocumentByIdQueryVariables
 >
-export const GetAssetByIdDocument = {
+export const GetAssetsByProcedureIdDocument = {
   kind: 'Document',
   definitions: [
     {
       kind: 'OperationDefinition',
       operation: 'query',
-      name: { kind: 'Name', value: 'getAssetById' },
+      name: { kind: 'Name', value: 'getAssetsByProcedureId' },
       variableDefinitions: [
         {
           kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'proceedingId' },
+          },
           type: {
             kind: 'NonNullType',
             type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
@@ -1700,14 +1716,14 @@ export const GetAssetByIdDocument = {
         selections: [
           {
             kind: 'Field',
-            name: { kind: 'Name', value: 'getAssetById' },
+            name: { kind: 'Name', value: 'getAssetsByProceedingId' },
             arguments: [
               {
                 kind: 'Argument',
-                name: { kind: 'Name', value: 'id' },
+                name: { kind: 'Name', value: 'proceedingId' },
                 value: {
                   kind: 'Variable',
-                  name: { kind: 'Name', value: 'id' },
+                  name: { kind: 'Name', value: 'proceedingId' },
                 },
               },
             ],
@@ -1715,6 +1731,10 @@ export const GetAssetByIdDocument = {
               kind: 'SelectionSet',
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'proceedingId' },
+                },
                 { kind: 'Field', name: { kind: 'Name', value: 'type' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'value' } },
@@ -1734,7 +1754,10 @@ export const GetAssetByIdDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<GetAssetByIdQuery, GetAssetByIdQueryVariables>
+} as unknown as DocumentNode<
+  GetAssetsByProcedureIdQuery,
+  GetAssetsByProcedureIdQueryVariables
+>
 export const GetDocumentsByProceedingIdDocument = {
   kind: 'Document',
   definitions: [
@@ -2584,19 +2607,6 @@ export const SignInDocument = {
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'streetNumber' },
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'beneficiaries' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'id' },
                             },
                           ],
                         },

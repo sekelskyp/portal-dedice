@@ -127,7 +127,7 @@ type Mutation {
   deleteBeneficiaries(id: Int!): Boolean!
   deleteDocumentsByIds(ids: [ID!]!): Boolean!
   deleteNotary(id: Int!): Boolean!
-  deleteProceedingsByIds(ids: [Int!]!): [Int!]!
+  deleteProceedingsByIds(ids: [Int!]!): Boolean!
   notifyProcedureBeneficiaries(
     html: String!
     proceedingId: Int!
@@ -155,7 +155,7 @@ type Notary {
 
 type Proceeding {
   beneficiaries: [Beneficiary!]
-  deceasedAddressId: ID!
+  deceasedAddressId: ID
   deceasedDateOfBirth: DateTimeISO!
   deceasedDateOfDeath: DateTimeISO!
   deceasedDisplayName: String!
@@ -238,7 +238,6 @@ input UploadDocumentInput {
 type User {
   address: Address
   addressId: ID
-  beneficiaries: [Beneficiary!]!
   confirmed: Boolean!
   displayName: String!
   email: String!
