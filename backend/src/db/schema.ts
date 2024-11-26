@@ -109,7 +109,9 @@ export const proceeding = mysqlTable('proceeding', {
   deceasedName: varchar('deceased_name', { length: 125 }).notNull(),
   deceasedSurname: varchar('surname', { length: 125 }).notNull(),
   deceasedDisplayName: varchar('display_name', { length: 255 }).notNull(),
-  deceasedAddressId: int('address_id').references(() => address.id),
+  deceasedAddressId: int('address_id').references(() => address.id, {
+    onDelete: 'set null',
+  }),
   deceasedDateOfBirth: date('date_of_birth').notNull(),
   deceasedDateOfDeath: date('date_of_death').notNull(),
 })
