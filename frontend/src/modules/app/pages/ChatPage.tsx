@@ -166,9 +166,8 @@ export default function ChatPage() {
                       left={0}
                       right={0}
                       p={2} // Reduced padding
-                      bg="white"
                       borderTop="1px solid"
-                      borderColor="gray.200"
+                      borderColor="bg.emphasized"
                       width="100%"
                       maxWidth={isMobile ? '100%' : '4xl'} // Match container width
                       mx="auto"

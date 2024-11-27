@@ -21,35 +21,53 @@ import {
 const GET_PROFILE_QUERY = gql(/* GraphQL */ `
   query GetUserById($getUserByIdId: Float!) {
     getUserById(id: $getUserByIdId) {
+      id
+      email
+      password
+      confirmed
+      type
+      notaryId
+      sendNotifications
+      name
+      surname
+      displayName
+      gender
+      phone
+      addressId
       address {
-        municipality
-        postalCode
+        id
         street
         streetNumber
+        municipality
+        postalCode
       }
     }
   }
 `)
 
-//TODO: fix query and components
-
 const UPDATE_PROFILE_MUTATION = gql(/* GraphQL */ `
   mutation UpdateProfile($profileInput: ProfileInput!) {
     updateProfile(profileInput: $profileInput) {
-      address {
-        municipality
-        postalCode
-        street
-        streetNumber
-      }
+      id
+      email
+      password
+      confirmed
+      type
+      notaryId
+      sendNotifications
       name
       surname
       displayName
-      email
       gender
-      name
       phone
-      surname
+      addressId
+      address {
+        id
+        street
+        streetNumber
+        municipality
+        postalCode
+      }
     }
   }
 `)
@@ -78,8 +96,6 @@ export const ProfilePage = () => {
           token: auth.token,
           user: {
             ...auth.user!,
-            id: auth.user!.id,
-            contact: res.data!.updateProfile.contact,
           },
         })
       })
@@ -96,9 +112,7 @@ export const ProfilePage = () => {
       <Card.Body>
         <ProfileForm
           loading={loading}
-          defaultValues={
-            data?.getUserById?.contact ?? { name: '', surname: '' }
-          }
+          defaultValues={data?.getUserById ?? { name: '', surname: '' }}
           onSubmit={onSubmit}
         />
       </Card.Body>

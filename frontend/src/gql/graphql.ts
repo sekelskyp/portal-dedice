@@ -839,12 +839,26 @@ export type GetUserByIdQuery = {
   __typename?: 'Query'
   getUserById?: {
     __typename?: 'User'
+    id: string
+    email: string
+    password: string
+    confirmed: boolean
+    type: string
+    notaryId?: string | null
+    sendNotifications: boolean
+    name: string
+    surname: string
+    displayName: string
+    gender?: string | null
+    phone?: string | null
+    addressId?: string | null
     address?: {
       __typename?: 'Address'
-      municipality: string
-      postalCode: string
+      id: string
       street: string
       streetNumber: string
+      municipality: string
+      postalCode: string
     } | null
   } | null
 }
@@ -857,18 +871,26 @@ export type UpdateProfileMutation = {
   __typename?: 'Mutation'
   updateProfile: {
     __typename?: 'User'
+    id: string
+    email: string
+    password: string
+    confirmed: boolean
+    type: string
+    notaryId?: string | null
+    sendNotifications: boolean
     name: string
     surname: string
     displayName: string
-    email: string
     gender?: string | null
     phone?: string | null
+    addressId?: string | null
     address?: {
       __typename?: 'Address'
-      municipality: string
-      postalCode: string
+      id: string
       street: string
       streetNumber: string
+      municipality: string
+      postalCode: string
     } | null
   }
 }
@@ -2342,20 +2364,29 @@ export const GetUserByIdDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'password' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'confirmed' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'notaryId' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'sendNotifications' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'surname' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'displayName' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'gender' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'phone' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'addressId' } },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'address' },
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'municipality' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'postalCode' },
-                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'street' },
@@ -2363,6 +2394,14 @@ export const GetUserByIdDocument = {
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'streetNumber' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'municipality' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'postalCode' },
                       },
                     ],
                   },
@@ -2417,20 +2456,29 @@ export const UpdateProfileDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'password' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'confirmed' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'notaryId' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'sendNotifications' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'surname' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'displayName' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'gender' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'phone' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'addressId' } },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'address' },
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'municipality' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'postalCode' },
-                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'street' },
@@ -2439,17 +2487,17 @@ export const UpdateProfileDocument = {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'streetNumber' },
                       },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'municipality' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'postalCode' },
+                      },
                     ],
                   },
                 },
-                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'surname' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'displayName' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'email' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'gender' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'phone' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'surname' } },
               ],
             },
           },
