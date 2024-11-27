@@ -18,6 +18,7 @@ import { UnauthorizedPage } from '@frontend/shared/navigation/pages/Unauthorized
 import { Assets } from '../components/Assets'
 import { Documents } from '../components/Documents'
 import { ProceedingDetail } from '../components/ProceedingDetail'
+import { RewardCalculator } from '../components/RewardCalculator'
 import { StatusBadge } from '../components/StatusBadge'
 import { useProceeding } from '../hooks/useProceeding'
 
@@ -65,6 +66,9 @@ const InheritanceProcedureDetail: React.FC = () => {
                   <Tabs.Trigger value="detail">Detail řízení</Tabs.Trigger>
                   <Tabs.Trigger value="documents">Dokumenty</Tabs.Trigger>
                   <Tabs.Trigger value="assets"> Majetek</Tabs.Trigger>
+                  <Tabs.Trigger value="reward">
+                    Výpočet odměny notáře
+                  </Tabs.Trigger>
                 </Tabs.List>
                 <Tabs.Content value="detail">
                   <ProceedingDetail proceeding={proceeding} />
@@ -74,6 +78,9 @@ const InheritanceProcedureDetail: React.FC = () => {
                 </Tabs.Content>
                 <Tabs.Content value="assets">
                   <Assets id={id ?? ''} />
+                </Tabs.Content>
+                <Tabs.Content value="reward">
+                  <RewardCalculator />
                 </Tabs.Content>
               </Tabs.Root>
             </Card.Body>

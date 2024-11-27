@@ -1,0 +1,238 @@
+import { useState } from 'react'
+import {
+  Box,
+  Card,
+  Circle,
+  Flex,
+  Heading,
+  HStack,
+  Icon,
+  List,
+  Separator,
+  Stack,
+  StatHelpText,
+  Text,
+} from '@chakra-ui/react'
+import { InfoIcon, PlusIcon } from 'lucide-react'
+
+import {
+  Alert,
+  StatLabel,
+  StatRoot,
+  StatValueText,
+  Tooltip,
+} from '@frontend/shared/design-system'
+import { Form, InputFormControl, SubmitButton } from '@frontend/shared/forms'
+
+const numberFormat = Intl.NumberFormat('cs-CZ', {
+  style: 'currency',
+  currency: 'CZK',
+  maximumFractionDigits: 0,
+})
+
+const percentageFormat = Intl.NumberFormat('cs-CZ', {
+  style: 'percent',
+  maximumFractionDigits: 2,
+})
+
+export const RewardCalculator = () => {
+  const [value, setValue] = useState<number | undefined>()
+
+  const { reward, VAT } = useRewardCalculator(value ?? 0)
+
+  const totalReward = reward + VAT
+
+  const percentage = totalReward / (value ?? 1)
+
+  return (
+    <Stack gap={8}>
+      <Heading>Výpočet odměny notáře</Heading>
+      <Stack direction={{ base: 'column', md: 'row' }} gap={12}>
+        <Box w="full">
+          <Form onSubmit={(value) => setValue(+value.worth)}>
+            <Stack gap={6}>
+              <InputFormControl
+                inputProps={{
+                  type: 'number',
+                  step: 1000,
+                  size: 'xl',
+                }}
+                placeholder="Hodnota majetku v pozůstalosti"
+                label={
+                  <Flex gap={2}>
+                    <Text fontSize="lg">Hodnota majetku v pozůstalosti</Text>
+                    <Tooltip
+                      showArrow
+                      content="Pro návod jak určit hodnotu doporučujeme informační sekci níže na stránce."
+                    >
+                      <Icon mb={0.5} size="md">
+                        <InfoIcon />
+                      </Icon>
+                    </Tooltip>
+                  </Flex>
+                }
+                name="worth"
+              />
+              <SubmitButton size="xl">Spočítat</SubmitButton>
+            </Stack>
+          </Form>
+        </Box>
+        {reward ? (
+          <Card.Root w="full" bg={'bg.emphasized'}>
+            <Card.Body>
+              <Stack gap={6}>
+                <StatRoot>
+                  <StatLabel>Odměna notáře celkem</StatLabel>
+                  <StatValueText>
+                    {numberFormat.format(totalReward)}
+                  </StatValueText>
+                  <StatHelpText>
+                    {percentageFormat.format(percentage)} z hodnoty pozůstalosti
+                  </StatHelpText>
+                </StatRoot>
+                <HStack alignItems="end" gap={3}>
+                  <StatRoot flex="none" size="sm">
+                    <StatLabel>Odměna notáře</StatLabel>
+                    <StatValueText>{numberFormat.format(reward)}</StatValueText>
+                  </StatRoot>
+                  <Icon size="md" mb={2}>
+                    <PlusIcon />
+                  </Icon>
+                  <StatRoot flex="none" size="sm">
+                    <StatLabel>DPH</StatLabel>
+                    <StatValueText>{numberFormat.format(VAT)}</StatValueText>
+                  </StatRoot>
+                </HStack>
+                <Stack>
+                  <Alert bg="none" p={0}>
+                    Výpočet je zaokrouhlen na celé koruny.
+                  </Alert>
+                  <Alert bg="none" p={0}>
+                    Tento výpočet je orientační, konečná částka se může lišit v
+                    závislosti na dalších požadovaných či potřebných úkonech.
+                  </Alert>
+                </Stack>
+              </Stack>
+            </Card.Body>
+          </Card.Root>
+        ) : (
+          <Stack mt={6} gap={4} w="full">
+            <Alert
+              h="min-content"
+              icon={
+                <Circle
+                  w={7}
+                  h={7}
+                  bg="fg.info"
+                  color="fg.inverted"
+                  fontSize="md"
+                >
+                  1
+                </Circle>
+              }
+            >
+              Zadejte hodnotu majetku v pozůstalosti.
+            </Alert>
+            <Alert
+              h="min-content"
+              icon={
+                <Circle
+                  w={7}
+                  h={7}
+                  bg="fg.info"
+                  color="fg.inverted"
+                  fontSize="md"
+                >
+                  2
+                </Circle>
+              }
+            >
+              Stiskněte tlačítko "Spočítat".
+            </Alert>
+          </Stack>
+        )}
+      </Stack>
+      <Separator />
+      <Stack fontSize={'sm'}>
+        <Text>
+          Hodnota pozůstalosti je součet všech aktiv, tedy plusových hodnot v
+          pozůstalosti. Dluhy z hodnoty neodečítejte. V případě, že je součástí
+          vypořádání dědictví také vypořádání SJM, tedy, pokud je součástí
+          řízení pozůstalý manžel/manželka postupujte následovně:
+        </Text>
+        <List.Root as="ol" listStyle="decimal" ml={8}>
+          <List.Item key={0} _marker={{ color: 'inherit' }}>
+            sečtěte majetek v SJM,
+          </List.Item>
+          <List.Item key={1} _marker={{ color: 'inherit' }}>
+            vydělte částku 2,
+          </List.Item>
+          <List.Item key={2} _marker={{ color: 'inherit' }}>
+            v případě, že měl zůstavitel nějaký majetek v osobním vlastnictví
+            (tedy majetek, který nespadá do SJM), tak ho k částce přičtěte,
+          </List.Item>
+          <List.Item key={3} _marker={{ color: 'inherit' }}>
+            výslednou hodnotu zadejte do pole{' '}
+            <em>Hodnota majetku v pozůstalosti</em>.
+          </List.Item>
+        </List.Root>
+      </Stack>
+
+      <Separator />
+      <Text fontSize={'sm'}>
+        Výpočet odměny notáře odpovídá Vyhlášce č. 196/2001 Sb., Notářský tarif
+        v platném znění
+      </Text>
+    </Stack>
+  )
+}
+
+const limits = [
+  [0, 500000, 0.02],
+  [500000, 1000000, 0.009],
+  [1000000, 3000000, 0.005],
+  [3000000, 30000000, 0.001],
+  [30000000, 100000000, 0.0005],
+]
+
+const VATPercentage = 0.21
+
+// Calculates the reward from given value according to the limits
+const calculateReward = (value: number) => {
+  let remainingValue = value
+  let processedValue = 0
+  let reward = 0
+
+  for (const [min, max, percentage] of limits) {
+    const range = max - min
+    const valueInThisRange = Math.min(remainingValue, range)
+    const rewardInThisRange = valueInThisRange * percentage
+
+    reward += rewardInThisRange
+    processedValue += valueInThisRange
+    remainingValue -= valueInThisRange
+
+    console.log({
+      min,
+      max,
+      percentage,
+      valueInThisRange,
+      rewardInThisRange,
+      processedValue,
+      remainingValue,
+    })
+
+    if (remainingValue <= 0) break
+  }
+
+  return Math.round(reward)
+}
+
+const useRewardCalculator = (value: number) => {
+  const reward = calculateReward(value)
+
+  return {
+    reward,
+    VAT: reward * VATPercentage,
+  }
+}
