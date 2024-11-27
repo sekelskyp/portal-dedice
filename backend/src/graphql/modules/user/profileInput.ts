@@ -14,6 +14,9 @@ export class ProfileInput {
   displayName?: string
 
   @Field({ nullable: true })
+  email?: string
+
+  @Field({ nullable: true })
   phone?: string
 
   @Field(() => String, { nullable: true })

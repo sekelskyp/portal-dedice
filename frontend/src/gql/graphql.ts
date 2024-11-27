@@ -335,6 +335,7 @@ export type Proceeding = {
 
 export type ProfileInput = {
   displayName?: InputMaybe<Scalars['String']['input']>
+  email?: InputMaybe<Scalars['String']['input']>
   gender?: InputMaybe<Scalars['String']['input']>
   municipality?: InputMaybe<Scalars['String']['input']>
   name: Scalars['String']['input']

@@ -34,26 +34,26 @@ export const AddressGroupFormControl = ({
               flex={3}
               onSuggestionSelected={(suggestion) => {
                 const address = suggestionToAddress(suggestion)
-                setValue('addressStreet', address.street, {
+                setValue('street', address.street, {
                   shouldValidate: true,
                 })
-                setValue('addressStreetNumber', address.streetNumber, {
+                setValue('streetNumber', address.streetNumber, {
                   shouldValidate: true,
                 })
-                setValue('addressMunicipality', address.municipality, {
+                setValue('municipality', address.municipality, {
                   shouldValidate: true,
                 })
-                setValue('addressPostCode', address.postCode, {
+                setValue('postCode', address.postCode, {
                   shouldValidate: true,
                 })
               }}
-              name="addressStreet"
+              name="street"
               label="Ulice"
             />
             <InputFormControl
               flex={2}
               required={required}
-              name="addressStreetNumber"
+              name="streetNumber"
               label="Číslo popisné a orientační"
             />
           </Stack>
@@ -61,13 +61,13 @@ export const AddressGroupFormControl = ({
             <InputFormControl
               flex={2}
               required={required}
-              name="addressMunicipality"
+              name="municipality"
               label="Obec"
             />
             <InputFormControl
               flex={1}
               required={required}
-              name="addressPostCode"
+              name="postCode"
               label="PSČ"
             />
           </HStack>

@@ -175,6 +175,7 @@ type Proceeding {
 
 input ProfileInput {
   displayName: String
+  email: String
   gender: String
   municipality: String
   name: String!

@@ -153,7 +153,7 @@ const ProfileForm = ({
       <Stack gap={4}>
         <NameGroupFormControl />
         <HStack gap={4}>
-          <InputFormControl name="email" label="Email" />
+          {/* <InputFormControl name="email" label="Email" /> */}
           <InputFormControl name="phone" label="Telefon" />
         </HStack>
         <RadioGroupFormControl name="gender" label="Pohlaví">
