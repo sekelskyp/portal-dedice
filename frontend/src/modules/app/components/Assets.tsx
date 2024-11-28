@@ -1,9 +1,11 @@
+import { useState } from 'react'
 import { useQuery } from '@apollo/client'
 import { Box, Heading, HStack, Stack, Text, VStack } from '@chakra-ui/react'
 import { FaMoneyBill, FaTimes } from 'react-icons/fa'
 import { useParams } from 'react-router-dom'
 
 import { useAuth } from '@frontend/modules/auth'
+import { ActionDialog } from '@frontend/shared/components/ActionDialog'
 import { Alert } from '@frontend/shared/design-system/atoms/chakra/alert'
 import { Button } from '@frontend/shared/design-system/atoms/chakra/button'
 import { toaster } from '@frontend/shared/design-system/atoms/chakra/toaster'
@@ -119,10 +121,10 @@ export function Assets({ id }: { id: string }) {
     variables: { procedureId: +id },
   })
   const { removeAsset } = useDeleteAsset(+id)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [selectedAssetId, setSelectedAssetId] = useState<string>()
 
-  const handleDelete = async (assetId: number | string) => {
-    if (!window.confirm('Opravdu chcete smazat tento majetek?')) return
-
+  const handleDelete = async (assetId: string) => {
     try {
       await removeAsset(Number(assetId))
       toaster.create({
@@ -135,6 +137,11 @@ export function Assets({ id }: { id: string }) {
         type: 'error',
       })
     }
+  }
+
+  const openDeleteDialog = (assetId: number) => {
+    setSelectedAssetId(assetId.toString())
+    setIsDeleteDialogOpen(true)
   }
 
   const assets = data?.getAssetsByProceedingId || []
@@ -165,6 +172,14 @@ export function Assets({ id }: { id: string }) {
 
   return (
     <Stack>
+      <ActionDialog
+        title="Smazat majetek"
+        text="Opravdu chcete smazat tento majetek?"
+        isOpen={isDeleteDialogOpen}
+        toggle={setIsDeleteDialogOpen}
+        onConfirm={handleDelete}
+        selectedId={selectedAssetId}
+      />
       <Heading mb={4}>Majetek v řízení</Heading>
       {assets.length === 0 ? (
         <Alert
@@ -179,7 +194,7 @@ export function Assets({ id }: { id: string }) {
               key={type}
               type={label}
               assets={groupedAssets[type] || []}
-              onDelete={handleDelete}
+              onDelete={openDeleteDialog}
             />
           ))}
         </Stack>

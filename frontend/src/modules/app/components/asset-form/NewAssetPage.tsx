@@ -7,15 +7,15 @@ import { Page } from '@frontend/shared/layout/Page'
 import { route } from '@shared/route'
 
 import { AssetType, useAddAsset } from '../../hooks/useAddAsset'
+import { useDeleteAsset } from '../../hooks/useDeleteAsset'
 import { mapAssetsToFormData, useGetAssets } from '../../hooks/useGetAsset'
-import { useUpdateAsset } from '../../hooks/useUpdateAsset'
 import { AssetForm, AssetFormData } from '../asset-form/AssetForm'
 
 export const NewAssetPage = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { addAsset: createAssetRequest } = useAddAsset()
-  const { updateAsset } = useUpdateAsset()
+  const { removeAsset } = useDeleteAsset(parseInt(id!, 10))
   const { data: existingAssets, loading } = useGetAssets(parseInt(id!, 10))
 
   const handleFormSubmit = useCallback(
@@ -23,33 +23,22 @@ export const NewAssetPage = () => {
       if (!id) return
 
       try {
-        const assets = mapFormDataToAssets(formData)
-        const existingAssetsByType =
-          existingAssets?.getAssetsByProcedureId?.reduce(
-            (acc: Record<string, Asset>, asset: Asset) => {
-              acc[asset.type] = asset
-              return acc
-            },
-            {}
-          ) || {}
-
+        const newAssets = mapFormDataToAssets(formData)
+        const existingAssetsList = existingAssets?.getAssetsByProceedingId || []
         await Promise.all(
-          assets.map(async (asset) => {
-            const existingAsset = existingAssetsByType[asset.type]
-            if (existingAsset) {
-              return updateAsset(parseInt(existingAsset.id), {
-                ...asset,
-                type: asset.type as AssetType,
-              })
-            } else {
-              return createAssetRequest({
-                inheritanceProcedureId: parseInt(id, 10),
-                ...asset,
-                type: asset.type as AssetType,
-                value: asset.value ?? 0,
-              })
-            }
-          })
+          existingAssetsList.map((asset: Asset) =>
+            removeAsset(parseInt(asset.id))
+          )
+        )
+        await Promise.all(
+          newAssets.map((asset) =>
+            createAssetRequest({
+              inheritanceProcedureId: parseInt(id),
+              ...asset,
+              type: asset.type as AssetType,
+              value: asset.value ?? 0,
+            })
+          )
         )
 
         navigate(route.inheritanceProcedure(id))
@@ -57,7 +46,7 @@ export const NewAssetPage = () => {
         console.error('Error managing assets:', error)
       }
     },
-    [createAssetRequest, updateAsset, id, navigate, existingAssets]
+    [createAssetRequest, removeAsset, id, navigate, existingAssets]
   )
 
   const defaultValues = useMemo(() => {

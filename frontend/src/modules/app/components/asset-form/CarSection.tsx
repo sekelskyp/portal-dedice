@@ -140,7 +140,6 @@ export const CarSection: React.FC<CarSectionProps> = ({
                       <InputFormControl
                         {...field}
                         label="Rok registrace"
-                        type="number"
                         placeholder="Rok"
                         width="150px"
                       />

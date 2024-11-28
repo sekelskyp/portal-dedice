@@ -119,28 +119,18 @@ export const AssetForm: React.FC<{
   defaultValues?: AssetFormData
   isEditMode?: boolean
 }> = ({ inheritanceProcedureId, onSubmit, defaultValues, isEditMode }) => {
-  console.log('Form default values:', defaultValues) // Debug log
-
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { sections, visibleSections, handleSetSelected } = useAssetSections(
-    defaultValues
-  ) as {
-    sections: Record<string, boolean>
-    visibleSections: Record<string, boolean>
-    handleSetSelected: (
-      section: string
-    ) => React.Dispatch<React.SetStateAction<boolean>>
-  }
+  const { sections, visibleSections, handleSetSelected } =
+    useAssetSections(defaultValues)
 
   const methods = useForm<AssetFormData>({
     resolver: zodResolver(assetSchema(sections)),
     defaultValues,
     mode: 'onChange',
+    reValidateMode: 'onChange',
   })
-
   useEffect(() => {
     if (defaultValues) {
-      console.log('Resetting form with values:', defaultValues) // Debug log
       methods.reset(defaultValues)
     }
   }, [defaultValues, methods])
@@ -149,32 +139,18 @@ export const AssetForm: React.FC<{
     try {
       setIsSubmitting(true)
       const filteredData = {} as AssetFormData
+      Object.entries(visibleSections).forEach(([key, isVisible]) => {
+        const typedKey = key as keyof AssetFormData
+        if (isVisible && data[typedKey]) {
+          ;(filteredData[typedKey] as (typeof data)[typeof typedKey]) =
+            data[typedKey]
+        }
+      })
 
-      if (data.bankAccount?.bank?.length) {
-        filteredData.bankAccount = data.bankAccount
-      }
-
-      if (visibleSections.bankAccount && data.bankAccount?.bank?.length) {
-        filteredData.bankAccount = data.bankAccount
-      }
-      if (visibleSections.company && data.company) {
-        filteredData.company = data.company
-      }
-      if (visibleSections.car && data.car) {
-        filteredData.car = data.car
-      }
-      if (visibleSections.valuables && data.valuables) {
-        filteredData.valuables = data.valuables
-      }
-      if (visibleSections.others && data.others) {
-        filteredData.others = data.others
-      }
-
-      console.log('Submitting data:', filteredData) // Debug log
       await onSubmit(filteredData)
+      methods.reset(filteredData)
     } catch (error) {
       console.error('Form submission error:', error)
-      throw error
     } finally {
       setIsSubmitting(false)
     }
@@ -197,26 +173,50 @@ export const AssetForm: React.FC<{
           <VStack gap={{ base: 6, md: 12 }} align="stretch">
             <CompanySection
               selected={sections.company}
-              setSelected={handleSetSelected('company')}
+              setSelected={(value: boolean | ((prev: boolean) => boolean)) =>
+                handleSetSelected('company')(
+                  typeof value === 'function' ? value(sections.company) : value
+                )
+              }
             />
             <ValuablesSection
               selected={sections.valuables}
-              setSelected={handleSetSelected('valuables')}
+              setSelected={(value: boolean | ((prev: boolean) => boolean)) =>
+                handleSetSelected('valuables')(
+                  typeof value === 'function'
+                    ? value(sections.valuables)
+                    : value
+                )
+              }
             />
             <OthersSection
               selected={sections.others}
-              setSelected={handleSetSelected('others')}
+              setSelected={(value: boolean | ((prev: boolean) => boolean)) =>
+                handleSetSelected('others')(
+                  typeof value === 'function' ? value(sections.others) : value
+                )
+              }
             />
           </VStack>
           <VStack gap={{ base: 6, md: 12 }} align="stretch">
             <BankAccountSection
               selected={sections.bankAccount}
-              setSelected={handleSetSelected('bankAccount')}
+              setSelected={(value: boolean | ((prev: boolean) => boolean)) =>
+                handleSetSelected('bankAccount')(
+                  typeof value === 'function'
+                    ? value(sections.bankAccount)
+                    : value
+                )
+              }
               bankAccountCollection={[]}
             />
             <CarSection
               selected={sections.car}
-              setSelected={handleSetSelected('car')}
+              setSelected={(value: boolean | ((prev: boolean) => boolean)) =>
+                handleSetSelected('car')(
+                  typeof value === 'function' ? value(sections.car) : value
+                )
+              }
               bankAccountCollection={[]}
             />
           </VStack>

@@ -30,6 +30,7 @@ export const useUpdateAsset = () => {
         variables: {
           id,
           data: {
+            proceedingId: data.proceedingId,
             type: data.type as AssetType,
             name: data.name,
             value: data.value || 0,
