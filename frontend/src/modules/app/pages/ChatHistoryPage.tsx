@@ -1,21 +1,17 @@
-import { Box, Container, Flex, Text, VStack } from '@chakra-ui/react'
+import { Box, Container, Flex, Text } from '@chakra-ui/react'
 import { useParams } from 'react-router-dom'
 import { useMediaQuery } from 'usehooks-ts'
 
-import { useAuth } from '@frontend/modules/auth'
 import { Page } from '@frontend/shared/layout'
 
-import ChatMessage from '../chat/components/ChatMessage'
 import { useGetMessages } from '../chat/hooks/useGetMessages'
 import { useProceeding } from '../hooks/useProceeding'
 
 //TODO: fix query and components
 
 export default function ChatPage() {
-  const user = useAuth()
   const { id } = useParams()
   const messages = useGetMessages(+id!)
-  const isNotary = user.user?.type === 'Notary'
 
   const proceeding = useProceeding(+id!).data?.getProceedingById
 

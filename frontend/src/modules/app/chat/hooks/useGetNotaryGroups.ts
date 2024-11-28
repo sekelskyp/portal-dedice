@@ -16,9 +16,7 @@ interface useGetNotaryGroupsProps {
   userId: number
 }
 
-export function useGetNotaryGroups({
-  userId,
-}: useGetNotaryGroupsProps) {
+export function useGetNotaryGroups({ userId }: useGetNotaryGroupsProps) {
   const { data, error, loading } = useQuery(GET_NOTARY_GROUPS, {
     variables: { userId: userId },
   })
