@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Grid, VStack } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -164,76 +164,64 @@ export const AssetForm: React.FC<{
         defaultValues={defaultValues}
         noValidate
       >
-        <Grid
-          templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }}
-          gap={{ base: 6, md: 12 }}
-          width="100%"
-          py={8}
-        >
-          <VStack gap={{ base: 6, md: 12 }} align="stretch">
-            <CompanySection
-              selected={sections.company}
-              setSelected={(value: boolean | ((prev: boolean) => boolean)) =>
-                handleSetSelected('company')(
-                  typeof value === 'function' ? value(sections.company) : value
-                )
-              }
-            />
-            <ValuablesSection
-              selected={sections.valuables}
-              setSelected={(value: boolean | ((prev: boolean) => boolean)) =>
-                handleSetSelected('valuables')(
-                  typeof value === 'function'
-                    ? value(sections.valuables)
-                    : value
-                )
-              }
-            />
-            <OthersSection
-              selected={sections.others}
-              setSelected={(value: boolean | ((prev: boolean) => boolean)) =>
-                handleSetSelected('others')(
-                  typeof value === 'function' ? value(sections.others) : value
-                )
-              }
-            />
-          </VStack>
-          <VStack gap={{ base: 6, md: 12 }} align="stretch">
-            <BankAccountSection
-              selected={sections.bankAccount}
-              setSelected={(value: boolean | ((prev: boolean) => boolean)) =>
-                handleSetSelected('bankAccount')(
-                  typeof value === 'function'
-                    ? value(sections.bankAccount)
-                    : value
-                )
-              }
-              bankAccountCollection={[]}
-            />
-            <CarSection
-              selected={sections.car}
-              setSelected={(value: boolean | ((prev: boolean) => boolean)) =>
-                handleSetSelected('car')(
-                  typeof value === 'function' ? value(sections.car) : value
-                )
-              }
-              bankAccountCollection={[]}
-            />
-          </VStack>
+        <VStack width="100%" py={8} gap={{ base: 6, md: 12 }} align="stretch">
+          <CompanySection
+            selected={sections.company}
+            setSelected={(value: boolean | ((prev: boolean) => boolean)) =>
+              handleSetSelected('company')(
+                typeof value === 'function' ? value(sections.company) : value
+              )
+            }
+          />
+          <BankAccountSection
+            selected={sections.bankAccount}
+            setSelected={(value: boolean | ((prev: boolean) => boolean)) =>
+              handleSetSelected('bankAccount')(
+                typeof value === 'function'
+                  ? value(sections.bankAccount)
+                  : value
+              )
+            }
+            bankAccountCollection={[]}
+          />
+          <CarSection
+            selected={sections.car}
+            setSelected={(value: boolean | ((prev: boolean) => boolean)) =>
+              handleSetSelected('car')(
+                typeof value === 'function' ? value(sections.car) : value
+              )
+            }
+            bankAccountCollection={[]}
+          />
+          <ValuablesSection
+            selected={sections.valuables}
+            setSelected={(value: boolean | ((prev: boolean) => boolean)) =>
+              handleSetSelected('valuables')(
+                typeof value === 'function' ? value(sections.valuables) : value
+              )
+            }
+          />
+          <OthersSection
+            selected={sections.others}
+            setSelected={(value: boolean | ((prev: boolean) => boolean)) =>
+              handleSetSelected('others')(
+                typeof value === 'function' ? value(sections.others) : value
+              )
+            }
+          />
 
           <SubmitButton
             type="submit"
             colorScheme="blue"
-            justifySelf={'center'}
-            gridColumn={{ base: '1', md: 'span 2' }}
             width={{ base: '100%', sm: '50%' }}
+            alignSelf="center"
             mt={8}
             loading={isSubmitting}
             loadingText="Ukládám..."
           >
             {isEditMode ? 'Upravit majetek' : 'Uložit majetek'}
           </SubmitButton>
-        </Grid>
+        </VStack>
       </Form>
     </FormProvider>
   )
