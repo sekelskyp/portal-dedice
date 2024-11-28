@@ -1,10 +1,15 @@
 import { eq, InferInsertModel, InferSelectModel } from 'drizzle-orm'
 
-import { chatMessage } from '@backend/db/schema'
+import { chatMessage, user } from '@backend/db/schema'
 import { Db } from '@backend/types/types'
 
 export interface ChatMessageEntity
-  extends InferSelectModel<typeof chatMessage> {}
+  extends InferSelectModel<typeof chatMessage> {
+  /**
+   * The display name of the user who sent the message
+   */
+  displayName?: string
+}
 export interface ChatMessageInsertInput
   extends InferInsertModel<Omit<typeof chatMessage, 'id'>> {}
 
@@ -13,8 +18,16 @@ export function getChatMessageRepository(db: Db) {
     chatId: number
   ): Promise<ChatMessageEntity[]> {
     return await db
-      .select()
+      .select({
+        id: chatMessage.id,
+        chatId: chatMessage.chatId,
+        userId: chatMessage.userId,
+        body: chatMessage.body,
+        createdAt: chatMessage.createdAt,
+        displayName: user.displayName,
+      })
       .from(chatMessage)
+      .innerJoin(user, eq(user.id, chatMessage.userId))
       .where(eq(chatMessage.chatId, chatId))
       .orderBy(chatMessage.createdAt)
   }

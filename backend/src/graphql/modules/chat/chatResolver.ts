@@ -78,6 +78,9 @@ export class ChatResolver {
     if (!chatMessage) {
       throw new Error('Failed to fetch chat message')
     }
+    const user = await context.userRepository.getUserById(userId)
+
+    chatMessage.displayName = user?.displayName
     // Publish the event
     await pubSub.publish(NEW_CHAT_MESSAGE, {
       newChatMessage: chatMessage,

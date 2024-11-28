@@ -16,4 +16,7 @@ export class ChatMessage {
 
   @Field(() => Date)
   createdAt!: Date
+
+  @Field(() => String, { nullable: true })
+  displayName?: string
 }

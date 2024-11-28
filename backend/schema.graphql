@@ -67,6 +67,7 @@ type ChatMessage {
   body: String!
   chatId: ID!
   createdAt: DateTimeISO!
+  displayName: String
   id: ID!
   userId: ID!
 }
