@@ -95,11 +95,11 @@ export class ChatResolver {
     topics: NEW_CHAT_MESSAGE,
     filter: ({ payload, args }) => {
       console.log('payload', payload)
-      return payload.procedureId === args.procedureId
+      return payload.proceedingId === args.proceedingId
     },
   })
   newChatMessage(
-    @Arg('procedureId', () => Int) procedureId: number,
+    @Arg('proceedingId', () => Int) proceedingId: number,
     @Root() payload: { newChatMessage: ChatMessage }
   ): ChatMessage {
     console.log('payload.newMessage', payload.newChatMessage)

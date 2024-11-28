@@ -10,12 +10,12 @@ const schema = z.object({
     .min(1, 'Zadejte zprávu'),
 })
 
-export type ChatMessageFormProps = {
+interface ChatInputProps {
   errorMessage?: string
   onSubmit: (data: { message: string }) => void
 }
 
-export function ChatMessageForm({ onSubmit }: ChatMessageFormProps) {
+export default function ChatInput({ onSubmit }: ChatInputProps) {
   return (
     <Form
       onSubmit={onSubmit}

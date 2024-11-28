@@ -221,7 +221,7 @@ type SignInResponse {
 }
 
 type Subscription {
-  newChatMessage(procedureId: Int!): ChatMessage!
+  newChatMessage(proceedingId: Int!): ChatMessage!
 }
 
 """The `Upload` scalar type represents a file upload."""

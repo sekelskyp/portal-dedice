@@ -223,7 +223,7 @@ type SignInResponse {
 }
 
 type Subscription {
-  newChatMessage(procedureId: Int!): ChatMessage!
+  newChatMessage(proceedingId: Int!): ChatMessage!
 }
 
 """

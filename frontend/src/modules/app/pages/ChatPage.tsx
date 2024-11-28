@@ -6,37 +6,37 @@ import { useMediaQuery } from 'usehooks-ts'
 import { useAuth } from '@frontend/modules/auth'
 import { Page } from '@frontend/shared/layout'
 
-import { Message } from '../components/Message'
+import { Message } from '../chat/components/ChatMessage'
 import { useAddMessage } from '../hooks/useAddMessage'
 import { useBeneficiaryProceedings } from '../hooks/useBeneficiaryProceedings'
-import { useGetMessages } from '../hooks/useGetMessages'
+import { useGetMessages } from '../chat/hooks/useGetMessages'
 import { useNotaryProcedures } from '../hooks/useNotaryProcedures'
 import { useProceeding } from '../hooks/useProceeding'
 
-import { ChatMessageForm } from './ChatMessageForm'
+import ChatHeader from '../chat/components/ChatHeader'
 
 //TODO: fix query and components
 
 export default function ChatPage() {
+  /*
   const user = useAuth()
   const { id } = useParams()
   const messages = useGetMessages(id!)
 
   const proceeding = useProceeding(+id!).data?.getProceedingById
 
-  const notaryDisplayName = proceeding?.notary?.user?.displayName ?? ''
+  //const notaryDisplayName = proceeding?.notary?.user?.displayName ?? ''
 
   const beneficiaryDisplayNames =
     proceeding?.beneficiaries?.map(
       (beneficiary) => beneficiary.user?.displayName
     ) ?? []
-
   const isNotary = user.user?.type === 'Notary'
 
   const notaryProcedures = useNotaryProcedures()
   const beneficiaryProcedures = useBeneficiaryProceedings()
 
-  const allNames = [...beneficiaryDisplayNames, notaryDisplayName].join(', ')
+  //const allNames = [...beneficiaryDisplayNames, notaryDisplayName].join(', ')
 
   const procedures = isNotary
     ? notaryProcedures.data?.getProceduresByNotaryId
@@ -130,6 +130,7 @@ export default function ChatPage() {
                   >
                     Chat s uživateli: {allNames}
                   </Text>
+                  <ChatHeader proceedingId={+id!}></ChatHeader>
                   <Box flex={1} position="relative">
                     <Box
                       overflowY="auto"
@@ -183,4 +184,9 @@ export default function ChatPage() {
       </Container>
     </Page>
   )
+  */
+  return (
+    <Page></Page>
+  )
 }
+

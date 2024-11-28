@@ -11,7 +11,7 @@ export const route = {
   newProceeding: () => `/portal/newProceeding`,
   settings: () => `/portal/settings`,
   chat: () => `/portal/chat/`,
-  chatId: (id = ':id', name = ':name') => `/portal/chat/${id}/${name}`,
+  chatId: (proceedingId = ':proceedingId') => `/portal/chat/${proceedingId}`,
   chatIdHistory: (id = ':id', name = ':name') =>
     `/portal/chat/${id}/${name}/history`,
   emailVerification: () => `/auth/email-verification`,

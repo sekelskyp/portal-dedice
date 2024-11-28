@@ -13,16 +13,18 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
+  '\n  query GetBeneficiaryGroups($userId: Int!) {\n    getBeneficiaryProceedingsForUser(userId: $userId) {\n      id\n      name\n      state\n    }\n  }\n':
+    types.GetBeneficiaryGroupsDocument,
+  '\n  query GetNotaryGroups($userId: Int!) {\n    getNotaryProceedingsForUser(userId: $userId) {\n      id\n      name\n      state\n    }\n  }\n':
+    types.GetNotaryGroupsDocument,
   '\n  mutation addMessage($body: String!, $proceedingId: Int!, $userId: Int!) {\n    addChatMessage(body: $body, proceedingId: $proceedingId, userId: $userId) {\n      chatId\n      body\n      userId\n    }\n  }\n':
     types.AddMessageDocument,
-  '\n  query getChat($proceedingId: Int!) {\n    chatByProceedingId(proceedingId: $proceedingId) {\n      chatMessages {\n        body\n        chatId\n        createdAt\n        id\n        userId\n      }\n    }\n  }\n':
-    types.GetChatDocument,
-  '\n  subscription newChatMessage($procedureId: Int!) {\n    newChatMessage(procedureId: $procedureId) {\n      chatId\n      body\n      userId\n      createdAt\n      id\n    }\n  }\n':
+  '\n  query ChatByProceedingId($proceedingId: Int!) {\n    chatByProceedingId(proceedingId: $proceedingId) {\n      chatMessages {\n        body\n        chatId\n        createdAt\n        id\n        userId\n      }\n    }\n  }\n':
+    types.ChatByProceedingIdDocument,
+  '\n  subscription newChatMessage($proceedingId: Int!) {\n    newChatMessage(proceedingId: $proceedingId) {\n      chatId\n      body\n      userId\n      createdAt\n      id\n    }\n  }\n':
     types.NewChatMessageDocument,
-  '\n  query GetBeneficiariesByProceedingId($proceedingId: Int!) {\n    getBeneficiariesByProceedingId(proceedingId: $proceedingId) {\n      #contactId //TODO: fix\n      userId\n    }\n  }\n':
-    types.GetBeneficiariesByProceedingIdDocument,
-  '\n  query GetContactById($id: Float!) {\n    getUserById(id: $id) {\n      displayName\n    }\n  }\n':
-    types.GetContactByIdDocument,
+  '\n  query GetChatHeader($getProceedingByIdId: Int!) {\n    getProceedingById(id: $getProceedingByIdId) {\n      beneficiaries {\n        user {\n          displayName\n          id\n        }\n      }\n      notary {\n        user {\n          displayName\n          id\n        }\n      }\n    }\n  }\n':
+    types.GetChatHeaderDocument,
   '\n  mutation createAsset($data: AssetInput!) {\n    createAsset(data: $data) {\n      id\n      proceedingId\n      type\n      name\n      value\n      description\n      bankName\n      carMakeName\n      carRegistrationDate\n      carType\n      cin\n    }\n  }\n':
     types.CreateAssetDocument,
   '\n  mutation UpdateAsset($id: Int!, $data: AssetInput!) {\n    updateAsset(id: $id, data: $data) {\n      id\n      type\n      name\n      value\n      description\n      bankName\n      carMakeName\n      carRegistrationDate\n      carType\n      cin\n    }\n  }\n':
@@ -83,32 +85,38 @@ export function gql(source: string): unknown
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
+  source: '\n  query GetBeneficiaryGroups($userId: Int!) {\n    getBeneficiaryProceedingsForUser(userId: $userId) {\n      id\n      name\n      state\n    }\n  }\n'
+): (typeof documents)['\n  query GetBeneficiaryGroups($userId: Int!) {\n    getBeneficiaryProceedingsForUser(userId: $userId) {\n      id\n      name\n      state\n    }\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  query GetNotaryGroups($userId: Int!) {\n    getNotaryProceedingsForUser(userId: $userId) {\n      id\n      name\n      state\n    }\n  }\n'
+): (typeof documents)['\n  query GetNotaryGroups($userId: Int!) {\n    getNotaryProceedingsForUser(userId: $userId) {\n      id\n      name\n      state\n    }\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
   source: '\n  mutation addMessage($body: String!, $proceedingId: Int!, $userId: Int!) {\n    addChatMessage(body: $body, proceedingId: $proceedingId, userId: $userId) {\n      chatId\n      body\n      userId\n    }\n  }\n'
 ): (typeof documents)['\n  mutation addMessage($body: String!, $proceedingId: Int!, $userId: Int!) {\n    addChatMessage(body: $body, proceedingId: $proceedingId, userId: $userId) {\n      chatId\n      body\n      userId\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query getChat($proceedingId: Int!) {\n    chatByProceedingId(proceedingId: $proceedingId) {\n      chatMessages {\n        body\n        chatId\n        createdAt\n        id\n        userId\n      }\n    }\n  }\n'
-): (typeof documents)['\n  query getChat($proceedingId: Int!) {\n    chatByProceedingId(proceedingId: $proceedingId) {\n      chatMessages {\n        body\n        chatId\n        createdAt\n        id\n        userId\n      }\n    }\n  }\n']
+  source: '\n  query ChatByProceedingId($proceedingId: Int!) {\n    chatByProceedingId(proceedingId: $proceedingId) {\n      chatMessages {\n        body\n        chatId\n        createdAt\n        id\n        userId\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query ChatByProceedingId($proceedingId: Int!) {\n    chatByProceedingId(proceedingId: $proceedingId) {\n      chatMessages {\n        body\n        chatId\n        createdAt\n        id\n        userId\n      }\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  subscription newChatMessage($procedureId: Int!) {\n    newChatMessage(procedureId: $procedureId) {\n      chatId\n      body\n      userId\n      createdAt\n      id\n    }\n  }\n'
-): (typeof documents)['\n  subscription newChatMessage($procedureId: Int!) {\n    newChatMessage(procedureId: $procedureId) {\n      chatId\n      body\n      userId\n      createdAt\n      id\n    }\n  }\n']
+  source: '\n  subscription newChatMessage($proceedingId: Int!) {\n    newChatMessage(proceedingId: $proceedingId) {\n      chatId\n      body\n      userId\n      createdAt\n      id\n    }\n  }\n'
+): (typeof documents)['\n  subscription newChatMessage($proceedingId: Int!) {\n    newChatMessage(proceedingId: $proceedingId) {\n      chatId\n      body\n      userId\n      createdAt\n      id\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query GetBeneficiariesByProceedingId($proceedingId: Int!) {\n    getBeneficiariesByProceedingId(proceedingId: $proceedingId) {\n      #contactId //TODO: fix\n      userId\n    }\n  }\n'
-): (typeof documents)['\n  query GetBeneficiariesByProceedingId($proceedingId: Int!) {\n    getBeneficiariesByProceedingId(proceedingId: $proceedingId) {\n      #contactId //TODO: fix\n      userId\n    }\n  }\n']
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function gql(
-  source: '\n  query GetContactById($id: Float!) {\n    getUserById(id: $id) {\n      displayName\n    }\n  }\n'
-): (typeof documents)['\n  query GetContactById($id: Float!) {\n    getUserById(id: $id) {\n      displayName\n    }\n  }\n']
+  source: '\n  query GetChatHeader($getProceedingByIdId: Int!) {\n    getProceedingById(id: $getProceedingByIdId) {\n      beneficiaries {\n        user {\n          displayName\n          id\n        }\n      }\n      notary {\n        user {\n          displayName\n          id\n        }\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query GetChatHeader($getProceedingByIdId: Int!) {\n    getProceedingById(id: $getProceedingByIdId) {\n      beneficiaries {\n        user {\n          displayName\n          id\n        }\n      }\n      notary {\n        user {\n          displayName\n          id\n        }\n      }\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
