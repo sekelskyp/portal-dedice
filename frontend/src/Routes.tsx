@@ -19,6 +19,7 @@ import { ConfirmEmailPage } from './modules/auth/pages/ConfirmEmailPage'
 import { EmailVerification } from './modules/auth/pages/EmailVerification'
 import { PasswordResetPage } from './modules/auth/pages/PasswordResetPage'
 import { BlogPage } from './modules/static-pages/blog/pages/BlogPage'
+import { NewArticlePage } from './modules/static-pages/blog/pages/NewArticlePage'
 import { AboutPage } from './modules/static-pages/pages/AboutPage'
 import { GuidePage } from './modules/static-pages/pages/GuidePage'
 import { WizardPage } from './modules/wizard/pages/WizardStepPage'
@@ -50,6 +51,7 @@ export function Routes() {
         <Route path={route.about()} element={<AboutPage />} />
         <Route path={route.guide()} element={<GuidePage />} />
         <Route path={route.blog()} element={<BlogPage />} />
+        <Route path={route.newArticle()} element={<NewArticlePage />} />
         <Route path={route.wizard()} element={<WizardPage />} />
         <Route path={route.confirmEmail()} element={<ConfirmEmailPage />} />
         <Route path={route.resetPassword()} element={<PasswordResetPage />} />

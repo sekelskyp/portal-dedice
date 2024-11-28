@@ -1,8 +1,11 @@
-import { Heading, IconButton, Stack } from '@chakra-ui/react'
+import { Box, Heading, IconButton, Stack } from '@chakra-ui/react'
+import { FaPlus } from 'react-icons/fa'
 import { RiSortAsc, RiSortDesc } from 'react-icons/ri'
 
 import { Alert } from '@frontend/shared/design-system'
 import { Page } from '@frontend/shared/layout'
+import { RouterNavLink } from '@frontend/shared/navigation/atoms/RouterNavLink'
+import { route } from '@shared/route'
 
 import { ArticleCard } from '../components/ArticleCard'
 import { ArticleSearchBar } from '../components/ArticleSearchBar'
@@ -32,7 +35,7 @@ export function BlogPage() {
       <Heading size="3xl" pb={4}>
         Mohlo by vás zajímat
       </Heading>
-      <Stack direction="row" alignItems="center" gap={4}>
+      <Stack direction="row" alignItems="center" flex={1} gap={4}>
         <ArticleSearchBar
           value={query}
           onChange={setQuery}
@@ -43,9 +46,21 @@ export function BlogPage() {
           rounded="full"
           bg="gray.500"
           _hover={{ bg: 'gray.700' }}
+          flexShrink={0}
         >
           {sortOrder === 'asc' ? <RiSortAsc /> : <RiSortDesc />}
         </IconButton>
+        <RouterNavLink
+          to={route.newArticle()}
+          width={{ base: '10%', xl: 'auto' }}
+          display="flex"
+          justifySelf={'flex-end'}
+          alignItems="center"
+          gap={2}
+        >
+          <FaPlus />
+          <Box display={{ base: 'none', xl: 'block' }}>Nový článek</Box>
+        </RouterNavLink>
       </Stack>
       <Stack
         direction="row"
