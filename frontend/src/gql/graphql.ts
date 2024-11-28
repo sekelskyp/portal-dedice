@@ -608,28 +608,6 @@ export type CreateAssetMutation = {
   }
 }
 
-export type UpdateAssetMutationVariables = Exact<{
-  id: Scalars['Int']['input']
-  data: AssetInput
-}>
-
-export type UpdateAssetMutation = {
-  __typename?: 'Mutation'
-  updateAsset?: {
-    __typename?: 'Asset'
-    id: string
-    type: string
-    name: string
-    value: number
-    description?: string | null
-    bankName?: string | null
-    carMakeName?: string | null
-    carRegistrationDate?: any | null
-    carType?: string | null
-    cin?: string | null
-  } | null
-}
-
 export type GetProceedingsByBeneficiaryIdQueryVariables = Exact<{
   userId: Scalars['Int']['input']
 }>
@@ -855,6 +833,28 @@ export type GetProceedingByIdQuery = {
         } | null
       } | null
     } | null
+  } | null
+}
+
+export type UpdateAssetMutationVariables = Exact<{
+  id: Scalars['Int']['input']
+  data: AssetInput
+}>
+
+export type UpdateAssetMutation = {
+  __typename?: 'Mutation'
+  updateAsset?: {
+    __typename?: 'Asset'
+    id: string
+    type: string
+    name: string
+    value: number
+    description?: string | null
+    bankName?: string | null
+    carMakeName?: string | null
+    carRegistrationDate?: any | null
+    carType?: string | null
+    cin?: string | null
   } | null
 }
 
@@ -1489,82 +1489,6 @@ export const CreateAssetDocument = {
     },
   ],
 } as unknown as DocumentNode<CreateAssetMutation, CreateAssetMutationVariables>
-export const UpdateAssetDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'UpdateAsset' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-          type: {
-            kind: 'NonNullType',
-            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
-          },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'data' } },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'AssetInput' },
-            },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'updateAsset' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'id' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'id' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'data' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'data' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'value' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'bankName' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'carMakeName' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'carRegistrationDate' },
-                },
-                { kind: 'Field', name: { kind: 'Name', value: 'carType' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'cin' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<UpdateAssetMutation, UpdateAssetMutationVariables>
 export const GetProceedingsByBeneficiaryIdDocument = {
   kind: 'Document',
   definitions: [
@@ -2464,6 +2388,82 @@ export const GetProceedingByIdDocument = {
   GetProceedingByIdQuery,
   GetProceedingByIdQueryVariables
 >
+export const UpdateAssetDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'UpdateAsset' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'data' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'AssetInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'updateAsset' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'id' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'id' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'data' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'data' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'value' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'bankName' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'carMakeName' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'carRegistrationDate' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'carType' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'cin' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<UpdateAssetMutation, UpdateAssetMutationVariables>
 export const GetUserByIdDocument = {
   kind: 'Document',
   definitions: [
