@@ -5,8 +5,8 @@ import { useMediaQuery } from 'usehooks-ts'
 import { useAuth } from '@frontend/modules/auth'
 import { Page } from '@frontend/shared/layout'
 
-import { Message } from '../components/Message'
-import { useGetMessages } from '../hooks/useGetMessages'
+import ChatMessage from '../chat/components/ChatMessage'
+import { useGetMessages } from '../chat/hooks/useGetMessages'
 import { useProceeding } from '../hooks/useProceeding'
 
 //TODO: fix query and components
@@ -14,7 +14,7 @@ import { useProceeding } from '../hooks/useProceeding'
 export default function ChatPage() {
   const user = useAuth()
   const { id } = useParams()
-  const messages = useGetMessages(id!)
+  const messages = useGetMessages(+id!)
   const isNotary = user.user?.type === 'Notary'
 
   const proceeding = useProceeding(+id!).data?.getProceedingById
@@ -52,21 +52,17 @@ export default function ChatPage() {
               {messages.length === 0 && (
                 <Text>Tento chat zatím nemá žádné zprávy.</Text>
               )}
+              {/*
               <VStack gap={4} align={'stretch'}>
-                {messages.map((message) => (
-                  <Message
-                    key={message.id}
-                    userId={+message.userId}
-                    body={message.body}
-                    createdAt={message.createdAt}
-                    currentUserId={+user.user?.id!}
-                    procedureId={+id!}
-                    notaryDisplayName={notaryDisplayName}
-                    isNotary={isNotary}
-                    isMobile={isMobile}
-                  />
+              {messages.map((message) => (
+                <ChatMessage
+                key={message.id}
+                body={message.body}
+                createdAt={message.createdAt}
+                />
                 ))}
-              </VStack>
+                </VStack>
+              */}
             </Box>
             <Box
               position="absolute"

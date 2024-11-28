@@ -111,7 +111,7 @@ export const ProceedingDetail = ({
               <CalculatorIcon />
             </Button>
             <RouterNavLink
-              to={route.chatId(proceeding.id, proceeding.name)}
+              to={route.chatId(proceeding.id)}
               rounded="full"
             >
               Chat s notářem

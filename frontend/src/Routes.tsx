@@ -9,6 +9,7 @@ import { route } from '@shared/route'
 import { NewAssetPage } from './modules/app/components/asset-form/NewAssetPage'
 import ChatHistoryPage from './modules/app/pages/ChatHistoryPage'
 import ChatPage from './modules/app/pages/ChatPage'
+import NewChatPage from './modules/app/chat/components/NewChatPage'
 import { NewDocumentPage } from './modules/app/pages/NewDocumentPage'
 import { NewProceedingPage } from './modules/app/pages/NewProceedingPage'
 import { NotaryEmailPage } from './modules/app/pages/NotaryEmailPage'
@@ -42,8 +43,8 @@ export function Routes() {
           <Route path={route.newDocument()} element={<NewDocumentPage />} />
           <Route path={route.newEmail()} element={<NotaryEmailPage />} />
           <Route path={route.newAsset()} element={<NewAssetPage />} />
-          <Route path={route.chat()} element={<ChatPage />} />
-          <Route path={route.chatId()} element={<ChatPage />} />
+          <Route path={route.chat()} element={<NewChatPage />} />
+          <Route path={route.chatId()} element={<NewChatPage />} />
           <Route path={route.chatIdHistory()} element={<ChatHistoryPage />} />
           <Route path={route.profile()} element={<ProfilePage />} />
         </Route>

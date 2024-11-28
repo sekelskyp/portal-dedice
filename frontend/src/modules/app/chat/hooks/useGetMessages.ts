@@ -2,38 +2,38 @@ import { useQuery, useSubscription } from '@apollo/client'
 
 import { ChatMessage } from '@frontend/gql/graphql'
 
-import { GET_MESSAGES_QUERY, MESSAGE_SUBSCRIPTION } from '../chatOperations'
+import { GET_MESSAGES, MESSAGE_SUBSCRIPTION } from '../utils/chatOperations'
 
-export function useGetMessages(proceedingId: string) {
-  const queryResponse = useQuery(GET_MESSAGES_QUERY, {
-    variables: { proceedingId: +proceedingId },
+export function useGetMessages(proceedingId: number) {
+  const queryResponse = useQuery(GET_MESSAGES, {
+    variables: { proceedingId: proceedingId },
   })
 
   useSubscription(MESSAGE_SUBSCRIPTION, {
     variables: {
-      procedureId: +proceedingId,
+      proceedingId: proceedingId,
     },
     onData: ({ data, client }) => {
       const newMessage = data.data?.newChatMessage
       if (!newMessage) return
 
       client.cache.updateQuery<{
-        chatByInheritanceProcedureId: {
+        chatByInheritanceProceedingId: {
           chatMessages: ChatMessage[]
         }
       }>(
         {
-          query: GET_MESSAGES_QUERY,
-          variables: { inheritanceProcedureId: +proceedingId },
+          query: GET_MESSAGES,
+          variables: { proceedingId: proceedingId },
         },
         (existing) => {
           if (!existing) return existing
 
           return {
-            chatByInheritanceProcedureId: {
-              ...existing.chatByInheritanceProcedureId,
+            chatByInheritanceProceedingId: {
+              ...existing.chatByInheritanceProceedingId,
               chatMessages: [
-                ...(existing.chatByInheritanceProcedureId?.chatMessages || []),
+                ...(existing.chatByInheritanceProceedingId.chatMessages || []),
                 newMessage,
               ],
             },
