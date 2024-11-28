@@ -67,7 +67,6 @@ export function NotaryAssignment({
       <Flex align="flex-start">
         <Avatar
           size={{ base: 'xl', sm: '2xl' }}
-          name=""
           src={
             notary.gender === 'Female' ? '/woman-avatar.png' : '/man-avatar.png'
           }
