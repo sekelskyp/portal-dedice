@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client'
-import { Card, Heading, HStack, Stack, Text } from '@chakra-ui/react'
+import { Card, Heading, HStack, Stack } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useFormContext } from 'react-hook-form'
 import { z } from 'zod'

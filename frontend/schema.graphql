@@ -112,7 +112,7 @@ type Mutation {
   addBeneficiariesToProceeding(proceedingId: Int!, userIds: [Int!]!): Boolean!
   addChatMessage(body: String!, proceedingId: Int!, userId: Int!): ChatMessage!
   assignNotary(proceedingId: Int!): Boolean!
-  changePassword(newPassword: String!, oldPassword: String!): User!
+  changePassword(newPassword: String!, oldPassword: String!): Boolean!
   closeProceeding(proceedingId: Int!): Boolean!
   confirmEmailVerification(token: String!): Boolean!
   createAddress(data: AddressInput!): Address!
@@ -181,6 +181,7 @@ input ProfileInput {
   name: String!
   phone: String
   postalCode: String
+  sendNotifications: Boolean
   street: String
   streetNumber: String
   surname: String!
@@ -223,7 +224,7 @@ type SignInResponse {
 }
 
 type Subscription {
-  newChatMessage(procedureId: Int!): ChatMessage!
+  newChatMessage(proceedingId: Int!): ChatMessage!
 }
 
 """

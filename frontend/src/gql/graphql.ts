@@ -149,7 +149,7 @@ export type Mutation = {
   addBeneficiariesToProceeding: Scalars['Boolean']['output']
   addChatMessage: ChatMessage
   assignNotary: Scalars['Boolean']['output']
-  changePassword: User
+  changePassword: Scalars['Boolean']['output']
   closeProceeding: Scalars['Boolean']['output']
   confirmEmailVerification: Scalars['Boolean']['output']
   createAddress: Address
@@ -341,6 +341,7 @@ export type ProfileInput = {
   name: Scalars['String']['input']
   phone?: InputMaybe<Scalars['String']['input']>
   postalCode?: InputMaybe<Scalars['String']['input']>
+  sendNotifications?: InputMaybe<Scalars['Boolean']['input']>
   street?: InputMaybe<Scalars['String']['input']>
   streetNumber?: InputMaybe<Scalars['String']['input']>
   surname: Scalars['String']['input']
@@ -462,7 +463,7 @@ export type Subscription = {
 }
 
 export type SubscriptionNewChatMessageArgs = {
-  procedureId: Scalars['Int']['input']
+  proceedingId: Scalars['Int']['input']
 }
 
 export type UploadDocumentInput = {
@@ -552,7 +553,7 @@ export type ChatByProceedingIdQuery = {
 }
 
 export type NewChatMessageSubscriptionVariables = Exact<{
-  procedureId: Scalars['Int']['input']
+  proceedingId: Scalars['Int']['input']
 }>
 
 export type NewChatMessageSubscription = {
@@ -631,7 +632,7 @@ export type ChangePasswordMutationVariables = Exact<{
 
 export type ChangePasswordMutation = {
   __typename?: 'Mutation'
-  changePassword: { __typename?: 'User'; id: string }
+  changePassword: boolean
 }
 
 export type CreateDocumentMutationVariables = Exact<{
@@ -1293,7 +1294,7 @@ export const NewChatMessageDocument = {
           kind: 'VariableDefinition',
           variable: {
             kind: 'Variable',
-            name: { kind: 'Name', value: 'procedureId' },
+            name: { kind: 'Name', value: 'proceedingId' },
           },
           type: {
             kind: 'NonNullType',
@@ -1310,10 +1311,10 @@ export const NewChatMessageDocument = {
             arguments: [
               {
                 kind: 'Argument',
-                name: { kind: 'Name', value: 'procedureId' },
+                name: { kind: 'Name', value: 'proceedingId' },
                 value: {
                   kind: 'Variable',
-                  name: { kind: 'Name', value: 'procedureId' },
+                  name: { kind: 'Name', value: 'proceedingId' },
                 },
               },
             ],
@@ -1618,12 +1619,6 @@ export const ChangePasswordDocument = {
                 },
               },
             ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-              ],
-            },
           },
         ],
       },

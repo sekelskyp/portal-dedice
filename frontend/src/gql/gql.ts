@@ -21,7 +21,7 @@ const documents = {
     types.AddMessageDocument,
   '\n  query ChatByProceedingId($proceedingId: Int!) {\n    chatByProceedingId(proceedingId: $proceedingId) {\n      chatMessages {\n        body\n        chatId\n        createdAt\n        id\n        userId\n      }\n    }\n  }\n':
     types.ChatByProceedingIdDocument,
-  '\n  subscription newChatMessage($procedureId: Int!) {\n    newChatMessage(procedureId: $procedureId) {\n      chatId\n      body\n      userId\n      createdAt\n      id\n    }\n  }\n':
+  '\n  subscription newChatMessage($proceedingId: Int!) {\n    newChatMessage(proceedingId: $proceedingId) {\n      chatId\n      body\n      userId\n      createdAt\n      id\n    }\n  }\n':
     types.NewChatMessageDocument,
   '\n  query GetChatHeader($getProceedingByIdId: Int!) {\n    getProceedingById(id: $getProceedingByIdId) {\n      beneficiaries {\n        user {\n          displayName\n          id\n        }\n      }\n      notary {\n        user {\n          displayName\n          id\n        }\n      }\n    }\n  }\n':
     types.GetChatHeaderDocument,
@@ -29,7 +29,7 @@ const documents = {
     types.CreateAssetDocument,
   '\n  query GetProceedingsByBeneficiaryId($userId: Int!) {\n    getBeneficiaryProceedingsForUser(userId: $userId) {\n      id\n      name\n      startDate\n      state\n      deceasedDisplayName\n    }\n  }\n':
     types.GetProceedingsByBeneficiaryIdDocument,
-  '\n  mutation ChangePassword($newPassword: String!, $oldPassword: String!) {\n    changePassword(newPassword: $newPassword, oldPassword: $oldPassword) {\n      id\n    }\n  }\n':
+  '\n  mutation ChangePassword($newPassword: String!, $oldPassword: String!) {\n    changePassword(newPassword: $newPassword, oldPassword: $oldPassword)\n  }\n':
     types.ChangePasswordDocument,
   '\n  mutation CreateDocument($data: UploadDocumentInput!) {\n    createDocument(data: $data)\n  }\n':
     types.CreateDocumentDocument,
@@ -111,8 +111,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  subscription newChatMessage($procedureId: Int!) {\n    newChatMessage(procedureId: $procedureId) {\n      chatId\n      body\n      userId\n      createdAt\n      id\n    }\n  }\n'
-): (typeof documents)['\n  subscription newChatMessage($procedureId: Int!) {\n    newChatMessage(procedureId: $procedureId) {\n      chatId\n      body\n      userId\n      createdAt\n      id\n    }\n  }\n']
+  source: '\n  subscription newChatMessage($proceedingId: Int!) {\n    newChatMessage(proceedingId: $proceedingId) {\n      chatId\n      body\n      userId\n      createdAt\n      id\n    }\n  }\n'
+): (typeof documents)['\n  subscription newChatMessage($proceedingId: Int!) {\n    newChatMessage(proceedingId: $proceedingId) {\n      chatId\n      body\n      userId\n      createdAt\n      id\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -135,8 +135,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  mutation ChangePassword($newPassword: String!, $oldPassword: String!) {\n    changePassword(newPassword: $newPassword, oldPassword: $oldPassword) {\n      id\n    }\n  }\n'
-): (typeof documents)['\n  mutation ChangePassword($newPassword: String!, $oldPassword: String!) {\n    changePassword(newPassword: $newPassword, oldPassword: $oldPassword) {\n      id\n    }\n  }\n']
+  source: '\n  mutation ChangePassword($newPassword: String!, $oldPassword: String!) {\n    changePassword(newPassword: $newPassword, oldPassword: $oldPassword)\n  }\n'
+): (typeof documents)['\n  mutation ChangePassword($newPassword: String!, $oldPassword: String!) {\n    changePassword(newPassword: $newPassword, oldPassword: $oldPassword)\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

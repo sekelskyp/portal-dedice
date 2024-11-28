@@ -35,10 +35,6 @@ export function SettingsForm({
         </Text>
         <PasswordFormControl name="oldPassword" label="Staré heslo" required />
         <PasswordFormControl name="newPassword" label="Nové heslo" required />
-        {/*
-        <Heading size="lg">Emailové notifikace</Heading>
-        <SwitchFormControl name="notifications" label="Notifikace" />
-        */}
         <SubmitButton
           alignSelf="end"
           loading={requestState.loading}
