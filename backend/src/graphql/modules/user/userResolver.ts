@@ -97,20 +97,21 @@ export class UserResolver {
   }
 
   // Mutation to change user password
-  @Mutation(() => User)
+  @Mutation(() => Boolean)
   async changePassword(
     @Arg('oldPassword') oldPassword: string,
     @Arg('newPassword') newPassword: string,
     @Ctx() context: CustomContext
-  ): Promise<void> {
+  ): Promise<boolean> {
     if (!context.authUser) throw new Error('User is not authenticated')
 
-    return await changeUserPassword(
+    await changeUserPassword(
       context.authUser.userId,
       oldPassword,
       newPassword,
       context
     )
+    return true
   }
 
   // Mutation to request password reset

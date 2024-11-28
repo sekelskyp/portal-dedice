@@ -109,14 +109,21 @@ export async function changeUserPassword(
   if (!userRecord) {
     throw new Error('Uživatel nebyl nalezen.')
   }
-
   // Validate old password
   const isOldPasswordCorrect = await comparePassword(
-    userRecord.password,
-    oldPassword
+    oldPassword,
+    userRecord.password
   )
   if (!isOldPasswordCorrect) {
     throw new Error('Nesprávné staré heslo.')
+  }
+  // Check if the new password matches the old password
+  const isNewPasswordSameAsOld = await comparePassword(
+    newPassword,
+    userRecord.password
+  )
+  if (isNewPasswordSameAsOld) {
+    throw new Error('Nové heslo nesmí být stejné jako staré heslo.')
   }
 
   // Hash the new password and update it

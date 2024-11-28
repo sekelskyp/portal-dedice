@@ -155,7 +155,6 @@ const init = async () => {
       pubSub, // Add PubSub to the HTTP context
     }
   }
-
   app.use(
     '/graphql',
     cors<cors.CorsRequest>(), // accepts all origins ('*'), not support cookies

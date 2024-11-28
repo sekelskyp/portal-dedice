@@ -117,7 +117,7 @@ type Mutation {
   addBeneficiariesToProceeding(proceedingId: Int!, userIds: [Int!]!): Boolean!
   addChatMessage(body: String!, proceedingId: Int!, userId: Int!): ChatMessage!
   assignNotary(proceedingId: Int!): Boolean!
-  changePassword(newPassword: String!, oldPassword: String!): User!
+  changePassword(newPassword: String!, oldPassword: String!): Boolean!
   closeProceeding(proceedingId: Int!): Boolean!
   confirmEmailVerification(token: String!): Boolean!
   createAddress(data: AddressInput!): Address!
