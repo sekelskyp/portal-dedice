@@ -8,7 +8,11 @@ interface MessageProps {
   displayName: string
 }
 
-export default function ChatMessage({ body, createdAt, displayName }: MessageProps) {
+export default function ChatMessage({
+  body,
+  createdAt,
+  displayName,
+}: MessageProps) {
   const formatDateTime = (dateStr: string) => {
     const date = new Date(dateStr)
     const today = new Date()

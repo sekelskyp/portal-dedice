@@ -110,10 +110,7 @@ export const ProceedingDetail = ({
               Modelace vyrovnaní
               <CalculatorIcon />
             </Button>
-            <RouterNavLink
-              to={route.chatId(proceeding.id)}
-              rounded="full"
-            >
+            <RouterNavLink to={route.chatId(proceeding.id)} rounded="full">
               Chat s notářem
               <MessageSquareTextIcon />
             </RouterNavLink>
