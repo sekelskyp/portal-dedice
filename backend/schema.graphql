@@ -179,6 +179,7 @@ input ProfileInput {
   name: String!
   phone: String
   postalCode: String
+  sendNotifications: Boolean
   street: String
   streetNumber: String
   surname: String!

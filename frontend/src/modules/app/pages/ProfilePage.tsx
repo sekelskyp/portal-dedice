@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client'
-import { Card, Heading, HStack, Stack } from '@chakra-ui/react'
+import { Card, Heading, HStack, Stack, Text } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useFormContext } from 'react-hook-form'
 import { z } from 'zod'
@@ -15,6 +15,7 @@ import {
   RadioGroupFormControl,
   SubmitButton,
 } from '@frontend/shared/forms'
+import { SwitchFormControl } from '@frontend/shared/forms/SwitchFormControl'
 
 //TODO: fix query and components
 
@@ -124,13 +125,13 @@ const schema = z.object({
   name: z.string().min(1),
   surname: z.string().min(1),
   displayName: z.string().min(1),
-  email: z.string().email().optional().nullish(),
   phone: z.string().min(9).optional().nullish(),
   addressStreet: z.string().optional().nullish(),
   addressStreetNumber: z.string().optional().nullish(),
   addressMunicipality: z.string().optional().nullish(),
   addressPostCode: z.string().optional().nullish(),
   gender: z.string().optional().nullish(),
+  sendNotifications: z.boolean().optional().nullish(),
 })
 
 const ProfileForm = ({
@@ -153,7 +154,6 @@ const ProfileForm = ({
       <Stack gap={4}>
         <NameGroupFormControl />
         <HStack gap={4}>
-          {/* <InputFormControl name="email" label="Email" /> */}
           <InputFormControl name="phone" label="Telefon" />
         </HStack>
         <RadioGroupFormControl name="gender" label="Pohlaví">
@@ -161,6 +161,11 @@ const ProfileForm = ({
           <Radio value="Female">Žena</Radio>
         </RadioGroupFormControl>
         <AddressGroupFormControl label="Trvalé bydliště" />
+        <SwitchFormControl
+          name="sendNotifications"
+          label="Emailové notifikace"
+          helperText="Povolit odesílání emailových notifikací v rámci chatu."
+        />
         <SubmitButton alignSelf="end" px={8}>
           Uložit
         </SubmitButton>

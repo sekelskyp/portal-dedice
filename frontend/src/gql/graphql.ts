@@ -462,7 +462,7 @@ export type Subscription = {
 }
 
 export type SubscriptionNewChatMessageArgs = {
-  proceedingId: Scalars['Int']['input']
+  procedureId: Scalars['Int']['input']
 }
 
 export type UploadDocumentInput = {
@@ -552,7 +552,7 @@ export type ChatByProceedingIdQuery = {
 }
 
 export type NewChatMessageSubscriptionVariables = Exact<{
-  proceedingId: Scalars['Int']['input']
+  procedureId: Scalars['Int']['input']
 }>
 
 export type NewChatMessageSubscription = {
@@ -622,6 +622,16 @@ export type GetProceedingsByBeneficiaryIdQuery = {
     state: string
     deceasedDisplayName: string
   }>
+}
+
+export type ChangePasswordMutationVariables = Exact<{
+  newPassword: Scalars['String']['input']
+  oldPassword: Scalars['String']['input']
+}>
+
+export type ChangePasswordMutation = {
+  __typename?: 'Mutation'
+  changePassword: { __typename?: 'User'; id: string }
 }
 
 export type CreateDocumentMutationVariables = Exact<{
@@ -1283,7 +1293,7 @@ export const NewChatMessageDocument = {
           kind: 'VariableDefinition',
           variable: {
             kind: 'Variable',
-            name: { kind: 'Name', value: 'proceedingId' },
+            name: { kind: 'Name', value: 'procedureId' },
           },
           type: {
             kind: 'NonNullType',
@@ -1300,10 +1310,10 @@ export const NewChatMessageDocument = {
             arguments: [
               {
                 kind: 'Argument',
-                name: { kind: 'Name', value: 'proceedingId' },
+                name: { kind: 'Name', value: 'procedureId' },
                 value: {
                   kind: 'Variable',
-                  name: { kind: 'Name', value: 'proceedingId' },
+                  name: { kind: 'Name', value: 'procedureId' },
                 },
               },
             ],
@@ -1546,6 +1556,82 @@ export const GetProceedingsByBeneficiaryIdDocument = {
 } as unknown as DocumentNode<
   GetProceedingsByBeneficiaryIdQuery,
   GetProceedingsByBeneficiaryIdQueryVariables
+>
+export const ChangePasswordDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'ChangePassword' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'newPassword' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'oldPassword' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'changePassword' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'newPassword' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'newPassword' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'oldPassword' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'oldPassword' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ChangePasswordMutation,
+  ChangePasswordMutationVariables
 >
 export const CreateDocumentDocument = {
   kind: 'Document',

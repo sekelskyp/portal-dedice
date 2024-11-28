@@ -33,4 +33,7 @@ export class ProfileInput {
 
   @Field(() => String, { nullable: true })
   postalCode?: string
+
+  @Field(() => Boolean, { nullable: true })
+  sendNotifications?: boolean
 }

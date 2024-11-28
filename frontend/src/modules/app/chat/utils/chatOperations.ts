@@ -25,8 +25,8 @@ export const GET_MESSAGES = gql(/* GraphQL */ `
 `)
 
 export const MESSAGE_SUBSCRIPTION = gql(/* GraphQL */ `
-  subscription newChatMessage($proceedingId: Int!) {
-    newChatMessage(proceedingId: $proceedingId) {
+  subscription newChatMessage($procedureId: Int!) {
+    newChatMessage(procedureId: $procedureId) {
       chatId
       body
       userId

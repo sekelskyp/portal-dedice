@@ -15,6 +15,7 @@ import { NotaryEmailPage } from './modules/app/pages/NotaryEmailPage'
 import InheritanceProcedureDetail from './modules/app/pages/ProceedingPage'
 import { Proceedings } from './modules/app/pages/Proceedings'
 import { ProfilePage } from './modules/app/pages/ProfilePage'
+import { SettingsPage } from './modules/app/pages/SettingsPage'
 import { ConfirmEmailPage } from './modules/auth/pages/ConfirmEmailPage'
 import { EmailVerification } from './modules/auth/pages/EmailVerification'
 import { PasswordResetPage } from './modules/auth/pages/PasswordResetPage'
@@ -46,6 +47,7 @@ export function Routes() {
           <Route path={route.chatId()} element={<NewChatPage />} />
           <Route path={route.chatIdHistory()} element={<ChatHistoryPage />} />
           <Route path={route.profile()} element={<ProfilePage />} />
+          <Route path={route.settings()} element={<SettingsPage />} />
         </Route>
         <Route path={route.about()} element={<AboutPage />} />
         <Route path={route.guide()} element={<GuidePage />} />

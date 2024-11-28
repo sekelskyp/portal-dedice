@@ -1,7 +1,7 @@
 import * as z from 'zod'
 
 export const passwordSchema = z
-  .string()
+  .string({ required_error: 'Heslo je povinné.' })
   .min(1, { message: 'Heslo je povinné' })
   .min(8, { message: 'Heslo musí mít alespoň 8 znaků' })
   .refine((password) => /[A-Z]/.test(password), {
