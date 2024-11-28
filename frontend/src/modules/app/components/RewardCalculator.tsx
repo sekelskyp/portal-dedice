@@ -7,10 +7,10 @@ import {
   Heading,
   HStack,
   Icon,
+  Link,
   List,
   Separator,
   Stack,
-  StatHelpText,
   Text,
 } from '@chakra-ui/react'
 import { InfoIcon, PlusIcon } from 'lucide-react'
@@ -30,11 +30,6 @@ const numberFormat = Intl.NumberFormat('cs-CZ', {
   maximumFractionDigits: 0,
 })
 
-const percentageFormat = Intl.NumberFormat('cs-CZ', {
-  style: 'percent',
-  maximumFractionDigits: 2,
-})
-
 export const RewardCalculator = () => {
   const [value, setValue] = useState<number | undefined>()
 
@@ -42,12 +37,13 @@ export const RewardCalculator = () => {
 
   const totalReward = reward + VAT
 
-  const percentage = totalReward / (value ?? 1)
-
   return (
     <Stack gap={8}>
       <Heading>Výpočet odměny notáře</Heading>
-      <Stack direction={{ base: 'column', md: 'row' }} gap={12}>
+      <Stack
+        direction={{ base: 'column', md: 'row' }}
+        gap={{ base: 0, md: 12 }}
+      >
         <Box w="full">
           <Form onSubmit={(value) => setValue(+value.worth)}>
             <Stack gap={6}>
@@ -86,9 +82,6 @@ export const RewardCalculator = () => {
                   <StatValueText>
                     {numberFormat.format(totalReward)}
                   </StatValueText>
-                  <StatHelpText>
-                    {percentageFormat.format(percentage)} z hodnoty pozůstalosti
-                  </StatHelpText>
                 </StatRoot>
                 <HStack alignItems="end" gap={3}>
                   <StatRoot flex="none" size="sm">
@@ -108,8 +101,9 @@ export const RewardCalculator = () => {
                     Výpočet je zaokrouhlen na celé koruny.
                   </Alert>
                   <Alert bg="none" p={0}>
-                    Tento výpočet je orientační, konečná částka se může lišit v
-                    závislosti na dalších požadovaných či potřebných úkonech.
+                    Tento výpočet je orientační, konečná částka se může lišit
+                    v&nbsp;závislosti na dalších požadovaných či potřebných
+                    úkonech.
                   </Alert>
                 </Stack>
               </Stack>
@@ -153,35 +147,43 @@ export const RewardCalculator = () => {
         )}
       </Stack>
       <Separator />
-      <Stack fontSize={'sm'}>
-        <Text>
-          Hodnota pozůstalosti je součet všech aktiv, tedy plusových hodnot v
-          pozůstalosti. Dluhy z hodnoty neodečítejte. V případě, že je součástí
-          vypořádání dědictví také vypořádání SJM, tedy, pokud je součástí
-          řízení pozůstalý manžel/manželka postupujte následovně:
-        </Text>
-        <List.Root as="ol" listStyle="decimal" ml={8}>
-          <List.Item key={0} _marker={{ color: 'inherit' }}>
-            sečtěte majetek v SJM,
+      <Stack fontSize={'sm'} maxW="80ch">
+        <Heading size="md">Jak určit hodnotu pozůstalosti</Heading>
+        <List.Root as="ol" listStyle="upper-alpha" ml={6}>
+          <List.Item>
+            Hodnota pozůstalosti je součet všech aktiv, tedy plusových hodnot
+            v&nbsp;pozůstalosti.
           </List.Item>
-          <List.Item key={1} _marker={{ color: 'inherit' }}>
-            vydělte částku 2,
-          </List.Item>
-          <List.Item key={2} _marker={{ color: 'inherit' }}>
-            v případě, že měl zůstavitel nějaký majetek v osobním vlastnictví
-            (tedy majetek, který nespadá do SJM), tak ho k částce přičtěte,
-          </List.Item>
-          <List.Item key={3} _marker={{ color: 'inherit' }}>
-            výslednou hodnotu zadejte do pole{' '}
-            <em>Hodnota majetku v pozůstalosti</em>.
+          <List.Item>Dluhy z hodnoty neodečítejte.</List.Item>
+          <List.Item>
+            V případě, že je součástí vypořádání dědictví také vypořádání SJM,
+            tedy, pokud je součástí řízení pozůstalý manžel/manželka postupujte
+            následovně:
+            <List.Root as="ol" listStyle="decimal" ml={4}>
+              <List.Item>sečtěte majetek v SJM,</List.Item>
+              <List.Item>vydělte částku 2,</List.Item>
+              <List.Item>
+                v případě, že měl zůstavitel nějaký majetek v&nbsp;osobním
+                vlastnictví (tedy majetek, který nespadá do SJM), tak ho
+                k&nbsp;částce přičtěte,
+              </List.Item>
+              <List.Item>
+                výslednou hodnotu zadejte do pole{' '}
+                <em>Hodnota majetku v&nbsp;pozůstalosti</em>.
+              </List.Item>
+            </List.Root>
           </List.Item>
         </List.Root>
+        <Text></Text>
       </Stack>
 
       <Separator />
       <Text fontSize={'sm'}>
-        Výpočet odměny notáře odpovídá Vyhlášce č. 196/2001 Sb., Notářský tarif
-        v platném znění
+        Výpočet odměny notáře odpovídá{' '}
+        <Link href="https://www.zakonyprolidi.cz/cs/2001-196">
+          Vyhlášce č.&nbsp;196/2001&nbsp;Sb., Notářský tarif
+        </Link>
+        &nbsp;v&nbsp;platném znění
       </Text>
     </Stack>
   )

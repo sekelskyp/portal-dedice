@@ -204,21 +204,21 @@ const BeneficiarySection = () => {
                   label={resources.portal.forms.proceedingForm.name}
                   disabled
                 >
-                  <Input value={user?.contact?.name} />
+                  <Input value={user?.name} />
                 </Field>
 
                 <Field
                   label={resources.portal.forms.proceedingForm.surname}
                   disabled
                 >
-                  <Input value={user?.contact?.surname} />
+                  <Input value={user?.surname} />
                 </Field>
               </HStack>
               <Field
                 label={resources.portal.forms.proceedingForm.email}
                 disabled
               >
-                <Input value={user?.contact?.email ?? user?.email} />
+                <Input value={user?.email} />
               </Field>
             </Card.Body>
           </Card.Root>
