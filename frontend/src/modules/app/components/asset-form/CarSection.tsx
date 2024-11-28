@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Button, HStack, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Stack, VStack } from '@chakra-ui/react'
 import { createListCollection } from '@chakra-ui/react/collection'
 import { Controller } from 'react-hook-form'
 import { FaPlus, FaTimes, FaTrash } from 'react-icons/fa'
@@ -102,8 +102,17 @@ export const CarSection: React.FC<CarSectionProps> = ({
           {fields.map((field, index) => (
             <React.Fragment key={field.id}>
               <VStack gap={4} width="100%" mb={4}>
-                <HStack width="100%" alignItems="flex-start" gap={4}>
-                  <Box position="relative" flex={1}>
+                <Stack
+                  direction={{ base: 'column', sm: 'row' }}
+                  width="100%"
+                  alignItems="flex-start"
+                  gap={4}
+                >
+                  <Box
+                    position="relative"
+                    width={{ base: '100%', sm: 'auto' }}
+                    flex={{ sm: '1' }}
+                  >
                     <Controller
                       name={`car.${index}.brand`}
                       render={({ field }) => (
@@ -141,11 +150,11 @@ export const CarSection: React.FC<CarSectionProps> = ({
                         {...field}
                         label="Rok registrace"
                         placeholder="Rok"
-                        width="150px"
+                        width={{ base: '50%', sm: '30%' }}
                       />
                     )}
                   />
-                </HStack>
+                </Stack>
                 <Controller
                   name={`car.${index}.description`}
                   render={({ field }) => (
