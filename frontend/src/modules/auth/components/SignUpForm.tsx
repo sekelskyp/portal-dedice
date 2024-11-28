@@ -4,6 +4,7 @@ import { z } from 'zod'
 
 import resources from '@frontend/resources'
 import { Form, InputFormControl, SubmitButton } from '@frontend/shared/forms'
+import { PasswordFormControl } from '@frontend/shared/forms/PasswordFormControl'
 
 import { passwordSchema } from '../passwordSchema'
 
@@ -62,16 +63,14 @@ export function SignUpForm({ onSubmit, loading }: SignUpFormProps) {
           placeholder={resources.auth.forms.shared.email.placeholder}
           required
         />
-        <InputFormControl
+        <PasswordFormControl
           name="password"
           label={resources.auth.forms.shared.password}
-          type="password"
           required
         />
-        <InputFormControl
+        <PasswordFormControl
           name="confirmPassword"
           label={resources.auth.forms.signUp.confirmPassword}
-          type="password"
           required
         />
         <SubmitButton loading={loading} loadingText="Počkejte prosím...">

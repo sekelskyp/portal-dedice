@@ -4,6 +4,7 @@ import { z } from 'zod'
 
 import resources from '@frontend/resources'
 import { Form, InputFormControl, SubmitButton } from '@frontend/shared/forms'
+import { PasswordFormControl } from '@frontend/shared/forms/PasswordFormControl'
 
 const schema = z.object({
   email: z
@@ -28,9 +29,9 @@ export function SignInForm({ onSubmit, error }: SignInFormProps) {
           label={resources.auth.forms.shared.email.label}
           required
         />
-        <InputFormControl
+
+        <PasswordFormControl
           name="password"
-          type="password"
           label={resources.auth.forms.shared.password}
           required
         />
