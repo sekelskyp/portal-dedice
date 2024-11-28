@@ -200,15 +200,12 @@ export function Assets({ id }: { id: string }) {
         </Stack>
       )}
       {!isNotary && (
-        <Stack
-          direction={{ base: 'column', lg: 'row' }}
-          justifyContent="center"
-          mb={4}
-        >
+        <Stack alignItems={'center'}>
           <RouterNavLink
             to={route.newAsset(id)}
             width="fit-content"
             rounded={'full'}
+            textAlign={'center'}
           >
             Přidat/upravit Majetek
             <FaMoneyBill />

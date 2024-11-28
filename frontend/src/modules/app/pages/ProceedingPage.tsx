@@ -61,12 +61,37 @@ const InheritanceProcedureDetail: React.FC = () => {
               <StatusBadge ml="auto" state={proceeding.state} />
             </Card.Header>
             <Card.Body gap={4}>
-              <Tabs.Root defaultValue="detail" size={{ base: 'sm', md: 'lg' }}>
-                <Tabs.List>
-                  <Tabs.Trigger value="detail">Detail řízení</Tabs.Trigger>
-                  <Tabs.Trigger value="documents">Dokumenty</Tabs.Trigger>
-                  <Tabs.Trigger value="assets"> Majetek</Tabs.Trigger>
-                  <Tabs.Trigger value="reward">
+              <Tabs.Root
+                defaultValue="detail"
+                size={{ base: 'sm', md: 'lg' }}
+                orientation="horizontal"
+              >
+                <Tabs.List
+                  width={{ base: 'full', md: 'auto' }}
+                  flexDirection={{ base: 'column', md: 'row' }}
+                >
+                  <Tabs.Trigger
+                    value="detail"
+                    width={{ base: 'full', md: 'auto' }}
+                  >
+                    Detail řízení
+                  </Tabs.Trigger>
+                  <Tabs.Trigger
+                    value="documents"
+                    width={{ base: 'full', md: 'auto' }}
+                  >
+                    Dokumenty
+                  </Tabs.Trigger>
+                  <Tabs.Trigger
+                    value="assets"
+                    width={{ base: 'full', md: 'auto' }}
+                  >
+                    Majetek
+                  </Tabs.Trigger>
+                  <Tabs.Trigger
+                    value="reward"
+                    width={{ base: 'full', md: 'auto' }}
+                  >
                     Výpočet odměny notáře
                   </Tabs.Trigger>
                 </Tabs.List>
