@@ -224,6 +224,13 @@ async function populateDatabase(
     ])
     .$returningId()
 
+  await db
+    .insert(chat)
+    .values([
+      { proceedingId: proceedingId1.id },
+      { proceedingId: proceedingId2.id },
+    ])
+
   // create beneficiaries
   const [beneficiary1Id, beneficiary2Id] = await db
     .insert(beneficiary)
