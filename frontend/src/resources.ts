@@ -1,4 +1,37 @@
 const resources = {
+  wizard: {
+    notaryAssignment: {
+      tooltip:
+        'Tato aplikace vám srozumitelně vysvětlí, co vás v pozůstalostním řízení čeká a díky návodu zjistíte, jaké jsou možnosti rozdělení majetku v pozůstalosti.',
+      title: 'Na základě vyplněných údajů vám byl přidělen následující notář:',
+      accordions: [
+        {
+          id: 1,
+          title: 'Mohu si vybrat jiného notáře?',
+          description: 'Bohužel, změna notáře není možná.',
+        },
+        {
+          id: 2,
+          title: 'Kde je toto upraveno?',
+          description:
+            'Notář je určen rozvrhem práce, což je právní předpis.\nDostupný zde: https://www.nkcr.cz/seznam-notaru/rozvrhy-rizeni-o-pozustalosti',
+        },
+      ],
+    },
+    testatorIdentification: {
+      title:
+        'Vyplněním formuláře údaji zůstavitele Vám pomůžeme zjistit, který notář bude spravovat Vaše pozůstalostní řízení.',
+      radio: {
+        male: 'Muž',
+        female: 'Žena',
+      },
+      CTA: {
+        previous: 'Zpět',
+        next: 'Ok',
+      },
+      submit: 'Potvrdit údaje',
+    },
+  },
   shared: {
     CTA: {
       signIn: 'Přihlásit se',

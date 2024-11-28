@@ -29,7 +29,7 @@ export function useGetNotary(birthDate?: Date, addressPostCode?: string) {
     variables: {
       input: {
         deceasedPersonDateOfDeath: birthDate,
-        addressPostCode,
+        addressPostCode: addressPostCode,
       },
     },
   })

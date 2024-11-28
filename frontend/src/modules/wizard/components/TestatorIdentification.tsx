@@ -3,6 +3,7 @@ import { Card, Center, Container, Stack, Text } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
+import resources from '@frontend/resources'
 import { Radio } from '@frontend/shared/design-system'
 import {
   AddressGroupFormControl,
@@ -19,10 +20,10 @@ const schema = z.object({
   birthDate: z
     .date({ required_error: 'Datum narození je povinné.' })
     .max(new Date(), 'Datum narození musí být v minulosti.'),
-  addressStreet: z.string().min(1, 'Ulice je povinná.'),
-  addressStreetNumber: z.string().min(1, 'Číslo popisné je povinné.'),
-  addressMunicipality: z.string().min(1, 'Obec je povinná.'),
-  addressPostCode: z.string().min(1, 'PSČ je povinné.'),
+  street: z.string().min(1, 'Ulice je povinná.'),
+  streetNumber: z.string().min(1, 'Číslo popisné je povinné.'),
+  municipality: z.string().min(1, 'Obec je povinná.'),
+  postCode: z.string().min(1, 'PSČ je povinné.'),
 })
 
 type NextStepProps = {
@@ -50,10 +51,10 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
       defaultValues={{
         sex: testatorData.sex || '',
         birthDate: testatorData.birthDate || undefined!,
-        addressStreet: testatorData.addressStreet || '',
-        addressMunicipality: testatorData.addressMunicipality || '',
-        addressPostCode: testatorData.addressPostCode || '',
-        addressStreetNumber: testatorData.addressStreetNumber || '',
+        street: testatorData.street || '',
+        municipality: testatorData.municipality || '',
+        postCode: testatorData.postCode || '',
+        streetNumber: testatorData.streetNumber || '',
       }}
     >
       <Container
@@ -63,8 +64,7 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
         py={{ base: 2, sm: 4 }}
       >
         <Text fontSize={{ base: 'sm', sm: 'md', md: 'lg' }}>
-          Vyplněním formuláře údaji zůstavitele Vám pomůžeme zjistit, který
-          notář bude spravovat Vaše pozůstalostní řízení.
+          {resources.wizard.testatorIdentification.title}
         </Text>
         <Card.Root mt={8}>
           <Card.Body as={Stack} gap={5}>
@@ -74,13 +74,19 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
               required
               size={{ base: 'sm', md: 'md' }}
             >
-              <Radio value="Male">Muž</Radio>
-              <Radio value="Female">Žena</Radio>
+              <Radio value="Male">
+                {resources.wizard.testatorIdentification.radio.male}
+              </Radio>
+              <Radio value="Female">
+                {resources.wizard.testatorIdentification.radio.female}
+              </Radio>
             </RadioGroupFormControl>
             <DateFormControl name="birthDate" label="Datum narození" required />
             <AddressGroupFormControl required label="Trvalé bydliště" />
             <Center>
-              <SubmitButton>Potvrdit údaje</SubmitButton>
+              <SubmitButton>
+                {resources.wizard.testatorIdentification.submit}
+              </SubmitButton>
             </Center>
           </Card.Body>
         </Card.Root>
