@@ -70,7 +70,7 @@ const AssetGroup = ({
   }
 
   return (
-    <Box p={4} borderWidth={1} borderRadius="md" mb={4} bg="gray.200">
+    <Box p={4} borderWidth={2} borderRadius="md" mb={4} bg="gray.100">
       <Heading size="md" mb={4}>
         {type}
       </Heading>
