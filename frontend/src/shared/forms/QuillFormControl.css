@@ -1,0 +1,32 @@
+.ql-editor {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.ql-editor p {
+  margin-bottom: 0.5em;
+}
+
+.ql-editor em,
+.ql-editor i {
+  font-style: italic !important;
+  font-synthesis: none;
+}
+
+.ql-editor strong,
+.ql-editor b {
+  font-weight: bold;
+}
+
+.ql-editor h1,
+.ql-editor h2,
+.ql-editor h3,
+.ql-editor h4,
+.ql-editor h5,
+.ql-editor h6 {
+  margin: 1em 0 0.5em;
+  line-height: 1.2;
+}
+
+.ql-snow .ql-picker.ql-font {
+  width: 120px;
+}

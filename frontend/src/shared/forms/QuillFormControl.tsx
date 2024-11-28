@@ -3,6 +3,7 @@ import ReactQuill from 'react-quill'
 import { BaseFieldControl, BaseFieldControlProps } from './BaseFieldControl'
 
 import 'react-quill/dist/quill.snow.css'
+import './QuillFormControl.css' // Add this import
 
 export interface QuillControlProps extends BaseFieldControlProps {
   placeholder?: string
@@ -13,10 +14,24 @@ const modules = {
     [{ header: [1, 2, 3, 4, 5, 6, false] }],
     ['bold', 'italic', 'underline', 'strike'],
     [{ list: 'ordered' }, { list: 'bullet' }],
-    ['link', 'image'],
+    ['link'],
     ['clean'],
   ],
 }
+
+const formats = [
+  'header',
+  'font',
+  'size',
+  'bold',
+  'italic',
+  'underline',
+  'strike',
+  'list',
+  'bullet',
+  'link',
+  'image',
+]
 
 export const QuillFormControl = ({
   placeholder,
@@ -32,6 +47,7 @@ export const QuillFormControl = ({
           readOnly={disabled}
           theme="snow"
           modules={modules}
+          formats={formats}
           style={{ height: '200px', marginBottom: '40px' }}
         />
       )}
