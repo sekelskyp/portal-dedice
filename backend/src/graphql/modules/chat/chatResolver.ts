@@ -10,6 +10,7 @@ import {
   Subscription,
 } from 'type-graphql'
 
+import { notifyUsersNewMessage } from '@backend/services/chatNotificationService'
 import { CustomContext } from '@backend/types/types'
 
 import { ChatMessage } from './chatMessage'
@@ -85,6 +86,15 @@ export class ChatResolver {
     await pubSub.publish(NEW_CHAT_MESSAGE, {
       newChatMessage: chatMessage,
       proceedingId,
+    })
+
+    await notifyUsersNewMessage({
+      chatId,
+      senderId: userId,
+      context,
+      senderDisplayName: user?.displayName ?? '',
+      senderEmail: user?.email ?? '',
+      messageBody: body,
     })
 
     return chatMessage

@@ -160,6 +160,23 @@ export class UserResolver {
     return user
   }
 
+  @Mutation(() => User)
+  async updateSendNotifications(
+    @Arg('sendNotifications') sendNotifications: boolean,
+    @Ctx() context: CustomContext
+  ): Promise<User> {
+    if (!context.authUser) throw new Error('User is not authenticated')
+
+    await context.userRepository.updateUserById(context.authUser.userId, {
+      sendNotifications,
+    })
+
+    const user = await getUserById(context.authUser.userId, context)
+    if (!user) throw new Error('User not found after profile update')
+
+    return user
+  }
+
   // FIELD RESOLVERS
 
   @FieldResolver(() => Address, { nullable: true })
