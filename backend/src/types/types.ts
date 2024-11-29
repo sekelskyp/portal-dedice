@@ -2,6 +2,7 @@ import { createPubSub } from '@graphql-yoga/subscription'
 import { MySql2Database } from 'drizzle-orm/mysql2'
 
 import { type getAddressRepository } from '@backend/graphql/modules/address/addressRepository'
+import { type getArticleRepository } from '@backend/graphql/modules/article/articleRepository'
 import { type getAssetRepository } from '@backend/graphql/modules/asset/assetRepository'
 import { type getBeneficiaryRepository } from '@backend/graphql/modules/beneficiary/beneficiaryRepository'
 import { type getChatMessageRepository } from '@backend/graphql/modules/chat/chatMessageRepository'
@@ -21,6 +22,7 @@ export type Db = MySql2Database<typeof schema>
 export type CustomContext = {
   db: Db
   authUser: JWTPayload | null
+  pubSub: ReturnType<typeof createPubSub>
   // repositories
   notaryRepository: ReturnType<typeof getNotaryRepository>
   userRepository: ReturnType<typeof getUserRepository>
@@ -38,7 +40,7 @@ export type CustomContext = {
   addressRepository: ReturnType<typeof getAddressRepository>
   chatRepository: ReturnType<typeof getChatRepository>
   chatMessageRepository: ReturnType<typeof getChatMessageRepository>
-  pubSub: ReturnType<typeof createPubSub>
+  articleRepository: ReturnType<typeof getArticleRepository>
 }
 
 export type JWTPayload = {

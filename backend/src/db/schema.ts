@@ -260,6 +260,15 @@ export const notaryDateRule = mysqlTable(
   })
 )
 
+export const article = mysqlTable('article', {
+  id: int('id').primaryKey().autoincrement(),
+  title: varchar('title', { length: 255 }).notNull(), // Article title
+  date: date('date').default(new Date()).notNull(),
+  // without cover image until i finish new file storage service
+  // coverImage: varchar('cover_image', { length: 500 }).notNull(),
+  content: text('content').notNull(), // Article content (stored as text)
+})
+
 // Custom lower function
 // https://orm.drizzle.team/docs/guides/unique-case-insensitive-email
 export function lower(email: AnyMySqlColumn): SQL<unknown> {
