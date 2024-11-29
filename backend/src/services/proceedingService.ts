@@ -335,14 +335,14 @@ export const getUsersForProceeding = async (
   proceedingId: number,
   context: CustomContext
 ) => {
-  const { beneficiaryRepository, proceedingRepository, notaryRepository } =
+  const { beneficiaryRepository, proceedingRepository, userRepository } =
     context
   const proceeding = await proceedingRepository.getProceedingById(proceedingId)
 
   const beneficiaries =
     await beneficiaryRepository.getBeneficiariesByProceedingId(proceedingId)
 
-  const notaryUser = await notaryRepository.getNotaryById(
+  const notaryUser = await userRepository.getUserByNotaryId(
     proceeding?.notaryId ?? -1
   )
 

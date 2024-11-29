@@ -8,9 +8,15 @@ export const notifyUsersNewMessage = async ({
   chatId,
   senderId,
   context,
+  senderDisplayName,
+  messageBody,
+  senderEmail,
 }: {
   chatId: number
   senderId: number
+  senderDisplayName: string
+  messageBody: string
+  senderEmail: string
   context: CustomContext
 }) => {
   const chat = await context.chatRepository.getChatById(chatId)
@@ -27,6 +33,9 @@ export const notifyUsersNewMessage = async ({
 
   const html = await renderTemplate('chatNotification', {
     proceedingName: proceeding.name,
+    senderName: senderDisplayName,
+    senderEmail,
+    messageBody,
   })
 
   for (const user of usersToNotify) {
@@ -38,15 +47,15 @@ export const notifyUsersNewMessage = async ({
     }
 
     if (!user.sendNotifications) {
-      console.log(
-        `Skipping email notification, notifications disabled for user ${user.id} for procedure ${proceeding.id}`
-      )
+      // console.log(
+      //   `Skipping email notification, notifications disabled for user ${user.id} for procedure ${proceeding.id}`
+      // )
       continue
     }
 
-    console.log(
-      `Sending email notification to user ${user.id} for procedure ${proceeding.id}`
-    )
+    // console.log(
+    //   `Sending email notification to user ${user.id} for procedure ${proceeding.id}`
+    // )
 
     try {
       await sendEmail({

@@ -92,6 +92,9 @@ export class ChatResolver {
       chatId,
       senderId: userId,
       context,
+      senderDisplayName: user?.displayName ?? '',
+      senderEmail: user?.email ?? '',
+      messageBody: body,
     })
 
     return chatMessage
