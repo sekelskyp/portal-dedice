@@ -23,6 +23,8 @@ import {
   SubmitButton,
 } from '@frontend/shared/forms'
 
+import useValidateUser from '../hooks/useValidateUser'
+
 const benefciarySchema = z.object({
   name: z
     .string({ required_error: 'Jméno je povinné' })
@@ -34,7 +36,7 @@ const benefciarySchema = z.object({
     .string({ required_error: 'Zadejte validní e-mailovou adresu' })
     .email('Zadejte validní e-mailovou adresu'),
 })
-
+/*
 const schema = z
   .object({
     name: z
@@ -57,7 +59,16 @@ const schema = z
       .min(1, 'Jméno je povinné'),
     contactEmail: z
       .string({ required_error: 'Zadejte validní e-mailovou adresu' })
-      .email('Zadejte validní e-mailovou adresu'),
+      .email('Zadejte validní e-mailovou adresu')
+      .refine(
+        async (email: string) => {
+          const result = await validate(email)
+          return !!result
+        },
+        {
+          message: 'Uživatel nebyl nalezen',
+        }
+      ),
     beneficiaries: z.array(benefciarySchema),
     addressStreet: z.string().min(1, 'Ulice je povinná.'),
     addressStreetNumber: z.string().min(1, 'Číslo popisné je povinné.'),
@@ -67,7 +78,7 @@ const schema = z
   .refine((data) => data.dateOfBirth < data.dateOfDeath, {
     message: 'Datum úmrtí musí být po datumu narození',
   })
-
+*/
 export type ProceedingFormProps = {
   errorMessage?: string
   onSubmit: (variables: {
@@ -93,6 +104,49 @@ export interface Beneficiary {
 }
 
 export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
+  const validate = useValidateUser()
+  const schema = z
+    .object({
+      name: z
+        .string({ required_error: 'Jméno je povinné' })
+        .min(1, 'Jméno je povinné'),
+      surname: z
+        .string({ required_error: 'Příjmení je povinné' })
+        .min(1, 'Příjmení je povinné'),
+      dateOfBirth: z
+        .date({ required_error: 'Datum narození je povinné.' })
+        .max(new Date(), 'Datum narození musí být v minulosti.'),
+      dateOfDeath: z
+        .date({ required_error: 'Datum narození je povinné.' })
+        .max(new Date(), 'Datum narození musí být v minulosti.'),
+      contactName: z
+        .string({ required_error: 'Jméno je povinné' })
+        .min(1, 'Jméno je povinné'),
+      contactSurname: z
+        .string({ required_error: 'Jméno je povinné' })
+        .min(1, 'Jméno je povinné'),
+      contactEmail: z
+        .string({ required_error: 'Zadejte validní e-mailovou adresu' })
+        .email('Zadejte validní e-mailovou adresu')
+        .refine(
+          async (email: string) => {
+            const result = await validate(email)
+            return !!result
+          },
+          {
+            message: 'Uživatel nebyl nalezen',
+          }
+        ),
+      beneficiaries: z.array(benefciarySchema),
+      addressStreet: z.string().min(1, 'Ulice je povinná.'),
+      addressStreetNumber: z.string().min(1, 'Číslo popisné je povinné.'),
+      addressMunicipality: z.string().min(1, 'Obec je povinná.'),
+      addressPostCode: z.string().min(1, 'PSČ je povinné.'),
+    })
+    .refine((data) => data.dateOfBirth < data.dateOfDeath, {
+      message: 'Datum úmrtí musí být po datumu narození',
+    })
+
   return (
     <Form
       onSubmit={onSubmit}

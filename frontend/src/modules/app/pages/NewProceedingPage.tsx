@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { Card, Heading, Text } from '@chakra-ui/react'
 
-import { useCreateProcedure } from '@frontend/modules/app/hooks/useCreateProcedure'
+import { useCreateProceeding } from '@frontend/modules/app/hooks/useCreateProceeding'
 import { useAuth } from '@frontend/modules/auth'
 import resources from '@frontend/resources'
 import { Alert } from '@frontend/shared/design-system'
@@ -11,7 +11,7 @@ import { Beneficiary, ProceedingForm } from './ProceedingForm'
 export function NewProceedingPage() {
   const { user } = useAuth()
   const [createProcedureRequest, createProcedureRequestState] =
-    useCreateProcedure()
+    useCreateProceeding()
 
   const handleProceedingFormSubmit = useCallback(
     async (variables: {
@@ -19,14 +19,14 @@ export function NewProceedingPage() {
       surname: string
       dateOfBirth: string
       dateOfDeath: string
-      contactName: string
-      contactSurname: string
-      contactEmail: string
-      beneficiaries: Beneficiary[]
       addressStreet: string
       addressStreetNumber: string
       addressMunicipality: string
       addressPostCode: string
+      contactName: string
+      contactSurname: string
+      contactEmail: string
+      beneficiaries: Beneficiary[]
     }) => {
       createProcedureRequest({
         variables: {
@@ -41,13 +41,9 @@ export function NewProceedingPage() {
               addressMunicipality: variables.addressMunicipality,
               addressPostCode: variables.addressPostCode,
             },
-            contactPerson: {
-              name: variables.contactName,
-              surname: variables.contactSurname,
-              email: variables.contactEmail,
-            },
-            beneficiaries: variables.beneficiaries,
-            beneficiaryId: +user?.beneficiaries[0].id!,
+            beneficiaryUserIds: variables.beneficiaries.map((ben) => ben.name),
+            mainBeneficiaryUserId: user?.id ?? '0',
+            startDate: new Date().toISOString(),
           },
         },
       })

@@ -1,19 +1,15 @@
 import { VStack } from '@chakra-ui/react'
 
-import { AuthUser } from '@frontend/modules/auth/auth-core'
-
 import { useGetMessages } from '../hooks/useGetMessages'
 
 import ChatMessage from './ChatMessage'
 
 interface ChatBodyProps {
   proceedingId: number
-  user: AuthUser
 }
 
-export default function ChatBody({ proceedingId, user }: ChatBodyProps) {
+export default function ChatBody({ proceedingId }: ChatBodyProps) {
   const messages = useGetMessages(proceedingId)
-  const displayName = user.displayName ?? `${user.name} ${user.surname}`
 
   if (messages.length === 0) return <p>Zadne zpravy</p>
 
@@ -24,7 +20,7 @@ export default function ChatBody({ proceedingId, user }: ChatBodyProps) {
           key={message.id}
           body={message.body}
           createdAt={message.createdAt}
-          displayName={displayName}
+          displayName={message.displayName!}
         />
       ))}
     </VStack>

@@ -19,7 +19,7 @@ const documents = {
     types.GetNotaryGroupsDocument,
   '\n  mutation addMessage($body: String!, $proceedingId: Int!, $userId: Int!) {\n    addChatMessage(body: $body, proceedingId: $proceedingId, userId: $userId) {\n      chatId\n      body\n      userId\n    }\n  }\n':
     types.AddMessageDocument,
-  '\n  query ChatByProceedingId($proceedingId: Int!) {\n    chatByProceedingId(proceedingId: $proceedingId) {\n      chatMessages {\n        body\n        chatId\n        createdAt\n        id\n        userId\n      }\n    }\n  }\n':
+  '\n  query ChatByProceedingId($proceedingId: Int!) {\n    chatByProceedingId(proceedingId: $proceedingId) {\n      chatMessages {\n        body\n        chatId\n        createdAt\n        id\n        userId\n        displayName\n      }\n    }\n  }\n':
     types.ChatByProceedingIdDocument,
   '\n  subscription newChatMessage($proceedingId: Int!) {\n    newChatMessage(proceedingId: $proceedingId) {\n      chatId\n      body\n      userId\n      createdAt\n      id\n    }\n  }\n':
     types.NewChatMessageDocument,
@@ -105,8 +105,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query ChatByProceedingId($proceedingId: Int!) {\n    chatByProceedingId(proceedingId: $proceedingId) {\n      chatMessages {\n        body\n        chatId\n        createdAt\n        id\n        userId\n      }\n    }\n  }\n'
-): (typeof documents)['\n  query ChatByProceedingId($proceedingId: Int!) {\n    chatByProceedingId(proceedingId: $proceedingId) {\n      chatMessages {\n        body\n        chatId\n        createdAt\n        id\n        userId\n      }\n    }\n  }\n']
+  source: '\n  query ChatByProceedingId($proceedingId: Int!) {\n    chatByProceedingId(proceedingId: $proceedingId) {\n      chatMessages {\n        body\n        chatId\n        createdAt\n        id\n        userId\n        displayName\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query ChatByProceedingId($proceedingId: Int!) {\n    chatByProceedingId(proceedingId: $proceedingId) {\n      chatMessages {\n        body\n        chatId\n        createdAt\n        id\n        userId\n        displayName\n      }\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

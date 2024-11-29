@@ -102,6 +102,7 @@ export type ChatMessage = {
   body: Scalars['String']['output']
   chatId: Scalars['ID']['output']
   createdAt: Scalars['DateTimeISO']['output']
+  displayName?: Maybe<Scalars['String']['output']>
   id: Scalars['ID']['output']
   userId: Scalars['ID']['output']
 }
@@ -548,6 +549,7 @@ export type ChatByProceedingIdQuery = {
       createdAt: any
       id: string
       userId: string
+      displayName?: string | null
     }> | null
   }
 }
@@ -1267,6 +1269,10 @@ export const ChatByProceedingIdDocument = {
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'userId' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'displayName' },
                       },
                     ],
                   },

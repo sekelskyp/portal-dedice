@@ -12,7 +12,7 @@ const PROCEEDING_MUTATION = gql(/* GraphQL */ `
   }
 `)
 
-export function useCreateProcedure() {
+export function useCreateProceeding() {
   const navigate = useNavigate()
 
   const [createProcedureRequest, createProcedureRequestState] = useMutation(

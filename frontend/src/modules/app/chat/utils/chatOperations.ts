@@ -19,6 +19,7 @@ export const GET_MESSAGES = gql(/* GraphQL */ `
         createdAt
         id
         userId
+        displayName
       }
     }
   }
