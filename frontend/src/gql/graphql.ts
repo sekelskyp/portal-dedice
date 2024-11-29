@@ -547,9 +547,9 @@ export type ChatByProceedingIdQuery = {
       body: string
       chatId: string
       createdAt: any
+      displayName?: string | null
       id: string
       userId: string
-      displayName?: string | null
     }> | null
   }
 }
@@ -562,11 +562,12 @@ export type NewChatMessageSubscription = {
   __typename?: 'Subscription'
   newChatMessage: {
     __typename?: 'ChatMessage'
-    chatId: string
     body: string
-    userId: string
+    chatId: string
     createdAt: any
+    displayName?: string | null
     id: string
+    userId: string
   }
 }
 
@@ -869,6 +870,15 @@ export type UpdateAssetMutation = {
     carType?: string | null
     cin?: string | null
   } | null
+}
+
+export type ValidateUserQueryVariables = Exact<{
+  email: Scalars['String']['input']
+}>
+
+export type ValidateUserQuery = {
+  __typename?: 'Query'
+  getUserByEmail?: { __typename?: 'User'; id: string } | null
 }
 
 export type GetUserByIdQueryVariables = Exact<{
@@ -1265,14 +1275,14 @@ export const ChatByProceedingIdDocument = {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'createdAt' },
                       },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'displayName' },
+                      },
                       { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'userId' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'displayName' },
                       },
                     ],
                   },
@@ -1327,11 +1337,12 @@ export const NewChatMessageDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'chatId' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'body' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'userId' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'chatId' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'displayName' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'userId' } },
               ],
             },
           },
@@ -2551,6 +2562,57 @@ export const UpdateAssetDocument = {
     },
   ],
 } as unknown as DocumentNode<UpdateAssetMutation, UpdateAssetMutationVariables>
+export const ValidateUserDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'validateUser' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'email' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getUserByEmail' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'email' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'email' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ValidateUserQuery, ValidateUserQueryVariables>
 export const GetUserByIdDocument = {
   kind: 'Document',
   definitions: [

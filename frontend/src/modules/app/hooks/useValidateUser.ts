@@ -12,12 +12,18 @@ export default function useValidateUser() {
   const [validateUser] = useLazyQuery(VALIDATE_USER)
 
   const validate = async (email: string) => {
-    const { data } = await validateUser({ variables: { email } })
-    return {
-      isValid: !!data.getUserByEmail.id,
-      userId: data.getUserByEmail.id,
+    try {
+      const { data } = await validateUser({ variables: { email } })
+      return {
+        isValid: !!data.getUserByEmail.id,
+        userId: data.getUserByEmail.id,
+      }
+    } catch (error) {
+      return {
+        isValid: false,
+        userId: null,
+      }
     }
   }
-
   return validate
 }

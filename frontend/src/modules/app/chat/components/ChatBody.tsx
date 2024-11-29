@@ -9,12 +9,14 @@ interface ChatBodyProps {
 }
 
 export default function ChatBody({ proceedingId }: ChatBodyProps) {
-  const messages = useGetMessages(proceedingId)
+  const { messages, loading, error } = useGetMessages(proceedingId)
 
-  if (messages.length === 0) return <p>Zadne zpravy</p>
+  if (loading) return <p>Načítání...</p>
+  if (error) return <p>Došlo k chybě při načítání zpráv</p>
+  if (messages.length === 0) return <p>Žádné zprávy</p>
 
   return (
-    <VStack>
+    <VStack gap={4} align="stretch">
       {messages.map((message) => (
         <ChatMessage
           key={message.id}

@@ -25,60 +25,6 @@ import {
 
 import useValidateUser from '../hooks/useValidateUser'
 
-const benefciarySchema = z.object({
-  name: z
-    .string({ required_error: 'Jméno je povinné' })
-    .min(1, 'Jméno je povinné'),
-  surname: z
-    .string({ required_error: 'Příjmení je povinné' })
-    .min(1, 'Příjmení je povinné'),
-  email: z
-    .string({ required_error: 'Zadejte validní e-mailovou adresu' })
-    .email('Zadejte validní e-mailovou adresu'),
-})
-/*
-const schema = z
-  .object({
-    name: z
-      .string({ required_error: 'Jméno je povinné' })
-      .min(1, 'Jméno je povinné'),
-    surname: z
-      .string({ required_error: 'Příjmení je povinné' })
-      .min(1, 'Příjmení je povinné'),
-    dateOfBirth: z
-      .date({ required_error: 'Datum narození je povinné.' })
-      .max(new Date(), 'Datum narození musí být v minulosti.'),
-    dateOfDeath: z
-      .date({ required_error: 'Datum narození je povinné.' })
-      .max(new Date(), 'Datum narození musí být v minulosti.'),
-    contactName: z
-      .string({ required_error: 'Jméno je povinné' })
-      .min(1, 'Jméno je povinné'),
-    contactSurname: z
-      .string({ required_error: 'Jméno je povinné' })
-      .min(1, 'Jméno je povinné'),
-    contactEmail: z
-      .string({ required_error: 'Zadejte validní e-mailovou adresu' })
-      .email('Zadejte validní e-mailovou adresu')
-      .refine(
-        async (email: string) => {
-          const result = await validate(email)
-          return !!result
-        },
-        {
-          message: 'Uživatel nebyl nalezen',
-        }
-      ),
-    beneficiaries: z.array(benefciarySchema),
-    addressStreet: z.string().min(1, 'Ulice je povinná.'),
-    addressStreetNumber: z.string().min(1, 'Číslo popisné je povinné.'),
-    addressMunicipality: z.string().min(1, 'Obec je povinná.'),
-    addressPostCode: z.string().min(1, 'PSČ je povinné.'),
-  })
-  .refine((data) => data.dateOfBirth < data.dateOfDeath, {
-    message: 'Datum úmrtí musí být po datumu narození',
-  })
-*/
 export type ProceedingFormProps = {
   errorMessage?: string
   onSubmit: (variables: {
@@ -105,6 +51,19 @@ export interface Beneficiary {
 
 export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
   const validate = useValidateUser()
+
+  const beneficiarySchema = z.object({
+    name: z
+      .string({ required_error: 'Jméno je povinné' })
+      .min(1, 'Jméno je povinné'),
+    surname: z
+      .string({ required_error: 'Příjmení je povinné' })
+      .min(1, 'Příjmení je povinné'),
+    email: z
+      .string({ required_error: 'Zadejte validní e-mailovou adresu' })
+      .email('Zadejte validní e-mailovou adresu'),
+  })
+
   const schema = z
     .object({
       name: z
@@ -128,21 +87,37 @@ export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
       contactEmail: z
         .string({ required_error: 'Zadejte validní e-mailovou adresu' })
         .email('Zadejte validní e-mailovou adresu')
-        .refine(
-          async (email: string) => {
-            const result = await validate(email)
-            return !!result
-          },
-          {
-            message: 'Uživatel nebyl nalezen',
+        .superRefine(async (email, ctx) => {
+          const { isValid } = await validate(email)
+          if (!isValid) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: 'Uživatel se zadanou emailovou adresou neexistuje',
+            })
+            return false
           }
-        ),
-      beneficiaries: z.array(benefciarySchema),
+          return true
+        }),
+      beneficiaries: z.array(beneficiarySchema),
       addressStreet: z.string().min(1, 'Ulice je povinná.'),
       addressStreetNumber: z.string().min(1, 'Číslo popisné je povinné.'),
       addressMunicipality: z.string().min(1, 'Obec je povinná.'),
       addressPostCode: z.string().min(1, 'PSČ je povinné.'),
     })
+    .refine(
+      async (data) => {
+        if (!data.beneficiaries?.length) return true
+
+        const results = await Promise.all(
+          data.beneficiaries.map((b) => validate(b.email))
+        )
+        return results.every(({ isValid }) => isValid)
+      },
+      {
+        message: 'Někteří dědicové nebyli nalezeni',
+        path: ['beneficiaries'],
+      }
+    )
     .refine((data) => data.dateOfBirth < data.dateOfDeath, {
       message: 'Datum úmrtí musí být po datumu narození',
     })

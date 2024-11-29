@@ -5,43 +5,51 @@ import { ChatMessage } from '@frontend/gql/graphql'
 import { GET_MESSAGES, MESSAGE_SUBSCRIPTION } from '../utils/chatOperations'
 
 export function useGetMessages(proceedingId: number) {
-  const queryResponse = useQuery(GET_MESSAGES, {
-    variables: { proceedingId: proceedingId },
+  const { data, loading, error } = useQuery(GET_MESSAGES, {
+    variables: { proceedingId },
+    fetchPolicy: 'cache-and-network',
   })
 
   useSubscription(MESSAGE_SUBSCRIPTION, {
-    variables: {
-      proceedingId: proceedingId,
-    },
-    onData: ({ data, client }) => {
-      const newMessage = data.data?.newChatMessage
+    variables: { proceedingId },
+    onData: ({ data: subscriptionData, client }) => {
+      const newMessage = subscriptionData.data?.newChatMessage
       if (!newMessage) return
 
-      client.cache.updateQuery<{
-        chatByInheritanceProceedingId: {
+      const currentData = client.cache.readQuery<{
+        chatByProceedingId: {
           chatMessages: ChatMessage[]
         }
-      }>(
-        {
-          query: GET_MESSAGES,
-          variables: { proceedingId: proceedingId },
-        },
-        (existing) => {
-          if (!existing) return existing
+      }>({
+        query: GET_MESSAGES,
+        variables: { proceedingId },
+      })
 
-          return {
-            chatByInheritanceProceedingId: {
-              ...existing.chatByInheritanceProceedingId,
+      const messageExists = currentData?.chatByProceedingId.chatMessages.some(
+        (msg) => msg.id === newMessage.id
+      )
+
+      if (!messageExists) {
+        client.cache.writeQuery({
+          query: GET_MESSAGES,
+          variables: { proceedingId },
+          data: {
+            chatByProceedingId: {
+              ...currentData?.chatByProceedingId,
               chatMessages: [
-                ...(existing.chatByInheritanceProceedingId.chatMessages || []),
+                ...(currentData?.chatByProceedingId.chatMessages || []),
                 newMessage,
               ],
             },
-          }
-        }
-      )
+          },
+        })
+      }
     },
   })
 
-  return queryResponse.data?.chatByProceedingId.chatMessages ?? []
+  return {
+    messages: data?.chatByProceedingId.chatMessages ?? [],
+    loading,
+    error,
+  }
 }
