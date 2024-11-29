@@ -326,3 +326,40 @@ export async function assignNotaryToProcedure(
     notaryId,
   })
 }
+
+/**
+ * Get all users associated with a proceeding.
+ * Includes the notary and beneficiaries.
+ */
+export const getUsersForProceeding = async (
+  proceedingId: number,
+  context: CustomContext
+) => {
+  const { beneficiaryRepository, proceedingRepository, notaryRepository } =
+    context
+  const proceeding = await proceedingRepository.getProceedingById(proceedingId)
+
+  const beneficiaries =
+    await beneficiaryRepository.getBeneficiariesByProceedingId(proceedingId)
+
+  const notaryUser = await notaryRepository.getNotaryById(
+    proceeding?.notaryId ?? -1
+  )
+
+  const notaryUserId = notaryUser?.id
+
+  const beneficiariesUserIds = beneficiaries
+    .map((beneficiary) => beneficiary.userId)
+    .filter(
+      (userId): userId is number => userId !== null && userId !== undefined
+    )
+
+  const userIds = [
+    ...(typeof notaryUserId === 'number' ? [notaryUserId] : []),
+    ...beneficiariesUserIds,
+  ]
+
+  const users = await context.userRepository.getUsersByIds(userIds)
+
+  return users
+}

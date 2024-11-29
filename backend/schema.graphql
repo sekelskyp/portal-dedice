@@ -144,6 +144,7 @@ type Mutation {
   updateAsset(data: AssetInput!, id: Int!): Asset
   updateBeneficiary(data: BeneficiaryInput!, id: Int!): Beneficiary!
   updateProfile(profileInput: ProfileInput!): User!
+  updateSendNotifications(sendNotifications: Boolean!): User!
 }
 
 type Notary {
