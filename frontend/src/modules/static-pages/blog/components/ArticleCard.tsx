@@ -12,6 +12,7 @@ export type Article = {
 }
 
 export function ArticleCard({
+  id,
   title,
   description,
   createDate,
@@ -39,7 +40,9 @@ export function ArticleCard({
         <Card.Description textAlign="justify">{description}</Card.Description>
       </Card.Body>
       <Card.Footer gap="2">
-        <RouterNavLink to={route.home()}>Zobrazit více</RouterNavLink>
+        <RouterNavLink to={route.detailArticle(id.toString())}>
+          Zobrazit více
+        </RouterNavLink>
       </Card.Footer>
     </Card.Root>
   )
