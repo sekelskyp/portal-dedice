@@ -1,4 +1,4 @@
-import { Box, VStack } from '@chakra-ui/react'
+import { Box, Heading, VStack } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -8,6 +8,7 @@ import { Form } from '@frontend/shared/forms/Form'
 import { InputFormControl } from '@frontend/shared/forms/InputFormControl'
 import { QuillFormControl } from '@frontend/shared/forms/QuillFormControl'
 import { SubmitButton } from '@frontend/shared/forms/SubmitButton'
+import { Page } from '@frontend/shared/layout'
 
 const articleSchema = z.object({
   title: z
@@ -30,43 +31,55 @@ export const NewArticlePage = () => {
   const currentDate = new Date()
 
   return (
-    <Box p={4} maxW="800px" mx="auto">
-      <Form<ArticleFormData>
-        onSubmit={handleSubmit}
-        defaultValues={{
-          date: currentDate,
-        }}
-        resolver={zodResolver(articleSchema)}
-        noValidate
+    <Page>
+      <Box
+        maxW="80%"
+        mx="auto"
+        bg="grey.100"
+        p={6}
+        borderRadius="lg"
+        boxShadow="md"
       >
-        <VStack gap={4} align="stretch">
-          <InputFormControl
-            name="title"
-            label="Titulek"
-            placeholder="Vložte titulek"
-          />
+        <Heading as="h1" size={'4xl'} mb={6}>
+          Vytvoření článku
+        </Heading>
+        <Form<ArticleFormData>
+          onSubmit={handleSubmit}
+          defaultValues={{
+            date: currentDate,
+          }}
+          resolver={zodResolver(articleSchema)}
+          noValidate
+        >
+          <VStack gap={4} align="stretch">
+            <InputFormControl
+              name="title"
+              label="Titulek"
+              placeholder="Vložte titulek"
+            />
 
-          <DateFormControl name="date" label="Datum" />
+            <DateFormControl name="date" label="Datum" />
 
-          <FileUploadFormControl
-            name="image"
-            label="Obrázek"
-            accept="image/*"
-            dropzoneLabel="Přetáhněte sem obrázek nebo klikněte pro výběr"
-            dropzoneDescription="Podporované formáty: JPG, PNG"
-            height="250px"
-            width="50%"
-          />
+            <FileUploadFormControl
+              name="image"
+              label="Obrázek"
+              accept="image/*"
+              dropzoneLabel="Přetáhněte sem obrázek nebo klikněte pro výběr"
+              dropzoneDescription="Podporované formáty: JPG, PNG"
+              height="250px"
+              width="50%"
+            />
 
-          <QuillFormControl
-            name="text"
-            label="Obsah"
-            placeholder="Vložte text článku"
-          />
+            <QuillFormControl
+              name="text"
+              label="Obsah"
+              placeholder="Vložte text článku"
+            />
 
-          <SubmitButton>Vytvořit článek</SubmitButton>
-        </VStack>
-      </Form>
-    </Box>
+            <SubmitButton>Vytvořit článek</SubmitButton>
+          </VStack>
+        </Form>
+      </Box>
+    </Page>
   )
 }
