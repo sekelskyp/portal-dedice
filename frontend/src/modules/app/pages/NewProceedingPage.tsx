@@ -2,14 +2,12 @@ import { useCallback } from 'react'
 import { Card, Heading, Text } from '@chakra-ui/react'
 
 import { useCreateProceeding } from '@frontend/modules/app/hooks/useCreateProceeding'
-import { useAuth } from '@frontend/modules/auth'
 import resources from '@frontend/resources'
 import { Alert } from '@frontend/shared/design-system'
 
 import { Beneficiary, ProceedingForm } from './ProceedingForm'
 
 export function NewProceedingPage() {
-  const { user } = useAuth()
   const [createProcedureRequest, createProcedureRequestState] =
     useCreateProceeding()
 
@@ -26,6 +24,7 @@ export function NewProceedingPage() {
       contactName: string
       contactSurname: string
       contactEmail: string
+      contactUserId: string
       beneficiaries: Beneficiary[]
     }) => {
       createProcedureRequest({
@@ -41,14 +40,16 @@ export function NewProceedingPage() {
               addressMunicipality: variables.addressMunicipality,
               addressPostCode: variables.addressPostCode,
             },
-            beneficiaryUserIds: variables.beneficiaries.map((ben) => ben.name),
-            mainBeneficiaryUserId: user?.id ?? '0',
+            beneficiaryUserIds: variables.beneficiaries.map(
+              (ben) => ben.userId!
+            ),
+            mainBeneficiaryUserId: variables.contactUserId,
             startDate: new Date().toISOString(),
           },
         },
       })
     },
-    [createProcedureRequest, user]
+    [createProcedureRequest]
   )
 
   return (

@@ -39,14 +39,16 @@ export type ProceedingFormProps = {
     contactName: string
     contactSurname: string
     contactEmail: string
+    contactUserId: string
     beneficiaries: Beneficiary[]
   }) => void
 }
 
 export interface Beneficiary {
+  email: string
   name: string
   surname: string
-  email: string
+  userId?: string
 }
 
 export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
@@ -62,6 +64,7 @@ export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
     email: z
       .string({ required_error: 'Zadejte validní e-mailovou adresu' })
       .email('Zadejte validní e-mailovou adresu'),
+    userId: z.string().optional(),
   })
 
   const schema = z
@@ -86,40 +89,47 @@ export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
         .min(1, 'Jméno je povinné'),
       contactEmail: z
         .string({ required_error: 'Zadejte validní e-mailovou adresu' })
-        .email('Zadejte validní e-mailovou adresu')
-        .superRefine(async (email, ctx) => {
-          const { isValid } = await validate(email)
-          if (!isValid) {
-            ctx.addIssue({
-              code: z.ZodIssueCode.custom,
-              message: 'Uživatel se zadanou emailovou adresou neexistuje',
-            })
-            return false
-          }
-          return true
-        }),
+        .email('Zadejte validní e-mailovou adresu'),
+      contactUserId: z.string().optional(),
       beneficiaries: z.array(beneficiarySchema),
       addressStreet: z.string().min(1, 'Ulice je povinná.'),
       addressStreetNumber: z.string().min(1, 'Číslo popisné je povinné.'),
       addressMunicipality: z.string().min(1, 'Obec je povinná.'),
       addressPostCode: z.string().min(1, 'PSČ je povinné.'),
     })
-    .refine(
-      async (data) => {
-        if (!data.beneficiaries?.length) return true
-
-        const results = await Promise.all(
-          data.beneficiaries.map((b) => validate(b.email))
-        )
-        return results.every(({ isValid }) => isValid)
-      },
-      {
-        message: 'Někteří dědicové nebyli nalezeni',
-        path: ['beneficiaries'],
-      }
-    )
     .refine((data) => data.dateOfBirth < data.dateOfDeath, {
       message: 'Datum úmrtí musí být po datumu narození',
+    })
+    .superRefine(async (data, ctx) => {
+      const { userId, isValid } = await validate(data.contactEmail)
+      if (!isValid) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Uživatel s emailovou adresou neexistuje',
+          path: [`contactEmail`],
+        })
+      } else {
+        data.contactUserId = userId
+      }
+      return isValid
+    })
+    .superRefine(async (data, ctx) => {
+      const results = await Promise.all(
+        data.beneficiaries.map(async (ben, index) => {
+          const { isValid, userId } = await validate(ben.email)
+          if (!isValid) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: 'Tento email není registrovaný v systému',
+              path: [`beneficiaries.${index}.email`],
+            })
+          } else {
+            data.beneficiaries[index].userId = userId
+          }
+          return isValid
+        })
+      )
+      return results.every((result) => result)
     })
 
   return (
@@ -235,7 +245,6 @@ const BeneficiarySection = () => {
                 >
                   <Input value={user?.name} />
                 </Field>
-
                 <Field
                   label={resources.portal.forms.proceedingForm.surname}
                   disabled

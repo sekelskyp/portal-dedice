@@ -13,17 +13,24 @@ export default function useValidateUser() {
 
   const validate = async (email: string) => {
     try {
-      const { data } = await validateUser({ variables: { email } })
+      const { data, error } = await validateUser({
+        variables: { email },
+        fetchPolicy: 'cache-first',
+      })
+
+      if (error) {
+        throw new Error('Validation failed')
+      }
+
       return {
-        isValid: !!data.getUserByEmail.id,
-        userId: data.getUserByEmail.id,
+        isValid: !!data?.getUserByEmail?.id,
+        userId: data?.getUserByEmail?.id,
       }
     } catch (error) {
-      return {
-        isValid: false,
-        userId: null,
-      }
+      console.error('User validation error:', error)
+      throw new Error('Nepodařilo se ověřit email')
     }
   }
+
   return validate
 }
