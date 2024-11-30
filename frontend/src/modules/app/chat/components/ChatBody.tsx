@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react'
 import { Text, VStack } from '@chakra-ui/react'
 
+import { useAuth } from '@frontend/modules/auth/auth-core'
+
 import { useGetMessages } from '../hooks/useGetMessages'
 
 import ChatMessage from './ChatMessage'
@@ -10,10 +12,12 @@ interface ChatBodyProps {
 }
 
 export default function ChatBody({ proceedingId }: ChatBodyProps) {
+  const { user } = useAuth()
   const { messages, loading, error } = useGetMessages(proceedingId)
 
-  const bottomRef = useRef<HTMLDivElement>(null)
+  const loggedUserId = user?.id!
 
+  const bottomRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     bottomRef.current?.scrollIntoView({
       behavior: 'smooth',
@@ -37,6 +41,7 @@ export default function ChatBody({ proceedingId }: ChatBodyProps) {
             body={message.body}
             createdAt={message.createdAt}
             displayName={message.displayName!}
+            isCurrent={message.userId === loggedUserId}
           />
         ))
       )}
