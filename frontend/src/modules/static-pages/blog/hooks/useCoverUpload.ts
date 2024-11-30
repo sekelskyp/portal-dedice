@@ -7,11 +7,22 @@ const MAX_FILE_SIZE = 10000000
 const TOAST_DURATION = 5000
 const MAX_FILE_COUNT = 1
 const ACCEPTED_FILE_TYPES = ['image/jpeg', 'image/png', 'image/jpg']
+const MIN_IMAGE_WIDTH = 400
+
+const checkImageDimensions = (file: File): Promise<boolean> => {
+  return new Promise((resolve) => {
+    const img = new Image()
+    img.src = URL.createObjectURL(file)
+    img.onload = () => {
+      resolve(img.width >= MIN_IMAGE_WIDTH)
+    }
+  })
+}
 
 export function useCoverUpload() {
   const [{ files }, setState] = useState<{ files: File[] }>({ files: [] })
 
-  const handleCoverUpload = (details: FileUploadFileChangeDetails) => {
+  const handleCoverUpload = async (details: FileUploadFileChangeDetails) => {
     const { acceptedFiles, rejectedFiles } = details
 
     if (rejectedFiles.length > 0) {
@@ -49,12 +60,22 @@ export function useCoverUpload() {
         ACCEPTED_FILE_TYPES.includes(file.type) &&
         file.size <= MAX_FILE_SIZE
       ) {
-        setState({ files: [file] })
-        toaster.create({
-          title: 'Soubor byl úspěsně vložen.',
-          type: 'success',
-          duration: TOAST_DURATION,
-        })
+        const isValidDimensions = await checkImageDimensions(file)
+        if (isValidDimensions) {
+          setState({ files: [file] })
+          toaster.create({
+            title: 'Soubor byl úspěsně vložen.',
+            type: 'success',
+            duration: TOAST_DURATION,
+          })
+        } else {
+          toaster.create({
+            title:
+              'Obrázek je příliš malý. Zvolete prosím obrázek s minimální šířkou 400 px.',
+            type: 'error',
+            duration: TOAST_DURATION,
+          })
+        }
       } else {
         toaster.create({
           title: 'Při vložení souboru došlo k neočekávané chybě.',
