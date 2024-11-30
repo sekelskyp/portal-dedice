@@ -10,7 +10,7 @@ export interface UserInsertInput
 export function getUserRepository(db: Db) {
   async function getUserById(id: number): Promise<UserEntity | null> {
     const [result] = await db.select().from(user).where(eq(user.id, id))
-    return result
+    return result || null
   }
 
   async function getUsersByIds(ids: number[]): Promise<UserEntity[]> {

@@ -58,14 +58,22 @@ export class ArticleResolver {
   @Mutation(() => Boolean)
   async deleteArticles(
     @Arg('ids', () => [Int]) ids: number[],
-    @Ctx() { articleRepository }: CustomContext
+    @Ctx() context: CustomContext
   ): Promise<boolean> {
-    const articles = await articleRepository.getArticlesByIds(ids)
-    if (articles.length !== ids.length) {
-      throw new Error('Some articles were not found')
+    if (!context.authUser) {
+      throw new Error('Not authenticated')
+    }
+    const userRecord = await context.userRepository.getUserById(
+      context.authUser.userId
+    )
+    if (!userRecord) {
+      throw new Error('User not found')
+    }
+    if (userRecord.type !== 'Admin') {
+      throw new Error('Not authorized')
     }
 
-    await articleRepository.deleteArticlesByIds(ids)
+    await context.articleRepository.deleteArticlesByIds(ids)
     return true
   }
 }

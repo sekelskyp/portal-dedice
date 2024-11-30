@@ -43,6 +43,13 @@
       "when": 1732649947867,
       "tag": "0005_real_human_fly",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1732983241129,
+      "tag": "0006_mute_nextwave",
+      "breakpoints": true
     }
   ]
 }
