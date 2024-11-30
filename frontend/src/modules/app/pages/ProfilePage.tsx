@@ -80,7 +80,14 @@ export const ProfilePage = () => {
     variables: { getUserByIdId: +auth.user!.id },
   })
 
-  const [updateProfile] = useMutation(UPDATE_PROFILE_MUTATION)
+  console.log(data)
+
+  const [updateProfile] = useMutation(UPDATE_PROFILE_MUTATION, {
+    onError: (error) => {
+      console.error(error)
+      toaster.error({ title: 'Nepodařilo se uložit profil' })
+    },
+  })
 
   const onSubmit = (variables: ProfileInput) => {
     console.log(variables)
@@ -92,7 +99,7 @@ export const ProfilePage = () => {
         if (!res.data)
           throw new Error('No data returned from updateProfile mutation')
 
-        toaster.success({ title: 'Profil byl úspěšně uložen' })
+        toaster.success({ title: 'Profil byl úspěšně uložen.' })
         auth.signIn({
           token: auth.token,
           user: {
@@ -101,7 +108,7 @@ export const ProfilePage = () => {
         })
       })
       .catch(() => {
-        toaster.error({ title: 'Nepodařilo se uložit profil' })
+        toaster.error({ title: 'Nepodařilo se uložit profil.' })
       })
   }
 
@@ -113,7 +120,18 @@ export const ProfilePage = () => {
       <Card.Body>
         <ProfileForm
           loading={loading}
-          defaultValues={data?.getUserById ?? { name: '', surname: '' }}
+          defaultValues={{
+            name: data?.getUserById?.name ?? '',
+            surname: data?.getUserById?.surname ?? '',
+            displayName: data?.getUserById?.displayName ?? '',
+            phone: data?.getUserById?.phone ?? '',
+            street: data?.getUserById?.address?.street ?? '',
+            streetNumber: data?.getUserById?.address?.streetNumber ?? '',
+            municipality: data?.getUserById?.address?.municipality ?? '',
+            postalCode: data?.getUserById?.address?.postalCode ?? '',
+            gender: data?.getUserById?.gender ?? '',
+            sendNotifications: data?.getUserById?.sendNotifications ?? false,
+          }}
           onSubmit={onSubmit}
         />
       </Card.Body>
@@ -126,10 +144,10 @@ const schema = z.object({
   surname: z.string().min(1),
   displayName: z.string().min(1),
   phone: z.string().min(9).optional().nullish(),
-  addressStreet: z.string().optional().nullish(),
-  addressStreetNumber: z.string().optional().nullish(),
-  addressMunicipality: z.string().optional().nullish(),
-  addressPostCode: z.string().optional().nullish(),
+  street: z.string().optional().nullish(),
+  streetNumber: z.string().optional().nullish(),
+  municipality: z.string().optional().nullish(),
+  postalCode: z.string().optional().nullish(),
   gender: z.string().optional().nullish(),
   sendNotifications: z.boolean().optional().nullish(),
 })

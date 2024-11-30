@@ -23,7 +23,7 @@ const schema = z.object({
   street: z.string().min(1, 'Ulice je povinná.'),
   streetNumber: z.string().min(1, 'Číslo popisné je povinné.'),
   municipality: z.string().min(1, 'Obec je povinná.'),
-  postCode: z.string().min(1, 'PSČ je povinné.'),
+  postalCode: z.string().min(1, 'PSČ je povinné.'),
 })
 
 type NextStepProps = {
@@ -53,7 +53,7 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
         birthDate: testatorData.birthDate || undefined!,
         street: testatorData.street || '',
         municipality: testatorData.municipality || '',
-        postCode: testatorData.postCode || '',
+        postalCode: testatorData.postalCode || '',
         streetNumber: testatorData.streetNumber || '',
       }}
     >

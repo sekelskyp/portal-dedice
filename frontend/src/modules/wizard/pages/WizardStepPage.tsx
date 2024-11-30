@@ -19,7 +19,7 @@ type TestatorData = {
   street?: string
   streetNumber?: string
   municipality?: string
-  postCode?: string
+  postalCode?: string
 }
 
 interface TestatorDataContextProps {

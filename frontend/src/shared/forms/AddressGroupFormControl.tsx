@@ -43,7 +43,7 @@ export const AddressGroupFormControl = ({
                 setValue('municipality', address.municipality, {
                   shouldValidate: true,
                 })
-                setValue('postCode', address.postCode, {
+                setValue('postalCode', address.postalCode, {
                   shouldValidate: true,
                 })
               }}
@@ -67,7 +67,7 @@ export const AddressGroupFormControl = ({
             <InputFormControl
               flex={1}
               required={required}
-              name="postCode"
+              name="postalCode"
               label="PSČ"
             />
           </HStack>

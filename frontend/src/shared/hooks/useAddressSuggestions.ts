@@ -25,7 +25,7 @@ export interface Address {
   street: string
   streetNumber: string
   municipality: string
-  postCode: string
+  postalCode: string
 }
 
 export function suggestionToAddress(suggestion?: Suggestion): Address {
@@ -34,7 +34,7 @@ export function suggestionToAddress(suggestion?: Suggestion): Address {
       street: '',
       streetNumber: '',
       municipality: '',
-      postCode: '',
+      postalCode: '',
     }
   }
 
@@ -48,7 +48,7 @@ export function suggestionToAddress(suggestion?: Suggestion): Address {
     municipality: suggestion.regionalStructure.find(
       (x) => x.type === 'regional.municipality'
     )?.name!,
-    postCode: suggestion.zip!,
+    postalCode: suggestion.zip!,
   }
 }
 
