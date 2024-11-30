@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client/react/hooks/useQuery'
-import { Box, Heading } from '@chakra-ui/react'
+import { Box, Heading, Text } from '@chakra-ui/react'
 
 import { GET_CHAT_HEADER } from '../utils/chatOperations.ts'
 
@@ -12,6 +12,8 @@ export default function ChatHeader({ proceedingId }: ChatHeaderProps) {
     variables: { getProceedingByIdId: proceedingId },
   })
 
+  const proceedingName = data?.getProceedingById?.name
+
   const beneficiaryNames =
     data?.getProceedingById?.beneficiaries?.map(
       (beneficiary) => beneficiary.user?.displayName
@@ -20,12 +22,18 @@ export default function ChatHeader({ proceedingId }: ChatHeaderProps) {
   const notaryName = data?.getProceedingById?.notary?.user?.displayName
   const allNames = [...beneficiaryNames, notaryName].join(', ')
 
-  if (loading) return <p>Loading ...</p>
-  if (error) return `Error! ${error}`
-
   return (
-    <Box>
-      <Heading>Chat s uživateli: {allNames}</Heading>
+    <Box width="full">
+      {error ? (
+        <Heading>Chat</Heading>
+      ) : loading ? (
+        <Text>Načítání...</Text>
+      ) : (
+        <>
+          <Heading as="h2">Chat s uživateli: {allNames} </Heading>
+          <Text fontSize="lg">Řízení: {proceedingName}</Text>
+        </>
+      )}
     </Box>
   )
 }

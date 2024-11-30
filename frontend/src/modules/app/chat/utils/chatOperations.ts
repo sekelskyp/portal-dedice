@@ -53,6 +53,7 @@ export const GET_CHAT_HEADER = gql(/* GraphQL */ `
           id
         }
       }
+      name
     }
   }
 `)

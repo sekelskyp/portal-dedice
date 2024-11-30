@@ -1,4 +1,4 @@
-import { Tabs } from '@chakra-ui/react'
+import { Tabs, Text } from '@chakra-ui/react'
 import type { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -48,9 +48,12 @@ export default function ChatGroups({ children }: ChatGroupProps) {
       }}
     >
       <Tabs.List>
-        {chatGroups.map((group) => (
+        {chatGroups.map((group, index) => (
           <Tabs.Trigger key={group.id} value={group.id}>
-            {group.name}
+            <Text display={{ base: 'block', md: 'none' }}>
+              {group.name.split('_').pop() || `Rizeni ${index}`}
+            </Text>
+            <Text display={{ base: 'none', md: 'block' }}>{group.name}</Text>
           </Tabs.Trigger>
         ))}
         <Tabs.Indicator />

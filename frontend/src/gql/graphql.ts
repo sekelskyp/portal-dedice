@@ -176,6 +176,7 @@ export type Mutation = {
   updateAsset?: Maybe<Asset>
   updateBeneficiary: Beneficiary
   updateProfile: User
+  updateSendNotifications: User
 }
 
 export type MutationAddBeneficiariesToProceedingArgs = {
@@ -304,6 +305,10 @@ export type MutationUpdateBeneficiaryArgs = {
 
 export type MutationUpdateProfileArgs = {
   profileInput: ProfileInput
+}
+
+export type MutationUpdateSendNotificationsArgs = {
+  sendNotifications: Scalars['Boolean']['input']
 }
 
 export type Notary = {
@@ -579,6 +584,7 @@ export type GetChatHeaderQuery = {
   __typename?: 'Query'
   getProceedingById?: {
     __typename?: 'Proceeding'
+    name: string
     beneficiaries?: Array<{
       __typename?: 'Beneficiary'
       user?: { __typename?: 'User'; displayName: string; id: string } | null
@@ -1445,6 +1451,7 @@ export const GetChatHeaderDocument = {
                     ],
                   },
                 },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
               ],
             },
           },
