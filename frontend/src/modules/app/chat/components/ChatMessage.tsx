@@ -6,12 +6,14 @@ interface MessageProps {
   body: string
   createdAt: string
   displayName: string
+  isCurrent: boolean
 }
 
 export default function ChatMessage({
   body,
   createdAt,
   displayName,
+  isCurrent,
 }: MessageProps) {
   const formatDateTime = (dateStr: string) => {
     const date = new Date(dateStr)
@@ -38,6 +40,8 @@ export default function ChatMessage({
     }).format(date)
   }
 
+  console.log(isCurrent)
+
   return (
     <>
       <Flex
@@ -47,13 +51,17 @@ export default function ChatMessage({
         px={2}
         width="100%"
       >
-        <Avatar name={displayName} bg={'blue.100'} size={'md'} />
+        <Avatar
+          name={displayName}
+          bg={isCurrent ? 'blue.100' : 'gray.100'}
+          size={'md'}
+        />
         <Box
-          bg={'blue.100'}
+          bg={isCurrent ? 'blue.100' : 'gray.100'}
           p={4}
           borderRadius="2xl"
           border="1px solid"
-          borderColor={'blue.200'}
+          borderColor={isCurrent ? 'blue.200' : 'gray.200'}
           boxShadow="md"
         >
           <Text fontSize={'lg'}>{displayName}</Text>
