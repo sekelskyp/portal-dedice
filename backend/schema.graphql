@@ -18,6 +18,20 @@ input AddressInput {
   streetNumber: String!
 }
 
+type Article {
+  content: String!
+  date: DateTimeISO!
+  id: ID!
+  title: String!
+}
+
+input ArticleInput {
+  content: String!
+  coverPicture: Upload!
+  date: DateTimeISO!
+  title: String!
+}
+
 type Asset {
   bankName: String
   carMakeName: String
@@ -122,6 +136,7 @@ type Mutation {
   closeProceeding(proceedingId: Int!): Boolean!
   confirmEmailVerification(token: String!): Boolean!
   createAddress(data: AddressInput!): Address!
+  createArticle(data: ArticleInput!): Article!
   createAsset(data: AssetInput!): Asset!
   createBeneficiaries(data: [BeneficiaryInput!]!): [Beneficiary!]!
   createBeneficiary(data: BeneficiaryInput!): Beneficiary!
@@ -129,6 +144,7 @@ type Mutation {
   createNotary(data: CreateNotaryInput!): Notary!
   createProceeding(data: CreateProceedingInput!): Int!
   deleteAddress(id: Int!): Boolean!
+  deleteArticles(ids: [Int!]!): Boolean!
   deleteAsset(id: Int!): Boolean!
   deleteBeneficiaries(id: Int!): Boolean!
   deleteDocumentsByIds(ids: [ID!]!): Boolean!
@@ -141,6 +157,7 @@ type Mutation {
   signIn(login: String!, password: String!): SignInResponse!
   signUp(registerInput: RegisterInput!): User!
   updateAddress(data: AddressInput!, id: Int!): Address
+  updateArticle(data: ArticleInput!, id: Int!): Article
   updateAsset(data: AssetInput!, id: Int!): Asset
   updateBeneficiary(data: BeneficiaryInput!, id: Int!): Beneficiary!
   updateProfile(profileInput: ProfileInput!): User!
@@ -189,7 +206,9 @@ type Query {
   chatByProceedingId(proceedingId: Int!): Chat!
   findNotary(input: FindNotaryInput!): Notary
   getAddressById(id: Int!): Address
+  getAllArticles: [Article!]!
   getAllProceedings: [Proceeding!]!
+  getArticleById(id: Int!): Article
   getAssetById(id: Int!): Asset
   getAssetsByProceedingId(proceedingId: Int!): [Asset!]!
   getBeneficiariesByIds(ids: [Int!]!): [Beneficiary!]!

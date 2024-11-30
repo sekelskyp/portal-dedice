@@ -1,5 +1,4 @@
-import GraphQLUpload from 'graphql-upload/GraphQLUpload'
-import { FileUpload } from 'graphql-upload/Upload'
+import { FileUpload, GraphQLUpload } from 'graphql-upload'
 import { Field, InputType } from 'type-graphql'
 
 @InputType()

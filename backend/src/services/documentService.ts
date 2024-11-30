@@ -1,4 +1,4 @@
-import { FileUpload } from 'graphql-upload/Upload'
+import { FileUpload } from 'graphql-upload'
 
 import { CustomContext } from '@backend/types/types'
 
