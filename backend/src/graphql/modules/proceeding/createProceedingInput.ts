@@ -29,13 +29,13 @@ class DeceasedPersonInput {
 
 @InputType()
 export class CreateProceedingInput {
-  @Field()
+  @Field({ nullable: true })
   startDate?: Date
 
   @Field()
   deceasedPerson!: DeceasedPersonInput
 
-  @Field(() => ID)
+  @Field(() => ID, { nullable: true })
   mainBeneficiaryUserId?: number
 
   @Field(() => [ID])

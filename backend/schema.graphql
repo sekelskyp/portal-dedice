@@ -94,8 +94,8 @@ input CreateNotaryInput {
 input CreateProceedingInput {
   beneficiaryUserIds: [ID!]!
   deceasedPerson: DeceasedPersonInput!
-  mainBeneficiaryUserId: ID!
-  startDate: DateTimeISO!
+  mainBeneficiaryUserId: ID
+  startDate: DateTimeISO
 }
 
 """
@@ -180,7 +180,7 @@ type Proceeding {
   documents: [Document!]!
   endDate: DateTimeISO
   id: ID!
-  mainBeneficiary: Beneficiary
+  mainBeneficiary: User
   mainBeneficiaryId: ID
   name: String!
   notary: Notary

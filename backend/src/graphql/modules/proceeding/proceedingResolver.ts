@@ -25,6 +25,7 @@ import {
 import { CustomContext } from '../../../types/types'
 import { Beneficiary } from '../beneficiary/beneficiaryType'
 import { Notary } from '../notary/notaryType'
+import { User } from '../user/userType'
 
 import { CreateProceedingInput } from './createProceedingInput'
 import { Proceeding } from './proceedingType'
@@ -170,17 +171,15 @@ export class InheritanceProcedureResolver {
   // ----------------------------------
 
   // Field Resolver to fetch the main beneficiary
-  @FieldResolver(() => Beneficiary, { nullable: true })
+  @FieldResolver(() => User, { nullable: true })
   async mainBeneficiary(
     @Root() proceeding: Proceeding,
-    @Ctx() { beneficiaryRepository }: CustomContext
-  ): Promise<Beneficiary | null> {
+    @Ctx() { userRepository }: CustomContext
+  ): Promise<User | null> {
     if (!proceeding.mainBeneficiaryId) {
       return null
     }
-    return await beneficiaryRepository.getBeneficiaryById(
-      proceeding.mainBeneficiaryId
-    )
+    return await userRepository.getUserById(proceeding.mainBeneficiaryId)
   }
 
   // Field Resolver to fetch the notary

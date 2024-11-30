@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Stopping and removing existing containers..."
-docker compose down --volumes
+docker compose down --volumes --remove-orphans
 
 echo "Building and starting containers..."
 docker compose up --build -d
