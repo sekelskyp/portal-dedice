@@ -14,7 +14,9 @@ import { LuArrowLeft, LuNewspaper } from 'react-icons/lu'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { Page } from '@frontend/shared/layout/Page'
+import { route } from '@shared/route'
 
+import { ArticleCard } from '../components/ArticleCard'
 import { dummyData } from '../dummyData'
 
 export const ArticleDetail: React.FC = () => {
@@ -23,6 +25,16 @@ export const ArticleDetail: React.FC = () => {
   const article = dummyData.find(
     (article) => article.id === parseInt(id ?? '0', 10)
   )
+
+  const latestArticles = React.useMemo(() => {
+    return dummyData
+      .filter((a) => a.id !== parseInt(id ?? '0', 10))
+      .sort(
+        (a, b) =>
+          new Date(b.createDate).getTime() - new Date(a.createDate).getTime()
+      )
+      .slice(0, 3)
+  }, [id])
 
   if (!article) {
     return (
@@ -34,7 +46,7 @@ export const ArticleDetail: React.FC = () => {
 
   return (
     <Page>
-      <Button variant="ghost" mb={4} onClick={() => navigate(-1)}>
+      <Button variant="ghost" mb={4} onClick={() => navigate(route.blog())}>
         <LuArrowLeft />
       </Button>
       <Stack display="flex" alignItems="center" justifyContent="center">
@@ -60,6 +72,24 @@ export const ArticleDetail: React.FC = () => {
             </Text>
           </Card.Body>
         </Card.Root>
+      </Stack>
+
+      <Stack mt={8} alignItems="center">
+        <Heading size="lg" mb={4}>
+          Nejnovější články
+        </Heading>
+        <HStack gap={4} wrap="wrap" justify="center">
+          {latestArticles.map((article) => (
+            <ArticleCard
+              key={article.id}
+              id={article.id}
+              title={article.title}
+              description={article.description}
+              createDate={article.createDate}
+              imageUrl={article.imageUrl}
+            />
+          ))}
+        </HStack>
       </Stack>
     </Page>
   )
