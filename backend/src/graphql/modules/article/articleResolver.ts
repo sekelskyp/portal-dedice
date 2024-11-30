@@ -20,6 +20,14 @@ export class ArticleResolver {
     return await articleRepository.getArticleById(id)
   }
 
+  // Query to get all articles
+  @Query(() => [Article])
+  async getAllArticles(
+    @Ctx() { articleRepository }: CustomContext
+  ): Promise<Article[]> {
+    return await articleRepository.getAllArticles()
+  }
+
   // ----------------------------------
   // MUTATIONS
   // ----------------------------------
