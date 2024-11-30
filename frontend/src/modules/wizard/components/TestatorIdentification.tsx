@@ -20,10 +20,12 @@ const schema = z.object({
   birthDate: z
     .date({ required_error: 'Datum narození je povinné.' })
     .max(new Date(), 'Datum narození musí být v minulosti.'),
-  street: z.string().min(1, 'Ulice je povinná.'),
-  streetNumber: z.string().min(1, 'Číslo popisné je povinné.'),
-  municipality: z.string().min(1, 'Obec je povinná.'),
-  postalCode: z.string().min(1, 'PSČ je povinné.'),
+  addressInput: z.object({
+    street: z.string().min(1, 'Ulice je povinná.'),
+    streetNumber: z.string().min(1, 'Číslo popisné je povinné.'),
+    municipality: z.string().min(1, 'Obec je povinná.'),
+    postalCode: z.string().min(1, 'PSČ je povinné.'),
+  }),
 })
 
 type NextStepProps = {
@@ -51,10 +53,12 @@ export function TestatorIdentification({ nextStep }: NextStepProps) {
       defaultValues={{
         sex: testatorData.sex || '',
         birthDate: testatorData.birthDate || undefined!,
-        street: testatorData.street || '',
-        municipality: testatorData.municipality || '',
-        postalCode: testatorData.postalCode || '',
-        streetNumber: testatorData.streetNumber || '',
+        addressInput: {
+          street: testatorData.addressInput?.street || '',
+          municipality: testatorData.addressInput?.municipality || '',
+          postalCode: testatorData.addressInput?.postalCode || '',
+          streetNumber: testatorData.addressInput?.streetNumber || '',
+        },
       }}
     >
       <Container
