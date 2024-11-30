@@ -1,5 +1,7 @@
-import { Box, Heading, VStack } from '@chakra-ui/react'
+import { Box, Heading, IconButton, VStack } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { LuArrowLeft } from 'react-icons/lu'
+import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
 import { DateFormControl } from '@frontend/shared/forms/DateFormControl'
@@ -9,6 +11,7 @@ import { InputFormControl } from '@frontend/shared/forms/InputFormControl'
 import { QuillFormControl } from '@frontend/shared/forms/QuillFormControl'
 import { SubmitButton } from '@frontend/shared/forms/SubmitButton'
 import { Page } from '@frontend/shared/layout'
+import { route } from '@shared/route'
 
 const articleSchema = z.object({
   title: z
@@ -24,6 +27,7 @@ const articleSchema = z.object({
 type ArticleFormData = z.infer<typeof articleSchema>
 
 export const NewArticlePage = () => {
+  const navigate = useNavigate()
   const handleSubmit = (data: ArticleFormData) => {
     console.log('Form submitted:', data)
   }
@@ -32,6 +36,16 @@ export const NewArticlePage = () => {
 
   return (
     <Page>
+      <IconButton
+        onClick={() => navigate(route.blog())}
+        rounded="full"
+        size="lg"
+        bg="gray.500"
+        _hover={{ bg: 'gray.700' }}
+        mb={6}
+      >
+        <LuArrowLeft />
+      </IconButton>
       <Box
         maxW="80%"
         mx="auto"
@@ -67,7 +81,7 @@ export const NewArticlePage = () => {
               dropzoneLabel="Přetáhněte sem obrázek nebo klikněte pro výběr"
               dropzoneDescription="Podporované formáty: JPG, PNG"
               height="250px"
-              width="50%"
+              width="100%"
             />
 
             <QuillFormControl
