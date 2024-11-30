@@ -69,6 +69,7 @@ export async function createProceeding(
     name: proceedingName,
     notaryId: notaryId,
     startDate,
+    mainBeneficiaryId: data.mainBeneficiaryUserId,
     deceasedAddressId: deceasedAddressId,
     deceasedName: data.deceasedPerson.name,
     deceasedSurname: data.deceasedPerson.surname,
