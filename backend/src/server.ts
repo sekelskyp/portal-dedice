@@ -22,6 +22,7 @@ import { MOCKS, PORT } from '@backend/config'
 import { getConnection } from '@backend/db/db'
 import { getAddressRepository } from '@backend/graphql/modules/address/addressRepository'
 import { AddressResolver } from '@backend/graphql/modules/address/addressResolver'
+import { getArticleRepository } from '@backend/graphql/modules/article/articleRepository'
 import { getAssetRepository } from '@backend/graphql/modules/asset/assetRepository'
 import { AssetResolver } from '@backend/graphql/modules/asset/assetResolver'
 import { getBeneficiaryRepository } from '@backend/graphql/modules/beneficiary/beneficiaryRepository'
@@ -138,6 +139,7 @@ const init = async () => {
     return {
       db: drizzle.db,
       authUser,
+      pubSub, // Add PubSub to the HTTP context
       notaryRepository: getNotaryRepository(drizzle.db),
       userRepository: getUserRepository(drizzle.db),
       proceedingRepository: getProceedingRepository(drizzle.db),
@@ -152,7 +154,7 @@ const init = async () => {
       addressRepository: getAddressRepository(drizzle.db),
       chatRepository: getChatRepository(drizzle.db),
       chatMessageRepository: getChatMessageRepository(drizzle.db),
-      pubSub, // Add PubSub to the HTTP context
+      articleRepository: getArticleRepository(drizzle.db),
     }
   }
   app.use(
