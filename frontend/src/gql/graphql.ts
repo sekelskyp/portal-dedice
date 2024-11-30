@@ -49,6 +49,21 @@ export type AddressInput = {
   streetNumber: Scalars['String']['input']
 }
 
+export type Article = {
+  __typename?: 'Article'
+  content: Scalars['String']['output']
+  date: Scalars['DateTimeISO']['output']
+  id: Scalars['ID']['output']
+  title: Scalars['String']['output']
+}
+
+export type ArticleInput = {
+  content: Scalars['String']['input']
+  coverPicture: Scalars['Upload']['input']
+  date: Scalars['DateTimeISO']['input']
+  title: Scalars['String']['input']
+}
+
 export type Asset = {
   __typename?: 'Asset'
   bankName?: Maybe<Scalars['String']['output']>
@@ -154,6 +169,7 @@ export type Mutation = {
   closeProceeding: Scalars['Boolean']['output']
   confirmEmailVerification: Scalars['Boolean']['output']
   createAddress: Address
+  createArticle: Article
   createAsset: Asset
   createBeneficiaries: Array<Beneficiary>
   createBeneficiary: Beneficiary
@@ -161,6 +177,7 @@ export type Mutation = {
   createNotary: Notary
   createProceeding: Scalars['Int']['output']
   deleteAddress: Scalars['Boolean']['output']
+  deleteArticles: Scalars['Boolean']['output']
   deleteAsset: Scalars['Boolean']['output']
   deleteBeneficiaries: Scalars['Boolean']['output']
   deleteDocumentsByIds: Scalars['Boolean']['output']
@@ -173,6 +190,7 @@ export type Mutation = {
   signIn: SignInResponse
   signUp: User
   updateAddress?: Maybe<Address>
+  updateArticle?: Maybe<Article>
   updateAsset?: Maybe<Asset>
   updateBeneficiary: Beneficiary
   updateProfile: User
@@ -211,6 +229,10 @@ export type MutationCreateAddressArgs = {
   data: AddressInput
 }
 
+export type MutationCreateArticleArgs = {
+  data: ArticleInput
+}
+
 export type MutationCreateAssetArgs = {
   data: AssetInput
 }
@@ -237,6 +259,10 @@ export type MutationCreateProceedingArgs = {
 
 export type MutationDeleteAddressArgs = {
   id: Scalars['Int']['input']
+}
+
+export type MutationDeleteArticlesArgs = {
+  ids: Array<Scalars['Int']['input']>
 }
 
 export type MutationDeleteAssetArgs = {
@@ -293,6 +319,11 @@ export type MutationUpdateAddressArgs = {
   id: Scalars['Int']['input']
 }
 
+export type MutationUpdateArticleArgs = {
+  data: ArticleInput
+  id: Scalars['Int']['input']
+}
+
 export type MutationUpdateAssetArgs = {
   data: AssetInput
   id: Scalars['Int']['input']
@@ -340,17 +371,13 @@ export type Proceeding = {
 }
 
 export type ProfileInput = {
+  addressInput?: InputMaybe<AddressInput>
   displayName?: InputMaybe<Scalars['String']['input']>
-  email?: InputMaybe<Scalars['String']['input']>
   gender?: InputMaybe<Scalars['String']['input']>
-  municipality?: InputMaybe<Scalars['String']['input']>
-  name: Scalars['String']['input']
+  name?: InputMaybe<Scalars['String']['input']>
   phone?: InputMaybe<Scalars['String']['input']>
-  postalCode?: InputMaybe<Scalars['String']['input']>
   sendNotifications?: InputMaybe<Scalars['Boolean']['input']>
-  street?: InputMaybe<Scalars['String']['input']>
-  streetNumber?: InputMaybe<Scalars['String']['input']>
-  surname: Scalars['String']['input']
+  surname?: InputMaybe<Scalars['String']['input']>
 }
 
 export type Query = {
@@ -360,7 +387,9 @@ export type Query = {
   chatByProceedingId: Chat
   findNotary?: Maybe<Notary>
   getAddressById?: Maybe<Address>
+  getAllArticles: Array<Article>
   getAllProceedings: Array<Proceeding>
+  getArticleById?: Maybe<Article>
   getAssetById?: Maybe<Asset>
   getAssetsByProceedingId: Array<Asset>
   getBeneficiariesByIds: Array<Beneficiary>
@@ -391,6 +420,10 @@ export type QueryFindNotaryArgs = {
 }
 
 export type QueryGetAddressByIdArgs = {
+  id: Scalars['Int']['input']
+}
+
+export type QueryGetArticleByIdArgs = {
   id: Scalars['Int']['input']
 }
 

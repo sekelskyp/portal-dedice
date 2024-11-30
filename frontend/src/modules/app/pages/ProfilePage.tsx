@@ -17,8 +17,6 @@ import {
 } from '@frontend/shared/forms'
 import { SwitchFormControl } from '@frontend/shared/forms/SwitchFormControl'
 
-//TODO: fix query and components
-
 const GET_PROFILE_QUERY = gql(/* GraphQL */ `
   query GetUserById($getUserByIdId: Float!) {
     getUserById(id: $getUserByIdId) {
@@ -80,20 +78,30 @@ export const ProfilePage = () => {
     variables: { getUserByIdId: +auth.user!.id },
   })
 
-  console.log(data)
-
   const [updateProfile] = useMutation(UPDATE_PROFILE_MUTATION, {
     onError: (error) => {
-      console.error(error)
       toaster.error({ title: 'Nepodařilo se uložit profil' })
     },
   })
 
-  const onSubmit = (variables: ProfileInput) => {
-    console.log(variables)
-
+  const onSubmit = (variables: z.infer<typeof schema>) => {
     return updateProfile({
-      variables: { profileInput: variables },
+      variables: {
+        profileInput: {
+          name: variables.name,
+          surname: variables.surname,
+          displayName: variables.displayName,
+          phone: variables.phone,
+          gender: variables.gender,
+          sendNotifications: variables.sendNotifications,
+          addressInput: {
+            street: variables.addressInput.street ?? '',
+            streetNumber: variables.addressInput.streetNumber ?? '',
+            municipality: variables.addressInput.municipality ?? '',
+            postalCode: variables.addressInput.postalCode ?? '',
+          },
+        },
+      },
     })
       .then((res) => {
         if (!res.data)
@@ -126,12 +134,14 @@ export const ProfilePage = () => {
             surname: data?.getUserById?.surname ?? '',
             displayName: data?.getUserById?.displayName ?? '',
             phone: data?.getUserById?.phone ?? '',
-            street: data?.getUserById?.address?.street ?? '',
-            streetNumber: data?.getUserById?.address?.streetNumber ?? '',
-            municipality: data?.getUserById?.address?.municipality ?? '',
-            postalCode: data?.getUserById?.address?.postalCode ?? '',
             gender: data?.getUserById?.gender ?? '',
             sendNotifications: data?.getUserById?.sendNotifications ?? false,
+            addressInput: {
+              street: data?.getUserById?.address?.street ?? '',
+              streetNumber: data?.getUserById?.address?.streetNumber ?? '',
+              municipality: data?.getUserById?.address?.municipality ?? '',
+              postalCode: data?.getUserById?.address?.postalCode ?? '',
+            },
           }}
           onSubmit={onSubmit}
         />
@@ -145,12 +155,14 @@ const schema = z.object({
   surname: z.string().min(1),
   displayName: z.string().min(1),
   phone: z.string().min(9).optional().nullish(),
-  street: z.string().optional().nullish(),
-  streetNumber: z.string().optional().nullish(),
-  municipality: z.string().optional().nullish(),
-  postalCode: z.string().optional().nullish(),
   gender: z.string().optional().nullish(),
   sendNotifications: z.boolean().optional().nullish(),
+  addressInput: z.object({
+    street: z.string().optional().nullish(),
+    streetNumber: z.string().optional().nullish(),
+    municipality: z.string().optional().nullish(),
+    postalCode: z.string().optional().nullish(),
+  }),
 })
 
 const ProfileForm = ({
@@ -159,8 +171,8 @@ const ProfileForm = ({
   onSubmit,
 }: {
   loading: boolean
-  defaultValues: ProfileInput
-  onSubmit: (variables: ProfileInput) => void
+  defaultValues: z.infer<typeof schema>
+  onSubmit: (variables: z.infer<typeof schema>) => void
 }) => {
   return (
     <Form
@@ -217,14 +229,14 @@ const NameGroupFormControl = () => {
           name="name"
           label="Jméno"
           onChange={(changedName) => {
-            displayNameUpdater(changedName, getValues('surname'))
+            displayNameUpdater(changedName, getValues('surname') ?? undefined)
           }}
         />
         <InputFormControl
           name="surname"
           label="Příjmení"
           onChange={(changedSurname) => {
-            displayNameUpdater(getValues('name'), changedSurname)
+            displayNameUpdater(getValues('name') ?? undefined, changedSurname)
           }}
         />
       </HStack>
