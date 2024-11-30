@@ -1,3 +1,4 @@
+import { AddressInsertInput } from '@backend/graphql/modules/address/addressRepository'
 import { UserEntity } from '@backend/graphql/modules/user/userRepository'
 import { GenderEnumType } from '@shared/enums'
 
@@ -30,10 +31,7 @@ interface UserProfileInput {
   sendNotifications?: boolean
   gender?: GenderEnumType
   phone?: string
-  street?: string
-  streetNumber?: string
-  municipality?: string
-  postalCode?: string
+  addressInput?: AddressInsertInput
 }
 
 export async function loginUser(
@@ -184,9 +182,31 @@ export async function updateProfile(
   // Ensure that the display name is updated if the name or surname is updated
   data.displayName = data.displayName || `${data.name} ${data.surname}`
   await userRepository.updateUserById(userId, data)
+  // Update the user's address if provided
+  if (data.addressInput) {
+    await updateUserAddress(userId, data.addressInput, context)
+  }
   const updatedUser = await userRepository.getUserById(userId)
   if (!updatedUser) {
     throw new Error('Uživatel nebyl nalezen po aktualizaci profilu.')
   }
   return updatedUser
+}
+
+async function updateUserAddress(
+  userId: number,
+  addressData: AddressInsertInput,
+  context: CustomContext
+): Promise<void> {
+  const { addressRepository } = context
+  const user = await context.userRepository.getUserById(userId)
+  if (!user) {
+    throw new Error('Uživatel nebyl nalezen.')
+  }
+  if (user.addressId) {
+    await addressRepository.updateAddressById(user.addressId, addressData)
+  } else {
+    const addressId = await addressRepository.createAddress(addressData)
+    await context.userRepository.updateUserById(userId, { addressId })
+  }
 }

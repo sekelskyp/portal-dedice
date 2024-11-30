@@ -2,19 +2,18 @@ import { Field, InputType } from 'type-graphql'
 
 import { GenderEnumType } from '@shared/enums'
 
+import { AddressInput } from '../address/addressInput'
+
 @InputType()
 export class ProfileInput {
-  @Field()
+  @Field({ nullable: true })
   name?: string
 
-  @Field()
+  @Field({ nullable: true })
   surname?: string
 
   @Field({ nullable: true })
   displayName?: string
-
-  @Field({ nullable: true })
-  email?: string
 
   @Field({ nullable: true })
   phone?: string
@@ -22,18 +21,9 @@ export class ProfileInput {
   @Field(() => String, { nullable: true })
   gender?: GenderEnumType
 
-  @Field(() => String, { nullable: true })
-  street?: string
-
-  @Field(() => String, { nullable: true })
-  streetNumber?: string
-
-  @Field(() => String, { nullable: true })
-  municipality?: string
-
-  @Field(() => String, { nullable: true })
-  postalCode?: string
-
   @Field(() => Boolean, { nullable: true })
   sendNotifications?: boolean
+
+  @Field(() => AddressInput, { nullable: true })
+  addressInput?: AddressInput
 }

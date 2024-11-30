@@ -174,17 +174,13 @@ type Proceeding {
 }
 
 input ProfileInput {
+  addressInput: AddressInput
   displayName: String
-  email: String
   gender: String
-  municipality: String
-  name: String!
+  name: String
   phone: String
-  postalCode: String
   sendNotifications: Boolean
-  street: String
-  streetNumber: String
-  surname: String!
+  surname: String
 }
 
 type Query {
