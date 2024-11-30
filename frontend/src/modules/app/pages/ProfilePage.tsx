@@ -104,6 +104,7 @@ export const ProfilePage = () => {
           token: auth.token,
           user: {
             ...auth.user!,
+            ...res.data.updateProfile,
           },
         })
       })

@@ -17,7 +17,7 @@ type AuthState = {
 }
 
 export type AuthUser = {
-  addressId: string
+  addressId: string | null
   address?:
     | {
         id: string
