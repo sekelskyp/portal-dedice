@@ -1,7 +1,6 @@
 import React from 'react'
 import {
   Box,
-  Button,
   Card,
   Heading,
   HStack,
@@ -10,18 +9,17 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react'
-import { LuArrowLeft, LuNewspaper } from 'react-icons/lu'
-import { useNavigate, useParams } from 'react-router-dom'
+import { LuNewspaper } from 'react-icons/lu'
+import { useParams } from 'react-router-dom'
 
 import { Page } from '@frontend/shared/layout/Page'
-import { route } from '@shared/route'
 
+import { ArticleAdminPanel } from '../components/ArticleAdminPanel'
 import { ArticleCard } from '../components/ArticleCard'
 import { dummyData } from '../dummyData'
 
 export const ArticleDetail: React.FC = () => {
   const { id } = useParams()
-  const navigate = useNavigate()
   const article = dummyData.find(
     (article) => article.id === parseInt(id ?? '0', 10)
   )
@@ -46,15 +44,13 @@ export const ArticleDetail: React.FC = () => {
 
   return (
     <Page>
-      <Button variant="ghost" mb={4} onClick={() => navigate(route.blog())}>
-        <LuArrowLeft />
-      </Button>
+      <ArticleAdminPanel />
       <Stack display="flex" alignItems="center" justifyContent="center">
         <Card.Root w="full" maxW="80%" variant="elevated">
           <Card.Header as={HStack} gap={2}>
             <LuNewspaper size={24} />
-            <Heading size="4xl">{article.title}</Heading>
-            <Text ml="auto" color="gray.500" fontSize="sm">
+            <Heading size="2xl">{article.title}</Heading>
+            <Text ml="auto" color="gray.500" fontSize="md">
               {new Date(article.createDate).toLocaleDateString()}
             </Text>
           </Card.Header>
@@ -67,7 +63,7 @@ export const ArticleDetail: React.FC = () => {
               width="100%"
               height="300px"
             />
-            <Text fontSize="md" mt={2}>
+            <Text fontSize="md" mt={2} textAlign="justify" px={2}>
               {article.description}
             </Text>
           </Card.Body>
@@ -75,10 +71,14 @@ export const ArticleDetail: React.FC = () => {
       </Stack>
 
       <Stack mt={8} alignItems="center">
-        <Heading size="lg" mb={4}>
-          Nejnovější články
-        </Heading>
-        <HStack gap={4} wrap="wrap" justify="center">
+        <Heading size="2xl">Mohlo by vás také zajímat:</Heading>
+        <Stack
+          direction="row"
+          justifyContent="center"
+          flexWrap="wrap"
+          gap={8}
+          mt={8}
+        >
           {latestArticles.map((article) => (
             <ArticleCard
               key={article.id}
@@ -89,7 +89,7 @@ export const ArticleDetail: React.FC = () => {
               imageUrl={article.imageUrl}
             />
           ))}
-        </HStack>
+        </Stack>
       </Stack>
     </Page>
   )
