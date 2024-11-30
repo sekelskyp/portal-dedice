@@ -13,6 +13,8 @@ import { SubmitButton } from '@frontend/shared/forms/SubmitButton'
 import { Page } from '@frontend/shared/layout'
 import { route } from '@shared/route'
 
+import { useCoverUpload } from '../hooks/useCoverUpload'
+
 const articleSchema = z.object({
   title: z
     .string({ required_error: 'Titulek je povinný' })
@@ -28,7 +30,18 @@ type ArticleFormData = z.infer<typeof articleSchema>
 
 export const NewArticlePage = () => {
   const navigate = useNavigate()
+
+  const {
+    files,
+    clearFiles,
+    handleCoverUpload,
+    ACCEPTED_FILE_TYPES,
+    MAX_FILE_COUNT,
+    MAX_FILE_SIZE,
+  } = useCoverUpload()
+
   const handleSubmit = (data: ArticleFormData) => {
+    data.image = files[0]
     console.log('Form submitted:', data)
   }
 
@@ -70,26 +83,30 @@ export const NewArticlePage = () => {
               name="title"
               label="Titulek"
               placeholder="Vložte titulek"
+              required
             />
-
-            <DateFormControl name="date" label="Datum" />
-
+            <DateFormControl name="date" label="Datum" required />
             <FileUploadFormControl
               name="image"
               label="Obrázek"
-              accept="image/*"
+              accept={ACCEPTED_FILE_TYPES}
+              maxFileSize={MAX_FILE_SIZE}
+              maxFiles={MAX_FILE_COUNT}
+              onFileChange={handleCoverUpload}
+              files={files}
+              onDelete={clearFiles}
               dropzoneLabel="Přetáhněte sem obrázek nebo klikněte pro výběr"
               dropzoneDescription="Podporované formáty: JPG, PNG"
               height="250px"
               width="100%"
+              required
             />
-
             <QuillFormControl
               name="text"
               label="Obsah"
               placeholder="Vložte text článku"
+              required
             />
-
             <SubmitButton>Vytvořit článek</SubmitButton>
           </VStack>
         </Form>
