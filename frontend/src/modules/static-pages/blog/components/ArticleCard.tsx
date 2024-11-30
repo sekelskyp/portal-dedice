@@ -18,6 +18,9 @@ export function ArticleCard({
   createDate,
   imageUrl,
 }: Article) {
+  const truncatedDescription =
+    description.length > 300 ? description.slice(0, 300) + '...' : description
+
   return (
     <Card.Root
       maxW={{ base: 'sm', md: 'md' }}
@@ -37,7 +40,9 @@ export function ArticleCard({
         <Text color="gray" fontSize="sm" py={1}>
           {createDate}
         </Text>
-        <Card.Description textAlign="justify">{description}</Card.Description>
+        <Card.Description textAlign="justify">
+          {truncatedDescription}
+        </Card.Description>
       </Card.Body>
       <Card.Footer gap="2">
         <RouterNavLink to={route.detailArticle(id.toString())}>

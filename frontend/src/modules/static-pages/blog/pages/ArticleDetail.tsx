@@ -50,7 +50,7 @@ export const ArticleDetail: React.FC = () => {
         <LuArrowLeft />
       </Button>
       <Stack display="flex" alignItems="center" justifyContent="center">
-        <Card.Root w="full" maxW="80%">
+        <Card.Root w="full" maxW="80%" variant="elevated">
           <Card.Header as={HStack} gap={2}>
             <LuNewspaper size={24} />
             <Heading size="4xl">{article.title}</Heading>
