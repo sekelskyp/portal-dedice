@@ -23,6 +23,7 @@ import { getConnection } from '@backend/db/db'
 import { getAddressRepository } from '@backend/graphql/modules/address/addressRepository'
 import { AddressResolver } from '@backend/graphql/modules/address/addressResolver'
 import { getArticleRepository } from '@backend/graphql/modules/article/articleRepository'
+import { ArticleResolver } from '@backend/graphql/modules/article/articleResolver'
 import { getAssetRepository } from '@backend/graphql/modules/asset/assetRepository'
 import { AssetResolver } from '@backend/graphql/modules/asset/assetResolver'
 import { getBeneficiaryRepository } from '@backend/graphql/modules/beneficiary/beneficiaryRepository'
@@ -65,6 +66,7 @@ const init = async () => {
       DocumentResolver,
       ChatResolver,
       AddressResolver,
+      ArticleResolver,
     ],
     pubSub,
     emitSchemaFile: true,
