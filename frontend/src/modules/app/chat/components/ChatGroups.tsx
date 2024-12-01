@@ -60,7 +60,7 @@ export default function ChatGroups({ children }: ChatGroupProps) {
     <Tabs.Root
       value={currentGroupId}
       onValueChange={(value) => {
-        navigate(`/portal/chat/${value}/`)
+        navigate(`/portal/chat/${value.value}/`)
       }}
     >
       <Tabs.List>
