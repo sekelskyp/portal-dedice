@@ -8,23 +8,19 @@ import {
   Root,
 } from 'type-graphql'
 
+import { Address } from '@backend/graphql/modules/address/adressType'
 import {
   changeUserPassword,
   completePasswordReset,
   confirmEmailVerification,
   getUserById,
   initiatePasswordReset,
-  isUserBeneficiary,
-  isUserNotary,
   loginUser,
   registerUser,
   updateProfile,
 } from '@backend/services/userService'
 import { CustomContext } from '@backend/types/types'
-
-import { Beneficiary } from '../beneficiary/beneficiaryType'
-import { Contact } from '../contact/contactType'
-import { Notary } from '../notary/notaryType'
+import { UserTypeEnumType } from '@shared/enums'
 
 import { ProfileInput } from './profileInput'
 import { RegisterInput } from './registerInput'
@@ -33,55 +29,7 @@ import { User } from './userType'
 
 @Resolver(() => User)
 export class UserResolver {
-  // Field resolver for Notaries (ensures an empty array if no notaries are found)
-  @FieldResolver(() => [Notary])
-  async notaries(
-    @Root() user: User,
-    @Ctx() { notaryRepository }: CustomContext
-  ): Promise<Notary[]> {
-    const notaries = await notaryRepository.getNotariesByUserId(user.id)
-    return notaries || []
-  }
-
-  // Field resolver for Beneficiaries (ensures an empty array if no beneficiaries are found)
-  @FieldResolver(() => [Beneficiary])
-  async beneficiaries(
-    @Root() user: User,
-    @Ctx() { beneficiaryRepository }: CustomContext
-  ): Promise<Beneficiary[]> {
-    const beneficiaries = await beneficiaryRepository.getBeneficiariesByUserId(
-      user.id
-    )
-    return beneficiaries || []
-  }
-
-  // Computed field for isNotary
-  @FieldResolver(() => Boolean)
-  async isNotary(
-    @Root() user: User,
-    @Ctx() context: CustomContext
-  ): Promise<boolean> {
-    return await isUserNotary(user.id, context)
-  }
-
-  // Computed field for isBeneficiary
-  @FieldResolver(() => Boolean)
-  async isBeneficiary(
-    @Root() user: User,
-    @Ctx() context: CustomContext
-  ): Promise<boolean> {
-    return await isUserBeneficiary(user.id, context)
-  }
-
-  @FieldResolver(() => Contact, { nullable: true })
-  async contact(
-    @Root() user: User,
-    @Ctx() context: CustomContext
-  ): Promise<Contact | null> {
-    return user.contactId
-      ? await context.contactRepository.getContactById(user.contactId)
-      : null
-  }
+  // QUERIES
 
   // Fetch a user by ID
   @Query(() => User, { nullable: true })
@@ -96,6 +44,29 @@ export class UserResolver {
     return userRecord
   }
 
+  // Fetch all users by their type
+  @Query(() => [User], { nullable: true })
+  async getAllUserByType(
+    @Arg('type', () => String) type: UserTypeEnumType,
+    @Ctx() context: CustomContext
+  ): Promise<User[]> {
+    return await context.userRepository.getAllUsersByType(type)
+  }
+
+  // Fetch a user by email
+  @Query(() => User, { nullable: true })
+  async getUserByEmail(
+    @Arg('email') email: string,
+    @Ctx() context: CustomContext
+  ): Promise<User | null> {
+    const userRecord = await context.userRepository.getUserByEmail(email)
+    if (!userRecord) {
+      return null
+    }
+    return userRecord
+  }
+
+  // MUTATIONS
   // Sign in mutation
   @Mutation(() => SignInResponse)
   async signIn(
@@ -122,13 +93,7 @@ export class UserResolver {
     @Arg('registerInput') registerInput: RegisterInput,
     @Ctx() context: CustomContext
   ): Promise<User> {
-    const userRecordId = await registerUser(
-      registerInput.email,
-      registerInput.password,
-      registerInput.name,
-      registerInput.surname,
-      context
-    )
+    const userRecordId = await registerUser(registerInput, context)
 
     if (!userRecordId) {
       throw new Error('Registration failed')
@@ -142,20 +107,21 @@ export class UserResolver {
   }
 
   // Mutation to change user password
-  @Mutation(() => User)
+  @Mutation(() => Boolean)
   async changePassword(
     @Arg('oldPassword') oldPassword: string,
     @Arg('newPassword') newPassword: string,
     @Ctx() context: CustomContext
-  ): Promise<void> {
+  ): Promise<boolean> {
     if (!context.authUser) throw new Error('User is not authenticated')
 
-    return await changeUserPassword(
+    await changeUserPassword(
       context.authUser.userId,
       oldPassword,
       newPassword,
       context
     )
+    return true
   }
 
   // Mutation to request password reset
@@ -202,5 +168,34 @@ export class UserResolver {
     if (!user) throw new Error('User not found after profile update')
 
     return user
+  }
+
+  @Mutation(() => User)
+  async updateSendNotifications(
+    @Arg('sendNotifications') sendNotifications: boolean,
+    @Ctx() context: CustomContext
+  ): Promise<User> {
+    if (!context.authUser) throw new Error('User is not authenticated')
+
+    await context.userRepository.updateUserById(context.authUser.userId, {
+      sendNotifications,
+    })
+
+    const user = await getUserById(context.authUser.userId, context)
+    if (!user) throw new Error('User not found after profile update')
+
+    return user
+  }
+
+  // FIELD RESOLVERS
+
+  @FieldResolver(() => Address, { nullable: true })
+  async address(
+    @Root() user: User,
+    @Ctx() { addressRepository }: CustomContext
+  ): Promise<Address | null> {
+    return user.addressId
+      ? await addressRepository.getAddressById(user.addressId)
+      : null
   }
 }

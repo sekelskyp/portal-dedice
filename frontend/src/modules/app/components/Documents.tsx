@@ -15,7 +15,7 @@ import { ActionDialog } from '../../../shared/components/ActionDialog'
 import { useDeleteDocument } from '../hooks/useDeleteDocument'
 import { useDocument } from '../hooks/useDocument'
 import { useGetDocuments } from '../hooks/useGetDocuments'
-import { useProcedure } from '../hooks/useProcedure'
+import { useProceeding } from '../hooks/useProceeding'
 import { decodeFile } from '../utils/decodeFile'
 
 interface DocumentType {
@@ -27,13 +27,14 @@ interface DocumentType {
 
 export function Documents({ id }: { id: string }) {
   const { user, token } = useAuth()
+  const isNotary = user?.type === 'Notary'
 
   const [documents, setDocuments] = useState<DocumentType[]>([])
 
-  const procedure = useProcedure({ procedureId: parseInt(id) })
+  const procedure = useProceeding(parseInt(id))
 
   const { data } = useGetDocuments({
-    procedureId: parseInt(id),
+    proceedingId: parseInt(id),
   })
 
   const { toggleDialog, isOpen, selectedId } = useActionDialog()
@@ -76,8 +77,8 @@ export function Documents({ id }: { id: string }) {
   }
 
   useEffect(() => {
-    if (data?.getProcedureById?.documents) {
-      setDocuments(data.getProcedureById.documents)
+    if (data?.getDocumentsByProceedingId) {
+      setDocuments(data.getDocumentsByProceedingId)
     }
   }, [data])
 
@@ -90,7 +91,6 @@ export function Documents({ id }: { id: string }) {
           <ActionDialog
             title="Smazání dokumentu"
             text="Opravdu chcete tento dokument smazat?"
-            actionText="Dokument byl úspěšně smazán."
             onConfirm={handleFileDelete}
             isOpen={isOpen}
             toggle={toggleDialog}
@@ -142,8 +142,8 @@ export function Documents({ id }: { id: string }) {
                     <Text color="gray" fontSize={{ base: 'sm', sm: 'md' }}>
                       {new Date(document.createDate).toLocaleString('cs-CZ')}
                     </Text>
-                    {procedure?.data?.getProcedureById?.beneficiaries?.some(
-                      (item) => item.id === user?.beneficiaries[0]?.id
+                    {procedure?.data?.getProceedingById?.beneficiaries?.some(
+                      (item) => item.user?.id === user?.id?.toString()
                     ) && (
                       <IconButton
                         variant="surface"
@@ -165,7 +165,7 @@ export function Documents({ id }: { id: string }) {
               />
             )}
           </Stack>
-          {!user?.isNotary && (
+          {!isNotary && (
             <Stack alignItems="center" pt={4}>
               <RouterNavLink
                 to={route.newDocument(id)}

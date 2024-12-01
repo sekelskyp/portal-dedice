@@ -12,16 +12,16 @@ import {
 } from '@chakra-ui/react'
 import { FiChevronDown, FiX } from 'react-icons/fi'
 
+import { AddressSuggestion } from '@frontend/gql/graphql'
+
 import { Button, InputGroup } from '../design-system'
-import useAddressSuggestions, {
-  Suggestion,
-} from '../hooks/useAddressSuggestions'
+import useAddressSuggestions from '../hooks/useAddressSuggestions'
 
 type PlacesAutoCompleteProps = {
   value?: string
   onChange: (value?: string | undefined) => void
   disabled?: boolean
-  onSuggestionSelected: (suggestion?: Suggestion) => void
+  onSuggestionSelected: (suggestion?: AddressSuggestion) => void
 }
 
 export const AddressAutoComplete = forwardRef(
@@ -35,17 +35,20 @@ export const AddressAutoComplete = forwardRef(
     }: PlacesAutoCompleteProps,
     ref
   ) => {
-    const { suggestions, loading } = useAddressSuggestions(value ?? '', {
-      lang: 'cs',
-      limit: 5,
-      enable: (value ?? '').length > 3,
-    })
+    const { suggestions, loading } = useAddressSuggestions(value ?? '')
 
     const collection = useMemo(
       () =>
         createListCollection({
           items: suggestions.map((x) => ({
-            label: x.name + ', ' + x.location,
+            label:
+              x.street +
+              ' ' +
+              x.streetNumber +
+              ', ' +
+              x.postalCode +
+              ' ' +
+              x.municipality,
             value: x,
           })),
         }),
@@ -64,13 +67,9 @@ export const AddressAutoComplete = forwardRef(
           }}
           onValueChange={(e) => {
             if (e.value.length !== 0) {
-              const suggestion = e.value[0] as unknown as Suggestion
+              const suggestion = e.value[0] as unknown as AddressSuggestion
               onSuggestionSelected?.(suggestion)
-              onChange(
-                suggestion.regionalStructure.find(
-                  (x) => x.type === 'regional.street'
-                )?.name
-              )
+              onChange(suggestion.street + ' ' + suggestion.streetNumber)
             }
           }}
           allowCustomValue

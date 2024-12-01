@@ -8,16 +8,14 @@ import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
 
 import { DocumentUpload } from '../components/DocumentUpload'
-import { useProcedure } from '../hooks/useProcedure'
+import { useProceeding } from '../hooks/useProceeding'
 import { documentTypes } from '../utils/documentTypes'
 
 export function NewDocumentPage() {
   const user = useAuth()
   const { id } = useParams()
 
-  const { data, loading, error } = useProcedure({
-    procedureId: parseInt(id ?? '0', 10),
-  })
+  const { data, loading, error } = useProceeding(parseInt(id ?? '0', 10))
 
   if (loading) {
     return <Spinner />
@@ -27,15 +25,12 @@ export function NewDocumentPage() {
     return <NotFoundPage />
   }
 
-  const procedure = data?.getProcedureById
+  const proceeding = data?.getProceedingById
+  const proceedingBeneficiaryIds = proceeding?.beneficiaries?.map(
+    (b) => b.user?.id
+  )
 
-  const userBeneficiaryId = user.user?.beneficiaries[0]?.id
-  const procedureBeneficiaryIds = procedure?.beneficiaries?.map((b) => b.id)
-
-  if (
-    !userBeneficiaryId ||
-    !procedureBeneficiaryIds?.includes(userBeneficiaryId)
-  ) {
+  if (!user.user?.id || !proceedingBeneficiaryIds?.includes(user.user?.id)) {
     return <UnauthorizedPage />
   }
 
@@ -63,7 +58,7 @@ export function NewDocumentPage() {
             justifyContent={{ base: 'center', md: 'start' }}
           >
             <LuFile size={24} />
-            <Heading>{procedure?.name}</Heading>
+            <Heading>{proceeding?.name}</Heading>
           </Stack>
         </Stack>
         <Stack direction="column" gap={4}>

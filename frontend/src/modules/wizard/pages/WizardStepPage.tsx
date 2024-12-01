@@ -16,10 +16,12 @@ import questionData from '../questions.json'
 type TestatorData = {
   sex?: string
   birthDate?: Date
-  addressStreet?: string
-  addressStreetNumber?: string
-  addressMunicipality?: string
-  addressPostCode?: string
+  addressInput?: {
+    street?: string
+    streetNumber?: string
+    municipality?: string
+    postalCode?: string
+  }
 }
 
 interface TestatorDataContextProps {

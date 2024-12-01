@@ -1,32 +1,40 @@
 import { useQuery } from '@apollo/client'
 
 import { gql } from '@frontend/gql'
+import { useAuth } from '@frontend/modules/auth'
 
-export const GET_ALL_PROCEDURES = gql(/* GraphQL */ `
-  query GetAllProcedures {
-    getAllProcedures {
+export const GET_PROCEEDINGS_BY_NOTARY_ID = gql(/* GraphQL */ `
+  query GetProceedingsByNotaryId($userId: Int!) {
+    getNotaryProceedingsForUser(userId: $userId) {
       id
       name
       startDate
       state
-      deceasedContact {
-        displayName
-      }
+      deceasedDisplayName
     }
   }
 `)
 
 export function useNotaryProcedures() {
-  const { data, loading, error } = useQuery(GET_ALL_PROCEDURES)
+  const auth = useAuth()
+  const id = auth.user?.id ?? '0'
 
+  const { data, loading, error } = useQuery(GET_PROCEEDINGS_BY_NOTARY_ID, {
+    variables: {
+      userId: +id,
+    },
+  })
+
+  /*
   const cleanData = data
     ? {
         ...data,
-        getProceduresByNotaryId: data.getAllProcedures.map(
+        getProceduresByNotaryId: data.getAllProceedings.map(
           ({ __typename, ...procedure }) => procedure
         ),
       }
     : null
+  */
 
-  return { data: cleanData, loading, error }
+  return { data, loading, error }
 }

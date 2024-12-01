@@ -9,13 +9,11 @@ import {
   DialogHeader,
   DialogRoot,
   DialogTitle,
-  toaster,
 } from '../design-system/atoms/chakra'
 
 interface ActionDialogProps {
   title: string
   text: string
-  actionText: string
   isOpen: boolean
   toggle: (state: boolean) => void
   onConfirm: (id: string) => void
@@ -25,7 +23,6 @@ interface ActionDialogProps {
 export function ActionDialog({
   title,
   text,
-  actionText,
   toggle,
   isOpen,
   onConfirm,
@@ -35,11 +32,6 @@ export function ActionDialog({
     if (!selectedId) return
     onConfirm(selectedId)
     toggle(false)
-    toaster.create({
-      title: actionText,
-      type: 'success',
-      duration: 5000,
-    })
   }
 
   return (

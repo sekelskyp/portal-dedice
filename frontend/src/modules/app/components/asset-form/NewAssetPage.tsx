@@ -1,42 +1,42 @@
 import React, { useCallback, useMemo } from 'react'
-import { Container, Heading, Text, VStack } from '@chakra-ui/react'
+import { Container, Heading, Spinner, Text, VStack } from '@chakra-ui/react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { Asset } from '@frontend/gql/graphql'
 import { Page } from '@frontend/shared/layout/Page'
 import { route } from '@shared/route'
 
-import { useAddAsset } from '../../hooks/useAddAsset'
+import { AssetType, useAddAsset } from '../../hooks/useAddAsset'
 import { useDeleteAsset } from '../../hooks/useDeleteAsset'
-import { useGetAssets } from '../../hooks/useGetAsset'
+import { mapAssetsToFormData, useGetAssets } from '../../hooks/useGetAsset'
 import { AssetForm, AssetFormData } from '../asset-form/AssetForm'
 
 export const NewAssetPage = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { addAsset: createAssetRequest } = useAddAsset()
-  const { removeAsset: deleteAsset } = useDeleteAsset()
-  const { data: existingAssets } = useGetAssets(parseInt(id!, 10))
+  const { removeAsset } = useDeleteAsset(parseInt(id!, 10))
+  const { data: existingAssets, loading } = useGetAssets(parseInt(id!, 10))
 
   const handleFormSubmit = useCallback(
     async (formData: AssetFormData) => {
       if (!id) return
 
       try {
-        if (existingAssets?.getAssetsByProcedureId?.length > 0) {
-          await Promise.all(
-            existingAssets.getAssetsByProcedureId.map((asset: Asset) =>
-              deleteAsset(parseInt(asset.id, 10))
-            )
-          )
-        }
-        const assets = mapFormDataToAssets(formData)
+        const newAssets = mapFormDataToAssets(formData)
+        const existingAssetsList = existingAssets?.getAssetsByProceedingId || []
         await Promise.all(
-          assets.map((asset) =>
+          existingAssetsList.map((asset: Asset) =>
+            removeAsset(parseInt(asset.id))
+          )
+        )
+        await Promise.all(
+          newAssets.map((asset) =>
             createAssetRequest({
-              inheritanceProcedureId: parseInt(id, 10),
-              value: 0,
+              inheritanceProcedureId: parseInt(id),
               ...asset,
+              type: asset.type as AssetType,
+              value: asset.value ?? 0,
             })
           )
         )
@@ -46,67 +46,33 @@ export const NewAssetPage = () => {
         console.error('Error managing assets:', error)
       }
     },
-    [createAssetRequest, deleteAsset, id, navigate, existingAssets]
+    [createAssetRequest, removeAsset, id, navigate, existingAssets]
   )
 
   const defaultValues = useMemo(() => {
-    if (!existingAssets?.getAssetsByProcedureId) return undefined
-
-    const formData: AssetFormData = {}
-
-    const groupedAssets = existingAssets.getAssetsByProcedureId.reduce(
-      (acc: Record<string, Asset[]>, asset: Asset) => {
-        if (!acc[asset.type]) {
-          acc[asset.type] = []
-        }
-        acc[asset.type].push(asset)
-        return acc
-      },
-      {}
-    )
-
-    if (groupedAssets['Financial instrument']?.length > 0) {
-      formData.bankAccount = {
-        bank: groupedAssets['Financial instrument'].map(
-          (asset: Asset) => asset.bankName || ''
-        ),
-      }
+    const assets = existingAssets?.getAssetsByProceedingId
+    if (!assets?.length) {
+      return undefined
     }
 
-    if (groupedAssets['Company']) {
-      formData.company = groupedAssets['Company'].map((asset: Asset) => ({
-        ico: asset.cin || '',
-      }))
-    }
-
-    if (groupedAssets['Automobile']) {
-      formData.car = groupedAssets['Automobile'].map((car: Asset) => ({
-        brand: car.carMakeName || '',
-        year: car.carRegistrationDate
-          ? new Date(car.carRegistrationDate).getFullYear()
-          : undefined,
-        description: car.carType || '',
-      }))
-    }
-
-    if (groupedAssets['Valuables']?.[0]) {
-      formData.valuables = {
-        description: groupedAssets['Valuables'][0].description || '',
-      }
-    }
-
-    if (groupedAssets['Other']?.[0]) {
-      formData.others = {
-        description: groupedAssets['Other'][0].description || '',
-      }
-    }
-
-    return formData
+    return mapAssetsToFormData(assets)
   }, [existingAssets])
 
   if (!id) {
     return <div>Missing procedure ID</div>
   }
+
+  if (loading) {
+    return (
+      <Page>
+        <Container centerContent>
+          <Spinner />
+        </Container>
+      </Page>
+    )
+  }
+
+  const isEditMode = existingAssets?.getAssetsByProcedureId?.length > 0
 
   return (
     <Page>
@@ -123,7 +89,7 @@ export const NewAssetPage = () => {
             mb={4}
             textAlign={{ base: 'center', md: 'left' }}
           >
-            Majetek zůstavitele
+            {isEditMode ? 'Upravit majetek zůstavitele' : 'Majetek zůstavitele'}
           </Heading>
           <Text
             fontSize={{ base: 'sm', md: 'lg' }}
@@ -139,6 +105,7 @@ export const NewAssetPage = () => {
             onSubmit={handleFormSubmit}
             inheritanceProcedureId={parseInt(id, 10)}
             defaultValues={defaultValues}
+            isEditMode={!!defaultValues}
           />
         </Container>
       </VStack>
@@ -146,41 +113,57 @@ export const NewAssetPage = () => {
   )
 }
 
-function mapFormDataToAssets(data: AssetFormData) {
+function mapFormDataToAssets(data: AssetFormData): Array<{
+  type: string
+  name: string
+  description?: string
+  bankName?: string
+  cin?: string
+  carMakeName?: string
+  carType?: string
+  carRegistrationDate?: Date
+  value?: number
+}> {
   const assets = []
 
   if (data.bankAccount?.bank?.length) {
     data.bankAccount.bank.forEach((bank) => {
       assets.push({
         type: 'Financial instrument',
-        name: 'Bankovní účet',
-        description: `Bankovní účet: ${bank}`,
+        name: `Bankovní účet`,
+        description: `Bankovní účet ve ${bank}`,
         bankName: bank,
+        value: 0,
       })
     })
   }
 
   if (data.company?.length) {
     data.company.forEach((company) => {
-      assets.push({
-        type: 'Company',
-        name: 'Obchodní společnost',
-        description: `IČO: ${company.ico}`,
-        cin: company.ico,
-      })
+      if (company.ico) {
+        assets.push({
+          type: 'Company',
+          name: 'Obchodní společnost',
+          description: `IČO: ${company.ico}`,
+          cin: company.ico,
+          value: 0,
+        })
+      }
     })
   }
-
   if (data.car?.length) {
     data.car.forEach((car) => {
-      assets.push({
-        type: 'Automobile',
-        name: `Auto ${car.brand}`,
-        description: car.description,
-        carMakeName: car.brand,
-        carType: car.description,
-        carRegistrationDate: new Date(car.year!, 0, 1),
-      })
+      if (car.brand) {
+        assets.push({
+          type: 'Automobile',
+          name: `Auto ${car.brand}`,
+          description: car.description || undefined,
+          carMakeName: car.brand,
+          carType: car.description,
+          carRegistrationDate: car.year ? new Date(car.year, 0, 1) : undefined,
+          value: 0,
+        })
+      }
     })
   }
 
@@ -189,6 +172,7 @@ function mapFormDataToAssets(data: AssetFormData) {
       type: 'Valuables',
       name: 'Cennosti',
       description: data.valuables.description,
+      value: 0,
     })
   }
 
@@ -197,6 +181,7 @@ function mapFormDataToAssets(data: AssetFormData) {
       type: 'Other',
       name: 'Ostatní majetek',
       description: data.others.description,
+      value: 0,
     })
   }
 

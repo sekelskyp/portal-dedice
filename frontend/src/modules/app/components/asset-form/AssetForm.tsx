@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Grid, VStack } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -39,10 +39,7 @@ const assetSchema = (sections: Record<string, boolean>) => {
 
   if (!sections.bankAccount) {
     schema.bankAccount = z.object({
-      bank: z
-        .array(z.string())
-        .min(1, { message: 'Vyberte alespoň jednu bankovní instituci' })
-        .optional(),
+      bank: z.array(z.string()).optional(),
     })
   }
 
@@ -120,46 +117,40 @@ export const AssetForm: React.FC<{
   inheritanceProcedureId: number
   onSubmit: (data: AssetFormData) => Promise<void>
   defaultValues?: AssetFormData
-}> = ({ inheritanceProcedureId, onSubmit, defaultValues }) => {
+  isEditMode?: boolean
+}> = ({ inheritanceProcedureId, onSubmit, defaultValues, isEditMode }) => {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { sections, visibleSections, handleSetSelected } = useAssetSections(
-    defaultValues
-  ) as {
-    sections: Record<string, boolean>
-    visibleSections: Record<string, boolean>
-    handleSetSelected: (
-      key: keyof typeof sections
-    ) => React.Dispatch<React.SetStateAction<boolean>>
-  }
+  const { sections, visibleSections, handleSetSelected } =
+    useAssetSections(defaultValues)
 
   const methods = useForm<AssetFormData>({
     resolver: zodResolver(assetSchema(sections)),
     defaultValues,
     mode: 'onChange',
-    shouldUnregister: false,
+    reValidateMode: 'onChange',
   })
-
   useEffect(() => {
     if (defaultValues) {
       methods.reset(defaultValues)
-      Object.entries(defaultValues).forEach(([key, value]) => {
-        if (value && Object.keys(value).length > 0) {
-          handleSetSelected(key as keyof typeof sections)(false)
-        }
-      })
     }
-  }, [defaultValues, methods, handleSetSelected])
+  }, [defaultValues, methods])
 
   const handleSubmit: SubmitHandler<AssetFormData> = async (data) => {
     try {
       setIsSubmitting(true)
-      const filteredData: AssetFormData = Object.keys(data)
-        .filter((key) => visibleSections[key as keyof typeof sections])
-        .reduce(
-          (acc, key) => ({ ...acc, [key]: data[key as keyof AssetFormData] }),
-          {}
-        )
+      const filteredData = {} as AssetFormData
+      Object.entries(visibleSections).forEach(([key, isVisible]) => {
+        const typedKey = key as keyof AssetFormData
+        if (isVisible && data[typedKey]) {
+          ;(filteredData[typedKey] as (typeof data)[typeof typedKey]) =
+            data[typedKey]
+        }
+      })
+
       await onSubmit(filteredData)
+      methods.reset(filteredData)
+    } catch (error) {
+      console.error('Form submission error:', error)
     } finally {
       setIsSubmitting(false)
     }
@@ -173,52 +164,64 @@ export const AssetForm: React.FC<{
         defaultValues={defaultValues}
         noValidate
       >
-        <Grid
-          templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }}
-          gap={{ base: 6, md: 12 }}
-          width="100%"
-          py={8}
-        >
-          <VStack gap={{ base: 6, md: 12 }} align="stretch">
-            <CompanySection
-              selected={sections.company}
-              setSelected={handleSetSelected('company')}
-            />
-            <ValuablesSection
-              selected={sections.valuables}
-              setSelected={handleSetSelected('valuables')}
-            />
-            <OthersSection
-              selected={sections.others}
-              setSelected={handleSetSelected('others')}
-            />
-          </VStack>
-          <VStack gap={{ base: 6, md: 12 }} align="stretch">
-            <BankAccountSection
-              selected={sections.bankAccount}
-              setSelected={handleSetSelected('bankAccount')}
-              bankAccountCollection={[]}
-            />
-            <CarSection
-              selected={sections.car}
-              setSelected={handleSetSelected('car')}
-              bankAccountCollection={[]}
-            />
-          </VStack>
+        <VStack width="100%" py={8} gap={{ base: 6, md: 12 }} align="stretch">
+          <CompanySection
+            selected={sections.company}
+            setSelected={(value: boolean | ((prev: boolean) => boolean)) =>
+              handleSetSelected('company')(
+                typeof value === 'function' ? value(sections.company) : value
+              )
+            }
+          />
+          <BankAccountSection
+            selected={sections.bankAccount}
+            setSelected={(value: boolean | ((prev: boolean) => boolean)) =>
+              handleSetSelected('bankAccount')(
+                typeof value === 'function'
+                  ? value(sections.bankAccount)
+                  : value
+              )
+            }
+            bankAccountCollection={[]}
+          />
+          <CarSection
+            selected={sections.car}
+            setSelected={(value: boolean | ((prev: boolean) => boolean)) =>
+              handleSetSelected('car')(
+                typeof value === 'function' ? value(sections.car) : value
+              )
+            }
+            bankAccountCollection={[]}
+          />
+          <ValuablesSection
+            selected={sections.valuables}
+            setSelected={(value: boolean | ((prev: boolean) => boolean)) =>
+              handleSetSelected('valuables')(
+                typeof value === 'function' ? value(sections.valuables) : value
+              )
+            }
+          />
+          <OthersSection
+            selected={sections.others}
+            setSelected={(value: boolean | ((prev: boolean) => boolean)) =>
+              handleSetSelected('others')(
+                typeof value === 'function' ? value(sections.others) : value
+              )
+            }
+          />
 
           <SubmitButton
             type="submit"
             colorScheme="blue"
-            justifySelf={'center'}
-            gridColumn={{ base: '1', md: 'span 2' }}
             width={{ base: '100%', sm: '50%' }}
+            alignSelf="center"
             mt={8}
             loading={isSubmitting}
             loadingText="Ukládám..."
           >
-            Uložit majetek
+            {isEditMode ? 'Upravit majetek' : 'Uložit majetek'}
           </SubmitButton>
-        </Grid>
+        </VStack>
       </Form>
     </FormProvider>
   )

@@ -1,4 +1,6 @@
-import { Contact } from '@backend/graphql/modules/contact/contactType'
+import { AddressInsertInput } from '@backend/graphql/modules/address/addressRepository'
+import { UserEntity } from '@backend/graphql/modules/user/userRepository'
+import { GenderEnumType } from '@shared/enums'
 
 import { createToken } from '../libs/jwt'
 import { CustomContext } from '../types/types'
@@ -15,6 +17,23 @@ export interface AuthResponse {
   token: string
 }
 
+interface registerUserInput {
+  email: string
+  password: string
+  name: string
+  surname: string
+}
+
+interface UserProfileInput {
+  name?: string
+  surname?: string
+  displayName?: string
+  sendNotifications?: boolean
+  gender?: GenderEnumType
+  phone?: string
+  addressInput?: AddressInsertInput
+}
+
 export async function loginUser(
   login: string,
   password: string,
@@ -25,10 +44,12 @@ export async function loginUser(
 
   // Find user by email
   const foundUser = await userRepository.getUserByEmail(login.toLowerCase())
+  console.log('foundUser', foundUser)
   if (!foundUser) throw new Error(errorMessage)
 
   // Validate password
   const isPasswordValid = await comparePassword(password, foundUser.password)
+  console.log('isPasswordValid', isPasswordValid)
   if (!isPasswordValid) throw new Error(errorMessage)
 
   // Check if user is confirmed
@@ -42,41 +63,33 @@ export async function loginUser(
 
 // Register a new user with email and password.
 export async function registerUser(
-  email: string,
-  password: string,
-  name: string,
-  surname: string,
+  data: registerUserInput,
   context: CustomContext
-) {
-  const { userRepository, beneficiaryRepository, contactRepository } = context
+): Promise<UserEntity> {
+  const { userRepository } = context
 
   // Check if email is already in use
-  const existingUser = await userRepository.getUserByEmail(email.toLowerCase())
+  const existingUser = await userRepository.getUserByEmail(
+    data.email.toLowerCase()
+  )
   if (existingUser) throw new Error('Uživatel s tímto emailem již existuje')
 
   // Hash the password and create the user
-  const hashedPassword = await hashPassword(password)
-  const displayName = `${name} ${surname}`
-  const userContactId = await contactRepository.createContact({
-    name: name,
-    surname: surname,
-    displayName: displayName,
-  })
+  const hashedPassword = await hashPassword(data.password)
+  const displayName = `${data.name} ${data.surname}`
   const userId = await userRepository.createUser({
-    email,
+    email: data.email,
     password: hashedPassword,
-    contactId: userContactId,
+    name: data.name,
+    surname: data.surname,
+    displayName,
+    type: 'User',
   })
   const newUser = await userRepository.getUserById(userId)
   if (!newUser) {
     throw new Error('Failed to retrieve the newly created user')
   }
-  // Create a beneficiary record linked to the new user
-  await beneficiaryRepository.createBeneficiary({
-    userId: newUser.id,
-    contactId: userContactId,
-  })
-  await sendEmailVerification(newUser.id, email, context)
+  await sendEmailVerification(newUser.id, data.email, context)
   return newUser
 }
 
@@ -94,19 +107,26 @@ export async function changeUserPassword(
   if (!userRecord) {
     throw new Error('Uživatel nebyl nalezen.')
   }
-
   // Validate old password
   const isOldPasswordCorrect = await comparePassword(
-    userRecord.password,
-    oldPassword
+    oldPassword,
+    userRecord.password
   )
   if (!isOldPasswordCorrect) {
     throw new Error('Nesprávné staré heslo.')
   }
+  // Check if the new password matches the old password
+  const isNewPasswordSameAsOld = await comparePassword(
+    newPassword,
+    userRecord.password
+  )
+  if (isNewPasswordSameAsOld) {
+    throw new Error('Nové heslo nesmí být stejné jako staré heslo.')
+  }
 
   // Hash the new password and update it
   const newPasswordHash = await hashPassword(newPassword)
-  await userRepository.updateUser(userId, { password: newPasswordHash })
+  await userRepository.updateUserById(userId, { password: newPasswordHash })
 }
 
 export async function getUserById(userId: number, context: CustomContext) {
@@ -148,39 +168,45 @@ export async function confirmEmailVerification(
   await verifyEmail(token, context) // Calls emailConfirmationService to validate and confirm email
 }
 
-export async function isUserNotary(
-  userId: number,
-  context: CustomContext
-): Promise<boolean> {
-  const { notaryRepository } = context
-  const notaries = await notaryRepository.getNotariesByUserId(userId)
-  return notaries.length > 0
-}
-
-export async function isUserBeneficiary(
-  userId: number,
-  context: CustomContext
-): Promise<boolean> {
-  const { beneficiaryRepository } = context
-  const beneficiaries =
-    await beneficiaryRepository.getBeneficiariesByUserId(userId)
-  return beneficiaries.length > 0
-}
-
 export async function updateProfile(
   userId: number,
-  contact: Omit<Contact, 'id'>,
+  data: UserProfileInput,
   context: CustomContext
-) {
-  const { userRepository, contactRepository } = context
+): Promise<UserEntity> {
+  const { userRepository } = context
 
   const user = await userRepository.getUserById(userId)
-
-  if (user?.contactId) {
-    await contactRepository.updateContact(user.contactId, contact)
-    return
+  if (!user) {
+    throw new Error('Uživatel nebyl nalezen.')
   }
+  // Ensure that the display name is updated if the name or surname is updated
+  data.displayName = data.displayName || `${data.name} ${data.surname}`
+  await userRepository.updateUserById(userId, data)
+  // Update the user's address if provided
+  if (data.addressInput) {
+    await updateUserAddress(userId, data.addressInput, context)
+  }
+  const updatedUser = await userRepository.getUserById(userId)
+  if (!updatedUser) {
+    throw new Error('Uživatel nebyl nalezen po aktualizaci profilu.')
+  }
+  return updatedUser
+}
 
-  const contactId = await contactRepository.createContact(contact)
-  await userRepository.updateUser(userId, { contactId })
+async function updateUserAddress(
+  userId: number,
+  addressData: AddressInsertInput,
+  context: CustomContext
+): Promise<void> {
+  const { addressRepository } = context
+  const user = await context.userRepository.getUserById(userId)
+  if (!user) {
+    throw new Error('Uživatel nebyl nalezen.')
+  }
+  if (user.addressId) {
+    await addressRepository.updateAddressById(user.addressId, addressData)
+  } else {
+    const addressId = await addressRepository.createAddress(addressData)
+    await context.userRepository.updateUserById(userId, { addressId })
+  }
 }

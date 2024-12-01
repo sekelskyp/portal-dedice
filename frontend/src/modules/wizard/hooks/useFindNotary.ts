@@ -4,7 +4,8 @@ import gql from 'graphql-tag'
 const FIND_NOTARY_QUERY = gql(/* GraphQL */ `
   query FindNotary($input: FindNotaryInput!) {
     findNotary(input: $input) {
-      contact {
+      id
+      user {
         id
         name
         surname
@@ -12,10 +13,12 @@ const FIND_NOTARY_QUERY = gql(/* GraphQL */ `
         email
         gender
         phone
-        addressStreet
-        addressStreetNumber
-        addressMunicipality
-        addressPostCode
+        address {
+          street
+          streetNumber
+          municipality
+          postalCode
+        }
       }
     }
   }
@@ -26,12 +29,12 @@ export function useGetNotary(birthDate?: Date, addressPostCode?: string) {
     variables: {
       input: {
         deceasedPersonDateOfDeath: birthDate,
-        addressPostCode,
+        addressPostCode: addressPostCode,
       },
     },
   })
 
-  const notary = data?.findNotary.contact
+  const notary = data?.findNotary.user
 
   return { notary, data, loading, error } as const
 }

@@ -3,7 +3,6 @@ import { Fieldset, HStack } from '@chakra-ui/react'
 import { useFormContext } from 'react-hook-form'
 
 import { Stack } from '../design-system'
-import { suggestionToAddress } from '../hooks/useAddressSuggestions'
 
 import { AddressFormControl, InputFormControl } from '.'
 
@@ -27,33 +26,23 @@ export const AddressGroupFormControl = ({
       </Stack>
 
       <Fieldset.Content>
-        <Stack gap={4} w={'full'}>
+        <Stack gap={4} w="full">
           <Stack direction={{ base: 'column', sm: 'row' }} gap={4}>
             <AddressFormControl
               required={required}
               flex={3}
               onSuggestionSelected={(suggestion) => {
-                const address = suggestionToAddress(suggestion)
-                setValue('addressStreet', address.street, {
-                  shouldValidate: true,
-                })
-                setValue('addressStreetNumber', address.streetNumber, {
-                  shouldValidate: true,
-                })
-                setValue('addressMunicipality', address.municipality, {
-                  shouldValidate: true,
-                })
-                setValue('addressPostCode', address.postCode, {
+                setValue('addressInput', suggestion, {
                   shouldValidate: true,
                 })
               }}
-              name="addressStreet"
+              name="addressInput.street"
               label="Ulice"
             />
             <InputFormControl
               flex={2}
               required={required}
-              name="addressStreetNumber"
+              name="addressInput.streetNumber"
               label="Číslo popisné a orientační"
             />
           </Stack>
@@ -61,13 +50,13 @@ export const AddressGroupFormControl = ({
             <InputFormControl
               flex={2}
               required={required}
-              name="addressMunicipality"
+              name="addressInput.municipality"
               label="Obec"
             />
             <InputFormControl
               flex={1}
               required={required}
-              name="addressPostCode"
+              name="addressInput.postalCode"
               label="PSČ"
             />
           </HStack>

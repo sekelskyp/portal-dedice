@@ -1,12 +1,9 @@
-import { FileUpload } from 'graphql-upload/Upload'
+import { FileUpload } from 'graphql-upload'
 
-import { DocumentData } from '@backend/graphql/modules/document/documentRepository'
 import { CustomContext } from '@backend/types/types'
 
 export interface CreateDocumentInput {
   file: FileUpload // Use `Promise<FileUpload>` for compatibility with async/await
-  userOwnerId: number | null
-  taskId: number | null
   inheritanceProcedureId: number
 }
 
@@ -62,20 +59,18 @@ export async function createDocument(
   }
   const file = await input.file
   const fileData = await encodeFileToBase64(file)
-  const documentData: DocumentData = {
+  const documentData = {
     fileName: file.filename,
     fileType: file.mimetype,
     fileData: fileData,
-    userOwnerId: input.userOwnerId || null,
-    taskId: input.taskId || null,
-    inheritanceProcedureId: input.inheritanceProcedureId,
+    proceedingId: input.inheritanceProcedureId,
   }
 
-  const [document] = await documentRepository.createDocument(documentData)
-  if (!document) {
+  const documentId = await documentRepository.createDocument(documentData)
+  if (!documentId) {
     throw new Error('Failed to create document')
   }
-  return document.id
+  return documentId
 }
 
 /**
@@ -114,10 +109,10 @@ export async function deleteDocumentsByIds(
   await documentRepository.deleteDocumentsByIds(ids)
 }
 
-export async function getDocumentsByProcedureId(
+export async function getDocumentsByProceedingId(
   id: number,
   context: CustomContext
 ) {
   const { documentRepository } = context
-  return await documentRepository.getDocumentsByProcedureId(id)
+  return await documentRepository.getDocumentsByProceedingId(id)
 }

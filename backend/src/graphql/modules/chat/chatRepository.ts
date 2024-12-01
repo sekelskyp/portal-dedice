@@ -1,37 +1,36 @@
-import { eq } from 'drizzle-orm'
+import { eq, InferInsertModel, InferSelectModel } from 'drizzle-orm'
 
+import { chat } from '@backend/db/schema'
 import { Db } from '@backend/types/types'
 
-import { chat } from '../../../db/schema'
-
-export interface ChatData {
-  inheritanceProcedureId: number
-}
+export interface ChatEntity extends InferSelectModel<typeof chat> {}
+export interface ChatInsertInput
+  extends InferInsertModel<Omit<typeof chat, 'id'>> {}
 
 export function getChatRepository(db: Db) {
-  async function getChatById(id: number) {
+  async function getChatById(id: number): Promise<ChatEntity | null> {
     const [result] = await db.select().from(chat).where(eq(chat.id, id))
     return result || null
   }
 
-  async function getChatByInheritanceProcedureId(
-    inheritanceProcedureId: number
-  ) {
+  async function getChatByProceedingId(
+    proceedingId: number
+  ): Promise<ChatEntity | null> {
     const [result] = await db
       .select()
       .from(chat)
-      .where(eq(chat.inheritanceProcedureId, inheritanceProcedureId))
+      .where(eq(chat.proceedingId, proceedingId))
     return result || null
   }
 
-  async function createChat(data: ChatData) {
+  async function createChat(data: ChatInsertInput): Promise<number> {
     const [result] = await db.insert(chat).values(data).$returningId()
-    return result
+    return result.id
   }
 
   return {
     getChatById,
     createChat,
-    getChatByInheritanceProcedureId,
+    getChatByProceedingId,
   }
 }

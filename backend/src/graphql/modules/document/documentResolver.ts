@@ -21,8 +21,6 @@ export class DocumentResolver {
   ): Promise<number> {
     const documentData: CreateDocumentInput = {
       file: data.file,
-      userOwnerId: data.userOwnerId || null,
-      taskId: data.taskId || null,
       inheritanceProcedureId: data.inheritanceProcedureId,
     }
     return await createDocument(documentData, context)

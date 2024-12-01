@@ -12,7 +12,7 @@ import { addMocksToSchema } from '@graphql-tools/mock'
 import { createPubSub } from '@graphql-yoga/subscription'
 import cors from 'cors'
 import express from 'express'
-import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js'
+import { graphqlUploadExpress } from 'graphql-upload'
 import { useServer } from 'graphql-ws/lib/use/ws'
 import * as http from 'http'
 import { buildSchema } from 'type-graphql'
@@ -20,31 +20,34 @@ import { WebSocketServer } from 'ws'
 
 import { MOCKS, PORT } from '@backend/config'
 import { getConnection } from '@backend/db/db'
+import { getAddressRepository } from '@backend/graphql/modules/address/addressRepository'
+import { AddressResolver } from '@backend/graphql/modules/address/addressResolver'
+import { getArticleRepository } from '@backend/graphql/modules/article/articleRepository'
+import { ArticleResolver } from '@backend/graphql/modules/article/articleResolver'
+import { getAssetRepository } from '@backend/graphql/modules/asset/assetRepository'
+import { AssetResolver } from '@backend/graphql/modules/asset/assetResolver'
 import { getBeneficiaryRepository } from '@backend/graphql/modules/beneficiary/beneficiaryRepository'
 import { BeneficiaryResolver } from '@backend/graphql/modules/beneficiary/beneficiaryResolver'
-import { getContactRepository } from '@backend/graphql/modules/contact/contactRepository'
-import { ContactResolver } from '@backend/graphql/modules/contact/contactResolver'
+import { getChatMessageRepository } from '@backend/graphql/modules/chat/chatMessageRepository'
+import { getChatRepository } from '@backend/graphql/modules/chat/chatRepository'
+import { ChatResolver } from '@backend/graphql/modules/chat/chatResolver'
 import { getDocumentRepository } from '@backend/graphql/modules/document/documentRepository'
+import { DocumentResolver } from '@backend/graphql/modules/document/documentResolver'
 import { getEmailConfirmationTokenRepository } from '@backend/graphql/modules/emailConfirmationToken/emailConfirmationTokenRepository'
 import { EmptyResolver } from '@backend/graphql/modules/empty/emptyResolver'
-import { getInheritanceProcedureRepository } from '@backend/graphql/modules/inheritanceProcedure/inheritaceProcedureRepository'
-import { InheritanceProcedureResolver } from '@backend/graphql/modules/inheritanceProcedure/inheritanceProcedureResolver'
 import { getNotaryRepository } from '@backend/graphql/modules/notary/notaryRepository'
 import { NotaryResolver } from '@backend/graphql/modules/notary/notaryResolver'
 import { getNotaryDateRuleRepository } from '@backend/graphql/modules/notaryDateRule/notaryDateRuleRepository'
 import { getPasswordResetTokenRepository } from '@backend/graphql/modules/passwordResetToken/passwordResetTokenRepository'
+import { getProceedingRepository } from '@backend/graphql/modules/proceeding/proceedingRepository'
+import { InheritanceProcedureResolver } from '@backend/graphql/modules/proceeding/proceedingResolver'
 import { getUserRepository } from '@backend/graphql/modules/user/userRepository'
 import { UserResolver } from '@backend/graphql/modules/user/userResolver'
 import { parseAndVerifyJWT } from '@backend/libs/jwt'
 import { mockResolvers } from '@backend/mocks/mocks'
 import { CustomContext } from '@backend/types/types'
 
-import { getAssetRepository } from './graphql/modules/asset/assetRepository'
-import { AssetResolver } from './graphql/modules/asset/assetResolver'
-import { getChatMessageRepository } from './graphql/modules/chat/chatMessageRepository'
-import { getChatRepository } from './graphql/modules/chat/chatRepository'
-import { ChatResolver } from './graphql/modules/chat/chatResolver'
-import { DocumentResolver } from './graphql/modules/document/documentResolver'
+import { AddressSuggestionResolver } from './graphql/modules/addressSuggestions/addressSuggestionResolver'
 
 const init = async () => {
   const app = express()
@@ -61,10 +64,12 @@ const init = async () => {
       BeneficiaryResolver,
       InheritanceProcedureResolver,
       NotaryResolver,
-      ContactResolver,
       AssetResolver,
       DocumentResolver,
       ChatResolver,
+      AddressResolver,
+      ArticleResolver,
+      AddressSuggestionResolver,
     ],
     pubSub,
     emitSchemaFile: true,
@@ -139,12 +144,10 @@ const init = async () => {
     return {
       db: drizzle.db,
       authUser,
+      pubSub, // Add PubSub to the HTTP context
       notaryRepository: getNotaryRepository(drizzle.db),
       userRepository: getUserRepository(drizzle.db),
-      contactRepository: getContactRepository(drizzle.db),
-      inheritanceProcedureRepository: getInheritanceProcedureRepository(
-        drizzle.db
-      ),
+      proceedingRepository: getProceedingRepository(drizzle.db),
       beneficiaryRepository: getBeneficiaryRepository(drizzle.db),
       notaryDateRuleRepository: getNotaryDateRuleRepository(drizzle.db),
       passwordResetTokenRepository: getPasswordResetTokenRepository(drizzle.db),
@@ -153,12 +156,12 @@ const init = async () => {
       ),
       assetRepository: getAssetRepository(drizzle.db),
       documentRepository: getDocumentRepository(drizzle.db),
+      addressRepository: getAddressRepository(drizzle.db),
       chatRepository: getChatRepository(drizzle.db),
       chatMessageRepository: getChatMessageRepository(drizzle.db),
-      pubSub, // Add PubSub to the HTTP context
+      articleRepository: getArticleRepository(drizzle.db),
     }
   }
-
   app.use(
     '/graphql',
     cors<cors.CorsRequest>(), // accepts all origins ('*'), not support cookies

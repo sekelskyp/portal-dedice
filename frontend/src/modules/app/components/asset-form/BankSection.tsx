@@ -20,17 +20,18 @@ const bankAccountCollection = createListCollection({
   items: [
     { value: 'Air Bank', label: 'Air Bank' },
     { value: 'Česká spořitelna', label: 'Česká spořitelna' },
-    {
-      value: 'Československá obchodní banka',
-      label: 'Československá obchodní banka',
-    },
+    { value: 'ČSOB', label: 'Československá obchodní banka' },
     { value: 'Equa bank', label: 'Equa bank' },
     { value: 'Fio banka', label: 'Fio banka' },
+    { value: 'Hello bank', label: 'Hello bank' },
+    { value: 'Hypoteční banka', label: 'Hypoteční banka' },
+    { value: 'J&T Banka', label: 'J&T Banka' },
     { value: 'Komerční banka', label: 'Komerční banka' },
     { value: 'mBank', label: 'mBank' },
-    { value: 'Moneta Money Bank', label: 'Moneta Money Bank' },
+    { value: 'MONETA Money Bank', label: 'MONETA Money Bank' },
+    { value: 'PPF banka', label: 'PPF banka' },
     { value: 'Raiffeisenbank', label: 'Raiffeisenbank' },
-    { value: 'Sberbank CZ', label: 'Sberbank CZ' },
+    { value: 'Trinity Bank', label: 'Trinity Bank' },
     { value: 'UniCredit Bank', label: 'UniCredit Bank' },
   ],
 })
@@ -40,13 +41,13 @@ export const BankAccountSection: React.FC<BankAccountSectionProps> = ({
   setSelected,
 }) => {
   const { setValue, watch, clearFields } = useAssetSection(
-    'bankAccount',
+    'bankAccount.bank',
     selected,
-    { bank: [] }
+    []
   )
 
-  const bankAccount = watch('bankAccount')
-  const hasExistingData = bankAccount?.bank && bankAccount.bank.length > 0
+  const bankValues = watch('bankAccount.bank') || []
+  const hasExistingData = bankValues.length > 0
 
   return (
     <Section
@@ -60,17 +61,25 @@ export const BankAccountSection: React.FC<BankAccountSectionProps> = ({
         <Box position="relative">
           <Controller
             name="bankAccount.bank"
-            render={({ field }) => (
+            defaultValue={[]}
+            render={({ field: { onChange, value, ...field } }) => (
               <SelectFormControl
                 {...field}
+                value={Array.isArray(value) ? value : []}
+                onChange={(newValue: unknown) => {
+                  onChange(newValue)
+                  if (Array.isArray(newValue) && newValue.length > 0) {
+                    setSelected(false)
+                  }
+                }}
                 label="Bankovní účet"
                 collection={bankAccountCollection}
-                placeholder="Vyberte bankovní instituci"
+                placeholder="Vyberte bankovní instituce"
                 multiple
               />
             )}
           />
-          {watch('bankAccount.bank')?.length > 0 && (
+          {bankValues.length > 0 && (
             <Button
               position="absolute"
               right="8"

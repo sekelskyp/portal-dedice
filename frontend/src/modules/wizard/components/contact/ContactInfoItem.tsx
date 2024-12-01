@@ -5,12 +5,19 @@ import { z } from 'zod'
 export interface ContactInfoItemProps {
   icon: JSX.Element
   text: string
+  displayText?: string
 }
 
-export function ContactInfoItem({ icon, text }: ContactInfoItemProps) {
+export function ContactInfoItem({
+  icon,
+  text,
+  displayText,
+}: ContactInfoItemProps) {
   const emailSchema = z.string().email()
+  const phoneSchema = z.string().regex(/^\+?[1-9]\d{1,14}$/)
 
   const isEmail: boolean = emailSchema.safeParse(text).success
+  const isPhone: boolean = phoneSchema.safeParse(text).success
 
   return (
     <Stack
@@ -25,8 +32,20 @@ export function ContactInfoItem({ icon, text }: ContactInfoItemProps) {
         <Link to={`mailto:${text}`}>
           <Text _hover={{ textDecoration: 'underline' }}>{text}</Text>
         </Link>
+      ) : isPhone ? (
+        <Link to={`tel:${text}`}>
+          <Text _hover={{ textDecoration: 'underline' }}>
+            {displayText || text}
+          </Text>
+        </Link>
       ) : (
-        <Text>{text}</Text>
+        <Link
+          to={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(text)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Text _hover={{ textDecoration: 'underline' }}>{text}</Text>
+        </Link>
       )}
     </Stack>
   )

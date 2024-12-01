@@ -6,20 +6,23 @@ import { HomePage } from '@frontend/modules/home/pages/HomePage'
 import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 import { route } from '@shared/route'
 
+import ChatHistoryPage from './modules/app/chat/components/ChatHistoryPage'
+import NewChatPage from './modules/app/chat/components/NewChatPage'
 import { NewAssetPage } from './modules/app/components/asset-form/NewAssetPage'
-import ChatHistoryPage from './modules/app/pages/ChatHistoryPage'
-import ChatPage from './modules/app/pages/ChatPage'
-import InheritanceProcedureDetail from './modules/app/pages/InheritanceProcedureDetail'
 import { NewDocumentPage } from './modules/app/pages/NewDocumentPage'
 import { NewProceedingPage } from './modules/app/pages/NewProceedingPage'
 import { NotaryEmailPage } from './modules/app/pages/NotaryEmailPage'
+import InheritanceProcedureDetail from './modules/app/pages/ProceedingPage'
 import { Proceedings } from './modules/app/pages/Proceedings'
 import { ProfilePage } from './modules/app/pages/ProfilePage'
+import { SettingsPage } from './modules/app/pages/SettingsPage'
 import { ConfirmEmailPage } from './modules/auth/pages/ConfirmEmailPage'
 import { EmailVerification } from './modules/auth/pages/EmailVerification'
 import { PasswordResetPage } from './modules/auth/pages/PasswordResetPage'
+import { ArticleDetail } from './modules/static-pages/blog/pages/ArticleDetail'
+import { BlogPage } from './modules/static-pages/blog/pages/BlogPage'
+import { NewArticlePage } from './modules/static-pages/blog/pages/NewArticlePage'
 import { AboutPage } from './modules/static-pages/pages/AboutPage'
-import { BlogPage } from './modules/static-pages/pages/BlogPage'
 import { GuidePage } from './modules/static-pages/pages/GuidePage'
 import { WizardPage } from './modules/wizard/pages/WizardStepPage'
 import { Layout } from './shared/layout'
@@ -42,14 +45,18 @@ export function Routes() {
           <Route path={route.newDocument()} element={<NewDocumentPage />} />
           <Route path={route.newEmail()} element={<NotaryEmailPage />} />
           <Route path={route.newAsset()} element={<NewAssetPage />} />
-          <Route path={route.chat()} element={<ChatPage />} />
-          <Route path={route.chatId()} element={<ChatPage />} />
+          <Route path={route.chat()} element={<NewChatPage />} />
+          <Route path={route.chatId()} element={<NewChatPage />} />
           <Route path={route.chatIdHistory()} element={<ChatHistoryPage />} />
           <Route path={route.profile()} element={<ProfilePage />} />
+          <Route path={route.settings()} element={<SettingsPage />} />
         </Route>
         <Route path={route.about()} element={<AboutPage />} />
         <Route path={route.guide()} element={<GuidePage />} />
         <Route path={route.blog()} element={<BlogPage />} />
+        <Route path={route.newArticle()} element={<NewArticlePage />} />
+        <Route path={route.detailArticle()} element={<ArticleDetail />} />
+        <Route path={route.editArticle()} element={<NewArticlePage />} />
         <Route path={route.wizard()} element={<WizardPage />} />
         <Route path={route.confirmEmail()} element={<ConfirmEmailPage />} />
         <Route path={route.resetPassword()} element={<PasswordResetPage />} />

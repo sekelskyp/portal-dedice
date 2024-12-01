@@ -1,17 +1,15 @@
 import { useCallback } from 'react'
 import { Card, Heading, Text } from '@chakra-ui/react'
 
-import { useAuth } from '@frontend/modules/auth'
-import { useCreateProcedure } from '@frontend/modules/auth/hooks/useCreateProcedure'
+import { useCreateProceeding } from '@frontend/modules/app/hooks/useCreateProceeding'
 import resources from '@frontend/resources'
 import { Alert } from '@frontend/shared/design-system'
 
-import { Beneficiary, ProceedingForm } from './ProceedingForm'
+import { ProceedingForm } from './ProceedingForm'
 
 export function NewProceedingPage() {
-  const { user } = useAuth()
   const [createProcedureRequest, createProcedureRequestState] =
-    useCreateProcedure()
+    useCreateProceeding()
 
   const handleProceedingFormSubmit = useCallback(
     async (variables: {
@@ -19,16 +17,16 @@ export function NewProceedingPage() {
       surname: string
       dateOfBirth: string
       dateOfDeath: string
-      contactName: string
-      contactSurname: string
-      contactEmail: string
-      beneficiaries: Beneficiary[]
-      addressStreet: string
-      addressStreetNumber: string
-      addressMunicipality: string
-      addressPostCode: string
+      addressInput: {
+        street: string
+        streetNumber: string
+        municipality: string
+        postalCode: string
+      }
+      mainBeneficiary: string
+      beneficiaries: string[]
     }) => {
-      createProcedureRequest({
+      await createProcedureRequest({
         variables: {
           data: {
             deceasedPerson: {
@@ -36,23 +34,19 @@ export function NewProceedingPage() {
               surname: variables.surname,
               dateOfBirth: new Date(variables.dateOfBirth).toISOString(),
               dateOfDeath: new Date(variables.dateOfDeath).toISOString(),
-              addressStreet: variables.addressStreet,
-              addressStreetNumber: variables.addressStreetNumber,
-              addressMunicipality: variables.addressMunicipality,
-              addressPostCode: variables.addressPostCode,
+              addressStreet: variables.addressInput.street,
+              addressStreetNumber: variables.addressInput.streetNumber,
+              addressMunicipality: variables.addressInput.municipality,
+              addressPostCode: variables.addressInput.postalCode,
             },
-            contactPerson: {
-              name: variables.contactName,
-              surname: variables.contactSurname,
-              email: variables.contactEmail,
-            },
-            beneficiaries: variables.beneficiaries,
-            beneficiaryId: +user?.beneficiaries[0].id!,
+            beneficiaryUserIds: variables.beneficiaries,
+            mainBeneficiaryUserId: variables.mainBeneficiary,
+            startDate: new Date().toISOString(),
           },
         },
       })
     },
-    [createProcedureRequest, user]
+    [createProcedureRequest]
   )
 
   return (

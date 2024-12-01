@@ -15,23 +15,30 @@ import {
   RadioGroupFormControl,
   SubmitButton,
 } from '@frontend/shared/forms'
+import { SwitchFormControl } from '@frontend/shared/forms/SwitchFormControl'
 
 const GET_PROFILE_QUERY = gql(/* GraphQL */ `
   query GetUserById($getUserByIdId: Float!) {
     getUserById(id: $getUserByIdId) {
-      contact {
-        addressMunicipality
-        addressPostCode
-        addressStreet
-        addressStreetNumber
-        name
-        surname
-        displayName
-        email
-        gender
-        name
-        phone
-        surname
+      id
+      email
+      password
+      confirmed
+      type
+      notaryId
+      sendNotifications
+      name
+      surname
+      displayName
+      gender
+      phone
+      addressId
+      address {
+        id
+        street
+        streetNumber
+        municipality
+        postalCode
       }
     }
   }
@@ -40,19 +47,25 @@ const GET_PROFILE_QUERY = gql(/* GraphQL */ `
 const UPDATE_PROFILE_MUTATION = gql(/* GraphQL */ `
   mutation UpdateProfile($profileInput: ProfileInput!) {
     updateProfile(profileInput: $profileInput) {
-      contact {
-        addressMunicipality
-        addressPostCode
-        addressStreet
-        addressStreetNumber
-        name
-        surname
-        displayName
-        email
-        gender
-        name
-        phone
-        surname
+      id
+      email
+      password
+      confirmed
+      type
+      notaryId
+      sendNotifications
+      name
+      surname
+      displayName
+      gender
+      phone
+      addressId
+      address {
+        id
+        street
+        streetNumber
+        municipality
+        postalCode
       }
     }
   }
@@ -65,30 +78,46 @@ export const ProfilePage = () => {
     variables: { getUserByIdId: +auth.user!.id },
   })
 
-  const [updateProfile] = useMutation(UPDATE_PROFILE_MUTATION)
+  const [updateProfile] = useMutation(UPDATE_PROFILE_MUTATION, {
+    onError: (error) => {
+      toaster.error({ title: 'Nepodařilo se uložit profil' })
+    },
+  })
 
-  const onSubmit = (variables: ProfileInput) => {
-    console.log(variables)
-
+  const onSubmit = (variables: z.infer<typeof schema>) => {
     return updateProfile({
-      variables: { profileInput: variables },
+      variables: {
+        profileInput: {
+          name: variables.name,
+          surname: variables.surname,
+          displayName: variables.displayName,
+          phone: variables.phone,
+          gender: variables.gender,
+          sendNotifications: variables.sendNotifications,
+          addressInput: {
+            street: variables.addressInput.street ?? '',
+            streetNumber: variables.addressInput.streetNumber ?? '',
+            municipality: variables.addressInput.municipality ?? '',
+            postalCode: variables.addressInput.postalCode ?? '',
+          },
+        },
+      },
     })
       .then((res) => {
         if (!res.data)
           throw new Error('No data returned from updateProfile mutation')
 
-        toaster.success({ title: 'Profil byl úspěšně uložen' })
+        toaster.success({ title: 'Profil byl úspěšně uložen.' })
         auth.signIn({
           token: auth.token,
           user: {
             ...auth.user!,
-            id: auth.user!.id,
-            contact: res.data!.updateProfile.contact,
+            ...res.data.updateProfile,
           },
         })
       })
       .catch(() => {
-        toaster.error({ title: 'Nepodařilo se uložit profil' })
+        toaster.error({ title: 'Nepodařilo se uložit profil.' })
       })
   }
 
@@ -100,9 +129,20 @@ export const ProfilePage = () => {
       <Card.Body>
         <ProfileForm
           loading={loading}
-          defaultValues={
-            data?.getUserById?.contact ?? { name: '', surname: '' }
-          }
+          defaultValues={{
+            name: data?.getUserById?.name ?? '',
+            surname: data?.getUserById?.surname ?? '',
+            displayName: data?.getUserById?.displayName ?? '',
+            phone: data?.getUserById?.phone ?? '',
+            gender: data?.getUserById?.gender ?? '',
+            sendNotifications: data?.getUserById?.sendNotifications ?? false,
+            addressInput: {
+              street: data?.getUserById?.address?.street ?? '',
+              streetNumber: data?.getUserById?.address?.streetNumber ?? '',
+              municipality: data?.getUserById?.address?.municipality ?? '',
+              postalCode: data?.getUserById?.address?.postalCode ?? '',
+            },
+          }}
           onSubmit={onSubmit}
         />
       </Card.Body>
@@ -114,13 +154,15 @@ const schema = z.object({
   name: z.string().min(1),
   surname: z.string().min(1),
   displayName: z.string().min(1),
-  email: z.string().email().optional().nullish(),
   phone: z.string().min(9).optional().nullish(),
-  addressStreet: z.string().optional().nullish(),
-  addressStreetNumber: z.string().optional().nullish(),
-  addressMunicipality: z.string().optional().nullish(),
-  addressPostCode: z.string().optional().nullish(),
   gender: z.string().optional().nullish(),
+  sendNotifications: z.boolean().optional().nullish(),
+  addressInput: z.object({
+    street: z.string().optional().nullish(),
+    streetNumber: z.string().optional().nullish(),
+    municipality: z.string().optional().nullish(),
+    postalCode: z.string().optional().nullish(),
+  }),
 })
 
 const ProfileForm = ({
@@ -129,8 +171,8 @@ const ProfileForm = ({
   onSubmit,
 }: {
   loading: boolean
-  defaultValues: ProfileInput
-  onSubmit: (variables: ProfileInput) => void
+  defaultValues: z.infer<typeof schema>
+  onSubmit: (variables: z.infer<typeof schema>) => void
 }) => {
   return (
     <Form
@@ -143,7 +185,6 @@ const ProfileForm = ({
       <Stack gap={4}>
         <NameGroupFormControl />
         <HStack gap={4}>
-          <InputFormControl name="email" label="Email" />
           <InputFormControl name="phone" label="Telefon" />
         </HStack>
         <RadioGroupFormControl name="gender" label="Pohlaví">
@@ -151,6 +192,11 @@ const ProfileForm = ({
           <Radio value="Female">Žena</Radio>
         </RadioGroupFormControl>
         <AddressGroupFormControl label="Trvalé bydliště" />
+        <SwitchFormControl
+          name="sendNotifications"
+          label="Emailové notifikace"
+          helperText="Povolit odesílání emailových notifikací v rámci chatu."
+        />
         <SubmitButton alignSelf="end" px={8}>
           Uložit
         </SubmitButton>
@@ -183,14 +229,14 @@ const NameGroupFormControl = () => {
           name="name"
           label="Jméno"
           onChange={(changedName) => {
-            displayNameUpdater(changedName, getValues('surname'))
+            displayNameUpdater(changedName, getValues('surname') ?? undefined)
           }}
         />
         <InputFormControl
           name="surname"
           label="Příjmení"
           onChange={(changedSurname) => {
-            displayNameUpdater(getValues('name'), changedSurname)
+            displayNameUpdater(getValues('name') ?? undefined, changedSurname)
           }}
         />
       </HStack>

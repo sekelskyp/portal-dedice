@@ -1,24 +1,34 @@
-import { and, eq, gt, lt } from 'drizzle-orm'
+import {
+  and,
+  eq,
+  gt,
+  InferInsertModel,
+  InferSelectModel,
+  lt,
+} from 'drizzle-orm'
 
 import { emailConfirmationToken } from '@backend/db/schema'
 import { Db } from '@backend/types/types'
 
-export interface EmailConfirmationTokenData {
-  userId: number
-  token: string
-  expiresAt: Date
-}
+export interface EmailConfirmationTokenEntity
+  extends InferSelectModel<typeof emailConfirmationToken> {}
+export interface EmailConfirmationTokenInsertInput
+  extends InferInsertModel<Omit<typeof emailConfirmationToken, 'id'>> {}
 
 export function getEmailConfirmationTokenRepository(db: Db) {
-  async function createToken(data: EmailConfirmationTokenData) {
-    const result = await db
+  async function createToken(
+    data: EmailConfirmationTokenInsertInput
+  ): Promise<number> {
+    const [result] = await db
       .insert(emailConfirmationToken)
       .values(data)
       .$returningId()
-    return result
+    return result.id
   }
 
-  async function getToken(token: string) {
+  async function getToken(
+    token: string
+  ): Promise<EmailConfirmationTokenEntity | null> {
     const [result] = await db
       .select()
       .from(emailConfirmationToken)
@@ -26,7 +36,9 @@ export function getEmailConfirmationTokenRepository(db: Db) {
     return result || null
   }
 
-  async function getValidTokenByUserId(userId: number) {
+  async function getValidTokenByUserId(
+    userId: number
+  ): Promise<EmailConfirmationTokenEntity | null> {
     const [result] = await db
       .select()
       .from(emailConfirmationToken)
@@ -39,19 +51,19 @@ export function getEmailConfirmationTokenRepository(db: Db) {
     return result || null
   }
 
-  async function deleteAllExpiredTokens() {
+  async function deleteAllExpiredTokens(): Promise<void> {
     await db
       .delete(emailConfirmationToken)
       .where(lt(emailConfirmationToken.expiresAt, new Date()))
   }
 
-  async function deleteTokenById(id: number) {
+  async function deleteTokenById(id: number): Promise<void> {
     await db
       .delete(emailConfirmationToken)
       .where(eq(emailConfirmationToken.id, id))
   }
 
-  async function deleteAllTokensForUser(userId: number) {
+  async function deleteAllTokensForUser(userId: number): Promise<void> {
     await db
       .delete(emailConfirmationToken)
       .where(eq(emailConfirmationToken.userId, userId))

@@ -1,28 +1,18 @@
-import { and, eq, inArray } from 'drizzle-orm'
+import { eq, inArray, InferInsertModel, InferSelectModel } from 'drizzle-orm'
 
-import {
-  beneficiary,
-  beneficiaryInheritanceProcedureRel,
-  DeceasedRelationEnumType,
-} from '@backend/db/schema'
+import { beneficiary } from '@backend/db/schema'
 import { Db } from '@backend/types/types'
 
-export interface BeneficiaryData {
-  userId?: number | null
-  deceasedRelation?: DeceasedRelationEnumType | null
-  contactId?: number | null
-  dateOfBirth?: Date | null
-  sendNotification?: boolean
-}
-
-export interface BeneficiaryInheritanceProcedureRelData {
-  inheritanceProcedureId: number
-  beneficiaryId: number
-}
+export interface BeneficiaryEntity
+  extends InferSelectModel<typeof beneficiary> {}
+export interface BeneficiaryInsertInput
+  extends InferInsertModel<Omit<typeof beneficiary, 'id'>> {}
 
 export function getBeneficiaryRepository(db: Db) {
   // Get a beneficiary by ID
-  async function getBeneficiaryById(id: number) {
+  async function getBeneficiaryById(
+    id: number
+  ): Promise<BeneficiaryEntity | null> {
     const [result] = await db
       .select()
       .from(beneficiary)
@@ -30,41 +20,37 @@ export function getBeneficiaryRepository(db: Db) {
     return result || null
   }
 
-  async function getBeneficiariesByIds(ids: number[]) {
+  async function getBeneficiariesByIds(
+    ids: number[]
+  ): Promise<BeneficiaryEntity[]> {
     const results = await db
       .select()
       .from(beneficiary)
       .where(inArray(beneficiary.id, ids))
-
     return results
   }
 
   // Get all beneficiaries associated with a specific procedure
-  async function getBeneficiariesByProcedureId(procedureId: number) {
+  async function getBeneficiariesByProceedingId(
+    proceedingId: number
+  ): Promise<BeneficiaryEntity[]> {
     return await db
       .select()
       .from(beneficiary)
-      .innerJoin(
-        beneficiaryInheritanceProcedureRel,
-        eq(beneficiary.id, beneficiaryInheritanceProcedureRel.beneficiaryId)
-      )
-      .where(
-        eq(
-          beneficiaryInheritanceProcedureRel.inheritanceProcedureId,
-          procedureId
-        )
-      )
+      .where(eq(beneficiary.proceedingId, proceedingId))
   }
 
   // Create a new beneficiary
-  async function createBeneficiary(data: BeneficiaryData): Promise<number> {
+  async function createBeneficiary(
+    data: BeneficiaryInsertInput
+  ): Promise<number> {
     const [result] = await db.insert(beneficiary).values(data).$returningId()
     return result.id
   }
 
   // Create multiple beneficiaries
   async function createBeneficiaries(
-    data: BeneficiaryData[]
+    data: BeneficiaryInsertInput[]
   ): Promise<number[]> {
     const results = await db.insert(beneficiary).values(data).$returningId()
 
@@ -72,72 +58,29 @@ export function getBeneficiaryRepository(db: Db) {
   }
 
   // Update an existing beneficiary by ID
-  async function updateBeneficiary(
+  async function updateBeneficiaryById(
     id: number,
-    data: Partial<BeneficiaryData>
+    data: Partial<BeneficiaryInsertInput>
   ): Promise<void> {
     await db.update(beneficiary).set(data).where(eq(beneficiary.id, id))
   }
 
-  async function deleteBeneficiary(id: number): Promise<void> {
-    await db.delete(beneficiary).where(eq(beneficiary.id, id))
+  async function deleteBeneficiariesByIds(ids: number[]): Promise<void> {
+    await db.delete(beneficiary).where(inArray(beneficiary.id, ids))
   }
 
-  async function insertBeneficiaryProcedureRelation(
-    data: BeneficiaryInheritanceProcedureRelData
-  ): Promise<void> {
-    await db.insert(beneficiaryInheritanceProcedureRel).values({
-      inheritanceProcedureId: data.inheritanceProcedureId,
-      beneficiaryId: data.beneficiaryId,
-    })
-  }
-
-  async function deleteBeneficiaryProcedureRelations(
-    procedureId: number,
-    beneficiaryId: number
-  ): Promise<void> {
-    await db
-      .delete(beneficiaryInheritanceProcedureRel)
-      .where(
-        and(
-          eq(
-            beneficiaryInheritanceProcedureRel.inheritanceProcedureId,
-            procedureId
-          ),
-          eq(beneficiaryInheritanceProcedureRel.beneficiaryId, beneficiaryId)
-        )
-      )
-  }
-
-  function getBeneficiariesByUserId(id: number) {
+  function getBeneficiariesByUserId(id: number): Promise<BeneficiaryEntity[]> {
     return db.select().from(beneficiary).where(eq(beneficiary.userId, id))
-  }
-
-  // Insert multiple BeneficiaryProcedureRelations
-  async function insertMultipleBeneficiaryProcedureRelations(
-    relationsData: BeneficiaryInheritanceProcedureRelData[]
-  ): Promise<void> {
-    const formattedRelations = relationsData.map((relation) => ({
-      inheritanceProcedureId: relation.inheritanceProcedureId,
-      beneficiaryId: relation.beneficiaryId,
-    }))
-
-    await db
-      .insert(beneficiaryInheritanceProcedureRel)
-      .values(formattedRelations)
   }
 
   return {
     getBeneficiaryById,
-    getBeneficiariesByProcedureId,
+    getBeneficiariesByProceedingId,
     createBeneficiary,
     getBeneficiariesByIds,
     createBeneficiaries,
-    updateBeneficiary,
-    deleteBeneficiary,
-    insertBeneficiaryProcedureRelation,
-    deleteBeneficiaryProcedureRelations,
+    updateBeneficiaryById,
+    deleteBeneficiariesByIds,
     getBeneficiariesByUserId,
-    insertMultipleBeneficiaryProcedureRelations,
   }
 }

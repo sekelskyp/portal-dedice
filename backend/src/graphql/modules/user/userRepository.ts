@@ -1,79 +1,78 @@
-import { eq, inArray } from 'drizzle-orm'
+import { eq, inArray, InferInsertModel, InferSelectModel } from 'drizzle-orm'
 
-import { notary, user } from '@backend/db/schema'
+import { user } from '@backend/db/schema'
 import { type Db } from '@backend/types/types'
+import { UserTypeEnumType } from '@shared/enums'
 
-export interface UserData {
-  email: string
-  password: string
-  confirmed?: boolean
-  contactId?: number
-}
-
-export interface UserDbRecord {
-  id: number
-  email: string
-  password: string
-  confirmed: boolean
-  contactId: number | null
-}
+export interface UserEntity extends InferSelectModel<typeof user> {}
+export interface UserInsertInput
+  extends InferInsertModel<Omit<typeof user, 'id'>> {}
 
 export function getUserRepository(db: Db) {
-  async function getUserById(id: number): Promise<UserDbRecord | null> {
+  async function getUserById(id: number): Promise<UserEntity | null> {
     const [result] = await db.select().from(user).where(eq(user.id, id))
-    return result
+    return result || null
   }
 
-  async function getUsersByIds(ids: number[]): Promise<UserDbRecord[]> {
+  async function getUsersByIds(ids: number[]): Promise<UserEntity[]> {
     const results = await db.select().from(user).where(inArray(user.id, ids))
     return results
   }
 
-  async function getAllUsers(): Promise<UserDbRecord[]> {
-    const results = await db.select().from(user)
+  async function getAllUsersByType(
+    type: UserTypeEnumType
+  ): Promise<UserEntity[]> {
+    const results = await db.select().from(user).where(eq(user.type, type))
     return results
   }
 
-  async function getUserByNotaryId(
-    notaryId: number
-  ): Promise<UserDbRecord | null> {
-    const [result] = await db
-      .select()
-      .from(user)
-      .innerJoin(notary, eq(user.id, notary.userId))
-      .where(eq(notary.id, notaryId))
-
-    return result ? result.user : null
-  }
-
-  async function createUser(userData: UserData): Promise<number> {
-    const resultingIds = await db
-      .insert(user)
-      .values(userData) // Passing the whole object as `userData`
-      .$returningId()
-
+  async function createUser(data: UserInsertInput): Promise<number> {
+    const resultingIds = await db.insert(user).values(data).$returningId()
     return resultingIds[0].id
   }
 
-  async function getUserByEmail(email: string): Promise<UserDbRecord | null> {
+  async function createUsers(data: UserInsertInput[]): Promise<number[]> {
+    const resultingIds = await db.insert(user).values(data).$returningId()
+    return resultingIds.map((result) => result.id)
+  }
+
+  async function getUserByEmail(email: string): Promise<UserEntity | null> {
     const [result] = await db.select().from(user).where(eq(user.email, email))
     return result || null
   }
 
-  async function updateUser(
-    userId: number,
-    data: Partial<UserData>
+  async function updateUserById(
+    id: number,
+    data: Partial<UserInsertInput>
   ): Promise<void> {
-    await db.update(user).set(data).where(eq(user.id, userId))
+    await db.update(user).set(data).where(eq(user.id, id))
+  }
+
+  async function deleteUsersByIds(ids: number[]): Promise<void> {
+    await db.delete(user).where(inArray(user.id, ids))
+  }
+
+  async function getUserByNotaryId(
+    notaryId: number
+  ): Promise<UserEntity | null> {
+    const [result] = await db
+      .select()
+      .from(user)
+      .where(eq(user.notaryId, notaryId))
+    console.log('repository notaryId', notaryId)
+    console.log('repository result', result)
+    return result || null
   }
 
   return {
     getUserById,
+    getAllUsersByType,
     getUsersByIds,
-    getAllUsers,
     createUser,
-    getUserByNotaryId,
+    createUsers,
     getUserByEmail,
-    updateUser,
+    updateUserById,
+    deleteUsersByIds,
+    getUserByNotaryId,
   }
 }

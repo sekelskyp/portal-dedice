@@ -1,33 +1,22 @@
-import { gql, useQuery } from '@apollo/client'
+import { useState } from 'react'
+import { useQuery } from '@apollo/client'
 import { Box, Heading, HStack, Stack, Text, VStack } from '@chakra-ui/react'
 import { FaMoneyBill, FaTimes } from 'react-icons/fa'
 import { useParams } from 'react-router-dom'
 
 import { useAuth } from '@frontend/modules/auth'
+import { ActionDialog } from '@frontend/shared/components/ActionDialog'
 import { Alert } from '@frontend/shared/design-system/atoms/chakra/alert'
 import { Button } from '@frontend/shared/design-system/atoms/chakra/button'
+import { toaster } from '@frontend/shared/design-system/atoms/chakra/toaster'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { route } from '@shared/route'
 
 import { useDeleteAsset } from '../hooks/useDeleteAsset'
-import { useProcedure } from '../hooks/useProcedure'
+import { GET_ASSETS } from '../hooks/useGetAsset'
+import { useProceeding } from '../hooks/useProceeding'
 
-const GET_ASSETS = gql`
-  query getAssetsByProcedureId($procedureId: Int!) {
-    getAssetsByProcedureId(procedureId: $procedureId) {
-      id
-      type
-      name
-      value
-      description
-      bankName
-      carMakeName
-      carRegistrationDate
-      carType
-      cin
-    }
-  }
-`
+//TODO: fix query and components
 
 interface Asset {
   id: number
@@ -53,14 +42,14 @@ const AssetGroup = ({
 }) => {
   const { id } = useParams()
   const { user } = useAuth()
-  const procedure = useProcedure({ procedureId: parseInt(id ?? '0', 10) })
+  const { data: procedureData } = useProceeding(parseInt(id ?? '0', 10))
 
   if (assets.length === 0) return null
 
   const getAssetDetails = (asset: Asset) => {
     switch (asset.type) {
       case 'Financial instrument':
-        return `${asset.bankName}`
+        return asset.bankName
       case 'Company':
         return `IČO: ${asset.cin}`
       case 'Automobile':
@@ -81,7 +70,7 @@ const AssetGroup = ({
   }
 
   return (
-    <Box p={4} borderWidth={1} borderRadius="md" mb={4} bg="gray.50">
+    <Box p={4} borderWidth={2} borderRadius="md" mb={4} bg="gray.100">
       <Heading size="md" mb={4}>
         {type}
       </Heading>
@@ -104,8 +93,8 @@ const AssetGroup = ({
                 </Text>
                 {getAssetDetails(asset)}
               </VStack>
-              {procedure?.data?.getProcedureById?.beneficiaries?.some(
-                (item) => item.id === user?.beneficiaries[0]?.id
+              {procedureData?.getProceedingById?.beneficiaries?.some(
+                (item) => item.user?.id === user?.id?.toString()
               ) && (
                 <Button
                   aria-label="Delete asset"
@@ -127,20 +116,37 @@ const AssetGroup = ({
 
 export function Assets({ id }: { id: string }) {
   const { user } = useAuth()
+  const isNotary = user?.type === 'Notary'
   const { data, loading, error } = useQuery(GET_ASSETS, {
-    variables: { procedureId: parseInt(id, 10) },
+    variables: { procedureId: +id },
   })
-  const { removeAsset } = useDeleteAsset()
+  const { removeAsset } = useDeleteAsset(+id)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [selectedAssetId, setSelectedAssetId] = useState<string>()
 
-  const handleDelete = async (assetId: number | string) => {
+  const handleDelete = async (assetId: string) => {
     try {
       await removeAsset(Number(assetId))
+      toaster.create({
+        title: 'Majetek byl úspěšně smazán',
+        type: 'success',
+      })
     } catch (error) {
-      console.error('Failed to delete asset:', error)
+      toaster.create({
+        title: 'Nepodařilo se smazat majetek',
+        type: 'error',
+      })
     }
   }
 
-  const assets = data?.getAssetsByProcedureId || []
+  const openDeleteDialog = (assetId: number) => {
+    setSelectedAssetId(assetId.toString())
+    setIsDeleteDialogOpen(true)
+  }
+
+  const assets = data?.getAssetsByProceedingId || []
+
+  console.log(assets)
 
   if (loading) return <Text>Načítání...</Text>
   if (error) return <Text color="red.500">Chyba při načítání majetku</Text>
@@ -166,6 +172,14 @@ export function Assets({ id }: { id: string }) {
 
   return (
     <Stack>
+      <ActionDialog
+        title="Smazat majetek"
+        text="Opravdu chcete smazat tento majetek?"
+        isOpen={isDeleteDialogOpen}
+        toggle={setIsDeleteDialogOpen}
+        onConfirm={handleDelete}
+        selectedId={selectedAssetId}
+      />
       <Heading mb={4}>Majetek v řízení</Heading>
       {assets.length === 0 ? (
         <Alert
@@ -180,21 +194,18 @@ export function Assets({ id }: { id: string }) {
               key={type}
               type={label}
               assets={groupedAssets[type] || []}
-              onDelete={handleDelete}
+              onDelete={openDeleteDialog}
             />
           ))}
         </Stack>
       )}
-      {!user?.isNotary && (
-        <Stack
-          direction={{ base: 'column', lg: 'row' }}
-          justifyContent="center"
-          mb={4}
-        >
+      {!isNotary && (
+        <Stack alignItems={'center'}>
           <RouterNavLink
             to={route.newAsset(id)}
             width="fit-content"
             rounded={'full'}
+            textAlign={'center'}
           >
             Přidat/upravit Majetek
             <FaMoneyBill />

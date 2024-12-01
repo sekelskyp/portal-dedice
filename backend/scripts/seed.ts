@@ -1,22 +1,21 @@
-import { sql } from 'drizzle-orm'
+import { eq, sql } from 'drizzle-orm'
 import { MySql2Database } from 'drizzle-orm/mysql2'
 
 import { getConnection } from '../src/db/db'
 import {
+  address,
   asset,
   beneficiary,
-  beneficiaryInheritanceProcedureRel,
   chat,
   chatMessage,
-  contact,
-  inheritanceProcedure,
   notary,
   notaryDateRule,
+  proceeding,
   user,
 } from '../src/db/schema'
 import { hashPassword } from '../src/services/passwordHashService'
+import { generateProceedingName } from '../src/services/proceedingService'
 
-import { seedInheritanceProcedures } from './seedInheritanceProcedures'
 import { seedNotariesAndDateRules } from './seedNotaries'
 
 async function populateDatabase(
@@ -24,19 +23,94 @@ async function populateDatabase(
   notaryIds: number[]
 ) {
   console.log('Seeding population data...')
+  // insert test notaries
+  const [notaryId1, notaryId2] = await db
+    .insert(notary)
+    .values([{ postalCode: '150 00' }, { postalCode: '120 00' }])
+    .$returningId()
 
-  // Insert contacts and save returned IDs
+  // addresses for users
   const [
-    beneficiaryContactId1,
-    beneficiaryContactId2,
-    deceasedContactId1,
-    beneficiaryContactId3,
-    deceasedContactId2,
-    notaryContactId1,
-    notaryContactId2,
+    addressId1,
+    addressId2,
+    addressId3,
+    addressId4,
+    addressId5,
+    addressId6,
+    deceasedAddressId1,
+    deceasedAddressId2,
   ] = await db
-    .insert(contact)
+    .insert(address)
     .values([
+      // user addresses
+      {
+        street: 'Main Street',
+        streetNumber: '123',
+        municipality: 'Brno',
+        postalCode: '11000',
+      },
+      {
+        street: 'Main Street',
+        streetNumber: '456',
+        municipality: 'Brno',
+        postalCode: '15000',
+      },
+      {
+        street: 'Liberty Avenue',
+        streetNumber: '789',
+        municipality: 'Prague',
+        postalCode: '12000',
+      },
+      {
+        street: 'Liberty Avenue',
+        streetNumber: '987',
+        municipality: 'Prague',
+        postalCode: '15000',
+      },
+      {
+        street: 'Liberty Avenue',
+        streetNumber: '111',
+        municipality: 'Prague',
+        postalCode: '13000',
+      },
+      // notary addresses
+      {
+        street: 'Peace Square',
+        streetNumber: '321',
+        municipality: 'Ostrava',
+        postalCode: '13000',
+      },
+      {
+        street: 'Peace Square',
+        streetNumber: '321',
+        municipality: 'Ostrava',
+        postalCode: '13000',
+      },
+      // deceased addresses
+      {
+        street: 'Main Street',
+        streetNumber: '888',
+        municipality: 'Brno',
+        postalCode: '11000',
+      },
+      {
+        street: 'Main Street',
+        streetNumber: '777',
+        municipality: 'Brno',
+        postalCode: '15000',
+      },
+    ])
+    .$returningId()
+
+  const [
+    beneficiaryUser1Id,
+    beneficiaryUser2Id,
+    beneficiaryUser3Id,
+    beneficiaryUser4Id,
+  ] = await db
+    .insert(user)
+    .values([
+      // beneficiaries
       {
         name: 'Young',
         surname: 'Gatchell',
@@ -44,10 +118,10 @@ async function populateDatabase(
         gender: 'Male',
         phone: '+420666666661',
         email: 'gatyou@quacker.com',
-        addressStreet: 'Main Street',
-        addressStreetNumber: '123',
-        addressMunicipality: 'Brno',
-        addressPostCode: '11000',
+        password: await hashPassword('heslo123'),
+        addressId: addressId1.id,
+        confirmed: true,
+        type: 'User',
       },
       {
         name: 'Petr',
@@ -56,22 +130,48 @@ async function populateDatabase(
         gender: 'Male',
         phone: '+420555555551',
         email: 'hocpet@quacker.com',
-        addressStreet: 'Main Street',
-        addressStreetNumber: '456',
-        addressMunicipality: 'Brno',
-        addressPostCode: '15000',
+        password: await hashPassword('heslo123'),
+        addressId: addressId2.id,
+        confirmed: true,
+        type: 'User',
       },
       {
         name: 'Alice',
         surname: 'Novakova',
         displayName: 'Alice Novakova',
+        email: 'novali@quacker.com',
         gender: 'Female',
         phone: '+420444444441',
-        email: 'novali@quacker.com',
-        addressStreet: 'Liberty Avenue',
-        addressStreetNumber: '789',
-        addressMunicipality: 'Prague',
-        addressPostCode: '12000',
+        password: await hashPassword('heslo123'),
+        addressId: addressId3.id,
+        confirmed: true,
+        type: 'User',
+      },
+      {
+        name: 'Radek',
+        surname: 'Lochman',
+        displayName: 'Radek Lochman',
+        gender: 'Male',
+        phone: '+420555555555',
+        email: 'locrad@quacker.com',
+        password: await hashPassword('heslo123'),
+        addressId: addressId4.id,
+        confirmed: true,
+        type: 'User',
+      },
+      // notaries
+      {
+        name: 'Jan',
+        surname: 'Michalec',
+        displayName: 'Jan Michalec',
+        gender: 'Male',
+        phone: '+42033333333š',
+        email: 'michalec@quacker.com',
+        password: await hashPassword('heslo123'),
+        addressId: addressId5.id,
+        confirmed: true,
+        type: 'Notary',
+        notaryId: notaryId1.id,
       },
       {
         name: 'Tomas',
@@ -80,187 +180,109 @@ async function populateDatabase(
         gender: 'Male',
         phone: '+420333333331',
         email: 'vestom@quacker.com',
-        addressStreet: 'Peace Square',
-        addressStreetNumber: '321',
-        addressMunicipality: 'Ostrava',
-        addressPostCode: '13000',
-      },
-      {
-        name: 'Jan',
-        surname: 'Svoboda',
-        displayName: 'Jan Svoboda',
-        gender: 'Male',
-        phone: '+42033333333š',
-        email: 'svojan@quacker.com',
-        addressStreet: 'Peace Square',
-        addressStreetNumber: '321',
-        addressMunicipality: 'Ostrava',
-        addressPostCode: '13000',
-      },
-      // main Contacts for inheritance procedures
-      {
-        name: 'Jan',
-        surname: 'Michalec',
-        displayName: 'Jan Michalec',
-        gender: 'Male',
-        phone: '+42033333333š',
-        email: 'michalec@quacker.com',
-        addressStreet: 'Peace Square',
-        addressStreetNumber: '321',
-        addressMunicipality: 'Ostrava',
-        addressPostCode: '13000',
-      },
-      {
-        name: 'Petr',
-        surname: 'Hochman',
-        displayName: 'Petr Hochman',
-        gender: 'Male',
-        phone: '+42033333333š',
-        email: 'hochman@quacker.com',
-        addressStreet: 'Peace Square',
-        addressStreetNumber: '321',
-        addressMunicipality: 'Ostrava',
-        addressPostCode: '13000',
+        password: await hashPassword('heslo123'),
+        addressId: addressId6.id,
+        confirmed: true,
+        type: 'Notary',
+        notaryId: notaryId2.id,
       },
     ])
     .$returningId()
 
-  // Insert users and save returned IDs
-  const [beneficiaryUserId1, beneficiaryUserId2, beneficiaryUserId3] = await db
-    .insert(user)
+  // proceedings
+  const [proceedingId1, proceedingId2] = await db
+    .insert(proceeding)
     .values([
       {
-        password: await hashPassword('heslo1234'),
-        email: 'test.email1@email.com',
-        confirmed: true,
-        contactId: beneficiaryContactId1.id,
+        notaryId: notaryId1.id,
+        name: generateProceedingName(
+          'Alice',
+          'Novakova',
+          new Date('2024-01-01')
+        ),
+        state: 'InProgress',
+        startDate: new Date('2024-01-01'),
+        deceasedName: 'Alice',
+        deceasedSurname: 'Novakova',
+        deceasedDisplayName: 'Alice Novakova',
+        deceasedAddressId: deceasedAddressId1.id,
+        deceasedDateOfBirth: new Date('1940-01-01'),
+        deceasedDateOfDeath: new Date('2023-12-31'),
       },
       {
-        password: await hashPassword('heslo1234'),
-        email: 'test.email2@email.com',
-        confirmed: true,
-        contactId: beneficiaryContactId2.id,
-      },
-      {
-        password: await hashPassword('heslo1234'),
-        email: 'test.email3@email.com',
-        confirmed: true,
-        contactId: beneficiaryContactId3.id,
+        notaryId: notaryId2.id,
+        name: generateProceedingName('Jan', 'Svoboda', new Date('2024-01-01')),
+        state: 'InProgress',
+        startDate: new Date('2024-01-01'),
+        deceasedName: 'Jan',
+        deceasedSurname: 'Svoboda',
+        deceasedDisplayName: 'Jan Svoboda',
+        deceasedAddressId: deceasedAddressId2.id,
+        deceasedDateOfBirth: new Date('1940-01-01'),
+        deceasedDateOfDeath: new Date('2023-12-31'),
       },
     ])
     .$returningId()
 
-  // Insert beneficiaries using the saved beneficiaryUserId
-  const [beneficiaryId1, beneficiaryId2, beneficiaryId3] = await db
+  await db
+    .insert(chat)
+    .values([
+      { proceedingId: proceedingId1.id },
+      { proceedingId: proceedingId2.id },
+    ])
+
+  // create beneficiaries
+  const [beneficiary1Id, beneficiary2Id] = await db
     .insert(beneficiary)
     .values([
+      // main beneficiaries first so i can get them as variables to pass check-all test
       {
-        userId: beneficiaryUserId1.id,
-        contactId: beneficiaryContactId1.id,
-        deceasedRelation: 'Spouse',
-        dateOfBirth: new Date('1980-01-01'),
+        userId: beneficiaryUser1Id.id,
+        proceedingId: proceedingId1.id,
       },
       {
-        userId: beneficiaryUserId2.id,
-        contactId: beneficiaryContactId2.id,
-        deceasedRelation: 'Child',
-        dateOfBirth: new Date('1980-01-01'),
+        userId: beneficiaryUser3Id.id,
+        proceedingId: proceedingId2.id,
       },
       {
-        userId: beneficiaryUserId3.id,
-        contactId: beneficiaryContactId3.id,
-        deceasedRelation: 'Parent',
-        dateOfBirth: new Date('1990-01-01'),
-      },
-    ])
-    .onDuplicateKeyUpdate({ set: { userId: beneficiaryUserId2.id } })
-    .$returningId()
-
-  // populate user notaries
-  const [notaryUserId1, notaryUserId2] = await db
-    .insert(user)
-    .values([
-      {
-        email: 'test.notary1@quacker.cz',
-        password: await hashPassword('heslo1234'),
-        confirmed: true,
-        contactId: notaryContactId1.id,
+        userId: beneficiaryUser2Id.id,
+        proceedingId: proceedingId1.id,
       },
       {
-        email: 'test.notary2@quacker.cz',
-        password: await hashPassword('heslo1234'),
-        confirmed: true,
-        contactId: notaryContactId1.id,
+        userId: beneficiaryUser4Id.id,
+        proceedingId: proceedingId2.id,
       },
     ])
     .$returningId()
 
-  const [notaryId1, notaryId2] = await db
-    .insert(notary)
-    .values([
-      {
-        contactId: notaryContactId1.id,
-        userId: notaryUserId1.id,
-      },
-      {
-        contactId: notaryContactId2.id,
-        userId: notaryUserId2.id,
-      },
-    ])
-    .$returningId()
+  // set main beneficiaries
 
-  const [inheritanceId1, inheritanceId2] = await seedInheritanceProcedures(db, [
-    {
-      notaryId: notaryId1.id,
-      state: 'InProgress',
-      startDate: new Date('2024-01-01'),
-      deceasedContactId: deceasedContactId1.id,
-      deceasedDateOfBirth: new Date('1940-01-01'),
-      deceasedDateOfDeath: new Date('2023-12-31'),
-      mainContactId: beneficiaryContactId1.id,
-    },
-    {
-      notaryId: notaryId2.id,
-      state: 'InProgress',
-      startDate: new Date('2024-03-10'),
-      deceasedContactId: deceasedContactId2.id,
-      deceasedDateOfBirth: new Date('1956-12-01'),
-      deceasedDateOfDeath: new Date('2024-03-12'),
-      mainContactId: beneficiaryContactId3.id,
-    },
-  ])
+  await db
+    .update(proceeding)
+    .set({ mainBeneficiaryId: beneficiary1Id.id })
+    .where(eq(proceeding.id, proceedingId1.id))
 
-  await db.insert(beneficiaryInheritanceProcedureRel).values([
-    {
-      beneficiaryId: beneficiaryId1.id,
-      inheritanceProcedureId: inheritanceId1,
-    },
-    {
-      beneficiaryId: beneficiaryId2.id,
-      inheritanceProcedureId: inheritanceId1,
-    },
-    {
-      beneficiaryId: beneficiaryId3.id,
-      inheritanceProcedureId: inheritanceId2,
-    },
-  ])
+  await db
+    .update(proceeding)
+    .set({ mainBeneficiaryId: beneficiary2Id.id })
+    .where(eq(proceeding.id, proceedingId2.id))
 
+  // create assets
   await db.insert(asset).values([
     {
-      inheritanceProcedureId: inheritanceId1,
-
+      proceedingId: proceedingId1.id,
       value: 100_000,
       name: 'Auto',
       type: 'Automobile',
     },
     {
-      inheritanceProcedureId: inheritanceId1,
-
+      proceedingId: proceedingId2.id,
       value: 200_000,
       name: 'Dům',
       type: 'Other',
     },
   ])
+
   console.log('Population data seeded successfully.')
 }
 
@@ -276,10 +298,9 @@ async function seed() {
     await db.delete(beneficiary)
     await db.delete(notary)
     await db.delete(user)
-    await db.delete(contact)
+    await db.delete(address)
     await db.delete(notaryDateRule)
-    await db.delete(inheritanceProcedure)
-    await db.delete(beneficiaryInheritanceProcedureRel)
+    await db.delete(proceeding)
     await db.delete(asset)
     await db.delete(chat)
     await db.delete(chatMessage)

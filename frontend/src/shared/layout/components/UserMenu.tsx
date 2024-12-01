@@ -23,7 +23,7 @@ export const UserMenu = () => {
   const breakpoint = useBreakpoint({ breakpoints: ['base', 'sm'] })
   const isMobile = breakpoint === 'base'
 
-  const name = user?.contact?.displayName
+  const name = user?.displayName
 
   if (!user) return null
 

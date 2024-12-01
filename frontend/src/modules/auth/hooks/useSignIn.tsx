@@ -6,39 +6,30 @@ import { route } from '@shared/route'
 
 import { useAuth } from '../auth-core'
 
+//TODO: fix query and components
+
 const SIGNIN_MUTATION = gql(/* GraphQL */ `
   mutation SignIn($login: String!, $password: String!) {
     signIn(login: $login, password: $password) {
       user {
-        id
-        email
+        addressId
+        address {
+          id
+          municipality
+          postalCode
+          street
+          streetNumber
+        }
         confirmed
-        isNotary
-        isBeneficiary
-        beneficiaries {
-          id
-          dateOfBirth
-          deceasedRelation
-          userId
-          contactId
-        }
-        notaries {
-          contactId
-          id
-          userId
-        }
-        contact {
-          name
-          surname
-          displayName
-          email
-          phone
-          addressStreet
-          addressStreetNumber
-          addressMunicipality
-          addressPostCode
-          gender
-        }
+        displayName
+        email
+        gender
+        id
+        name
+        phone
+        sendNotifications
+        surname
+        type
       }
       token
     }
@@ -51,7 +42,7 @@ export function useSignIn() {
 
   const [signInRequest, signInRequestState] = useMutation(SIGNIN_MUTATION, {
     onCompleted: ({ signIn: { user, token } }) => {
-      auth.signIn({ token, user })
+      auth.signIn({ token, user: { ...user, addressId: user.addressId ?? '' } })
       navigate(route.portal())
     },
     onError: () => {},

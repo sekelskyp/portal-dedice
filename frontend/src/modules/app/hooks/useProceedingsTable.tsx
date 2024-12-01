@@ -15,13 +15,14 @@ import { SquareArrowOutUpRight as SquareArrowOutUpRightIcon } from 'lucide-react
 import { MdDelete } from 'react-icons/md'
 
 import { useAuth } from '@frontend/modules/auth'
+import { useActionDialog } from '@frontend/shared/hooks/useActionDialog'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { route } from '@shared/route'
 
 import { ProceedingsItem } from '../components/proceedings-table/ProceedingsTable'
 import { StatusBadge } from '../components/StatusBadge'
 
-import { useDeleteProcedure } from './useDeleteProcedure'
+import { useDeleteProceeding } from './useDeleteProceeding'
 
 const INITIAL_SORTING_STATE = [
   {
@@ -45,23 +46,24 @@ const columnHelper = createColumnHelper<ProceedingsItem>()
 
 export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
   const { user } = useAuth()
+  const isNotary = user?.type === 'Notary'
 
-  const [deleteProcedureRequest] = useDeleteProcedure()
+  const { toggleDialog, isOpen, selectedId } = useActionDialog()
 
-  const handleProcedureDelete = useCallback(
-    (id: string) => {
+  const [deleteProcedureRequest] = useDeleteProceeding()
+
+  const handleProcedureDelete = useCallback(() => {
+    if (selectedId) {
       deleteProcedureRequest({
         variables: {
-          ids: [parseInt(id)],
+          ids: [parseInt(selectedId)],
         },
       })
-    },
-    [deleteProcedureRequest]
-  )
+    }
+  }, [deleteProcedureRequest, selectedId])
 
   const breakpoint = useBreakpoint({ breakpoints: ['base', 'sm', 'xl'] })
   const isMobile = breakpoint === 'base'
-  // const isDesktop = breakpoint === 'xl'
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -71,7 +73,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
 
   const columns = useMemo(() => {
     const columns = [
-      columnHelper.accessor('deceasedContact.displayName', {
+      columnHelper.accessor('deceasedDisplayName', {
         header: () => 'Zůstavitel',
         cell: (info) => {
           const name = info.getValue() as string
@@ -121,11 +123,11 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
           const id = info.row.original.id
           return (
             <Stack direction="row" alignItems="center">
-              {user?.isNotary && (
+              {isNotary && (
                 <IconButton
                   borderRadius="xl"
                   bg="red.600"
-                  onClick={() => handleProcedureDelete(id)}
+                  onClick={() => toggleDialog(true, id)}
                 >
                   <MdDelete />
                 </IconButton>
@@ -149,7 +151,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
     )
 
     return columns
-  }, [isMobile, handleProcedureDelete, user?.isNotary])
+  }, [isMobile, isNotary, toggleDialog])
 
   const table = useReactTable({
     columns,
@@ -173,5 +175,14 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
     getPaginationRowModel: getPaginationRowModel(),
   })
 
-  return { table, setGlobalFilter }
+  return {
+    table,
+    setGlobalFilter,
+    dialog: {
+      isOpen,
+      toggleDialog,
+      selectedId,
+      handleProcedureDelete,
+    },
+  }
 }

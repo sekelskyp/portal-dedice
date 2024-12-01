@@ -52,7 +52,7 @@ export const Section: React.FC<SectionProps> = ({
           onChange={() => {
             setSelected(!selected)
             if (selected && clearFields) {
-              requestAnimationFrame(clearFields)
+              clearFields()
             }
           }}
           transition="opacity 0.2s"
@@ -62,12 +62,10 @@ export const Section: React.FC<SectionProps> = ({
     )}
     <Box
       flex={1}
-      visibility={!selected || hideSwitch ? 'visible' : 'hidden'}
-      opacity={!selected || hideSwitch ? 1 : 0}
+      visibility={selected ? 'hidden' : 'visible'}
+      opacity={selected ? 0 : 1}
       transition="all 0.2s"
-      transform={
-        !selected || hideSwitch ? 'translateY(0)' : 'translateY(-10px)'
-      }
+      transform={selected ? 'translateY(-10px)' : 'translateY(0)'}
     >
       {children}
     </Box>

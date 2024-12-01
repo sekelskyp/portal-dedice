@@ -30,7 +30,7 @@ export function NotaryAssignmentError({
         mx={{ base: 8, sm: 0 }}
         p={4}
       >
-        {errorMessage}
+        Pro tuto kombinace údajů nelze najít notáře. Zkuste to prosím znovu.
       </Alert>
       <Button mt={4} onClick={action}>
         Zpět na formulář

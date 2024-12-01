@@ -17,10 +17,24 @@ export function ContactInfo({ contactInfo }: ContactInfoProps) {
     sm: '20px',
     md: '24px',
   })
+
+  const formatPhoneNumberForDisplay = (phone: string) => {
+    return phone.replace(/(\d{3})(?=\d)/g, '$1 ')
+  }
+
+  const formatPhoneNumberForLink = (phone: string) => {
+    return phone.replace(/\s+/g, '')
+  }
+
   const contactIcons: ContactInfoItemProps[] = [
     {
       icon: <FiPhone size={iconBreakpoints} />,
-      text: contactInfo.phone!,
+      text: contactInfo.phone
+        ? formatPhoneNumberForLink(contactInfo.phone)
+        : '',
+      displayText: contactInfo.phone
+        ? formatPhoneNumberForDisplay(contactInfo.phone)
+        : '',
     },
     {
       icon: <FiMail size={iconBreakpoints} />,
@@ -45,7 +59,12 @@ export function ContactInfo({ contactInfo }: ContactInfoProps) {
       py={4}
     >
       {contactIcons.map((item, index) => (
-        <ContactInfoItem key={index} icon={item.icon} text={item.text} />
+        <ContactInfoItem
+          key={index}
+          icon={item.icon}
+          text={item.text}
+          displayText={item.displayText}
+        />
       ))}
     </Container>
   )

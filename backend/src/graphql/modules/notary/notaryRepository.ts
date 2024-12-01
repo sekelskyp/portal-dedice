@@ -1,16 +1,22 @@
-import { and, eq, inArray, sql } from 'drizzle-orm'
+import {
+  and,
+  eq,
+  inArray,
+  InferInsertModel,
+  InferSelectModel,
+  sql,
+} from 'drizzle-orm'
 
 import { type Db } from '@backend/types/types'
 
-import { contact, notary, notaryDateRule } from '../../../db/schema'
+import { notary, notaryDateRule } from '../../../db/schema'
 
-export interface NotaryData {
-  contactId?: number
-  userId?: number
-}
+export interface NotaryEntity extends InferSelectModel<typeof notary> {}
+export interface NotaryInsertInput
+  extends InferInsertModel<Omit<typeof notary, 'id'>> {}
 
 export function getNotaryRepository(db: Db) {
-  function getNotaryById(id: number) {
+  function getNotaryById(id: number): Promise<NotaryEntity | null> {
     return db
       .select()
       .from(notary)
@@ -18,16 +24,12 @@ export function getNotaryRepository(db: Db) {
       .then(([notary]) => notary)
   }
 
-  function getNotariesByIds(ids: number[]) {
+  function getNotariesByIds(ids: number[]): Promise<NotaryEntity[]> {
     return db
       .select()
       .from(notary)
       .where(inArray(notary.id, ids))
       .then((notaries) => notaries)
-  }
-
-  function getNotariesByUserId(id: number) {
-    return db.select().from(notary).where(eq(notary.userId, id))
   }
 
   function getAllNotaries() {
@@ -37,25 +39,12 @@ export function getNotaryRepository(db: Db) {
       .then((notaries) => notaries)
   }
 
-  async function createNotary({
-    contactId = null,
-    userId = null,
-  }: {
-    contactId?: number | null
-    userId?: number | null
-  }) {
-    const resultingIds = await db
-      .insert(notary)
-      .values({
-        contactId,
-        userId,
-      })
-      .$returningId()
-
-    return resultingIds[0]
+  async function createNotary(data: NotaryInsertInput): Promise<number> {
+    const [result] = await db.insert(notary).values(data).$returningId()
+    return result.id
   }
 
-  async function createNotaries(data: NotaryData[]): Promise<number[]> {
+  async function createNotaries(data: NotaryInsertInput[]): Promise<number[]> {
     const results = await db.insert(notary).values(data).$returningId()
     return results.map((notary) => notary.id)
   }
@@ -70,11 +59,10 @@ export function getNotaryRepository(db: Db) {
     dateOfDeathMonthNumber: number,
     dateOfDeathDayNumber: number,
     addressPostCode: string
-  ) {
+  ): Promise<number | null> {
     const result = await db
       .select({ id: notary.id })
       .from(notary)
-      .leftJoin(contact, eq(notary.contactId, contact.id))
       .leftJoin(
         notaryDateRule,
         and(
@@ -83,17 +71,10 @@ export function getNotaryRepository(db: Db) {
           eq(notaryDateRule.startDay, dateOfDeathDayNumber)
         )
       )
-      .where(
-        sql`LEFT(${contact.addressPostCode}, 2) = LEFT(${addressPostCode}, 2)`
-      )
+      .where(sql`LEFT(${notary.postalCode}, 2) = LEFT(${addressPostCode}, 2)`)
       .groupBy(notary.id)
       .limit(1)
-
-    if (result.length === 0) {
-      throw new Error('Notář nebyl nalezen.')
-    }
-
-    return await db.select().from(notary).where(eq(notary.id, result[0].id))
+    return result[0].id || null
   }
 
   return {
@@ -104,6 +85,5 @@ export function getNotaryRepository(db: Db) {
     deleteNotaryById,
     findAvailableNotary,
     createNotaries,
-    getNotariesByUserId,
   }
 }

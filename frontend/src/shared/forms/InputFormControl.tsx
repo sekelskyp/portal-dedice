@@ -1,17 +1,17 @@
-import { Input } from '@chakra-ui/react'
+import { Input, InputProps } from '@chakra-ui/react'
 
 import { BaseFieldControl, BaseFieldControlProps } from './BaseFieldControl'
 
 export interface InputControlProps extends BaseFieldControlProps {
-  type?: string
   placeholder?: string
   onChange?: (value: string) => void
+  inputProps?: InputProps
 }
 
 export const InputFormControl = ({
-  type,
   placeholder,
   onChange,
+  inputProps,
   ...props
 }: InputControlProps) => {
   return (
@@ -19,13 +19,13 @@ export const InputFormControl = ({
       {(field, disabled) => (
         <Input
           {...field}
+          {...inputProps}
           onChange={(e) => {
             field.onChange(e.target.value)
             onChange?.(e.target.value)
           }}
           value={field.value || ''}
           disabled={disabled}
-          type={type}
           placeholder={placeholder}
         />
       )}

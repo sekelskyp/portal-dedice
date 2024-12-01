@@ -8,7 +8,7 @@ export class Chat {
   id!: number
 
   @Field(() => ID)
-  inheritanceProcedureId!: number
+  proceedingId!: number
 
   @Field(() => [ChatMessage], { nullable: true })
   chatMessages?: ChatMessage[]

@@ -1,10 +1,11 @@
+import { AddressSuggestion } from '@frontend/gql/graphql'
+
 import { AddressAutoComplete } from '../components/AddressAutoComplete'
-import { Suggestion } from '../hooks/useAddressSuggestions'
 
 import { BaseFieldControl, BaseFieldControlProps } from './BaseFieldControl'
 
 export interface AddressFormControlProps extends BaseFieldControlProps {
-  onSuggestionSelected: (suggestion?: Suggestion) => void
+  onSuggestionSelected: (suggestion?: AddressSuggestion) => void
 }
 
 export const AddressFormControl = ({

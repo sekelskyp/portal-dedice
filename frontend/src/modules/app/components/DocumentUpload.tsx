@@ -14,18 +14,22 @@ import {
 
 import { useCreateDocument } from '../hooks/useCreateDocument'
 import { useDocumentUpload } from '../hooks/useDocumentUpload'
-import { useProcedure } from '../hooks/useProcedure'
+import { useProceeding } from '../hooks/useProceeding'
 
 export function DocumentUpload() {
   const { id } = useParams()
   const [showEmptyFilesAlert, setShowEmptyFilesAlert] = useState(false)
 
-  const { data } = useProcedure({
-    procedureId: parseInt(id ?? '0', 10),
-  })
+  const { data } = useProceeding(parseInt(id ?? '0', 10))
 
-  const { files, handleFileUpload, clearFiles, ACCEPTED_FILE_TYPES } =
-    useDocumentUpload()
+  const {
+    files,
+    handleFileUpload,
+    clearFiles,
+    ACCEPTED_FILE_TYPES,
+    MAX_FILE_SIZE,
+    MAX_FILE_COUNT,
+  } = useDocumentUpload()
 
   const [createDocumentRequest, createDocumentRequestState] =
     useCreateDocument()
@@ -62,7 +66,7 @@ export function DocumentUpload() {
           data: {
             file: file,
             inheritanceProcedureId:
-              data?.getProcedureById?.id?.toString() ?? '',
+              data?.getProceedingById?.id?.toString() ?? '',
           },
         },
       })
@@ -73,8 +77,8 @@ export function DocumentUpload() {
     <Box width="100%">
       <FileUploadRoot
         alignItems="stretch"
-        maxFiles={1}
-        maxFileSize={25000000}
+        maxFiles={MAX_FILE_COUNT}
+        maxFileSize={MAX_FILE_SIZE}
         accept={ACCEPTED_FILE_TYPES}
         onFileChange={handleDataChange}
       >

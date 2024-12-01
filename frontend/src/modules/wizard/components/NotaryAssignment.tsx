@@ -1,6 +1,15 @@
 import { useContext } from 'react'
-import { Button, Container, Flex, Heading, Stack, Text } from '@chakra-ui/react'
+import {
+  Button,
+  Container,
+  Flex,
+  Heading,
+  Spinner,
+  Stack,
+  Text,
+} from '@chakra-ui/react'
 
+import resources from '@frontend/resources'
 import { Avatar, Tooltip } from '@frontend/shared/design-system'
 import { SimpleCentered } from '@frontend/shared/design-system/atoms/CTA/SimpleCentered'
 
@@ -11,23 +20,6 @@ import { TestatorDataContext } from '../pages/WizardStepPage'
 import { AccordionHelper } from './accordion/AccordionHelper'
 import { ContactInfo } from './contact/ContactInfo'
 import { NotaryAssignmentError } from './NotaryAssignmentError'
-
-const dummy_data = [
-  {
-    id: 1,
-    title: 'Mohu si vybrat jiného notáře?',
-    description: 'Bohužel, změna notáře není možná.',
-  },
-  {
-    id: 2,
-    title: 'Kde je toto upraveno?',
-    description:
-      'Notář je určen rozvrhem práce, což je právní předpis.\nDostupný zde: https://www.nkcr.cz/seznam-notaru/rozvrhy-rizeni-o-pozustalosti',
-  },
-]
-
-const tooltipText =
-  'Tato aplikace vám srozumitelně vysvětlí, co vás v pozůstalostním řízení čeká a díky návodu zjistíte, jaké jsou možnosti rozdělení majetku v pozůstalosti.'
 
 interface NotaryAssignmentProps {
   nextStep: () => void
@@ -46,10 +38,16 @@ export function NotaryAssignment({
 
   const { notary, loading, error } = useGetNotary(
     testatorData.birthDate,
-    testatorData.addressPostCode
+    testatorData.addressInput?.postalCode
   )
 
-  if (loading) return <Text>Loading...</Text>
+  if (loading)
+    return (
+      <Stack direction="row" justifyItems="center">
+        <Spinner />
+        <Text>Načítání...</Text>
+      </Stack>
+    )
   if (error)
     return (
       <NotaryAssignmentError
@@ -64,12 +62,11 @@ export function NotaryAssignment({
         size={{ base: 'xs', sm: 'sm', md: 'md', lg: 'lg' }}
         textAlign="center"
       >
-        Na základě vyplněných údajů vám byl přidělen následující notář:
+        {resources.wizard.notaryAssignment.title}
       </Heading>
       <Flex align="flex-start">
         <Avatar
           size={{ base: 'xl', sm: '2xl' }}
-          name=""
           src={
             notary.gender === 'Female' ? '/woman-avatar.png' : '/man-avatar.png'
           }
@@ -92,10 +89,12 @@ export function NotaryAssignment({
             contactInfo={{
               email: notary.email,
               phone: notary.phone,
-              completeAddress: `${notary.addressStreet} ${notary.addressStreetNumber}, ${notary.addressMunicipality} ${notary.addressPostCode}`,
+              completeAddress: `${notary.address.street} ${notary.address.streetNumber}, ${notary.address.municipality} ${notary.address.postalCode}`,
             }}
           />
-          <AccordionHelper items={dummy_data} />
+          <AccordionHelper
+            items={resources.wizard.notaryAssignment.accordions}
+          />
         </Stack>
       </Container>
       <SimpleCentered bg="blue.bg">
@@ -104,7 +103,12 @@ export function NotaryAssignment({
         </Heading>
         <Text fontSize={{ base: 'xs', sm: 'sm', md: 'md', lg: 'lg' }}>
           Pojďte se v naší{' '}
-          <Tooltip content={tooltipText} showArrow open={isOpen} portalled>
+          <Tooltip
+            content={resources.wizard.notaryAssignment.tooltip}
+            showArrow
+            open={isOpen}
+            portalled
+          >
             <Text
               as="u"
               onMouseLeave={closeTooltip}
@@ -118,10 +122,10 @@ export function NotaryAssignment({
         </Text>
         <Flex justify="space-between" gap={4}>
           <Button bg="gray.500" onClick={previousStep} size="lg">
-            Zpět
+            {resources.wizard.testatorIdentification.CTA.previous}
           </Button>
           <Button onClick={nextStep} size="lg">
-            OK
+            {resources.wizard.testatorIdentification.CTA.next}
           </Button>
         </Flex>
       </SimpleCentered>

@@ -12,8 +12,6 @@ import {
 import { CustomContext } from '@backend/types/types'
 
 import { findAvailableNotary } from '../../../services/notaryAssignmentService'
-import { Contact } from '../contact/contactType'
-import { InheritanceProcedure } from '../inheritanceProcedure/inheritanceProcedureType'
 import { User } from '../user/userType'
 
 import { CreateNotaryInput } from './createNotaryInput'
@@ -22,15 +20,9 @@ import { Notary } from './notaryType'
 
 @Resolver(() => Notary)
 export class NotaryResolver {
-  @FieldResolver(() => [InheritanceProcedure])
-  async inheritanceProcedures(
-    @Root() user: User,
-    @Ctx() { inheritanceProcedureRepository }: CustomContext
-  ): Promise<InheritanceProcedure[]> {
-    const notaries =
-      await inheritanceProcedureRepository.getProceduresByNotaryId(user.id)
-    return notaries || []
-  }
+  // ----------------------------------
+  // Queries
+  // ----------------------------------
 
   @Query(() => [Notary])
   async notaries(
@@ -43,42 +35,8 @@ export class NotaryResolver {
   async getNotaryById(
     @Arg('id', () => Int) id: number,
     @Ctx() { notaryRepository }: CustomContext
-  ): Promise<Notary> {
+  ): Promise<Notary | null> {
     return notaryRepository.getNotaryById(id)
-  }
-
-  @FieldResolver(() => User, { nullable: true })
-  async user(
-    @Root() notary: Notary,
-    @Ctx() { userRepository }: CustomContext
-  ): Promise<User | null> {
-    return await userRepository.getUserByNotaryId(notary.id)
-  }
-
-  @FieldResolver(() => Contact, { nullable: true })
-  async contact(
-    @Root() notary: Notary,
-    @Ctx() { contactRepository }: CustomContext
-  ): Promise<Contact | null> {
-    return await contactRepository.getContactByNotaryId(notary.id)
-  }
-
-  @Mutation(() => Notary)
-  async createNotary(
-    @Arg('data') data: CreateNotaryInput,
-    @Ctx() { notaryRepository }: CustomContext
-  ): Promise<Notary> {
-    const { id } = await notaryRepository.createNotary(data)
-    return notaryRepository.getNotaryById(id)
-  }
-
-  @Mutation(() => Notary)
-  async deleteNotary(
-    @Arg('id', () => Int) id: number,
-    @Ctx() { notaryRepository }: CustomContext
-  ): Promise<boolean> {
-    const deletedNotaryId = await notaryRepository.deleteNotaryById(id)
-    return deletedNotaryId !== null
   }
 
   @Query(() => Notary, { nullable: true })
@@ -91,10 +49,64 @@ export class NotaryResolver {
       dateOfDeath: input.deceasedPersonDateOfDeath,
     }
 
-    const [notaryRecord] = await findAvailableNotary(
+    const notaryId = await findAvailableNotary(
       findAvailableNotaryInput,
       context
     )
-    return notaryRecord
+    if (!notaryId) {
+      return null
+    }
+    return context.notaryRepository.getNotaryById(notaryId)
+  }
+
+  // ----------------------------------
+  // Mutations
+  // ----------------------------------
+
+  @Mutation(() => Notary)
+  async createNotary(
+    @Arg('data') data: CreateNotaryInput,
+    @Ctx() { notaryRepository }: CustomContext
+  ): Promise<Notary> {
+    const notaryId = await notaryRepository.createNotary(data)
+    const notary = await notaryRepository.getNotaryById(notaryId)
+    if (!notary) {
+      throw new Error('Notary not found')
+    }
+    return notary
+  }
+
+  @Mutation(() => Boolean)
+  async deleteNotary(
+    @Arg('id', () => Int) id: number,
+    @Ctx() { notaryRepository }: CustomContext
+  ): Promise<boolean> {
+    const deletedNotaryId = await notaryRepository.deleteNotaryById(id)
+    return deletedNotaryId !== null
+  }
+
+  // ----------------------------------
+  // Field Resolvers
+  // ----------------------------------
+
+  // @FieldResolver(() => [Proceeding])
+  // async inheritanceProcedures(
+  //   @Root() user: User,
+  //   @Ctx() { proceedingRepository }: CustomContext
+  // ): Promise<Proceeding[]> {
+  //   const notaries = await proceedingRepository.getProceedingsByNotaryId(
+  //     user.id
+  //   )
+  //   return notaries || []
+  // }
+
+  @FieldResolver(() => User, { nullable: true })
+  async user(
+    @Root() notary: Notary,
+    @Ctx() { userRepository }: CustomContext
+  ): Promise<User | null> {
+    const result = await userRepository.getUserByNotaryId(notary.id)
+    console.log('user result', result)
+    return await userRepository.getUserByNotaryId(notary.id)
   }
 }
