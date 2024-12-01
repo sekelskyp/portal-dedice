@@ -1,4 +1,4 @@
-import { Box, Heading, IconButton, Stack } from '@chakra-ui/react'
+import { Box, Heading, IconButton, Spinner, Stack } from '@chakra-ui/react'
 import { FaPlus } from 'react-icons/fa'
 import { RiSortAsc, RiSortDesc } from 'react-icons/ri'
 
@@ -9,8 +9,8 @@ import { route } from '@shared/route'
 
 import { ArticleCard } from '../components/ArticleCard'
 import { ArticleSearchBar } from '../components/ArticleSearchBar'
-import { dummyData } from '../dummyData'
 import { useArticle } from '../hooks/useArticle'
+import { useGetArticles } from '../hooks/useGetArticles'
 
 //TODO: add routing to article detail page
 //TODO: add loading and error states
@@ -19,6 +19,7 @@ import { useArticle } from '../hooks/useArticle'
 //TODO: add responsive design
 
 export function BlogPage() {
+  const { data, loading, error } = useGetArticles()
   const {
     query,
     setQuery,
@@ -27,8 +28,30 @@ export function BlogPage() {
     sortOrder,
     toggleSortOrder,
   } = useArticle({
-    articles: dummyData,
+    articles: (data?.getAllArticles ?? []).map((article) => ({
+      id: Number(article.id),
+      title: article.title,
+      description: article.content,
+      createDate: article.date,
+      imageUrl: article.coverPicture,
+    })),
   })
+
+  if (loading) {
+    return (
+      <Page as={Stack} alignItems="center" justifyContent="center">
+        <Spinner size="xl" />
+      </Page>
+    )
+  }
+
+  if (error) {
+    return (
+      <Page as={Stack}>
+        <Alert status="error" title="Chyba při načítání článků." />
+      </Page>
+    )
+  }
 
   return (
     <Page as={Stack}>
