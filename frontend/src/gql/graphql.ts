@@ -1094,6 +1094,7 @@ export type GetArticleByIdQueryVariables = Exact<{
 export type GetArticleByIdQuery = {
   __typename?: 'Query'
   getArticleById?: {
+    coverPicture: string | undefined
     __typename?: 'Article'
     id: string
     date: any
@@ -1107,6 +1108,7 @@ export type GetAllArticlesQueryVariables = Exact<{ [key: string]: never }>
 export type GetAllArticlesQuery = {
   __typename?: 'Query'
   getAllArticles: Array<{
+    coverPicture: any
     __typename?: 'Article'
     id: string
     date: any
