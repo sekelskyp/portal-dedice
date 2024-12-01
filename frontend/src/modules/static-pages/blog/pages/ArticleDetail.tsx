@@ -78,7 +78,11 @@ export const ArticleDetail: React.FC = () => {
         articleId={articleId}
       />
       <Stack display="flex" alignItems="center" justifyContent="center">
-        <Card.Root w="full" maxW="80%" variant="elevated">
+        <Card.Root
+          w="full"
+          maxW={{ base: '100%', md: '80%' }}
+          variant="elevated"
+        >
           <Card.Header as={HStack} gap={2}>
             <LuNewspaper size={24} />
             <Heading size="2xl">{article.title}</Heading>
@@ -119,13 +123,16 @@ export const ArticleDetail: React.FC = () => {
       </Stack>
 
       <Stack mt={8} alignItems="center">
-        <Heading size="2xl">Mohlo by vás také zajímat:</Heading>
+        <Heading size={{ base: 'xl', md: '2xl' }}>
+          Mohlo by vás také zajímat:
+        </Heading>
         <Stack
           direction="row"
           justifyContent="center"
           flexWrap="wrap"
           gap={8}
           mt={8}
+          w={{ base: 'full', md: '100%' }}
         >
           {latestArticles.map((article) => (
             <ArticleCard

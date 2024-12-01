@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Box, Heading, IconButton, VStack } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LuArrowLeft } from 'react-icons/lu'
@@ -20,6 +20,7 @@ import { useCoverUpload } from '../hooks/useCoverUpload'
 import { useCreateArticle } from '../hooks/useCreateArticle'
 import { useGetArticle } from '../hooks/useGetArticle'
 import { useUpdateArticle } from '../hooks/useUpdateArticle'
+import { base64ToFile } from '../imageUtils'
 
 const articleSchema = z.object({
   title: z
@@ -54,10 +55,34 @@ export const NewArticlePage = () => {
 
   const currentDate = new Date()
 
+  const [currentImage, setCurrentImage] = useState<File | null>(null)
+  const [wasDeleted, setWasDeleted] = useState(false)
+
+  const handleFileChange = useCallback((file: File) => {
+    setCurrentImage(file)
+    setWasDeleted(false)
+  }, [])
+
+  const handleFileDelete = useCallback(() => {
+    setCurrentImage(null)
+    setWasDeleted(true)
+  }, [])
+
+  useEffect(() => {
+    if (
+      existingArticle?.getArticleById?.coverImage &&
+      !currentImage &&
+      !wasDeleted
+    ) {
+      const file = base64ToFile(existingArticle.getArticleById.coverImage)
+      setCurrentImage(file)
+    }
+  }, [existingArticle?.getArticleById?.coverImage, currentImage, wasDeleted])
+
   const handleSubmit = useCallback(
     async (data: ArticleFormData) => {
       if (isEditing) {
-        if (!data.image && !existingArticle?.getArticleById?.coverImage) {
+        if (!currentImage && !existingArticle?.getArticleById?.coverImage) {
           throw new Error('Cover picture is required')
         }
         await updateArticle({
@@ -68,12 +93,12 @@ export const NewArticlePage = () => {
               date: new Date(data.date).toISOString(),
               content: data.text,
               coverImage:
-                data.image ?? existingArticle?.getArticleById?.coverImage,
+                currentImage ?? existingArticle?.getArticleById?.coverImage,
             },
           },
         })
       } else {
-        if (!data.image) {
+        if (!currentImage) {
           throw new Error('Cover picture is required')
         }
         await createArticle({
@@ -82,7 +107,7 @@ export const NewArticlePage = () => {
               title: data.title,
               date: new Date(data.date).toISOString(),
               content: data.text,
-              coverImage: data.image,
+              coverImage: currentImage,
             },
           },
         })
@@ -90,12 +115,17 @@ export const NewArticlePage = () => {
     },
     [
       isEditing,
+      currentImage,
       existingArticle?.getArticleById?.coverImage,
       updateArticle,
       articleId,
       createArticle,
     ]
   )
+
+  const existingImage = existingArticle?.getArticleById?.coverImage
+    ? base64ToFile(existingArticle.getArticleById.coverImage)
+    : null
 
   if (!user || user.type !== 'Admin') {
     return <UnauthorizedPage />
@@ -132,6 +162,7 @@ export const NewArticlePage = () => {
               : currentDate,
             title: existingArticle?.getArticleById?.title,
             text: existingArticle?.getArticleById?.content,
+            image: isEditing && existingImage ? existingImage : undefined,
           }}
           resolver={zodResolver(articleSchema)}
           noValidate
@@ -156,6 +187,11 @@ export const NewArticlePage = () => {
               width="100%"
               required
               onFileRejection={handleCoverUpload}
+              files={currentImage ? [currentImage] : undefined}
+              onFileChange={({ acceptedFiles }) =>
+                handleFileChange(acceptedFiles[0])
+              }
+              onDelete={handleFileDelete}
             />
             <QuillFormControl
               name="text"
