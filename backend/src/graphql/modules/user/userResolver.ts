@@ -47,11 +47,10 @@ export class UserResolver {
   // Fetch all users by their type
   @Query(() => [User], { nullable: true })
   async getAllUserByType(
-    @Arg('type') type: UserTypeEnumType,
+    @Arg('type', () => String) type: UserTypeEnumType,
     @Ctx() context: CustomContext
   ): Promise<User[]> {
     const result = await context.userRepository.getAllUsersByType(type)
-    console.log('result', result)
     return result
   }
 
