@@ -26,7 +26,7 @@ const articleSchema = z.object({
     .string({ required_error: 'Titulek je povinný' })
     .min(1, 'Titulek je povinný'),
   date: z.date(),
-  image: z.instanceof(File, { message: 'Obrázek je povinný' }).optional(),
+  image: z.instanceof(File, { message: 'Obrázek je povinný' }),
   text: z
     .string({ required_error: 'Obsah je povinný' })
     .min(1, 'Obsah je povinný'),
@@ -145,7 +145,7 @@ export const NewArticlePage = () => {
               placeholder="Vložte titulek"
               required
             />
-            <DateFormControl name="date" label="Datum" required />
+            <DateFormControl name="date" label="Datum" />
             <FileUploadFormControl
               name="image"
               label="Obrázek"
