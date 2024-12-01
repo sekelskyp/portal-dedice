@@ -26,8 +26,6 @@ export function NewProceedingPage() {
       mainBeneficiary: string
       beneficiaries: string[]
     }) => {
-      console.log(variables)
-      // Ensure we're creating only one proceeding with all beneficiaries
       await createProcedureRequest({
         variables: {
           data: {
@@ -41,7 +39,7 @@ export function NewProceedingPage() {
               addressMunicipality: variables.addressInput.municipality,
               addressPostCode: variables.addressInput.postalCode,
             },
-            beneficiaryUserIds: [...new Set([...variables.beneficiaries])],
+            beneficiaryUserIds: variables.beneficiaries,
             mainBeneficiaryUserId: variables.mainBeneficiary,
             startDate: new Date().toISOString(),
           },

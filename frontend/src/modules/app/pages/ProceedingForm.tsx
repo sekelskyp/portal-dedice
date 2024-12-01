@@ -88,10 +88,14 @@ export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
         .array(z.string())
         .min(1, 'Vyberte alespoň jednoho dědice'),
       addressInput: addressSchema,
-      mainBeneficiary: z.string().nullish(),
+      mainBeneficiary: z.string({ required_error: 'Hlavní dědic je povinný' }),
     })
     .refine((data) => data.dateOfBirth < data.dateOfDeath, {
       message: 'Datum úmrtí musí být po datumu narození',
+    })
+    .refine((data) => data.beneficiaries.includes(data.mainBeneficiary), {
+      message: 'Hlavní dědic musí být také v seznamu dědiců',
+      path: ['mainBeneficiary'],
     })
 
   return (
