@@ -72,7 +72,10 @@ export const ArticleDetail: React.FC = () => {
 
   return (
     <Page>
-      <ArticleAdminPanel onDelete={() => setIsDeleteDialogOpen(true)} />
+      <ArticleAdminPanel
+        onDelete={() => setIsDeleteDialogOpen(true)}
+        articleId={articleId}
+      />
       <Stack display="flex" alignItems="center" justifyContent="center">
         <Card.Root w="full" maxW="80%" variant="elevated">
           <Card.Header as={HStack} gap={2}>

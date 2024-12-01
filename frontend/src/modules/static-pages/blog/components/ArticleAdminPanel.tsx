@@ -9,10 +9,12 @@ import { route } from '@shared/route'
 
 interface ArticleAdminPanelProps {
   onDelete: () => void
+  articleId: number
 }
 
 export const ArticleAdminPanel: React.FC<ArticleAdminPanelProps> = ({
   onDelete,
+  articleId,
 }) => {
   const navigate = useNavigate()
 
@@ -28,7 +30,10 @@ export const ArticleAdminPanel: React.FC<ArticleAdminPanelProps> = ({
         <LuArrowLeft />
       </IconButton>
       <Stack direction="row">
-        <IconButton onClick={() => console.log('TODO editace')} size="lg">
+        <IconButton
+          onClick={() => navigate(route.editArticle(articleId.toString()))}
+          size="lg"
+        >
           <MdEdit />
         </IconButton>
         <IconButton

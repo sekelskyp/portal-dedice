@@ -56,6 +56,7 @@ export function Routes() {
         <Route path={route.blog()} element={<BlogPage />} />
         <Route path={route.newArticle()} element={<NewArticlePage />} />
         <Route path={route.detailArticle()} element={<ArticleDetail />} />
+        <Route path={route.editArticle()} element={<NewArticlePage />} />
         <Route path={route.wizard()} element={<WizardPage />} />
         <Route path={route.confirmEmail()} element={<ConfirmEmailPage />} />
         <Route path={route.resetPassword()} element={<PasswordResetPage />} />
