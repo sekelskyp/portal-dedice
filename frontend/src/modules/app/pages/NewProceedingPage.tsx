@@ -5,7 +5,7 @@ import { useCreateProceeding } from '@frontend/modules/app/hooks/useCreateProcee
 import resources from '@frontend/resources'
 import { Alert } from '@frontend/shared/design-system'
 
-import { Beneficiary, ProceedingForm } from './ProceedingForm'
+import { ProceedingForm } from './ProceedingForm'
 
 export function NewProceedingPage() {
   const [createProcedureRequest, createProcedureRequestState] =
@@ -23,13 +23,12 @@ export function NewProceedingPage() {
         municipality: string
         postalCode: string
       }
-      contactName: string
-      contactSurname: string
-      contactEmail: string
-      contactUserId: string
-      beneficiaries: Beneficiary[]
+      mainBeneficiary: string
+      beneficiaries: string[]
     }) => {
-      createProcedureRequest({
+      console.log(variables)
+      // Ensure we're creating only one proceeding with all beneficiaries
+      await createProcedureRequest({
         variables: {
           data: {
             deceasedPerson: {
@@ -42,10 +41,8 @@ export function NewProceedingPage() {
               addressMunicipality: variables.addressInput.municipality,
               addressPostCode: variables.addressInput.postalCode,
             },
-            beneficiaryUserIds: variables.beneficiaries.map(
-              (ben) => ben.userId!
-            ),
-            mainBeneficiaryUserId: variables.contactUserId,
+            beneficiaryUserIds: [...new Set([...variables.beneficiaries])],
+            mainBeneficiaryUserId: variables.mainBeneficiary,
             startDate: new Date().toISOString(),
           },
         },

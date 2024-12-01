@@ -210,6 +210,7 @@ type Query {
   getAddressById(id: Int!): Address
   getAllArticles: [Article!]!
   getAllProceedings: [Proceeding!]!
+  getAllUserByType(type: String!): [User!]
   getArticleById(id: Int!): Article
   getAssetById(id: Int!): Asset
   getAssetsByProceedingId(proceedingId: Int!): [Asset!]!
