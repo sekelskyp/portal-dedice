@@ -20,10 +20,14 @@ import { useGetArticle } from '../hooks/useGetArticle'
 import { useUpdateArticle } from '../hooks/useUpdateArticle'
 
 const articleSchema = z.object({
-  title: z.string().min(1, 'Titulek je povinný'),
+  title: z
+    .string({ required_error: 'Titulek je povinný' })
+    .min(1, 'Titulek je povinný'),
   date: z.date(),
   image: z.instanceof(File, { message: 'Obrázek je povinný' }).optional(),
-  text: z.string().min(1, 'Obsah je povinný'),
+  text: z
+    .string({ required_error: 'Obsah je povinný' })
+    .min(1, 'Obsah je povinný'),
 })
 
 type ArticleFormData = z.infer<typeof articleSchema>
