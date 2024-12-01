@@ -12,11 +12,13 @@ import {
 import { LuNewspaper } from 'react-icons/lu'
 import { useParams } from 'react-router-dom'
 
+import { ActionDialog } from '@frontend/shared/components/ActionDialog'
 import { Alert } from '@frontend/shared/design-system'
 import { Page } from '@frontend/shared/layout/Page'
 
 import { ArticleAdminPanel } from '../components/ArticleAdminPanel'
 import { ArticleCard } from '../components/ArticleCard'
+import { useDeleteArticle } from '../hooks/useDeleteArticle'
 import { useGetArticle } from '../hooks/useGetArticle'
 import { useGetArticles } from '../hooks/useGetArticles'
 
@@ -25,6 +27,8 @@ export const ArticleDetail: React.FC = () => {
   const articleId = parseInt(id ?? '0', 10)
   const { data, loading, error } = useGetArticle(articleId)
   const { data: allArticlesData } = useGetArticles()
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false)
+  const [deleteArticle] = useDeleteArticle()
 
   const article = data?.getArticleById
   const latestArticles = React.useMemo(() => {
@@ -58,9 +62,17 @@ export const ArticleDetail: React.FC = () => {
     )
   }
 
+  const handleDelete = () => {
+    deleteArticle({
+      variables: {
+        ids: [articleId],
+      },
+    })
+  }
+
   return (
     <Page>
-      <ArticleAdminPanel />
+      <ArticleAdminPanel onDelete={() => setIsDeleteDialogOpen(true)} />
       <Stack display="flex" alignItems="center" justifyContent="center">
         <Card.Root w="full" maxW="80%" variant="elevated">
           <Card.Header as={HStack} gap={2}>
@@ -72,7 +84,11 @@ export const ArticleDetail: React.FC = () => {
           </Card.Header>
           <Card.Body gap={2}>
             <Image
-              src={article.coverPicture}
+              src={
+                article.coverPicture
+                  ? article.coverPicture
+                  : '/cover-fallback.png'
+              }
               alt={article.title}
               borderRadius="lg"
               objectFit="cover"
@@ -119,6 +135,14 @@ export const ArticleDetail: React.FC = () => {
           ))}
         </Stack>
       </Stack>
+      <ActionDialog
+        title="Smazat článek"
+        text="Opravdu chcete smazat tento článek?"
+        isOpen={isDeleteDialogOpen}
+        toggle={setIsDeleteDialogOpen}
+        onConfirm={() => handleDelete()}
+        selectedId={id}
+      />
     </Page>
   )
 }

@@ -7,7 +7,13 @@ import { route } from '@shared/route'
 
 //TODO add admin condition
 
-export function ArticleAdminPanel() {
+interface ArticleAdminPanelProps {
+  onDelete: () => void
+}
+
+export const ArticleAdminPanel: React.FC<ArticleAdminPanelProps> = ({
+  onDelete,
+}) => {
   const navigate = useNavigate()
 
   return (
@@ -26,7 +32,7 @@ export function ArticleAdminPanel() {
           <MdEdit />
         </IconButton>
         <IconButton
-          onClick={() => console.log('TODO smazání')}
+          onClick={onDelete}
           size="lg"
           bg="red.500"
           _hover={{ bg: 'red.700' }}
