@@ -267,6 +267,10 @@ export const article = mysqlTable('article', {
   // without cover image until i finish new file storage service
   // coverImage: varchar('cover_image', { length: 500 }).notNull(),
   content: text('content').notNull(), // Article content (stored as text)
+  // cover image
+  fileName: varchar('file_name', { length: 255 }).notNull(),
+  fileType: varchar('file_type', { length: 100 }).notNull(),
+  coverImage: longtext('file_data').notNull(),
 })
 
 // Custom lower function

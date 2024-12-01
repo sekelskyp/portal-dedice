@@ -2,7 +2,7 @@ import { FileUpload, GraphQLUpload } from 'graphql-upload'
 import { Field, InputType } from 'type-graphql'
 
 @InputType()
-export class ArticleInput {
+export class CreateArticleInput {
   @Field(() => String)
   title!: string
 
@@ -13,5 +13,5 @@ export class ArticleInput {
   content!: string
 
   @Field(() => GraphQLUpload)
-  coverPicture!: FileUpload
+  coverImage!: FileUpload
 }
