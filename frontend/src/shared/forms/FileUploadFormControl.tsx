@@ -20,6 +20,7 @@ export interface FileUploadControlProps extends BaseFieldControlProps {
   onFileChange?: (details: FileUploadFileChangeDetails) => void
   files?: File[]
   onDelete?: (file: File) => void
+  onFileRejection?: (details: FileUploadFileChangeDetails) => void
 }
 
 export const FileUploadFormControl = ({
@@ -34,6 +35,7 @@ export const FileUploadFormControl = ({
   onFileChange,
   files: externalFiles,
   onDelete: externalOnDelete,
+  onFileRejection,
   ...props
 }: FileUploadControlProps) => {
   return (
@@ -42,6 +44,10 @@ export const FileUploadFormControl = ({
         const files = externalFiles ?? (field.value ? [field.value] : [])
 
         const handleFileChange = (details: FileUploadFileChangeDetails) => {
+          if (details.rejectedFiles.length > 0) {
+            onFileRejection?.(details)
+            return
+          }
           const newFiles = details.acceptedFiles
           field.onChange(multiple ? newFiles : newFiles[0])
           onFileChange?.(details)

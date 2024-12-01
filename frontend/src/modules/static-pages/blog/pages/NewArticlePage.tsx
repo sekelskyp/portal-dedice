@@ -30,8 +30,12 @@ type ArticleFormData = z.infer<typeof articleSchema>
 
 export const NewArticlePage = () => {
   const navigate = useNavigate()
-  const { ACCEPTED_FILE_TYPES, MAX_FILE_COUNT, MAX_FILE_SIZE } =
-    useCoverUpload()
+  const {
+    ACCEPTED_FILE_TYPES,
+    MAX_FILE_COUNT,
+    MAX_FILE_SIZE,
+    handleCoverUpload,
+  } = useCoverUpload()
 
   const handleSubmit = (data: ArticleFormData) => {
     console.log('Form submitted:', data)
@@ -89,6 +93,7 @@ export const NewArticlePage = () => {
               height="250px"
               width="100%"
               required
+              onFileRejection={handleCoverUpload}
             />
             <QuillFormControl
               name="text"
