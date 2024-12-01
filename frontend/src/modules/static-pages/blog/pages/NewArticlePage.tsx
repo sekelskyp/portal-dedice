@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { Box, Heading, IconButton, VStack } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LuArrowLeft } from 'react-icons/lu'
@@ -14,6 +15,7 @@ import { Page } from '@frontend/shared/layout'
 import { route } from '@shared/route'
 
 import { useCoverUpload } from '../hooks/useCoverUpload'
+import { useCreateArticle } from '../hooks/useCreateArticle'
 
 const articleSchema = z.object({
   title: z
@@ -37,11 +39,25 @@ export const NewArticlePage = () => {
     handleCoverUpload,
   } = useCoverUpload()
 
-  const handleSubmit = (data: ArticleFormData) => {
-    console.log('Form submitted:', data)
-  }
-
   const currentDate = new Date()
+
+  const [createArticleRequest, createArticleRequestState] = useCreateArticle()
+
+  const handleCreateArticle = useCallback(
+    async (data: ArticleFormData) => {
+      await createArticleRequest({
+        variables: {
+          data: {
+            title: data.title,
+            date: new Date(data.date).toISOString(),
+            content: data.text,
+            coverPicture: data.image as File,
+          },
+        },
+      })
+    },
+    [createArticleRequest]
+  )
 
   return (
     <Page>
@@ -67,7 +83,7 @@ export const NewArticlePage = () => {
           Vytvoření článku
         </Heading>
         <Form<ArticleFormData>
-          onSubmit={handleSubmit}
+          onSubmit={handleCreateArticle}
           defaultValues={{
             date: currentDate,
           }}
@@ -82,6 +98,7 @@ export const NewArticlePage = () => {
               required
             />
             <DateFormControl name="date" label="Datum" required />
+
             <FileUploadFormControl
               name="image"
               label="Obrázek"
@@ -101,7 +118,12 @@ export const NewArticlePage = () => {
               placeholder="Vložte text článku"
               required
             />
-            <SubmitButton>Vytvořit článek</SubmitButton>
+            <SubmitButton
+              loading={createArticleRequestState.loading}
+              loadingText="Vytváření..."
+            >
+              Vytvořit článek
+            </SubmitButton>
           </VStack>
         </Form>
       </Box>
