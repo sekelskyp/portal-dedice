@@ -3,7 +3,6 @@ import { Fieldset, HStack } from '@chakra-ui/react'
 import { useFormContext } from 'react-hook-form'
 
 import { Stack } from '../design-system'
-import { suggestionToAddress } from '../hooks/useAddressSuggestions'
 
 import { AddressFormControl, InputFormControl } from '.'
 
@@ -27,23 +26,13 @@ export const AddressGroupFormControl = ({
       </Stack>
 
       <Fieldset.Content>
-        <Stack gap={4} w={'full'}>
+        <Stack gap={4} w="full">
           <Stack direction={{ base: 'column', sm: 'row' }} gap={4}>
             <AddressFormControl
               required={required}
               flex={3}
               onSuggestionSelected={(suggestion) => {
-                const address = suggestionToAddress(suggestion)
-                setValue('addressInput.street', address.street, {
-                  shouldValidate: true,
-                })
-                setValue('addressInput.streetNumber', address.streetNumber, {
-                  shouldValidate: true,
-                })
-                setValue('addressInput.municipality', address.municipality, {
-                  shouldValidate: true,
-                })
-                setValue('addressInput.postalCode', address.postalCode, {
+                setValue('addressInput', suggestion, {
                   shouldValidate: true,
                 })
               }}

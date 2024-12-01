@@ -49,6 +49,14 @@ export type AddressInput = {
   streetNumber: Scalars['String']['input']
 }
 
+export type AddressSuggestion = {
+  __typename?: 'AddressSuggestion'
+  municipality: Scalars['String']['output']
+  postalCode: Scalars['String']['output']
+  street: Scalars['String']['output']
+  streetNumber: Scalars['String']['output']
+}
+
 export type Article = {
   __typename?: 'Article'
   content: Scalars['String']['output']
@@ -387,6 +395,7 @@ export type Query = {
   chatByProceedingId: Chat
   findNotary?: Maybe<Notary>
   getAddressById?: Maybe<Address>
+  getAddressSuggestions: Array<AddressSuggestion>
   getAllArticles: Array<Article>
   getAllProceedings: Array<Proceeding>
   getAllUserByType?: Maybe<Array<User>>
@@ -422,6 +431,10 @@ export type QueryFindNotaryArgs = {
 
 export type QueryGetAddressByIdArgs = {
   id: Scalars['Int']['input']
+}
+
+export type QueryGetAddressSuggestionsArgs = {
+  query: Scalars['String']['input']
 }
 
 export type QueryGetAllUserByTypeArgs = {
@@ -1139,6 +1152,21 @@ export type FindNotaryQuery = {
       } | null
     } | null
   } | null
+}
+
+export type GetAddressSuggestionsQueryVariables = Exact<{
+  query: Scalars['String']['input']
+}>
+
+export type GetAddressSuggestionsQuery = {
+  __typename?: 'Query'
+  getAddressSuggestions: Array<{
+    __typename?: 'AddressSuggestion'
+    street: string
+    streetNumber: string
+    municipality: string
+    postalCode: string
+  }>
 }
 
 export const GetBeneficiaryGroupsDocument = {
@@ -3553,3 +3581,66 @@ export const FindNotaryDocument = {
     },
   ],
 } as unknown as DocumentNode<FindNotaryQuery, FindNotaryQueryVariables>
+export const GetAddressSuggestionsDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetAddressSuggestions' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'query' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getAddressSuggestions' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'query' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'query' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'street' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'streetNumber' },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'municipality' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'postalCode' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetAddressSuggestionsQuery,
+  GetAddressSuggestionsQueryVariables
+>

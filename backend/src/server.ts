@@ -47,6 +47,8 @@ import { parseAndVerifyJWT } from '@backend/libs/jwt'
 import { mockResolvers } from '@backend/mocks/mocks'
 import { CustomContext } from '@backend/types/types'
 
+import { AddressSuggestionResolver } from './graphql/modules/addressSuggestions/addressSuggestionResolver'
+
 const init = async () => {
   const app = express()
 
@@ -67,6 +69,7 @@ const init = async () => {
       ChatResolver,
       AddressResolver,
       ArticleResolver,
+      AddressSuggestionResolver,
     ],
     pubSub,
     emitSchemaFile: true,
