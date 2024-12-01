@@ -41,7 +41,7 @@ export const FileUploadFormControl = ({
   return (
     <BaseFieldControl {...props}>
       {(field, disabled) => {
-        const files = externalFiles ?? []
+        const files = externalFiles ?? (field.value ? [field.value] : [])
 
         const handleFileChange = (details: FileUploadFileChangeDetails) => {
           if (details.rejectedFiles.length > 0) {
@@ -54,7 +54,7 @@ export const FileUploadFormControl = ({
         }
 
         const handleDelete = (file: File) => {
-          field.onChange(null)
+          field.onChange(multiple ? [] : null)
           externalOnDelete?.(file)
         }
 
