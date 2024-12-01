@@ -64,30 +64,32 @@ export async function createProceeding(
     municipality: data.deceasedPerson.addressMunicipality,
     postalCode: data.deceasedPerson.addressPostCode,
   })
+  console.log('before proceeding')
   // 4) create proceeding
-  const proceedingId = await context.proceedingRepository.createProceeding({
+  const proceedingData = {
     name: proceedingName,
     notaryId: notaryId,
     startDate,
-    mainBeneficiaryId: data.mainBeneficiaryUserId,
     deceasedAddressId: deceasedAddressId,
     deceasedName: data.deceasedPerson.name,
     deceasedSurname: data.deceasedPerson.surname,
     deceasedDisplayName: `${data.deceasedPerson.name} ${data.deceasedPerson.surname}`,
     deceasedDateOfBirth: data.deceasedPerson.dateOfBirth,
     deceasedDateOfDeath: data.deceasedPerson.dateOfDeath,
-  })
+  }
+  const proceedingId =
+    await context.proceedingRepository.createProceeding(proceedingData)
   // 5) create new beneficiaries for new proceeding
   // Step 1: Create a set of unique userIds (filter out undefined values)
   const userIdsSet = new Set<number>(
     [
       ...data.beneficiaryUserIds, // Array of beneficiary user IDs
-      data.mainBeneficiaryUserId, // Single main beneficiary user ID
+      //data.mainBeneficiaryUserId, // Single main beneficiary user ID
       context.authUser?.userId, // Current user ID (might be undefined)
     ].filter((id): id is number => id !== undefined) // Filter out undefined values
   )
   // Step 2: Create beneficiary create data from the unique user IDs
-  createBeneficiariesForProceeding(
+  await createBeneficiariesForProceeding(
     proceedingId,
     Array.from(userIdsSet),
     context
@@ -96,6 +98,17 @@ export async function createProceeding(
   await context.chatRepository.createChat({
     proceedingId: proceedingId,
   })
+  // set main beneficiary TODO slightly change DB schema -> this is very clunky
+  if (data.mainBeneficiaryUserId) {
+    const mainBeneficiaryId =
+      await context.beneficiaryRepository.createBeneficiary({
+        userId: data.mainBeneficiaryUserId,
+        proceedingId: proceedingId,
+      })
+    await context.proceedingRepository.updateProceeding(proceedingId, {
+      mainBeneficiaryId: mainBeneficiaryId,
+    })
+  }
   // 6) return proceeding id
   return proceedingId
 }
