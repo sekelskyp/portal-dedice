@@ -29,8 +29,10 @@ export const ProceedingDetail = ({
             Hlavní kontaktní osoba
           </Heading>
 
-          {proceeding.mainBeneficiary ? (
-            <BeneficiaryBadge beneficiaryContact={proceeding.mainBeneficiary} />
+          {proceeding.mainBeneficiary?.user ? (
+            <BeneficiaryBadge
+              beneficiaryContact={proceeding.mainBeneficiary.user}
+            />
           ) : (
             <Alert status="warning">Dědic bez kontaktních údajů.</Alert>
           )}

@@ -182,7 +182,7 @@ type Proceeding {
   documents: [Document!]!
   endDate: DateTimeISO
   id: ID!
-  mainBeneficiary: User
+  mainBeneficiary: Beneficiary
   mainBeneficiaryId: ID
   name: String!
   notary: Notary

@@ -19,12 +19,14 @@ export const GET_PROCEEDING_QUERY = gql(/* GraphQL */ `
         cin
       }
       mainBeneficiary {
-        id
-        displayName
-        email
-        phone
-        name
-        surname
+        user {
+          id
+          displayName
+          email
+          phone
+          name
+          surname
+        }
       }
       beneficiaries {
         id
