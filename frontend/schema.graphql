@@ -13,6 +13,13 @@ input AddressInput {
   streetNumber: String!
 }
 
+type AddressSuggestion {
+  municipality: String!
+  postalCode: String!
+  street: String!
+  streetNumber: String!
+}
+
 type Article {
   content: String!
   date: DateTimeISO!
@@ -208,6 +215,7 @@ type Query {
   chatByProceedingId(proceedingId: Int!): Chat!
   findNotary(input: FindNotaryInput!): Notary
   getAddressById(id: Int!): Address
+  getAddressSuggestions(query: String!): [AddressSuggestion!]!
   getAllArticles: [Article!]!
   getAllProceedings: [Proceeding!]!
   getAllUserByType(type: String!): [User!]

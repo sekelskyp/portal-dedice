@@ -81,6 +81,8 @@ const documents = {
     types.UpdateArticleDocument,
   '\n  query FindNotary($input: FindNotaryInput!) {\n    findNotary(input: $input) {\n      id\n      user {\n        id\n        name\n        surname\n        displayName\n        email\n        gender\n        phone\n        address {\n          street\n          streetNumber\n          municipality\n          postalCode\n        }\n      }\n    }\n  }\n':
     types.FindNotaryDocument,
+  '\n  query GetAddressSuggestions($query: String!) {\n  getAddressSuggestions(query: $query) {\n    street\n    streetNumber\n    municipality\n    postalCode\n  }\n}\n':
+    types.GetAddressSuggestionsDocument,
 }
 
 /**
@@ -301,6 +303,12 @@ export function gql(
 export function gql(
   source: '\n  query FindNotary($input: FindNotaryInput!) {\n    findNotary(input: $input) {\n      id\n      user {\n        id\n        name\n        surname\n        displayName\n        email\n        gender\n        phone\n        address {\n          street\n          streetNumber\n          municipality\n          postalCode\n        }\n      }\n    }\n  }\n'
 ): (typeof documents)['\n  query FindNotary($input: FindNotaryInput!) {\n    findNotary(input: $input) {\n      id\n      user {\n        id\n        name\n        surname\n        displayName\n        email\n        gender\n        phone\n        address {\n          street\n          streetNumber\n          municipality\n          postalCode\n        }\n      }\n    }\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  query GetAddressSuggestions($query: String!) {\n  getAddressSuggestions(query: $query) {\n    street\n    streetNumber\n    municipality\n    postalCode\n  }\n}\n'
+): (typeof documents)['\n  query GetAddressSuggestions($query: String!) {\n  getAddressSuggestions(query: $query) {\n    street\n    streetNumber\n    municipality\n    postalCode\n  }\n}\n']
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {}
