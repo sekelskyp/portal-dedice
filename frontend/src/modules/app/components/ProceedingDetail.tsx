@@ -125,6 +125,13 @@ export const ProceedingDetail = ({
               Hromadná zpráva všem dědicům
               <SendIcon />
             </RouterNavLink>
+            <RouterNavLink
+              to={route.chatIdHistory(proceeding.id)}
+              rounded="full"
+            >
+              Chatová historie řízení
+              <MessageSquareTextIcon />
+            </RouterNavLink>
           </>
         )}
       </Stack>
