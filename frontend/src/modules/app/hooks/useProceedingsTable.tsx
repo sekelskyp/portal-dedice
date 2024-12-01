@@ -15,7 +15,6 @@ import { SquareArrowOutUpRight as SquareArrowOutUpRightIcon } from 'lucide-react
 import { MdDelete } from 'react-icons/md'
 
 import { useAuth } from '@frontend/modules/auth'
-import { ActionDialog } from '@frontend/shared/components/ActionDialog'
 import { useActionDialog } from '@frontend/shared/hooks/useActionDialog'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { route } from '@shared/route'
@@ -124,21 +123,10 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
           const id = info.row.original.id
           return (
             <Stack direction="row" alignItems="center">
-              {selectedId !== undefined ? (
-                <ActionDialog
-                  title="Smazání řízení"
-                  text="Opravdu chcete toto řízení smazat?"
-                  onConfirm={handleProcedureDelete}
-                  isOpen={isOpen}
-                  toggle={toggleDialog}
-                  selectedId={selectedId}
-                />
-              ) : null}
               {isNotary && (
                 <IconButton
                   borderRadius="xl"
                   bg="red.600"
-                  //onClick={() => handleProcedureDelete(id)}
                   onClick={() => toggleDialog(true, id)}
                 >
                   <MdDelete />
@@ -163,14 +151,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
     )
 
     return columns
-  }, [
-    isMobile,
-    handleProcedureDelete,
-    isNotary,
-    isOpen,
-    toggleDialog,
-    selectedId,
-  ])
+  }, [isMobile, isNotary, toggleDialog])
 
   const table = useReactTable({
     columns,
@@ -194,5 +175,14 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
     getPaginationRowModel: getPaginationRowModel(),
   })
 
-  return { table, setGlobalFilter }
+  return {
+    table,
+    setGlobalFilter,
+    dialog: {
+      isOpen,
+      toggleDialog,
+      selectedId,
+      handleProcedureDelete,
+    },
+  }
 }
