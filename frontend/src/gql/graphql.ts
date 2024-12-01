@@ -389,6 +389,7 @@ export type Query = {
   getAddressById?: Maybe<Address>
   getAllArticles: Array<Article>
   getAllProceedings: Array<Proceeding>
+  getAllUserByType?: Maybe<Array<User>>
   getArticleById?: Maybe<Article>
   getAssetById?: Maybe<Asset>
   getAssetsByProceedingId: Array<Asset>
@@ -421,6 +422,10 @@ export type QueryFindNotaryArgs = {
 
 export type QueryGetAddressByIdArgs = {
   id: Scalars['Int']['input']
+}
+
+export type QueryGetAllUserByTypeArgs = {
+  type: Scalars['String']['input']
 }
 
 export type QueryGetArticleByIdArgs = {
@@ -772,6 +777,21 @@ export type GetDocumentsByProceedingIdQuery = {
     createDate: any
     fileType: string
   }>
+}
+
+export type GetAllUsersQueryVariables = Exact<{
+  type: Scalars['String']['input']
+}>
+
+export type GetAllUsersQuery = {
+  __typename?: 'Query'
+  getAllUserByType?: Array<{
+    __typename?: 'User'
+    id: string
+    name: string
+    surname: string
+    displayName: string
+  }> | null
 }
 
 export type GetProceedingsByNotaryIdQueryVariables = Exact<{
@@ -2136,6 +2156,57 @@ export const GetDocumentsByProceedingIdDocument = {
   GetDocumentsByProceedingIdQuery,
   GetDocumentsByProceedingIdQueryVariables
 >
+export const GetAllUsersDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetAllUsers' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'type' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getAllUserByType' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'type' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'type' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'surname' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'displayName' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetAllUsersQuery, GetAllUsersQueryVariables>
 export const GetProceedingsByNotaryIdDocument = {
   kind: 'Document',
   definitions: [

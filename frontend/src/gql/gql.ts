@@ -47,6 +47,8 @@ const documents = {
     types.GetAssetsByProcedureIdDocument,
   '\n  query GetDocumentsByProceedingId($proceedingId: Int!) {\n    getDocumentsByProceedingId(proceedingId: $proceedingId) {\n      id\n      fileName\n      createDate\n      fileType\n    }\n  }\n':
     types.GetDocumentsByProceedingIdDocument,
+  '\n  query GetAllUsers($type: String!) {\n    getAllUserByType(type: $type) {\n      id\n      name\n      surname\n      displayName\n    }\n  }\n':
+    types.GetAllUsersDocument,
   '\n  query GetProceedingsByNotaryId($userId: Int!) {\n    getNotaryProceedingsForUser(userId: $userId) {\n      id\n      name\n      startDate\n      state\n      deceasedDisplayName\n    }\n  }\n':
     types.GetProceedingsByNotaryIdDocument,
   '\n  mutation NotifyProcedureBeneficiaries(\n    $html: String!\n    $subject: String!\n    $proceedingId: Int!\n  ) {\n    notifyProcedureBeneficiaries(\n      html: $html\n      subject: $subject\n      proceedingId: $proceedingId\n    )\n  }\n':
@@ -197,6 +199,12 @@ export function gql(
 export function gql(
   source: '\n  query GetDocumentsByProceedingId($proceedingId: Int!) {\n    getDocumentsByProceedingId(proceedingId: $proceedingId) {\n      id\n      fileName\n      createDate\n      fileType\n    }\n  }\n'
 ): (typeof documents)['\n  query GetDocumentsByProceedingId($proceedingId: Int!) {\n    getDocumentsByProceedingId(proceedingId: $proceedingId) {\n      id\n      fileName\n      createDate\n      fileType\n    }\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  query GetAllUsers($type: String!) {\n    getAllUserByType(type: $type) {\n      id\n      name\n      surname\n      displayName\n    }\n  }\n'
+): (typeof documents)['\n  query GetAllUsers($type: String!) {\n    getAllUserByType(type: $type) {\n      id\n      name\n      surname\n      displayName\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

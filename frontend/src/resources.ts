@@ -115,7 +115,7 @@ const resources = {
           deceased: 'Identifikace zůstavitele',
           deceasedHelper: 'Vyplňte prosím informace o zůstaviteli.',
           contactPerson: 'Kontaktní osoba',
-          contactPersonHelper: 'Vyplňte prosím informace o kontaktní osobě.',
+          contactPersonHelper: 'Zvolte prosím hlavní kontaktní osobu.',
           beneficiaries: 'Dědici po zůstaviteli',
           beneficiariesHelper:
             'Přidejte všechny dědice, kteří se mají podílet na dědictví.',

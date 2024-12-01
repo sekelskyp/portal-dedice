@@ -13,10 +13,11 @@ export interface SelectControlProps
   extends Omit<SelectRootProps, 'name'>,
     BaseFieldControlProps {
   placeholder?: string
+  clearable?: boolean
 }
 
 export const SelectFormControl = (props: SelectControlProps) => {
-  const { children, placeholder, ...rest } = props
+  const { children, placeholder, clearable, ...rest } = props
 
   const multiple = rest.multiple
 
@@ -30,7 +31,7 @@ export const SelectFormControl = (props: SelectControlProps) => {
           {...rest}
           disabled={disabled}
         >
-          <SelectTrigger>
+          <SelectTrigger clearable={clearable}>
             <SelectValueText placeholder={placeholder}>
               {(items) => items.map((i) => i.label).join(', ')}
             </SelectValueText>

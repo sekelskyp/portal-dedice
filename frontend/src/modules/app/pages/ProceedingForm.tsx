@@ -1,15 +1,12 @@
 import {
   Card,
+  createListCollection,
   Fieldset,
-  Grid,
   HStack,
-  IconButton,
   Input,
   Stack,
 } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useFieldArray } from 'react-hook-form'
-import { LuPlus, LuTrash2 } from 'react-icons/lu'
 import { z } from 'zod'
 
 import { useAuth } from '@frontend/modules/auth'
@@ -20,10 +17,11 @@ import {
   DateFormControl,
   Form,
   InputFormControl,
+  SelectFormControl,
   SubmitButton,
 } from '@frontend/shared/forms'
 
-import useValidateUser from '../hooks/useValidateUser'
+import { useGetUsers } from '../hooks/useGetUsers'
 
 export type ProceedingFormProps = {
   errorMessage?: string
@@ -38,42 +36,38 @@ export type ProceedingFormProps = {
       municipality: string
       postalCode: string
     }
-    contactName: string
-    contactSurname: string
-    contactEmail: string
-    contactUserId: string
-    beneficiaries: Beneficiary[]
+    mainBeneficiary: string
+    beneficiaries: string[]
   }) => void
 }
 
-export interface Beneficiary {
-  email: string
-  name: string
-  surname: string
-  userId?: string
-}
-
 export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
-  const validate = useValidateUser()
+  const { user } = useAuth()
+  const { data } = useGetUsers({ type: 'User' })
+
+  const allUsers = createListCollection({
+    items:
+      data?.getAllUserByType?.map((user) => ({
+        label: `${user.name} ${user.surname}`,
+        value: user.id,
+      })) || [],
+  })
+
+  const otherUsers = createListCollection({
+    items:
+      data?.getAllUserByType
+        ?.filter((u) => u.id !== user?.id)
+        .map((user) => ({
+          label: `${user.name} ${user.surname}`,
+          value: user.id,
+        })) || [],
+  })
 
   const addressSchema = z.object({
     street: z.string().min(1, 'Ulice je povinná'),
     streetNumber: z.string().min(1, 'Číslo popisné je povinné'),
     municipality: z.string().min(1, 'Obec je povinná'),
     postalCode: z.string().min(1, 'PSČ je povinné'),
-  })
-
-  const beneficiarySchema = z.object({
-    name: z
-      .string({ required_error: 'Jméno je povinné' })
-      .min(1, 'Jméno je povinné'),
-    surname: z
-      .string({ required_error: 'Příjmení je povinné' })
-      .min(1, 'Příjmení je povinné'),
-    email: z
-      .string({ required_error: 'Zadejte validní e-mailovou adresu' })
-      .email('Zadejte validní e-mailovou adresu'),
-    userId: z.string().optional(),
   })
 
   const schema = z
@@ -90,53 +84,14 @@ export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
       dateOfDeath: z
         .date({ required_error: 'Datum úmrtí je povinné.' })
         .max(new Date(), 'Datum úmrtí musí být v minulosti.'),
-      contactName: z
-        .string({ required_error: 'Jméno je povinné' })
-        .min(1, 'Jméno je povinné'),
-      contactSurname: z
-        .string({ required_error: 'Příjmení je povinné' })
-        .min(1, 'Příjmení je povinné'),
-      contactEmail: z
-        .string({ required_error: 'Zadejte validní e-mailovou adresu' })
-        .email('Zadejte validní e-mailovou adresu'),
-      contactUserId: z.string().optional(),
-      beneficiaries: z.array(beneficiarySchema),
+      beneficiaries: z
+        .array(z.string())
+        .min(1, 'Vyberte alespoň jednoho dědice'),
       addressInput: addressSchema,
+      mainBeneficiary: z.string().nullish(),
     })
     .refine((data) => data.dateOfBirth < data.dateOfDeath, {
       message: 'Datum úmrtí musí být po datumu narození',
-    })
-    .superRefine(async (data, ctx) => {
-      const { userId, isValid } = await validate(data.contactEmail)
-      if (!isValid) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'Uživatel s emailovou adresou neexistuje',
-          path: [`contactEmail`],
-        })
-      } else {
-        data.contactUserId = userId
-      }
-      console.log(data)
-      return isValid
-    })
-    .superRefine(async (data, ctx) => {
-      const results = await Promise.all(
-        data.beneficiaries.map(async (ben, index) => {
-          const { isValid, userId } = await validate(ben.email)
-          if (!isValid) {
-            ctx.addIssue({
-              code: z.ZodIssueCode.custom,
-              message: 'Tento email není registrovaný v systému',
-              path: [`beneficiaries.${index}.email`],
-            })
-          } else {
-            data.beneficiaries[index].userId = userId
-          }
-          return isValid
-        })
-      )
-      return results.every((result) => result)
     })
 
   return (
@@ -144,7 +99,9 @@ export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
       onSubmit={onSubmit}
       resolver={zodResolver(schema)}
       noValidate
-      defaultValues={{ beneficiaries: [] }}
+      defaultValues={{
+        beneficiaries: [],
+      }}
     >
       <Stack gap={6}>
         <Fieldset.Root size="lg">
@@ -197,128 +154,66 @@ export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
             </Fieldset.HelperText>
           </Stack>
           <Fieldset.Content>
-            <Stack direction={{ base: 'column', sm: 'row' }} gap={6}>
-              <InputFormControl
-                name="contactName"
-                label={resources.portal.forms.proceedingForm.name}
-                required
-              ></InputFormControl>
-              <InputFormControl
-                name="contactSurname"
-                label={resources.portal.forms.proceedingForm.surname}
-                required
-              ></InputFormControl>
-            </Stack>
-            <InputFormControl
-              name="contactEmail"
-              label={resources.portal.forms.proceedingForm.email}
+            <SelectFormControl
+              name="mainBeneficiary"
+              collection={allUsers} // Use allUsers here
+              label="Hlavní kontaktní osoba"
+              clearable
               required
-            ></InputFormControl>
+            />
           </Fieldset.Content>
         </Fieldset.Root>
-        <BeneficiarySection />
+        <Fieldset.Root size="lg">
+          <Stack>
+            <Fieldset.Legend>
+              {resources.portal.forms.proceedingForm.groups.beneficiaries}
+            </Fieldset.Legend>
+            <Fieldset.HelperText>
+              {resources.portal.forms.proceedingForm.groups.beneficiariesHelper}
+            </Fieldset.HelperText>
+          </Stack>
+          <Fieldset.Content>
+            <Card.Root bg="blackAlpha.100" size="sm">
+              <Card.Header color="fg.subtle">Dědic (Vy)</Card.Header>
+              <Card.Body as={Stack}>
+                <HStack gap={4}>
+                  <Field
+                    label={resources.portal.forms.proceedingForm.name}
+                    disabled
+                  >
+                    <Input value={user?.name} />
+                  </Field>
+
+                  <Field
+                    label={resources.portal.forms.proceedingForm.surname}
+                    disabled
+                  >
+                    <Input value={user?.surname} />
+                  </Field>
+                </HStack>
+                <Field
+                  label={resources.portal.forms.proceedingForm.email}
+                  disabled
+                >
+                  <Input value={user?.email} />
+                </Field>
+              </Card.Body>
+            </Card.Root>
+          </Fieldset.Content>
+          <Fieldset.Content>
+            <SelectFormControl
+              name="beneficiaries"
+              collection={otherUsers} // Use otherUsers here
+              label="Další dědicové"
+              multiple
+              required
+            />
+          </Fieldset.Content>
+        </Fieldset.Root>
         <SubmitButton alignSelf="center">
           {resources.portal.forms.proceedingForm.createProceeding}
         </SubmitButton>
       </Stack>
     </Form>
-  )
-}
-
-const BeneficiarySection = () => {
-  const beneficiaries = useFieldArray({ name: 'beneficiaries' })
-  const { user } = useAuth()
-
-  return (
-    <Fieldset.Root size="lg">
-      <Stack>
-        <Fieldset.Legend>
-          {resources.portal.forms.proceedingForm.groups.beneficiaries}
-        </Fieldset.Legend>
-        <Fieldset.HelperText fontSize="xs">
-          {resources.portal.forms.proceedingForm.groups.beneficiariesHelper}
-        </Fieldset.HelperText>
-      </Stack>
-
-      <Fieldset.Content>
-        <Grid gap={6} templateColumns={{ base: '1fr', xl: '1fr 1fr' }}>
-          <Card.Root bg="blackAlpha.100" size="sm">
-            <Card.Header color="fg.subtle">Dědic (Vy)</Card.Header>
-            <Card.Body as={Stack}>
-              <HStack gap={4}>
-                <Field
-                  label={resources.portal.forms.proceedingForm.name}
-                  disabled
-                >
-                  <Input value={user?.name} />
-                </Field>
-                <Field
-                  label={resources.portal.forms.proceedingForm.surname}
-                  disabled
-                >
-                  <Input value={user?.surname} />
-                </Field>
-              </HStack>
-              <Field
-                label={resources.portal.forms.proceedingForm.email}
-                disabled
-              >
-                <Input value={user?.email} />
-              </Field>
-            </Card.Body>
-          </Card.Root>
-
-          {beneficiaries.fields.map((field, index) => (
-            <Card.Root key={field.id} bg="bg.muted" size="sm">
-              <Card.Header>{`Dědic ${index + 1}`}</Card.Header>
-              <Card.Body as={Stack}>
-                <HStack gap={4}>
-                  <InputFormControl
-                    name={`beneficiaries.${index}.name`}
-                    label={resources.portal.forms.proceedingForm.name}
-                    required
-                  ></InputFormControl>
-                  <InputFormControl
-                    name={`beneficiaries.${index}.surname`}
-                    label={resources.portal.forms.proceedingForm.surname}
-                    required
-                  ></InputFormControl>
-                </HStack>
-                <HStack gap={4}>
-                  <InputFormControl
-                    name={`beneficiaries.${index}.email`}
-                    label={resources.portal.forms.proceedingForm.email}
-                    required
-                  ></InputFormControl>
-                  <IconButton
-                    alignSelf="end"
-                    onClick={() => beneficiaries.remove(index)}
-                    p={4}
-                    bg={{ base: 'red.500', _hover: 'red.600' }}
-                  >
-                    <LuTrash2 />
-                    Odstranit
-                  </IconButton>
-                </HStack>
-              </Card.Body>
-            </Card.Root>
-          ))}
-        </Grid>
-        <IconButton
-          onClick={() =>
-            beneficiaries.append({
-              name: '',
-              surname: '',
-              email: '',
-            })
-          }
-          alignSelf="flex-start"
-          p={4}
-        >
-          <LuPlus></LuPlus>
-          {resources.portal.forms.proceedingForm.addBeneficiary}
-        </IconButton>
-      </Fieldset.Content>
-    </Fieldset.Root>
   )
 }
