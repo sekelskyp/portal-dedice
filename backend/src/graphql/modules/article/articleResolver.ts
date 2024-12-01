@@ -51,8 +51,7 @@ export class ArticleResolver {
     @Ctx() { articleRepository }: CustomContext
   ): Promise<Article> {
     // Destructure and extract the file details
-    const { coverImage } = data
-    const { createReadStream } = coverImage
+    const { createReadStream, filename, mimetype } = data.coverImage
     const stream = createReadStream()
 
     // Encode the file stream to Base64
@@ -63,8 +62,8 @@ export class ArticleResolver {
       title: data.title,
       date: data.date,
       content: data.content,
-      fileName: coverImage.filename,
-      fileType: coverImage.mimetype,
+      fileName: filename,
+      fileType: mimetype,
       coverImage: base64CoverPicture,
     }
 
@@ -102,11 +101,11 @@ export class ArticleResolver {
       content: data.content,
     }
     if (data.coverImage) {
-      const { createReadStream } = data.coverImage
+      const { createReadStream, filename, mimetype } = data.coverImage
       const stream = createReadStream()
       const base64CoverPicture = await encodeStreamToBase64(stream)
-      const fileName = data.coverImage.filename
-      const fileType = data.coverImage.mimetype
+      const fileName = filename
+      const fileType = mimetype
       const coverImage = base64CoverPicture
       updateData = { ...updateData, fileName, fileType, coverImage }
     }
