@@ -20,6 +20,7 @@ import {
   updateProfile,
 } from '@backend/services/userService'
 import { CustomContext } from '@backend/types/types'
+import { UserTypeEnumType } from '@shared/enums'
 
 import { ProfileInput } from './profileInput'
 import { RegisterInput } from './registerInput'
@@ -41,6 +42,17 @@ export class UserResolver {
       return null
     }
     return userRecord
+  }
+
+  // Fetch all users by their type
+  @Query(() => [User], { nullable: true })
+  async getAllUserByType(
+    @Arg('type') type: UserTypeEnumType,
+    @Ctx() context: CustomContext
+  ): Promise<User[]> {
+    const result = await context.userRepository.getAllUsersByType(type)
+    console.log('result', result)
+    return result
   }
 
   // Fetch a user by email

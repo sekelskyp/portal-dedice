@@ -2,6 +2,7 @@ import { eq, inArray, InferInsertModel, InferSelectModel } from 'drizzle-orm'
 
 import { user } from '@backend/db/schema'
 import { type Db } from '@backend/types/types'
+import { UserTypeEnumType } from '@shared/enums'
 
 export interface UserEntity extends InferSelectModel<typeof user> {}
 export interface UserInsertInput
@@ -15,6 +16,13 @@ export function getUserRepository(db: Db) {
 
   async function getUsersByIds(ids: number[]): Promise<UserEntity[]> {
     const results = await db.select().from(user).where(inArray(user.id, ids))
+    return results
+  }
+
+  async function getAllUsersByType(
+    type: UserTypeEnumType
+  ): Promise<UserEntity[]> {
+    const results = await db.select().from(user).where(eq(user.type, type))
     return results
   }
 
@@ -58,6 +66,7 @@ export function getUserRepository(db: Db) {
 
   return {
     getUserById,
+    getAllUsersByType,
     getUsersByIds,
     createUser,
     createUsers,
