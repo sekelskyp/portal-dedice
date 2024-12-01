@@ -6,7 +6,7 @@ import { toaster } from '@frontend/shared/design-system'
 import { route } from '@shared/route'
 
 const CREATE_ARTICLE = gql(/* GraphQL */ `
-  mutation CreateArticle($data: ArticleInput!) {
+  mutation CreateArticle($data: CreateArticleInput!) {
     createArticle(data: $data) {
       id
     }

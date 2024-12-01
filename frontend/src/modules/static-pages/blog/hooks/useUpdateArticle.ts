@@ -4,7 +4,7 @@ import { gql } from '@frontend/gql'
 import { toaster } from '@frontend/shared/design-system'
 
 const UPDATE_ARTICLE = gql(/* GraphQL */ `
-  mutation UpdateArticle($data: ArticleInput!, $updateArticleId: Int!) {
+  mutation UpdateArticle($data: UpdateArticleInput!, $updateArticleId: Int!) {
     updateArticle(data: $data, id: $updateArticleId) {
       id
     }

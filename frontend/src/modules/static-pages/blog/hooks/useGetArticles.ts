@@ -9,6 +9,7 @@ const GET_ALL_ARTICLES = gql(/* GraphQL */ `
       date
       title
       content
+      coverImage
     }
   }
 `)

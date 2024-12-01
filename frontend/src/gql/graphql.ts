@@ -60,16 +60,10 @@ export type AddressSuggestion = {
 export type Article = {
   __typename?: 'Article'
   content: Scalars['String']['output']
+  coverImage: Scalars['String']['output']
   date: Scalars['DateTimeISO']['output']
   id: Scalars['ID']['output']
   title: Scalars['String']['output']
-}
-
-export type ArticleInput = {
-  content: Scalars['String']['input']
-  coverPicture: Scalars['Upload']['input']
-  date: Scalars['DateTimeISO']['input']
-  title: Scalars['String']['input']
 }
 
 export type Asset = {
@@ -128,6 +122,13 @@ export type ChatMessage = {
   displayName?: Maybe<Scalars['String']['output']>
   id: Scalars['ID']['output']
   userId: Scalars['ID']['output']
+}
+
+export type CreateArticleInput = {
+  content: Scalars['String']['input']
+  coverImage: Scalars['Upload']['input']
+  date: Scalars['DateTimeISO']['input']
+  title: Scalars['String']['input']
 }
 
 export type CreateNotaryInput = {
@@ -238,7 +239,7 @@ export type MutationCreateAddressArgs = {
 }
 
 export type MutationCreateArticleArgs = {
-  data: ArticleInput
+  data: CreateArticleInput
 }
 
 export type MutationCreateAssetArgs = {
@@ -328,7 +329,7 @@ export type MutationUpdateAddressArgs = {
 }
 
 export type MutationUpdateArticleArgs = {
-  data: ArticleInput
+  data: UpdateArticleInput
   id: Scalars['Int']['input']
 }
 
@@ -521,6 +522,13 @@ export type Subscription = {
 
 export type SubscriptionNewChatMessageArgs = {
   proceedingId: Scalars['Int']['input']
+}
+
+export type UpdateArticleInput = {
+  content?: InputMaybe<Scalars['String']['input']>
+  coverImage?: InputMaybe<Scalars['Upload']['input']>
+  date?: InputMaybe<Scalars['DateTimeISO']['input']>
+  title?: InputMaybe<Scalars['String']['input']>
 }
 
 export type UploadDocumentInput = {
@@ -1070,7 +1078,7 @@ export type SignUpMutation = {
 }
 
 export type CreateArticleMutationVariables = Exact<{
-  data: ArticleInput
+  data: CreateArticleInput
 }>
 
 export type CreateArticleMutation = {
@@ -1094,12 +1102,12 @@ export type GetArticleByIdQueryVariables = Exact<{
 export type GetArticleByIdQuery = {
   __typename?: 'Query'
   getArticleById?: {
-    coverPicture: string | undefined
     __typename?: 'Article'
     id: string
     date: any
     title: string
     content: string
+    coverImage: string
   } | null
 }
 
@@ -1108,17 +1116,17 @@ export type GetAllArticlesQueryVariables = Exact<{ [key: string]: never }>
 export type GetAllArticlesQuery = {
   __typename?: 'Query'
   getAllArticles: Array<{
-    coverPicture: any
     __typename?: 'Article'
     id: string
     date: any
     title: string
     content: string
+    coverImage: string
   }>
 }
 
 export type UpdateArticleMutationVariables = Exact<{
-  data: ArticleInput
+  data: UpdateArticleInput
   updateArticleId: Scalars['Int']['input']
 }>
 
@@ -3246,7 +3254,7 @@ export const CreateArticleDocument = {
             kind: 'NonNullType',
             type: {
               kind: 'NamedType',
-              name: { kind: 'Name', value: 'ArticleInput' },
+              name: { kind: 'Name', value: 'CreateArticleInput' },
             },
           },
         },
@@ -3376,6 +3384,7 @@ export const GetArticleByIdDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'date' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'title' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'content' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'coverImage' } },
               ],
             },
           },
@@ -3404,6 +3413,7 @@ export const GetAllArticlesDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'date' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'title' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'content' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'coverImage' } },
               ],
             },
           },
@@ -3427,7 +3437,7 @@ export const UpdateArticleDocument = {
             kind: 'NonNullType',
             type: {
               kind: 'NamedType',
-              name: { kind: 'Name', value: 'ArticleInput' },
+              name: { kind: 'Name', value: 'UpdateArticleInput' },
             },
           },
         },

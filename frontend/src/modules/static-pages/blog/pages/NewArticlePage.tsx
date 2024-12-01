@@ -50,7 +50,7 @@ export const NewArticlePage = () => {
   const handleSubmit = useCallback(
     async (data: ArticleFormData) => {
       if (isEditing) {
-        if (!data.image && !existingArticle?.getArticleById?.coverPicture) {
+        if (!data.image && !existingArticle?.getArticleById?.coverImage) {
           throw new Error('Cover picture is required')
         }
         await updateArticle({
@@ -60,8 +60,8 @@ export const NewArticlePage = () => {
               title: data.title,
               date: new Date(data.date).toISOString(),
               content: data.text,
-              coverPicture:
-                data.image ?? existingArticle?.getArticleById?.coverPicture,
+              coverImage:
+                data.image ?? existingArticle?.getArticleById?.coverImage,
             },
           },
         })
@@ -75,7 +75,7 @@ export const NewArticlePage = () => {
               title: data.title,
               date: new Date(data.date).toISOString(),
               content: data.text,
-              coverPicture: data.image,
+              coverImage: data.image,
             },
           },
         })
@@ -83,7 +83,7 @@ export const NewArticlePage = () => {
     },
     [
       isEditing,
-      existingArticle?.getArticleById?.coverPicture,
+      existingArticle?.getArticleById?.coverImage,
       updateArticle,
       articleId,
       createArticle,
