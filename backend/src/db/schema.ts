@@ -171,10 +171,10 @@ export const chat = mysqlTable('chat', {
 export const chatMessage = mysqlTable('chat_message', {
   id: int('id').primaryKey().autoincrement(),
   chatId: int('chat_id')
-    .references(() => chat.id)
+    .references(() => chat.id, { onDelete: 'cascade' })
     .notNull(), // FK to Chat
   userId: int('user_id')
-    .references(() => user.id)
+    .references(() => user.id, { onDelete: 'cascade' })
     .notNull(), // FK to User
   body: text('body').notNull(),
   createdAt: datetime('created_at').notNull().default(new Date()),

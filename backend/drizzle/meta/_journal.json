@@ -50,6 +50,13 @@
       "when": 1732983241129,
       "tag": "0006_mute_nextwave",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1733066345687,
+      "tag": "0007_massive_carnage",
+      "breakpoints": true
     }
   ]
 }
