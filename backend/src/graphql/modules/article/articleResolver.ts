@@ -102,7 +102,7 @@ export class ArticleResolver {
       content: data.content,
     }
     if (data.coverImage) {
-      const { createReadStream, filename, mimetype } = data.coverImage
+      const { createReadStream, filename, mimetype } = await data.coverImage // WARNING - THIS HAS TO BE AWAITED - VSCODE IS WRONG
       const stream = createReadStream()
       const base64CoverPicture = await encodeStreamToBase64(stream)
       const fileName = filename
