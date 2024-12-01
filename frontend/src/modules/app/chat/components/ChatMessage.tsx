@@ -42,7 +42,14 @@ export default function ChatMessage({
 
   return (
     <Flex maxWidth="50%" gap={2}>
-      {!isCurrent && <Avatar name={displayName} size="md" />}
+      {!isCurrent && (
+        <Avatar
+          bg={isCurrent ? 'blue.100' : 'gray.100'}
+          color={isCurrent ? 'blue.700' : 'gray.700'}
+          name={displayName}
+          size="md"
+        />
+      )}
       <Box bg={isCurrent ? 'blue.100' : 'gray.100'} p={4} borderRadius="xl">
         <Text fontWeight="medium">{displayName}</Text>
         <Text color="gray.600" wordBreak="break-word">
@@ -50,7 +57,14 @@ export default function ChatMessage({
         </Text>
         <Text fontSize="sm">{formatDateTime(createdAt)}</Text>
       </Box>
-      {isCurrent && <Avatar name={displayName} size="md" />}
+      {isCurrent && (
+        <Avatar
+          bg={isCurrent ? 'blue.100' : 'gray.100'}
+          color={isCurrent ? 'blue.700' : 'gray.700'}
+          name={displayName}
+          size="md"
+        />
+      )}
     </Flex>
   )
 }
