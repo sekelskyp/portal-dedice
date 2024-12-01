@@ -87,6 +87,7 @@ export const NewArticlePage = () => {
           },
         })
       }
+      navigate(route.blog())
     },
     [
       isEditing,
@@ -94,6 +95,7 @@ export const NewArticlePage = () => {
       updateArticle,
       articleId,
       createArticle,
+      navigate,
     ]
   )
 
