@@ -58,25 +58,20 @@ export const ProceedingDetail = ({
         >
           Seznam dědiců
         </Heading>
-        {proceeding.beneficiaries
-          ?.filter(
-            (beneficiary) =>
-              beneficiary.user?.id !== proceeding.mainBeneficiary?.user?.id
+        {proceeding.beneficiaries?.map((beneficiary) =>
+          !!beneficiary.user ? (
+            <BeneficiaryBadge
+              key={beneficiary.id}
+              beneficiaryContact={{
+                ...beneficiary.user,
+              }}
+            />
+          ) : (
+            <Alert status="warning" key={beneficiary.id}>
+              Dědic bez kontaktních údajů.
+            </Alert>
           )
-          .map((beneficiary, index) =>
-            !!beneficiary.user ? (
-              <BeneficiaryBadge
-                key={beneficiary.user.id || `beneficiary-${index}`}
-                beneficiaryContact={{
-                  ...beneficiary.user,
-                }}
-              />
-            ) : (
-              <Alert status="warning" key={`beneficiary-${index}`}>
-                Dědic bez kontaktních údajů.
-              </Alert>
-            )
-          )}
+        )}
       </Stack>
       <Heading
         size={{ base: 'lg', lg: 'xl' }}

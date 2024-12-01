@@ -45,14 +45,6 @@ export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
   const { user } = useAuth()
   const { data } = useGetUsers({ type: 'User' })
 
-  const allUsers = createListCollection({
-    items:
-      data?.getAllUserByType?.map((user) => ({
-        label: `${user.name} ${user.surname}`,
-        value: user.id,
-      })) || [],
-  })
-
   const otherUsers = createListCollection({
     items:
       data?.getAllUserByType
@@ -84,18 +76,16 @@ export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
       dateOfDeath: z
         .date({ required_error: 'Datum úmrtí je povinné.' })
         .max(new Date(), 'Datum úmrtí musí být v minulosti.'),
-      beneficiaries: z
-        .array(z.string())
-        .min(1, 'Vyberte alespoň jednoho dědice'),
+      beneficiaries: z.array(z.string()),
       addressInput: addressSchema,
-      mainBeneficiary: z.string({ required_error: 'Hlavní dědic je povinný' }),
+      mainBeneficiary: z.string({ required_error: 'Hlavní dědic je povinný.' }),
     })
     .refine((data) => data.dateOfBirth < data.dateOfDeath, {
-      message: 'Datum úmrtí musí být po datumu narození',
+      message: 'Datum úmrtí musí být po datumu narození.',
     })
-    .refine((data) => data.beneficiaries.includes(data.mainBeneficiary), {
-      message: 'Hlavní dědic musí být také v seznamu dědiců',
-      path: ['mainBeneficiary'],
+    .refine((data) => !data.beneficiaries.includes(data.mainBeneficiary), {
+      message: 'Hlavní dědic nemůže být zároveň v seznamu dalších dědiců.',
+      path: ['beneficiaries'],
     })
 
   return (
@@ -160,7 +150,7 @@ export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
           <Fieldset.Content>
             <SelectFormControl
               name="mainBeneficiary"
-              collection={allUsers} // Use allUsers here
+              collection={otherUsers} // Use allUsers here
               label="Hlavní kontaktní osoba"
               clearable
               required
@@ -207,10 +197,9 @@ export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
           <Fieldset.Content>
             <SelectFormControl
               name="beneficiaries"
-              collection={otherUsers} // Use otherUsers here
+              collection={otherUsers}
               label="Další dědicové"
               multiple
-              required
             />
           </Fieldset.Content>
         </Fieldset.Root>
