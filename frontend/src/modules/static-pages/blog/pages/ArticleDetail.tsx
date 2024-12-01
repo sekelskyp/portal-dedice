@@ -63,9 +63,21 @@ export const ArticleDetail: React.FC = () => {
               width="100%"
               height="300px"
             />
-            <Text fontSize="md" mt={2} textAlign="justify" px={2}>
-              {article.description}
-            </Text>
+            <Box
+              mt={2}
+              px={2}
+              css={{
+                '& p': {
+                  textAlign: 'justify',
+                  marginBottom: '1rem',
+                },
+                '& ul, & ol': {
+                  paddingLeft: '2rem',
+                  marginBottom: '1rem',
+                },
+              }}
+              dangerouslySetInnerHTML={{ __html: article.description }}
+            />
           </Card.Body>
         </Card.Root>
       </Stack>

@@ -22,7 +22,7 @@ export const dummyData = [
     id: 3,
     title: 'Jak funguje správní právo?',
     description:
-      'Správní právo upravuje vztahy mezi občany a veřejnou správou. Klíčovou zásadou je princip legality, který zajišťuje, že správní orgány mohou jednat pouze v rámci zákonem stanovených pravomocí. Proti nezákonným rozhodnutím správních orgánů lze využít opravné prostředky, například odvolání či žalobu ke správnímu soudu. Transparentnost a přístup k informacím posilují důvěru v právo.',
+      '<b>Správní právo</b> upravuje vztahy mezi občany a veřejnou správou. Klíčovou zásadou je princip legality, který zajišťuje, že správní orgány mohou jednat pouze v rámci zákonem stanovených pravomocí. Proti nezákonným rozhodnutím správních orgánů lze využít opravné prostředky, například odvolání či žalobu ke správnímu soudu. Transparentnost a přístup k informacím posilují důvěru v právo.',
     createDate: '2024-10-10',
     imageUrl:
       'https://images.pexels.com/photos/208603/pexels-photo-208603.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',

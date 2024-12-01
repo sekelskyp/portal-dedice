@@ -1,4 +1,4 @@
-import { Card, Image, Text } from '@chakra-ui/react'
+import { Box, Card, Image, Text } from '@chakra-ui/react'
 
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { route } from '@shared/route'
@@ -41,7 +41,19 @@ export function ArticleCard({
           {createDate}
         </Text>
         <Card.Description textAlign="justify">
-          {truncatedDescription}
+          <Box
+            css={{
+              '& p': {
+                textAlign: 'justify',
+                marginBottom: '1rem',
+              },
+              '& ul, & ol': {
+                paddingLeft: '2rem',
+                marginBottom: '1rem',
+              },
+            }}
+            dangerouslySetInnerHTML={{ __html: truncatedDescription }}
+          />
         </Card.Description>
       </Card.Body>
       <Card.Footer gap="2">
