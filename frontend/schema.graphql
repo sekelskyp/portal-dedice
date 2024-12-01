@@ -22,15 +22,9 @@ type AddressSuggestion {
 
 type Article {
   content: String!
+  coverImage: String!
   date: DateTimeISO!
   id: ID!
-  title: String!
-}
-
-input ArticleInput {
-  content: String!
-  coverPicture: Upload!
-  date: DateTimeISO!
   title: String!
 }
 
@@ -88,6 +82,13 @@ type ChatMessage {
   userId: ID!
 }
 
+input CreateArticleInput {
+  content: String!
+  coverImage: Upload!
+  date: DateTimeISO!
+  title: String!
+}
+
 input CreateNotaryInput {
   postalCode: String
   userId: ID
@@ -138,7 +139,7 @@ type Mutation {
   closeProceeding(proceedingId: Int!): Boolean!
   confirmEmailVerification(token: String!): Boolean!
   createAddress(data: AddressInput!): Address!
-  createArticle(data: ArticleInput!): Article!
+  createArticle(data: CreateArticleInput!): Article!
   createAsset(data: AssetInput!): Asset!
   createBeneficiaries(data: [BeneficiaryInput!]!): [Beneficiary!]!
   createBeneficiary(data: BeneficiaryInput!): Beneficiary!
@@ -166,7 +167,7 @@ type Mutation {
   signIn(login: String!, password: String!): SignInResponse!
   signUp(registerInput: RegisterInput!): User!
   updateAddress(data: AddressInput!, id: Int!): Address
-  updateArticle(data: ArticleInput!, id: Int!): Article
+  updateArticle(data: UpdateArticleInput!, id: Int!): Article
   updateAsset(data: AssetInput!, id: Int!): Asset
   updateBeneficiary(data: BeneficiaryInput!, id: Int!): Beneficiary!
   updateProfile(profileInput: ProfileInput!): User!
@@ -251,6 +252,13 @@ type SignInResponse {
 
 type Subscription {
   newChatMessage(proceedingId: Int!): ChatMessage!
+}
+
+input UpdateArticleInput {
+  content: String
+  coverImage: Upload
+  date: DateTimeISO
+  title: String
 }
 
 """

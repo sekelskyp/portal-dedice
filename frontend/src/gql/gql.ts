@@ -69,15 +69,15 @@ const documents = {
     types.SignInDocument,
   '\n  mutation SignUp($registerInput: RegisterInput!) {\n    signUp(registerInput: $registerInput) {\n      id\n    }\n  }\n':
     types.SignUpDocument,
-  '\n  mutation CreateArticle($data: ArticleInput!) {\n    createArticle(data: $data) {\n      id\n    }\n  }\n':
+  '\n  mutation CreateArticle($data: CreateArticleInput!) {\n    createArticle(data: $data) {\n      id\n    }\n  }\n':
     types.CreateArticleDocument,
   '\n  mutation DeleteArticle($ids: [Int!]!) {\n    deleteArticles(ids: $ids)\n  }\n':
     types.DeleteArticleDocument,
-  '\n  query GetArticleById($getArticleByIdId: Int!) {\n    getArticleById(id: $getArticleByIdId) {\n      id\n      date\n      title\n      content\n    }\n  }\n':
+  '\n  query GetArticleById($getArticleByIdId: Int!) {\n    getArticleById(id: $getArticleByIdId) {\n      id\n      date\n      title\n      content\n      coverImage\n    }\n  }\n':
     types.GetArticleByIdDocument,
-  '\n  query GetAllArticles {\n    getAllArticles {\n      id\n      date\n      title\n      content\n    }\n  }\n':
+  '\n  query GetAllArticles {\n    getAllArticles {\n      id\n      date\n      title\n      content\n      coverImage\n    }\n  }\n':
     types.GetAllArticlesDocument,
-  '\n  mutation UpdateArticle($data: ArticleInput!, $updateArticleId: Int!) {\n    updateArticle(data: $data, id: $updateArticleId) {\n      id\n    }\n  }\n':
+  '\n  mutation UpdateArticle($data: UpdateArticleInput!, $updateArticleId: Int!) {\n    updateArticle(data: $data, id: $updateArticleId) {\n      id\n    }\n  }\n':
     types.UpdateArticleDocument,
   '\n  query FindNotary($input: FindNotaryInput!) {\n    findNotary(input: $input) {\n      id\n      user {\n        id\n        name\n        surname\n        displayName\n        email\n        gender\n        phone\n        address {\n          street\n          streetNumber\n          municipality\n          postalCode\n        }\n      }\n    }\n  }\n':
     types.FindNotaryDocument,
@@ -271,8 +271,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  mutation CreateArticle($data: ArticleInput!) {\n    createArticle(data: $data) {\n      id\n    }\n  }\n'
-): (typeof documents)['\n  mutation CreateArticle($data: ArticleInput!) {\n    createArticle(data: $data) {\n      id\n    }\n  }\n']
+  source: '\n  mutation CreateArticle($data: CreateArticleInput!) {\n    createArticle(data: $data) {\n      id\n    }\n  }\n'
+): (typeof documents)['\n  mutation CreateArticle($data: CreateArticleInput!) {\n    createArticle(data: $data) {\n      id\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -283,20 +283,20 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query GetArticleById($getArticleByIdId: Int!) {\n    getArticleById(id: $getArticleByIdId) {\n      id\n      date\n      title\n      content\n    }\n  }\n'
-): (typeof documents)['\n  query GetArticleById($getArticleByIdId: Int!) {\n    getArticleById(id: $getArticleByIdId) {\n      id\n      date\n      title\n      content\n    }\n  }\n']
+  source: '\n  query GetArticleById($getArticleByIdId: Int!) {\n    getArticleById(id: $getArticleByIdId) {\n      id\n      date\n      title\n      content\n      coverImage\n    }\n  }\n'
+): (typeof documents)['\n  query GetArticleById($getArticleByIdId: Int!) {\n    getArticleById(id: $getArticleByIdId) {\n      id\n      date\n      title\n      content\n      coverImage\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query GetAllArticles {\n    getAllArticles {\n      id\n      date\n      title\n      content\n    }\n  }\n'
-): (typeof documents)['\n  query GetAllArticles {\n    getAllArticles {\n      id\n      date\n      title\n      content\n    }\n  }\n']
+  source: '\n  query GetAllArticles {\n    getAllArticles {\n      id\n      date\n      title\n      content\n      coverImage\n    }\n  }\n'
+): (typeof documents)['\n  query GetAllArticles {\n    getAllArticles {\n      id\n      date\n      title\n      content\n      coverImage\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  mutation UpdateArticle($data: ArticleInput!, $updateArticleId: Int!) {\n    updateArticle(data: $data, id: $updateArticleId) {\n      id\n    }\n  }\n'
-): (typeof documents)['\n  mutation UpdateArticle($data: ArticleInput!, $updateArticleId: Int!) {\n    updateArticle(data: $data, id: $updateArticleId) {\n      id\n    }\n  }\n']
+  source: '\n  mutation UpdateArticle($data: UpdateArticleInput!, $updateArticleId: Int!) {\n    updateArticle(data: $data, id: $updateArticleId) {\n      id\n    }\n  }\n'
+): (typeof documents)['\n  mutation UpdateArticle($data: UpdateArticleInput!, $updateArticleId: Int!) {\n    updateArticle(data: $data, id: $updateArticleId) {\n      id\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

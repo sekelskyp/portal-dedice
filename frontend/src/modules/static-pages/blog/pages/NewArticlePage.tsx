@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { Box, Heading, IconButton, VStack } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LuArrowLeft } from 'react-icons/lu'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { z } from 'zod'
 
 import { DateFormControl } from '@frontend/shared/forms/DateFormControl'
@@ -16,21 +16,27 @@ import { route } from '@shared/route'
 
 import { useCoverUpload } from '../hooks/useCoverUpload'
 import { useCreateArticle } from '../hooks/useCreateArticle'
+import { useGetArticle } from '../hooks/useGetArticle'
+import { useUpdateArticle } from '../hooks/useUpdateArticle'
 
 const articleSchema = z.object({
-  title: z
-    .string({ required_error: 'Titulek je povinný' })
-    .min(1, 'Titulek je povinný'),
+  title: z.string().min(1, 'Titulek je povinný'),
   date: z.date(),
-  image: z.instanceof(File, { message: 'Obrázek je povinný' }),
-  text: z
-    .string({ required_error: 'Obsah je povinný' })
-    .min(1, 'Obsah je povinný'),
+  image: z.instanceof(File, { message: 'Obrázek je povinný' }).optional(),
+  text: z.string().min(1, 'Obsah je povinný'),
 })
 
 type ArticleFormData = z.infer<typeof articleSchema>
 
 export const NewArticlePage = () => {
+  const { id } = useParams()
+  const isEditing = Boolean(id)
+  const articleId = parseInt(id ?? '0', 10)
+
+  const { data: existingArticle } = useGetArticle(articleId)
+  const [createArticle, { loading: createLoading }] = useCreateArticle()
+  const [updateArticle, { loading: updateLoading }] = useUpdateArticle()
+
   const navigate = useNavigate()
   const {
     ACCEPTED_FILE_TYPES,
@@ -41,22 +47,47 @@ export const NewArticlePage = () => {
 
   const currentDate = new Date()
 
-  const [createArticleRequest, createArticleRequestState] = useCreateArticle()
-
-  const handleCreateArticle = useCallback(
+  const handleSubmit = useCallback(
     async (data: ArticleFormData) => {
-      await createArticleRequest({
-        variables: {
-          data: {
-            title: data.title,
-            date: new Date(data.date).toISOString(),
-            content: data.text,
-            coverPicture: data.image as File,
+      if (isEditing) {
+        if (!data.image && !existingArticle?.getArticleById?.coverImage) {
+          throw new Error('Cover picture is required')
+        }
+        await updateArticle({
+          variables: {
+            updateArticleId: articleId,
+            data: {
+              title: data.title,
+              date: new Date(data.date).toISOString(),
+              content: data.text,
+              coverImage:
+                data.image ?? existingArticle?.getArticleById?.coverImage,
+            },
           },
-        },
-      })
+        })
+      } else {
+        if (!data.image) {
+          throw new Error('Cover picture is required')
+        }
+        await createArticle({
+          variables: {
+            data: {
+              title: data.title,
+              date: new Date(data.date).toISOString(),
+              content: data.text,
+              coverImage: data.image,
+            },
+          },
+        })
+      }
     },
-    [createArticleRequest]
+    [
+      isEditing,
+      existingArticle?.getArticleById?.coverImage,
+      updateArticle,
+      articleId,
+      createArticle,
+    ]
   )
 
   return (
@@ -80,12 +111,16 @@ export const NewArticlePage = () => {
         boxShadow="md"
       >
         <Heading as="h1" size={'4xl'} mb={6}>
-          Vytvoření článku
+          {isEditing ? 'Úprava článku' : 'Vytvoření článku'}
         </Heading>
         <Form<ArticleFormData>
-          onSubmit={handleCreateArticle}
+          onSubmit={handleSubmit}
           defaultValues={{
-            date: currentDate,
+            date: isEditing
+              ? new Date(existingArticle?.getArticleById?.date ?? new Date())
+              : currentDate,
+            title: existingArticle?.getArticleById?.title,
+            text: existingArticle?.getArticleById?.content,
           }}
           resolver={zodResolver(articleSchema)}
           noValidate
@@ -119,10 +154,10 @@ export const NewArticlePage = () => {
               required
             />
             <SubmitButton
-              loading={createArticleRequestState.loading}
-              loadingText="Vytváření..."
+              loading={isEditing ? updateLoading : createLoading}
+              loadingText={isEditing ? 'Ukládání...' : 'Vytváření...'}
             >
-              Vytvořit článek
+              {isEditing ? 'Uložit změny' : 'Vytvořit článek'}
             </SubmitButton>
           </VStack>
         </Form>

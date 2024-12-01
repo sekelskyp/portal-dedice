@@ -2,6 +2,7 @@ import { Box, Heading, IconButton, Spinner, Stack } from '@chakra-ui/react'
 import { FaPlus } from 'react-icons/fa'
 import { RiSortAsc, RiSortDesc } from 'react-icons/ri'
 
+import { useAuth } from '@frontend/modules/auth'
 import { Alert } from '@frontend/shared/design-system'
 import { Page } from '@frontend/shared/layout'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms/RouterNavLink'
@@ -19,6 +20,7 @@ import { useGetArticles } from '../hooks/useGetArticles'
 //TODO: add responsive design
 
 export function BlogPage() {
+  const { user } = useAuth()
   const { data, loading, error } = useGetArticles()
   const {
     query,
@@ -33,7 +35,7 @@ export function BlogPage() {
       title: article.title,
       description: article.content,
       createDate: article.date,
-      imageUrl: article.coverPicture,
+      imageUrl: article.coverImage,
     })),
   })
 
@@ -73,17 +75,19 @@ export function BlogPage() {
         >
           {sortOrder === 'asc' ? <RiSortAsc /> : <RiSortDesc />}
         </IconButton>
-        <RouterNavLink
-          to={route.newArticle()}
-          width={{ base: '10%', xl: 'auto' }}
-          display="flex"
-          justifySelf={'flex-end'}
-          alignItems="center"
-          gap={2}
-        >
-          <FaPlus />
-          <Box display={{ base: 'none', xl: 'block' }}>Nový článek</Box>
-        </RouterNavLink>
+        {user?.type === 'Admin' && (
+          <RouterNavLink
+            to={route.newArticle()}
+            width={{ base: '10%', xl: 'auto' }}
+            display="flex"
+            justifySelf={'flex-end'}
+            alignItems="center"
+            gap={2}
+          >
+            <FaPlus />
+            <Box display={{ base: 'none', xl: 'block' }}>Nový článek</Box>
+          </RouterNavLink>
+        )}
       </Stack>
       <Stack
         direction="row"
@@ -107,7 +111,11 @@ export function BlogPage() {
         <Alert
           mt={-8}
           status="warning"
-          title="Žádné články neodpovídají vašemu hledání."
+          title={
+            query
+              ? 'Žádné články neodpovídají vašemu hledání.'
+              : 'Seznam článků je prázdný.'
+          }
           width="fit-content"
         />
       )}

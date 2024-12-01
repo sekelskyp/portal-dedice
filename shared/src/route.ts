@@ -7,6 +7,7 @@ export const route = {
   guide: () => `/guide`,
   blog: () => `/blog`,
   newArticle: () => `/blog/new-article`,
+  editArticle: (id = ':id') => `/blog/article/edit/${id}`,
   detailArticle: (id = ':id') => `/blog/article/${id}`,
   wizard: () => `/wizard`,
   portal: () => `/portal/proceedings`,
