@@ -5,6 +5,7 @@ import { LuArrowLeft } from 'react-icons/lu'
 import { useNavigate, useParams } from 'react-router-dom'
 import { z } from 'zod'
 
+import { useAuth } from '@frontend/modules/auth'
 import { DateFormControl } from '@frontend/shared/forms/DateFormControl'
 import { FileUploadFormControl } from '@frontend/shared/forms/FileUploadFormControl'
 import { Form } from '@frontend/shared/forms/Form'
@@ -12,6 +13,7 @@ import { InputFormControl } from '@frontend/shared/forms/InputFormControl'
 import { QuillFormControl } from '@frontend/shared/forms/QuillFormControl'
 import { SubmitButton } from '@frontend/shared/forms/SubmitButton'
 import { Page } from '@frontend/shared/layout'
+import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
 import { route } from '@shared/route'
 
 import { useCoverUpload } from '../hooks/useCoverUpload'
@@ -34,6 +36,7 @@ type ArticleFormData = z.infer<typeof articleSchema>
 
 export const NewArticlePage = () => {
   const { id } = useParams()
+  const { user } = useAuth()
   const isEditing = Boolean(id)
   const articleId = parseInt(id ?? '0', 10)
 
@@ -93,6 +96,10 @@ export const NewArticlePage = () => {
       createArticle,
     ]
   )
+
+  if (!user || user.type !== 'Admin') {
+    return <UnauthorizedPage />
+  }
 
   return (
     <Page>
