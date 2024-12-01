@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Text, VStack } from '@chakra-ui/react'
+import { Box, Flex, Grid, GridItem, Text } from '@chakra-ui/react'
 
 import { useAuth } from '@frontend/modules/auth/auth-core'
 
@@ -28,46 +28,63 @@ export default function ChatBody({ proceedingId, isHistory }: ChatBodyProps) {
     })
   }, [messages])
 
-  return !isHistory ? (
-    <VStack gap={4} align="stretch" height="50vh" overflowY="auto">
+  const renderMessages = () => (
+    <Grid templateColumns="1fr" gap={4} width="100%" px={4}>
+      {messages.map((message) => {
+        const isCurrent = message.userId === loggedUserId
+
+        return (
+          <GridItem key={message.id} width="100%">
+            <Flex
+              width="100%"
+              justifyContent={isCurrent ? 'flex-end' : 'flex-start'}
+            >
+              <ChatMessage
+                body={message.body}
+                createdAt={message.createdAt}
+                displayName={message.displayName!}
+                isCurrent={isCurrent}
+              />
+            </Flex>
+          </GridItem>
+        )
+      })}
+    </Grid>
+  )
+
+  const content = (
+    <Box height="100%" width="100%" display="flex" flexDirection="column">
       {error ? (
-        <Text>Došlo k chybě při načítání zpráv</Text>
+        <Text px={4}>
+          {isHistory
+            ? 'Došlo k chybě při načítání historie zpráv'
+            : 'Došlo k chybě při načítání zpráv'}
+        </Text>
       ) : loading ? (
-        <Text>Načítání...</Text>
+        <Text px={4}>{isHistory ? 'Načítání historie...' : 'Načítání...'}</Text>
       ) : messages.length === 0 ? (
-        <Text>V chatu zatím nejsou žádné zprávy</Text>
+        <Text px={4}>
+          {isHistory
+            ? 'V historii chatu nejsou žádné zprávy'
+            : 'V chatu zatím nejsou žádné zprávy'}
+        </Text>
       ) : (
-        messages.map((message) => (
-          <ChatMessage
-            key={message.id}
-            body={message.body}
-            createdAt={message.createdAt}
-            displayName={message.displayName!}
-            isCurrent={message.userId === loggedUserId}
-          />
-        ))
+        renderMessages()
       )}
-      <div ref={bottomRef}></div>
-    </VStack>
-  ) : (
-    <VStack gap={4} align="stretch" height="50vh" overflowY="auto">
-      {error ? (
-        <Text>Došlo k chybě při načítání historie zpráv</Text>
-      ) : loading ? (
-        <Text>Načítání historie...</Text>
-      ) : messages.length === 0 ? (
-        <Text>V historii chatu nejsou žádné zprávy</Text>
-      ) : (
-        messages.map((message) => (
-          <ChatMessage
-            key={message.id}
-            body={message.body}
-            createdAt={message.createdAt}
-            displayName={message.displayName!}
-            isCurrent={message.userId === loggedUserId}
-          />
-        ))
-      )}
-    </VStack>
+      {!isHistory && <div ref={bottomRef} />}
+    </Box>
+  )
+
+  return (
+    <Box
+      height="100%"
+      flex={1}
+      width="100%"
+      overflowY="auto"
+      display="flex"
+      flexDirection="column"
+    >
+      {content}
+    </Box>
   )
 }

@@ -40,39 +40,31 @@ export default function ChatMessage({
     }).format(date)
   }
 
-  console.log(isCurrent)
-
   return (
-    <>
-      <Flex
-        justifyContent="flex-start"
-        gap={2}
-        alignItems="flex-end"
-        px={2}
-        width="100%"
-      >
+    <Flex maxWidth="50%" gap={2}>
+      {!isCurrent && (
         <Avatar
+          bg={isCurrent ? 'blue.100' : 'gray.100'}
+          color={isCurrent ? 'blue.700' : 'gray.700'}
           name={displayName}
-          bg={isCurrent ? 'blue.100' : 'gray.100'}
-          size={'md'}
+          size="md"
         />
-        <Box
+      )}
+      <Box bg={isCurrent ? 'blue.100' : 'gray.100'} p={4} borderRadius="xl">
+        <Text fontWeight="medium">{displayName}</Text>
+        <Text color="gray.600" wordBreak="break-word">
+          {body}
+        </Text>
+        <Text fontSize="sm">{formatDateTime(createdAt)}</Text>
+      </Box>
+      {isCurrent && (
+        <Avatar
           bg={isCurrent ? 'blue.100' : 'gray.100'}
-          p={4}
-          borderRadius="2xl"
-          border="1px solid"
-          borderColor={isCurrent ? 'blue.200' : 'gray.200'}
-          boxShadow="md"
-        >
-          <Text fontSize={'lg'}>{displayName}</Text>
-          <Text color="gray.600" wordBreak="break-word">
-            {body}
-          </Text>
-          <Text fontSize="sm" color="gray.500">
-            {formatDateTime(createdAt)}
-          </Text>
-        </Box>
-      </Flex>
-    </>
+          color={isCurrent ? 'blue.700' : 'gray.700'}
+          name={displayName}
+          size="md"
+        />
+      )}
+    </Flex>
   )
 }

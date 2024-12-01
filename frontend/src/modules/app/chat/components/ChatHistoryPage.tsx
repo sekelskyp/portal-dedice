@@ -13,7 +13,10 @@ export default function ChatHistoryPage() {
     <Page>
       <Container maxW="4xl">
         <Flex gap={6} direction="column">
-          <ChatHeader proceedingId={+proceedingId!} isHistory={true}></ChatHeader>
+          <ChatHeader
+            proceedingId={+proceedingId!}
+            isHistory={true}
+          ></ChatHeader>
           <ChatBody proceedingId={+proceedingId!} isHistory={true}></ChatBody>
         </Flex>
       </Container>
