@@ -18,7 +18,7 @@ export const ProceedingDetail = ({
   const user = useAuth()
   const assets = proceeding?.procedureAssets
   const totalAssetsValue = assets?.reduce((sum, asset) => sum + asset.value, 0)
-
+  console.log('this is main beneficiary', proceeding?.mainBeneficiary)
   return proceeding ? (
     <Stack gap={4}>
       <Grid gap={4} templateColumns={{ base: '1fr', lg: '1fr 1fr' }}>
@@ -30,10 +30,8 @@ export const ProceedingDetail = ({
             Hlavní kontaktní osoba
           </Heading>
 
-          {proceeding.mainBeneficiary?.user ? (
-            <BeneficiaryBadge
-              beneficiaryContact={proceeding.mainBeneficiary?.user}
-            />
+          {proceeding.mainBeneficiary ? (
+            <BeneficiaryBadge beneficiaryContact={proceeding.mainBeneficiary} />
           ) : (
             <Alert status="warning">Dědic bez kontaktních údajů.</Alert>
           )}

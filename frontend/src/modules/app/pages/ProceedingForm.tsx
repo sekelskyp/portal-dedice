@@ -32,10 +32,12 @@ export type ProceedingFormProps = {
     surname: string
     dateOfBirth: string
     dateOfDeath: string
-    addressStreet: string
-    addressStreetNumber: string
-    addressMunicipality: string
-    addressPostCode: string
+    addressInput: {
+      street: string
+      streetNumber: string
+      municipality: string
+      postalCode: string
+    }
     contactName: string
     contactSurname: string
     contactEmail: string
@@ -53,6 +55,13 @@ export interface Beneficiary {
 
 export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
   const validate = useValidateUser()
+
+  const addressSchema = z.object({
+    street: z.string().min(1, 'Ulice je povinná'),
+    streetNumber: z.string().min(1, 'Číslo popisné je povinné'),
+    municipality: z.string().min(1, 'Obec je povinná'),
+    postalCode: z.string().min(1, 'PSČ je povinné'),
+  })
 
   const beneficiarySchema = z.object({
     name: z
@@ -79,23 +88,20 @@ export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
         .date({ required_error: 'Datum narození je povinné.' })
         .max(new Date(), 'Datum narození musí být v minulosti.'),
       dateOfDeath: z
-        .date({ required_error: 'Datum narození je povinné.' })
-        .max(new Date(), 'Datum narození musí být v minulosti.'),
+        .date({ required_error: 'Datum úmrtí je povinné.' })
+        .max(new Date(), 'Datum úmrtí musí být v minulosti.'),
       contactName: z
         .string({ required_error: 'Jméno je povinné' })
         .min(1, 'Jméno je povinné'),
       contactSurname: z
-        .string({ required_error: 'Jméno je povinné' })
-        .min(1, 'Jméno je povinné'),
+        .string({ required_error: 'Příjmení je povinné' })
+        .min(1, 'Příjmení je povinné'),
       contactEmail: z
         .string({ required_error: 'Zadejte validní e-mailovou adresu' })
         .email('Zadejte validní e-mailovou adresu'),
       contactUserId: z.string().optional(),
       beneficiaries: z.array(beneficiarySchema),
-      addressStreet: z.string().min(1, 'Ulice je povinná.'),
-      addressStreetNumber: z.string().min(1, 'Číslo popisné je povinné.'),
-      addressMunicipality: z.string().min(1, 'Obec je povinná.'),
-      addressPostCode: z.string().min(1, 'PSČ je povinné.'),
+      addressInput: addressSchema,
     })
     .refine((data) => data.dateOfBirth < data.dateOfDeath, {
       message: 'Datum úmrtí musí být po datumu narození',
@@ -111,6 +117,7 @@ export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
       } else {
         data.contactUserId = userId
       }
+      console.log(data)
       return isValid
     })
     .superRefine(async (data, ctx) => {

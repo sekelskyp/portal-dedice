@@ -130,8 +130,8 @@ export type CreateNotaryInput = {
 export type CreateProceedingInput = {
   beneficiaryUserIds: Array<Scalars['ID']['input']>
   deceasedPerson: DeceasedPersonInput
-  mainBeneficiaryUserId: Scalars['ID']['input']
-  startDate: Scalars['DateTimeISO']['input']
+  mainBeneficiaryUserId?: InputMaybe<Scalars['ID']['input']>
+  startDate?: InputMaybe<Scalars['DateTimeISO']['input']>
 }
 
 export type DeceasedPersonInput = {
@@ -360,7 +360,7 @@ export type Proceeding = {
   documents: Array<Document>
   endDate?: Maybe<Scalars['DateTimeISO']['output']>
   id: Scalars['ID']['output']
-  mainBeneficiary?: Maybe<Beneficiary>
+  mainBeneficiary?: Maybe<User>
   mainBeneficiaryId?: Maybe<Scalars['ID']['output']>
   name: Scalars['String']['output']
   notary?: Maybe<Notary>
@@ -832,17 +832,13 @@ export type GetProceedingByIdQuery = {
       cin?: string | null
     }> | null
     mainBeneficiary?: {
-      __typename?: 'Beneficiary'
+      __typename?: 'User'
       id: string
-      user?: {
-        __typename?: 'User'
-        displayName: string
-        email: string
-        phone?: string | null
-        id: string
-        name: string
-        surname: string
-      } | null
+      displayName: string
+      email: string
+      phone?: string | null
+      name: string
+      surname: string
     } | null
     beneficiaries?: Array<{
       __typename?: 'Beneficiary'
@@ -2311,36 +2307,14 @@ export const GetProceedingByIdDocument = {
                       { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       {
                         kind: 'Field',
-                        name: { kind: 'Name', value: 'user' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'displayName' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'email' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'phone' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'id' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'name' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'surname' },
-                            },
-                          ],
-                        },
+                        name: { kind: 'Name', value: 'displayName' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'phone' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'surname' },
                       },
                     ],
                   },

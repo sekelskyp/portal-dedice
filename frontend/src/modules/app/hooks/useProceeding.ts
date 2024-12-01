@@ -20,14 +20,11 @@ export const GET_PROCEEDING_QUERY = gql(/* GraphQL */ `
       }
       mainBeneficiary {
         id
-        user {
-          displayName
-          email
-          phone
-          id
-          name
-          surname
-        }
+        displayName
+        email
+        phone
+        name
+        surname
       }
       beneficiaries {
         id
@@ -83,6 +80,8 @@ export function useProceeding(proceedingId: number) {
       getProceedingByIdId: proceedingId,
     },
   })
+
+  console.log(data)
 
   return {
     data,

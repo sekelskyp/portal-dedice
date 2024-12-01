@@ -17,10 +17,12 @@ export function NewProceedingPage() {
       surname: string
       dateOfBirth: string
       dateOfDeath: string
-      addressStreet: string
-      addressStreetNumber: string
-      addressMunicipality: string
-      addressPostCode: string
+      addressInput: {
+        street: string
+        streetNumber: string
+        municipality: string
+        postalCode: string
+      }
       contactName: string
       contactSurname: string
       contactEmail: string
@@ -35,10 +37,10 @@ export function NewProceedingPage() {
               surname: variables.surname,
               dateOfBirth: new Date(variables.dateOfBirth).toISOString(),
               dateOfDeath: new Date(variables.dateOfDeath).toISOString(),
-              addressStreet: variables.addressStreet,
-              addressStreetNumber: variables.addressStreetNumber,
-              addressMunicipality: variables.addressMunicipality,
-              addressPostCode: variables.addressPostCode,
+              addressStreet: variables.addressInput.street,
+              addressStreetNumber: variables.addressInput.streetNumber,
+              addressMunicipality: variables.addressInput.municipality,
+              addressPostCode: variables.addressInput.postalCode,
             },
             beneficiaryUserIds: variables.beneficiaries.map(
               (ben) => ben.userId!

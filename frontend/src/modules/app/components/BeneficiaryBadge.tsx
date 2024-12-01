@@ -16,6 +16,7 @@ export function BeneficiaryBadge({
 }: {
   beneficiaryContact: User
 }) {
+  console.log('This is beneficiary contact from props', beneficiaryContact)
   return (
     <HStack
       key={beneficiaryContact.id}
