@@ -52,9 +52,7 @@ export class ArticleResolver {
   ): Promise<Article> {
     // Destructure and extract the file details
     const { createReadStream, filename, mimetype } = await data.coverImage // WARNING - THIS HAS TO BE AWAITED - VSCODE IS WRONG
-    console.log('data', data)
     const stream = createReadStream()
-    console.log('stream', stream)
     // Encode the file stream to Base64
     const base64CoverPicture = await encodeStreamToBase64(stream)
 
