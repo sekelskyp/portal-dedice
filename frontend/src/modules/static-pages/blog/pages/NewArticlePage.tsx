@@ -103,14 +103,14 @@ export const NewArticlePage = () => {
         <LuArrowLeft />
       </IconButton>
       <Box
-        maxW="80%"
+        maxW={{ base: '100%', md: '80%' }}
         mx="auto"
         bg="grey.100"
         p={6}
         borderRadius="lg"
         boxShadow="md"
       >
-        <Heading as="h1" size={'4xl'} mb={6}>
+        <Heading size={{ base: '2xl', md: '4xl' }} mb={6}>
           {isEditing ? 'Úprava článku' : 'Vytvoření článku'}
         </Heading>
         <Form<ArticleFormData>
@@ -133,7 +133,6 @@ export const NewArticlePage = () => {
               required
             />
             <DateFormControl name="date" label="Datum" required />
-
             <FileUploadFormControl
               name="image"
               label="Obrázek"
