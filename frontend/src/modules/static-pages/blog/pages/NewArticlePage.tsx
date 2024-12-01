@@ -5,6 +5,7 @@ import { LuArrowLeft } from 'react-icons/lu'
 import { useNavigate, useParams } from 'react-router-dom'
 import { z } from 'zod'
 
+import { useAuth } from '@frontend/modules/auth'
 import { DateFormControl } from '@frontend/shared/forms/DateFormControl'
 import { FileUploadFormControl } from '@frontend/shared/forms/FileUploadFormControl'
 import { Form } from '@frontend/shared/forms/Form'
@@ -12,6 +13,7 @@ import { InputFormControl } from '@frontend/shared/forms/InputFormControl'
 import { QuillFormControl } from '@frontend/shared/forms/QuillFormControl'
 import { SubmitButton } from '@frontend/shared/forms/SubmitButton'
 import { Page } from '@frontend/shared/layout'
+import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
 import { route } from '@shared/route'
 
 import { useCoverUpload } from '../hooks/useCoverUpload'
@@ -20,16 +22,21 @@ import { useGetArticle } from '../hooks/useGetArticle'
 import { useUpdateArticle } from '../hooks/useUpdateArticle'
 
 const articleSchema = z.object({
-  title: z.string().min(1, 'Titulek je povinný'),
+  title: z
+    .string({ required_error: 'Titulek je povinný' })
+    .min(1, 'Titulek je povinný'),
   date: z.date(),
   image: z.instanceof(File, { message: 'Obrázek je povinný' }).optional(),
-  text: z.string().min(1, 'Obsah je povinný'),
+  text: z
+    .string({ required_error: 'Obsah je povinný' })
+    .min(1, 'Obsah je povinný'),
 })
 
 type ArticleFormData = z.infer<typeof articleSchema>
 
 export const NewArticlePage = () => {
   const { id } = useParams()
+  const { user } = useAuth()
   const isEditing = Boolean(id)
   const articleId = parseInt(id ?? '0', 10)
 
@@ -90,6 +97,10 @@ export const NewArticlePage = () => {
     ]
   )
 
+  if (!user || user.type !== 'Admin') {
+    return <UnauthorizedPage />
+  }
+
   return (
     <Page>
       <IconButton
@@ -103,14 +114,14 @@ export const NewArticlePage = () => {
         <LuArrowLeft />
       </IconButton>
       <Box
-        maxW="80%"
+        maxW={{ base: '100%', md: '80%' }}
         mx="auto"
         bg="grey.100"
         p={6}
         borderRadius="lg"
         boxShadow="md"
       >
-        <Heading as="h1" size={'4xl'} mb={6}>
+        <Heading size={{ base: '2xl', md: '4xl' }} mb={6}>
           {isEditing ? 'Úprava článku' : 'Vytvoření článku'}
         </Heading>
         <Form<ArticleFormData>
@@ -133,7 +144,6 @@ export const NewArticlePage = () => {
               required
             />
             <DateFormControl name="date" label="Datum" required />
-
             <FileUploadFormControl
               name="image"
               label="Obrázek"

@@ -48,7 +48,6 @@ export const QuillFormControl = ({
           theme="snow"
           modules={modules}
           formats={formats}
-          style={{ height: '200px', marginBottom: '40px' }}
         />
       )}
     </BaseFieldControl>

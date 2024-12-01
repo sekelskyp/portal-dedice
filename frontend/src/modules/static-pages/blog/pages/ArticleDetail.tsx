@@ -42,7 +42,7 @@ export const ArticleDetail: React.FC = () => {
         title: article.title,
         description: article.content,
         createDate: article.date,
-        imageUrl: article.coverPicture,
+        imageUrl: article.coverImage,
       }))
   }, [allArticlesData, articleId])
 
@@ -88,9 +88,7 @@ export const ArticleDetail: React.FC = () => {
           <Card.Body gap={2}>
             <Image
               src={
-                article.coverPicture
-                  ? article.coverPicture
-                  : '/cover-fallback.png'
+                article.coverImage ? article.coverImage : '/cover-fallback.png'
               }
               alt={article.title}
               borderRadius="lg"
