@@ -50,8 +50,7 @@ export class UserResolver {
     @Arg('type', () => String) type: UserTypeEnumType,
     @Ctx() context: CustomContext
   ): Promise<User[]> {
-    const result = await context.userRepository.getAllUsersByType(type)
-    return result
+    return await context.userRepository.getAllUsersByType(type)
   }
 
   // Fetch a user by email
