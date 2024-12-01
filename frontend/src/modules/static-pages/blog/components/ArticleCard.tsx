@@ -8,7 +8,7 @@ export type Article = {
   title: string
   description: string
   createDate: string
-  imageUrl: string
+  imageUrl?: string
 }
 
 export function ArticleCard({
@@ -30,7 +30,7 @@ export function ArticleCard({
       variant="elevated"
     >
       <Image
-        src={imageUrl}
+        src={imageUrl ? imageUrl : '/cover-fallback.png'}
         borderTopRadius="xl"
         height="250px"
         objectFit="cover"
