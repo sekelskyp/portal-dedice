@@ -18,9 +18,6 @@ export function ArticleCard({
   createDate,
   imageUrl,
 }: Article) {
-  const truncatedDescription =
-    description.length > 300 ? description.slice(0, 300) + '...' : description
-
   return (
     <Card.Root
       w={{ base: 'sm', md: 'md' }}
@@ -42,17 +39,14 @@ export function ArticleCard({
         </Text>
         <Card.Description textAlign="justify">
           <Box
-            css={{
-              '& p': {
-                textAlign: 'justify',
-                marginBottom: '1rem',
-              },
-              '& ul, & ol': {
-                paddingLeft: '2rem',
-                marginBottom: '1rem',
-              },
+            display="-webkit-box"
+            style={{
+              display: '-webkit-box',
+              WebkitLineClamp: '5',
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
             }}
-            dangerouslySetInnerHTML={{ __html: truncatedDescription }}
+            dangerouslySetInnerHTML={{ __html: description }}
           />
         </Card.Description>
       </Card.Body>
