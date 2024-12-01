@@ -23,7 +23,7 @@ export function ArticleCard({
 
   return (
     <Card.Root
-      maxW={{ base: 'sm', md: 'md' }}
+      w={{ base: 'sm', md: 'md' }}
       borderRadius="xl"
       borderWidth="1px"
       borderColor="gray.200"

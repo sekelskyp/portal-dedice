@@ -3,6 +3,7 @@ import { FaPlus } from 'react-icons/fa'
 import { RiSortAsc, RiSortDesc } from 'react-icons/ri'
 
 import { useAuth } from '@frontend/modules/auth'
+import { createImageUrl } from '@frontend/modules/static-pages/blog/imageUtils'
 import { Alert } from '@frontend/shared/design-system'
 import { Page } from '@frontend/shared/layout'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms/RouterNavLink'
@@ -34,8 +35,8 @@ export function BlogPage() {
       id: Number(article.id),
       title: article.title,
       description: article.content,
-      createDate: article.date,
-      imageUrl: article.coverImage,
+      createDate: article.date.split('T')[0],
+      imageUrl: createImageUrl(article.coverImage),
     })),
   })
 
