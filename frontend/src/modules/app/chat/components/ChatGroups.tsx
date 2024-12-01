@@ -1,6 +1,6 @@
+import { type ReactNode, useEffect } from 'react'
 import { Tabs, Text } from '@chakra-ui/react'
-import type { ReactNode } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { useAuth } from '@frontend/modules/auth/auth-core'
 
@@ -18,6 +18,8 @@ interface ChatGroupProps {
 
 export default function ChatGroups({ children }: ChatGroupProps) {
   const navigate = useNavigate()
+  const location = useLocation()
+
   const user = useAuth()
   const userId = +user.user?.id!
   const isNotary = user.user?.type === 'Notary'
@@ -39,12 +41,26 @@ export default function ChatGroups({ children }: ChatGroupProps) {
     name: group.name,
   }))
 
+  useEffect(() => {
+    if (
+      location.pathname === '/portal/chat/' &&
+      chatGroups.length > 0 &&
+      !data.loading
+    ) {
+      const firstChat = chatGroups[0]
+      navigate(`/portal/chat/${firstChat.id}/`)
+    }
+  }, [chatGroups, navigate, location.pathname, data.loading])
+
+  const currentGroupId =
+    location.pathname.split('/')[3] ||
+    (chatGroups.length > 0 ? chatGroups[0].id : undefined)
+
   return (
     <Tabs.Root
-      defaultValue={chatGroups[0]?.id}
+      value={currentGroupId}
       onValueChange={(value) => {
-        console.log(value)
-        navigate(`/portal/chat/${value.value}/`)
+        navigate(`/portal/chat/${value}/`)
       }}
     >
       <Tabs.List>

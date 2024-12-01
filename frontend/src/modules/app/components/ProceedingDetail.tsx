@@ -18,7 +18,6 @@ export const ProceedingDetail = ({
   const user = useAuth()
   const assets = proceeding?.procedureAssets
   const totalAssetsValue = assets?.reduce((sum, asset) => sum + asset.value, 0)
-  console.log('this is main beneficiary', proceeding?.mainBeneficiary)
   return proceeding ? (
     <Stack gap={4}>
       <Grid gap={4} templateColumns={{ base: '1fr', lg: '1fr 1fr' }}>
@@ -113,7 +112,7 @@ export const ProceedingDetail = ({
               <MessageSquareTextIcon />
             </RouterNavLink>
             <RouterNavLink
-              to={route.chatIdHistory(proceeding.id, proceeding.name)}
+              to={route.chatIdHistory(proceeding.id)}
               rounded="full"
             >
               Chatová historie řízení

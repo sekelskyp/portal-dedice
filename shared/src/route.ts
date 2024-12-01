@@ -14,8 +14,8 @@ export const route = {
   settings: () => `/portal/settings`,
   chat: () => `/portal/chat/`,
   chatId: (proceedingId = ':proceedingId') => `/portal/chat/${proceedingId}`,
-  chatIdHistory: (id = ':id', name = ':name') =>
-    `/portal/chat/${id}/${name}/history`,
+  chatIdHistory: (proceedingId = ':proceedingId') =>
+    `/portal/chat/${proceedingId}/history`,
   emailVerification: () => `/auth/email-verification`,
   confirmEmail: () => `/auth/confirm-email`,
   inheritanceProcedure: (id = ':id') => `/portal/inheritance-procedure/${id}`,
