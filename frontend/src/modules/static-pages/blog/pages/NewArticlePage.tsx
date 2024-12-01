@@ -30,18 +30,10 @@ type ArticleFormData = z.infer<typeof articleSchema>
 
 export const NewArticlePage = () => {
   const navigate = useNavigate()
-
-  const {
-    files,
-    clearFiles,
-    handleCoverUpload,
-    ACCEPTED_FILE_TYPES,
-    MAX_FILE_COUNT,
-    MAX_FILE_SIZE,
-  } = useCoverUpload()
+  const { ACCEPTED_FILE_TYPES, MAX_FILE_COUNT, MAX_FILE_SIZE } =
+    useCoverUpload()
 
   const handleSubmit = (data: ArticleFormData) => {
-    data.image = files[0]
     console.log('Form submitted:', data)
   }
 
@@ -92,9 +84,6 @@ export const NewArticlePage = () => {
               accept={ACCEPTED_FILE_TYPES}
               maxFileSize={MAX_FILE_SIZE}
               maxFiles={MAX_FILE_COUNT}
-              onFileChange={handleCoverUpload}
-              files={files}
-              onDelete={clearFiles}
               dropzoneLabel="Přetáhněte sem obrázek nebo klikněte pro výběr"
               dropzoneDescription="Podporované formáty: JPG, PNG"
               height="250px"

@@ -32,33 +32,49 @@ export const FileUploadFormControl = ({
   maxFileSize,
   maxFiles,
   onFileChange,
-  files,
-  onDelete,
+  files: externalFiles,
+  onDelete: externalOnDelete,
   ...props
 }: FileUploadControlProps) => {
   return (
     <BaseFieldControl {...props}>
-      {(field, disabled) => (
-        <FileUploadRoot
-          accept={accept}
-          maxFileSize={maxFileSize}
-          maxFiles={maxFiles}
-          onFileChange={onFileChange}
-        >
-          <FileUploadDropzone
-            label={dropzoneLabel}
-            description={dropzoneDescription}
-            height={height}
-            width={width}
-          />
-          <FileUploadList
-            showSize
-            clearable
-            files={files}
-            onDelete={onDelete}
-          />
-        </FileUploadRoot>
-      )}
+      {(field, disabled) => {
+        const files = externalFiles ?? (field.value ? [field.value] : [])
+
+        const handleFileChange = (details: FileUploadFileChangeDetails) => {
+          const newFiles = details.acceptedFiles
+          field.onChange(multiple ? newFiles : newFiles[0])
+          onFileChange?.(details)
+        }
+
+        const handleDelete = (file: File) => {
+          field.onChange(multiple ? [] : null)
+          externalOnDelete?.(file)
+        }
+
+        return (
+          <FileUploadRoot
+            accept={accept}
+            maxFileSize={maxFileSize}
+            maxFiles={maxFiles}
+            onFileChange={handleFileChange}
+          >
+            <FileUploadDropzone
+              label={dropzoneLabel}
+              description={dropzoneDescription}
+              height={height}
+              width={width}
+            />
+            <FileUploadList
+              showSize
+              clearable
+              files={files}
+              onDelete={handleDelete}
+              style={{ wordBreak: 'break-word' }}
+            />
+          </FileUploadRoot>
+        )
+      }}
     </BaseFieldControl>
   )
 }
