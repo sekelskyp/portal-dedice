@@ -38,6 +38,8 @@ export const ValuablesSection: React.FC<ValuablesSectionProps> = ({
           render={({ field }) => (
             <InputFormControl
               {...field}
+              label="Cennosti"
+              required
               placeholder="Zadejte jaké cennosti zůstavitel vlastnil (Max. 300 znaků)"
             />
           )}

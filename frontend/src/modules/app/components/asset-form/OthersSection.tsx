@@ -37,6 +37,8 @@ export const OthersSection: React.FC<OthersSectionProps> = ({
           render={({ field }) => (
             <InputFormControl
               {...field}
+              label="Jiné"
+              required
               placeholder="Např. hotovost, nebo šperky, obrazy (max. 300 znaků)"
             />
           )}

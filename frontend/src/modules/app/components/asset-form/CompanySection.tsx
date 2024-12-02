@@ -52,6 +52,7 @@ export const CompanySection: React.FC<CompanySectionProps> = ({
                         label="IČO společnosti"
                         placeholder="Zadejte 8místné IČO"
                         width="100%"
+                        required
                       />
                     )}
                   />

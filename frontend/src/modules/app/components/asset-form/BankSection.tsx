@@ -76,6 +76,7 @@ export const BankAccountSection: React.FC<BankAccountSectionProps> = ({
                 collection={bankAccountCollection}
                 placeholder="Vyberte bankovní instituce"
                 multiple
+                required
               />
             )}
           />

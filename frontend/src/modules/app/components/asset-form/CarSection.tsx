@@ -121,6 +121,7 @@ export const CarSection: React.FC<CarSectionProps> = ({
                           label="Auto"
                           collection={carBrandCollection}
                           placeholder="Vyberte značku auta"
+                          required
                         />
                       )}
                     />
@@ -151,6 +152,7 @@ export const CarSection: React.FC<CarSectionProps> = ({
                         label="Rok registrace"
                         placeholder="Rok"
                         width={{ base: '50%', sm: '30%' }}
+                        required
                       />
                     )}
                   />
@@ -163,6 +165,7 @@ export const CarSection: React.FC<CarSectionProps> = ({
                       label="Popis"
                       placeholder="Zadejte popis auta"
                       width="100%"
+                      required
                     />
                   )}
                 />
