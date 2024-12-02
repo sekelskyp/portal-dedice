@@ -106,6 +106,7 @@ export const ArticleDetail: React.FC = () => {
             <Box
               mt={2}
               px={2}
+              className="ql-editor"
               css={{
                 '& p': {
                   textAlign: 'justify',
@@ -114,6 +115,10 @@ export const ArticleDetail: React.FC = () => {
                 '& ul, & ol': {
                   paddingLeft: '2rem',
                   marginBottom: '1rem',
+                },
+                '& a': {
+                  color: 'blue.500',
+                  textDecoration: 'underline',
                 },
               }}
               dangerouslySetInnerHTML={{ __html: article.content }}

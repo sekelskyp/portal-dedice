@@ -14,6 +14,8 @@ const modules = {
     [{ header: [1, 2, 3, 4, 5, 6, false] }],
     ['bold', 'italic', 'underline', 'strike'],
     [{ list: 'ordered' }, { list: 'bullet' }],
+    [{ align: [] }],
+    [{ color: [] }, { background: [] }],
     ['link'],
     ['clean'],
   ],
@@ -21,16 +23,16 @@ const modules = {
 
 const formats = [
   'header',
-  'font',
-  'size',
   'bold',
   'italic',
   'underline',
   'strike',
   'list',
   'bullet',
+  'align',
+  'color',
+  'background',
   'link',
-  'image',
 ]
 
 export const QuillFormControl = ({

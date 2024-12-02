@@ -14,7 +14,45 @@
 
 .ql-editor strong,
 .ql-editor b {
-  font-weight: bold;
+  font-weight: bold !important;
+}
+
+.ql-editor u {
+  text-decoration: underline;
+}
+
+.ql-editor s {
+  text-decoration: line-through;
+}
+
+.ql-editor h1 {
+  font-size: 2.5em !important;
+  font-weight: 700 !important;
+}
+
+.ql-editor h2 {
+  font-size: 2em !important;
+  font-weight: 600 !important;
+}
+
+.ql-editor h3 {
+  font-size: 1.75em !important;
+  font-weight: 600 !important;
+}
+
+.ql-editor h4 {
+  font-size: 1.5em !important;
+  font-weight: 500 !important;
+}
+
+.ql-editor h5 {
+  font-size: 1.25em !important;
+  font-weight: 500 !important;
+}
+
+.ql-editor h6 {
+  font-size: 1.1em !important;
+  font-weight: 500 !important;
 }
 
 .ql-editor h1,
@@ -25,6 +63,24 @@
 .ql-editor h6 {
   margin: 1em 0 0.5em;
   line-height: 1.2;
+  font-weight: bold;
+}
+
+.ql-editor a {
+  color: #3182ce;
+  text-decoration: underline;
+}
+
+.ql-editor [style*='text-align:center'] {
+  text-align: center !important;
+}
+
+.ql-editor [style*='text-align:right'] {
+  text-align: right !important;
+}
+
+.ql-editor [style*='text-align:justify'] {
+  text-align: justify !important;
 }
 
 .ql-snow .ql-picker.ql-font {
