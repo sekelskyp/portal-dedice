@@ -14,12 +14,6 @@ import { ArticleSearchBar } from '../components/ArticleSearchBar'
 import { useArticle } from '../hooks/useArticle'
 import { useGetArticles } from '../hooks/useGetArticles'
 
-//TODO: add routing to article detail page
-//TODO: add loading and error states
-//TODO: add empty check
-//TODO: consider adding infinite scroll or pagination
-//TODO: add responsive design
-
 export function BlogPage() {
   const { user } = useAuth()
   const { data, loading, error } = useGetArticles()

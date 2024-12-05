@@ -46,6 +46,7 @@ export function ArticleCard({
               WebkitBoxOrient: 'vertical',
               overflow: 'hidden',
             }}
+            fontSize="md"
             dangerouslySetInnerHTML={{ __html: description }}
           />
         </Card.Description>

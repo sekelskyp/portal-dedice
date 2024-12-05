@@ -58,7 +58,7 @@ export const NewArticlePage = () => {
     async (data: ArticleFormData) => {
       if (isEditing) {
         if (!data.image && !existingArticle?.getArticleById?.coverImage) {
-          throw new Error('Cover picture is required')
+          throw new Error('Obrázek je povinný.')
         }
         await updateArticle({
           variables: {
@@ -74,7 +74,7 @@ export const NewArticlePage = () => {
         })
       } else {
         if (!data.image) {
-          throw new Error('Cover picture is required')
+          throw new Error('Obrázek je povinný.')
         }
         await createArticle({
           variables: {
