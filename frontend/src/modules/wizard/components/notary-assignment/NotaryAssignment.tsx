@@ -1,6 +1,5 @@
 import { useContext } from 'react'
 import {
-  Button,
   Container,
   Flex,
   Heading,
@@ -10,16 +9,16 @@ import {
 } from '@chakra-ui/react'
 
 import resources from '@frontend/resources'
-import { Avatar, Tooltip } from '@frontend/shared/design-system'
-import { SimpleCentered } from '@frontend/shared/design-system/atoms/CTA/SimpleCentered'
+import { Avatar } from '@frontend/shared/design-system'
 
-import { useGetNotary } from '../hooks/useFindNotary'
-import { useTooltip } from '../hooks/useTooltip'
-import { TestatorDataContext } from '../pages/WizardStepPage'
+import { useTooltip } from '../../../../shared/hooks/useTooltip'
+import { useGetNotary } from '../../hooks/useFindNotary'
+import { TestatorDataContext } from '../../pages/WizardStepPage'
+import { AccordionHelper } from '../accordion/AccordionHelper'
+import { ContactInfo } from '../contact/ContactInfo'
 
-import { AccordionHelper } from './accordion/AccordionHelper'
-import { ContactInfo } from './contact/ContactInfo'
 import { NotaryAssignmentError } from './NotaryAssignmentError'
+import { NotaryAssignmentHelper } from './NotaryAssignmentHelper'
 
 interface NotaryAssignmentProps {
   nextStep: () => void
@@ -31,9 +30,7 @@ export function NotaryAssignment({
   previousStep,
 }: NotaryAssignmentProps) {
   const { isOpen, openTooltip, closeTooltip, toggleTooltip } = useTooltip()
-
   const testatorDataContext = useContext(TestatorDataContext)
-
   const { testatorData } = testatorDataContext
 
   const { notary, loading, error } = useGetNotary(
@@ -97,38 +94,14 @@ export function NotaryAssignment({
           />
         </Stack>
       </Container>
-      <SimpleCentered bg="blue.bg">
-        <Heading size={{ base: 'sm', sm: 'md', md: 'lg', lg: '2xl' }}>
-          Nevíte jak dál?
-        </Heading>
-        <Text fontSize={{ base: 'xs', sm: 'sm', md: 'md', lg: 'lg' }}>
-          Pojďte se v naší{' '}
-          <Tooltip
-            content={resources.wizard.notaryAssignment.tooltip}
-            showArrow
-            open={isOpen}
-            portalled
-          >
-            <Text
-              as="u"
-              onMouseLeave={closeTooltip}
-              onMouseEnter={openTooltip}
-              onClick={toggleTooltip}
-            >
-              aplikaci
-            </Text>
-          </Tooltip>{' '}
-          dozvědět více o tom, co vás čeká v pozůstalostním řízení.
-        </Text>
-        <Flex justify="space-between" gap={4}>
-          <Button bg="gray.500" onClick={previousStep} size="lg">
-            {resources.wizard.testatorIdentification.CTA.previous}
-          </Button>
-          <Button onClick={nextStep} size="lg">
-            {resources.wizard.testatorIdentification.CTA.next}
-          </Button>
-        </Flex>
-      </SimpleCentered>
+      <NotaryAssignmentHelper
+        nextStep={nextStep}
+        previousStep={previousStep}
+        isOpen={isOpen}
+        closeTooltip={closeTooltip}
+        openTooltip={openTooltip}
+        toggleTooltip={toggleTooltip}
+      />
     </Stack>
   )
 }

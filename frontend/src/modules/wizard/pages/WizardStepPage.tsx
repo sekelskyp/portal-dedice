@@ -3,7 +3,7 @@ import { Box, Heading, Stack } from '@chakra-ui/react'
 
 import { Page } from '@frontend/shared/layout'
 
-import { NotaryAssignment } from '../components/NotaryAssignment'
+import { NotaryAssignment } from '../components/notary-assignment/NotaryAssignment'
 import { QuestionnaireStep } from '../components/Questionnaire'
 import { QuestionStep } from '../components/QuestionStep'
 import { StepperProgress } from '../components/stepper/StepperProgress'

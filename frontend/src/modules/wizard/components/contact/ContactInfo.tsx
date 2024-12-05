@@ -1,6 +1,11 @@
 import { Container, useBreakpointValue } from '@chakra-ui/react'
 import { FiMail, FiMapPin, FiPhone } from 'react-icons/fi'
 
+import {
+  formatPhoneNumberForDisplay,
+  formatPhoneNumberForLink,
+} from '../../utils/contactUtils'
+
 import { ContactInfoItem, ContactInfoItemProps } from './ContactInfoItem'
 
 interface ContactInfoProps {
@@ -17,14 +22,6 @@ export function ContactInfo({ contactInfo }: ContactInfoProps) {
     sm: '20px',
     md: '24px',
   })
-
-  const formatPhoneNumberForDisplay = (phone: string) => {
-    return phone.replace(/(\d{3})(?=\d)/g, '$1 ')
-  }
-
-  const formatPhoneNumberForLink = (phone: string) => {
-    return phone.replace(/\s+/g, '')
-  }
 
   const contactIcons: ContactInfoItemProps[] = [
     {

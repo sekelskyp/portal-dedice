@@ -4,9 +4,8 @@ import { Outlet } from 'react-router-dom'
 import SideBar from '@frontend/modules/app/SideBar'
 import { useAuth } from '@frontend/modules/auth'
 
-import { UnauthorizedPage } from '../navigation/pages/UnauthorizedPage'
-
-import { Page } from './Page'
+import { Page } from '../../../shared/layout/Page'
+import { UnauthorizedPage } from '../../../shared/navigation/pages/UnauthorizedPage'
 
 export const PortalLayout = () => {
   const user = useAuth()

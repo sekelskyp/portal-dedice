@@ -9,6 +9,7 @@ import { route } from '@shared/route'
 import { NewAssetPage } from './modules/app/assets/components/NewAssetPage'
 import ChatHistoryPage from './modules/app/chat/components/ChatHistoryPage'
 import NewChatPage from './modules/app/chat/components/NewChatPage'
+import { PortalLayout } from './modules/app/components/PortalLayout'
 import { NewDocumentPage } from './modules/app/pages/NewDocumentPage'
 import { NewProceedingPage } from './modules/app/pages/NewProceedingPage'
 import { NotaryEmailPage } from './modules/app/pages/NotaryEmailPage'
@@ -26,7 +27,6 @@ import { AboutPage } from './modules/static-pages/pages/AboutPage'
 import { GuidePage } from './modules/static-pages/pages/GuidePage'
 import { WizardPage } from './modules/wizard/pages/WizardStepPage'
 import { Layout } from './shared/layout'
-import { PortalLayout } from './shared/layout/PortalLayout'
 
 export function Routes() {
   return (
