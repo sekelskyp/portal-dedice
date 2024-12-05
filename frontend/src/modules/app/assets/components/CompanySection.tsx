@@ -6,8 +6,9 @@ import { FaPlus, FaTrash } from 'react-icons/fa'
 import resources from '@frontend/resources'
 import { InputFormControl } from '@frontend/shared/forms/InputFormControl'
 
+import { useAssetSection } from '../hooks/useAssetSection'
+
 import { Section } from './Sections'
-import { useAssetSection } from './useAssetSection'
 
 interface CompanySectionProps {
   selected: boolean

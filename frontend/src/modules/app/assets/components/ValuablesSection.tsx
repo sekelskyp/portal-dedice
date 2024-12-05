@@ -4,7 +4,7 @@ import { Controller, useFormContext } from 'react-hook-form'
 import resources from '@frontend/resources'
 import { InputFormControl } from '@frontend/shared/forms/InputFormControl'
 
-import { Section } from './Sections'
+import { Section } from '../../assets/components/Sections'
 
 interface ValuablesSectionProps {
   selected: boolean

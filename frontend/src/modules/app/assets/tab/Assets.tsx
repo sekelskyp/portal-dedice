@@ -12,9 +12,9 @@ import { toaster } from '@frontend/shared/design-system/atoms/chakra/toaster'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { route } from '@shared/route'
 
+import { useProceeding } from '../../hooks/useProceeding'
 import { useDeleteAsset } from '../hooks/useDeleteAsset'
 import { GET_ASSETS } from '../hooks/useGetAsset'
-import { useProceeding } from '../hooks/useProceeding'
 
 //TODO: fix query and components
 

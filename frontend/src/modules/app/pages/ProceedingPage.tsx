@@ -15,7 +15,7 @@ import { useParams } from 'react-router-dom'
 import { useAuth } from '@frontend/modules/auth'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
 
-import { Assets } from '../components/Assets'
+import { Assets } from '../assets/tab/Assets'
 import { Documents } from '../components/Documents'
 import { ProceedingDetail } from '../components/ProceedingDetail'
 import { RewardCalculator } from '../components/RewardCalculator'

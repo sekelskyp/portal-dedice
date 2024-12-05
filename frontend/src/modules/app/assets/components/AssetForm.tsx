@@ -7,11 +7,12 @@ import { z } from 'zod'
 import { Form } from '@frontend/shared/forms/Form'
 import { SubmitButton } from '@frontend/shared/forms/SubmitButton'
 
+import { useAssetSections } from '../hooks/useAssetSections'
+
 import { BankAccountSection } from './BankSection'
 import { CarSection } from './CarSection'
 import { CompanySection } from './CompanySection'
 import { OthersSection } from './OthersSection'
-import { useAssetSections } from './useAssetSections'
 import { ValuablesSection } from './ValuablesSection'
 
 export type AssetFormData = {

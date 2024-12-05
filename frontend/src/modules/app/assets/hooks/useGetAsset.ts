@@ -1,6 +1,6 @@
 import { gql, useQuery } from '@apollo/client'
 
-import { AssetFormData } from '../components/asset-form/AssetForm'
+import { AssetFormData } from '../components/AssetForm'
 
 export const GET_ASSETS = gql`
   query getAssetsByProcedureId($procedureId: Int!) {

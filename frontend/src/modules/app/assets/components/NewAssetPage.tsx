@@ -6,10 +6,11 @@ import { Asset } from '@frontend/gql/graphql'
 import { Page } from '@frontend/shared/layout/Page'
 import { route } from '@shared/route'
 
-import { AssetType, useAddAsset } from '../../hooks/useAddAsset'
-import { useDeleteAsset } from '../../hooks/useDeleteAsset'
-import { mapAssetsToFormData, useGetAssets } from '../../hooks/useGetAsset'
-import { AssetForm, AssetFormData } from '../asset-form/AssetForm'
+import { AssetType, useAddAsset } from '../hooks/useAddAsset'
+import { useDeleteAsset } from '../hooks/useDeleteAsset'
+import { mapAssetsToFormData, useGetAssets } from '../hooks/useGetAsset'
+
+import { AssetForm, AssetFormData } from './AssetForm'
 
 export const NewAssetPage = () => {
   const { id } = useParams<{ id: string }>()
