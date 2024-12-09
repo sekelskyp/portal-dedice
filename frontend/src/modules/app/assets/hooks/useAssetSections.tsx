@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { AssetFormData } from './AssetForm'
+import { AssetFormData } from '../components/AssetForm'
 
 export const useAssetSections = (defaultValues?: AssetFormData) => {
   const [sections, setSections] = useState(() => ({
