@@ -16,8 +16,8 @@ import { useAuth } from '@frontend/modules/auth'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
 
 import { Assets } from '../../assets/tab/Assets'
-import { RewardCalculator } from '../../components/RewardCalculator'
 import { Documents } from '../../documents/tab/Documents'
+import { RewardCalculator } from '../../pages/RewardCalculator'
 import { useProceeding } from '../hooks/useProceeding'
 import { StatusBadge } from '../utils/StatusBadge'
 
