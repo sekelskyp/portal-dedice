@@ -1,8 +1,7 @@
 import { Card, Heading } from '@chakra-ui/react'
 
+import { SettingsForm } from '../components/SettingsForm'
 import { useChangePassword } from '../hooks/useChangePassword'
-
-import { SettingsForm } from './SettingsForm'
 
 export function SettingsPage() {
   const [changePasswordRequest, changePasswordRequestState] =

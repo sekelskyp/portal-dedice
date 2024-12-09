@@ -21,7 +21,7 @@ import { ArticleCard } from '../components/ArticleCard'
 import { useDeleteArticle } from '../hooks/useDeleteArticle'
 import { useGetArticle } from '../hooks/useGetArticle'
 import { useGetArticles } from '../hooks/useGetArticles'
-import { createImageUrl } from '../imageUtils'
+import { createImageUrl } from '../utils/imageUtils'
 
 export const ArticleDetail: React.FC = () => {
   const { id } = useParams()

@@ -16,12 +16,12 @@ import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
 import { route } from '@shared/route'
 
-import { useBeneficiaryProceedings } from '../hooks/useBeneficiaryProceedings'
-import { useNotaryProcedures } from '../hooks/useNotaryProcedures'
 import {
   ProceedingsItem,
   ProceedingsTable,
-} from '../proceedings-table/ProceedingsTable'
+} from '../components/proceedings-table/ProceedingsTable'
+import { useBeneficiaryProceedings } from '../hooks/useBeneficiaryProceedings'
+import { useNotaryProcedures } from '../hooks/useNotaryProcedures'
 import { proceedingsNavigation } from '../utils/proceedingsNavigation'
 
 export function Proceedings() {

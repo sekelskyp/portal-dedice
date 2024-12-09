@@ -5,7 +5,7 @@ import { useCreateProceeding } from '@frontend/modules/app/proceeding/hooks/useC
 import resources from '@frontend/resources'
 import { Alert } from '@frontend/shared/design-system'
 
-import { ProceedingForm } from '../utils/ProceedingForm'
+import { ProceedingForm } from '../components/ProceedingForm'
 
 export function NewProceedingPage() {
   const [createProcedureRequest, createProcedureRequestState] =

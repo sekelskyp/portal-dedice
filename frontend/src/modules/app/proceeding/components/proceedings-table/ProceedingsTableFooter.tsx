@@ -6,7 +6,7 @@ import {
   NativeSelectRoot,
 } from '@frontend/shared/design-system/atoms/chakra'
 
-import { TablePagination } from '../utils/TablePagination'
+import { TablePagination } from '../TablePagination'
 
 import { ProceedingsItem } from './ProceedingsTable'
 

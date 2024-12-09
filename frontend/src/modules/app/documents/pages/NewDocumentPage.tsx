@@ -8,9 +8,8 @@ import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
 
 import { useProceeding } from '../../proceeding/hooks/useProceeding'
-
-import { documentTypes } from './documentTypes'
-import { DocumentUpload } from './DocumentUpload'
+import { DocumentUpload } from '../components/DocumentUpload'
+import { documentTypes } from '../utils/documentTypes'
 
 export function NewDocumentPage() {
   const user = useAuth()

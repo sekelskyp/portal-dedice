@@ -6,7 +6,7 @@ import {
   HiChevronRight,
 } from 'react-icons/hi2'
 
-import { ProceedingsItem } from '../proceedings-table/ProceedingsTable'
+import { ProceedingsItem } from '../components/proceedings-table/ProceedingsTable'
 
 const paginationItems = [
   {

@@ -17,9 +17,9 @@ import { UnauthorizedPage } from '@frontend/shared/navigation/pages/Unauthorized
 
 import { Assets } from '../../assets/tab/Assets'
 import { Documents } from '../../documents/tab/Documents'
-import { RewardCalculator } from '../../pages/RewardCalculator'
+import { RewardCalculator } from '../components/RewardCalculator'
+import { StatusBadge } from '../components/StatusBadge'
 import { useProceeding } from '../hooks/useProceeding'
-import { StatusBadge } from '../utils/StatusBadge'
 
 import { ProceedingDetail } from './ProceedingDetail'
 
