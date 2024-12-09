@@ -21,7 +21,7 @@ import { ArticleCard } from '../components/ArticleCard'
 import { useDeleteArticle } from '../hooks/useDeleteArticle'
 import { useGetArticle } from '../hooks/useGetArticle'
 import { useGetArticles } from '../hooks/useGetArticles'
-import { createImageUrl } from '../imageUtils'
+import { createImageUrl } from '../utils/imageUtils'
 
 export const ArticleDetail: React.FC = () => {
   const { id } = useParams()
@@ -85,7 +85,9 @@ export const ArticleDetail: React.FC = () => {
         >
           <Card.Header as={HStack} gap={2}>
             <LuNewspaper size={24} />
-            <Heading size="2xl">{article.title}</Heading>
+            <Heading size={{ base: 'md', sm: 'lg', md: '2xl' }}>
+              {article.title}
+            </Heading>
             <Text ml="auto" color="gray.500" fontSize="md">
               {new Date(article.date).toLocaleDateString()}
             </Text>
@@ -99,9 +101,9 @@ export const ArticleDetail: React.FC = () => {
               }
               alt={article.title}
               borderRadius="lg"
-              objectFit="fit"
+              objectFit="cover"
               width="100%"
-              height="400px"
+              height={{ base: '200px', md: '400px' }}
             />
             <Box
               mt={2}

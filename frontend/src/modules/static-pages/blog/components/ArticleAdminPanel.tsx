@@ -6,8 +6,6 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@frontend/modules/auth'
 import { route } from '@shared/route'
 
-//TODO add admin condition
-
 interface ArticleAdminPanelProps {
   onDelete: () => void
   articleId: number

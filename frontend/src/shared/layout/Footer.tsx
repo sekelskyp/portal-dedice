@@ -14,7 +14,7 @@ import { useTheme } from 'next-themes'
 import { ColorModeButton } from '../design-system/atoms/chakra'
 
 import { FooterList } from './components/FooterList'
-import { footerLinks } from './links'
+import { footerLinks } from './utils/links'
 
 export const Footer = () => {
   const theme = useTheme()

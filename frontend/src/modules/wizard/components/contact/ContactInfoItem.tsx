@@ -1,6 +1,7 @@
 import { Stack, Text } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
-import { z } from 'zod'
+
+import { isEmail, isPhone } from '../../utils/contactUtils'
 
 export interface ContactInfoItemProps {
   icon: JSX.Element
@@ -13,12 +14,6 @@ export function ContactInfoItem({
   text,
   displayText,
 }: ContactInfoItemProps) {
-  const emailSchema = z.string().email()
-  const phoneSchema = z.string().regex(/^\+?[1-9]\d{1,14}$/)
-
-  const isEmail: boolean = emailSchema.safeParse(text).success
-  const isPhone: boolean = phoneSchema.safeParse(text).success
-
   return (
     <Stack
       direction="row"
@@ -28,11 +23,11 @@ export function ContactInfoItem({
       textAlign="left"
     >
       {icon}
-      {isEmail ? (
+      {isEmail(text) ? (
         <Link to={`mailto:${text}`}>
           <Text _hover={{ textDecoration: 'underline' }}>{text}</Text>
         </Link>
-      ) : isPhone ? (
+      ) : isPhone(text) ? (
         <Link to={`tel:${text}`}>
           <Text _hover={{ textDecoration: 'underline' }}>
             {displayText || text}

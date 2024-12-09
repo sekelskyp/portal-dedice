@@ -3,7 +3,7 @@ import { FaPlus } from 'react-icons/fa'
 import { RiSortAsc, RiSortDesc } from 'react-icons/ri'
 
 import { useAuth } from '@frontend/modules/auth'
-import { createImageUrl } from '@frontend/modules/static-pages/blog/imageUtils'
+import { createImageUrl } from '@frontend/modules/static-pages/blog/utils/imageUtils'
 import { Alert } from '@frontend/shared/design-system'
 import { Page } from '@frontend/shared/layout'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms/RouterNavLink'
@@ -13,12 +13,6 @@ import { ArticleCard } from '../components/ArticleCard'
 import { ArticleSearchBar } from '../components/ArticleSearchBar'
 import { useArticle } from '../hooks/useArticle'
 import { useGetArticles } from '../hooks/useGetArticles'
-
-//TODO: add routing to article detail page
-//TODO: add loading and error states
-//TODO: add empty check
-//TODO: consider adding infinite scroll or pagination
-//TODO: add responsive design
 
 export function BlogPage() {
   const { user } = useAuth()
