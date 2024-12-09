@@ -11,11 +11,11 @@ import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
 import { route } from '@shared/route'
 
-import { ActionDialog } from '../../../shared/components/ActionDialog'
+import { ActionDialog } from '../../../../shared/components/ActionDialog'
+import { useProceeding } from '../../proceeding/hooks/useProceeding'
 import { useDeleteDocument } from '../hooks/useDeleteDocument'
 import { useDocument } from '../hooks/useDocument'
 import { useGetDocuments } from '../hooks/useGetDocuments'
-import { useProceeding } from '../hooks/useProceeding'
 import { decodeFile } from '../utils/decodeFile'
 
 interface DocumentType {

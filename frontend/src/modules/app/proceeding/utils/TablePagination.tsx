@@ -1,9 +1,9 @@
 import { Button, Stack, Text } from '@chakra-ui/react'
 import { Table } from '@tanstack/react-table'
 
-import { paginationItems } from '../utils/table-pagination'
+import { ProceedingsItem } from '../proceedings-table/ProceedingsTable'
 
-import { ProceedingsItem } from './proceedings-table/ProceedingsTable'
+import { paginationItems } from './table-pagination'
 
 export function TablePagination({ table }: { table: Table<ProceedingsItem> }) {
   return (

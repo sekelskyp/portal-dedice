@@ -19,10 +19,9 @@ import { useActionDialog } from '@frontend/shared/hooks/useActionDialog'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { route } from '@shared/route'
 
-import { ProceedingsItem } from '../components/proceedings-table/ProceedingsTable'
-import { StatusBadge } from '../components/StatusBadge'
-
-import { useDeleteProceeding } from './useDeleteProceeding'
+import { useDeleteProceeding } from '../hooks/useDeleteProceeding'
+import { ProceedingsItem } from '../proceedings-table/ProceedingsTable'
+import { StatusBadge } from '../utils/StatusBadge'
 
 const INITIAL_SORTING_STATE = [
   {

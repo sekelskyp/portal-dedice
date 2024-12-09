@@ -12,9 +12,9 @@ import {
   toaster,
 } from '@frontend/shared/design-system/atoms/chakra'
 
+import { useProceeding } from '../../proceeding/hooks/useProceeding'
 import { useCreateDocument } from '../hooks/useCreateDocument'
 import { useDocumentUpload } from '../hooks/useDocumentUpload'
-import { useProceeding } from '../hooks/useProceeding'
 
 export function DocumentUpload() {
   const { id } = useParams()

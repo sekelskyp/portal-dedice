@@ -2,7 +2,7 @@ import { Grid, Stack, Table } from '@chakra-ui/react'
 
 import { ActionDialog } from '@frontend/shared/components/ActionDialog'
 
-import { useProceedingsTable } from '../../hooks/useProceedingsTable'
+import { useProceedingsTable } from '../hooks/useProceedingsTable'
 
 import { ProceedingsTableBody } from './ProceedingsTableBody'
 import { ProceedingsTableFooter } from './ProceedingsTableFooter'

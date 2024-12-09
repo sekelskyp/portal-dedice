@@ -8,10 +8,11 @@ import { Alert, toaster } from '@frontend/shared/design-system'
 import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
 
-import { BeneficiaryBadge } from '../components/BeneficiaryBadge'
-import { NotaryEmailForm } from '../components/NotaryEmailForm'
-import { useNotifyBeneficiaries } from '../hooks/useNotifyBeneficiaries'
-import { useProceeding } from '../hooks/useProceeding'
+import { useNotifyBeneficiaries } from '../proceeding/hooks/useNotifyBeneficiaries'
+import { useProceeding } from '../proceeding/hooks/useProceeding'
+import { BeneficiaryBadge } from '../proceeding/utils/BeneficiaryBadge'
+
+import { NotaryEmailForm } from './NotaryEmailForm'
 
 export function NotaryEmailPage() {
   const { user, token } = useAuth()

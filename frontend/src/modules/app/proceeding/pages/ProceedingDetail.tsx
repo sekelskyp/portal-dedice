@@ -8,7 +8,7 @@ import { Alert } from '@frontend/shared/design-system'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { route } from '@shared/route'
 
-import { BeneficiaryBadge } from './BeneficiaryBadge'
+import { BeneficiaryBadge } from '../utils/BeneficiaryBadge'
 
 export const ProceedingDetail = ({
   proceeding,

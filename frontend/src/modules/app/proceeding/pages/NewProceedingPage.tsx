@@ -1,11 +1,11 @@
 import { useCallback } from 'react'
 import { Card, Heading, Text } from '@chakra-ui/react'
 
-import { useCreateProceeding } from '@frontend/modules/app/hooks/useCreateProceeding'
+import { useCreateProceeding } from '@frontend/modules/app/proceeding/hooks/useCreateProceeding'
 import resources from '@frontend/resources'
 import { Alert } from '@frontend/shared/design-system'
 
-import { ProceedingForm } from './ProceedingForm'
+import { ProceedingForm } from '../utils/ProceedingForm'
 
 export function NewProceedingPage() {
   const [createProcedureRequest, createProcedureRequestState] =

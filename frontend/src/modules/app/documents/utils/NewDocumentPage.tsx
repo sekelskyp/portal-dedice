@@ -7,9 +7,10 @@ import { AccordionHelper } from '@frontend/modules/wizard/components/accordion/A
 import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
 
-import { DocumentUpload } from '../components/DocumentUpload'
-import { useProceeding } from '../hooks/useProceeding'
-import { documentTypes } from '../utils/documentTypes'
+import { useProceeding } from '../../proceeding/hooks/useProceeding'
+
+import { documentTypes } from './documentTypes'
+import { DocumentUpload } from './DocumentUpload'
 
 export function NewDocumentPage() {
   const user = useAuth()

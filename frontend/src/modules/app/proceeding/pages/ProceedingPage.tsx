@@ -15,14 +15,13 @@ import { useParams } from 'react-router-dom'
 import { useAuth } from '@frontend/modules/auth'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
 
-import { Assets } from '../assets/tab/Assets'
-import { Documents } from '../components/Documents'
-import { ProceedingDetail } from '../components/ProceedingDetail'
-import { RewardCalculator } from '../components/RewardCalculator'
-import { StatusBadge } from '../components/StatusBadge'
+import { Assets } from '../../assets/tab/Assets'
+import { RewardCalculator } from '../../components/RewardCalculator'
+import { Documents } from '../../documents/tab/Documents'
 import { useProceeding } from '../hooks/useProceeding'
+import { StatusBadge } from '../utils/StatusBadge'
 
-//TODO: fix query and components
+import { ProceedingDetail } from './ProceedingDetail'
 
 const InheritanceProcedureDetail: React.FC = () => {
   const user = useAuth()

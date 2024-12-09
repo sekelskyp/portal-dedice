@@ -2,7 +2,6 @@ import { HStack, Stack, Text } from '@chakra-ui/react'
 
 import { Avatar } from '@frontend/shared/design-system'
 
-//TODO: fix new contact structure
 interface User {
   id: string
   name: string
