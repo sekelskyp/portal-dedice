@@ -1,4 +1,4 @@
-import { Box, Card, Image, Text } from '@chakra-ui/react'
+import { Card, Image, Text } from '@chakra-ui/react'
 
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { route } from '@shared/route'
@@ -37,19 +37,18 @@ export function ArticleCard({
         <Text color="gray" fontSize="sm" py={1}>
           {createDate}
         </Text>
-        <Card.Description textAlign="justify">
-          <Box
-            display="-webkit-box"
-            style={{
-              display: '-webkit-box',
-              WebkitLineClamp: '5',
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-            }}
-            fontSize="md"
-            dangerouslySetInnerHTML={{ __html: description }}
-          />
-        </Card.Description>
+        <Card.Description
+          textAlign="justify"
+          display="-webkit-box"
+          style={{
+            display: '-webkit-box',
+            WebkitLineClamp: '5',
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+          }}
+          fontSize="md"
+          dangerouslySetInnerHTML={{ __html: description }}
+        />
       </Card.Body>
       <Card.Footer gap="2">
         <RouterNavLink to={route.detailArticle(id.toString())}>
