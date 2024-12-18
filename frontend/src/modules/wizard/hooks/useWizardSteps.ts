@@ -1,48 +1,72 @@
 import { useState } from 'react'
 
+const STEPS = {
+  IDENTIFICATION: 1,
+  QUESTIONS: 2,
+  QUESTIONNAIRE: 3,
+  COMPLETE: 4,
+} as const
+
+const PROGRESS = {
+  MIN: 0,
+  MAX: 100,
+} as const
+
+const MIN_ID = 0
+
+const calculateProgressIncrement = (total: number) => PROGRESS.MAX / total
+
 export function useWizardSteps(
   totalQuestions: number,
   totalQuestionnaireSteps: number
 ) {
-  const [
-    { step, questionsProgress, questionId, questionnaireProgress },
-    setState,
-  ] = useState<{
+  const [state, setState] = useState<{
     step: number
     questionsProgress: number
     questionId: number
     questionnaireProgress: number
   }>(INITIAL_STATE)
 
-  const questionProgressIncrement = 100 / totalQuestions
-  const questionnaireProgressIncrement = 100 / totalQuestionnaireSteps
+  const questionProgressIncrement = calculateProgressIncrement(totalQuestions)
+  const questionnaireProgressIncrement = calculateProgressIncrement(
+    totalQuestionnaireSteps
+  )
 
   const setNextStep = () => {
     setState((prevState) => {
-      if (prevState.step === 1) {
-        return { ...prevState, step: 2 }
-      }
-      if (prevState.step === 2) {
-        if (prevState.questionsProgress < 100) {
-          const newQuestionsProgress =
-            prevState.questionsProgress + questionProgressIncrement
-          const newQuestionId = prevState.questionId + 1
+      switch (prevState.step) {
+        case STEPS.IDENTIFICATION:
+          return { ...prevState, step: STEPS.QUESTIONS }
+        case STEPS.QUESTIONS:
+          if (prevState.questionsProgress < PROGRESS.MAX) {
+            const newQuestionsProgress =
+              prevState.questionsProgress + questionProgressIncrement
+            const newQuestionId = prevState.questionId + 1
+            return {
+              ...prevState,
+              questionsProgress: newQuestionsProgress,
+              questionId: newQuestionId,
+              step:
+                newQuestionsProgress >= PROGRESS.MAX
+                  ? STEPS.QUESTIONNAIRE
+                  : STEPS.QUESTIONS,
+            }
+          }
+          break
+        case STEPS.QUESTIONNAIRE:
+          const newQuestionnaireProgress =
+            prevState.questionnaireProgress + questionnaireProgressIncrement
           return {
             ...prevState,
-            questionsProgress: newQuestionsProgress,
-            questionId: newQuestionId,
-            step: newQuestionsProgress >= 100 ? 3 : 2,
+            questionnaireProgress: Math.min(
+              newQuestionnaireProgress,
+              PROGRESS.MAX
+            ),
+            step:
+              newQuestionnaireProgress >= PROGRESS.MAX
+                ? STEPS.COMPLETE
+                : STEPS.QUESTIONNAIRE,
           }
-        }
-      }
-      if (prevState.step === 3) {
-        const newQuestionnaireProgress =
-          prevState.questionnaireProgress + questionnaireProgressIncrement
-        return {
-          ...prevState,
-          questionnaireProgress: Math.min(newQuestionnaireProgress, 100),
-          step: newQuestionnaireProgress >= 100 ? 4 : 3,
-        }
       }
       return prevState
     })
@@ -50,46 +74,45 @@ export function useWizardSteps(
 
   const setPreviousStep = () => {
     setState((prevState) => {
-      if (prevState.step === 2) {
-        if (prevState.questionsProgress > 0) {
-          const newQuestionsProgress =
-            prevState.questionsProgress - questionProgressIncrement
-          const newQuestionId = Math.max(prevState.questionId - 1, 0)
+      switch (prevState.step) {
+        case STEPS.QUESTIONS:
+          if (prevState.questionsProgress > PROGRESS.MIN) {
+            const newQuestionsProgress =
+              prevState.questionsProgress - questionProgressIncrement
+            const newQuestionId = Math.max(prevState.questionId - 1, MIN_ID)
+            return {
+              ...prevState,
+              questionsProgress: Math.max(newQuestionsProgress, PROGRESS.MIN),
+              questionId: newQuestionId,
+            }
+          }
+          return { ...prevState, step: STEPS.IDENTIFICATION }
+        case STEPS.QUESTIONNAIRE:
+          if (prevState.questionnaireProgress > 0) {
+            const newQuestionnaireProgress =
+              prevState.questionnaireProgress - questionnaireProgressIncrement
+            return {
+              ...prevState,
+              questionnaireProgress: Math.max(newQuestionnaireProgress, 0),
+            }
+          }
           return {
             ...prevState,
-            questionsProgress: Math.max(newQuestionsProgress, 0),
-            questionId: newQuestionId,
+            step: STEPS.QUESTIONS,
+            questionsProgress: Math.max(
+              prevState.questionsProgress - questionProgressIncrement,
+              0
+            ),
+            questionId: Math.max(prevState.questionId - 1, 0),
           }
-        }
-        return { ...prevState, step: 1 }
-      }
-      if (prevState.step === 3) {
-        if (prevState.questionnaireProgress > 0) {
+        case STEPS.COMPLETE:
           const newQuestionnaireProgress =
             prevState.questionnaireProgress - questionnaireProgressIncrement
           return {
             ...prevState,
             questionnaireProgress: Math.max(newQuestionnaireProgress, 0),
+            step: STEPS.QUESTIONNAIRE,
           }
-        }
-        return {
-          ...prevState,
-          step: 2,
-          questionsProgress: Math.max(
-            prevState.questionsProgress - questionProgressIncrement,
-            0
-          ),
-          questionId: Math.max(prevState.questionId - 1, 0),
-        }
-      }
-      if (prevState.step === 4) {
-        const newQuestionnaireProgress =
-          prevState.questionnaireProgress - questionnaireProgressIncrement
-        return {
-          ...prevState,
-          questionnaireProgress: Math.max(newQuestionnaireProgress, 0),
-          step: 3,
-        }
       }
       return prevState
     })
@@ -100,9 +123,9 @@ export function useWizardSteps(
       let newQuestionsProgress = prevState.questionsProgress
       let newQuestionnaireProgress = prevState.questionnaireProgress
 
-      if (newStep >= 4) {
-        newQuestionsProgress = 100
-        newQuestionnaireProgress = 100
+      if (newStep >= STEPS.COMPLETE) {
+        newQuestionsProgress = PROGRESS.MAX
+        newQuestionnaireProgress = PROGRESS.MAX
       }
 
       return {
@@ -122,20 +145,20 @@ export function useWizardSteps(
   }
 
   return {
-    step,
-    questionsProgress,
-    questionId,
-    questionnaireProgress,
+    step: state.step,
+    questionsProgress: state.questionsProgress,
+    questionId: state.questionId,
+    questionnaireProgress: state.questionnaireProgress,
     setNextStep,
     setPreviousStep,
     setStep,
-    resetProgress, // Include resetProgress in the returned object
+    resetProgress,
   }
 }
 
 const INITIAL_STATE = {
-  step: 1,
-  questionsProgress: 0,
-  questionId: 0,
-  questionnaireProgress: 0,
+  step: STEPS.IDENTIFICATION,
+  questionsProgress: PROGRESS.MIN,
+  questionId: MIN_ID,
+  questionnaireProgress: PROGRESS.MIN,
 } as const

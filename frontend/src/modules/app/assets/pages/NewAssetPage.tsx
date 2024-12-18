@@ -6,11 +6,10 @@ import { Asset } from '@frontend/gql/graphql'
 import { Page } from '@frontend/shared/layout/Page'
 import { route } from '@shared/route'
 
+import { AssetForm, AssetFormData } from '../components/AssetForm'
 import { AssetType, useAddAsset } from '../hooks/useAddAsset'
 import { useDeleteAsset } from '../hooks/useDeleteAsset'
 import { mapAssetsToFormData, useGetAssets } from '../hooks/useGetAsset'
-
-import { AssetForm, AssetFormData } from './AssetForm'
 
 export const NewAssetPage = () => {
   const { id } = useParams<{ id: string }>()
@@ -73,8 +72,6 @@ export const NewAssetPage = () => {
     )
   }
 
-  const isEditMode = existingAssets?.getAssetsByProcedureId?.length > 0
-
   return (
     <Page>
       <VStack gap={8} width="100%" align="stretch">
@@ -90,7 +87,7 @@ export const NewAssetPage = () => {
             mb={4}
             textAlign={{ base: 'center', md: 'left' }}
           >
-            {isEditMode ? 'Upravit majetek zůstavitele' : 'Majetek zůstavitele'}
+            Majetek zůstavitele
           </Heading>
           <Text
             fontSize={{ base: 'sm', md: 'lg' }}
