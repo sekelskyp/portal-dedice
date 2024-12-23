@@ -9,47 +9,17 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import {
-  ArchiveIcon,
-  ChevronsLeft,
-  ChevronsRight,
-  MessagesSquareIcon,
-  SettingsIcon,
-  User2Icon,
-} from 'lucide-react'
+import { ChevronsLeft, ChevronsRight } from 'lucide-react'
 
-import resources from '@frontend/resources'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms/RouterNavLink'
-import { route } from '@shared/route'
+
+import { sideBarItems } from '../utils/sideBarItems'
 
 export interface SideBarItem {
   label: string
   to: string
   icon?: ReactElement
 }
-
-const sideBarItems: SideBarItem[] = [
-  {
-    label: resources.portal.sideBar.proceedings,
-    to: route.portal(),
-    icon: <ArchiveIcon />,
-  },
-  {
-    label: resources.portal.sideBar.profile,
-    to: route.profile(),
-    icon: <User2Icon />,
-  },
-  {
-    label: 'Chat',
-    to: route.chat(),
-    icon: <MessagesSquareIcon />,
-  },
-  {
-    label: resources.portal.sideBar.settings,
-    to: route.settings(),
-    icon: <SettingsIcon />,
-  },
-]
 
 export default function SideBar() {
   const breakpoint = useBreakpoint({ breakpoints: ['base', 'sm', 'lg'] })
