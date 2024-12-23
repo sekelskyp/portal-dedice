@@ -177,9 +177,9 @@ export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
             px={8}
             my={8}
           >
-            {currentStep.question_text.map((textObj, index) => (
+            {currentStep.question_text.map((textObj) => (
               <Heading
-                key={index}
+                key={textObj.questionTextId}
                 as="h2"
                 size={{ base: 'xs', sm: 'sm', md: 'md', lg: 'lg' }}
                 py={4}

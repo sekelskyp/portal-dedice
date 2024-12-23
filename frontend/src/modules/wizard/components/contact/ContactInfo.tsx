@@ -55,9 +55,9 @@ export function ContactInfo({ contactInfo }: ContactInfoProps) {
       px={{ base: 4, sm: 8, md: 10 }}
       py={4}
     >
-      {contactIcons.map((item, index) => (
+      {contactIcons.map((item) => (
         <ContactInfoItem
-          key={index}
+          key={item.text}
           icon={item.icon}
           text={item.text}
           displayText={item.displayText}
