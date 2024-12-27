@@ -26,6 +26,7 @@ import { getArticleRepository } from '@backend/graphql/modules/article/articleRe
 import { ArticleResolver } from '@backend/graphql/modules/article/articleResolver'
 import { getAssetRepository } from '@backend/graphql/modules/asset/assetRepository'
 import { AssetResolver } from '@backend/graphql/modules/asset/assetResolver'
+import { getAttachmentRepository } from '@backend/graphql/modules/attachment/attachmentRepository'
 import { getBeneficiaryRepository } from '@backend/graphql/modules/beneficiary/beneficiaryRepository'
 import { BeneficiaryResolver } from '@backend/graphql/modules/beneficiary/beneficiaryResolver'
 import { getChatMessageRepository } from '@backend/graphql/modules/chat/chatMessageRepository'
@@ -160,6 +161,7 @@ const init = async () => {
       chatRepository: getChatRepository(drizzle.db),
       chatMessageRepository: getChatMessageRepository(drizzle.db),
       articleRepository: getArticleRepository(drizzle.db),
+      attachmentRepository: getAttachmentRepository(drizzle.db),
     }
   }
   app.use(

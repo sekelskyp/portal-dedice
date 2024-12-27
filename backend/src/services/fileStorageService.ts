@@ -10,7 +10,12 @@ export interface FileInput {
   mimetype: string
 }
 
-export async function storeFile(input: FileInput): Promise<string> {
+export interface StoreFileResult {
+  fileUuid: string
+  filePath: string
+}
+
+export async function storeFile(input: FileInput): Promise<StoreFileResult> {
   // Step 1: Generate a unique ID for the file
   const fileUuid = uuidv4() // Universally unique identifier (e.g., "550e8400-e29b-41d4-a716-446655440000")
 
@@ -31,7 +36,7 @@ export async function storeFile(input: FileInput): Promise<string> {
     throw new Error('Error saving file')
   }
 
-  return fileUuid
+  return { fileUuid, filePath }
 }
 
 export async function retrieveFile(

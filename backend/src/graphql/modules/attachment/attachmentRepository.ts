@@ -34,6 +34,16 @@ export function getAttachmentRepository(db: Db) {
     return result || null
   }
 
+  async function getAttachmentCountByProceedingId(
+    proceedingId: number
+  ): Promise<number> {
+    const [result] = await db
+      .select(db.count())
+      .from(attachment)
+      .where(eq(attachment.proceedingId, proceedingId))
+    return result ? result.count : 0
+  }
+
   // Get Attachmentes by their IDs
   async function getAttachmentsByIds(
     ids: number[]
