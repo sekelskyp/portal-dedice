@@ -1,4 +1,10 @@
-import { eq, inArray, InferInsertModel, InferSelectModel } from 'drizzle-orm'
+import {
+  count,
+  eq,
+  inArray,
+  InferInsertModel,
+  InferSelectModel,
+} from 'drizzle-orm'
 
 import { attachment } from '@backend/db/schema'
 import { Db } from '@backend/types/types'
@@ -38,7 +44,7 @@ export function getAttachmentRepository(db: Db) {
     proceedingId: number
   ): Promise<number> {
     const [result] = await db
-      .select(db.count())
+      .select({ count: count() })
       .from(attachment)
       .where(eq(attachment.proceedingId, proceedingId))
     return result ? result.count : 0
@@ -71,5 +77,6 @@ export function getAttachmentRepository(db: Db) {
     createAttachment,
     deleteAttachmentsByIds,
     updateAttachmentById,
+    getAttachmentCountByProceedingId,
   }
 }

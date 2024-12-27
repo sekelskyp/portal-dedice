@@ -7,5 +7,5 @@ export class UploadFileToProceedingInput {
   file!: FileUpload
 
   @Field(() => ID)
-  inheritanceProceedingId!: number
+  proceedingId!: number
 }

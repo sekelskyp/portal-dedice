@@ -276,9 +276,7 @@ export const article = mysqlTable('article', {
 // Define Attachment Table (that represents a stored file)
 export const attachment = mysqlTable('attachment', {
   id: int('id').primaryKey().autoincrement(),
-  proceedingId: int('proceeding_id')
-    .references(() => proceeding.id)
-    .notNull(),
+  proceedingId: int('proceeding_id').references(() => proceeding.id),
   date: date('date').default(new Date()).notNull(),
   // stored file informartion
   fileUuid: varchar('file_uuid', { length: 255 }).notNull(),

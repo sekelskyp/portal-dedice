@@ -2,6 +2,7 @@ import {
   Arg,
   Ctx,
   FieldResolver,
+  ID,
   Int,
   Mutation,
   Query,
@@ -11,6 +12,7 @@ import {
 
 import { Asset } from '@backend/graphql/modules/asset/assetType'
 import { Document } from '@backend/graphql/modules/document/documentType'
+import { createAttachment } from '@backend/services/attachmentService'
 import { getDocumentsByProceedingId } from '@backend/services/documentService'
 
 import {
@@ -21,6 +23,7 @@ import {
   deleteBeneficiaryFromProceeding,
   deleteProceedingsByIds,
   notifyProceedingBeneficiaries,
+  uploadFileToProceeding,
 } from '../../../services/proceedingService'
 import { CustomContext } from '../../../types/types'
 import { Beneficiary } from '../beneficiary/beneficiaryType'
@@ -28,6 +31,7 @@ import { Notary } from '../notary/notaryType'
 
 import { CreateProceedingInput } from './createProceedingInput'
 import { Proceeding } from './proceedingType'
+import { UploadFileToProceedingInput } from './uploadFileToProceedingInput'
 
 @Resolver(() => Proceeding)
 export class InheritanceProcedureResolver {
@@ -163,6 +167,20 @@ export class InheritanceProcedureResolver {
   ): Promise<boolean> {
     await notifyProceedingBeneficiaries(proceedingId, subject, html, context)
     return true
+  }
+
+  @Mutation(() => ID)
+  async uploadAttachmentToProceeding(
+    @Arg('data') data: UploadFileToProceedingInput,
+    @Ctx() context: CustomContext
+  ): Promise<number> {
+    const createAttachmentInput = {
+      proceedingId: data.proceedingId,
+      stream: data.file.createReadStream(),
+      filename: data.file.filename,
+      mimetype: data.file.mimetype,
+    }
+    return uploadFileToProceeding(createAttachmentInput, context)
   }
 
   // ----------------------------------
