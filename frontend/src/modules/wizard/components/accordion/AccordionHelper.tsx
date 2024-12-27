@@ -20,8 +20,8 @@ export function AccordionHelper({ items }: AccordionHelperProps) {
       variant="enclosed"
       borderRadius="lg"
     >
-      {items.map((item, index) => (
-        <AccordionItem key={index} value={item.title}>
+      {items.map((item) => (
+        <AccordionItem key={item.title} value={item.title}>
           <AccordionItemTrigger>{item.title}</AccordionItemTrigger>
           <AccordionItemContent>{item.description}</AccordionItemContent>
         </AccordionItem>

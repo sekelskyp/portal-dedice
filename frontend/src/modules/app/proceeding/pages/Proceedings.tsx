@@ -93,8 +93,8 @@ export function Proceedings() {
         {!isNotary && (
           <Stack gap={4} alignItems={{ base: 'center', sm: 'start' }}>
             <Heading size={{ base: 'xl', sm: '2xl' }}>Další možnosti</Heading>
-            {proceedingsNavigation.map((item, index) => (
-              <Link key={index} to={item.link}>
+            {proceedingsNavigation.map((item) => (
+              <Link key={item.link} to={item.link}>
                 <Button width="fit-content" rounded="full">
                   {item.text} {item.icon}
                 </Button>
