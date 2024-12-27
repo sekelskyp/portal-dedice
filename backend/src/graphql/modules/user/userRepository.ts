@@ -64,6 +64,11 @@ export function getUserRepository(db: Db) {
     return result || null
   }
 
+  async function getAllUsers(): Promise<UserEntity[]> {
+    const results = await db.select().from(user)
+    return results
+  }
+
   return {
     getUserById,
     getAllUsersByType,
@@ -74,5 +79,6 @@ export function getUserRepository(db: Db) {
     updateUserById,
     deleteUsersByIds,
     getUserByNotaryId,
+    getAllUsers,
   }
 }

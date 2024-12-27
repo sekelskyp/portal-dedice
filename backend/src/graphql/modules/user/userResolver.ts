@@ -53,6 +53,12 @@ export class UserResolver {
     return await context.userRepository.getAllUsersByType(type)
   }
 
+  // Fetch all users
+  @Query(() => [User])
+  async getAllUsers(@Ctx() context: CustomContext): Promise<User[]> {
+    return await context.userRepository.getAllUsers()
+  }
+
   // Fetch a user by email
   @Query(() => User, { nullable: true })
   async getUserByEmail(

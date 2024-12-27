@@ -220,6 +220,7 @@ type Query {
   getAllArticles: [Article!]!
   getAllProceedings: [Proceeding!]!
   getAllUserByType(type: String!): [User!]
+  getAllUsers: [User!]!
   getArticleById(id: Int!): Article
   getAssetById(id: Int!): Asset
   getAssetsByProceedingId(proceedingId: Int!): [Asset!]!
