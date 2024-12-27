@@ -25,4 +25,5 @@ export const route = {
   newAsset: (id = ':id') => `/portal/inheritance-procedure/${id}/assets`,
   newEmail: (id = ':id') => `/portal/inheritance-procedure/${id}/new-email`,
   profile: () => `/portal/profile`,
+  users: () => `/admin/users`,
 }

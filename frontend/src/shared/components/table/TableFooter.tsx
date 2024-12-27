@@ -6,15 +6,9 @@ import {
   NativeSelectRoot,
 } from '@frontend/shared/design-system/atoms/chakra'
 
-import { TablePagination } from '../TablePagination'
+import { TablePagination } from './TablePagination'
 
-import { ProceedingsItem } from './ProceedingsTable'
-
-export function ProceedingsTableFooter({
-  table,
-}: {
-  table: Table<ProceedingsItem>
-}) {
+export function TableFooter<TData>({ table }: { table: Table<TData> }) {
   return (
     <Stack
       direction={{ base: 'column', xl: 'row' }}

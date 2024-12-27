@@ -19,7 +19,7 @@ import { useActionDialog } from '@frontend/shared/hooks/useActionDialog'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { route } from '@shared/route'
 
-import { ProceedingsItem } from '../components/proceedings-table/ProceedingsTable'
+import { ProceedingsItem } from '../components/ProceedingsTable'
 import { StatusBadge } from '../components/StatusBadge'
 import { useDeleteProceeding } from '../hooks/useDeleteProceeding'
 
