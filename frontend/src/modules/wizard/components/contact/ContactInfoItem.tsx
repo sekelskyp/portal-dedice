@@ -1,47 +1,56 @@
-import { Stack, Text } from '@chakra-ui/react'
-import { Link } from 'react-router-dom'
+import { Stack, useBreakpointValue } from '@chakra-ui/react'
+import { FiMail, FiMapPin, FiPhone } from 'react-icons/fi'
 
-import { isEmail, isPhone } from '../../utils/contactUtils'
-
-export interface ContactInfoItemProps {
-  icon: JSX.Element
-  text: string
-  displayText?: string
-}
+import { ContactLinkItem } from './ContactLinkItem'
 
 export function ContactInfoItem({
-  icon,
-  text,
-  displayText,
-}: ContactInfoItemProps) {
+  phone,
+  email,
+  completeAddress,
+}: {
+  phone?: string
+  email?: string
+  completeAddress?: string
+}) {
+  const iconBreakpoints = useBreakpointValue({
+    base: '18px',
+    sm: '20px',
+    md: '24px',
+  })
+
+  const contactItemsWithIcons = [
+    {
+      id: 1,
+      icon: <FiPhone size={iconBreakpoints} />,
+      text: phone ? phone : '',
+    },
+    {
+      id: 2,
+      icon: <FiMail size={iconBreakpoints} />,
+      text: email ? email : '',
+    },
+    {
+      id: 3,
+      icon: <FiMapPin size={iconBreakpoints} />,
+      text: completeAddress ? completeAddress : '',
+    },
+  ]
+
   return (
-    <Stack
-      direction="row"
-      align="center"
-      gap={{ base: 2, sm: 4 }}
-      py={2}
-      textAlign="left"
-    >
-      {icon}
-      {isEmail(text) ? (
-        <Link to={`mailto:${text}`}>
-          <Text _hover={{ textDecoration: 'underline' }}>{text}</Text>
-        </Link>
-      ) : isPhone(text) ? (
-        <Link to={`tel:${text}`}>
-          <Text _hover={{ textDecoration: 'underline' }}>
-            {displayText || text}
-          </Text>
-        </Link>
-      ) : (
-        <Link
-          to={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(text)}`}
-          target="_blank"
-          rel="noopener noreferrer"
+    <>
+      {contactItemsWithIcons.map((contactItem) => (
+        <Stack
+          key={contactItem.id}
+          direction="row"
+          align="center"
+          gap={{ base: 2, sm: 4 }}
+          py={2}
+          textAlign="left"
         >
-          <Text _hover={{ textDecoration: 'underline' }}>{text}</Text>
-        </Link>
-      )}
-    </Stack>
+          {contactItem.icon}
+          <ContactLinkItem contactItem={contactItem} />
+        </Stack>
+      ))}
+    </>
   )
 }

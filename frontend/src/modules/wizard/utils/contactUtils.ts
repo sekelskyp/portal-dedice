@@ -1,9 +1,5 @@
 import { z } from 'zod'
 
-export const formatPhoneNumberForLink = (phone: string) => {
-  return phone.replace(/\s+/g, '')
-}
-
 export const formatPhoneNumberForDisplay = (phone: string) => {
   return phone.replace(/(\d{3})(?=\d)/g, '$1 ')
 }

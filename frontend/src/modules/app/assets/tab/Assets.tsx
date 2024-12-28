@@ -146,8 +146,6 @@ export function Assets({ id }: { id: string }) {
 
   const assets = data?.getAssetsByProceedingId || []
 
-  console.log(assets)
-
   if (loading) return <Text>Načítání...</Text>
   if (error) return <Text color="red.500">Chyba při načítání majetku</Text>
 

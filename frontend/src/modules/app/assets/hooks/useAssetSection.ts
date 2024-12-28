@@ -23,6 +23,7 @@ export const useAssetSection = (
 
   const clearFields = () => {
     console.log(`Clearing fields for ${name}`)
+    console.log('test123')
     if (Array.isArray(defaultValue)) {
       setValue(name, [], { shouldValidate: true })
     } else {

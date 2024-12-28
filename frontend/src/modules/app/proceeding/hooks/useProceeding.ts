@@ -83,8 +83,6 @@ export function useProceeding(proceedingId: number) {
     },
   })
 
-  console.log(data)
-
   return {
     data,
     loading,
