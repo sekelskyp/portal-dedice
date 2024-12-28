@@ -193,6 +193,16 @@ export class UserResolver {
     return user
   }
 
+  @Mutation(() => User)
+  async toggleUserConfirmation(
+    @Arg('userId') userId: number,
+    @Ctx() context: CustomContext
+  ): Promise<User> {
+    const user = await context.userRepository.toggleUserConfirmation(userId)
+    if (!user) throw new Error('User not found')
+    return user
+  }
+
   // FIELD RESOLVERS
 
   @FieldResolver(() => Address, { nullable: true })

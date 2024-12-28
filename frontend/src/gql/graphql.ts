@@ -198,6 +198,7 @@ export type Mutation = {
   resetPassword: Scalars['Boolean']['output']
   signIn: SignInResponse
   signUp: User
+  toggleUserConfirmation: User
   updateAddress?: Maybe<Address>
   updateArticle?: Maybe<Article>
   updateAsset?: Maybe<Asset>
@@ -321,6 +322,10 @@ export type MutationSignInArgs = {
 
 export type MutationSignUpArgs = {
   registerInput: RegisterInput
+}
+
+export type MutationToggleUserConfirmationArgs = {
+  userId: Scalars['Float']['input']
 }
 
 export type MutationUpdateAddressArgs = {
@@ -555,6 +560,15 @@ export type User = {
   type: Scalars['String']['output']
 }
 
+export type ChangeUserStatusMutationVariables = Exact<{
+  userId: Scalars['Float']['input']
+}>
+
+export type ChangeUserStatusMutation = {
+  __typename?: 'Mutation'
+  toggleUserConfirmation: { __typename?: 'User'; confirmed: boolean }
+}
+
 export type GetUsersQueryVariables = Exact<{ [key: string]: never }>
 
 export type GetUsersQuery = {
@@ -567,6 +581,7 @@ export type GetUsersQuery = {
     displayName: string
     addressId?: string | null
     type: string
+    confirmed: boolean
     address?: {
       __typename?: 'Address'
       id: string
@@ -1194,6 +1209,57 @@ export type GetAddressSuggestionsQuery = {
   }>
 }
 
+export const ChangeUserStatusDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'ChangeUserStatus' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'userId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Float' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'toggleUserConfirmation' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'userId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'userId' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'confirmed' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ChangeUserStatusMutation,
+  ChangeUserStatusMutationVariables
+>
 export const GetUsersDocument = {
   kind: 'Document',
   definitions: [
@@ -1242,6 +1308,7 @@ export const GetUsersDocument = {
                 },
                 { kind: 'Field', name: { kind: 'Name', value: 'addressId' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'confirmed' } },
               ],
             },
           },

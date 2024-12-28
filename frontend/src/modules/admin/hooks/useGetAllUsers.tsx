@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client'
 
 import { gql } from '@frontend/gql'
 
-const GET_ALL_USERS = gql(/* GraphQL */ `
+export const GET_ALL_USERS = gql(/* GraphQL */ `
   query GetUsers {
     getAllUsers {
       id
@@ -18,6 +18,7 @@ const GET_ALL_USERS = gql(/* GraphQL */ `
       }
       addressId
       type
+      confirmed
     }
   }
 `)

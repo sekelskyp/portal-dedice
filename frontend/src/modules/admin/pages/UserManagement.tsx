@@ -42,12 +42,13 @@ export function UserManagement() {
               item.address.postalCode || ''
             }, ${item.address.municipality || ''}`
           : '',
+        confirmed: item.confirmed,
       }))
   }
 
   if (token && isAdmin) {
     return (
-      <Stack gap={8} p={8} mx={8}>
+      <Stack gap={8} p={{ base: 4, md: 8 }} mx={{ base: 0, sm: 4, md: 8 }}>
         <Card.Root>
           <Card.Header
             as={HStack}

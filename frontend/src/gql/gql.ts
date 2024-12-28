@@ -13,7 +13,9 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-  '\n  query GetUsers {\n    getAllUsers {\n      id\n      name\n      surname\n      displayName\n      address {\n        id\n        municipality\n        postalCode\n        street\n        streetNumber\n      }\n      addressId\n      type\n    }\n  }\n':
+  '\n  mutation ChangeUserStatus($userId: Float!) {\n    toggleUserConfirmation(userId: $userId) {\n      confirmed\n    }\n  }\n':
+    types.ChangeUserStatusDocument,
+  '\n  query GetUsers {\n    getAllUsers {\n      id\n      name\n      surname\n      displayName\n      address {\n        id\n        municipality\n        postalCode\n        street\n        streetNumber\n      }\n      addressId\n      type\n      confirmed\n    }\n  }\n':
     types.GetUsersDocument,
   '\n  mutation createAsset($data: AssetInput!) {\n    createAsset(data: $data) {\n      id\n      proceedingId\n      type\n      name\n      value\n      description\n      bankName\n      carMakeName\n      carRegistrationDate\n      carType\n      cin\n    }\n  }\n':
     types.CreateAssetDocument,
@@ -103,8 +105,14 @@ export function gql(source: string): unknown
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query GetUsers {\n    getAllUsers {\n      id\n      name\n      surname\n      displayName\n      address {\n        id\n        municipality\n        postalCode\n        street\n        streetNumber\n      }\n      addressId\n      type\n    }\n  }\n'
-): (typeof documents)['\n  query GetUsers {\n    getAllUsers {\n      id\n      name\n      surname\n      displayName\n      address {\n        id\n        municipality\n        postalCode\n        street\n        streetNumber\n      }\n      addressId\n      type\n    }\n  }\n']
+  source: '\n  mutation ChangeUserStatus($userId: Float!) {\n    toggleUserConfirmation(userId: $userId) {\n      confirmed\n    }\n  }\n'
+): (typeof documents)['\n  mutation ChangeUserStatus($userId: Float!) {\n    toggleUserConfirmation(userId: $userId) {\n      confirmed\n    }\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  query GetUsers {\n    getAllUsers {\n      id\n      name\n      surname\n      displayName\n      address {\n        id\n        municipality\n        postalCode\n        street\n        streetNumber\n      }\n      addressId\n      type\n      confirmed\n    }\n  }\n'
+): (typeof documents)['\n  query GetUsers {\n    getAllUsers {\n      id\n      name\n      surname\n      displayName\n      address {\n        id\n        municipality\n        postalCode\n        street\n        streetNumber\n      }\n      addressId\n      type\n      confirmed\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

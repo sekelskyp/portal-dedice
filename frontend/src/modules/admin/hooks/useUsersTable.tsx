@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { IconButton, Stack } from '@chakra-ui/react'
 import { rankItem } from '@tanstack/match-sorter-utils'
 import {
@@ -11,9 +11,14 @@ import {
   PaginationState,
   useReactTable,
 } from '@tanstack/react-table'
-import { MdDelete } from 'react-icons/md'
+import { FaUserCheck, FaUserMinus } from 'react-icons/fa'
+
+import { useActionDialog } from '@frontend/shared/hooks/useActionDialog'
 
 import { UserItem } from '../components/UserTable'
+import { USER_TYPE_MAPPING } from '../utils/user-mapping'
+
+import { useChangeUserStatus } from './useChangeUserStatus'
 
 const INITIAL_SORTING_STATE = [
   {
@@ -21,12 +26,6 @@ const INITIAL_SORTING_STATE = [
     desc: false,
   },
 ]
-
-const USER_TYPE_MAPPING = {
-  Notary: 'Notář',
-  Admin: 'Admin',
-  User: 'Uživatel',
-} as const
 
 const fuzzyFilter: FilterFn<UserItem> = (row, columnId, value, addMeta) => {
   const itemRank = rankItem(row.getValue(columnId), value)
@@ -37,6 +36,20 @@ const fuzzyFilter: FilterFn<UserItem> = (row, columnId, value, addMeta) => {
 const columnHelper = createColumnHelper<UserItem>()
 
 export function useUsersTable({ data }: { data: UserItem[] }) {
+  const { toggleDialog, isOpen, selectedId } = useActionDialog()
+  const [selectedUser, setSelectedUser] = useState<UserItem | null>(null)
+  const [changeUserStatusRequest] = useChangeUserStatus()
+
+  const handleUserStatusChange = useCallback(() => {
+    if (selectedId) {
+      changeUserStatusRequest({
+        variables: {
+          userId: parseInt(selectedId),
+        },
+      })
+    }
+  }, [changeUserStatusRequest, selectedId])
+
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -65,20 +78,26 @@ export function useUsersTable({ data }: { data: UserItem[] }) {
       }),
       columnHelper.display({
         id: 'actions',
-        header: () => 'Aktivace / Deaktivace',
+        header: () => '',
         cell: (info) => {
-          const id = info.row.original.id
+          const user = info.row.original
+          const isActive = user.confirmed
           return (
             <Stack direction="row" alignItems="center">
               <IconButton
-                borderRadius="xl"
-                bg="red.600"
+                borderRadius="md"
+                bg={isActive ? 'red.600' : 'green.600'}
+                _hover={{ bg: isActive ? 'red.700' : 'green.700' }}
                 onClick={() => {
-                  console.log(id)
+                  setSelectedUser(user)
+                  toggleDialog(true, user.id)
                 }}
-                size="sm"
+                size="md"
+                p={4}
+                w={32}
               >
-                <MdDelete />
+                {isActive ? <FaUserMinus /> : <FaUserCheck />}
+                {isActive ? 'Deaktivovat' : 'Aktivovat'}
               </IconButton>
             </Stack>
           )
@@ -86,7 +105,7 @@ export function useUsersTable({ data }: { data: UserItem[] }) {
         enableSorting: false,
       }),
     ],
-    []
+    [toggleDialog]
   )
 
   const table = useReactTable({
@@ -111,5 +130,15 @@ export function useUsersTable({ data }: { data: UserItem[] }) {
     getPaginationRowModel: getPaginationRowModel(),
   })
 
-  return { table, setGlobalFilter }
+  return {
+    table,
+    setGlobalFilter,
+    dialog: {
+      isOpen,
+      toggleDialog,
+      selectedId,
+      handleUserStatusChange,
+      selectedUser,
+    },
+  }
 }
