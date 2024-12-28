@@ -22,6 +22,12 @@ const INITIAL_SORTING_STATE = [
   },
 ]
 
+const USER_TYPE_MAPPING = {
+  Notary: 'Notář',
+  Admin: 'Admin',
+  User: 'Uživatel',
+} as const
+
 const fuzzyFilter: FilterFn<UserItem> = (row, columnId, value, addMeta) => {
   const itemRank = rankItem(row.getValue(columnId), value)
   addMeta({ itemRank })
@@ -54,11 +60,12 @@ export function useUsersTable({ data }: { data: UserItem[] }) {
       }),
       columnHelper.accessor('type', {
         header: () => 'Role',
-        cell: (info) => info.getValue(),
+        cell: (info) =>
+          USER_TYPE_MAPPING[info.getValue() as keyof typeof USER_TYPE_MAPPING],
       }),
       columnHelper.display({
         id: 'actions',
-        header: () => '',
+        header: () => 'Aktivace / Deaktivace',
         cell: (info) => {
           const id = info.row.original.id
           return (

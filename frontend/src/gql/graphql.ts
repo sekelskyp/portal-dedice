@@ -555,6 +555,29 @@ export type User = {
   type: Scalars['String']['output']
 }
 
+export type GetUsersQueryVariables = Exact<{ [key: string]: never }>
+
+export type GetUsersQuery = {
+  __typename?: 'Query'
+  getAllUsers: Array<{
+    __typename?: 'User'
+    id: string
+    name: string
+    surname: string
+    displayName: string
+    addressId?: string | null
+    type: string
+    address?: {
+      __typename?: 'Address'
+      id: string
+      municipality: string
+      postalCode: string
+      street: string
+      streetNumber: string
+    } | null
+  }>
+}
+
 export type CreateAssetMutationVariables = Exact<{
   data: AssetInput
 }>
@@ -1171,6 +1194,62 @@ export type GetAddressSuggestionsQuery = {
   }>
 }
 
+export const GetUsersDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetUsers' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getAllUsers' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'surname' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'displayName' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'address' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'municipality' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'postalCode' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'street' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'streetNumber' },
+                      },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'addressId' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetUsersQuery, GetUsersQueryVariables>
 export const CreateAssetDocument = {
   kind: 'Document',
   definitions: [
