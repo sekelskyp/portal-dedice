@@ -1,9 +1,11 @@
 import React from 'react'
 import { Input, NativeSelectRoot, Stack } from '@chakra-ui/react'
 import { Column } from '@tanstack/react-table'
+import { FaSearch } from 'react-icons/fa'
+import { MdOutlineCancel } from 'react-icons/md'
 
 import { USER_TYPE_MAPPING } from '@frontend/modules/admin/utils/user-mapping'
-import { NativeSelectField } from '@frontend/shared/design-system'
+import { InputGroup, NativeSelectField } from '@frontend/shared/design-system'
 
 interface TableFilterProps<TData> {
   column: Column<TData, unknown>
@@ -25,7 +27,7 @@ export function TableFilter<TData>({ column }: TableFilterProps<TData>) {
   if (filterVariant === 'select') {
     return (
       <Stack>
-        <NativeSelectRoot size="md">
+        <NativeSelectRoot size="md" minWidth={125}>
           <NativeSelectField
             onChange={(e) => column.setFilterValue(e.target.value)}
             value={(columnFilterValue ?? '').toString()}
@@ -46,11 +48,20 @@ export function TableFilter<TData>({ column }: TableFilterProps<TData>) {
 
   return (
     <Stack>
-      <Input
-        value={(columnFilterValue ?? '').toString()}
-        onChange={(e) => column.setFilterValue(e.target.value)}
-        placeholder="Vyhledej..."
-      />
+      <InputGroup
+        startElement={<FaSearch size="18px" />}
+        endElement={<MdOutlineCancel size="18px" />}
+        endElementProps={{
+          _hover: { cursor: 'pointer' },
+          onClick: () => column.setFilterValue(''),
+        }}
+      >
+        <Input
+          value={(columnFilterValue ?? '').toString()}
+          onChange={(e) => column.setFilterValue(e.target.value)}
+          placeholder="Vyhledej..."
+        />
+      </InputGroup>
     </Stack>
   )
 }

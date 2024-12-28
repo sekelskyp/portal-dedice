@@ -91,7 +91,6 @@ export function useUsersTable({ data }: { data: UserItem[] }) {
         meta: {
           filterVariant: 'select',
         },
-        enableColumnFilter: true,
       }),
       columnHelper.display({
         id: 'actions',
