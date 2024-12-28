@@ -78,6 +78,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
           const name = info.getValue() as string
           return name
         },
+        enableColumnFilter: false,
       }),
     ]
 
@@ -86,6 +87,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
         columnHelper.accessor('name', {
           header: () => 'ID',
           cell: (info) => info.getValue(),
+          enableColumnFilter: false,
         })
       )
       columns.push(
@@ -96,6 +98,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
             const formattedDate = date ? date.split('T')[0] : ''
             return formattedDate
           },
+          enableColumnFilter: false,
         })
       )
     }
@@ -111,6 +114,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
             </Flex>
           )
         },
+        enableColumnFilter: false,
       })
     )
 
@@ -145,6 +149,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
             </Stack>
           )
         },
+        enableColumnFilter: false,
         enableSorting: false,
       })
     )

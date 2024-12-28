@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { IconButton, Stack } from '@chakra-ui/react'
 import { rankItem } from '@tanstack/match-sorter-utils'
 import {
+  ColumnFiltersState,
   createColumnHelper,
   FilterFn,
   getCoreRowModel,
@@ -56,25 +57,41 @@ export function useUsersTable({ data }: { data: UserItem[] }) {
   })
 
   const [globalFilter, setGlobalFilter] = useState('')
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
   const columns = useMemo(
     () => [
       columnHelper.accessor('id', {
         header: () => 'ID',
         cell: (info) => info.getValue(),
+        enableColumnFilter: false,
       }),
       columnHelper.accessor('displayName', {
         header: () => 'Jméno a přijmení',
         cell: (info) => info.getValue(),
+        meta: {
+          filterVariant: 'text',
+        },
       }),
       columnHelper.accessor('address', {
         header: () => 'Adresa',
         cell: (info) => info.getValue(),
+        meta: {
+          filterVariant: 'text',
+        },
       }),
       columnHelper.accessor('type', {
         header: () => 'Role',
-        cell: (info) =>
-          USER_TYPE_MAPPING[info.getValue() as keyof typeof USER_TYPE_MAPPING],
+        cell: (info) => {
+          const value = info.getValue()
+          return (
+            USER_TYPE_MAPPING[value as keyof typeof USER_TYPE_MAPPING] || value
+          )
+        },
+        meta: {
+          filterVariant: 'select',
+        },
+        enableColumnFilter: true,
       }),
       columnHelper.display({
         id: 'actions',
@@ -117,6 +134,7 @@ export function useUsersTable({ data }: { data: UserItem[] }) {
     state: {
       globalFilter,
       pagination,
+      columnFilters,
     },
     initialState: {
       sorting: INITIAL_SORTING_STATE,
@@ -124,6 +142,7 @@ export function useUsersTable({ data }: { data: UserItem[] }) {
     globalFilterFn: fuzzyFilter,
     onPaginationChange: setPagination,
     onGlobalFilterChange: setGlobalFilter,
+    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
