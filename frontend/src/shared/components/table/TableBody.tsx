@@ -1,13 +1,7 @@
 import { Table } from '@chakra-ui/react'
 import { flexRender, Table as ReactTable } from '@tanstack/react-table'
 
-import { ProceedingsItem } from './ProceedingsTable'
-
-export function ProceedingsTableBody({
-  table,
-}: {
-  table: ReactTable<ProceedingsItem>
-}) {
+export function TableBody<TData>({ table }: { table: ReactTable<TData> }) {
   return (
     <Table.Body whiteSpace="nowrap">
       {table.getRowModel().rows.map((row) => {

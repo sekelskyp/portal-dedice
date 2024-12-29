@@ -19,7 +19,7 @@ import { route } from '@shared/route'
 import {
   ProceedingsItem,
   ProceedingsTable,
-} from '../components/proceedings-table/ProceedingsTable'
+} from '../components/ProceedingsTable'
 import { useBeneficiaryProceedings } from '../hooks/useBeneficiaryProceedings'
 import { useNotaryProcedures } from '../hooks/useNotaryProcedures'
 import { proceedingsNavigation } from '../utils/proceedingsNavigation'

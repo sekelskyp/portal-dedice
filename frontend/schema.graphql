@@ -166,6 +166,7 @@ type Mutation {
   resetPassword(newPassword: String!, token: String!): Boolean!
   signIn(login: String!, password: String!): SignInResponse!
   signUp(registerInput: RegisterInput!): User!
+  toggleUserConfirmation(userId: Float!): User!
   updateAddress(data: AddressInput!, id: Int!): Address
   updateArticle(data: UpdateArticleInput!, id: Int!): Article
   updateAsset(data: AssetInput!, id: Int!): Asset
@@ -220,6 +221,7 @@ type Query {
   getAllArticles: [Article!]!
   getAllProceedings: [Proceeding!]!
   getAllUserByType(type: String!): [User!]
+  getAllUsers: [User!]!
   getArticleById(id: Int!): Article
   getAssetById(id: Int!): Asset
   getAssetsByProceedingId(proceedingId: Int!): [Asset!]!

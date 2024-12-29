@@ -53,6 +53,12 @@ export class UserResolver {
     return await context.userRepository.getAllUsersByType(type)
   }
 
+  // Fetch all users
+  @Query(() => [User])
+  async getAllUsers(@Ctx() context: CustomContext): Promise<User[]> {
+    return await context.userRepository.getAllUsers()
+  }
+
   // Fetch a user by email
   @Query(() => User, { nullable: true })
   async getUserByEmail(
@@ -184,6 +190,16 @@ export class UserResolver {
     const user = await getUserById(context.authUser.userId, context)
     if (!user) throw new Error('User not found after profile update')
 
+    return user
+  }
+
+  @Mutation(() => User)
+  async toggleUserConfirmation(
+    @Arg('userId') userId: number,
+    @Ctx() context: CustomContext
+  ): Promise<User> {
+    const user = await context.userRepository.toggleUserConfirmation(userId)
+    if (!user) throw new Error('User not found')
     return user
   }
 
