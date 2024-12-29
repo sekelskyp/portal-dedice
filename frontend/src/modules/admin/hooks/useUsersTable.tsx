@@ -1,5 +1,4 @@
 import { useCallback, useMemo, useState } from 'react'
-import { IconButton, Stack } from '@chakra-ui/react'
 import { rankItem } from '@tanstack/match-sorter-utils'
 import {
   ColumnFiltersState,
@@ -12,10 +11,10 @@ import {
   PaginationState,
   useReactTable,
 } from '@tanstack/react-table'
-import { FaUserCheck, FaUserMinus } from 'react-icons/fa'
 
 import { useActionDialog } from '@frontend/shared/hooks/useActionDialog'
 
+import { UserActionButton } from '../components/UserActionButton'
 import { UserItem } from '../components/UserTable'
 import { USER_TYPE_MAPPING } from '../utils/user-mapping'
 
@@ -99,23 +98,13 @@ export function useUsersTable({ data }: { data: UserItem[] }) {
           const user = info.row.original
           const isActive = user.confirmed
           return (
-            <Stack direction="row" alignItems="center">
-              <IconButton
-                borderRadius="md"
-                bg={isActive ? 'red.600' : 'green.600'}
-                _hover={{ bg: isActive ? 'red.700' : 'green.700' }}
-                onClick={() => {
-                  setSelectedUser(user)
-                  toggleDialog(true, user.id)
-                }}
-                size="md"
-                p={4}
-                w={32}
-              >
-                {isActive ? <FaUserMinus /> : <FaUserCheck />}
-                {isActive ? 'Deaktivovat' : 'Aktivovat'}
-              </IconButton>
-            </Stack>
+            <UserActionButton
+              key={user.id}
+              user={user}
+              isActive={isActive}
+              setSelectedUser={setSelectedUser}
+              toggleDialog={toggleDialog}
+            />
           )
         },
         enableSorting: false,
