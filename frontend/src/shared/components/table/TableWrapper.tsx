@@ -1,6 +1,5 @@
 import { Grid } from '@chakra-ui/react'
 
-/** Makes Table scrollable when overflows parent. */
 export const TableWrapper = ({ children }: { children: React.ReactNode }) => (
   <Grid
     overflowX="auto"

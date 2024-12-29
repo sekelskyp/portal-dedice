@@ -9,13 +9,14 @@ import { route } from '@shared/route'
 
 import { UserItem, UserTable } from '../components/UserTable'
 import { useGetAllUsers } from '../hooks/useGetAllUsers'
+import { loadUsers } from '../utils/user-utils'
 
 //TODO: add routing to invite page when it's ready
 
 export function UserManagement() {
   const { user, token } = useAuth()
-  const isAdmin = user?.type === 'Admin'
   const { data, loading, error } = useGetAllUsers()
+  const isAdmin = user?.type === 'Admin'
 
   let users: UserItem[] = []
 
@@ -30,21 +31,7 @@ export function UserManagement() {
 
   if (error) return <Text>Error: {error.message}</Text>
 
-  if (data?.getAllUsers) {
-    users = data.getAllUsers
-      .filter((item) => item.id !== user?.id)
-      .map((item) => ({
-        id: item.id,
-        displayName: item.displayName || `${item.name} ${item.surname}`,
-        type: item.type,
-        address: item.address
-          ? `${item.address.street || ''}, ${item.address.streetNumber || ''}, ${
-              item.address.postalCode || ''
-            }, ${item.address.municipality || ''}`
-          : '',
-        confirmed: item.confirmed,
-      }))
-  }
+  users = loadUsers({ data, user }) || []
 
   if (token && isAdmin) {
     return (

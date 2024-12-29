@@ -1,11 +1,15 @@
-import React from 'react'
-import { Input, NativeSelectRoot, Stack } from '@chakra-ui/react'
+import { useMemo } from 'react'
+import { Input, Stack } from '@chakra-ui/react'
 import { Column } from '@tanstack/react-table'
 import { FaSearch } from 'react-icons/fa'
 import { MdOutlineCancel } from 'react-icons/md'
 
 import { USER_TYPE_MAPPING } from '@frontend/modules/admin/utils/user-mapping'
-import { InputGroup, NativeSelectField } from '@frontend/shared/design-system'
+import {
+  InputGroup,
+  NativeSelectField,
+  NativeSelectRoot,
+} from '@frontend/shared/design-system'
 
 interface TableFilterProps<TData> {
   column: Column<TData, unknown>
@@ -15,7 +19,7 @@ export function TableFilter<TData>({ column }: TableFilterProps<TData>) {
   const { filterVariant } = column.columnDef.meta ?? {}
   const columnFilterValue = column.getFilterValue()
 
-  const sortedUniqueValues = React.useMemo(() => {
+  const sortedUniqueValues = useMemo(() => {
     if (column.id === 'type') {
       return Object.keys(USER_TYPE_MAPPING)
     }

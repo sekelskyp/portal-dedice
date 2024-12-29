@@ -8,6 +8,8 @@ import {
 
 import { TablePagination } from './TablePagination'
 
+const OPTIONS = [10, 20, 30, 40, 50]
+
 export function TableFooter<TData>({ table }: { table: Table<TData> }) {
   return (
     <Stack
@@ -49,7 +51,7 @@ export function TableFooter<TData>({ table }: { table: Table<TData> }) {
             alignItems="center"
           >
             {' '}
-            {[10, 20, 30, 40, 50].map((pageSize) => (
+            {OPTIONS.map((pageSize) => (
               <option key={pageSize} value={pageSize}>
                 {pageSize}
               </option>

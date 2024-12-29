@@ -1,18 +1,20 @@
 import { useCallback, useMemo, useState } from 'react'
-import { rankItem } from '@tanstack/match-sorter-utils'
 import {
-  ColumnFiltersState,
   createColumnHelper,
-  FilterFn,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  PaginationState,
   useReactTable,
 } from '@tanstack/react-table'
 
 import { useActionDialog } from '@frontend/shared/hooks/useActionDialog'
+import { useTableFilters } from '@frontend/shared/hooks/useTableFilters'
+import { useTablePagination } from '@frontend/shared/hooks/useTablePagination'
+import {
+  fuzzyFilter,
+  INITIAL_SORTING_STATE,
+} from '@frontend/shared/utils/table-utils'
 
 import { UserActionButton } from '../components/UserActionButton'
 import { UserItem } from '../components/UserTable'
@@ -20,25 +22,16 @@ import { USER_TYPE_MAPPING } from '../utils/user-mapping'
 
 import { useChangeUserStatus } from './useChangeUserStatus'
 
-const INITIAL_SORTING_STATE = [
-  {
-    id: 'id',
-    desc: false,
-  },
-]
-
-const fuzzyFilter: FilterFn<UserItem> = (row, columnId, value, addMeta) => {
-  const itemRank = rankItem(row.getValue(columnId), value)
-  addMeta({ itemRank })
-  return itemRank.passed
-}
-
 const columnHelper = createColumnHelper<UserItem>()
 
 export function useUsersTable({ data }: { data: UserItem[] }) {
   const { toggleDialog, isOpen, selectedId } = useActionDialog()
   const [selectedUser, setSelectedUser] = useState<UserItem | null>(null)
   const [changeUserStatusRequest] = useChangeUserStatus()
+
+  const { pagination, setPagination } = useTablePagination()
+  const { globalFilter, setGlobalFilter, columnFilters, setColumnFilters } =
+    useTableFilters()
 
   const handleUserStatusChange = useCallback(() => {
     if (selectedId) {
@@ -49,14 +42,6 @@ export function useUsersTable({ data }: { data: UserItem[] }) {
       })
     }
   }, [changeUserStatusRequest, selectedId])
-
-  const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 10,
-  })
-
-  const [globalFilter, setGlobalFilter] = useState('')
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
   const columns = useMemo(
     () => [
@@ -90,6 +75,7 @@ export function useUsersTable({ data }: { data: UserItem[] }) {
         meta: {
           filterVariant: 'select',
         },
+        enableGlobalFilter: false,
       }),
       columnHelper.display({
         id: 'actions',
@@ -108,6 +94,7 @@ export function useUsersTable({ data }: { data: UserItem[] }) {
           )
         },
         enableSorting: false,
+        enableGlobalFilter: false,
       }),
     ],
     [toggleDialog]
@@ -117,7 +104,7 @@ export function useUsersTable({ data }: { data: UserItem[] }) {
     columns,
     data,
     filterFns: {
-      fuzzy: fuzzyFilter,
+      fuzzy: fuzzyFilter<UserItem>(),
     },
     state: {
       globalFilter,
@@ -127,7 +114,7 @@ export function useUsersTable({ data }: { data: UserItem[] }) {
     initialState: {
       sorting: INITIAL_SORTING_STATE,
     },
-    globalFilterFn: fuzzyFilter,
+    globalFilterFn: fuzzyFilter<UserItem>(),
     onPaginationChange: setPagination,
     onGlobalFilterChange: setGlobalFilter,
     onColumnFiltersChange: setColumnFilters,
