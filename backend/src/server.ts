@@ -12,9 +12,11 @@ import { addMocksToSchema } from '@graphql-tools/mock'
 import { createPubSub } from '@graphql-yoga/subscription'
 import cors from 'cors'
 import express from 'express'
+import fs from 'fs'
 import { graphqlUploadExpress } from 'graphql-upload'
 import { useServer } from 'graphql-ws/lib/use/ws'
 import * as http from 'http'
+import path from 'path'
 import { buildSchema } from 'type-graphql'
 import { WebSocketServer } from 'ws'
 
@@ -47,6 +49,7 @@ import { UserResolver } from '@backend/graphql/modules/user/userResolver'
 import { parseAndVerifyJWT } from '@backend/libs/jwt'
 import { mockResolvers } from '@backend/mocks/mocks'
 import { CustomContext } from '@backend/types/types'
+import { route } from '@shared/route'
 
 import { AddressSuggestionResolver } from './graphql/modules/addressSuggestions/addressSuggestionResolver'
 
@@ -176,6 +179,37 @@ const init = async () => {
 
   app.get('/', (_req, res) => {
     res.redirect('/graphql')
+  })
+
+  // Serve files from the filesystem
+  app.get(route.downloadFile(), (req, res) => {
+    const fileUuid = req.params.fileUuid
+    const filePath = path.join(FILE_UPLOADS_DIR, fileUuid)
+
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).send('File not found')
+    }
+
+    // Set headers for file download
+    res.download(filePath)
+  })
+
+  app.get(route.streamFile(), (req, res) => {
+    const fileUuid = req.params.fileUuid
+    const filePath = path.join(FILE_UPLOADS_DIR, fileUuid)
+
+    // Check if the file exists
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).send('File not found')
+    }
+
+    // Serve the file as a stream
+    res.sendFile(filePath, (err) => {
+      if (err) {
+        console.error('Error serving file:', err)
+        res.status(500).send('Error serving file')
+      }
+    })
   })
 
   httpServer.listen({ port: PORT }, () => {
