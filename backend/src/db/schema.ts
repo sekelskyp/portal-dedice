@@ -277,12 +277,12 @@ export const article = mysqlTable('article', {
 export const attachment = mysqlTable('attachment', {
   id: int('id').primaryKey().autoincrement(),
   proceedingId: int('proceeding_id').references(() => proceeding.id),
-  date: date('date').default(new Date()).notNull(),
+  uploadDate: date('upload_date').default(new Date()).notNull(),
   // stored file informartion
   fileUuid: varchar('file_uuid', { length: 255 }).notNull(),
   filepath: varchar('filepath', { length: 255 }).notNull(),
   filename: varchar('filename', { length: 255 }).notNull(),
-  fileType: varchar('file_type', { length: 30 }).notNull(),
+  mimetype: varchar('mimetype', { length: 30 }).notNull(),
 })
 
 // Custom lower function

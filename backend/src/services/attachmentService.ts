@@ -27,7 +27,7 @@ export async function createAttachment(
     fileUuid: response.fileUuid,
     filepath: response.filePath,
     filename: input.filename,
-    fileType: input.mimetype,
+    mimetype: input.mimetype,
   }
   // return the ID of the new attachment record
   return context.attachmentRepository.createAttachment(dbRecordData)

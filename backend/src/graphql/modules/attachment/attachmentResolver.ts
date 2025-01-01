@@ -1,31 +1,17 @@
 import { Arg, Ctx, ID, Mutation, Query, Resolver } from 'type-graphql'
 
-import { Attachment } from '@backend/graphql/modules/attachment/attachmentType'
 import {
-  createAttachment,
-  CreateAttachmentInput,
   deleteAttachmentsByIds,
   getAttachmentById,
   getAttachmentsByIds,
 } from '@backend/services/attachmentService'
 import { CustomContext } from '@backend/types/types'
 
-import { UploadAttachmentInput } from './createAttachmentInput'
+import { Attachment } from './attachmentType'
 
 @Resolver()
 export class AttachmentResolver {
   @Mutation(() => ID)
-  async createAttachment(
-    @Arg('data') data: UploadAttachmentInput,
-    @Ctx() context: CustomContext
-  ): Promise<number> {
-    const attachmentData: CreateAttachmentInput = {
-      file: data.file,
-      inheritanceProcedureId: data.inheritanceProcedureId,
-    }
-    return await createAttachment(attachmentData, context)
-  }
-
   @Mutation(() => Boolean)
   async deleteAttachmentsByIds(
     @Arg('ids', () => [ID]) ids: number[],
