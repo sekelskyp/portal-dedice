@@ -25,6 +25,7 @@ import {
   uploadFileToProceeding,
 } from '../../../services/proceedingService'
 import { CustomContext } from '../../../types/types'
+import { Attachment } from '../attachment/attachmentType'
 import { Beneficiary } from '../beneficiary/beneficiaryType'
 import { Notary } from '../notary/notaryType'
 
@@ -89,6 +90,15 @@ export class InheritanceProcedureResolver {
     @Ctx() { assetRepository }: CustomContext
   ): Promise<Asset[]> {
     return await assetRepository.getAssetsByProcedureId(proceedingId)
+  }
+
+  // Query to get attachments by proceeding ID
+  @Query(() => [Asset])
+  async getAttachmentsByProceedingId(
+    @Arg('proceedingId', () => Int) proceedingId: number,
+    @Ctx() { attachmentRepository }: CustomContext
+  ): Promise<Attachment[]> {
+    return await attachmentRepository.getAttachmentsByProceedingId(proceedingId)
   }
 
   // ----------------------------------

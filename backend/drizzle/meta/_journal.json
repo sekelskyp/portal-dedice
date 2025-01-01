@@ -64,6 +64,13 @@
       "when": 1733080075159,
       "tag": "0008_condemned_karen_page",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1735771213045,
+      "tag": "0009_rare_starhawk",
+      "breakpoints": true
     }
   ]
 }

@@ -222,6 +222,7 @@ type Query {
   getArticleById(id: Int!): Article
   getAssetById(id: Int!): Asset
   getAssetsByProceedingId(proceedingId: Int!): [Asset!]!
+  getAttachmentsByProceedingId(proceedingId: Int!): [Asset!]!
   getBeneficiariesByIds(ids: [Int!]!): [Beneficiary!]!
   getBeneficiariesByProceedingId(proceedingId: Int!): [Beneficiary!]!
   getBeneficiaryById(id: Int!): Beneficiary
