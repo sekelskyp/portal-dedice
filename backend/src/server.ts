@@ -169,7 +169,10 @@ const init = async () => {
     '/graphql',
     cors<cors.CorsRequest>(), // accepts all origins ('*'), not support cookies
     express.json(),
-    graphqlUploadExpress(),
+    graphqlUploadExpress({
+      maxFileSize: 25 * 1024 * 1024, // 25MB
+      maxFiles: 10, // Optional: Limit the number of files in a single request
+    }),
     expressMiddleware(server, {
       context: customContext,
     })
