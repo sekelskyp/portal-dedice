@@ -12,15 +12,12 @@ import { addMocksToSchema } from '@graphql-tools/mock'
 import { createPubSub } from '@graphql-yoga/subscription'
 import cors from 'cors'
 import express from 'express'
-import fs from 'fs'
 import { graphqlUploadExpress } from 'graphql-upload'
 import { useServer } from 'graphql-ws/lib/use/ws'
 import * as http from 'http'
-import path from 'path'
 import { buildSchema } from 'type-graphql'
 import { WebSocketServer } from 'ws'
 
-import { MOCKS, PORT } from '@backend/config'
 import { getConnection } from '@backend/db/db'
 import { getAddressRepository } from '@backend/graphql/modules/address/addressRepository'
 import { AddressResolver } from '@backend/graphql/modules/address/addressResolver'
@@ -49,9 +46,10 @@ import { UserResolver } from '@backend/graphql/modules/user/userResolver'
 import { parseAndVerifyJWT } from '@backend/libs/jwt'
 import { mockResolvers } from '@backend/mocks/mocks'
 import { CustomContext } from '@backend/types/types'
-import { route } from '@shared/route'
 
 import { AddressSuggestionResolver } from './graphql/modules/addressSuggestions/addressSuggestionResolver'
+import fileRoutes from './routes/fileRoutes'
+import { MOCKS, PORT } from './config'
 
 const init = async () => {
   const app = express()
@@ -181,36 +179,8 @@ const init = async () => {
     res.redirect('/graphql')
   })
 
-  // Serve files from the filesystem
-  app.get(route.downloadFile(), (req, res) => {
-    const fileUuid = req.params.fileUuid
-    const filePath = path.join(FILE_UPLOADS_DIR, fileUuid)
-
-    if (!fs.existsSync(filePath)) {
-      return res.status(404).send('File not found')
-    }
-
-    // Set headers for file download
-    res.download(filePath)
-  })
-
-  app.get(route.streamFile(), (req, res) => {
-    const fileUuid = req.params.fileUuid
-    const filePath = path.join(FILE_UPLOADS_DIR, fileUuid)
-
-    // Check if the file exists
-    if (!fs.existsSync(filePath)) {
-      return res.status(404).send('File not found')
-    }
-
-    // Serve the file as a stream
-    res.sendFile(filePath, (err) => {
-      if (err) {
-        console.error('Error serving file:', err)
-        res.status(500).send('Error serving file')
-      }
-    })
-  })
+  // Add routes for serving files
+  app.use(fileRoutes)
 
   httpServer.listen({ port: PORT }, () => {
     console.log('Server listening on port: ' + PORT)

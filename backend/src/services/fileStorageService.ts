@@ -16,27 +16,31 @@ export interface StoreFileResult {
 }
 
 export async function storeFile(input: FileInput): Promise<StoreFileResult> {
-  // Step 1: Generate a unique ID for the file
-  const fileUuid = uuidv4() // Universally unique identifier (e.g., "550e8400-e29b-41d4-a716-446655440000")
-
-  // Step 2: Construct the file path
+  const fileUuid = uuidv4()
   const filePath = path.join(FILE_UPLOADS_DIR, fileUuid)
+
   try {
+    // Ensure the uploads directory exists
+    await fs.promises.mkdir(FILE_UPLOADS_DIR, { recursive: true })
+
+    // Write the file to disk
     const writeStream = fs.createWriteStream(filePath)
     input.stream.pipe(writeStream)
 
-    await new Promise((resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
       writeStream.on('finish', resolve)
-      writeStream.on('error', reject)
+      writeStream.on('error', (error) => {
+        console.error(`Error writing file: ${error}`)
+        reject(new Error('Error writing file'))
+      })
     })
 
-    console.log(`File saved as ${filePath}`)
+    console.log(`File saved successfully: ${filePath}`)
+    return { fileUuid, filePath }
   } catch (error) {
-    console.error(`Error saving file: ${error}`)
-    throw new Error('Error saving file')
+    console.error(`Error storing file: ${error}`)
+    throw new Error('Failed to store file')
   }
-
-  return { fileUuid, filePath }
 }
 
 export async function retrieveFile(
@@ -44,41 +48,33 @@ export async function retrieveFile(
 ): Promise<NodeJS.ReadableStream> {
   const filePath = path.join(FILE_UPLOADS_DIR, fileUuid)
 
-  // Check if the file exists asynchronously
   try {
-    fs.access(filePath, (err) => {
-      if (err) {
-        throw new Error(`File not found: ${filePath}`)
-      }
-    })
-  } catch (error) {
-    throw new Error(`File not found: ${filePath}`)
-  }
+    // Check if the file exists
+    await fs.promises.access(filePath)
 
-  // Return the file as a readable stream
-  return fs.createReadStream(filePath)
+    // Return the file as a readable stream
+    return fs.createReadStream(filePath)
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+      console.error(`File not found: ${filePath}`)
+      throw new Error('File not found')
+    } else {
+      console.error(`Error retrieving file: ${error}`)
+      throw new Error('Failed to retrieve file')
+    }
+  }
 }
 
-/**
- * Deletes multiple files asynchronously based on their UUIDs.
- *
- * @param uuids - Array of file UUIDs to be deleted.
- * @returns A promise that resolves once all files are processed.
- */
 export async function deleteFiles(uuids: string[]): Promise<void> {
-  // Construct file paths from UUIDs
   const filePaths = uuids.map((uuid) => path.join(FILE_UPLOADS_DIR, uuid))
 
-  // Delete files in parallel
   await Promise.all(
     filePaths.map(async (filePath) => {
       try {
-        fs.unlink(filePath, (error) => {
-          if (error) throw error
-          console.log(`Deleted file: ${filePath}`)
-        })
+        // Delete file asynchronously
+        await fs.promises.unlink(filePath)
+        console.log(`Deleted file: ${filePath}`)
       } catch (error) {
-        // Handle file not found or other errors
         if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
           console.warn(`File not found: ${filePath}`)
         } else {

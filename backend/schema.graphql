@@ -170,6 +170,7 @@ type Mutation {
   updateBeneficiary(data: BeneficiaryInput!, id: Int!): Beneficiary!
   updateProfile(profileInput: ProfileInput!): User!
   updateSendNotifications(sendNotifications: Boolean!): User!
+  uploadAttachmentToProceeding(data: UploadFileToProceedingInput!): ID!
 }
 
 type Notary {
@@ -265,6 +266,11 @@ scalar Upload
 input UploadDocumentInput {
   file: Upload!
   inheritanceProcedureId: ID!
+}
+
+input UploadFileToProceedingInput {
+  file: Upload!
+  proceedingId: ID!
 }
 
 type User {

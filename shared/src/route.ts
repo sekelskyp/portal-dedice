@@ -27,6 +27,6 @@ export const route = {
   profile: () => `/portal/profile`,
   // Add the route for file serving
   downloadFile: (fileUuid: string = ':fileUuid') =>
-    `/files/${fileUuid}/download`,
-  streamFile: (fileUuid: string = ':fileUuid') => `/files/${fileUuid}`,
+    `/files/download/${fileUuid}`,
+  streamFile: (fileUuid: string = ':fileUuid') => `/files/stream/${fileUuid}`,
 }

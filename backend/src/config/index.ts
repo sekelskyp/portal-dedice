@@ -16,5 +16,4 @@ export const DB_NAME = process.env.DB_NAME
 export const PROJECT_ROOT = path.resolve(process.cwd())
 export const FRONTEND_ROOT = path.resolve(PROJECT_ROOT, `../frontend/`)
 export const FRONTEND_PUBLIC_FOLDER = path.resolve(FRONTEND_ROOT, `public`)
-// Should be kept in sync with path in gitignore
-export const FILE_UPLOADS_DIR = path.resolve(process.cwd(), 'file_uploads')
+export const FILE_UPLOADS_DIR = path.resolve(PROJECT_ROOT, '../filestore')
