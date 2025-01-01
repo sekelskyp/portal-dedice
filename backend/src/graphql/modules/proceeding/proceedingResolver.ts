@@ -12,7 +12,6 @@ import {
 
 import { Asset } from '@backend/graphql/modules/asset/assetType'
 import { Document } from '@backend/graphql/modules/document/documentType'
-import { createAttachment } from '@backend/services/attachmentService'
 import { getDocumentsByProceedingId } from '@backend/services/documentService'
 
 import {
@@ -214,7 +213,6 @@ export class InheritanceProcedureResolver {
   }
 
   // Field Resolver to fetch beneficiaries
-  // TODO - I would like to get rid of this and use query instead. Depends on FE willingness
   @FieldResolver(() => [Beneficiary], { nullable: true })
   async beneficiaries(
     @Root() proceeding: Proceeding,
