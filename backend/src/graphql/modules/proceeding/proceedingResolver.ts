@@ -183,11 +183,15 @@ export class InheritanceProcedureResolver {
     @Arg('data') data: UploadFileToProceedingInput,
     @Ctx() context: CustomContext
   ): Promise<number> {
+    // Destructure and extract the file details
+    const { createReadStream, filename, mimetype } = await data.file // WARNING - THIS HAS TO BE AWAITED - VSCODE IS WRONG
+    const stream = createReadStream()
+
     const createAttachmentInput = {
       proceedingId: data.proceedingId,
-      stream: await data.file.createReadStream(),
-      filename: data.file.filename,
-      mimetype: data.file.mimetype,
+      stream: stream,
+      filename: filename,
+      mimetype: mimetype,
     }
     return uploadFileToProceeding(createAttachmentInput, context)
   }
