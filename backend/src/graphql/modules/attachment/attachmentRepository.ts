@@ -40,6 +40,17 @@ export function getAttachmentRepository(db: Db) {
     return result || null
   }
 
+  // Get an Attachment by File UUID
+  async function getAttachmentByUuid(
+    fileUuid: string
+  ): Promise<AttachmentEntity | null> {
+    const [result] = await db
+      .select()
+      .from(attachment)
+      .where(eq(attachment.fileUuid, fileUuid))
+    return result || null
+  }
+
   async function getAttachmentCountByProceedingId(
     proceedingId: number
   ): Promise<number> {
@@ -89,5 +100,6 @@ export function getAttachmentRepository(db: Db) {
     updateAttachmentById,
     getAttachmentCountByProceedingId,
     getAttachmentsByProceedingId,
+    getAttachmentByUuid,
   }
 }

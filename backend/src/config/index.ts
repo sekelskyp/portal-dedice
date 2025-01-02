@@ -16,4 +16,4 @@ export const DB_NAME = process.env.DB_NAME
 export const PROJECT_ROOT = path.resolve(process.cwd())
 export const FRONTEND_ROOT = path.resolve(PROJECT_ROOT, `../frontend/`)
 export const FRONTEND_PUBLIC_FOLDER = path.resolve(FRONTEND_ROOT, `public`)
-export const FILE_UPLOADS_DIR = path.resolve(PROJECT_ROOT, '../filestore')
+export const FILE_UPLOADS_DIR = path.resolve(PROJECT_ROOT, '../../filestore') // next to root folder (outside of workspace)

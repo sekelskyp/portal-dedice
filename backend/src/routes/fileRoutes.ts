@@ -3,6 +3,7 @@ import fs from 'fs/promises'
 import path from 'path'
 
 import { FILE_UPLOADS_DIR } from '@backend/config'
+import { CustomContext } from '@backend/types/types'
 import { route } from '@shared/route'
 
 const router = Router()
@@ -26,19 +27,24 @@ const checkFileExists = async (filePath: string): Promise<boolean> => {
 router.get(
   route.downloadFile(':fileUuid'),
   async (req: Request, res: Response) => {
-    const fileUuid = req.params.fileUuid
+    const { fileUuid } = req.params
+    const context: CustomContext = res.locals.context // Retrieve context from res.locals
     const filePath = getFilePath(fileUuid)
-    console.log('download endpoint zavolan')
+
     try {
+      const attachment =
+        await context.attachmentRepository.getAttachmentByUuid(fileUuid)
+
+      if (!attachment) {
+        return res.status(404).send('File not found in database')
+      }
+
       const fileExists = await checkFileExists(filePath)
       if (!fileExists) {
-        console.log(
-          'fuck you soubor nenalezen. test test test. filepath: ',
-          filePath
-        )
-        return res.status(404).send('File not found')
+        return res.status(404).send('File not found on server')
       }
-      res.download(filePath, (err) => {
+
+      res.download(filePath, attachment.filename, (err) => {
         if (err) {
           console.error('Error downloading file:', err)
           res.status(500).send('Error downloading file')
@@ -55,14 +61,24 @@ router.get(
 router.get(
   route.streamFile(':fileUuid'),
   async (req: Request, res: Response) => {
-    const fileUuid = req.params.fileUuid
+    const { fileUuid } = req.params
+    const context: CustomContext = res.locals.context // Retrieve context from res.locals
+
     const filePath = getFilePath(fileUuid)
 
     try {
+      const attachment =
+        await context.attachmentRepository.getAttachmentByUuid(fileUuid)
+
+      if (!attachment) {
+        return res.status(404).send('File not found in database')
+      }
+
       const fileExists = await checkFileExists(filePath)
       if (!fileExists) {
-        return res.status(404).send('File not found')
+        return res.status(404).send('File not found on server')
       }
+
       res.sendFile(filePath, (err) => {
         if (err) {
           console.error('Error streaming file:', err)
@@ -76,4 +92,4 @@ router.get(
   }
 )
 
-export default router
+export const fileRoutes = router

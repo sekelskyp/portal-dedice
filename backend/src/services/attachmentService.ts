@@ -69,3 +69,10 @@ export async function deleteAttachmentsByIds(
   // Delete the attachment records from the database
   await context.attachmentRepository.deleteAttachmentsByIds(ids)
 }
+
+export async function getAttachmentByUuid(
+  fileUuid: string,
+  context: CustomContext
+): Promise<AttachmentEntity | null> {
+  return context.attachmentRepository.getAttachmentByUuid(fileUuid)
+}

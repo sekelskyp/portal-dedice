@@ -11,7 +11,7 @@ import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHt
 import { addMocksToSchema } from '@graphql-tools/mock'
 import { createPubSub } from '@graphql-yoga/subscription'
 import cors from 'cors'
-import express from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import { graphqlUploadExpress } from 'graphql-upload'
 import { useServer } from 'graphql-ws/lib/use/ws'
 import * as http from 'http'
@@ -48,7 +48,7 @@ import { mockResolvers } from '@backend/mocks/mocks'
 import { CustomContext } from '@backend/types/types'
 
 import { AddressSuggestionResolver } from './graphql/modules/addressSuggestions/addressSuggestionResolver'
-import fileRoutes from './routes/fileRoutes'
+import { fileRoutes } from './routes/fileRoutes'
 import { MOCKS, PORT } from './config'
 
 const init = async () => {
@@ -182,8 +182,23 @@ const init = async () => {
     res.redirect('/graphql')
   })
 
+  const resolveContext = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const context = await customContext({ req, res })
+      res.locals.context = context // Store context in res.locals
+      next()
+    } catch (error) {
+      console.error('Error resolving context:', error)
+      res.status(500).send('Internal server error')
+    }
+  }
+
   // Add routes for serving files
-  app.use(fileRoutes)
+  app.use(resolveContext, fileRoutes)
 
   httpServer.listen({ port: PORT }, () => {
     console.log('Server listening on port: ' + PORT)
