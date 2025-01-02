@@ -4,27 +4,27 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { gql } from '@frontend/gql'
 import { route } from '@shared/route'
 
-const CREATE_DOCUMENT_MUTATION = gql(/* GraphQL */ `
-  mutation CreateDocument($data: UploadDocumentInput!) {
-    createDocument(data: $data)
+const UPDATE_DOCUMENT_MUTATION = gql(/* GraphQL */ `
+  mutation UploadDocument($data: UploadFileToProceedingInput!) {
+    uploadAttachmentToProceeding(data: $data)
   }
 `)
 
-export function useCreateDocument() {
+export function useUploadDocument() {
   const navigate = useNavigate()
   const { id } = useParams()
 
-  const [createDocumentRequest, createDocumentRequestState] = useMutation(
-    CREATE_DOCUMENT_MUTATION,
+  const [uploadDocumentRequest, uploadDocumentRequestState] = useMutation(
+    UPDATE_DOCUMENT_MUTATION,
     {
       onCompleted: () => {
         navigate(route.inheritanceProcedure(id))
       },
       onError: (error) => {
-        console.error('Error creating document:', error)
+        console.error('Error uploading document:', error)
       },
     }
   )
 
-  return [createDocumentRequest, createDocumentRequestState] as const
+  return [uploadDocumentRequest, uploadDocumentRequestState] as const
 }

@@ -25,7 +25,6 @@ export const route = {
   newAsset: (id = ':id') => `/portal/inheritance-procedure/${id}/assets`,
   newEmail: (id = ':id') => `/portal/inheritance-procedure/${id}/new-email`,
   profile: () => `/portal/profile`,
-  // Add the route for file serving
   downloadFile: (fileUuid: string = ':fileUuid') =>
     `/files/download/${fileUuid}`,
   streamFile: (fileUuid: string = ':fileUuid') => `/files/stream/${fileUuid}`,

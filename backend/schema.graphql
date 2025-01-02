@@ -60,6 +60,15 @@ input AssetInput {
   value: Float!
 }
 
+type Attachment {
+  fileUuid: String!
+  filename: String!
+  id: ID!
+  mimetype: String!
+  proceedingId: ID
+  uploadDate: DateTimeISO!
+}
+
 type Beneficiary {
   id: ID!
   proceedingId: ID
@@ -222,7 +231,7 @@ type Query {
   getArticleById(id: Int!): Article
   getAssetById(id: Int!): Asset
   getAssetsByProceedingId(proceedingId: Int!): [Asset!]!
-  getAttachmentsByProceedingId(proceedingId: Int!): [Asset!]!
+  getAttachmentsByProceedingId(proceedingId: Int!): [Attachment!]!
   getBeneficiariesByIds(ids: [Int!]!): [Beneficiary!]!
   getBeneficiariesByProceedingId(proceedingId: Int!): [Beneficiary!]!
   getBeneficiaryById(id: Int!): Beneficiary

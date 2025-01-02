@@ -55,6 +55,15 @@ input AssetInput {
   value: Float!
 }
 
+type Attachment {
+  fileUuid: String!
+  filename: String!
+  id: ID!
+  mimetype: String!
+  proceedingId: ID
+  uploadDate: DateTimeISO!
+}
+
 type Beneficiary {
   id: ID!
   proceedingId: ID
@@ -172,6 +181,7 @@ type Mutation {
   updateBeneficiary(data: BeneficiaryInput!, id: Int!): Beneficiary!
   updateProfile(profileInput: ProfileInput!): User!
   updateSendNotifications(sendNotifications: Boolean!): User!
+  uploadAttachmentToProceeding(data: UploadFileToProceedingInput!): ID!
 }
 
 type Notary {
@@ -223,6 +233,7 @@ type Query {
   getArticleById(id: Int!): Article
   getAssetById(id: Int!): Asset
   getAssetsByProceedingId(proceedingId: Int!): [Asset!]!
+  getAttachmentsByProceedingId(proceedingId: Int!): [Attachment!]!
   getBeneficiariesByIds(ids: [Int!]!): [Beneficiary!]!
   getBeneficiariesByProceedingId(proceedingId: Int!): [Beneficiary!]!
   getBeneficiaryById(id: Int!): Beneficiary
@@ -269,6 +280,11 @@ scalar Upload
 input UploadDocumentInput {
   file: Upload!
   inheritanceProcedureId: ID!
+}
+
+input UploadFileToProceedingInput {
+  file: Upload!
+  proceedingId: ID!
 }
 
 type User {
