@@ -277,7 +277,9 @@ export const article = mysqlTable('article', {
 export const attachment = mysqlTable('attachment', {
   id: int('id').primaryKey().autoincrement(),
   proceedingId: int('proceeding_id').references(() => proceeding.id),
-  uploadDate: date('upload_date').default(new Date()).notNull(),
+  uploadDate: datetime('upload_date')
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
   // stored file informartion
   fileUuid: varchar('file_uuid', { length: 36 }).notNull(),
   filepath: varchar('filepath', { length: 255 }).notNull(),

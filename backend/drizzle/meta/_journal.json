@@ -78,6 +78,13 @@
       "when": 1735827576797,
       "tag": "0010_certain_sunfire",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "5",
+      "when": 1735844045058,
+      "tag": "0011_petite_mister_fear",
+      "breakpoints": true
     }
   ]
 }
