@@ -28,10 +28,14 @@ router.get(
   async (req: Request, res: Response) => {
     const fileUuid = req.params.fileUuid
     const filePath = getFilePath(fileUuid)
-
+    console.log('download endpoint zavolan')
     try {
       const fileExists = await checkFileExists(filePath)
       if (!fileExists) {
+        console.log(
+          'fuck you soubor nenalezen. test test test. filepath: ',
+          filePath
+        )
         return res.status(404).send('File not found')
       }
       res.download(filePath, (err) => {
