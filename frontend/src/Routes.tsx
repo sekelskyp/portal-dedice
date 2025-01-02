@@ -26,6 +26,7 @@ import { BlogPage } from './modules/static-pages/blog/pages/BlogPage'
 import { NewArticlePage } from './modules/static-pages/blog/pages/NewArticlePage'
 import { AboutPage } from './modules/static-pages/pages/AboutPage'
 import { GuidePage } from './modules/static-pages/pages/GuidePage'
+import { TermsOfService } from './modules/static-pages/pages/TermsOfService'
 import { WizardPage } from './modules/wizard/pages/WizardStepPage'
 import { Layout } from './shared/layout'
 
@@ -53,6 +54,7 @@ export function Routes() {
           <Route path={route.settings()} element={<SettingsPage />} />
         </Route>
         <Route path={route.about()} element={<AboutPage />} />
+        <Route path={route.termOfService()} element={<TermsOfService />} />
         <Route path={route.guide()} element={<GuidePage />} />
         <Route path={route.blog()} element={<BlogPage />} />
         <Route path={route.newArticle()} element={<NewArticlePage />} />

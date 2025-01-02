@@ -7,6 +7,7 @@ export const route = {
   about: () => `/about`,
   guide: () => `/guide`,
   blog: () => `/blog`,
+  termOfService: () => `/terms-of-service`,
   newArticle: () => `/blog/new-article`,
   editArticle: (id = ':id') => `/blog/article/edit/${id}`,
   detailArticle: (id = ':id') => `/blog/article/${id}`,
