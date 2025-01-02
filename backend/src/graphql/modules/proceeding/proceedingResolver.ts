@@ -93,7 +93,7 @@ export class InheritanceProcedureResolver {
   }
 
   // Query to get attachments by proceeding ID
-  @Query(() => [Asset])
+  @Query(() => [Attachment])
   async getAttachmentsByProceedingId(
     @Arg('proceedingId', () => Int) proceedingId: number,
     @Ctx() { attachmentRepository }: CustomContext
