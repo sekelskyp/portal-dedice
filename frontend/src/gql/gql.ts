@@ -33,14 +33,14 @@ const documents = {
     types.NewChatMessageDocument,
   '\n  query GetChatHeader($getProceedingByIdId: Int!) {\n    getProceedingById(id: $getProceedingByIdId) {\n      beneficiaries {\n        user {\n          displayName\n          id\n        }\n      }\n      notary {\n        user {\n          displayName\n          id\n        }\n      }\n      name\n    }\n  }\n':
     types.GetChatHeaderDocument,
-  '\n  mutation UploadDocument($data: UploadFileToProceedingInput!) {\n    uploadAttachmentToProceeding(data: $data)\n  }\n':
-    types.UploadDocumentDocument,
   '\n  mutation DeleteDocument($id: ID!) {\n    deleteDocumentsByIds(ids: [$id])\n  }\n':
     types.DeleteDocumentDocument,
   '\n  query GetDocumentById($id: ID!) {\n    getDocumentById(id: $id) {\n      fileData\n      fileType\n      fileName\n      createDate\n    }\n  }\n':
     types.GetDocumentByIdDocument,
   '\n  query GetAttachmentsByProceedingId($proceedingId: Int!) {\n    getAttachmentsByProceedingId(proceedingId: $proceedingId) {\n      fileUuid\n      filename\n      id\n      mimetype\n      uploadDate\n    }\n  }\n':
     types.GetAttachmentsByProceedingIdDocument,
+  '\n  mutation UploadDocument($data: UploadFileToProceedingInput!) {\n    uploadAttachmentToProceeding(data: $data)\n  }\n':
+    types.UploadDocumentDocument,
   '\n  mutation NotifyProcedureBeneficiaries(\n    $html: String!\n    $subject: String!\n    $proceedingId: Int!\n  ) {\n    notifyProcedureBeneficiaries(\n      html: $html\n      subject: $subject\n      proceedingId: $proceedingId\n    )\n  }\n':
     types.NotifyProcedureBeneficiariesDocument,
   '\n  query GetProceedingsByBeneficiaryId($userId: Int!) {\n    getBeneficiaryProceedingsForUser(userId: $userId) {\n      id\n      name\n      startDate\n      state\n      deceasedDisplayName\n    }\n  }\n':
@@ -63,6 +63,10 @@ const documents = {
     types.UpdateProfileDocument,
   '\n  mutation EmailVerification($token: String!) {\n    confirmEmailVerification(token: $token)\n  }\n':
     types.EmailVerificationDocument,
+  '\n  mutation RequestPasswordReset($email: String!) {\n    requestPasswordReset(email: $email)\n  }\n':
+    types.RequestPasswordResetDocument,
+  '\n  mutation xdd($newPassword: String!, $token: String!) {\n    resetPassword(newPassword: $newPassword, token: $token)\n  }\n':
+    types.XddDocument,
   '\n  mutation SignIn($login: String!, $password: String!) {\n    signIn(login: $login, password: $password) {\n      user {\n        addressId\n        address {\n          id\n          municipality\n          postalCode\n          street\n          streetNumber\n        }\n        confirmed\n        displayName\n        email\n        gender\n        id\n        name\n        phone\n        sendNotifications\n        surname\n        type\n      }\n      token\n    }\n  }\n':
     types.SignInDocument,
   '\n  mutation SignUp($registerInput: RegisterInput!) {\n    signUp(registerInput: $registerInput) {\n      id\n    }\n  }\n':
@@ -161,12 +165,6 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  mutation UploadDocument($data: UploadFileToProceedingInput!) {\n    uploadAttachmentToProceeding(data: $data)\n  }\n'
-): (typeof documents)['\n  mutation UploadDocument($data: UploadFileToProceedingInput!) {\n    uploadAttachmentToProceeding(data: $data)\n  }\n']
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function gql(
   source: '\n  mutation DeleteDocument($id: ID!) {\n    deleteDocumentsByIds(ids: [$id])\n  }\n'
 ): (typeof documents)['\n  mutation DeleteDocument($id: ID!) {\n    deleteDocumentsByIds(ids: [$id])\n  }\n']
 /**
@@ -181,6 +179,12 @@ export function gql(
 export function gql(
   source: '\n  query GetAttachmentsByProceedingId($proceedingId: Int!) {\n    getAttachmentsByProceedingId(proceedingId: $proceedingId) {\n      fileUuid\n      filename\n      id\n      mimetype\n      uploadDate\n    }\n  }\n'
 ): (typeof documents)['\n  query GetAttachmentsByProceedingId($proceedingId: Int!) {\n    getAttachmentsByProceedingId(proceedingId: $proceedingId) {\n      fileUuid\n      filename\n      id\n      mimetype\n      uploadDate\n    }\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  mutation UploadDocument($data: UploadFileToProceedingInput!) {\n    uploadAttachmentToProceeding(data: $data)\n  }\n'
+): (typeof documents)['\n  mutation UploadDocument($data: UploadFileToProceedingInput!) {\n    uploadAttachmentToProceeding(data: $data)\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -247,6 +251,18 @@ export function gql(
 export function gql(
   source: '\n  mutation EmailVerification($token: String!) {\n    confirmEmailVerification(token: $token)\n  }\n'
 ): (typeof documents)['\n  mutation EmailVerification($token: String!) {\n    confirmEmailVerification(token: $token)\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  mutation RequestPasswordReset($email: String!) {\n    requestPasswordReset(email: $email)\n  }\n'
+): (typeof documents)['\n  mutation RequestPasswordReset($email: String!) {\n    requestPasswordReset(email: $email)\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  mutation xdd($newPassword: String!, $token: String!) {\n    resetPassword(newPassword: $newPassword, token: $token)\n  }\n'
+): (typeof documents)['\n  mutation xdd($newPassword: String!, $token: String!) {\n    resetPassword(newPassword: $newPassword, token: $token)\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

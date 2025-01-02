@@ -17,10 +17,11 @@ const schema = z.object({
 
 export type SignInFormProps = {
   error?: Error
+  loading?: boolean
   onSubmit: (data: { email: string; password: string }) => void
 }
 
-export function SignInForm({ onSubmit, error }: SignInFormProps) {
+export function SignInForm({ onSubmit, error, loading }: SignInFormProps) {
   return (
     <Form onSubmit={onSubmit} resolver={zodResolver(schema)} noValidate>
       <Stack gap={4}>
@@ -35,7 +36,9 @@ export function SignInForm({ onSubmit, error }: SignInFormProps) {
           label={resources.auth.forms.shared.password}
           required
         />
-        <SubmitButton>{resources.shared.CTA.signIn}</SubmitButton>
+        <SubmitButton loading={loading} loadingText="Probíhá přihlášení...">
+          {resources.shared.CTA.signIn}
+        </SubmitButton>
       </Stack>
     </Form>
   )

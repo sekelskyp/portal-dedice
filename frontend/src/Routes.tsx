@@ -19,6 +19,7 @@ import { ProfilePage } from './modules/app/settings/pages/ProfilePage'
 import { SettingsPage } from './modules/app/settings/pages/SettingsPage'
 import { ConfirmEmailPage } from './modules/auth/pages/ConfirmEmailPage'
 import { EmailVerification } from './modules/auth/pages/EmailVerification'
+import { PasswordChangePage } from './modules/auth/pages/PasswordChangePage'
 import { PasswordResetPage } from './modules/auth/pages/PasswordResetPage'
 import { ArticleDetail } from './modules/static-pages/blog/pages/ArticleDetail'
 import { BlogPage } from './modules/static-pages/blog/pages/BlogPage'
@@ -60,6 +61,7 @@ export function Routes() {
         <Route path={route.wizard()} element={<WizardPage />} />
         <Route path={route.confirmEmail()} element={<ConfirmEmailPage />} />
         <Route path={route.resetPassword()} element={<PasswordResetPage />} />
+        <Route path={route.changePassword()} element={<PasswordChangePage />} />
         <Route
           path={route.emailVerification()}
           element={<EmailVerification />}

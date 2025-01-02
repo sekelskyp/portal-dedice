@@ -43,7 +43,7 @@ export const requestPasswordReset = async (
 
   // Generate the reset link
   const baseUrl = `${process.env.APP_BASE_URL_FRONTEND}`
-  const resetLink = `${baseUrl}${route.resetPassword()}?token=${token}`
+  const resetLink = `${baseUrl}${route.changePassword()}?token=${token}`
   // Render the template
   const html = await renderTemplate('passwordReset', {
     userDisplayName: userRecord.displayName,
@@ -73,7 +73,9 @@ export const resetPassword = async (
   // Find the reset token in the database
   const resetTokenRecord = await passwordResetTokenRepository.getToken(token)
   if (!resetTokenRecord || resetTokenRecord.expiresAt < new Date()) {
-    throw new Error('Invalid or expired reset token')
+    throw new Error(
+      'Chybný či vypršelý ověřovací token. Zkuste to prosím znovu.'
+    )
   }
 
   // Find the user associated with the reset token

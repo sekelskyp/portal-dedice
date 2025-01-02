@@ -3,6 +3,7 @@ export const route = {
   signIn: () => `/auth/signin`,
   signUp: () => `/auth/signup`,
   resetPassword: () => `/auth/passwordReset`,
+  changePassword: () => `/auth/changePassword`,
   about: () => `/about`,
   guide: () => `/guide`,
   blog: () => `/blog`,

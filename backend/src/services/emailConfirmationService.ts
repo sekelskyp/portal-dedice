@@ -73,7 +73,9 @@ export const verifyEmail = async (
     !confirmationTokenRecord ||
     confirmationTokenRecord.expiresAt < new Date()
   ) {
-    throw new Error('Invalid or expired confirmation token')
+    throw new Error(
+      'Chybný či vypršelý ověřovací token. Zkuste to prosím znovu.'
+    )
   }
 
   // Find the user associated with the confirmation token
