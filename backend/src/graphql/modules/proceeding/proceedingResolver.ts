@@ -185,7 +185,7 @@ export class InheritanceProcedureResolver {
   ): Promise<number> {
     const createAttachmentInput = {
       proceedingId: data.proceedingId,
-      stream: data.file.createReadStream(),
+      stream: await data.file.createReadStream(),
       filename: data.file.filename,
       mimetype: data.file.mimetype,
     }
