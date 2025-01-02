@@ -279,10 +279,10 @@ export const attachment = mysqlTable('attachment', {
   proceedingId: int('proceeding_id').references(() => proceeding.id),
   uploadDate: date('upload_date').default(new Date()).notNull(),
   // stored file informartion
-  fileUuid: varchar('file_uuid', { length: 255 }).notNull(),
+  fileUuid: varchar('file_uuid', { length: 36 }).notNull(),
   filepath: varchar('filepath', { length: 255 }).notNull(),
   filename: varchar('filename', { length: 255 }).notNull(),
-  mimetype: varchar('mimetype', { length: 30 }).notNull(),
+  mimetype: varchar('mimetype', { length: 100 }).notNull(),
 })
 
 // Custom lower function
