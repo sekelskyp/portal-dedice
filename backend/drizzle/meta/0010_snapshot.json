@@ -48,9 +48,7 @@
       "compositePrimaryKeys": {
         "address_id": {
           "name": "address_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
@@ -114,9 +112,7 @@
       "compositePrimaryKeys": {
         "article_id": {
           "name": "article_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
@@ -208,12 +204,8 @@
           "name": "asset_proceeding_id_proceeding_id_fk",
           "tableFrom": "asset",
           "tableTo": "proceeding",
-          "columnsFrom": [
-            "proceeding_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["proceeding_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -221,9 +213,7 @@
       "compositePrimaryKeys": {
         "asset_id": {
           "name": "asset_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
@@ -288,12 +278,8 @@
           "name": "attachment_proceeding_id_proceeding_id_fk",
           "tableFrom": "attachment",
           "tableTo": "proceeding",
-          "columnsFrom": [
-            "proceeding_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["proceeding_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -301,9 +287,7 @@
       "compositePrimaryKeys": {
         "attachment_id": {
           "name": "attachment_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
@@ -339,12 +323,8 @@
           "name": "beneficiary_user_id_user_id_fk",
           "tableFrom": "beneficiary",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -352,12 +332,8 @@
           "name": "beneficiary_proceeding_id_proceeding_id_fk",
           "tableFrom": "beneficiary",
           "tableTo": "proceeding",
-          "columnsFrom": [
-            "proceeding_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["proceeding_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -365,9 +341,7 @@
       "compositePrimaryKeys": {
         "beneficiary_id": {
           "name": "beneficiary_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
@@ -396,12 +370,8 @@
           "name": "beneficiary_meeting_rel_beneficiary_id_beneficiary_id_fk",
           "tableFrom": "beneficiary_meeting_rel",
           "tableTo": "beneficiary",
-          "columnsFrom": [
-            "beneficiary_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["beneficiary_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -409,12 +379,8 @@
           "name": "beneficiary_meeting_rel_meeting_id_meeting_id_fk",
           "tableFrom": "beneficiary_meeting_rel",
           "tableTo": "meeting",
-          "columnsFrom": [
-            "meeting_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["meeting_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -422,10 +388,7 @@
       "compositePrimaryKeys": {
         "beneficiary_meeting_rel_beneficiary_id_meeting_id_pk": {
           "name": "beneficiary_meeting_rel_beneficiary_id_meeting_id_pk",
-          "columns": [
-            "beneficiary_id",
-            "meeting_id"
-          ]
+          "columns": ["beneficiary_id", "meeting_id"]
         }
       },
       "uniqueConstraints": {}
@@ -454,12 +417,8 @@
           "name": "chat_proceeding_id_proceeding_id_fk",
           "tableFrom": "chat",
           "tableTo": "proceeding",
-          "columnsFrom": [
-            "proceeding_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["proceeding_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -467,9 +426,7 @@
       "compositePrimaryKeys": {
         "chat_id": {
           "name": "chat_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
@@ -520,12 +477,8 @@
           "name": "chat_message_chat_id_chat_id_fk",
           "tableFrom": "chat_message",
           "tableTo": "chat",
-          "columnsFrom": [
-            "chat_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["chat_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -533,12 +486,8 @@
           "name": "chat_message_user_id_user_id_fk",
           "tableFrom": "chat_message",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -546,9 +495,7 @@
       "compositePrimaryKeys": {
         "chat_message_id": {
           "name": "chat_message_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
@@ -606,12 +553,8 @@
           "name": "document_proceeding_id_proceeding_id_fk",
           "tableFrom": "document",
           "tableTo": "proceeding",
-          "columnsFrom": [
-            "proceeding_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["proceeding_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -619,9 +562,7 @@
       "compositePrimaryKeys": {
         "document_id": {
           "name": "document_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
@@ -664,12 +605,8 @@
           "name": "email_confirmation_token_user_id_user_id_fk",
           "tableFrom": "email_confirmation_token",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -677,9 +614,7 @@
       "compositePrimaryKeys": {
         "email_confirmation_token_id": {
           "name": "email_confirmation_token_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
@@ -729,12 +664,8 @@
           "name": "meeting_notary_id_notary_id_fk",
           "tableFrom": "meeting",
           "tableTo": "notary",
-          "columnsFrom": [
-            "notary_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["notary_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -742,9 +673,7 @@
       "compositePrimaryKeys": {
         "meeting_id": {
           "name": "meeting_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
@@ -772,9 +701,7 @@
       "compositePrimaryKeys": {
         "notary_id": {
           "name": "notary_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
@@ -831,12 +758,8 @@
           "name": "notary_date_rule_notary_id_notary_id_fk",
           "tableFrom": "notary_date_rule",
           "tableTo": "notary",
-          "columnsFrom": [
-            "notary_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["notary_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -844,9 +767,7 @@
       "compositePrimaryKeys": {
         "notary_date_rule_id": {
           "name": "notary_date_rule_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
@@ -889,12 +810,8 @@
           "name": "password_reset_token_user_id_user_id_fk",
           "tableFrom": "password_reset_token",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -902,9 +819,7 @@
       "compositePrimaryKeys": {
         "password_reset_token_id": {
           "name": "password_reset_token_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
@@ -1011,12 +926,8 @@
           "name": "proceeding_notary_id_notary_id_fk",
           "tableFrom": "proceeding",
           "tableTo": "notary",
-          "columnsFrom": [
-            "notary_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["notary_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1024,12 +935,8 @@
           "name": "proceeding_main_beneficiary_id_beneficiary_id_fk",
           "tableFrom": "proceeding",
           "tableTo": "beneficiary",
-          "columnsFrom": [
-            "main_beneficiary_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["main_beneficiary_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -1037,12 +944,8 @@
           "name": "proceeding_address_id_address_id_fk",
           "tableFrom": "proceeding",
           "tableTo": "address",
-          "columnsFrom": [
-            "address_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["address_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1050,9 +953,7 @@
       "compositePrimaryKeys": {
         "proceeding_id": {
           "name": "proceeding_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
@@ -1158,9 +1059,7 @@
       "indexes": {
         "user_email_unique_index": {
           "name": "user_email_unique_index",
-          "columns": [
-            "(lower(`email`))"
-          ],
+          "columns": ["(lower(`email`))"],
           "isUnique": true
         }
       },
@@ -1169,12 +1068,8 @@
           "name": "user_notary_id_notary_id_fk",
           "tableFrom": "user",
           "tableTo": "notary",
-          "columnsFrom": [
-            "notary_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["notary_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1182,12 +1077,8 @@
           "name": "user_address_id_address_id_fk",
           "tableFrom": "user",
           "tableTo": "address",
-          "columnsFrom": [
-            "address_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["address_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1195,9 +1086,7 @@
       "compositePrimaryKeys": {
         "user_id": {
           "name": "user_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}
