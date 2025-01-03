@@ -51,7 +51,7 @@ export const footerLinks = [
       {
         id: 1,
         title: 'Podmínky užívání',
-        link: route.home(),
+        link: route.termOfService(),
       },
       {
         id: 2,

@@ -755,15 +755,6 @@ export type GetChatHeaderQuery = {
   } | null
 }
 
-export type UploadDocumentMutationVariables = Exact<{
-  data: UploadFileToProceedingInput
-}>
-
-export type UploadDocumentMutation = {
-  __typename?: 'Mutation'
-  uploadAttachmentToProceeding: string
-}
-
 export type DeleteDocumentMutationVariables = Exact<{
   id: Scalars['ID']['input']
 }>
@@ -802,6 +793,15 @@ export type GetAttachmentsByProceedingIdQuery = {
     mimetype: string
     uploadDate: any
   }>
+}
+
+export type UploadDocumentMutationVariables = Exact<{
+  data: UploadFileToProceedingInput
+}>
+
+export type UploadDocumentMutation = {
+  __typename?: 'Mutation'
+  uploadAttachmentToProceeding: string
 }
 
 export type NotifyProcedureBeneficiariesMutationVariables = Exact<{
@@ -1049,6 +1049,22 @@ export type EmailVerificationMutation = {
   __typename?: 'Mutation'
   confirmEmailVerification: boolean
 }
+
+export type RequestPasswordResetMutationVariables = Exact<{
+  email: Scalars['String']['input']
+}>
+
+export type RequestPasswordResetMutation = {
+  __typename?: 'Mutation'
+  requestPasswordReset: boolean
+}
+
+export type XddMutationVariables = Exact<{
+  newPassword: Scalars['String']['input']
+  token: Scalars['String']['input']
+}>
+
+export type XddMutation = { __typename?: 'Mutation'; resetPassword: boolean }
 
 export type SignInMutationVariables = Exact<{
   login: Scalars['String']['input']
@@ -1869,51 +1885,6 @@ export const GetChatHeaderDocument = {
     },
   ],
 } as unknown as DocumentNode<GetChatHeaderQuery, GetChatHeaderQueryVariables>
-export const UploadDocumentDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'UploadDocument' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'data' } },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'UploadFileToProceedingInput' },
-            },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'uploadAttachmentToProceeding' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'data' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'data' },
-                },
-              },
-            ],
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  UploadDocumentMutation,
-  UploadDocumentMutationVariables
->
 export const DeleteDocumentDocument = {
   kind: 'Document',
   definitions: [
@@ -2063,6 +2034,51 @@ export const GetAttachmentsByProceedingIdDocument = {
 } as unknown as DocumentNode<
   GetAttachmentsByProceedingIdQuery,
   GetAttachmentsByProceedingIdQueryVariables
+>
+export const UploadDocumentDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'UploadDocument' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'data' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'UploadFileToProceedingInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'uploadAttachmentToProceeding' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'data' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'data' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  UploadDocumentMutation,
+  UploadDocumentMutationVariables
 >
 export const NotifyProcedureBeneficiariesDocument = {
   kind: 'Document',
@@ -3015,6 +3031,121 @@ export const EmailVerificationDocument = {
   EmailVerificationMutation,
   EmailVerificationMutationVariables
 >
+export const RequestPasswordResetDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'RequestPasswordReset' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'email' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'requestPasswordReset' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'email' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'email' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  RequestPasswordResetMutation,
+  RequestPasswordResetMutationVariables
+>
+export const XddDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'xdd' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'newPassword' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'token' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'resetPassword' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'newPassword' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'newPassword' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'token' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'token' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<XddMutation, XddMutationVariables>
 export const SignInDocument = {
   kind: 'Document',
   definitions: [

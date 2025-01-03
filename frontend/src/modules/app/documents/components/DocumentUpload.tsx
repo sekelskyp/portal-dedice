@@ -13,8 +13,8 @@ import {
 } from '@frontend/shared/design-system/atoms/chakra'
 
 import { useProceeding } from '../../proceeding/hooks/useProceeding'
-import { useUploadDocument } from '../hooks/useCreateDocument'
 import { useDocumentUpload } from '../hooks/useDocumentUpload'
+import { useUploadDocument } from '../hooks/useUploadDocument'
 
 export function DocumentUpload() {
   const { id } = useParams()
