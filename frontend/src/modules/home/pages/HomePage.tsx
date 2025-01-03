@@ -24,6 +24,9 @@ export function HomePage() {
         <Button asChild>
           <Link to={route.wizard()}>Pojďme na to!</Link>
         </Button>
+        <Button asChild>
+          <Link to={route.wizard()}>Vyporadani pozustalosti nanecisto</Link>
+        </Button>
       </SplitWithImage>
       {!user && (
         <SimpleCentered bgColor="blue.bg">
