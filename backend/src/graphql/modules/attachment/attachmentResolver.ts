@@ -11,7 +11,6 @@ import { Attachment } from './attachmentType'
 
 @Resolver()
 export class AttachmentResolver {
-  @Mutation(() => ID)
   @Mutation(() => Boolean)
   async deleteAttachmentsByIds(
     @Arg('ids', () => [ID]) ids: number[],
