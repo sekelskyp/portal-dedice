@@ -1,21 +1,29 @@
-import { Readable } from 'stream'
-import { Arg, Ctx, Int, Mutation, Query, Resolver } from 'type-graphql'
+import {
+  Arg,
+  Ctx,
+  FieldResolver,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+  Root,
+} from 'type-graphql'
 
 import { Article } from '@backend/graphql/modules/article/articleType'
+import {
+  createArticle,
+  deleteArticlesByIds,
+  getAllArticles,
+  getArticleById,
+  updateArticle,
+} from '@backend/services/articleService'
+import { getAttachmentById } from '@backend/services/attachmentService'
 import { CustomContext } from '@backend/types/types'
+
+import { Attachment } from '../attachment/attachmentType'
 
 import { CreateArticleInput } from './createArticleInput'
 import { UpdateArticleInput } from './updateArticleInput'
-
-async function encodeStreamToBase64(stream: Readable): Promise<string> {
-  const chunks: Buffer[] = []
-
-  return new Promise((resolve, reject) => {
-    stream.on('data', (chunk) => chunks.push(Buffer.from(chunk)))
-    stream.on('end', () => resolve(Buffer.concat(chunks).toString('base64')))
-    stream.on('error', (err) => reject(err))
-  })
-}
 
 @Resolver(() => Article)
 export class ArticleResolver {
@@ -27,17 +35,15 @@ export class ArticleResolver {
   @Query(() => Article, { nullable: true })
   async getArticleById(
     @Arg('id', () => Int) id: number,
-    @Ctx() { articleRepository }: CustomContext
+    @Ctx() context: CustomContext
   ): Promise<Article | null> {
-    return await articleRepository.getArticleById(id)
+    return await getArticleById(id, context)
   }
 
   // Query to get all articles
   @Query(() => [Article])
-  async getAllArticles(
-    @Ctx() { articleRepository }: CustomContext
-  ): Promise<Article[]> {
-    return await articleRepository.getAllArticles()
+  async getAllArticles(@Ctx() context: CustomContext): Promise<Article[]> {
+    return await getAllArticles(context)
   }
 
   // ----------------------------------
@@ -48,27 +54,24 @@ export class ArticleResolver {
   @Mutation(() => Article)
   async createArticle(
     @Arg('data') data: CreateArticleInput,
-    @Ctx() { articleRepository }: CustomContext
+    @Ctx() context: CustomContext
   ): Promise<Article> {
     // Destructure and extract the file details
     const { createReadStream, filename, mimetype } = await data.coverImage // WARNING - THIS HAS TO BE AWAITED - VSCODE IS WRONG
     const stream = createReadStream()
-    // Encode the file stream to Base64
-    const base64CoverPicture = await encodeStreamToBase64(stream)
-
-    // Prepare the data for saving
-    const articleCreateData = {
+    const fileDataInput = {
+      stream: stream,
+      filename: filename,
+      mimetype: mimetype,
+    }
+    const attachmentData = {
       title: data.title,
       date: data.date,
       content: data.content,
-      fileName: filename,
-      fileType: mimetype,
-      coverImage: base64CoverPicture,
+      fileData: fileDataInput,
     }
-
-    // Save the article and fetch it
-    const articleId = await articleRepository.createArticle(articleCreateData)
-    const article = await articleRepository.getArticleById(articleId)
+    const articleId = await createArticle(attachmentData, context)
+    const article = await getArticleById(articleId, context)
     if (!article) {
       throw new Error('Article was created but could not be fetched')
     }
@@ -81,36 +84,31 @@ export class ArticleResolver {
   async updateArticle(
     @Arg('id', () => Int) id: number,
     @Arg('data') data: UpdateArticleInput,
-    @Ctx() { articleRepository }: CustomContext
+    @Ctx() context: CustomContext
   ): Promise<Article | null> {
-    const article = await articleRepository.getArticleById(id)
-    if (!article) {
-      throw new Error('Article not found')
-    }
-    let updateData: {
-      title: string | undefined
-      date: Date | undefined
-      content: string | undefined
-      fileName?: string
-      fileType?: string
-      coverImage?: string
-    } = {
-      title: data.title,
-      date: data.date,
-      content: data.content,
-    }
+    // Start with the base update data
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const updateData: Record<string, any> = { ...data }
+
+    // Add fileData dynamically if coverImage is provided
     if (data.coverImage) {
-      const { createReadStream, filename, mimetype } = await data.coverImage // WARNING - THIS HAS TO BE AWAITED - VSCODE IS WRONG
-      const stream = createReadStream()
-      const base64CoverPicture = await encodeStreamToBase64(stream)
-      const fileName = filename
-      const fileType = mimetype
-      const coverImage = base64CoverPicture
-      updateData = { ...updateData, fileName, fileType, coverImage }
+      const { createReadStream, filename, mimetype } = await data.coverImage
+      updateData.fileData = {
+        stream: createReadStream(),
+        filename,
+        mimetype,
+      }
     }
 
-    await articleRepository.updateArticleById(article.id, updateData)
-    return await articleRepository.getArticleById(id)
+    // Update the article
+    const isUpdated = await updateArticle(id, updateData, context)
+
+    if (!isUpdated) {
+      throw new Error('Failed to update article')
+    }
+
+    // Fetch and return the updated article
+    return await context.articleRepository.getArticleById(id)
   }
 
   // Mutation to delete multiple articles by IDs
@@ -119,20 +117,23 @@ export class ArticleResolver {
     @Arg('ids', () => [Int]) ids: number[],
     @Ctx() context: CustomContext
   ): Promise<boolean> {
-    if (!context.authUser) {
-      throw new Error('Not authenticated')
-    }
-    const userRecord = await context.userRepository.getUserById(
-      context.authUser.userId
-    )
-    if (!userRecord) {
-      throw new Error('User not found')
-    }
-    if (userRecord.type !== 'Admin') {
-      throw new Error('Not authorized')
-    }
-
-    await context.articleRepository.deleteArticlesByIds(ids)
+    await deleteArticlesByIds(ids, context)
     return true
+  }
+
+  // ----------------------------------
+  // FIELD RESOLVERS
+  // ----------------------------------
+
+  // Field Resolver to fetch the main beneficiary
+  @FieldResolver(() => Attachment, { nullable: true })
+  async attachment(
+    @Root() article: Article,
+    @Ctx() context: CustomContext
+  ): Promise<Attachment | null> {
+    if (!article.coverImageAttachmentId) {
+      return null
+    }
+    return await getAttachmentById(article.coverImageAttachmentId, context)
   }
 }
