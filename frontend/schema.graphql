@@ -158,6 +158,7 @@ type Mutation {
   deleteAddress(id: Int!): Boolean!
   deleteArticles(ids: [Int!]!): Boolean!
   deleteAsset(id: Int!): Boolean!
+  deleteAttachmentsByIds(ids: [ID!]!): Boolean!
   deleteBeneficiaries(id: Int!): Boolean!
   deleteDocumentsByIds(ids: [ID!]!): Boolean!
   deleteNotary(id: Int!): Boolean!
@@ -233,6 +234,8 @@ type Query {
   getArticleById(id: Int!): Article
   getAssetById(id: Int!): Asset
   getAssetsByProceedingId(proceedingId: Int!): [Asset!]!
+  getAttachmentById(id: ID!): Attachment
+  getAttachmentsByIds(ids: [ID!]!): [Attachment!]!
   getAttachmentsByProceedingId(proceedingId: Int!): [Attachment!]!
   getBeneficiariesByIds(ids: [Int!]!): [Beneficiary!]!
   getBeneficiariesByProceedingId(proceedingId: Int!): [Beneficiary!]!

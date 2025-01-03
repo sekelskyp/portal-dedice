@@ -198,6 +198,7 @@ export type Mutation = {
   deleteAddress: Scalars['Boolean']['output']
   deleteArticles: Scalars['Boolean']['output']
   deleteAsset: Scalars['Boolean']['output']
+  deleteAttachmentsByIds: Scalars['Boolean']['output']
   deleteBeneficiaries: Scalars['Boolean']['output']
   deleteDocumentsByIds: Scalars['Boolean']['output']
   deleteNotary: Scalars['Boolean']['output']
@@ -287,6 +288,10 @@ export type MutationDeleteArticlesArgs = {
 
 export type MutationDeleteAssetArgs = {
   id: Scalars['Int']['input']
+}
+
+export type MutationDeleteAttachmentsByIdsArgs = {
+  ids: Array<Scalars['ID']['input']>
 }
 
 export type MutationDeleteBeneficiariesArgs = {
@@ -418,6 +423,8 @@ export type Query = {
   getArticleById?: Maybe<Article>
   getAssetById?: Maybe<Asset>
   getAssetsByProceedingId: Array<Asset>
+  getAttachmentById?: Maybe<Attachment>
+  getAttachmentsByIds: Array<Attachment>
   getAttachmentsByProceedingId: Array<Attachment>
   getBeneficiariesByIds: Array<Beneficiary>
   getBeneficiariesByProceedingId: Array<Beneficiary>
@@ -468,6 +475,14 @@ export type QueryGetAssetByIdArgs = {
 
 export type QueryGetAssetsByProceedingIdArgs = {
   proceedingId: Scalars['Int']['input']
+}
+
+export type QueryGetAttachmentByIdArgs = {
+  id: Scalars['ID']['input']
+}
+
+export type QueryGetAttachmentsByIdsArgs = {
+  ids: Array<Scalars['ID']['input']>
 }
 
 export type QueryGetAttachmentsByProceedingIdArgs = {
@@ -762,6 +777,15 @@ export type DeleteDocumentMutationVariables = Exact<{
 export type DeleteDocumentMutation = {
   __typename?: 'Mutation'
   deleteDocumentsByIds: boolean
+}
+
+export type DeleteAttachmentMutationVariables = Exact<{
+  id: Scalars['ID']['input']
+}>
+
+export type DeleteAttachmentMutation = {
+  __typename?: 'Mutation'
+  deleteAttachmentsByIds: boolean
 }
 
 export type GetDocumentByIdQueryVariables = Exact<{
@@ -1928,6 +1952,50 @@ export const DeleteDocumentDocument = {
 } as unknown as DocumentNode<
   DeleteDocumentMutation,
   DeleteDocumentMutationVariables
+>
+export const DeleteAttachmentDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'DeleteAttachment' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'deleteAttachmentsByIds' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'ids' },
+                value: {
+                  kind: 'ListValue',
+                  values: [
+                    { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+                  ],
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  DeleteAttachmentMutation,
+  DeleteAttachmentMutationVariables
 >
 export const GetDocumentByIdDocument = {
   kind: 'Document',

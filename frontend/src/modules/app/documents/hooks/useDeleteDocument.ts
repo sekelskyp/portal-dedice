@@ -3,15 +3,15 @@ import { useMutation } from '@apollo/client'
 import { gql } from '@frontend/gql'
 import { toaster } from '@frontend/shared/design-system'
 
-const DELETE_DOCUMENT_MUTATION = gql(/* GraphQL */ `
-  mutation DeleteDocument($id: ID!) {
-    deleteDocumentsByIds(ids: [$id])
+const DELETE_ATTACHMENT_MUTATION = gql(/* GraphQL */ `
+  mutation DeleteAttachment($id: ID!) {
+    deleteAttachmentsByIds(ids: [$id])
   }
 `)
 
 export function useDeleteDocument() {
   const [deleteDocumentRequest, deleteDocumentRequestState] = useMutation(
-    DELETE_DOCUMENT_MUTATION,
+    DELETE_ATTACHMENT_MUTATION,
     {
       onCompleted: () => {
         toaster.create({

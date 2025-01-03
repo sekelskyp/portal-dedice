@@ -108,8 +108,8 @@ export function TermsOfService() {
             color="gray.400"
             fontStyle="italic"
           >
-            Tento text je pouze ukázkový pro potřeby vyvíjené aplikace a
-            neodpovídá skutečnosti. Veškeré vvedené informace jsou fiktivní a
+            Tento text je pouze ukázkový pro potřeby aplikace a neodpovídá
+            skutečnosti. Veškeré uvedené informace jsou fiktivní a
             nereprezentují reálné entity či osoby.
           </Text>
           <Text mt={2} textAlign="center" color="gray.400" fontStyle="italic">
