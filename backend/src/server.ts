@@ -32,8 +32,6 @@ import { BeneficiaryResolver } from '@backend/graphql/modules/beneficiary/benefi
 import { getChatMessageRepository } from '@backend/graphql/modules/chat/chatMessageRepository'
 import { getChatRepository } from '@backend/graphql/modules/chat/chatRepository'
 import { ChatResolver } from '@backend/graphql/modules/chat/chatResolver'
-import { getDocumentRepository } from '@backend/graphql/modules/document/documentRepository'
-import { DocumentResolver } from '@backend/graphql/modules/document/documentResolver'
 import { getEmailConfirmationTokenRepository } from '@backend/graphql/modules/emailConfirmationToken/emailConfirmationTokenRepository'
 import { EmptyResolver } from '@backend/graphql/modules/empty/emptyResolver'
 import { getNotaryRepository } from '@backend/graphql/modules/notary/notaryRepository'
@@ -68,7 +66,6 @@ const init = async () => {
       InheritanceProcedureResolver,
       NotaryResolver,
       AssetResolver,
-      DocumentResolver,
       ChatResolver,
       AddressResolver,
       ArticleResolver,
@@ -159,7 +156,6 @@ const init = async () => {
         drizzle.db
       ),
       assetRepository: getAssetRepository(drizzle.db),
-      documentRepository: getDocumentRepository(drizzle.db),
       addressRepository: getAddressRepository(drizzle.db),
       chatRepository: getChatRepository(drizzle.db),
       chatMessageRepository: getChatMessageRepository(drizzle.db),

@@ -11,8 +11,6 @@ import {
 } from 'type-graphql'
 
 import { Asset } from '@backend/graphql/modules/asset/assetType'
-import { Document } from '@backend/graphql/modules/document/documentType'
-import { getDocumentsByProceedingId } from '@backend/services/documentService'
 
 import {
   addBeneficiariesToProceeding,
@@ -72,15 +70,6 @@ export class InheritanceProcedureResolver {
     @Ctx() { proceedingRepository }: CustomContext
   ): Promise<Proceeding[]> {
     return await proceedingRepository.getNotaryProceedingsForUser(userId)
-  }
-
-  // Query to get documents by proceeding ID
-  @Query(() => [Document])
-  async getDocumentsByProceedingId(
-    @Arg('proceedingId', () => Int) proceedingId: number,
-    @Ctx() context: CustomContext
-  ): Promise<Document[]> {
-    return await getDocumentsByProceedingId(proceedingId, context)
   }
 
   // Query to get assets by proceeding ID
@@ -235,15 +224,6 @@ export class InheritanceProcedureResolver {
     return await beneficiaryRepository.getBeneficiariesByProceedingId(
       proceeding.id
     )
-  }
-
-  // Field Resolver to fetch documents
-  @FieldResolver(() => [Document])
-  async documents(
-    @Root() proceeding: Proceeding,
-    @Ctx() context: CustomContext
-  ): Promise<Document[]> {
-    return await getDocumentsByProceedingId(proceeding.id, context)
   }
 
   // Field Resolver to fetch assets

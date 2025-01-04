@@ -8,11 +8,9 @@ import {
   datetime,
   float,
   int,
-  longtext,
   mysqlTable,
   primaryKey,
   text,
-  timestamp,
   uniqueIndex,
   varchar,
 } from 'drizzle-orm/mysql-core'
@@ -145,18 +143,6 @@ export const asset = mysqlTable('asset', {
   carRegistrationDate: date('car_registration_date'),
   carType: varchar('car_type', { length: 20 }),
   cin: varchar('cin', { length: 8 }),
-})
-
-// Define Document Table
-export const document = mysqlTable('document', {
-  id: int('id').primaryKey().autoincrement(),
-  proceedingId: int('proceeding_id')
-    .references(() => proceeding.id, { onDelete: 'cascade' })
-    .notNull(), // FK to InheritanceProcedure
-  createDate: timestamp('create_date').defaultNow().notNull(),
-  fileName: varchar('file_name', { length: 255 }).notNull(),
-  fileType: varchar('file_type', { length: 100 }).notNull(),
-  fileData: longtext('file_data').notNull(),
 })
 
 // Define Chat Table
