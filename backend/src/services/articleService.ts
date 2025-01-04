@@ -66,9 +66,8 @@ export async function updateArticle(
     title: input.title,
     date: input.date,
     content: input.content,
-    coverImage: attachmentId,
+    coverImageAttachmentId: attachmentId,
   }
-
   // Update the article in the repository
   context.articleRepository.updateArticleById(id, articleData)
   return true
