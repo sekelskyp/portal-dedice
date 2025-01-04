@@ -67,8 +67,7 @@ export const NewArticlePage = () => {
               title: data.title,
               date: new Date(data.date).toISOString(),
               content: data.text,
-              coverImage:
-                data.image ?? existingArticle?.getArticleById?.attachment,
+              coverImage: data.image,
             },
           },
         })
