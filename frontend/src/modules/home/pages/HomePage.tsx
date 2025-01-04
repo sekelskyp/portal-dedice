@@ -25,7 +25,9 @@ export function HomePage() {
           <Link to={route.wizard()}>Pojďme na to!</Link>
         </Button>
         <Button asChild>
-          <Link to={route.wizard()}>Vyporadani pozustalosti nanecisto</Link>
+          <Link to={route.inheritance()}>
+            Vypořádání pozůstalosti nanečisto
+          </Link>
         </Button>
       </SplitWithImage>
       {!user && (

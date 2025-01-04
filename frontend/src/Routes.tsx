@@ -21,6 +21,7 @@ import { SettingsPage } from './modules/app/settings/pages/SettingsPage'
 import { ConfirmEmailPage } from './modules/auth/pages/ConfirmEmailPage'
 import { EmailVerification } from './modules/auth/pages/EmailVerification'
 import { PasswordResetPage } from './modules/auth/pages/PasswordResetPage'
+import InheritanceModel from './modules/inheritance-splitting/InheritanceModel'
 import { ArticleDetail } from './modules/static-pages/blog/pages/ArticleDetail'
 import { BlogPage } from './modules/static-pages/blog/pages/BlogPage'
 import { NewArticlePage } from './modules/static-pages/blog/pages/NewArticlePage'
@@ -60,6 +61,7 @@ export function Routes() {
         <Route path={route.detailArticle()} element={<ArticleDetail />} />
         <Route path={route.editArticle()} element={<NewArticlePage />} />
         <Route path={route.wizard()} element={<WizardPage />} />
+        <Route path={route.inheritance()} element={<InheritanceModel />} />
         <Route path={route.confirmEmail()} element={<ConfirmEmailPage />} />
         <Route path={route.resetPassword()} element={<PasswordResetPage />} />
         <Route

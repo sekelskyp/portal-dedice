@@ -5,6 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { Form } from '@frontend/shared/forms/Form'
 
 import { StepOne } from './StepOne'
+import { StepThree } from './StepThree'
 import { StepTwo } from './StepTwo'
 
 interface FormData {
@@ -83,11 +84,9 @@ const InheritanceModel = () => {
           {currentStep === 2 && (
             <StepTwo onPrevious={handlePrevious} onNext={handleNext} />
           )}
-          {/*
           {currentStep === 3 && (
             <StepThree onPrevious={handlePrevious} onNext={handleNext} />
-            )}
-        */}
+          )}
         </Box>
       </Form>
     </FormProvider>
