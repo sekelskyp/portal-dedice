@@ -56,6 +56,7 @@ export class ArticleResolver {
     @Arg('data') data: CreateArticleInput,
     @Ctx() context: CustomContext
   ): Promise<Article> {
+    console.log('createArticle zavolan')
     // Destructure and extract the file details
     const { createReadStream, filename, mimetype } = await data.coverImage // WARNING - THIS HAS TO BE AWAITED - VSCODE IS WRONG
     const stream = createReadStream()
@@ -71,7 +72,9 @@ export class ArticleResolver {
       fileData: fileDataInput,
     }
     const articleId = await createArticle(attachmentData, context)
+    console.log('article vytvoren', articleId)
     const article = await getArticleById(articleId, context)
+    console.log('article nalezen', article)
     if (!article) {
       throw new Error('Article was created but could not be fetched')
     }
