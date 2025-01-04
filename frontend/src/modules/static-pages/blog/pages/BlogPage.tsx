@@ -12,7 +12,7 @@ import { ArticleCard } from '../components/ArticleCard'
 import { ArticleSearchBar } from '../components/ArticleSearchBar'
 import { useArticle } from '../hooks/useArticle'
 import { useGetArticles } from '../hooks/useGetArticles'
-import { getArticleImageUrl } from '../utils/displayArticleImage'
+import { getArticleImageUrl } from '../utils/articleUtils'
 
 export function BlogPage() {
   const { user } = useAuth()
@@ -51,8 +51,6 @@ export function BlogPage() {
       </Page>
     )
   }
-
-  console.log('data článků:', data)
 
   return (
     <Page as={Stack}>

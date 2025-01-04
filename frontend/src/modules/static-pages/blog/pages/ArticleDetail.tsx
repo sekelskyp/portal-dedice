@@ -1,15 +1,5 @@
-import React from 'react'
-import {
-  Box,
-  Card,
-  Heading,
-  HStack,
-  Image,
-  Spinner,
-  Stack,
-  Text,
-} from '@chakra-ui/react'
-import { LuNewspaper } from 'react-icons/lu'
+import React, { useMemo, useState } from 'react'
+import { Heading, Spinner, Stack } from '@chakra-ui/react'
 import { useParams } from 'react-router-dom'
 
 import { ActionDialog } from '@frontend/shared/components/ActionDialog'
@@ -18,36 +8,25 @@ import { Page } from '@frontend/shared/layout/Page'
 
 import { ArticleAdminPanel } from '../components/ArticleAdminPanel'
 import { ArticleCard } from '../components/ArticleCard'
+import { ArticleDetailCard } from '../components/ArticleDetailCard'
 import { useDeleteArticle } from '../hooks/useDeleteArticle'
 import { useGetArticle } from '../hooks/useGetArticle'
 import { useGetArticles } from '../hooks/useGetArticles'
-import { getArticleImageUrl } from '../utils/displayArticleImage'
+import { getLatestArticles } from '../utils/articleUtils'
 
 export const ArticleDetail: React.FC = () => {
   const { id } = useParams()
   const articleId = parseInt(id ?? '0', 10)
   const { data, loading, error } = useGetArticle(articleId)
   const { data: allArticlesData } = useGetArticles()
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [deleteArticle] = useDeleteArticle()
 
   const article = data?.getArticleById
-  const latestArticles = React.useMemo(() => {
-    if (!allArticlesData?.getAllArticles) return []
-    return allArticlesData.getAllArticles
-      .filter((a) => parseInt(a.id) !== articleId)
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-      .slice(0, 3)
-      .map((article) => ({
-        id: parseInt(article.id),
-        title: article.title,
-        description: article.content,
-        createDate: article.date.split('T')[0],
-        imageUrl: article.attachment?.fileUuid
-          ? getArticleImageUrl({ fileUuid: article.attachment.fileUuid })
-          : undefined,
-      }))
-  }, [allArticlesData, articleId])
+  const latestArticles = useMemo(
+    () => getLatestArticles(allArticlesData?.getAllArticles, articleId),
+    [allArticlesData, articleId]
+  )
 
   if (loading) {
     return (
@@ -80,59 +59,13 @@ export const ArticleDetail: React.FC = () => {
         articleId={articleId}
       />
       <Stack display="flex" alignItems="center" justifyContent="center">
-        <Card.Root
-          w="full"
-          maxW={{ base: '100%', md: '80%' }}
-          variant="elevated"
-        >
-          <Card.Header as={HStack} gap={2}>
-            <LuNewspaper size={24} />
-            <Heading size={{ base: 'md', sm: 'lg', md: '2xl' }}>
-              {article.title}
-            </Heading>
-            <Text ml="auto" color="gray.500" fontSize="md">
-              {new Date(article.date).toLocaleDateString()}
-            </Text>
-          </Card.Header>
-          <Card.Body gap={2}>
-            <Image
-              src={
-                article.attachment?.fileUuid
-                  ? getArticleImageUrl({
-                      fileUuid: article.attachment.fileUuid,
-                    })
-                  : '/cover-fallback.png'
-              }
-              alt={article.title}
-              borderRadius="lg"
-              objectFit="cover"
-              width="100%"
-              height={{ base: '200px', md: '400px' }}
-            />
-            <Box
-              mt={2}
-              px={2}
-              className="ql-editor"
-              css={{
-                '& p': {
-                  textAlign: 'justify',
-                  marginBottom: '1rem',
-                },
-                '& ul, & ol': {
-                  paddingLeft: '2rem',
-                  marginBottom: '1rem',
-                },
-                '& a': {
-                  color: 'blue.500',
-                  textDecoration: 'underline',
-                },
-              }}
-              dangerouslySetInnerHTML={{ __html: article.content }}
-            />
-          </Card.Body>
-        </Card.Root>
+        <ArticleDetailCard
+          title={article.title}
+          content={article.content}
+          date={article.date}
+          fileUuid={article.attachment?.fileUuid ?? ''}
+        />
       </Stack>
-
       <Stack mt={8} alignItems="center">
         <Heading size={{ base: 'xl', md: '2xl' }}>
           Mohlo by vás také zajímat:
