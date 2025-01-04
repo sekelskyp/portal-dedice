@@ -9,7 +9,12 @@ export const GET_ARTICLE_BY_ID = gql(/* GraphQL */ `
       date
       title
       content
-      coverImage
+      coverImageAttachmentId
+      attachment {
+        id
+        fileUuid
+        mimetype
+      }
     }
   }
 `)

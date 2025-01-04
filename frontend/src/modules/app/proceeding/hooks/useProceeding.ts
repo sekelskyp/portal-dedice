@@ -44,14 +44,6 @@ export const GET_PROCEEDING_QUERY = gql(/* GraphQL */ `
       deceasedDateOfDeath
       deceasedDateOfBirth
       deceasedAddressId
-      documents {
-        id
-        fileData
-        fileName
-        fileType
-        createDate
-        proceedingId
-      }
       id
       state
       notaryId

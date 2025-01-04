@@ -3,9 +3,11 @@ export const route = {
   signIn: () => `/auth/signin`,
   signUp: () => `/auth/signup`,
   resetPassword: () => `/auth/passwordReset`,
+  changePassword: () => `/auth/changePassword`,
   about: () => `/about`,
   guide: () => `/guide`,
   blog: () => `/blog`,
+  termOfService: () => `/terms-of-service`,
   newArticle: () => `/blog/new-article`,
   editArticle: (id = ':id') => `/blog/article/edit/${id}`,
   detailArticle: (id = ':id') => `/blog/article/${id}`,
@@ -25,5 +27,8 @@ export const route = {
   newAsset: (id = ':id') => `/portal/inheritance-procedure/${id}/assets`,
   newEmail: (id = ':id') => `/portal/inheritance-procedure/${id}/new-email`,
   profile: () => `/portal/profile`,
+  downloadFile: (fileUuid: string = ':fileUuid') =>
+    `/files/download/${fileUuid}`,
+  streamFile: (fileUuid: string = ':fileUuid') => `/files/stream/${fileUuid}`,
   users: () => `/admin/users`,
 }

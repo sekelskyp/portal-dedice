@@ -11,14 +11,13 @@ import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHt
 import { addMocksToSchema } from '@graphql-tools/mock'
 import { createPubSub } from '@graphql-yoga/subscription'
 import cors from 'cors'
-import express from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import { graphqlUploadExpress } from 'graphql-upload'
 import { useServer } from 'graphql-ws/lib/use/ws'
 import * as http from 'http'
 import { buildSchema } from 'type-graphql'
 import { WebSocketServer } from 'ws'
 
-import { MOCKS, PORT } from '@backend/config'
 import { getConnection } from '@backend/db/db'
 import { getAddressRepository } from '@backend/graphql/modules/address/addressRepository'
 import { AddressResolver } from '@backend/graphql/modules/address/addressResolver'
@@ -26,13 +25,13 @@ import { getArticleRepository } from '@backend/graphql/modules/article/articleRe
 import { ArticleResolver } from '@backend/graphql/modules/article/articleResolver'
 import { getAssetRepository } from '@backend/graphql/modules/asset/assetRepository'
 import { AssetResolver } from '@backend/graphql/modules/asset/assetResolver'
+import { getAttachmentRepository } from '@backend/graphql/modules/attachment/attachmentRepository'
+import { AttachmentResolver } from '@backend/graphql/modules/attachment/attachmentResolver'
 import { getBeneficiaryRepository } from '@backend/graphql/modules/beneficiary/beneficiaryRepository'
 import { BeneficiaryResolver } from '@backend/graphql/modules/beneficiary/beneficiaryResolver'
 import { getChatMessageRepository } from '@backend/graphql/modules/chat/chatMessageRepository'
 import { getChatRepository } from '@backend/graphql/modules/chat/chatRepository'
 import { ChatResolver } from '@backend/graphql/modules/chat/chatResolver'
-import { getDocumentRepository } from '@backend/graphql/modules/document/documentRepository'
-import { DocumentResolver } from '@backend/graphql/modules/document/documentResolver'
 import { getEmailConfirmationTokenRepository } from '@backend/graphql/modules/emailConfirmationToken/emailConfirmationTokenRepository'
 import { EmptyResolver } from '@backend/graphql/modules/empty/emptyResolver'
 import { getNotaryRepository } from '@backend/graphql/modules/notary/notaryRepository'
@@ -48,6 +47,8 @@ import { mockResolvers } from '@backend/mocks/mocks'
 import { CustomContext } from '@backend/types/types'
 
 import { AddressSuggestionResolver } from './graphql/modules/addressSuggestions/addressSuggestionResolver'
+import { fileRoutes } from './routes/fileRoutes'
+import { MOCKS, PORT } from './config'
 
 const init = async () => {
   const app = express()
@@ -65,11 +66,11 @@ const init = async () => {
       InheritanceProcedureResolver,
       NotaryResolver,
       AssetResolver,
-      DocumentResolver,
       ChatResolver,
       AddressResolver,
       ArticleResolver,
       AddressSuggestionResolver,
+      AttachmentResolver,
     ],
     pubSub,
     emitSchemaFile: true,
@@ -155,18 +156,21 @@ const init = async () => {
         drizzle.db
       ),
       assetRepository: getAssetRepository(drizzle.db),
-      documentRepository: getDocumentRepository(drizzle.db),
       addressRepository: getAddressRepository(drizzle.db),
       chatRepository: getChatRepository(drizzle.db),
       chatMessageRepository: getChatMessageRepository(drizzle.db),
       articleRepository: getArticleRepository(drizzle.db),
+      attachmentRepository: getAttachmentRepository(drizzle.db),
     }
   }
   app.use(
     '/graphql',
     cors<cors.CorsRequest>(), // accepts all origins ('*'), not support cookies
     express.json(),
-    graphqlUploadExpress(),
+    graphqlUploadExpress({
+      maxFileSize: 25 * 1024 * 1024, // 25MB
+      maxFiles: 10, // Optional: Limit the number of files in a single request
+    }),
     expressMiddleware(server, {
       context: customContext,
     })
@@ -175,6 +179,24 @@ const init = async () => {
   app.get('/', (_req, res) => {
     res.redirect('/graphql')
   })
+
+  const resolveContext = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const context = await customContext({ req, res })
+      res.locals.context = context // Store context in res.locals
+      next()
+    } catch (error) {
+      console.error('Error resolving context:', error)
+      res.status(500).send('Internal server error')
+    }
+  }
+
+  // Add routes for serving files
+  app.use(resolveContext, fileRoutes)
 
   httpServer.listen({ port: PORT }, () => {
     console.log('Server listening on port: ' + PORT)

@@ -20,12 +20,14 @@ import { ProfilePage } from './modules/app/settings/pages/ProfilePage'
 import { SettingsPage } from './modules/app/settings/pages/SettingsPage'
 import { ConfirmEmailPage } from './modules/auth/pages/ConfirmEmailPage'
 import { EmailVerification } from './modules/auth/pages/EmailVerification'
+import { PasswordChangePage } from './modules/auth/pages/PasswordChangePage'
 import { PasswordResetPage } from './modules/auth/pages/PasswordResetPage'
 import { ArticleDetail } from './modules/static-pages/blog/pages/ArticleDetail'
 import { BlogPage } from './modules/static-pages/blog/pages/BlogPage'
 import { NewArticlePage } from './modules/static-pages/blog/pages/NewArticlePage'
 import { AboutPage } from './modules/static-pages/pages/AboutPage'
 import { GuidePage } from './modules/static-pages/pages/GuidePage'
+import { TermsOfService } from './modules/static-pages/pages/TermsOfService'
 import { WizardPage } from './modules/wizard/pages/WizardStepPage'
 import { Layout } from './shared/layout'
 
@@ -54,6 +56,7 @@ export function Routes() {
         </Route>
         <Route path={route.users()} element={<UserManagement />} />
         <Route path={route.about()} element={<AboutPage />} />
+        <Route path={route.termOfService()} element={<TermsOfService />} />
         <Route path={route.guide()} element={<GuidePage />} />
         <Route path={route.blog()} element={<BlogPage />} />
         <Route path={route.newArticle()} element={<NewArticlePage />} />
@@ -62,6 +65,7 @@ export function Routes() {
         <Route path={route.wizard()} element={<WizardPage />} />
         <Route path={route.confirmEmail()} element={<ConfirmEmailPage />} />
         <Route path={route.resetPassword()} element={<PasswordResetPage />} />
+        <Route path={route.changePassword()} element={<PasswordChangePage />} />
         <Route
           path={route.emailVerification()}
           element={<EmailVerification />}

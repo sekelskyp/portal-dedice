@@ -59,8 +59,9 @@ export type AddressSuggestion = {
 
 export type Article = {
   __typename?: 'Article'
+  attachment?: Maybe<Attachment>
   content: Scalars['String']['output']
-  coverImage: Scalars['String']['output']
+  coverImageAttachmentId?: Maybe<Scalars['ID']['output']>
   date: Scalars['DateTimeISO']['output']
   id: Scalars['ID']['output']
   title: Scalars['String']['output']
@@ -92,6 +93,16 @@ export type AssetInput = {
   proceedingId: Scalars['ID']['input']
   type: Scalars['String']['input']
   value: Scalars['Float']['input']
+}
+
+export type Attachment = {
+  __typename?: 'Attachment'
+  fileUuid: Scalars['String']['output']
+  filename: Scalars['String']['output']
+  id: Scalars['ID']['output']
+  mimetype: Scalars['String']['output']
+  proceedingId?: Maybe<Scalars['ID']['output']>
+  uploadDate: Scalars['DateTimeISO']['output']
 }
 
 export type Beneficiary = {
@@ -154,16 +165,6 @@ export type DeceasedPersonInput = {
   surname: Scalars['String']['input']
 }
 
-export type Document = {
-  __typename?: 'Document'
-  createDate: Scalars['DateTimeISO']['output']
-  fileData: Scalars['String']['output']
-  fileName: Scalars['String']['output']
-  fileType: Scalars['String']['output']
-  id: Scalars['ID']['output']
-  proceedingId: Scalars['ID']['output']
-}
-
 export type FindNotaryInput = {
   addressPostCode: Scalars['String']['input']
   deceasedPersonDateOfDeath: Scalars['DateTimeISO']['input']
@@ -182,14 +183,13 @@ export type Mutation = {
   createAsset: Asset
   createBeneficiaries: Array<Beneficiary>
   createBeneficiary: Beneficiary
-  createDocument: Scalars['ID']['output']
   createNotary: Notary
   createProceeding: Scalars['Int']['output']
   deleteAddress: Scalars['Boolean']['output']
   deleteArticles: Scalars['Boolean']['output']
   deleteAsset: Scalars['Boolean']['output']
+  deleteAttachmentsByIds: Scalars['Boolean']['output']
   deleteBeneficiaries: Scalars['Boolean']['output']
-  deleteDocumentsByIds: Scalars['Boolean']['output']
   deleteNotary: Scalars['Boolean']['output']
   deleteProceedingsByIds: Scalars['Boolean']['output']
   notifyProcedureBeneficiaries: Scalars['Boolean']['output']
@@ -205,6 +205,7 @@ export type Mutation = {
   updateBeneficiary: Beneficiary
   updateProfile: User
   updateSendNotifications: User
+  uploadAttachmentToProceeding: Scalars['ID']['output']
 }
 
 export type MutationAddBeneficiariesToProceedingArgs = {
@@ -255,10 +256,6 @@ export type MutationCreateBeneficiaryArgs = {
   data: BeneficiaryInput
 }
 
-export type MutationCreateDocumentArgs = {
-  data: UploadDocumentInput
-}
-
 export type MutationCreateNotaryArgs = {
   data: CreateNotaryInput
 }
@@ -279,12 +276,12 @@ export type MutationDeleteAssetArgs = {
   id: Scalars['Int']['input']
 }
 
-export type MutationDeleteBeneficiariesArgs = {
-  id: Scalars['Int']['input']
+export type MutationDeleteAttachmentsByIdsArgs = {
+  ids: Array<Scalars['ID']['input']>
 }
 
-export type MutationDeleteDocumentsByIdsArgs = {
-  ids: Array<Scalars['ID']['input']>
+export type MutationDeleteBeneficiariesArgs = {
+  id: Scalars['Int']['input']
 }
 
 export type MutationDeleteNotaryArgs = {
@@ -356,6 +353,10 @@ export type MutationUpdateSendNotificationsArgs = {
   sendNotifications: Scalars['Boolean']['input']
 }
 
+export type MutationUploadAttachmentToProceedingArgs = {
+  data: UploadFileToProceedingInput
+}
+
 export type Notary = {
   __typename?: 'Notary'
   id: Scalars['ID']['output']
@@ -371,7 +372,6 @@ export type Proceeding = {
   deceasedDateOfDeath: Scalars['DateTimeISO']['output']
   deceasedDisplayName: Scalars['String']['output']
   deceasedName: Scalars['String']['output']
-  documents: Array<Document>
   endDate?: Maybe<Scalars['DateTimeISO']['output']>
   id: Scalars['ID']['output']
   mainBeneficiary?: Maybe<Beneficiary>
@@ -409,13 +409,13 @@ export type Query = {
   getArticleById?: Maybe<Article>
   getAssetById?: Maybe<Asset>
   getAssetsByProceedingId: Array<Asset>
+  getAttachmentById?: Maybe<Attachment>
+  getAttachmentsByIds: Array<Attachment>
+  getAttachmentsByProceedingId: Array<Attachment>
   getBeneficiariesByIds: Array<Beneficiary>
   getBeneficiariesByProceedingId: Array<Beneficiary>
   getBeneficiaryById?: Maybe<Beneficiary>
   getBeneficiaryProceedingsForUser: Array<Proceeding>
-  getDocumentById?: Maybe<Document>
-  getDocumentsByIds: Array<Document>
-  getDocumentsByProceedingId: Array<Document>
   getNotaryById?: Maybe<Notary>
   getNotaryProceedingsForUser: Array<Proceeding>
   getProceedingById?: Maybe<Proceeding>
@@ -460,6 +460,18 @@ export type QueryGetAssetsByProceedingIdArgs = {
   proceedingId: Scalars['Int']['input']
 }
 
+export type QueryGetAttachmentByIdArgs = {
+  id: Scalars['ID']['input']
+}
+
+export type QueryGetAttachmentsByIdsArgs = {
+  ids: Array<Scalars['ID']['input']>
+}
+
+export type QueryGetAttachmentsByProceedingIdArgs = {
+  proceedingId: Scalars['Int']['input']
+}
+
 export type QueryGetBeneficiariesByIdsArgs = {
   ids: Array<Scalars['Int']['input']>
 }
@@ -474,18 +486,6 @@ export type QueryGetBeneficiaryByIdArgs = {
 
 export type QueryGetBeneficiaryProceedingsForUserArgs = {
   userId: Scalars['Int']['input']
-}
-
-export type QueryGetDocumentByIdArgs = {
-  id: Scalars['ID']['input']
-}
-
-export type QueryGetDocumentsByIdsArgs = {
-  ids: Array<Scalars['ID']['input']>
-}
-
-export type QueryGetDocumentsByProceedingIdArgs = {
-  proceedingId: Scalars['Int']['input']
 }
 
 export type QueryGetNotaryByIdArgs = {
@@ -537,9 +537,9 @@ export type UpdateArticleInput = {
   title?: InputMaybe<Scalars['String']['input']>
 }
 
-export type UploadDocumentInput = {
+export type UploadFileToProceedingInput = {
   file: Scalars['Upload']['input']
-  inheritanceProcedureId: Scalars['ID']['input']
+  proceedingId: Scalars['ID']['input']
 }
 
 export type User = {
@@ -769,52 +769,38 @@ export type GetChatHeaderQuery = {
   } | null
 }
 
-export type CreateDocumentMutationVariables = Exact<{
-  data: UploadDocumentInput
-}>
-
-export type CreateDocumentMutation = {
-  __typename?: 'Mutation'
-  createDocument: string
-}
-
-export type DeleteDocumentMutationVariables = Exact<{
+export type DeleteAttachmentMutationVariables = Exact<{
   id: Scalars['ID']['input']
 }>
 
-export type DeleteDocumentMutation = {
+export type DeleteAttachmentMutation = {
   __typename?: 'Mutation'
-  deleteDocumentsByIds: boolean
+  deleteAttachmentsByIds: boolean
 }
 
-export type GetDocumentByIdQueryVariables = Exact<{
-  id: Scalars['ID']['input']
-}>
-
-export type GetDocumentByIdQuery = {
-  __typename?: 'Query'
-  getDocumentById?: {
-    __typename?: 'Document'
-    fileData: string
-    fileType: string
-    fileName: string
-    createDate: any
-  } | null
-}
-
-export type GetDocumentsByProceedingIdQueryVariables = Exact<{
+export type GetAttachmentsByProceedingIdQueryVariables = Exact<{
   proceedingId: Scalars['Int']['input']
 }>
 
-export type GetDocumentsByProceedingIdQuery = {
+export type GetAttachmentsByProceedingIdQuery = {
   __typename?: 'Query'
-  getDocumentsByProceedingId: Array<{
-    __typename?: 'Document'
+  getAttachmentsByProceedingId: Array<{
+    __typename?: 'Attachment'
+    fileUuid: string
+    filename: string
     id: string
-    fileName: string
-    createDate: any
-    fileType: string
+    mimetype: string
+    uploadDate: any
   }>
+}
+
+export type UploadDocumentMutationVariables = Exact<{
+  data: UploadFileToProceedingInput
+}>
+
+export type UploadDocumentMutation = {
+  __typename?: 'Mutation'
+  uploadAttachmentToProceeding: string
 }
 
 export type NotifyProcedureBeneficiariesMutationVariables = Exact<{
@@ -948,15 +934,6 @@ export type GetProceedingByIdQuery = {
         surname: string
       } | null
     }> | null
-    documents: Array<{
-      __typename?: 'Document'
-      id: string
-      fileData: string
-      fileName: string
-      fileType: string
-      createDate: any
-      proceedingId: string
-    }>
     notary?: {
       __typename?: 'Notary'
       user?: {
@@ -1063,6 +1040,22 @@ export type EmailVerificationMutation = {
   confirmEmailVerification: boolean
 }
 
+export type RequestPasswordResetMutationVariables = Exact<{
+  email: Scalars['String']['input']
+}>
+
+export type RequestPasswordResetMutation = {
+  __typename?: 'Mutation'
+  requestPasswordReset: boolean
+}
+
+export type XddMutationVariables = Exact<{
+  newPassword: Scalars['String']['input']
+  token: Scalars['String']['input']
+}>
+
+export type XddMutation = { __typename?: 'Mutation'; resetPassword: boolean }
+
 export type SignInMutationVariables = Exact<{
   login: Scalars['String']['input']
   password: Scalars['String']['input']
@@ -1137,7 +1130,13 @@ export type GetArticleByIdQuery = {
     date: any
     title: string
     content: string
-    coverImage: string
+    coverImageAttachmentId?: string | null
+    attachment?: {
+      __typename?: 'Attachment'
+      id: string
+      fileUuid: string
+      mimetype: string
+    } | null
   } | null
 }
 
@@ -1151,7 +1150,13 @@ export type GetAllArticlesQuery = {
     date: any
     title: string
     content: string
-    coverImage: string
+    coverImageAttachmentId?: string | null
+    attachment?: {
+      __typename?: 'Attachment'
+      id: string
+      fileUuid: string
+      mimetype: string
+    } | null
   }>
 }
 
@@ -1990,58 +1995,13 @@ export const GetChatHeaderDocument = {
     },
   ],
 } as unknown as DocumentNode<GetChatHeaderQuery, GetChatHeaderQueryVariables>
-export const CreateDocumentDocument = {
+export const DeleteAttachmentDocument = {
   kind: 'Document',
   definitions: [
     {
       kind: 'OperationDefinition',
       operation: 'mutation',
-      name: { kind: 'Name', value: 'CreateDocument' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'data' } },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'UploadDocumentInput' },
-            },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'createDocument' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'data' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'data' },
-                },
-              },
-            ],
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  CreateDocumentMutation,
-  CreateDocumentMutationVariables
->
-export const DeleteDocumentDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'DeleteDocument' },
+      name: { kind: 'Name', value: 'DeleteAttachment' },
       variableDefinitions: [
         {
           kind: 'VariableDefinition',
@@ -2057,7 +2017,7 @@ export const DeleteDocumentDocument = {
         selections: [
           {
             kind: 'Field',
-            name: { kind: 'Name', value: 'deleteDocumentsByIds' },
+            name: { kind: 'Name', value: 'deleteAttachmentsByIds' },
             arguments: [
               {
                 kind: 'Argument',
@@ -2076,67 +2036,16 @@ export const DeleteDocumentDocument = {
     },
   ],
 } as unknown as DocumentNode<
-  DeleteDocumentMutation,
-  DeleteDocumentMutationVariables
+  DeleteAttachmentMutation,
+  DeleteAttachmentMutationVariables
 >
-export const GetDocumentByIdDocument = {
+export const GetAttachmentsByProceedingIdDocument = {
   kind: 'Document',
   definitions: [
     {
       kind: 'OperationDefinition',
       operation: 'query',
-      name: { kind: 'Name', value: 'GetDocumentById' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-          type: {
-            kind: 'NonNullType',
-            type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'getDocumentById' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'id' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'id' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'fileData' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'fileType' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'fileName' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'createDate' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  GetDocumentByIdQuery,
-  GetDocumentByIdQueryVariables
->
-export const GetDocumentsByProceedingIdDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'GetDocumentsByProceedingId' },
+      name: { kind: 'Name', value: 'GetAttachmentsByProceedingId' },
       variableDefinitions: [
         {
           kind: 'VariableDefinition',
@@ -2155,7 +2064,7 @@ export const GetDocumentsByProceedingIdDocument = {
         selections: [
           {
             kind: 'Field',
-            name: { kind: 'Name', value: 'getDocumentsByProceedingId' },
+            name: { kind: 'Name', value: 'getAttachmentsByProceedingId' },
             arguments: [
               {
                 kind: 'Argument',
@@ -2169,10 +2078,11 @@ export const GetDocumentsByProceedingIdDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'fileUuid' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'filename' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'fileName' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'createDate' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'fileType' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'mimetype' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'uploadDate' } },
               ],
             },
           },
@@ -2181,8 +2091,53 @@ export const GetDocumentsByProceedingIdDocument = {
     },
   ],
 } as unknown as DocumentNode<
-  GetDocumentsByProceedingIdQuery,
-  GetDocumentsByProceedingIdQueryVariables
+  GetAttachmentsByProceedingIdQuery,
+  GetAttachmentsByProceedingIdQueryVariables
+>
+export const UploadDocumentDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'UploadDocument' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'data' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'UploadFileToProceedingInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'uploadAttachmentToProceeding' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'data' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'data' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  UploadDocumentMutation,
+  UploadDocumentMutationVariables
 >
 export const NotifyProcedureBeneficiariesDocument = {
   kind: 'Document',
@@ -2712,36 +2667,6 @@ export const GetProceedingByIdDocument = {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'deceasedAddressId' },
                 },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'documents' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'fileData' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'fileName' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'fileType' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'createDate' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'proceedingId' },
-                      },
-                    ],
-                  },
-                },
                 { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'state' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'notaryId' } },
@@ -3135,6 +3060,121 @@ export const EmailVerificationDocument = {
   EmailVerificationMutation,
   EmailVerificationMutationVariables
 >
+export const RequestPasswordResetDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'RequestPasswordReset' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'email' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'requestPasswordReset' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'email' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'email' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  RequestPasswordResetMutation,
+  RequestPasswordResetMutationVariables
+>
+export const XddDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'xdd' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'newPassword' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'token' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'resetPassword' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'newPassword' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'newPassword' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'token' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'token' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<XddMutation, XddMutationVariables>
 export const SignInDocument = {
   kind: 'Document',
   definitions: [
@@ -3471,7 +3511,28 @@ export const GetArticleByIdDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'date' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'title' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'content' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'coverImage' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'coverImageAttachmentId' },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'attachment' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'fileUuid' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'mimetype' },
+                      },
+                    ],
+                  },
+                },
               ],
             },
           },
@@ -3500,7 +3561,28 @@ export const GetAllArticlesDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'date' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'title' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'content' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'coverImage' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'coverImageAttachmentId' },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'attachment' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'fileUuid' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'mimetype' },
+                      },
+                    ],
+                  },
+                },
               ],
             },
           },

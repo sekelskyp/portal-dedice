@@ -2,6 +2,7 @@ import {
   Arg,
   Ctx,
   FieldResolver,
+  ID,
   Int,
   Mutation,
   Query,
@@ -10,8 +11,6 @@ import {
 } from 'type-graphql'
 
 import { Asset } from '@backend/graphql/modules/asset/assetType'
-import { Document } from '@backend/graphql/modules/document/documentType'
-import { getDocumentsByProceedingId } from '@backend/services/documentService'
 
 import {
   addBeneficiariesToProceeding,
@@ -21,13 +20,16 @@ import {
   deleteBeneficiaryFromProceeding,
   deleteProceedingsByIds,
   notifyProceedingBeneficiaries,
+  uploadFileToProceeding,
 } from '../../../services/proceedingService'
 import { CustomContext } from '../../../types/types'
+import { Attachment } from '../attachment/attachmentType'
 import { Beneficiary } from '../beneficiary/beneficiaryType'
 import { Notary } from '../notary/notaryType'
 
 import { CreateProceedingInput } from './createProceedingInput'
 import { Proceeding } from './proceedingType'
+import { UploadFileToProceedingInput } from './uploadFileToProceedingInput'
 
 @Resolver(() => Proceeding)
 export class InheritanceProcedureResolver {
@@ -70,15 +72,6 @@ export class InheritanceProcedureResolver {
     return await proceedingRepository.getNotaryProceedingsForUser(userId)
   }
 
-  // Query to get documents by proceeding ID
-  @Query(() => [Document])
-  async getDocumentsByProceedingId(
-    @Arg('proceedingId', () => Int) proceedingId: number,
-    @Ctx() context: CustomContext
-  ): Promise<Document[]> {
-    return await getDocumentsByProceedingId(proceedingId, context)
-  }
-
   // Query to get assets by proceeding ID
   @Query(() => [Asset])
   async getAssetsByProceedingId(
@@ -86,6 +79,15 @@ export class InheritanceProcedureResolver {
     @Ctx() { assetRepository }: CustomContext
   ): Promise<Asset[]> {
     return await assetRepository.getAssetsByProcedureId(proceedingId)
+  }
+
+  // Query to get attachments by proceeding ID
+  @Query(() => [Attachment])
+  async getAttachmentsByProceedingId(
+    @Arg('proceedingId', () => Int) proceedingId: number,
+    @Ctx() { attachmentRepository }: CustomContext
+  ): Promise<Attachment[]> {
+    return await attachmentRepository.getAttachmentsByProceedingId(proceedingId)
   }
 
   // ----------------------------------
@@ -165,6 +167,24 @@ export class InheritanceProcedureResolver {
     return true
   }
 
+  @Mutation(() => ID)
+  async uploadAttachmentToProceeding(
+    @Arg('data') data: UploadFileToProceedingInput,
+    @Ctx() context: CustomContext
+  ): Promise<number> {
+    // Destructure and extract the file details
+    const { createReadStream, filename, mimetype } = await data.file // WARNING - THIS HAS TO BE AWAITED - VSCODE IS WRONG
+    const stream = createReadStream()
+
+    const createAttachmentInput = {
+      proceedingId: data.proceedingId,
+      stream: stream,
+      filename: filename,
+      mimetype: mimetype,
+    }
+    return uploadFileToProceeding(createAttachmentInput, context)
+  }
+
   // ----------------------------------
   // FIELD RESOLVERS
   // ----------------------------------
@@ -196,7 +216,6 @@ export class InheritanceProcedureResolver {
   }
 
   // Field Resolver to fetch beneficiaries
-  // TODO - I would like to get rid of this and use query instead. Depends on FE willingness
   @FieldResolver(() => [Beneficiary], { nullable: true })
   async beneficiaries(
     @Root() proceeding: Proceeding,
@@ -205,15 +224,6 @@ export class InheritanceProcedureResolver {
     return await beneficiaryRepository.getBeneficiariesByProceedingId(
       proceeding.id
     )
-  }
-
-  // Field Resolver to fetch documents
-  @FieldResolver(() => [Document])
-  async documents(
-    @Root() proceeding: Proceeding,
-    @Ctx() context: CustomContext
-  ): Promise<Document[]> {
-    return await getDocumentsByProceedingId(proceeding.id, context)
   }
 
   // Field Resolver to fetch assets

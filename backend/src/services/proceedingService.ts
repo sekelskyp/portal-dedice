@@ -1,8 +1,11 @@
 import { CustomContext } from '../types/types'
 
+import { createAttachment } from './attachmentService'
 import { sendEmail } from './emailService'
 import { findAvailableNotary } from './notaryAssignmentService'
 import { renderTemplate } from './templateService'
+
+const PROCEEDING_ATTACHMENT_LIMIT = 10
 
 interface CreateProceedingData {
   startDate?: Date
@@ -18,6 +21,13 @@ interface CreateProceedingData {
     addressMunicipality: string
     addressPostCode: string
   }
+}
+
+export interface UploadFileToProceedingInput {
+  stream: NodeJS.ReadableStream
+  filename: string
+  mimetype: string
+  proceedingId: number
 }
 
 // helper function to generate a unique name for a new procedure
@@ -376,4 +386,21 @@ export const getUsersForProceeding = async (
   const users = await context.userRepository.getUsersByIds(userIds)
 
   return users
+}
+
+export const uploadFileToProceeding = async (
+  input: UploadFileToProceedingInput,
+  context: CustomContext
+): Promise<number> => {
+  // check current attachment count
+  const attachmentCount =
+    await context.attachmentRepository.getAttachmentCountByProceedingId(
+      input.proceedingId
+    )
+  if (attachmentCount >= PROCEEDING_ATTACHMENT_LIMIT) {
+    throw new Error('Maximální počet příloh pro řízení byl dosažen')
+  }
+  // create attachment
+  const attachmentId = await createAttachment(input, context)
+  return attachmentId
 }

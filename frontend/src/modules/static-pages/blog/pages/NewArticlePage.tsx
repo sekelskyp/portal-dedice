@@ -57,7 +57,7 @@ export const NewArticlePage = () => {
   const handleSubmit = useCallback(
     async (data: ArticleFormData) => {
       if (isEditing) {
-        if (!data.image && !existingArticle?.getArticleById?.coverImage) {
+        if (!data.image && !existingArticle?.getArticleById?.attachment) {
           throw new Error('Obrázek je povinný.')
         }
         await updateArticle({
@@ -67,8 +67,7 @@ export const NewArticlePage = () => {
               title: data.title,
               date: new Date(data.date).toISOString(),
               content: data.text,
-              coverImage:
-                data.image ?? existingArticle?.getArticleById?.coverImage,
+              coverImage: data.image,
             },
           },
         })
@@ -76,6 +75,7 @@ export const NewArticlePage = () => {
         if (!data.image) {
           throw new Error('Obrázek je povinný.')
         }
+        console.log(data)
         await createArticle({
           variables: {
             data: {
@@ -91,7 +91,7 @@ export const NewArticlePage = () => {
     },
     [
       isEditing,
-      existingArticle?.getArticleById?.coverImage,
+      existingArticle?.getArticleById?.attachment,
       updateArticle,
       articleId,
       createArticle,

@@ -14,57 +14,28 @@ import { route } from '@shared/route'
 import { ActionDialog } from '../../../../shared/components/ActionDialog'
 import { useProceeding } from '../../proceeding/hooks/useProceeding'
 import { useDeleteDocument } from '../hooks/useDeleteDocument'
-import { useDocument } from '../hooks/useDocument'
-import { useGetDocuments } from '../hooks/useGetDocuments'
-import { decodeFile } from '../utils/decodeFile'
+import { useGetAttachments } from '../hooks/useGetDocuments'
+import { downloadDocument } from '../utils/downloadDocument'
 
 interface DocumentType {
+  fileUUid: string
   id: string
   fileName: string
   fileType: string
-  createDate: string
+  uploadDate: string
 }
 
 export function Documents({ id }: { id: string }) {
   const { user, token } = useAuth()
   const isNotary = user?.type === 'Notary'
-
-  const [documents, setDocuments] = useState<DocumentType[]>([])
-
   const procedure = useProceeding(parseInt(id))
-
-  const { data } = useGetDocuments({
-    proceedingId: parseInt(id),
-  })
-
+  const [documents, setDocuments] = useState<DocumentType[]>([])
+  const [deleteDocumentRequest] = useDeleteDocument()
   const { toggleDialog, isOpen, selectedId } = useActionDialog()
 
-  const [deleteDocumentRequest] = useDeleteDocument()
-
-  const { getDocument } = useDocument()
-
-  const handleFileShow = (
-    documentId: string,
-    fileName: string,
-    fileType: string
-  ) => {
-    return async (event: React.MouseEvent<HTMLAnchorElement>) => {
-      event.preventDefault()
-      const { data } = await getDocument({
-        variables: {
-          id: documentId,
-        },
-      })
-
-      if (data?.getDocumentById) {
-        decodeFile({
-          fileName,
-          fileData: data.getDocumentById.fileData,
-          fileType,
-        })
-      }
-    }
-  }
+  const { data } = useGetAttachments({
+    proceedingId: parseInt(id),
+  })
 
   const handleFileDelete = (documentId: string) => {
     deleteDocumentRequest({
@@ -77,8 +48,24 @@ export function Documents({ id }: { id: string }) {
   }
 
   useEffect(() => {
-    if (data?.getDocumentsByProceedingId) {
-      setDocuments(data.getDocumentsByProceedingId)
+    if (data?.getAttachmentsByProceedingId) {
+      setDocuments(
+        data.getAttachmentsByProceedingId.map(
+          (attachment: {
+            fileUuid: string
+            id: string
+            filename: string
+            mimetype: string
+            uploadDate: string
+          }) => ({
+            fileUUid: attachment.fileUuid,
+            id: attachment.id,
+            fileName: attachment.filename,
+            fileType: attachment.mimetype,
+            uploadDate: attachment.uploadDate,
+          })
+        )
+      )
     }
   }, [data])
 
@@ -127,20 +114,19 @@ export function Documents({ id }: { id: string }) {
                   <Stack direction="row" alignItems="center" gap={4}>
                     <IoDocumentTextOutline size={24} />
                     <Link
-                      onClick={handleFileShow(
-                        document.id,
-                        document.fileName,
-                        document.fileType
-                      )}
+                      onClick={() =>
+                        downloadDocument(document.fileUUid, document.fileName)
+                      }
                       wordBreak="break-word"
                       fontSize={{ base: 'sm', sm: 'md' }}
+                      cursor="pointer"
                     >
                       {decodeURIComponent(escape(document.fileName))}
                     </Link>
                   </Stack>
                   <Stack direction="row" gap={4} alignItems="center">
                     <Text color="gray" fontSize={{ base: 'sm', sm: 'md' }}>
-                      {new Date(document.createDate).toLocaleString('cs-CZ')}
+                      {new Date(document.uploadDate).toLocaleString('cs-CZ')}
                     </Text>
                     {procedure?.data?.getProceedingById?.beneficiaries?.some(
                       (item) => item.user?.id === user?.id?.toString()

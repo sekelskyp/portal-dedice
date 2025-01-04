@@ -64,6 +64,41 @@
       "when": 1733080075159,
       "tag": "0008_condemned_karen_page",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1735771213045,
+      "tag": "0009_rare_starhawk",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1735827576797,
+      "tag": "0010_certain_sunfire",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "5",
+      "when": 1735844045058,
+      "tag": "0011_petite_mister_fear",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "5",
+      "when": 1735947609551,
+      "tag": "0012_big_giant_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "5",
+      "when": 1736013452454,
+      "tag": "0013_loose_goliath",
+      "breakpoints": true
     }
   ]
 }

@@ -3,7 +3,6 @@ import { FaPlus } from 'react-icons/fa'
 import { RiSortAsc, RiSortDesc } from 'react-icons/ri'
 
 import { useAuth } from '@frontend/modules/auth'
-import { createImageUrl } from '@frontend/modules/static-pages/blog/utils/imageUtils'
 import { Alert } from '@frontend/shared/design-system'
 import { Page } from '@frontend/shared/layout'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms/RouterNavLink'
@@ -13,6 +12,7 @@ import { ArticleCard } from '../components/ArticleCard'
 import { ArticleSearchBar } from '../components/ArticleSearchBar'
 import { useArticle } from '../hooks/useArticle'
 import { useGetArticles } from '../hooks/useGetArticles'
+import { getArticleImageUrl } from '../utils/articleUtils'
 
 export function BlogPage() {
   const { user } = useAuth()
@@ -30,7 +30,9 @@ export function BlogPage() {
       title: article.title,
       description: article.content,
       createDate: article.date.split('T')[0],
-      imageUrl: createImageUrl(article.coverImage),
+      imageUrl: article.attachment?.fileUuid
+        ? getArticleImageUrl({ fileUuid: article.attachment.fileUuid })
+        : undefined,
     })),
   })
 

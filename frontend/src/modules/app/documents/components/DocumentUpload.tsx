@@ -13,8 +13,8 @@ import {
 } from '@frontend/shared/design-system/atoms/chakra'
 
 import { useProceeding } from '../../proceeding/hooks/useProceeding'
-import { useCreateDocument } from '../hooks/useCreateDocument'
 import { useDocumentUpload } from '../hooks/useDocumentUpload'
+import { useUploadDocument } from '../hooks/useUploadDocument'
 
 export function DocumentUpload() {
   const { id } = useParams()
@@ -32,7 +32,7 @@ export function DocumentUpload() {
   } = useDocumentUpload()
 
   const [createDocumentRequest, createDocumentRequestState] =
-    useCreateDocument()
+    useUploadDocument()
 
   const handleDataChange = useCallback(
     (details: FileUploadFileChangeDetails) => {
@@ -65,8 +65,7 @@ export function DocumentUpload() {
         variables: {
           data: {
             file: file,
-            inheritanceProcedureId:
-              data?.getProceedingById?.id?.toString() ?? '',
+            proceedingId: data?.getProceedingById?.id?.toString() ?? '',
           },
         },
       })

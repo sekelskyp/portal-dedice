@@ -8,11 +8,9 @@ import {
   datetime,
   float,
   int,
-  longtext,
   mysqlTable,
   primaryKey,
   text,
-  timestamp,
   uniqueIndex,
   varchar,
 } from 'drizzle-orm/mysql-core'
@@ -147,18 +145,6 @@ export const asset = mysqlTable('asset', {
   cin: varchar('cin', { length: 8 }),
 })
 
-// Define Document Table
-export const document = mysqlTable('document', {
-  id: int('id').primaryKey().autoincrement(),
-  proceedingId: int('proceeding_id')
-    .references(() => proceeding.id, { onDelete: 'cascade' })
-    .notNull(), // FK to InheritanceProcedure
-  createDate: timestamp('create_date').defaultNow().notNull(),
-  fileName: varchar('file_name', { length: 255 }).notNull(),
-  fileType: varchar('file_type', { length: 100 }).notNull(),
-  fileData: longtext('file_data').notNull(),
-})
-
 // Define Chat Table
 export const chat = mysqlTable('chat', {
   id: int('id').primaryKey().autoincrement(),
@@ -264,13 +250,24 @@ export const article = mysqlTable('article', {
   id: int('id').primaryKey().autoincrement(),
   title: varchar('title', { length: 255 }).notNull(), // Article title
   date: date('date').default(new Date()).notNull(),
-  // without cover image until i finish new file storage service
-  // coverImage: varchar('cover_image', { length: 500 }).notNull(),
   content: text('content').notNull(), // Article content (stored as text)
-  // cover image
-  fileName: varchar('file_name', { length: 255 }).notNull(),
-  fileType: varchar('file_type', { length: 100 }).notNull(),
-  coverImage: longtext('file_data').notNull(),
+  coverImageAttachmentId: int('attachment_id').references(() => attachment.id, {
+    onDelete: 'set null',
+  }),
+})
+
+// Define Attachment Table (that represents a stored file)
+export const attachment = mysqlTable('attachment', {
+  id: int('id').primaryKey().autoincrement(),
+  proceedingId: int('proceeding_id').references(() => proceeding.id),
+  uploadDate: datetime('upload_date')
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  // stored file informartion
+  fileUuid: varchar('file_uuid', { length: 36 }).notNull(),
+  filepath: varchar('filepath', { length: 255 }).notNull(),
+  filename: varchar('filename', { length: 255 }).notNull(),
+  mimetype: varchar('mimetype', { length: 100 }).notNull(),
 })
 
 // Custom lower function
