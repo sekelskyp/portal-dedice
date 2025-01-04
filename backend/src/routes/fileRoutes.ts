@@ -78,7 +78,8 @@ router.get(
       if (!fileExists) {
         return res.status(404).send('File not found on server')
       }
-
+      // Set Content-Type header based on the file's MIME type
+      res.setHeader('Content-Type', attachment.mimetype)
       res.sendFile(filePath, (err) => {
         if (err) {
           console.error('Error streaming file:', err)
