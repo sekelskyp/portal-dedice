@@ -6,15 +6,11 @@ import {
   NativeSelectRoot,
 } from '@frontend/shared/design-system/atoms/chakra'
 
-import { TablePagination } from '../TablePagination'
+import { TablePagination } from './TablePagination'
 
-import { ProceedingsItem } from './ProceedingsTable'
+const OPTIONS = [10, 20, 30, 40, 50]
 
-export function ProceedingsTableFooter({
-  table,
-}: {
-  table: Table<ProceedingsItem>
-}) {
+export function TableFooter<TData>({ table }: { table: Table<TData> }) {
   return (
     <Stack
       direction={{ base: 'column', xl: 'row' }}
@@ -55,7 +51,7 @@ export function ProceedingsTableFooter({
             alignItems="center"
           >
             {' '}
-            {[10, 20, 30, 40, 50].map((pageSize) => (
+            {OPTIONS.map((pageSize) => (
               <option key={pageSize} value={pageSize}>
                 {pageSize}
               </option>

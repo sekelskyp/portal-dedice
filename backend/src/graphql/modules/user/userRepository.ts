@@ -64,6 +64,25 @@ export function getUserRepository(db: Db) {
     return result || null
   }
 
+  async function getAllUsers(): Promise<UserEntity[]> {
+    const results = await db.select().from(user)
+    return results
+  }
+
+  async function toggleUserConfirmation(
+    id: number
+  ): Promise<UserEntity | null> {
+    const currentUser = await getUserById(id)
+    if (!currentUser) return null
+
+    await db
+      .update(user)
+      .set({ confirmed: !currentUser.confirmed })
+      .where(eq(user.id, id))
+
+    return await getUserById(id)
+  }
+
   return {
     getUserById,
     getAllUsersByType,
@@ -74,5 +93,7 @@ export function getUserRepository(db: Db) {
     updateUserById,
     deleteUsersByIds,
     getUserByNotaryId,
+    getAllUsers,
+    toggleUserConfirmation,
   }
 }

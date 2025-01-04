@@ -4,7 +4,7 @@ import { LuFile } from 'react-icons/lu'
 import { useParams } from 'react-router-dom'
 
 import { useAuth } from '@frontend/modules/auth'
-import { Alert, toaster } from '@frontend/shared/design-system'
+import { Alert } from '@frontend/shared/design-system'
 import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
 
@@ -33,12 +33,6 @@ export function NotaryEmailPage() {
           subject: variables.subject,
           proceedingId: parseInt(id ?? '0', 10),
         },
-      }).then(() => {
-        toaster.create({
-          title: 'E-mail byl úspěšně odeslán.',
-          type: 'success',
-          duration: 5000,
-        })
       })
     },
     [notifyProceedingBeneficiariesRequest, id]

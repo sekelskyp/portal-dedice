@@ -15,9 +15,7 @@ export const DateFormControl = ({
       <DateInput
         {...field}
         onChange={(value) => {
-          console.log('value', value)
           field.onChange(value)
-          console.log('field', field.value)
         }}
         disabled={disabled}
       />

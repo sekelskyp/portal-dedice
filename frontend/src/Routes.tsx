@@ -6,7 +6,8 @@ import { HomePage } from '@frontend/modules/home/pages/HomePage'
 import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 import { route } from '@shared/route'
 
-import { NewAssetPage } from './modules/app/assets/components/NewAssetPage'
+import { UserManagement } from './modules/admin/pages/UserManagement'
+import { NewAssetPage } from './modules/app/assets/pages/NewAssetPage'
 import ChatHistoryPage from './modules/app/chat/components/ChatHistoryPage'
 import NewChatPage from './modules/app/chat/components/NewChatPage'
 import { PortalLayout } from './modules/app/components/PortalLayout'
@@ -53,6 +54,7 @@ export function Routes() {
           <Route path={route.profile()} element={<ProfilePage />} />
           <Route path={route.settings()} element={<SettingsPage />} />
         </Route>
+        <Route path={route.users()} element={<UserManagement />} />
         <Route path={route.about()} element={<AboutPage />} />
         <Route path={route.termOfService()} element={<TermsOfService />} />
         <Route path={route.guide()} element={<GuidePage />} />

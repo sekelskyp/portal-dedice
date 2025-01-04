@@ -165,16 +165,6 @@ export type DeceasedPersonInput = {
   surname: Scalars['String']['input']
 }
 
-export type Document = {
-  __typename?: 'Document'
-  createDate: Scalars['DateTimeISO']['output']
-  fileData: Scalars['String']['output']
-  fileName: Scalars['String']['output']
-  fileType: Scalars['String']['output']
-  id: Scalars['ID']['output']
-  proceedingId: Scalars['ID']['output']
-}
-
 export type FindNotaryInput = {
   addressPostCode: Scalars['String']['input']
   deceasedPersonDateOfDeath: Scalars['DateTimeISO']['input']
@@ -193,7 +183,6 @@ export type Mutation = {
   createAsset: Asset
   createBeneficiaries: Array<Beneficiary>
   createBeneficiary: Beneficiary
-  createDocument: Scalars['ID']['output']
   createNotary: Notary
   createProceeding: Scalars['Int']['output']
   deleteAddress: Scalars['Boolean']['output']
@@ -201,7 +190,6 @@ export type Mutation = {
   deleteAsset: Scalars['Boolean']['output']
   deleteAttachmentsByIds: Scalars['Boolean']['output']
   deleteBeneficiaries: Scalars['Boolean']['output']
-  deleteDocumentsByIds: Scalars['Boolean']['output']
   deleteNotary: Scalars['Boolean']['output']
   deleteProceedingsByIds: Scalars['Boolean']['output']
   notifyProcedureBeneficiaries: Scalars['Boolean']['output']
@@ -210,6 +198,7 @@ export type Mutation = {
   resetPassword: Scalars['Boolean']['output']
   signIn: SignInResponse
   signUp: User
+  toggleUserConfirmation: User
   updateAddress?: Maybe<Address>
   updateArticle?: Maybe<Article>
   updateAsset?: Maybe<Asset>
@@ -267,10 +256,6 @@ export type MutationCreateBeneficiaryArgs = {
   data: BeneficiaryInput
 }
 
-export type MutationCreateDocumentArgs = {
-  data: UploadDocumentInput
-}
-
 export type MutationCreateNotaryArgs = {
   data: CreateNotaryInput
 }
@@ -297,10 +282,6 @@ export type MutationDeleteAttachmentsByIdsArgs = {
 
 export type MutationDeleteBeneficiariesArgs = {
   id: Scalars['Int']['input']
-}
-
-export type MutationDeleteDocumentsByIdsArgs = {
-  ids: Array<Scalars['ID']['input']>
 }
 
 export type MutationDeleteNotaryArgs = {
@@ -338,6 +319,10 @@ export type MutationSignInArgs = {
 
 export type MutationSignUpArgs = {
   registerInput: RegisterInput
+}
+
+export type MutationToggleUserConfirmationArgs = {
+  userId: Scalars['Float']['input']
 }
 
 export type MutationUpdateAddressArgs = {
@@ -387,7 +372,6 @@ export type Proceeding = {
   deceasedDateOfDeath: Scalars['DateTimeISO']['output']
   deceasedDisplayName: Scalars['String']['output']
   deceasedName: Scalars['String']['output']
-  documents: Array<Document>
   endDate?: Maybe<Scalars['DateTimeISO']['output']>
   id: Scalars['ID']['output']
   mainBeneficiary?: Maybe<Beneficiary>
@@ -421,6 +405,7 @@ export type Query = {
   getAllArticles: Array<Article>
   getAllProceedings: Array<Proceeding>
   getAllUserByType?: Maybe<Array<User>>
+  getAllUsers: Array<User>
   getArticleById?: Maybe<Article>
   getAssetById?: Maybe<Asset>
   getAssetsByProceedingId: Array<Asset>
@@ -431,9 +416,6 @@ export type Query = {
   getBeneficiariesByProceedingId: Array<Beneficiary>
   getBeneficiaryById?: Maybe<Beneficiary>
   getBeneficiaryProceedingsForUser: Array<Proceeding>
-  getDocumentById?: Maybe<Document>
-  getDocumentsByIds: Array<Document>
-  getDocumentsByProceedingId: Array<Document>
   getNotaryById?: Maybe<Notary>
   getNotaryProceedingsForUser: Array<Proceeding>
   getProceedingById?: Maybe<Proceeding>
@@ -506,18 +488,6 @@ export type QueryGetBeneficiaryProceedingsForUserArgs = {
   userId: Scalars['Int']['input']
 }
 
-export type QueryGetDocumentByIdArgs = {
-  id: Scalars['ID']['input']
-}
-
-export type QueryGetDocumentsByIdsArgs = {
-  ids: Array<Scalars['ID']['input']>
-}
-
-export type QueryGetDocumentsByProceedingIdArgs = {
-  proceedingId: Scalars['Int']['input']
-}
-
 export type QueryGetNotaryByIdArgs = {
   id: Scalars['Int']['input']
 }
@@ -567,11 +537,6 @@ export type UpdateArticleInput = {
   title?: InputMaybe<Scalars['String']['input']>
 }
 
-export type UploadDocumentInput = {
-  file: Scalars['Upload']['input']
-  inheritanceProcedureId: Scalars['ID']['input']
-}
-
 export type UploadFileToProceedingInput = {
   file: Scalars['Upload']['input']
   proceedingId: Scalars['ID']['input']
@@ -593,6 +558,39 @@ export type User = {
   sendNotifications: Scalars['Boolean']['output']
   surname: Scalars['String']['output']
   type: Scalars['String']['output']
+}
+
+export type ChangeUserStatusMutationVariables = Exact<{
+  userId: Scalars['Float']['input']
+}>
+
+export type ChangeUserStatusMutation = {
+  __typename?: 'Mutation'
+  toggleUserConfirmation: { __typename?: 'User'; confirmed: boolean }
+}
+
+export type GetUsersQueryVariables = Exact<{ [key: string]: never }>
+
+export type GetUsersQuery = {
+  __typename?: 'Query'
+  getAllUsers: Array<{
+    __typename?: 'User'
+    id: string
+    name: string
+    surname: string
+    displayName: string
+    addressId?: string | null
+    type: string
+    confirmed: boolean
+    address?: {
+      __typename?: 'Address'
+      id: string
+      municipality: string
+      postalCode: string
+      street: string
+      streetNumber: string
+    } | null
+  }>
 }
 
 export type CreateAssetMutationVariables = Exact<{
@@ -780,21 +778,6 @@ export type DeleteAttachmentMutation = {
   deleteAttachmentsByIds: boolean
 }
 
-export type GetDocumentByIdQueryVariables = Exact<{
-  id: Scalars['ID']['input']
-}>
-
-export type GetDocumentByIdQuery = {
-  __typename?: 'Query'
-  getDocumentById?: {
-    __typename?: 'Document'
-    fileData: string
-    fileType: string
-    fileName: string
-    createDate: any
-  } | null
-}
-
 export type GetAttachmentsByProceedingIdQueryVariables = Exact<{
   proceedingId: Scalars['Int']['input']
 }>
@@ -951,15 +934,6 @@ export type GetProceedingByIdQuery = {
         surname: string
       } | null
     }> | null
-    documents: Array<{
-      __typename?: 'Document'
-      id: string
-      fileData: string
-      fileName: string
-      fileType: string
-      createDate: any
-      proceedingId: string
-    }>
     notary?: {
       __typename?: 'Notary'
       user?: {
@@ -1240,6 +1214,114 @@ export type GetAddressSuggestionsQuery = {
   }>
 }
 
+export const ChangeUserStatusDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'ChangeUserStatus' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'userId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Float' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'toggleUserConfirmation' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'userId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'userId' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'confirmed' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ChangeUserStatusMutation,
+  ChangeUserStatusMutationVariables
+>
+export const GetUsersDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetUsers' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getAllUsers' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'surname' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'displayName' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'address' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'municipality' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'postalCode' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'street' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'streetNumber' },
+                      },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'addressId' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'confirmed' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetUsersQuery, GetUsersQueryVariables>
 export const CreateAssetDocument = {
   kind: 'Document',
   definitions: [
@@ -1957,57 +2039,6 @@ export const DeleteAttachmentDocument = {
   DeleteAttachmentMutation,
   DeleteAttachmentMutationVariables
 >
-export const GetDocumentByIdDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'GetDocumentById' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-          type: {
-            kind: 'NonNullType',
-            type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'getDocumentById' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'id' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'id' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'fileData' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'fileType' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'fileName' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'createDate' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  GetDocumentByIdQuery,
-  GetDocumentByIdQueryVariables
->
 export const GetAttachmentsByProceedingIdDocument = {
   kind: 'Document',
   definitions: [
@@ -2635,36 +2666,6 @@ export const GetProceedingByIdDocument = {
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'deceasedAddressId' },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'documents' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'fileData' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'fileName' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'fileType' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'createDate' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'proceedingId' },
-                      },
-                    ],
-                  },
                 },
                 { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'state' } },

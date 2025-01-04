@@ -5,6 +5,7 @@ import {
   LogOutIcon,
   User2Icon,
 } from 'lucide-react'
+import { MdAdminPanelSettings } from 'react-icons/md'
 
 import { useAuth } from '@frontend/modules/auth'
 import {
@@ -22,6 +23,7 @@ export const UserMenu = () => {
   const { user, signOut } = useAuth()
   const breakpoint = useBreakpoint({ breakpoints: ['base', 'sm'] })
   const isMobile = breakpoint === 'base'
+  const isAdmin = user?.type === 'Admin'
 
   const name = user?.displayName
 
@@ -68,6 +70,12 @@ export const UserMenu = () => {
             <User2Icon />
           </Icon>
           Můj profil
+        </RouterMenuItem>
+        <RouterMenuItem value="admin" to={route.users()} hidden={!isAdmin}>
+          <Icon>
+            <MdAdminPanelSettings />
+          </Icon>
+          Správa uživatelů
         </RouterMenuItem>
         <MenuItem value="signOut" onClick={signOut}>
           <Icon>

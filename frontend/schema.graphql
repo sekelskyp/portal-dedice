@@ -127,15 +127,6 @@ input DeceasedPersonInput {
   surname: String!
 }
 
-type Document {
-  createDate: DateTimeISO!
-  fileData: String!
-  fileName: String!
-  fileType: String!
-  id: ID!
-  proceedingId: ID!
-}
-
 input FindNotaryInput {
   addressPostCode: String!
   deceasedPersonDateOfDeath: DateTimeISO!
@@ -153,7 +144,6 @@ type Mutation {
   createAsset(data: AssetInput!): Asset!
   createBeneficiaries(data: [BeneficiaryInput!]!): [Beneficiary!]!
   createBeneficiary(data: BeneficiaryInput!): Beneficiary!
-  createDocument(data: UploadDocumentInput!): ID!
   createNotary(data: CreateNotaryInput!): Notary!
   createProceeding(data: CreateProceedingInput!): Int!
   deleteAddress(id: Int!): Boolean!
@@ -161,7 +151,6 @@ type Mutation {
   deleteAsset(id: Int!): Boolean!
   deleteAttachmentsByIds(ids: [ID!]!): Boolean!
   deleteBeneficiaries(id: Int!): Boolean!
-  deleteDocumentsByIds(ids: [ID!]!): Boolean!
   deleteNotary(id: Int!): Boolean!
   deleteProceedingsByIds(ids: [Int!]!): Boolean!
   notifyProcedureBeneficiaries(
@@ -177,6 +166,7 @@ type Mutation {
   resetPassword(newPassword: String!, token: String!): Boolean!
   signIn(login: String!, password: String!): SignInResponse!
   signUp(registerInput: RegisterInput!): User!
+  toggleUserConfirmation(userId: Float!): User!
   updateAddress(data: AddressInput!, id: Int!): Address
   updateArticle(data: UpdateArticleInput!, id: Int!): Article
   updateAsset(data: AssetInput!, id: Int!): Asset
@@ -199,7 +189,6 @@ type Proceeding {
   deceasedDateOfDeath: DateTimeISO!
   deceasedDisplayName: String!
   deceasedName: String!
-  documents: [Document!]!
   endDate: DateTimeISO
   id: ID!
   mainBeneficiary: Beneficiary
@@ -232,6 +221,7 @@ type Query {
   getAllArticles: [Article!]!
   getAllProceedings: [Proceeding!]!
   getAllUserByType(type: String!): [User!]
+  getAllUsers: [User!]!
   getArticleById(id: Int!): Article
   getAssetById(id: Int!): Asset
   getAssetsByProceedingId(proceedingId: Int!): [Asset!]!
@@ -242,9 +232,6 @@ type Query {
   getBeneficiariesByProceedingId(proceedingId: Int!): [Beneficiary!]!
   getBeneficiaryById(id: Int!): Beneficiary
   getBeneficiaryProceedingsForUser(userId: Int!): [Proceeding!]!
-  getDocumentById(id: ID!): Document
-  getDocumentsByIds(ids: [ID!]!): [Document!]!
-  getDocumentsByProceedingId(proceedingId: Int!): [Document!]!
   getNotaryById(id: Int!): Notary
   getNotaryProceedingsForUser(userId: Int!): [Proceeding!]!
   getProceedingById(id: Int!): Proceeding
@@ -280,11 +267,6 @@ input UpdateArticleInput {
 The `Upload` scalar type represents a file upload.
 """
 scalar Upload
-
-input UploadDocumentInput {
-  file: Upload!
-  inheritanceProcedureId: ID!
-}
 
 input UploadFileToProceedingInput {
   file: Upload!

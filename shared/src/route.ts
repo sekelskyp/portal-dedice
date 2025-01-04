@@ -30,4 +30,5 @@ export const route = {
   downloadFile: (fileUuid: string = ':fileUuid') =>
     `/files/download/${fileUuid}`,
   streamFile: (fileUuid: string = ':fileUuid') => `/files/stream/${fileUuid}`,
+  users: () => `/admin/users`,
 }

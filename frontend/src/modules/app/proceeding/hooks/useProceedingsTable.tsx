@@ -1,14 +1,11 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 import { Flex, Icon, IconButton, Stack, useBreakpoint } from '@chakra-ui/react'
-import { rankItem } from '@tanstack/match-sorter-utils'
 import {
   createColumnHelper,
-  FilterFn,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  PaginationState,
   useReactTable,
 } from '@tanstack/react-table'
 import { SquareArrowOutUpRight as SquareArrowOutUpRightIcon } from 'lucide-react'
@@ -16,40 +13,31 @@ import { MdDelete } from 'react-icons/md'
 
 import { useAuth } from '@frontend/modules/auth'
 import { useActionDialog } from '@frontend/shared/hooks/useActionDialog'
+import { useTableFilters } from '@frontend/shared/hooks/useTableFilters'
+import { useTablePagination } from '@frontend/shared/hooks/useTablePagination'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
+import {
+  fuzzyFilter,
+  INITIAL_SORTING_STATE,
+} from '@frontend/shared/utils/table-utils'
 import { route } from '@shared/route'
 
-import { ProceedingsItem } from '../components/proceedings-table/ProceedingsTable'
+import { ProceedingsItem } from '../components/ProceedingsTable'
 import { StatusBadge } from '../components/StatusBadge'
 import { useDeleteProceeding } from '../hooks/useDeleteProceeding'
-
-const INITIAL_SORTING_STATE = [
-  {
-    id: 'state',
-    desc: true,
-  },
-]
-
-const fuzzyFilter: FilterFn<ProceedingsItem> = (
-  row,
-  columnId,
-  value,
-  addMeta
-) => {
-  const itemRank = rankItem(row.getValue(columnId), value)
-  addMeta({ itemRank })
-  return itemRank.passed
-}
 
 const columnHelper = createColumnHelper<ProceedingsItem>()
 
 export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
+  const { toggleDialog, isOpen, selectedId } = useActionDialog()
   const { user } = useAuth()
   const isNotary = user?.type === 'Notary'
-
-  const { toggleDialog, isOpen, selectedId } = useActionDialog()
-
   const [deleteProcedureRequest] = useDeleteProceeding()
+
+  const { pagination, setPagination } = useTablePagination()
+  const { globalFilter, setGlobalFilter } = useTableFilters()
+  const breakpoint = useBreakpoint({ breakpoints: ['base', 'sm', 'xl'] })
+  const isMobile = breakpoint === 'base'
 
   const handleProcedureDelete = useCallback(() => {
     if (selectedId) {
@@ -61,15 +49,6 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
     }
   }, [deleteProcedureRequest, selectedId])
 
-  const breakpoint = useBreakpoint({ breakpoints: ['base', 'sm', 'xl'] })
-  const isMobile = breakpoint === 'base'
-  const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 10,
-  })
-
-  const [globalFilter, setGlobalFilter] = useState<string>('')
-
   const columns = useMemo(() => {
     const columns = [
       columnHelper.accessor('deceasedDisplayName', {
@@ -78,6 +57,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
           const name = info.getValue() as string
           return name
         },
+        enableColumnFilter: false,
       }),
     ]
 
@@ -86,6 +66,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
         columnHelper.accessor('name', {
           header: () => 'ID',
           cell: (info) => info.getValue(),
+          enableColumnFilter: false,
         })
       )
       columns.push(
@@ -96,6 +77,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
             const formattedDate = date ? date.split('T')[0] : ''
             return formattedDate
           },
+          enableColumnFilter: false,
         })
       )
     }
@@ -111,6 +93,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
             </Flex>
           )
         },
+        enableColumnFilter: false,
       })
     )
 
@@ -145,6 +128,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
             </Stack>
           )
         },
+        enableColumnFilter: false,
         enableSorting: false,
       })
     )
@@ -156,7 +140,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
     columns,
     data,
     filterFns: {
-      fuzzy: fuzzyFilter,
+      fuzzy: fuzzyFilter<ProceedingsItem>(),
     },
     state: {
       globalFilter,
@@ -165,7 +149,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
     initialState: {
       sorting: INITIAL_SORTING_STATE,
     },
-    globalFilterFn: fuzzyFilter,
+    globalFilterFn: fuzzyFilter<ProceedingsItem>(),
     onPaginationChange: setPagination,
     onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModel(),

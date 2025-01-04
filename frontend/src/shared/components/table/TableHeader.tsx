@@ -2,13 +2,9 @@ import { Heading, Stack, Table } from '@chakra-ui/react'
 import { flexRender, Table as ReactTable } from '@tanstack/react-table'
 import { HiChevronDown, HiChevronUp } from 'react-icons/hi'
 
-import { ProceedingsItem } from './ProceedingsTable'
+import { TableFilter } from './TableFilter'
 
-export function ProceedingsTableHeader({
-  table,
-}: {
-  table: ReactTable<ProceedingsItem>
-}) {
+export function TableHeader<TData>({ table }: { table: ReactTable<TData> }) {
   return (
     <Table.Header textAlign="center" whiteSpace="nowrap">
       {table.getHeaderGroups().map((headerGroup) => (
@@ -37,6 +33,9 @@ export function ProceedingsTableHeader({
                     <HiChevronDown size="20" />
                   ) : null}
                 </Stack>
+                {header.column.getCanFilter() ? (
+                  <TableFilter column={header.column} />
+                ) : null}
               </Table.ColumnHeader>
             )
           })}

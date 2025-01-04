@@ -1,11 +1,11 @@
 import { Button, Stack, Text } from '@chakra-ui/react'
 import { Table } from '@tanstack/react-table'
 
-import { paginationItems } from '../utils/table-pagination'
+import { createPaginationItems } from '../../utils/table-pagination'
 
-import { ProceedingsItem } from './proceedings-table/ProceedingsTable'
+export function TablePagination<TData>({ table }: { table: Table<TData> }) {
+  const paginationItems = createPaginationItems<TData>()
 
-export function TablePagination({ table }: { table: Table<ProceedingsItem> }) {
   return (
     <Stack direction="row" gap={2}>
       <Stack direction="row" gap={2}>

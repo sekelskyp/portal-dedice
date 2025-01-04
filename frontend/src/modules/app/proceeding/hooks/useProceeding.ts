@@ -44,14 +44,6 @@ export const GET_PROCEEDING_QUERY = gql(/* GraphQL */ `
       deceasedDateOfDeath
       deceasedDateOfBirth
       deceasedAddressId
-      documents {
-        id
-        fileData
-        fileName
-        fileType
-        createDate
-        proceedingId
-      }
       id
       state
       notaryId
@@ -82,8 +74,6 @@ export function useProceeding(proceedingId: number) {
       getProceedingByIdId: proceedingId,
     },
   })
-
-  console.log(data)
 
   return {
     data,

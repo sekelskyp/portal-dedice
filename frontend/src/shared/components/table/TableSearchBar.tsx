@@ -6,13 +6,11 @@ import { MdOutlineCancel } from 'react-icons/md'
 
 import { InputGroup } from '@frontend/shared/design-system'
 
-import { ProceedingsItem } from './ProceedingsTable'
-
-export function ProceedingsTableSearchBar({
+export function TableSearchBar<TData>({
   table,
   setGlobalFilter,
 }: {
-  table: Table<ProceedingsItem>
+  table: Table<TData>
   setGlobalFilter: Dispatch<SetStateAction<string>>
 }) {
   return (
