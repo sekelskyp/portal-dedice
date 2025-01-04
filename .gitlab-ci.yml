@@ -68,6 +68,7 @@ lint:
     <<: *cache_config
     policy: pull
   script:
+    - yarn install --frozen-lockfile --ignore-engines
     - yarn lint
   needs:
     - format
