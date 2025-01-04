@@ -33,7 +33,7 @@ export async function createArticle(
     title: input.title,
     date: input.date,
     content: input.content,
-    coverImage: attachmentId,
+    coverImageAttachmentId: attachmentId,
   }
   // return the ID of the new article record
   return context.articleRepository.createArticle(articleData)

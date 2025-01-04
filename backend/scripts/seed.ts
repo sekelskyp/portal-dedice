@@ -186,6 +186,16 @@ async function populateDatabase(
         type: 'Notary',
         notaryId: notaryId2.id,
       },
+      // admin account
+      {
+        name: 'Admin',
+        surname: 'Admin',
+        displayName: 'Admin',
+        email: 'admin',
+        password: await hashPassword('admin'),
+        confirmed: true,
+        type: 'Admin',
+      },
     ])
     .$returningId()
 

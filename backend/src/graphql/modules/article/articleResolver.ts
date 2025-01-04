@@ -43,7 +43,8 @@ export class ArticleResolver {
   // Query to get all articles
   @Query(() => [Article])
   async getAllArticles(@Ctx() context: CustomContext): Promise<Article[]> {
-    return await getAllArticles(context)
+    const result = await getAllArticles(context)
+    return result
   }
 
   // ----------------------------------
@@ -56,7 +57,6 @@ export class ArticleResolver {
     @Arg('data') data: CreateArticleInput,
     @Ctx() context: CustomContext
   ): Promise<Article> {
-    console.log('createArticle zavolan')
     // Destructure and extract the file details
     const { createReadStream, filename, mimetype } = await data.coverImage // WARNING - THIS HAS TO BE AWAITED - VSCODE IS WRONG
     const stream = createReadStream()
@@ -72,13 +72,10 @@ export class ArticleResolver {
       fileData: fileDataInput,
     }
     const articleId = await createArticle(attachmentData, context)
-    console.log('article vytvoren', articleId)
     const article = await getArticleById(articleId, context)
-    console.log('article nalezen', article)
     if (!article) {
       throw new Error('Article was created but could not be fetched')
     }
-
     return article
   }
 
