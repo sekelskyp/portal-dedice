@@ -264,13 +264,10 @@ export const article = mysqlTable('article', {
   id: int('id').primaryKey().autoincrement(),
   title: varchar('title', { length: 255 }).notNull(), // Article title
   date: date('date').default(new Date()).notNull(),
-  // without cover image until i finish new file storage service
-  // coverImage: varchar('cover_image', { length: 500 }).notNull(),
   content: text('content').notNull(), // Article content (stored as text)
-  // cover image
-  fileName: varchar('file_name', { length: 255 }).notNull(),
-  fileType: varchar('file_type', { length: 100 }).notNull(),
-  coverImage: longtext('file_data').notNull(),
+  coverImageAttachmentId: int('attachment_id').references(() => attachment.id, {
+    onDelete: 'set null',
+  }),
 })
 
 // Define Attachment Table (that represents a stored file)

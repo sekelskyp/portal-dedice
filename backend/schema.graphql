@@ -26,8 +26,9 @@ type AddressSuggestion {
 }
 
 type Article {
+  attachment: Attachment
   content: String!
-  coverImage: String!
+  coverImageAttachmentId: ID
   date: DateTimeISO!
   id: ID!
   title: String!

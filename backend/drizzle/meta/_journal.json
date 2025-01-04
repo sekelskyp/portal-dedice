@@ -85,6 +85,13 @@
       "when": 1735844045058,
       "tag": "0011_petite_mister_fear",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "5",
+      "when": 1735947609551,
+      "tag": "0012_big_giant_man",
+      "breakpoints": true
     }
   ]
 }
