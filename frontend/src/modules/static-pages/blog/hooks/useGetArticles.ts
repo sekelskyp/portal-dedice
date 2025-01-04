@@ -9,7 +9,12 @@ const GET_ALL_ARTICLES = gql(/* GraphQL */ `
       date
       title
       content
-      coverImage
+      coverImageAttachmentId
+      attachment {
+        id
+        fileUuid
+        mimetype
+      }
     }
   }
 `)

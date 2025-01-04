@@ -21,7 +21,7 @@ import { ArticleCard } from '../components/ArticleCard'
 import { useDeleteArticle } from '../hooks/useDeleteArticle'
 import { useGetArticle } from '../hooks/useGetArticle'
 import { useGetArticles } from '../hooks/useGetArticles'
-import { createImageUrl } from '../utils/imageUtils'
+import { getArticleImageUrl } from '../utils/displayArticleImage'
 
 export const ArticleDetail: React.FC = () => {
   const { id } = useParams()
@@ -43,7 +43,9 @@ export const ArticleDetail: React.FC = () => {
         title: article.title,
         description: article.content,
         createDate: article.date.split('T')[0],
-        imageUrl: createImageUrl(article.coverImage),
+        imageUrl: article.attachment?.fileUuid
+          ? getArticleImageUrl({ fileUuid: article.attachment.fileUuid })
+          : undefined,
       }))
   }, [allArticlesData, articleId])
 
@@ -95,8 +97,10 @@ export const ArticleDetail: React.FC = () => {
           <Card.Body gap={2}>
             <Image
               src={
-                article.coverImage
-                  ? createImageUrl(article.coverImage)
+                article.attachment?.fileUuid
+                  ? getArticleImageUrl({
+                      fileUuid: article.attachment.fileUuid,
+                    })
                   : '/cover-fallback.png'
               }
               alt={article.title}

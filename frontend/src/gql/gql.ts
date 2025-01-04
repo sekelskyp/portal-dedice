@@ -33,8 +33,6 @@ const documents = {
     types.NewChatMessageDocument,
   '\n  query GetChatHeader($getProceedingByIdId: Int!) {\n    getProceedingById(id: $getProceedingByIdId) {\n      beneficiaries {\n        user {\n          displayName\n          id\n        }\n      }\n      notary {\n        user {\n          displayName\n          id\n        }\n      }\n      name\n    }\n  }\n':
     types.GetChatHeaderDocument,
-  '\n  mutation DeleteDocument($id: ID!) {\n    deleteDocumentsByIds(ids: [$id])\n  }\n':
-    types.DeleteDocumentDocument,
   '\n  mutation DeleteAttachment($id: ID!) {\n    deleteAttachmentsByIds(ids: [$id])\n  }\n':
     types.DeleteAttachmentDocument,
   '\n  query GetDocumentById($id: ID!) {\n    getDocumentById(id: $id) {\n      fileData\n      fileType\n      fileName\n      createDate\n    }\n  }\n':
@@ -77,9 +75,9 @@ const documents = {
     types.CreateArticleDocument,
   '\n  mutation DeleteArticle($ids: [Int!]!) {\n    deleteArticles(ids: $ids)\n  }\n':
     types.DeleteArticleDocument,
-  '\n  query GetArticleById($getArticleByIdId: Int!) {\n    getArticleById(id: $getArticleByIdId) {\n      id\n      date\n      title\n      content\n      coverImage\n    }\n  }\n':
+  '\n  query GetArticleById($getArticleByIdId: Int!) {\n    getArticleById(id: $getArticleByIdId) {\n      id\n      date\n      title\n      content\n      coverImageAttachmentId\n      attachment {\n        id\n        fileUuid\n        mimetype\n      }\n    }\n  }\n':
     types.GetArticleByIdDocument,
-  '\n  query GetAllArticles {\n    getAllArticles {\n      id\n      date\n      title\n      content\n      coverImage\n    }\n  }\n':
+  '\n  query GetAllArticles {\n    getAllArticles {\n      id\n      date\n      title\n      content\n      coverImageAttachmentId\n      attachment {\n        id\n        fileUuid\n        mimetype\n      }\n    }\n  }\n':
     types.GetAllArticlesDocument,
   '\n  mutation UpdateArticle($data: UpdateArticleInput!, $updateArticleId: Int!) {\n    updateArticle(data: $data, id: $updateArticleId) {\n      id\n    }\n  }\n':
     types.UpdateArticleDocument,
@@ -163,12 +161,6 @@ export function gql(
 export function gql(
   source: '\n  query GetChatHeader($getProceedingByIdId: Int!) {\n    getProceedingById(id: $getProceedingByIdId) {\n      beneficiaries {\n        user {\n          displayName\n          id\n        }\n      }\n      notary {\n        user {\n          displayName\n          id\n        }\n      }\n      name\n    }\n  }\n'
 ): (typeof documents)['\n  query GetChatHeader($getProceedingByIdId: Int!) {\n    getProceedingById(id: $getProceedingByIdId) {\n      beneficiaries {\n        user {\n          displayName\n          id\n        }\n      }\n      notary {\n        user {\n          displayName\n          id\n        }\n      }\n      name\n    }\n  }\n']
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function gql(
-  source: '\n  mutation DeleteDocument($id: ID!) {\n    deleteDocumentsByIds(ids: [$id])\n  }\n'
-): (typeof documents)['\n  mutation DeleteDocument($id: ID!) {\n    deleteDocumentsByIds(ids: [$id])\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -299,14 +291,14 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query GetArticleById($getArticleByIdId: Int!) {\n    getArticleById(id: $getArticleByIdId) {\n      id\n      date\n      title\n      content\n      coverImage\n    }\n  }\n'
-): (typeof documents)['\n  query GetArticleById($getArticleByIdId: Int!) {\n    getArticleById(id: $getArticleByIdId) {\n      id\n      date\n      title\n      content\n      coverImage\n    }\n  }\n']
+  source: '\n  query GetArticleById($getArticleByIdId: Int!) {\n    getArticleById(id: $getArticleByIdId) {\n      id\n      date\n      title\n      content\n      coverImageAttachmentId\n      attachment {\n        id\n        fileUuid\n        mimetype\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query GetArticleById($getArticleByIdId: Int!) {\n    getArticleById(id: $getArticleByIdId) {\n      id\n      date\n      title\n      content\n      coverImageAttachmentId\n      attachment {\n        id\n        fileUuid\n        mimetype\n      }\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query GetAllArticles {\n    getAllArticles {\n      id\n      date\n      title\n      content\n      coverImage\n    }\n  }\n'
-): (typeof documents)['\n  query GetAllArticles {\n    getAllArticles {\n      id\n      date\n      title\n      content\n      coverImage\n    }\n  }\n']
+  source: '\n  query GetAllArticles {\n    getAllArticles {\n      id\n      date\n      title\n      content\n      coverImageAttachmentId\n      attachment {\n        id\n        fileUuid\n        mimetype\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query GetAllArticles {\n    getAllArticles {\n      id\n      date\n      title\n      content\n      coverImageAttachmentId\n      attachment {\n        id\n        fileUuid\n        mimetype\n      }\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -59,8 +59,9 @@ export type AddressSuggestion = {
 
 export type Article = {
   __typename?: 'Article'
+  attachment?: Maybe<Attachment>
   content: Scalars['String']['output']
-  coverImage: Scalars['String']['output']
+  coverImageAttachmentId?: Maybe<Scalars['ID']['output']>
   date: Scalars['DateTimeISO']['output']
   id: Scalars['ID']['output']
   title: Scalars['String']['output']
@@ -770,15 +771,6 @@ export type GetChatHeaderQuery = {
   } | null
 }
 
-export type DeleteDocumentMutationVariables = Exact<{
-  id: Scalars['ID']['input']
-}>
-
-export type DeleteDocumentMutation = {
-  __typename?: 'Mutation'
-  deleteDocumentsByIds: boolean
-}
-
 export type DeleteAttachmentMutationVariables = Exact<{
   id: Scalars['ID']['input']
 }>
@@ -1164,7 +1156,13 @@ export type GetArticleByIdQuery = {
     date: any
     title: string
     content: string
-    coverImage: string
+    coverImageAttachmentId?: string | null
+    attachment?: {
+      __typename?: 'Attachment'
+      id: string
+      fileUuid: string
+      mimetype: string
+    } | null
   } | null
 }
 
@@ -1178,7 +1176,13 @@ export type GetAllArticlesQuery = {
     date: any
     title: string
     content: string
-    coverImage: string
+    coverImageAttachmentId?: string | null
+    attachment?: {
+      __typename?: 'Attachment'
+      id: string
+      fileUuid: string
+      mimetype: string
+    } | null
   }>
 }
 
@@ -1909,50 +1913,6 @@ export const GetChatHeaderDocument = {
     },
   ],
 } as unknown as DocumentNode<GetChatHeaderQuery, GetChatHeaderQueryVariables>
-export const DeleteDocumentDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'DeleteDocument' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-          type: {
-            kind: 'NonNullType',
-            type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'deleteDocumentsByIds' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'ids' },
-                value: {
-                  kind: 'ListValue',
-                  values: [
-                    { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-                  ],
-                },
-              },
-            ],
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  DeleteDocumentMutation,
-  DeleteDocumentMutationVariables
->
 export const DeleteAttachmentDocument = {
   kind: 'Document',
   definitions: [
@@ -3550,7 +3510,28 @@ export const GetArticleByIdDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'date' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'title' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'content' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'coverImage' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'coverImageAttachmentId' },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'attachment' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'fileUuid' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'mimetype' },
+                      },
+                    ],
+                  },
+                },
               ],
             },
           },
@@ -3579,7 +3560,28 @@ export const GetAllArticlesDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'date' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'title' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'content' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'coverImage' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'coverImageAttachmentId' },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'attachment' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'fileUuid' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'mimetype' },
+                      },
+                    ],
+                  },
+                },
               ],
             },
           },
