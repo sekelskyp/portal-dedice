@@ -190,9 +190,9 @@ async function populateDatabase(
       {
         name: 'Admin',
         surname: 'Admin',
-        displayName: 'Admin',
-        email: 'admin',
-        password: await hashPassword('admin'),
+        displayName: 'Admin Admin',
+        email: 'admin@portal.com',
+        password: await hashPassword('heslo123'),
         confirmed: true,
         type: 'Admin',
       },
