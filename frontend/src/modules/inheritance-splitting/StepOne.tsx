@@ -1,13 +1,11 @@
+import { FormEvent } from 'react'
 import { Box, VStack } from '@chakra-ui/react'
 import { createListCollection } from '@chakra-ui/react/collection'
-import { Controller, useFormContext } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 
-import { Radio } from '@frontend/shared/design-system'
-import {
-  RadioGroupFormControl,
-  SelectFormControl,
-} from '@frontend/shared/forms'
+import { SelectFormControl } from '@frontend/shared/forms'
 
+import { BinaryRadioGroup } from './components/BinaryRadioGroup'
 import { StepNavigation } from './StepNavigation'
 
 interface FormData {
@@ -39,15 +37,20 @@ interface StepOneProps {
 }
 
 export const StepOne = ({ onPrevious, onNext }: StepOneProps) => {
-  const { watch, control } = useFormContext<FormData>()
+  const { watch, setValue } = useFormContext<FormData>()
+
+  const handleRadioChange =
+    (fieldName: keyof FormData) => (event: FormEvent<HTMLDivElement>) => {
+      const value = (event.target as HTMLInputElement).value
+      setValue(fieldName, value)
+      console.log(fieldName, value)
+    }
 
   const hasChildren = watch('hasChildren')
   //const childrenCount = watch('childrenCount')
   //const hasSpouse = watch('hasSpouse')
   const hasParents = watch('hasParents')
   const hasSiblings = watch('hasSiblings')
-
-  // Remove the defaultValues since they're now handled in InheritanceModel
 
   return (
     <Box width="100%" py={8}>
@@ -60,116 +63,59 @@ export const StepOne = ({ onPrevious, onNext }: StepOneProps) => {
         borderColor="gray.200"
       >
         <VStack align="stretch" gap={6}>
-          <Controller
+          <BinaryRadioGroup
             name="hasChildren"
-            control={control}
-            rules={{ required: true }}
-            render={({ field }) => (
-              <RadioGroupFormControl
-                label="Má zůstavitel/ka potomky?"
-                required
-                {...field}
-              >
-                <Radio value="yes">Ano</Radio>
-                <Radio value="no">Ne</Radio>
-              </RadioGroupFormControl>
-            )}
-          />
+            label="Má zůstavitel/ka potomky?"
+            onChange={handleRadioChange('hasChildren')}
+            required
+          ></BinaryRadioGroup>
 
           {hasChildren === 'yes' && (
-            <Controller
+            <SelectFormControl
               name="childrenCount"
-              control={control}
-              rules={{ required: true }}
-              render={({ field }) => (
-                <SelectFormControl
-                  label="Počet dětí"
-                  collection={childrenCountCollection}
-                  placeholder="Vyberte počet"
-                  required
-                  onChange={field.onChange}
-                  value={[field.value]}
-                  name={field.name}
-                />
-              )}
+              label="Počet dětí"
+              collection={childrenCountCollection}
+              placeholder="Vyberte počet"
+              required
             />
           )}
 
           {hasChildren === 'no' && (
             <>
-              <Controller
+              <BinaryRadioGroup
                 name="hasParents"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <RadioGroupFormControl
-                    label="Má zůstavitel/ka žijící rodiče?"
-                    required
-                    {...field}
-                    value={field.value?.toString()}
-                  >
-                    <Radio value="yes">Ano</Radio>
-                    <Radio value="no">Ne</Radio>
-                  </RadioGroupFormControl>
-                )}
+                label="Má zůstavitel/ka žijící rodiče?"
+                onChange={handleRadioChange('hasParents')}
+                required
               />
 
               {hasParents === 'no' && (
                 <>
-                  <Controller
+                  <BinaryRadioGroup
                     name="hasSiblings"
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field }) => (
-                      <RadioGroupFormControl
-                        label="Má zůstavitel/ka sourozence?"
-                        required
-                        {...field}
-                        value={field.value?.toString()}
-                      >
-                        <Radio value="yes">Ano</Radio>
-                        <Radio value="no">Ne</Radio>
-                      </RadioGroupFormControl>
-                    )}
+                    label="Má zůstavitel/ka sourozence?"
+                    onChange={handleRadioChange('hasSiblings')}
+                    required
                   />
 
                   {hasSiblings === 'yes' && (
-                    <Controller
+                    <SelectFormControl
                       name="siblingsCount"
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field }) => (
-                        <SelectFormControl
-                          label="Počet sourozenců"
-                          collection={siblingsCountCollection}
-                          placeholder="Vyberte počet"
-                          required
-                          onChange={field.onChange}
-                          value={[field.value]}
-                          name={field.name}
-                        />
-                      )}
+                      label="Počet sourozenců"
+                      collection={siblingsCountCollection}
+                      placeholder="Vyberte počet"
+                      required
                     />
                   )}
                 </>
               )}
             </>
           )}
-
-          <Controller
+          <BinaryRadioGroup
             name="hasSpouse"
-            control={control}
-            rules={{ required: true }}
-            render={({ field }) => (
-              <RadioGroupFormControl
-                label="Má zůstavitel/ka manžela/manželku?"
-                required
-                {...field}
-              >
-                <Radio value="yes">Ano</Radio>
-                <Radio value="no">Ne</Radio>
-              </RadioGroupFormControl>
-            )}
+            label="Má zůstavitel/ka manžela/manželku?"
+            onChange={handleRadioChange('hasSpouse')}
+            required
           />
           <StepNavigation
             onPrevious={onPrevious}

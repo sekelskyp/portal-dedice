@@ -21,14 +21,19 @@ interface FormData {
 
 const InheritanceModel = () => {
   const [currentStep, setCurrentStep] = useState(1)
+
   const methods = useForm<FormData>({
     defaultValues: {
       hasChildren: '',
       childrenCount: '',
       hasSpouse: '',
+      hasParents: '', // Add this
+      hasSiblings: '', // Add this
+      siblingsCount: '', // Add this
       assets: [],
       heirs: [],
     },
+    mode: 'onChange',
   })
 
   useEffect(() => {
