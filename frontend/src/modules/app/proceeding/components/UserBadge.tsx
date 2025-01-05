@@ -3,12 +3,13 @@ import { Trash2Icon } from 'lucide-react'
 
 import {
   Alert,
-  Avatar,
   Button,
   Skeleton,
   SkeletonCircle,
 } from '@frontend/shared/design-system'
 import {} from '@frontend/shared/design-system/atoms/chakra'
+
+import { UserAvatar } from '../../components/UserAvatar'
 
 interface User {
   id: string
@@ -53,13 +54,7 @@ const UserBadgeFilled = ({
     py={2}
     bg="bg.emphasized/75"
   >
-    <Avatar
-      name={user.name}
-      size={{ base: 'sm', sm: 'md' }}
-      boxShadow="inner"
-      border="1px solid"
-      borderColor="border.emphasized"
-    />
+    <UserAvatar {...user} />
     <Stack gap="0" h={10}>
       <Text fontSize="md" fontWeight="bold">
         {!!user.displayName.trim()
