@@ -43,12 +43,9 @@ export const StepOne = ({ onPrevious, onNext }: StepOneProps) => {
     (fieldName: keyof FormData) => (event: FormEvent<HTMLDivElement>) => {
       const value = (event.target as HTMLInputElement).value
       setValue(fieldName, value)
-      console.log(fieldName, value)
     }
 
   const hasChildren = watch('hasChildren')
-  //const childrenCount = watch('childrenCount')
-  //const hasSpouse = watch('hasSpouse')
   const hasParents = watch('hasParents')
   const hasSiblings = watch('hasSiblings')
 

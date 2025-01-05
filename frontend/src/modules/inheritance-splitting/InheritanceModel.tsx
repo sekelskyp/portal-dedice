@@ -27,9 +27,9 @@ const InheritanceModel = () => {
       hasChildren: '',
       childrenCount: '',
       hasSpouse: '',
-      hasParents: '', // Add this
-      hasSiblings: '', // Add this
-      siblingsCount: '', // Add this
+      hasParents: '',
+      hasSiblings: '',
+      siblingsCount: '',
       assets: [],
       heirs: [],
     },

@@ -26,7 +26,6 @@ export const StepThree = ({ onPrevious, onNext }: StepThreeProps) => {
   const { watch } = useFormContext<FormData>()
 
   const heirs = watch('heirs') || []
-
   const assets = watch('assets') || []
 
   const getHeirLabel = (heir: string) => {
