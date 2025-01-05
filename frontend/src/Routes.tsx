@@ -47,10 +47,10 @@ export function Routes() {
             element={<ProceedingLayout />}
           >
             <Route path={route.proceeding()} element={<ProceedingPage />} />
+            <Route path={route.newDocument()} element={<NewDocumentPage />} />
+            <Route path={route.newAsset()} element={<NewAssetPage />} />
           </Route>
-          <Route path={route.newDocument()} element={<NewDocumentPage />} />
           <Route path={route.newEmail()} element={<NotaryEmailPage />} />
-          <Route path={route.newAsset()} element={<NewAssetPage />} />
           <Route path={route.chat()} element={<NewChatPage />} />
           <Route path={route.chatId()} element={<NewChatPage />} />
           <Route path={route.chatIdHistory()} element={<ChatHistoryPage />} />

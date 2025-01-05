@@ -1,6 +1,9 @@
 import { defineRecipe } from '@chakra-ui/react'
 
 export const buttonRecipe = defineRecipe({
+  base: {
+    transition: 'background 0.2s ease-in-out',
+  },
   variants: {
     variant: {
       solid: {

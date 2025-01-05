@@ -20,6 +20,7 @@ export const UserBadgeAssignButton = ({
     color="fg.inverted"
     bg={'primary.500'}
     _hover={{ bg: { _light: 'primary.600', _dark: 'primary.400' } }}
+    transition="background 0.2s ease-in-out"
     cursor="pointer"
     h={14}
     {...rest}

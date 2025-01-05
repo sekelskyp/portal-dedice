@@ -97,14 +97,18 @@ export const RewardCalculator = () => {
                   </StatRoot>
                 </HStack>
                 <Stack>
-                  <Alert bg="none" p={0}>
-                    Výpočet je zaokrouhlen na celé koruny.
-                  </Alert>
-                  <Alert bg="none" p={0}>
-                    Tento výpočet je orientační, konečná částka se může lišit
+                  <Alert
+                    bg="none"
+                    p={0}
+                    title="Výpočet je zaokrouhlen na celé koruny."
+                  />
+                  <Alert
+                    bg="none"
+                    p={0}
+                    title="Tento výpočet je orientační, konečná částka se může lišit
                     v&nbsp;závislosti na dalších požadovaných či potřebných
-                    úkonech.
-                  </Alert>
+                    úkonech."
+                  />
                 </Stack>
               </Stack>
             </Card.Body>

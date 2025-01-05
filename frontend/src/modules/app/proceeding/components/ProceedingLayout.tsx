@@ -21,16 +21,13 @@ export const ProceedingLayout = () => {
 }
 
 export interface IProceedingContext {
+  proceedingId: number
   loading: boolean
   proceeding: GetProceedingByIdQuery['getProceedingById'] | undefined
   error: ApolloError | undefined
 }
 
-export const ProceedingContext = createContext<IProceedingContext>({
-  loading: true,
-  proceeding: undefined,
-  error: undefined,
-})
+export const ProceedingContext = createContext<IProceedingContext | null>(null)
 
 // A proceeding context provider
 export const ProceedingProvider = ({
@@ -44,7 +41,12 @@ export const ProceedingProvider = ({
 
   return (
     <ProceedingContext.Provider
-      value={{ proceeding: data?.getProceedingById, loading, error }}
+      value={{
+        proceedingId: id,
+        proceeding: data?.getProceedingById,
+        loading,
+        error,
+      }}
     >
       {children}
     </ProceedingContext.Provider>
@@ -53,5 +55,9 @@ export const ProceedingProvider = ({
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useProceedingContext = () => {
-  return useContext(ProceedingContext)
+  const ctx = useContext(ProceedingContext)
+
+  if (!ctx) throw new Error('ProceedingContext must be provided.')
+
+  return ctx
 }

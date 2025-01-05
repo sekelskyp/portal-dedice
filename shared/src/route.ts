@@ -21,10 +21,12 @@ export const route = {
     `/portal/chat/${proceedingId}/history`,
   emailVerification: () => `/auth/email-verification`,
   confirmEmail: () => `/auth/confirm-email`,
-  proceeding: (id = ':proceedingId') => `/portal/proceeding/${id}`,
+  proceeding: (proceedingId = ':proceedingId') =>
+    `/portal/proceeding/${proceedingId}`,
   newDocument: (id = ':proceedingId') =>
     `/portal/proceeding/${id}/new-document`,
-  newAsset: (id = ':proceedingId') => `/portal/proceeding/${id}/assets`,
+  newAsset: (proceedingId = ':proceedingId') =>
+    `/portal/proceeding/${proceedingId}/assets`,
   newEmail: (id = ':proceedingId') => `/portal/proceeding/${id}/new-email`,
   profile: () => `/portal/profile`,
   downloadFile: (fileUuid: string = ':fileUuid') =>

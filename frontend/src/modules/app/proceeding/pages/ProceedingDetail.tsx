@@ -25,6 +25,7 @@ export const ProceedingDetail = ({
           <Heading
             size={{ base: 'lg', lg: 'xl' }}
             textAlign={{ base: 'center', lg: 'left' }}
+            alignItems={'end'}
           >
             Hlavní kontaktní osoba
           </Heading>
@@ -44,7 +45,7 @@ export const ProceedingDetail = ({
             Přiřazený notář
           </Heading>
           <UserBadge
-            user={undefined}
+            user={proceeding.notary?.user}
             issueText="Notář bez kontaktních údajů."
           />
         </Stack>

@@ -4,17 +4,16 @@ import { AvatarProps } from '@frontend/shared/design-system/atoms/chakra'
 export const UserAvatar = ({
   name,
   surname,
-  ...rest
+  size,
 }: {
   name: string
   surname: string
 } & AvatarProps) => (
   <Avatar
     name={name + ' ' + surname}
-    size={{ base: 'sm', sm: 'md' }}
-    boxShadow="inner"
+    size={size ?? { base: 'sm', sm: 'md' }}
+    boxShadow={{ _light: 'inner' }}
     border="1px solid"
     borderColor="border.emphasized"
-    {...rest}
   />
 )

@@ -1,27 +1,26 @@
-import React, { useCallback, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { Container, Heading, Spinner, Text, VStack } from '@chakra-ui/react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { Asset } from '@frontend/gql/graphql'
 import { Page } from '@frontend/shared/layout/Page'
 import { route } from '@shared/route'
 
+import { useProceedingContext } from '../../proceeding/components/ProceedingLayout'
 import { AssetForm, AssetFormData } from '../components/AssetForm'
 import { AssetType, useAddAsset } from '../hooks/useAddAsset'
 import { useDeleteAsset } from '../hooks/useDeleteAsset'
 import { mapAssetsToFormData, useGetAssets } from '../hooks/useGetAsset'
 
 export const NewAssetPage = () => {
-  const { id } = useParams<{ id: string }>()
+  const { proceedingId } = useProceedingContext()
   const navigate = useNavigate()
   const { addAsset: createAssetRequest } = useAddAsset()
-  const { removeAsset } = useDeleteAsset(parseInt(id!, 10))
-  const { data: existingAssets, loading } = useGetAssets(parseInt(id!, 10))
+  const { removeAsset } = useDeleteAsset(proceedingId)
+  const { data: existingAssets, loading } = useGetAssets(proceedingId)
 
   const handleFormSubmit = useCallback(
     async (formData: AssetFormData) => {
-      if (!id) return
-
       try {
         const newAssets = mapFormDataToAssets(formData)
         const existingAssetsList = existingAssets?.getAssetsByProceedingId || []
@@ -33,7 +32,7 @@ export const NewAssetPage = () => {
         await Promise.all(
           newAssets.map((asset) =>
             createAssetRequest({
-              inheritanceProcedureId: parseInt(id),
+              inheritanceProcedureId: proceedingId,
               ...asset,
               type: asset.type as AssetType,
               value: asset.value ?? 0,
@@ -41,12 +40,12 @@ export const NewAssetPage = () => {
           )
         )
 
-        navigate(route.proceeding(id))
+        navigate(route.proceeding(proceedingId.toString()))
       } catch (error) {
         console.error('Error managing assets:', error)
       }
     },
-    [createAssetRequest, removeAsset, id, navigate, existingAssets]
+    [createAssetRequest, removeAsset, proceedingId, navigate, existingAssets]
   )
 
   const defaultValues = useMemo(() => {
@@ -57,10 +56,6 @@ export const NewAssetPage = () => {
 
     return mapAssetsToFormData(assets)
   }, [existingAssets])
-
-  if (!id) {
-    return <div>Missing procedure ID</div>
-  }
 
   if (loading) {
     return (
@@ -101,7 +96,7 @@ export const NewAssetPage = () => {
           </Text>
           <AssetForm
             onSubmit={handleFormSubmit}
-            inheritanceProcedureId={parseInt(id, 10)}
+            inheritanceProcedureId={proceedingId}
             defaultValues={defaultValues}
             isEditMode={!!defaultValues}
           />

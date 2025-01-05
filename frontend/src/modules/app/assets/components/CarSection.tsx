@@ -114,17 +114,12 @@ export const CarSection: React.FC<CarSectionProps> = ({
                     width={{ base: '100%', sm: 'auto' }}
                     flex={{ sm: '1' }}
                   >
-                    <Controller
+                    <SelectFormControl
                       name={`car.${index}.brand`}
-                      render={({ field }) => (
-                        <SelectFormControl
-                          {...field}
-                          label="Auto"
-                          collection={carBrandCollection}
-                          placeholder="Vyberte značku auta"
-                          required
-                        />
-                      )}
+                      label="Auto"
+                      collection={carBrandCollection}
+                      placeholder="Vyberte značku auta"
+                      required
                     />
                     {watch(`car.${index}.brand`) && (
                       <Button
