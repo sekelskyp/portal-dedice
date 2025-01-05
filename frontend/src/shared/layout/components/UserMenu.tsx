@@ -4,8 +4,8 @@ import {
   ChevronDown as ChevronDownIcon,
   LogOutIcon,
   User2Icon,
+  Users2Icon,
 } from 'lucide-react'
-import { MdAdminPanelSettings } from 'react-icons/md'
 
 import { useAuth } from '@frontend/modules/auth'
 import {
@@ -73,7 +73,7 @@ export const UserMenu = () => {
         </RouterMenuItem>
         <RouterMenuItem value="admin" to={route.users()} hidden={!isAdmin}>
           <Icon>
-            <MdAdminPanelSettings />
+            <Users2Icon />
           </Icon>
           Správa uživatelů
         </RouterMenuItem>
