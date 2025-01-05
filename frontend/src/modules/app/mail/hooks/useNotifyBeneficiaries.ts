@@ -33,7 +33,7 @@ export function useNotifyBeneficiaries() {
         type: 'success',
         duration: 5000,
       })
-      navigate(route.inheritanceProcedure(id))
+      navigate(route.proceeding(id))
     },
     onError: (error) => {
       toaster.create({

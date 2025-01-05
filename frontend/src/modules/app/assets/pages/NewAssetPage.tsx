@@ -41,7 +41,7 @@ export const NewAssetPage = () => {
           )
         )
 
-        navigate(route.inheritanceProcedure(id))
+        navigate(route.proceeding(id))
       } catch (error) {
         console.error('Error managing assets:', error)
       }

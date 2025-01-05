@@ -4,11 +4,10 @@ import { LuFile } from 'react-icons/lu'
 import { useParams } from 'react-router-dom'
 
 import { useAuth } from '@frontend/modules/auth'
-import { Alert } from '@frontend/shared/design-system'
 import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
 
-import { BeneficiaryBadge } from '../../proceeding/components/BeneficiaryBadge'
+import { UserBadge } from '../../proceeding/components/UserBadge'
 import { useProceeding } from '../../proceeding/hooks/useProceeding'
 import { NotaryEmailForm } from '../components/NotaryEmailForm'
 import { useNotifyBeneficiaries } from '../hooks/useNotifyBeneficiaries'
@@ -90,27 +89,19 @@ export function NotaryEmailPage() {
         </Text>
         <Stack alignItems="start">
           <Heading>Notář</Heading>
-          {proceeding.notary?.user ? (
-            <BeneficiaryBadge beneficiaryContact={proceeding.notary?.user} />
-          ) : (
-            <Alert status="warning">Notář bez kontaktních údajů.</Alert>
-          )}
+          <UserBadge
+            user={proceeding.notary?.user}
+            issueText="Notář bez kontaktních údajů."
+          />
           <Heading>Dědici</Heading>
           <Stack direction={{ base: 'column', md: 'row' }} alignItems="start">
-            {proceeding.beneficiaries?.map((beneficiary) =>
-              !!beneficiary.user ? (
-                <BeneficiaryBadge
-                  key={beneficiary.id}
-                  beneficiaryContact={{
-                    ...beneficiary.user,
-                  }}
-                />
-              ) : (
-                <Alert status="warning" key={beneficiary.id}>
-                  Dědic bez kontaktních údajů.
-                </Alert>
-              )
-            )}
+            {proceeding.beneficiaries?.map((beneficiary, index) => (
+              <UserBadge
+                key={beneficiary?.id ?? index}
+                user={beneficiary?.user}
+                issueText="Dědic bez kontaktních údajů."
+              />
+            ))}
           </Stack>
         </Stack>
         <NotaryEmailForm

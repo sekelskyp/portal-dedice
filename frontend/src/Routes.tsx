@@ -13,8 +13,9 @@ import NewChatPage from './modules/app/chat/components/NewChatPage'
 import { PortalLayout } from './modules/app/components/PortalLayout'
 import { NewDocumentPage } from './modules/app/documents/pages/NewDocumentPage'
 import { NotaryEmailPage } from './modules/app/mail/pages/NotaryEmailPage'
+import { ProceedingLayout } from './modules/app/proceeding/components/ProceedingLayout'
 import { NewProceedingPage } from './modules/app/proceeding/pages/NewProceedingPage'
-import InheritanceProcedureDetail from './modules/app/proceeding/pages/ProceedingPage'
+import { ProceedingPage } from './modules/app/proceeding/pages/ProceedingPage'
 import { Proceedings } from './modules/app/proceeding/pages/Proceedings'
 import { ProfilePage } from './modules/app/settings/pages/ProfilePage'
 import { SettingsPage } from './modules/app/settings/pages/SettingsPage'
@@ -42,9 +43,11 @@ export function Routes() {
           <Route path={route.portal()} element={<Proceedings />} />
           <Route path={route.newProceeding()} element={<NewProceedingPage />} />
           <Route
-            path={route.inheritanceProcedure()}
-            element={<InheritanceProcedureDetail />}
-          />
+            path="/portal/proceeding/:proceedingId"
+            element={<ProceedingLayout />}
+          >
+            <Route path={route.proceeding()} element={<ProceedingPage />} />
+          </Route>
           <Route path={route.newDocument()} element={<NewDocumentPage />} />
           <Route path={route.newEmail()} element={<NotaryEmailPage />} />
           <Route path={route.newAsset()} element={<NewAssetPage />} />

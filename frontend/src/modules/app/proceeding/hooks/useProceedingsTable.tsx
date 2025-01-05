@@ -116,7 +116,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
               )}
               <RouterNavLink
                 key={id}
-                to={route.inheritanceProcedure(id.toString())}
+                to={route.proceeding(id.toString())}
                 size="md"
                 variant="subtle"
                 borderRadius="xl"

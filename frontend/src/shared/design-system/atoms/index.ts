@@ -31,6 +31,8 @@ export {
   SelectTrigger,
   SelectValueText,
   Skeleton,
+  SkeletonCircle,
+  SkeletonText,
   StatDownTrend,
   StatHelpText,
   StatLabel,

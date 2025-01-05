@@ -202,7 +202,7 @@ const VATPercentage = 0.21
 // Calculates the reward from given value according to the limits
 const calculateReward = (value: number) => {
   let remainingValue = value
-  let processedValue = 0
+  // let processedValue = 0
   let reward = 0
 
   for (const [min, max, percentage] of limits) {
@@ -211,18 +211,8 @@ const calculateReward = (value: number) => {
     const rewardInThisRange = valueInThisRange * percentage
 
     reward += rewardInThisRange
-    processedValue += valueInThisRange
+    // processedValue += valueInThisRange
     remainingValue -= valueInThisRange
-
-    console.log({
-      min,
-      max,
-      percentage,
-      valueInThisRange,
-      rewardInThisRange,
-      processedValue,
-      remainingValue,
-    })
 
     if (remainingValue <= 0) break
   }

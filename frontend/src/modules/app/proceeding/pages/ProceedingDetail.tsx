@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom'
 
 import { GetProceedingByIdQuery } from '@frontend/gql/graphql'
 import { useAuth } from '@frontend/modules/auth'
-import { Alert } from '@frontend/shared/design-system'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { route } from '@shared/route'
 
-import { BeneficiaryBadge } from '../components/BeneficiaryBadge'
+import { UserBadge } from '../components/UserBadge'
+import { UserBadgeAssignButton } from '../components/UserBadgeAssignButton'
 
 export const ProceedingDetail = ({
   proceeding,
@@ -19,9 +19,9 @@ export const ProceedingDetail = ({
   const assets = proceeding?.procedureAssets
   const totalAssetsValue = assets?.reduce((sum, asset) => sum + asset.value, 0)
   return proceeding ? (
-    <Stack gap={4}>
+    <Stack gap={6}>
       <Grid gap={4} templateColumns={{ base: '1fr', lg: '1fr 1fr' }}>
-        <Stack>
+        <Stack gap={4}>
           <Heading
             size={{ base: 'lg', lg: 'xl' }}
             textAlign={{ base: 'center', lg: 'left' }}
@@ -29,49 +29,44 @@ export const ProceedingDetail = ({
             Hlavní kontaktní osoba
           </Heading>
 
-          {proceeding.mainBeneficiary?.user ? (
-            <BeneficiaryBadge
-              beneficiaryContact={proceeding.mainBeneficiary.user}
-            />
-          ) : (
-            <Alert status="warning">Dědic bez kontaktních údajů.</Alert>
-          )}
+          <UserBadge
+            user={proceeding.mainBeneficiary?.user}
+            issueText="Dědic bez kontaktních údajů."
+            editable={user.user?.type === 'Notary'}
+          />
+          <UserBadgeAssignButton text="Nastavit hlavní kontaktní osobu" />
         </Stack>
-        <Stack>
+        <Stack gap={4}>
           <Heading
             size={{ base: 'lg', lg: 'xl' }}
             textAlign={{ base: 'center', lg: 'left' }}
           >
             Přiřazený notář
           </Heading>
-          {proceeding.notary?.user ? (
-            <BeneficiaryBadge beneficiaryContact={proceeding.notary?.user} />
-          ) : (
-            <Alert status="warning">Notář bez kontaktních údajů.</Alert>
-          )}
+          <UserBadge
+            user={undefined}
+            issueText="Notář bez kontaktních údajů."
+          />
         </Stack>
       </Grid>
-      <Stack>
+      <Stack gap={4}>
         <Heading
           size={{ base: 'lg', lg: 'xl' }}
           textAlign={{ base: 'center', lg: 'left' }}
         >
           Seznam dědiců
         </Heading>
-        {proceeding.beneficiaries?.map((beneficiary) =>
-          !!beneficiary.user ? (
-            <BeneficiaryBadge
+        <Grid gap={4} templateColumns={{ base: '1fr', lg: '1fr 1fr' }}>
+          {proceeding.beneficiaries?.map((beneficiary) => (
+            <UserBadge
               key={beneficiary.id}
-              beneficiaryContact={{
-                ...beneficiary.user,
-              }}
+              user={beneficiary.user}
+              issueText="Dědic bez kontaktních údajů."
+              editable={true}
+              onRemoveClick={() => {}}
             />
-          ) : (
-            <Alert status="warning" key={beneficiary.id}>
-              Dědic bez kontaktních údajů.
-            </Alert>
-          )
-        )}
+          ))}
+        </Grid>
       </Stack>
       <Heading
         size={{ base: 'lg', lg: 'xl' }}
