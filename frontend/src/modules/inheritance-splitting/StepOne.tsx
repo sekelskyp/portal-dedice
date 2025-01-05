@@ -6,16 +6,8 @@ import { useFormContext } from 'react-hook-form'
 import { SelectFormControl } from '@frontend/shared/forms'
 
 import { BinaryRadioGroup } from './components/BinaryRadioGroup'
+import { FormData } from './FormData'
 import { StepNavigation } from './StepNavigation'
-
-interface FormData {
-  childrenCount: string
-  hasChildren: string
-  hasSpouse: string
-  hasParents: string
-  hasSiblings: string
-  siblingsCount: string
-}
 
 const childrenCountCollection = createListCollection({
   items: Array.from({ length: 10 }, (_, i) => ({

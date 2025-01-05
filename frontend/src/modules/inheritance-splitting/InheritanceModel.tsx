@@ -4,20 +4,10 @@ import { FormProvider, useForm } from 'react-hook-form'
 
 import { Form } from '@frontend/shared/forms/Form'
 
+import { FormData } from './FormData'
 import { StepOne } from './StepOne'
 import { StepThree } from './StepThree'
 import { StepTwo } from './StepTwo'
-
-interface FormData {
-  childrenCount: string
-  hasChildren: string
-  hasSpouse: string
-  hasParents: string
-  hasSiblings: string
-  siblingsCount: string
-  assets: string[]
-  heirs: string[]
-}
 
 const InheritanceModel = () => {
   const [currentStep, setCurrentStep] = useState(1)
