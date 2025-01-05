@@ -196,7 +196,7 @@ const init = async () => {
   }
 
   // Add routes for serving files
-  app.use(resolveContext, fileRoutes)
+  app.use(cors<cors.CorsRequest>(), resolveContext, fileRoutes)
 
   httpServer.listen({ port: PORT }, () => {
     console.log('Server listening on port: ' + PORT)
