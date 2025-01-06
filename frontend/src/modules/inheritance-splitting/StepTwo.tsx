@@ -5,23 +5,10 @@ import { FaPlus } from 'react-icons/fa'
 
 import { InputFormControl, SelectFormControl } from '@frontend/shared/forms'
 
+import { FormData } from './FormData'
 import { StepNavigation } from './StepNavigation'
 
-interface FormData {
-  childrenCount: string
-  hasChildren: string
-  hasSpouse: string
-  hasParents: string
-  hasSiblings: string
-  siblingsCount: string
-  heirs: string[]
-  assets: Array<{
-    type: string
-    name: string
-    value: string
-    isShared: boolean
-  }>
-}   
+// Remove duplicate FormData interface and keep only the import
 
 const assetTypeCollection = createListCollection({
   items: [
@@ -47,9 +34,9 @@ export const StepTwo = ({ onPrevious, onNext }: StepTwoProps) => {
   const { watch, setValue } = useFormContext<FormData>()
 
   return (
-    <VStack gap={4} align="start">
+    <VStack gap={8} align="stretch" width="100%">
       {watch('assets')?.map((_, index) => (
-        <HStack key={index} gap={4} align="center">
+        <VStack key={index} gap={6} align="stretch" width="100%">
           <SelectFormControl
             label="Typ položky"
             name={`assets.${index}.type`}
@@ -57,20 +44,23 @@ export const StepTwo = ({ onPrevious, onNext }: StepTwoProps) => {
             placeholder="Vyberte typ"
             required
           />
-          <InputFormControl
-            label="Název položky"
-            name={`assets.${index}.name`}
-            required
-          />
-          <InputFormControl
-            label="Hodnota položky (Kč)"
-            name={`assets.${index}.value`}
-            inputProps={{ type: 'number' }}
-            required
-          />
-        </HStack>
+          <HStack gap={6} align="start">
+            <InputFormControl
+              label="Název položky"
+              name={`assets.${index}.name`}
+              required
+            />
+            <InputFormControl
+              label="Hodnota položky (Kč)"
+              name={`assets.${index}.value`}
+              inputProps={{ type: 'number' }}
+              required
+            />
+          </HStack>
+        </VStack>
       ))}
       <Button
+        alignSelf="flex-start"
         onClick={() => {
           const assets = watch('assets') || []
           setValue('assets', [
@@ -80,6 +70,7 @@ export const StepTwo = ({ onPrevious, onNext }: StepTwoProps) => {
         }}
       >
         <FaPlus />
+        Přidat položku
       </Button>
       <StepNavigation
         onPrevious={onPrevious}

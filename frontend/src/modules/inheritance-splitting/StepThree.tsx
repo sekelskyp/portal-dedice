@@ -1,21 +1,14 @@
-import { Box, HStack, VStack } from '@chakra-ui/react'
+import { Box, Grid, Text, VStack } from '@chakra-ui/react'
 import { createListCollection } from '@chakra-ui/react/collection'
 import { useFormContext } from 'react-hook-form'
 
 import { SelectFormControl } from '@frontend/shared/forms'
 
+import { FormData } from './FormData'
 import { StepNavigation } from './StepNavigation'
+import { useWizard } from './useWizard' // Updated import path
 
-interface FormData {
-  childrenCount: string
-  hasChildren: string
-  hasSpouse: string
-  hasParents: string
-  hasSiblings: string
-  siblingsCount: string
-  assets: { type: string; name: string; isShared: boolean; value: number }[]
-  heirs: string[]
-}
+// Remove duplicate FormData interface
 
 interface StepThreeProps {
   onPrevious: () => void
@@ -24,72 +17,94 @@ interface StepThreeProps {
 
 export const StepThree = ({ onPrevious, onNext }: StepThreeProps) => {
   const { watch } = useFormContext<FormData>()
+  const { formData } = useWizard()
 
-  const heirs = watch('heirs') || []
+  const heirs = formData.heirs || []
   const assets = watch('assets') || []
 
-  const getHeirLabel = (heir: string) => {
-    if (heir === 'spouse') return 'Manžel/ka'
-
-    if (heir.startsWith('child')) {
-      const childNumber = heir.replace('child', '')
-
-      return `Dítě ${childNumber}`
+  const getHeirCollection = (isIndivisible: boolean) => {
+    if (isIndivisible) {
+      return createListCollection({
+        items: heirs.map((heir) => ({
+          value: heir.id,
+          label: heir.label,
+        })),
+      })
     }
-
-    return heir
+    return createListCollection({
+      items: [
+        { value: 'all', label: 'Všichni dědicové rovným dílem' },
+        ...heirs.map((heir) => ({
+          value: heir.id,
+          label: heir.label,
+        })),
+      ],
+    })
   }
 
   return (
-    <VStack gap={4} align="start">
+    <VStack gap={6} align="stretch" w="full">
       {assets.length > 0 ? (
         assets.map((asset, index) => (
-          <HStack key={index} gap={4} align="center">
-            <Box>
-              <strong>Typ:</strong> {asset.type || 'Neuvedeno'}
-            </Box>
+          <Box key={index} p={4} borderRadius="md" bg="gray.50" shadow="sm">
+            <Grid templateColumns="repeat(3, 1fr)" gap={6} mb={4}>
+              <Box>
+                <Text color="gray.600" fontSize="sm" mb={1}>
+                  Typ
+                </Text>
+                <Text>{asset.type || 'Neuvedeno'}</Text>
+              </Box>
 
-            <Box>
-              <strong>Název:</strong> {asset.name || 'Neuvedeno'}
-            </Box>
+              <Box>
+                <Text color="gray.600" fontSize="sm" mb={1}>
+                  Název
+                </Text>
+                <Text>{asset.name || 'Neuvedeno'}</Text>
+              </Box>
 
-            <Box>
-              <strong>Vlastnictví:</strong>{' '}
-              {asset.isShared ? 'Společné' : 'Individuální'}
-            </Box>
+              <Box>
+                <Text color="gray.600" fontSize="sm" mb={1}>
+                  Vlastnictví
+                </Text>
+                <Text>{asset.isShared ? 'Společné' : 'Individuální'}</Text>
+              </Box>
 
-            <Box>
-              <strong>Hodnota:</strong> {asset.value || '0'} Kč
-            </Box>
+              <Box>
+                <Text color="gray.600" fontSize="sm" mb={1}>
+                  Hodnota
+                </Text>
+                <Text>{asset.value || '0'} Kč</Text>
+              </Box>
 
-            <Box>
-              <strong>Dělitelnost:</strong>{' '}
-              {asset.type === 'cenné papíry' || asset.type === 'vozidlo'
-                ? 'Ne'
-                : 'Ano'}
-            </Box>
+              <Box>
+                <Text color="gray.600" fontSize="sm" mb={1}>
+                  Dělitelnost
+                </Text>
+                <Text>
+                  {asset.type === 'cenné papíry' || asset.type === 'vozidlo'
+                    ? 'Ne'
+                    : 'Ano'}
+                </Text>
+              </Box>
 
-            <SelectFormControl
-              label="Návrh rozdělení"
-              name={`assets.${index}.heir`}
-              collection={createListCollection({
-                items: [
-                  { value: 'all', label: 'Všichni dědicové' },
-
-                  ...heirs.map((heir) => ({
-                    value: heir,
-
-                    label: getHeirLabel(heir),
-                  })),
-                ],
-              })}
-              placeholder="Vyberte dědice"
-              required
-            />
-          </HStack>
+              <Box>
+                <SelectFormControl
+                  label="Návrh rozdělení"
+                  name={`assets.${index}.heir`}
+                  collection={getHeirCollection(
+                    asset.type === 'cenné papíry' || asset.type === 'vozidlo'
+                  )}
+                  placeholder="Vyberte dědice"
+                  required
+                />
+              </Box>
+            </Grid>
+          </Box>
         ))
       ) : (
-        <Box>Nebyly přidány žádné položky majetku.</Box>
+        <Box p={4} bg="gray.50" borderRadius="md">
+          <Text>Nebyly přidány žádné položky majetku.</Text>
+        </Box>
       )}
 
       <StepNavigation

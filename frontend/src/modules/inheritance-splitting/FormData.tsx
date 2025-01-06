@@ -5,6 +5,16 @@ export interface FormData {
   hasParents: string
   hasSiblings: string
   siblingsCount: string
-  assets?: string[]
-  heirs?: string[]
+  heirs: Array<{
+    id: string
+    type: 'spouse' | 'child' | 'parent' | 'sibling'
+    label: string
+  }>
+  assets: Array<{
+    type: string
+    name: string
+    value: string
+    isShared: boolean
+    heir?: string
+  }>
 }

@@ -1,5 +1,5 @@
 import { FormEvent } from 'react'
-import { Box, VStack } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react'
 import { createListCollection } from '@chakra-ui/react/collection'
 import { useFormContext } from 'react-hook-form'
 
@@ -42,78 +42,66 @@ export const StepOne = ({ onPrevious, onNext }: StepOneProps) => {
   const hasSiblings = watch('hasSiblings')
 
   return (
-    <Box width="100%" py={8}>
-      <Box
-        p={6}
-        bg="white"
-        borderRadius="lg"
-        boxShadow="sm"
-        border="1px"
-        borderColor="gray.200"
-      >
-        <VStack align="stretch" gap={6}>
+    <VStack align="stretch" gap={6}>
+      <BinaryRadioGroup
+        name="hasChildren"
+        label="Má zůstavitel/ka potomky?"
+        onChange={handleRadioChange('hasChildren')}
+        required
+      />
+      {hasChildren === 'yes' && (
+        <SelectFormControl
+          name="childrenCount"
+          label="Počet dětí"
+          collection={childrenCountCollection}
+          placeholder="Vyberte počet"
+          required
+        />
+      )}
+
+      {hasChildren === 'no' && (
+        <>
           <BinaryRadioGroup
-            name="hasChildren"
-            label="Má zůstavitel/ka potomky?"
-            onChange={handleRadioChange('hasChildren')}
+            name="hasParents"
+            label="Má zůstavitel/ka žijící rodiče?"
+            onChange={handleRadioChange('hasParents')}
             required
-          ></BinaryRadioGroup>
+          />
 
-          {hasChildren === 'yes' && (
-            <SelectFormControl
-              name="childrenCount"
-              label="Počet dětí"
-              collection={childrenCountCollection}
-              placeholder="Vyberte počet"
-              required
-            />
-          )}
-
-          {hasChildren === 'no' && (
+          {hasParents === 'no' && (
             <>
               <BinaryRadioGroup
-                name="hasParents"
-                label="Má zůstavitel/ka žijící rodiče?"
-                onChange={handleRadioChange('hasParents')}
+                name="hasSiblings"
+                label="Má zůstavitel/ka sourozence?"
+                onChange={handleRadioChange('hasSiblings')}
                 required
               />
 
-              {hasParents === 'no' && (
-                <>
-                  <BinaryRadioGroup
-                    name="hasSiblings"
-                    label="Má zůstavitel/ka sourozence?"
-                    onChange={handleRadioChange('hasSiblings')}
-                    required
-                  />
-
-                  {hasSiblings === 'yes' && (
-                    <SelectFormControl
-                      name="siblingsCount"
-                      label="Počet sourozenců"
-                      collection={siblingsCountCollection}
-                      placeholder="Vyberte počet"
-                      required
-                    />
-                  )}
-                </>
+              {hasSiblings === 'yes' && (
+                <SelectFormControl
+                  name="siblingsCount"
+                  label="Počet sourozenců"
+                  collection={siblingsCountCollection}
+                  placeholder="Vyberte počet"
+                  required
+                />
               )}
             </>
           )}
-          <BinaryRadioGroup
-            name="hasSpouse"
-            label="Má zůstavitel/ka manžela/manželku?"
-            onChange={handleRadioChange('hasSpouse')}
-            required
-          />
-          <StepNavigation
-            onPrevious={onPrevious}
-            onNext={onNext}
-            isFirstStep={true}
-            isLastStep={false}
-          />
-        </VStack>
-      </Box>
-    </Box>
+        </>
+      )}
+      <BinaryRadioGroup
+        name="hasSpouse"
+        label="Má zůstavitel/ka manžela/manželku?"
+        onChange={handleRadioChange('hasSpouse')}
+        required
+      />
+      <StepNavigation
+        onPrevious={onPrevious}
+        onNext={onNext}
+        isFirstStep={true}
+        isLastStep={false}
+      />
+    </VStack>
   )
 }
