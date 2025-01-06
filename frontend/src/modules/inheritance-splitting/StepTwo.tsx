@@ -1,36 +1,29 @@
-import { Button, HStack, VStack } from '@chakra-ui/react'
+import { HStack, IconButton, VStack } from '@chakra-ui/react'
 import { createListCollection } from '@chakra-ui/react/collection'
 import { useFormContext } from 'react-hook-form'
 import { FaPlus } from 'react-icons/fa'
 
 import { InputFormControl, SelectFormControl } from '@frontend/shared/forms'
 
-import { FormData } from './FormData'
+import { FormData, StepProps } from './FormData'
 import { StepNavigation } from './StepNavigation'
-
-// Remove duplicate FormData interface and keep only the import
 
 const assetTypeCollection = createListCollection({
   items: [
-    { value: 'běžný účet', label: 'Běžný účet' },
-    { value: 'spořící účet', label: 'Spořící účet' },
-    { value: 'termínovaný vklad', label: 'Termínovaný vklad' },
-    { value: 'stavební spoření', label: 'Stavební spoření' },
-    { value: 'cenné papíry', label: 'Cenné papíry' },
-    { value: 'cennosti', label: 'Cennosti' },
-    { value: 'hotovost', label: 'Hotovost' },
-    { value: 'přeplatky energií', label: 'Přeplatky energií' },
-    { value: 'vozidlo', label: 'Vozidlo' },
-    { value: 'nemovitost', label: 'Nemovitost' },
+    { value: 'Běžný účet', label: 'Běžný účet' },
+    { value: 'Spořící účet', label: 'Spořící účet' },
+    { value: 'Termínovaný vklad', label: 'Termínovaný vklad' },
+    { value: 'Stavební spoření', label: 'Stavební spoření' },
+    { value: 'Cenné papíry', label: 'Cenné papíry' },
+    { value: 'Cennosti', label: 'Cennosti' },
+    { value: 'Hotovost', label: 'Hotovost' },
+    { value: 'Přeplatky energií', label: 'Přeplatky energií' },
+    { value: 'Vozidlo', label: 'Vozidlo' },
+    { value: 'Nemovitost', label: 'Nemovitost' },
   ],
 })
 
-interface StepTwoProps {
-  onPrevious: () => void
-  onNext: () => void
-}
-
-export const StepTwo = ({ onPrevious, onNext }: StepTwoProps) => {
+export const StepTwo = ({ onPrevious, onNext }: StepProps) => {
   const { watch, setValue } = useFormContext<FormData>()
 
   return (
@@ -59,7 +52,7 @@ export const StepTwo = ({ onPrevious, onNext }: StepTwoProps) => {
           </HStack>
         </VStack>
       ))}
-      <Button
+      <IconButton
         alignSelf="flex-start"
         onClick={() => {
           const assets = watch('assets') || []
@@ -68,10 +61,11 @@ export const StepTwo = ({ onPrevious, onNext }: StepTwoProps) => {
             { type: '', name: '', value: '', isShared: true },
           ])
         }}
+        p={4}
       >
         <FaPlus />
         Přidat položku
-      </Button>
+      </IconButton>
       <StepNavigation
         onPrevious={onPrevious}
         onNext={onNext}

@@ -1,3 +1,17 @@
+export interface Asset {
+  heir?: string
+  isShared: boolean
+  name: string
+  type: string
+  value: string
+}
+
+export interface Heir {
+  id?: string
+  label: string
+  type?: 'spouse' | 'child' | 'parent' | 'sibling'
+}
+
 export interface FormData {
   childrenCount: string
   hasChildren: string
@@ -5,16 +19,11 @@ export interface FormData {
   hasParents: string
   hasSiblings: string
   siblingsCount: string
-  heirs: Array<{
-    id: string
-    type: 'spouse' | 'child' | 'parent' | 'sibling'
-    label: string
-  }>
-  assets: Array<{
-    type: string
-    name: string
-    value: string
-    isShared: boolean
-    heir?: string
-  }>
+  heirs: Array<Heir>
+  assets: Array<Asset>
+}
+
+export interface StepProps {
+  onPrevious: () => void
+  onNext: () => void
 }

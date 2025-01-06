@@ -5,29 +5,17 @@ import { useFormContext, useWatch } from 'react-hook-form'
 import { SelectFormControl } from '@frontend/shared/forms'
 
 import { BinaryRadioGroup } from './components/BinaryRadioGroup'
-import { FormData } from './FormData'
+import { FormData, StepProps } from './FormData'
 import { StepNavigation } from './StepNavigation'
 
-const childrenCountCollection = createListCollection({
+const countCollection = createListCollection({
   items: Array.from({ length: 10 }, (_, i) => ({
     value: (i + 1).toString(),
     label: (i + 1).toString(),
   })),
 })
 
-const siblingsCountCollection = createListCollection({
-  items: Array.from({ length: 10 }, (_, i) => ({
-    value: (i + 1).toString(),
-    label: (i + 1).toString(),
-  })),
-})
-
-interface StepOneProps {
-  onPrevious: () => void
-  onNext: () => void
-}
-
-export const StepOne = ({ onPrevious, onNext }: StepOneProps) => {
+export const StepOne = ({ onPrevious, onNext }: StepProps) => {
   const { control } = useFormContext<FormData>()
 
   const [hasChildren, hasParents, hasSiblings] = useWatch({
@@ -47,7 +35,7 @@ export const StepOne = ({ onPrevious, onNext }: StepOneProps) => {
         <SelectFormControl
           name="childrenCount"
           label="Počet dětí"
-          collection={childrenCountCollection}
+          collection={countCollection}
           placeholder="Vyberte počet"
           required
         />
@@ -73,7 +61,7 @@ export const StepOne = ({ onPrevious, onNext }: StepOneProps) => {
                 <SelectFormControl
                   name="siblingsCount"
                   label="Počet sourozenců"
-                  collection={siblingsCountCollection}
+                  collection={countCollection}
                   placeholder="Vyberte počet"
                   required
                 />
