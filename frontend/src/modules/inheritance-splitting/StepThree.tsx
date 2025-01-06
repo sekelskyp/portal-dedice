@@ -1,6 +1,7 @@
+import { useCallback, useMemo } from 'react'
 import { Box, Text, VStack } from '@chakra-ui/react'
 import { createListCollection } from '@chakra-ui/react/collection'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 
 import { AssetCard } from './components/AssetCard'
 import { FormData, StepProps } from './FormData'
@@ -8,37 +9,46 @@ import { StepNavigation } from './StepNavigation'
 import { useWizard } from './useWizard'
 
 export const StepThree = ({ onPrevious, onNext }: StepProps) => {
-  const { watch } = useFormContext<FormData>()
   const { formData } = useWizard()
+  const { watch, control } = useFormContext<FormData>()
 
-  const heirs = formData.heirs || []
+  const watchedHeirs = useWatch({ control, name: 'heirs' })
+  const heirs = useMemo(() => {
+    return watchedHeirs || formData.heirs || []
+  }, [watchedHeirs, formData.heirs])
   const assets = watch('assets') || []
 
-  const getHeirCollection = (isIndivisible: boolean) => {
-    if (isIndivisible) {
+  const getHeirCollection = useCallback(
+    (isIndivisible: boolean) => {
+      if (!heirs.length) {
+        console.warn('No heirs available for collection')
+        return createListCollection({ items: [] })
+      }
+
       return createListCollection({
-        items: heirs.map((heir) => ({
-          value: heir.id,
-          label: heir.label,
-        })),
+        items: isIndivisible
+          ? heirs.map((heir) => ({
+              value: heir.id || '',
+              label: heir.label,
+            }))
+          : [
+              { value: 'all', label: 'Všichni dědicové rovným dílem' },
+              ...heirs.map((heir) => ({
+                value: heir.id || '',
+                label: heir.label,
+              })),
+            ],
       })
-    }
-    return createListCollection({
-      items: [
-        { value: 'all', label: 'Všichni dědicové rovným dílem' },
-        ...heirs.map((heir) => ({
-          value: heir.id,
-          label: heir.label,
-        })),
-      ],
-    })
-  }
+    },
+    [heirs]
+  )
 
   return (
     <VStack gap={6} align="stretch" w="full">
       {assets.length > 0 ? (
         assets.map((asset, index) => (
           <AssetCard
+            key={index}
             asset={asset}
             index={index}
             getHeirCollection={getHeirCollection}

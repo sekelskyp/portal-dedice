@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import { Form } from '@frontend/shared/forms/Form'
@@ -27,77 +27,11 @@ const InheritanceModel = () => {
     mode: 'onChange',
   })
 
-  useEffect(() => {
-    const subscription = methods.watch((formData) => {
-      const newHeirs: {
-        id: string
-        type: 'spouse' | 'child' | 'parent' | 'sibling'
-        label: string
-      }[] = []
-
-      if (formData.hasSpouse === 'ano') {
-        newHeirs.push({
-          id: 'spouse',
-          type: 'spouse',
-          label: 'Manžel/ka',
-        })
-      }
-
-      const childCount = formData.childrenCount
-        ? parseInt(String(formData.childrenCount), 10)
-        : 0
-      if (formData.hasChildren === 'ano' && childCount > 0) {
-        for (let i = 1; i <= childCount; i++) {
-          newHeirs.push({
-            id: `child${i}`,
-            type: 'child',
-            label: `Dítě ${i}`,
-          })
-        }
-      }
-
-      if (formData.hasChildren === 'ne' && formData.hasParents === 'ano') {
-        newHeirs.push({
-          id: 'parent1',
-          type: 'parent',
-          label: 'Rodič 1',
-        })
-        newHeirs.push({
-          id: 'parent2',
-          type: 'parent',
-          label: 'Rodič 2',
-        })
-      }
-
-      const siblingCount = formData.siblingsCount
-        ? parseInt(String(formData.siblingsCount), 10)
-        : 0
-      if (
-        formData.hasChildren === 'ne' &&
-        formData.hasParents === 'ne' &&
-        formData.hasSiblings === 'ano' &&
-        siblingCount > 0
-      ) {
-        for (let i = 1; i <= siblingCount; i++) {
-          newHeirs.push({
-            id: `sibling${i}`,
-            type: 'sibling',
-            label: `Sourozenec ${i}`,
-          })
-        }
-      }
-
-      if (newHeirs.length > 0) {
-        methods.setValue('heirs', newHeirs, { shouldValidate: true })
-      }
-    })
-
-    return () => subscription.unsubscribe()
-  }, [methods])
+  const formData = methods.watch()
 
   const onSubmit = (data: FormData) => {
     if (currentStep === 3) {
-      console.log(data)
+      console.log('Final submission:', data)
     } else {
       setCurrentStep((prev) => prev + 1)
     }
@@ -108,13 +42,13 @@ const InheritanceModel = () => {
   }
 
   const handleNext = () => {
-    setCurrentStep((prev) => prev + 1)
+    methods.handleSubmit(onSubmit)()
   }
 
   return (
     <WizardProvider
       value={{
-        formData: methods.getValues(),
+        formData,
         currentStep,
         setCurrentStep,
         formMethods: methods,

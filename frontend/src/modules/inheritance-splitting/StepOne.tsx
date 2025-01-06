@@ -6,7 +6,7 @@ import { useFormContext, useWatch } from 'react-hook-form'
 import { SelectFormControl } from '@frontend/shared/forms'
 
 import { BinaryRadioGroup } from './components/BinaryRadioGroup'
-import { FormData, StepProps } from './FormData'
+import { FormData, Heir, StepProps } from './FormData'
 import { StepNavigation } from './StepNavigation'
 
 const countCollection = createListCollection({
@@ -17,7 +17,7 @@ const countCollection = createListCollection({
 })
 
 export const StepOne = ({ onPrevious, onNext }: StepProps) => {
-  const { control, trigger } = useFormContext<FormData>()
+  const { control, trigger, setValue, getValues } = useFormContext<FormData>()
 
   const [hasChildren, hasParents, hasSiblings] = useWatch({
     control,
@@ -27,6 +27,72 @@ export const StepOne = ({ onPrevious, onNext }: StepProps) => {
   useEffect(() => {
     trigger(['childrenCount', 'siblingsCount'])
   }, [hasChildren, hasSiblings, trigger])
+
+  const calculateHeirs = () => {
+    const newHeirs: Array<Heir> = []
+    const {
+      hasSpouse,
+      hasChildren,
+      childrenCount,
+      hasParents,
+      hasSiblings,
+      siblingsCount,
+    } = getValues()
+
+    if (hasSpouse === 'ano') {
+      newHeirs.push({
+        id: 'spouse',
+        type: 'spouse',
+        label: 'Manžel/ka',
+      })
+    }
+
+    if (hasChildren === 'ano' && childrenCount) {
+      const count = parseInt(String(childrenCount), 10)
+      for (let i = 1; i <= count; i++) {
+        newHeirs.push({
+          id: `child${i}`,
+          type: 'child',
+          label: `Dítě ${i}`,
+        })
+      }
+    }
+
+    if (hasChildren === 'ne' && hasParents === 'ano') {
+      newHeirs.push(
+        { id: 'parent1', type: 'parent', label: 'Rodič 1' },
+        { id: 'parent2', type: 'parent', label: 'Rodič 2' }
+      )
+    }
+
+    if (
+      hasChildren === 'ne' &&
+      hasParents === 'ne' &&
+      hasSiblings === 'ano' &&
+      siblingsCount
+    ) {
+      const count = parseInt(String(siblingsCount), 10)
+      for (let i = 1; i <= count; i++) {
+        newHeirs.push({
+          id: `sibling${i}`,
+          type: 'sibling',
+          label: `Sourozenec ${i}`,
+        })
+      }
+    }
+
+    return newHeirs
+  }
+
+  const handleNextStep = async () => {
+    const isValid = await trigger()
+    if (isValid) {
+      const newHeirs = calculateHeirs()
+      console.log('Setting heirs:', newHeirs)
+      setValue('heirs', newHeirs, { shouldValidate: true })
+      onNext()
+    }
+  }
 
   return (
     <VStack align="stretch" gap={6}>
@@ -83,7 +149,7 @@ export const StepOne = ({ onPrevious, onNext }: StepProps) => {
       />
       <StepNavigation
         onPrevious={onPrevious}
-        onNext={onNext}
+        onNext={handleNextStep}
         isFirstStep={true}
         isLastStep={false}
       />

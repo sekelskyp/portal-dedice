@@ -29,7 +29,8 @@ export const AssetCard = ({
         <AssetDetailField
           label="Dělitelnost"
           value={
-            asset.type === 'cenné papíry' || asset.type === 'vozidlo'
+            asset.type.toLowerCase() === 'cenné papíry' ||
+            asset.type.toLowerCase() === 'vozidlo'
               ? 'Ne'
               : 'Ano'
           }
@@ -41,7 +42,8 @@ export const AssetCard = ({
             label=""
             name={`assets.${index}.heir`}
             collection={getHeirCollection(
-              asset.type === 'cenné papíry' || asset.type === 'vozidlo'
+              asset.type.toLowerCase() === 'cenné papíry' ||
+                asset.type.toLowerCase() === 'vozidlo'
             )}
             placeholder="Vyberte dědice"
             required
