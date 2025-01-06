@@ -1,7 +1,6 @@
-import { FormEvent } from 'react'
 import { VStack } from '@chakra-ui/react'
 import { createListCollection } from '@chakra-ui/react/collection'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 
 import { SelectFormControl } from '@frontend/shared/forms'
 
@@ -29,27 +28,22 @@ interface StepOneProps {
 }
 
 export const StepOne = ({ onPrevious, onNext }: StepOneProps) => {
-  const { watch, setValue } = useFormContext<FormData>()
+  const { control } = useFormContext<FormData>()
 
-  const handleRadioChange =
-    (fieldName: keyof FormData) => (event: FormEvent<HTMLDivElement>) => {
-      const value = (event.target as HTMLInputElement).value
-      setValue(fieldName, value)
-    }
-
-  const hasChildren = watch('hasChildren')
-  const hasParents = watch('hasParents')
-  const hasSiblings = watch('hasSiblings')
+  const [hasChildren, hasParents, hasSiblings] = useWatch({
+    control,
+    name: ['hasChildren', 'hasParents', 'hasSiblings'],
+  })
 
   return (
     <VStack align="stretch" gap={6}>
       <BinaryRadioGroup
         name="hasChildren"
         label="Má zůstavitel/ka potomky?"
-        onChange={handleRadioChange('hasChildren')}
         required
       />
-      {hasChildren === 'yes' && (
+
+      {hasChildren === 'ano' && (
         <SelectFormControl
           name="childrenCount"
           label="Počet dětí"
@@ -59,25 +53,23 @@ export const StepOne = ({ onPrevious, onNext }: StepOneProps) => {
         />
       )}
 
-      {hasChildren === 'no' && (
+      {hasChildren === 'ne' && (
         <>
           <BinaryRadioGroup
             name="hasParents"
             label="Má zůstavitel/ka žijící rodiče?"
-            onChange={handleRadioChange('hasParents')}
             required
           />
 
-          {hasParents === 'no' && (
+          {hasParents === 'ne' && (
             <>
               <BinaryRadioGroup
                 name="hasSiblings"
                 label="Má zůstavitel/ka sourozence?"
-                onChange={handleRadioChange('hasSiblings')}
                 required
               />
 
-              {hasSiblings === 'yes' && (
+              {hasSiblings === 'ano' && (
                 <SelectFormControl
                   name="siblingsCount"
                   label="Počet sourozenců"
@@ -90,10 +82,10 @@ export const StepOne = ({ onPrevious, onNext }: StepOneProps) => {
           )}
         </>
       )}
+
       <BinaryRadioGroup
         name="hasSpouse"
         label="Má zůstavitel/ka manžela/manželku?"
-        onChange={handleRadioChange('hasSpouse')}
         required
       />
       <StepNavigation
