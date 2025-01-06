@@ -1,8 +1,10 @@
+import { useEffect } from 'react'
 import { HStack, IconButton, VStack } from '@chakra-ui/react'
 import { createListCollection } from '@chakra-ui/react/collection'
 import { useFormContext } from 'react-hook-form'
 import { FaPlus } from 'react-icons/fa'
 
+import { Checkbox } from '@frontend/shared/design-system/atoms/chakra/checkbox'
 import { InputFormControl, SelectFormControl } from '@frontend/shared/forms'
 
 import { FormData, StepProps } from './FormData'
@@ -25,6 +27,16 @@ const assetTypeCollection = createListCollection({
 
 export const StepTwo = ({ onPrevious, onNext }: StepProps) => {
   const { watch, setValue } = useFormContext<FormData>()
+  const hasSpouse = watch('hasSpouse')
+
+  useEffect(() => {
+    if (hasSpouse === 'ne') {
+      const assets = watch('assets') || []
+      assets.forEach((_, index) => {
+        setValue(`assets.${index}.isShared`, false)
+      })
+    }
+  }, [hasSpouse, setValue, watch])
 
   return (
     <VStack gap={8} align="stretch" width="100%">
@@ -50,6 +62,17 @@ export const StepTwo = ({ onPrevious, onNext }: StepProps) => {
               required
             />
           </HStack>
+          <Checkbox
+            inputProps={{
+              name: `assets.${index}.isShared`,
+              checked: watch(`assets.${index}.isShared`),
+              onChange: (e) =>
+                setValue(`assets.${index}.isShared`, e.target.checked),
+              disabled: hasSpouse === 'ne',
+            }}
+          >
+            Společné jmění manželů
+          </Checkbox>
         </VStack>
       ))}
       <IconButton

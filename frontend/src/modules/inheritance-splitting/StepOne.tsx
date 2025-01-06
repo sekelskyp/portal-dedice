@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { VStack } from '@chakra-ui/react'
 import { createListCollection } from '@chakra-ui/react/collection'
 import { useFormContext, useWatch } from 'react-hook-form'
@@ -16,12 +17,16 @@ const countCollection = createListCollection({
 })
 
 export const StepOne = ({ onPrevious, onNext }: StepProps) => {
-  const { control } = useFormContext<FormData>()
+  const { control, trigger } = useFormContext<FormData>()
 
   const [hasChildren, hasParents, hasSiblings] = useWatch({
     control,
     name: ['hasChildren', 'hasParents', 'hasSiblings'],
   })
+
+  useEffect(() => {
+    trigger(['childrenCount', 'siblingsCount'])
+  }, [hasChildren, hasSiblings, trigger])
 
   return (
     <VStack align="stretch" gap={6}>

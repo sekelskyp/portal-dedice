@@ -35,7 +35,7 @@ const InheritanceModel = () => {
         label: string
       }[] = []
 
-      if (formData.hasSpouse === 'yes') {
+      if (formData.hasSpouse === 'ano') {
         newHeirs.push({
           id: 'spouse',
           type: 'spouse',
@@ -46,7 +46,7 @@ const InheritanceModel = () => {
       const childCount = formData.childrenCount
         ? parseInt(String(formData.childrenCount), 10)
         : 0
-      if (formData.hasChildren === 'yes' && childCount > 0) {
+      if (formData.hasChildren === 'ano' && childCount > 0) {
         for (let i = 1; i <= childCount; i++) {
           newHeirs.push({
             id: `child${i}`,
@@ -56,9 +56,38 @@ const InheritanceModel = () => {
         }
       }
 
+      if (formData.hasChildren === 'ne' && formData.hasParents === 'ano') {
+        newHeirs.push({
+          id: 'parent1',
+          type: 'parent',
+          label: 'Rodič 1',
+        })
+        newHeirs.push({
+          id: 'parent2',
+          type: 'parent',
+          label: 'Rodič 2',
+        })
+      }
+
+      const siblingCount = formData.siblingsCount
+        ? parseInt(String(formData.siblingsCount), 10)
+        : 0
       if (
-        JSON.stringify(newHeirs) !== JSON.stringify(methods.getValues('heirs'))
+        formData.hasChildren === 'ne' &&
+        formData.hasParents === 'ne' &&
+        formData.hasSiblings === 'ano' &&
+        siblingCount > 0
       ) {
+        for (let i = 1; i <= siblingCount; i++) {
+          newHeirs.push({
+            id: `sibling${i}`,
+            type: 'sibling',
+            label: `Sourozenec ${i}`,
+          })
+        }
+      }
+
+      if (newHeirs.length > 0) {
         methods.setValue('heirs', newHeirs, { shouldValidate: true })
       }
     })
