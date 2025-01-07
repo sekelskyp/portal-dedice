@@ -3,6 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 
 import { Form } from '@frontend/shared/forms/Form'
 
+import { InheritanceProgress } from './components/InheritanceProgress'
 import { StepLayout } from './components/StepLayout'
 import { FormData } from './FormData'
 import { StepFour } from './StepFour'
@@ -57,6 +58,7 @@ const InheritanceModel = () => {
     >
       <FormProvider {...methods}>
         <Form onSubmit={onSubmit}>
+          <InheritanceProgress currentStep={currentStep} />
           {currentStep === 1 && (
             <StepLayout
               title="Modelace vypořádání pozůstalosti"
