@@ -9,6 +9,7 @@ import { InputFormControl, SelectFormControl } from '@frontend/shared/forms'
 
 import { FormData, StepProps } from './FormData'
 import { StepNavigation } from './StepNavigation'
+import { useWizard } from './useWizard'
 
 const assetTypeCollection = createListCollection({
   items: [
@@ -27,7 +28,22 @@ const assetTypeCollection = createListCollection({
 
 export const StepTwo = ({ onPrevious, onNext }: StepProps) => {
   const { watch, setValue } = useFormContext<FormData>()
+  const { setCurrentStep } = useWizard()
   const hasSpouse = watch('hasSpouse')
+  const heirs = watch('heirs') || []
+
+  const handleNext = () => {
+    if (heirs.length === 1) {
+      // If there's only one heir, assign all assets to them and skip to step 4
+      const assets = watch('assets') || []
+      assets.forEach((_, index) => {
+        setValue(`assets.${index}.heir`, heirs[0].id)
+      })
+      setCurrentStep(4)
+    } else {
+      onNext()
+    }
+  }
 
   useEffect(() => {
     if (hasSpouse === 'ne') {
@@ -102,7 +118,7 @@ export const StepTwo = ({ onPrevious, onNext }: StepProps) => {
       </IconButton>
       <StepNavigation
         onPrevious={onPrevious}
-        onNext={onNext}
+        onNext={handleNext}
         isFirstStep={false}
         isLastStep={false}
       />

@@ -15,6 +15,12 @@ interface InheritanceShare {
   }>
 }
 
+interface Transfer {
+  from: string
+  to: string
+  amount: number
+}
+
 export const StepFour = ({ onPrevious, onNext }: StepProps) => {
   const { watch } = useFormContext<FormData>()
 
@@ -84,8 +90,42 @@ export const StepFour = ({ onPrevious, onNext }: StepProps) => {
     return Object.values(shares)
   }
 
+  const calculateTransfers = (shares: InheritanceShare[]): Transfer[] => {
+    const transfers: Transfer[] = []
+    const equalShare = totalEstate / shares.length
+
+    const sortedShares = [...shares].sort((a, b) => b.totalValue - a.totalValue)
+
+    const differences = sortedShares.map((share) => ({
+      heirId: share.heirId,
+      heirLabel: share.heirLabel,
+      difference: share.totalValue - equalShare,
+    }))
+
+    while (differences.some((d) => Math.abs(d.difference) > 1)) {
+      const payer = differences.find((d) => d.difference > 0)
+      const receiver = differences.find((d) => d.difference < 0)
+
+      if (payer && receiver) {
+        const transferAmount = Math.min(payer.difference, -receiver.difference)
+        transfers.push({
+          from: payer.heirId,
+          to: receiver.heirId,
+          amount: transferAmount,
+        })
+
+        payer.difference -= transferAmount
+        receiver.difference += transferAmount
+      }
+    }
+
+    return transfers
+  }
+
   const shares = calculateShares()
   const totalEstate = shares.reduce((sum, share) => sum + share.totalValue, 0)
+  const equalShare = totalEstate / shares.length
+  const transfers = calculateTransfers(shares)
 
   return (
     <VStack gap={6} align="stretch" w="full">
@@ -147,6 +187,35 @@ export const StepFour = ({ onPrevious, onNext }: StepProps) => {
           </GridItem>
         ))}
       </Grid>
+
+      <Box p={4} bg="purple.50" borderRadius="md" mt={6}>
+        <Heading size="md" mb={4}>
+          Vyrovnání podílů
+        </Heading>
+        <Text mb={4}>
+          Spravedlivý podíl pro každého: {equalShare.toLocaleString()} Kč
+        </Text>
+
+        {transfers.length > 0 ? (
+          <VStack align="stretch" gap={2}>
+            <Text fontWeight="bold" mb={2}>
+              Potřebné převody:
+            </Text>
+            {transfers.map((transfer, index) => {
+              const fromHeir = shares.find((s) => s.heirId === transfer.from)
+              const toHeir = shares.find((s) => s.heirId === transfer.to)
+              return (
+                <Text key={index}>
+                  {fromHeir?.heirLabel} → {toHeir?.heirLabel}:{' '}
+                  {transfer.amount.toLocaleString()} Kč
+                </Text>
+              )
+            })}
+          </VStack>
+        ) : (
+          <Text>Všechny podíly jsou již vyrovnané.</Text>
+        )}
+      </Box>
 
       <StepNavigation
         onPrevious={onPrevious}

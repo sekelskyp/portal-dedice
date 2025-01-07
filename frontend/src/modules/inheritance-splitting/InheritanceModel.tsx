@@ -37,6 +37,8 @@ const InheritanceModel = () => {
   const onSubmit = (data: FormData) => {
     if (currentStep === 4) {
       console.log('Final submission:', data)
+    } else if (currentStep === 2 && data.heirs?.length === 1) {
+      setCurrentStep(4)
     } else {
       setCurrentStep((prev) => prev + 1)
     }
