@@ -63,13 +63,17 @@ export const StepTwo = ({ onPrevious, onNext }: StepProps) => {
             />
           </HStack>
           <Checkbox
-            checked={watch(`assets.${index}.isShared`)}
-            onChange={(e) =>
-              setValue(
-                `assets.${index}.isShared`,
-                (e.target as HTMLInputElement).checked
-              )
+            checked={
+              hasSpouse === 'ne' ? false : watch(`assets.${index}.isShared`)
             }
+            onChange={(e) => {
+              const isChecked = (e.target as HTMLInputElement).checked
+              setValue(`assets.${index}.isShared`, isChecked)
+              setValue(
+                `assets.${index}.sharedOwner`,
+                isChecked ? 'manžel/ka' : 'pozůstalost'
+              )
+            }}
             disabled={hasSpouse === 'ne'}
           >
             Společné jmění manželů
