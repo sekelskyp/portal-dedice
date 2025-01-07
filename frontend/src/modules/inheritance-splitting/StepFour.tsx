@@ -27,14 +27,18 @@ export const StepFour = ({ onPrevious, onNext }: StepProps) => {
   const assets = watch('assets') || []
   const heirs = watch('heirs') || []
 
-  const sharedAssets = assets.filter(
-    (asset) => asset.isShared && asset.sharedOwner === 'manžel/ka'
-  )
+  const spouse = heirs.find((heir) => heir.type === 'spouse')
+  const sharedAssets = assets.filter((asset) => asset.isShared)
   const sharedTotal = sharedAssets.reduce(
     (sum, asset) => sum + (Number(asset.value) || 0),
     0
   )
-  const sharedHalf = sharedTotal / 2
+  const expectedSpouseShare = sharedTotal / 2
+  const sharedHalf = sharedAssets
+    .filter(
+      (asset) => asset.sharedOwner === 'manžel/ka' && asset.heir === spouse?.id
+    )
+    .reduce((sum, asset) => sum + (Number(asset.value) || 0), 0)
 
   const calculateShares = (): InheritanceShare[] => {
     const shares: Record<string, InheritanceShare> = {}
@@ -136,12 +140,11 @@ export const StepFour = ({ onPrevious, onNext }: StepProps) => {
           </Text>
           <Text>Celková hodnota: {sharedTotal.toLocaleString()} Kč</Text>
           <Text>
-            Polovina připadající pozůstalému manželovi:{' '}
-            {sharedHalf.toLocaleString()} Kč
+            Kolik by měl dostat pozůstalý manžel/ka:{' '}
+            {expectedSpouseShare.toLocaleString()} Kč
           </Text>
           <Text>
-            Polovina vstupující do pozůstalosti: {sharedHalf.toLocaleString()}{' '}
-            Kč
+            Kolik dostal pozůstalý manžel/ka: {sharedHalf.toLocaleString()} Kč
           </Text>
         </Box>
       )}
