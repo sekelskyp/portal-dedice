@@ -5,6 +5,7 @@ import { Form } from '@frontend/shared/forms/Form'
 
 import { StepLayout } from './components/StepLayout'
 import { FormData } from './FormData'
+import { StepFour } from './StepFour'
 import { StepOne } from './StepOne'
 import { StepThree } from './StepThree'
 import { StepTwo } from './StepTwo'
@@ -30,7 +31,7 @@ const InheritanceModel = () => {
   const formData = methods.watch()
 
   const onSubmit = (data: FormData) => {
-    if (currentStep === 3) {
+    if (currentStep === 4) {
       console.log('Final submission:', data)
     } else {
       setCurrentStep((prev) => prev + 1)
@@ -79,6 +80,14 @@ Vložené informace a data se nijak neukládají ani nezaznamenávají."
               description="Navrhněte rozdělení majetku mezi dědice"
             >
               <StepThree onPrevious={handlePrevious} onNext={handleNext} />
+            </StepLayout>
+          )}
+          {currentStep === 4 && (
+            <StepLayout
+              title="Výsledek dědického řízení"
+              description="Přehled rozdělení majetku mezi dědice"
+            >
+              <StepFour onPrevious={handlePrevious} onNext={handleNext} />
             </StepLayout>
           )}
         </Form>

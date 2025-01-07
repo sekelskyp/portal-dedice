@@ -64,7 +64,7 @@ export const StepThree = ({ onPrevious, onNext }: StepProps) => {
         onPrevious={onPrevious}
         onNext={onNext}
         isFirstStep={false}
-        isLastStep={true}
+        isLastStep={false}
       />
     </VStack>
   )

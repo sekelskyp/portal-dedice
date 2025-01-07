@@ -38,7 +38,7 @@ export const StepLayout = ({
           {children}
         </Box>
         <Text textAlign="center" color="gray.500" fontSize="sm">
-          Krok {currentStep} ze 3
+          Krok {currentStep} ze 4
         </Text>
       </VStack>
     </Container>
