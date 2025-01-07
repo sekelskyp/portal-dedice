@@ -4,8 +4,9 @@ import { useFormContext } from 'react-hook-form'
 import {
   HeirShare,
   InheritanceShare,
+  SjmShare,
   Transfer,
-} from './components/StepFourComponents'
+} from './components/ShareCard'
 import { FormData, StepProps } from './FormData'
 import { StepNavigation } from './StepNavigation'
 
@@ -122,23 +123,15 @@ export const StepFour = ({ onPrevious, onNext }: StepProps) => {
   return (
     <VStack gap={6} align="stretch" w="full">
       {sharedTotal > 0 && (
-        <Box p={4} bg="yellow.50" borderRadius="md">
-          <Text fontSize="lg" fontWeight="bold">
-            Společné jmění manželů (SJM)
-          </Text>
-          <Text>Celková hodnota: {sharedTotal.toLocaleString()} Kč</Text>
-          <Text>
-            Kolik by měl dostat pozůstalý manžel/ka:{' '}
-            {expectedSpouseShare.toLocaleString()} Kč
-          </Text>
-          <Text>
-            Kolik dostal pozůstalý manžel/ka: {sharedHalf.toLocaleString()} Kč
-          </Text>
-        </Box>
+        <SjmShare
+          totalValue={sharedTotal}
+          expectedShare={expectedSpouseShare}
+          actualShare={sharedHalf}
+        />
       )}
 
-      <Box p={4} bg="blue.50" borderRadius="md">
-        <Text fontSize="lg" fontWeight="bold" mb={2}>
+      <Box p={4} bg="gray.50" borderRadius="md" boxShadow="sm">
+        <Text fontSize="lg" fontWeight="bold">
           Celková hodnota pozůstalosti: {totalEstate.toLocaleString()} Kč
         </Text>
       </Box>
@@ -152,7 +145,7 @@ export const StepFour = ({ onPrevious, onNext }: StepProps) => {
             equalShare={equalShare}
             transfers={transfers}
             targetPercentage={100 / shares.length}
-            shares={shares} // Add this new prop
+            shares={shares}
           />
         ))}
       </Grid>

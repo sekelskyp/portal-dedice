@@ -25,14 +25,14 @@ export const HeirShare = ({
   equalShare,
   transfers,
   targetPercentage,
-  shares, // Add this new prop
+  shares,
 }: {
   share: InheritanceShare
   totalEstate: number
   equalShare: number
   transfers: Transfer[]
   targetPercentage: number
-  shares: InheritanceShare[] // Add this new prop type
+  shares: InheritanceShare[]
 }) => (
   <GridItem>
     <Box p={4} bg="gray.50" borderRadius="md" boxShadow="sm">
@@ -122,4 +122,36 @@ export const HeirShare = ({
   </GridItem>
 )
 
-// Remove TransfersList component as it's no longer needed
+export const SjmShare = ({
+  totalValue,
+  expectedShare,
+  actualShare,
+}: {
+  totalValue: number
+  expectedShare: number
+  actualShare: number
+}) => (
+  <Box p={4} bg="gray.50" borderRadius="md" boxShadow="sm">
+    <VStack gap={4} align="stretch">
+      <Box borderBottom="1px" borderColor="gray.200" pb={2}>
+        <Heading size="md" color="blue.600">
+          Společné jmění manželů (SJM)
+        </Heading>
+        <VStack align="start" gap={1} mt={2}>
+          <Text fontSize="lg" fontWeight="bold" color="green.600">
+            Celková hodnota: {totalValue.toLocaleString()} Kč
+          </Text>
+          <Text fontSize="sm" color="blue.600">
+            Očekávaný podíl manžela/ky: {expectedShare.toLocaleString()} Kč
+          </Text>
+          <Text
+            fontSize="sm"
+            color={actualShare === expectedShare ? 'green.600' : 'orange.600'}
+          >
+            Skutečný podíl manžela/ky: {actualShare.toLocaleString()} Kč
+          </Text>
+        </VStack>
+      </Box>
+    </VStack>
+  </Box>
+)
