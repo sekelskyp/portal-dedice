@@ -4,6 +4,7 @@ export interface Asset {
   name: string
   type: string
   value: string
+  sharedOwner?: 'manžel/ka' | 'pozůstalost'
 }
 
 export interface Heir {

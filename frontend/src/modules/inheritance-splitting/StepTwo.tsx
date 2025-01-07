@@ -82,7 +82,13 @@ export const StepTwo = ({ onPrevious, onNext }: StepProps) => {
           const assets = watch('assets') || []
           setValue('assets', [
             ...assets,
-            { type: '', name: '', value: '', isShared: true },
+            {
+              type: '',
+              name: '',
+              value: '',
+              isShared: true,
+              sharedOwner: 'pozůstalost',
+            },
           ])
         }}
         p={4}

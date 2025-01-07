@@ -21,6 +21,15 @@ export const StepFour = ({ onPrevious, onNext }: StepProps) => {
   const assets = watch('assets') || []
   const heirs = watch('heirs') || []
 
+  const sharedAssets = assets.filter(
+    (asset) => asset.isShared && asset.sharedOwner === 'manžel/ka'
+  )
+  const sharedTotal = sharedAssets.reduce(
+    (sum, asset) => sum + (Number(asset.value) || 0),
+    0
+  )
+  const sharedHalf = sharedTotal / 2
+
   const calculateShares = (): InheritanceShare[] => {
     const shares: Record<string, InheritanceShare> = {}
 
@@ -28,12 +37,23 @@ export const StepFour = ({ onPrevious, onNext }: StepProps) => {
       shares[heir.id || ''] = {
         heirId: heir.id || '',
         heirLabel: heir.label,
-        totalValue: 0,
-        assets: [],
+        totalValue: heir.type === 'spouse' ? sharedHalf : 0,
+        assets:
+          heir.type === 'spouse'
+            ? [
+                {
+                  name: 'Podíl ze SJM',
+                  value: sharedHalf,
+                  percentage: 50,
+                },
+              ]
+            : [],
       }
     })
 
     assets.forEach((asset) => {
+      if (asset.isShared && asset.sharedOwner === 'manžel/ka') return
+
       const value = Number(asset.value) || 0
       if (asset.heir === 'all') {
         const shareValue = value / heirs.length
@@ -49,7 +69,6 @@ export const StepFour = ({ onPrevious, onNext }: StepProps) => {
           }
         })
       } else if (asset.heir) {
-        // Assign to specific heir
         const share = shares[asset.heir]
         if (share) {
           share.totalValue += value
@@ -70,6 +89,23 @@ export const StepFour = ({ onPrevious, onNext }: StepProps) => {
 
   return (
     <VStack gap={6} align="stretch" w="full">
+      {sharedTotal > 0 && (
+        <Box p={4} bg="yellow.50" borderRadius="md">
+          <Text fontSize="lg" fontWeight="bold">
+            Společné jmění manželů (SJM)
+          </Text>
+          <Text>Celková hodnota: {sharedTotal.toLocaleString()} Kč</Text>
+          <Text>
+            Polovina připadající pozůstalému manželovi:{' '}
+            {sharedHalf.toLocaleString()} Kč
+          </Text>
+          <Text>
+            Polovina vstupující do pozůstalosti: {sharedHalf.toLocaleString()}{' '}
+            Kč
+          </Text>
+        </Box>
+      )}
+
       <Box p={4} bg="blue.50" borderRadius="md">
         <Text fontSize="lg" fontWeight="bold" mb={2}>
           Celková hodnota pozůstalosti: {totalEstate.toLocaleString()} Kč
