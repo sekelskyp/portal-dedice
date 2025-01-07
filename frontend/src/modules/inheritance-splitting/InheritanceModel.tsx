@@ -23,8 +23,11 @@ const InheritanceModel = () => {
       hasParents: '',
       hasSiblings: '',
       siblingsCount: '',
+      hasLivedWithDeceased: '',
       assets: [],
       heirs: [],
+      hasMother: false,
+      hasFather: false,
     },
     mode: 'onChange',
   })

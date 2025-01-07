@@ -9,7 +9,7 @@ export interface Asset {
 export interface Heir {
   id?: string
   label: string
-  type?: 'spouse' | 'child' | 'parent' | 'sibling'
+  type?: 'spouse' | 'child' | 'parent' | 'sibling' | 'cohabitant'
 }
 
 export interface FormData {
@@ -17,10 +17,13 @@ export interface FormData {
   hasChildren: string
   hasSpouse: string
   hasParents: string
+  hasMother: boolean
+  hasFather: boolean
   hasSiblings: string
   siblingsCount: string
   heirs: Array<Heir>
   assets: Array<Asset>
+  hasLivedWithDeceased: string
 }
 
 export interface StepProps {

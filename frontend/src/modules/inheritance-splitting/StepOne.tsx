@@ -3,6 +3,7 @@ import { VStack } from '@chakra-ui/react'
 import { createListCollection } from '@chakra-ui/react/collection'
 import { useFormContext, useWatch } from 'react-hook-form'
 
+import { Checkbox } from '@frontend/shared/design-system/atoms/chakra/checkbox'
 import { SelectFormControl } from '@frontend/shared/forms'
 
 import { BinaryRadioGroup } from './components/BinaryRadioGroup'
@@ -17,7 +18,8 @@ const countCollection = createListCollection({
 })
 
 export const StepOne = ({ onPrevious, onNext }: StepProps) => {
-  const { control, trigger, setValue, getValues } = useFormContext<FormData>()
+  const { control, trigger, setValue, getValues, register } =
+    useFormContext<FormData>()
 
   const [hasChildren, hasParents, hasSiblings] = useWatch({
     control,
@@ -37,6 +39,9 @@ export const StepOne = ({ onPrevious, onNext }: StepProps) => {
       hasParents,
       hasSiblings,
       siblingsCount,
+      hasLivedWithDeceased,
+      hasMother,
+      hasFather,
     } = getValues()
 
     if (hasSpouse === 'ano') {
@@ -59,10 +64,12 @@ export const StepOne = ({ onPrevious, onNext }: StepProps) => {
     }
 
     if (hasChildren === 'ne' && hasParents === 'ano') {
-      newHeirs.push(
-        { id: 'parent1', type: 'parent', label: 'Rodič 1' },
-        { id: 'parent2', type: 'parent', label: 'Rodič 2' }
-      )
+      if (hasMother) {
+        newHeirs.push({ id: 'mother', type: 'parent', label: 'Matka' })
+      }
+      if (hasFather) {
+        newHeirs.push({ id: 'father', type: 'parent', label: 'Otec' })
+      }
     }
 
     if (
@@ -79,6 +86,14 @@ export const StepOne = ({ onPrevious, onNext }: StepProps) => {
           label: `Sourozenec ${i}`,
         })
       }
+    }
+
+    if (hasChildren === 'ne' && hasLivedWithDeceased === 'ano') {
+      newHeirs.push({
+        id: 'cohabitant',
+        type: 'cohabitant',
+        label: 'Osoba žijící se zůstavitelem po dobu nejméně jednoho roku',
+      })
     }
 
     return newHeirs
@@ -115,10 +130,23 @@ export const StepOne = ({ onPrevious, onNext }: StepProps) => {
       {hasChildren === 'ne' && (
         <>
           <BinaryRadioGroup
+            name="hasLivedWithDeceased"
+            label="Žila se zůstavitelem/kou nějaká osoba ve společné domácnosti po dobu nejméně jednoho roku?"
+            required
+          />
+
+          <BinaryRadioGroup
             name="hasParents"
             label="Má zůstavitel/ka žijící rodiče?"
             required
           />
+
+          {hasParents === 'ano' && (
+            <VStack align="start" pl={4}>
+              <Checkbox {...register('hasMother')}>Matka žije</Checkbox>
+              <Checkbox {...register('hasFather')}>Otec žije</Checkbox>
+            </VStack>
+          )}
 
           {hasParents === 'ne' && (
             <>
