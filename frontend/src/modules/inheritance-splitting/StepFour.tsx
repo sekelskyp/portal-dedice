@@ -5,7 +5,6 @@ import {
   HeirShare,
   InheritanceShare,
   Transfer,
-  TransfersList,
 } from './components/StepFourComponents'
 import { FormData, StepProps } from './FormData'
 import { StepNavigation } from './StepNavigation'
@@ -150,15 +149,13 @@ export const StepFour = ({ onPrevious, onNext }: StepProps) => {
             key={share.heirId}
             share={share}
             totalEstate={totalEstate}
+            equalShare={equalShare}
+            transfers={transfers}
+            targetPercentage={100 / shares.length}
+            shares={shares} // Add this new prop
           />
         ))}
       </Grid>
-
-      <TransfersList
-        transfers={transfers}
-        shares={shares}
-        equalShare={equalShare}
-      />
 
       <StepNavigation
         onPrevious={onPrevious}
