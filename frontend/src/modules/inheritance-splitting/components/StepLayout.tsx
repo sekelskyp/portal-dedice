@@ -1,8 +1,6 @@
 import { ReactNode } from 'react'
 import { Box, Container, Heading, Text, VStack } from '@chakra-ui/react'
 
-import { useWizard } from '../useWizard'
-
 interface StepLayoutProps {
   children: ReactNode
   title: string
@@ -14,8 +12,6 @@ export const StepLayout = ({
   title,
   description,
 }: StepLayoutProps) => {
-  const { currentStep } = useWizard()
-
   return (
     <Container maxW="6xl" py={8}>
       <VStack gap={6} align="stretch">
@@ -37,9 +33,6 @@ export const StepLayout = ({
           </VStack>
           {children}
         </Box>
-        <Text textAlign="center" color="gray.500" fontSize="sm">
-          Krok {currentStep} ze 4
-        </Text>
       </VStack>
     </Container>
   )
