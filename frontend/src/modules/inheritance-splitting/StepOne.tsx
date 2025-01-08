@@ -4,7 +4,7 @@ import { createListCollection } from '@chakra-ui/react/collection'
 import { useFormContext, useWatch } from 'react-hook-form'
 
 import { Checkbox } from '@frontend/shared/design-system/atoms/chakra/checkbox'
-import { SelectFormControl } from '@frontend/shared/forms'
+import { CheckboxFormControl, SelectFormControl } from '@frontend/shared/forms'
 
 import { BinaryRadioGroup } from './components/BinaryRadioGroup'
 import { FormData, Heir, StepProps } from './FormData'
@@ -18,7 +18,7 @@ const countCollection = createListCollection({
 })
 
 export const StepOne = ({ onPrevious, onNext }: StepProps) => {
-  const { control, trigger, setValue, getValues, register } =
+  const { control, trigger, setValue, getValues } =
     useFormContext<FormData>()
 
   const [hasChildren, hasParents, hasSiblings] = useWatch({
@@ -142,10 +142,10 @@ export const StepOne = ({ onPrevious, onNext }: StepProps) => {
           />
 
           {hasParents === 'ano' && (
-            <VStack align="start" pl={4}>
-              <Checkbox {...register('hasMother')}>Matka žije</Checkbox>
-              <Checkbox {...register('hasFather')}>Otec žije</Checkbox>
-            </VStack>
+            <>
+              <CheckboxFormControl name="hasMother" label="Matka žije" />
+              <CheckboxFormControl name="hasFather" label="Otec žije" />
+            </>
           )}
 
           {hasParents === 'ne' && (
