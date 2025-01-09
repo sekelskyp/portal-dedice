@@ -1,11 +1,11 @@
 import { useMutation } from '@apollo/client'
 
 import { gql } from '@frontend/gql'
+import { useAuth } from '@frontend/modules/auth'
 import { toaster } from '@frontend/shared/design-system'
 
+import { GET_ALL_PROCEEDINGS } from './useGetAllProceedings'
 import { GET_PROCEEDINGS_BY_NOTARY_ID } from './useNotaryProcedures'
-
-//TODO: fix query and components
 
 const DELETE_PROCEEDING_MUTATION = gql(/* GraphQL */ `
   mutation DeleteProceeding($ids: [Int!]!) {
@@ -14,10 +14,20 @@ const DELETE_PROCEEDING_MUTATION = gql(/* GraphQL */ `
 `)
 
 export function useDeleteProceeding() {
+  const { user } = useAuth()
+  const isAdmin = user?.type === 'Admin'
+  const isNotary = user?.type === 'Notary'
+
+  const getRefetchQueries = () => {
+    if (isAdmin) return [GET_ALL_PROCEEDINGS]
+    if (isNotary) return [GET_PROCEEDINGS_BY_NOTARY_ID]
+    return []
+  }
+
   const [deleteProceedingRequest, deleteProceedingRequestState] = useMutation(
     DELETE_PROCEEDING_MUTATION,
     {
-      refetchQueries: [GET_PROCEEDINGS_BY_NOTARY_ID],
+      refetchQueries: getRefetchQueries(),
       onCompleted: () => {
         toaster.create({
           title: 'Řízení bylo úspěšně smazáno.',

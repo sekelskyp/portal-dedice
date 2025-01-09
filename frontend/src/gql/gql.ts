@@ -51,6 +51,8 @@ const documents = {
     types.CreateProceedingDocument,
   '\n  mutation DeleteProceeding($ids: [Int!]!) {\n    deleteProceedingsByIds(ids: $ids)\n  }\n':
     types.DeleteProceedingDocument,
+  '\n  query GetAllProceedings {\n    getAllProceedings {\n      id\n      name\n      startDate\n      state\n      deceasedDisplayName\n    }\n  }\n':
+    types.GetAllProceedingsDocument,
   '\n  query GetAllUsers($type: String!) {\n    getAllUserByType(type: $type) {\n      id\n      name\n      surname\n      displayName\n    }\n  }\n':
     types.GetAllUsersDocument,
   '\n  query GetProceedingsByNotaryId($userId: Int!) {\n    getNotaryProceedingsForUser(userId: $userId) {\n      id\n      name\n      startDate\n      state\n      deceasedDisplayName\n    }\n  }\n':
@@ -217,6 +219,12 @@ export function gql(
 export function gql(
   source: '\n  mutation DeleteProceeding($ids: [Int!]!) {\n    deleteProceedingsByIds(ids: $ids)\n  }\n'
 ): (typeof documents)['\n  mutation DeleteProceeding($ids: [Int!]!) {\n    deleteProceedingsByIds(ids: $ids)\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  query GetAllProceedings {\n    getAllProceedings {\n      id\n      name\n      startDate\n      state\n      deceasedDisplayName\n    }\n  }\n'
+): (typeof documents)['\n  query GetAllProceedings {\n    getAllProceedings {\n      id\n      name\n      startDate\n      state\n      deceasedDisplayName\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

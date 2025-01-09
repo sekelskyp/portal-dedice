@@ -21,24 +21,26 @@ import {
   ProceedingsTable,
 } from '../components/ProceedingsTable'
 import { useBeneficiaryProceedings } from '../hooks/useBeneficiaryProceedings'
+import { useGetAllProceedings } from '../hooks/useGetAllProceedings'
 import { useNotaryProcedures } from '../hooks/useNotaryProcedures'
+import { loadProceedings } from '../utils/loadProceedings'
 import { proceedingsNavigation } from '../utils/proceedingsNavigation'
 
 export function Proceedings() {
-  const user = useAuth()
-  const isNotary = user.user?.type === 'Notary'
+  const { user, token } = useAuth()
+  const isNotary = user?.type === 'Notary'
+  const isAdmin = user?.type === 'Admin'
   const beneficiaryProceedings = useBeneficiaryProceedings()
   const notaryProceedings = useNotaryProcedures()
+  const allProceedings = useGetAllProceedings()
 
-  const data = {
-    proceedings: isNotary
-      ? notaryProceedings.data?.getNotaryProceedingsForUser
-      : beneficiaryProceedings.data?.getBeneficiaryProceedingsForUser,
-    loading: isNotary
-      ? notaryProceedings.loading
-      : beneficiaryProceedings.loading,
-    error: isNotary ? notaryProceedings.error : beneficiaryProceedings.error,
-  }
+  const data = loadProceedings(
+    isAdmin,
+    isNotary,
+    allProceedings,
+    notaryProceedings,
+    beneficiaryProceedings
+  )
 
   let procedures: ProceedingsItem[] = []
 
@@ -57,7 +59,7 @@ export function Proceedings() {
     }))
   }
 
-  if (user.token) {
+  if (token) {
     return (
       <Stack gap={8}>
         <Card.Root>

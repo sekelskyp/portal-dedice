@@ -848,6 +848,20 @@ export type DeleteProceedingMutation = {
   deleteProceedingsByIds: boolean
 }
 
+export type GetAllProceedingsQueryVariables = Exact<{ [key: string]: never }>
+
+export type GetAllProceedingsQuery = {
+  __typename?: 'Query'
+  getAllProceedings: Array<{
+    __typename?: 'Proceeding'
+    id: string
+    name: string
+    startDate: any
+    state: string
+    deceasedDisplayName: string
+  }>
+}
+
 export type GetAllUsersQueryVariables = Exact<{
   type: Scalars['String']['input']
 }>
@@ -2378,6 +2392,41 @@ export const DeleteProceedingDocument = {
 } as unknown as DocumentNode<
   DeleteProceedingMutation,
   DeleteProceedingMutationVariables
+>
+export const GetAllProceedingsDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetAllProceedings' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getAllProceedings' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'startDate' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'state' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'deceasedDisplayName' },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetAllProceedingsQuery,
+  GetAllProceedingsQueryVariables
 >
 export const GetAllUsersDocument = {
   kind: 'Document',
