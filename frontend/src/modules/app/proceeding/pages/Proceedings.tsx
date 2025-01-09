@@ -30,6 +30,7 @@ export function Proceedings() {
   const { user, token } = useAuth()
   const isNotary = user?.type === 'Notary'
   const isAdmin = user?.type === 'Admin'
+  const isUser = user?.type === 'User'
   const beneficiaryProceedings = useBeneficiaryProceedings()
   const notaryProceedings = useNotaryProcedures()
   const allProceedings = useGetAllProceedings()
@@ -69,7 +70,7 @@ export function Proceedings() {
             flexWrap="wrap"
           >
             <Heading size={{ base: 'xl', sm: '2xl' }}>Moje řízení</Heading>
-            {!isNotary && (
+            {isUser && (
               <RouterNavLink
                 to={route.newProceeding()}
                 size={{ base: 'sm', sm: 'lg' }}
@@ -92,7 +93,7 @@ export function Proceedings() {
             )}
           </Card.Body>
         </Card.Root>
-        {!isNotary && (
+        {isUser && (
           <Stack gap={4} alignItems={{ base: 'center', sm: 'start' }}>
             <Heading size={{ base: 'xl', sm: '2xl' }}>Další možnosti</Heading>
             {proceedingsNavigation.map((item) => (

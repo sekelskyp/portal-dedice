@@ -16,8 +16,6 @@ import { useProceeding } from '../../proceeding/hooks/useProceeding'
 import { useDeleteAsset } from '../hooks/useDeleteAsset'
 import { GET_ASSETS } from '../hooks/useGetAsset'
 
-//TODO: fix query and components
-
 interface Asset {
   id: number
   type: string
@@ -116,7 +114,7 @@ const AssetGroup = ({
 
 export function Assets({ id }: { id: string }) {
   const { user } = useAuth()
-  const isNotary = user?.type === 'Notary'
+  const isUser = user?.type === 'User'
   const { data, loading, error } = useQuery(GET_ASSETS, {
     variables: { procedureId: +id },
   })
@@ -178,7 +176,7 @@ export function Assets({ id }: { id: string }) {
         onConfirm={handleDelete}
         selectedId={selectedAssetId}
       />
-      <Heading mb={4}>Majetek v řízení</Heading>
+      <Heading>Majetek v řízení</Heading>
       {assets.length === 0 ? (
         <Alert
           width={'fit-content'}
@@ -197,7 +195,7 @@ export function Assets({ id }: { id: string }) {
           ))}
         </Stack>
       )}
-      {!isNotary && (
+      {isUser && (
         <Stack alignItems={'center'}>
           <RouterNavLink
             to={route.newAsset(id)}

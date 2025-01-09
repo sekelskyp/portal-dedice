@@ -933,6 +933,7 @@ export type GetProceedingByIdQuery = {
         phone?: string | null
         name: string
         surname: string
+        confirmed: boolean
       } | null
     } | null
     beneficiaries?: Array<{
@@ -946,6 +947,7 @@ export type GetProceedingByIdQuery = {
         id: string
         name: string
         surname: string
+        confirmed: boolean
       } | null
     }> | null
     notary?: {
@@ -958,6 +960,7 @@ export type GetProceedingByIdQuery = {
         surname: string
         phone?: string | null
         id: string
+        confirmed: boolean
         address?: {
           __typename?: 'Address'
           id: string
@@ -2650,6 +2653,10 @@ export const GetProceedingByIdDocument = {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'surname' },
                             },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'confirmed' },
+                            },
                           ],
                         },
                       },
@@ -2692,6 +2699,10 @@ export const GetProceedingByIdDocument = {
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'surname' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'confirmed' },
                             },
                           ],
                         },
@@ -2789,6 +2800,10 @@ export const GetProceedingByIdDocument = {
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'confirmed' },
                             },
                           ],
                         },

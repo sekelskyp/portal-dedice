@@ -27,7 +27,7 @@ interface DocumentType {
 
 export function Documents({ id }: { id: string }) {
   const { user, token } = useAuth()
-  const isNotary = user?.type === 'Notary'
+  const isUser = user?.type === 'User'
   const procedure = useProceeding(parseInt(id))
   const [documents, setDocuments] = useState<DocumentType[]>([])
   const [deleteDocumentRequest] = useDeleteDocument()
@@ -151,7 +151,7 @@ export function Documents({ id }: { id: string }) {
               />
             )}
           </Stack>
-          {!isNotary && (
+          {isUser && (
             <Stack alignItems="center" pt={4}>
               <RouterNavLink
                 to={route.newDocument(id)}

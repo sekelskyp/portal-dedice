@@ -6,8 +6,6 @@ import { route } from '@shared/route'
 
 import { useAuth } from '../auth-core'
 
-//TODO: fix query and components
-
 const SIGNIN_MUTATION = gql(/* GraphQL */ `
   mutation SignIn($login: String!, $password: String!) {
     signIn(login: $login, password: $password) {
