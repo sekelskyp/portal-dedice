@@ -26,7 +26,7 @@ async function populateDatabase(
   // insert test notaries
   const [notaryId1, notaryId2] = await db
     .insert(notary)
-    .values([{ postalCode: '150 00' }, { postalCode: '120 00' }])
+    .values([{ postalCode: '15000' }, { postalCode: '12000' }])
     .$returningId()
 
   // addresses for users

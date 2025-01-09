@@ -21,6 +21,7 @@ export const loadUsers = ({
             }, ${item.address.municipality || ''}`
           : '',
         confirmed: item.confirmed,
+        notaryId: item.notaryId || '',
       }))
   }
 }

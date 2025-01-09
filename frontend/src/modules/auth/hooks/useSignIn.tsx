@@ -28,6 +28,7 @@ const SIGNIN_MUTATION = gql(/* GraphQL */ `
         sendNotifications
         surname
         type
+        notaryId
       }
       token
     }
@@ -40,7 +41,14 @@ export function useSignIn() {
 
   const [signInRequest, signInRequestState] = useMutation(SIGNIN_MUTATION, {
     onCompleted: ({ signIn: { user, token } }) => {
-      auth.signIn({ token, user: { ...user, addressId: user.addressId ?? '' } })
+      auth.signIn({
+        token,
+        user: {
+          ...user,
+          addressId: user.addressId ?? '',
+          notaryId: user.notaryId ?? '',
+        },
+      })
       navigate(route.portal())
     },
     onError: () => {},

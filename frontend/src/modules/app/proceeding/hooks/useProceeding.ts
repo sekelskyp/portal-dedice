@@ -27,6 +27,7 @@ export const GET_PROCEEDING_QUERY = gql(/* GraphQL */ `
           name
           surname
           confirmed
+          type
         }
       }
       beneficiaries {
@@ -39,6 +40,7 @@ export const GET_PROCEEDING_QUERY = gql(/* GraphQL */ `
           name
           surname
           confirmed
+          type
         }
       }
       name
@@ -65,6 +67,7 @@ export const GET_PROCEEDING_QUERY = gql(/* GraphQL */ `
           phone
           id
           confirmed
+          type
         }
       }
     }

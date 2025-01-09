@@ -1,7 +1,7 @@
 import { HStack, Stack, Text } from '@chakra-ui/react'
-import { FaUserLargeSlash } from 'react-icons/fa6'
+import { TbExclamationMark } from 'react-icons/tb'
 
-import { Avatar } from '../design-system'
+import { Avatar, Tooltip } from '../design-system'
 
 interface UserDetails {
   id: string
@@ -10,26 +10,34 @@ interface UserDetails {
   email: string
   displayName: string
   confirmed: boolean
+  type: string
 }
 
 export function UserBadge({ details }: { details: UserDetails }) {
+  const role = details.type === 'User' ? 'Uživatel' : 'Notář'
+
   return (
     <HStack
       key={details.id}
       gap={4}
       p={2}
       justifyContent={{ base: 'center', lg: 'left' }}
-      opacity={details.confirmed ? 1 : 0.7}
     >
       {details.confirmed ? (
         <Avatar name={details.displayName} size={{ base: 'md', sm: 'xl' }} />
       ) : (
-        <Avatar
-          fallback={<FaUserLargeSlash size={22} />}
-          size={{ base: 'md', sm: 'xl' }}
-        />
+        <Tooltip
+          content={`${role} ${details.name} ${details.surname} byl ze systému deaktivován. S uživatelem nebude již možná komunikace. V případě dotazů kontaktujte zákaznickou podporu.`}
+          showArrow
+          portalled
+        >
+          <Avatar
+            fallback={<TbExclamationMark size={24} />}
+            size={{ base: 'md', sm: 'xl' }}
+            cursor="pointer"
+          />
+        </Tooltip>
       )}
-
       <Stack gap="0">
         <Text
           fontSize={{ base: 'md', lg: 'lg' }}

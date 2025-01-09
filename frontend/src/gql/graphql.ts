@@ -184,6 +184,7 @@ export type Mutation = {
   createBeneficiaries: Array<Beneficiary>
   createBeneficiary: Beneficiary
   createNotary: Notary
+  createNotaryDateRule: NotaryDateRule
   createProceeding: Scalars['Int']['output']
   deleteAddress: Scalars['Boolean']['output']
   deleteArticles: Scalars['Boolean']['output']
@@ -191,6 +192,7 @@ export type Mutation = {
   deleteAttachmentsByIds: Scalars['Boolean']['output']
   deleteBeneficiaries: Scalars['Boolean']['output']
   deleteNotary: Scalars['Boolean']['output']
+  deleteNotaryDateRules: Scalars['Boolean']['output']
   deleteProceedingsByIds: Scalars['Boolean']['output']
   notifyProcedureBeneficiaries: Scalars['Boolean']['output']
   removeBeneficiaryFromProceeding: Scalars['Boolean']['output']
@@ -203,6 +205,7 @@ export type Mutation = {
   updateArticle?: Maybe<Article>
   updateAsset?: Maybe<Asset>
   updateBeneficiary: Beneficiary
+  updateNotaryDateRule?: Maybe<NotaryDateRule>
   updateProfile: User
   updateSendNotifications: User
   uploadAttachmentToProceeding: Scalars['ID']['output']
@@ -260,6 +263,10 @@ export type MutationCreateNotaryArgs = {
   data: CreateNotaryInput
 }
 
+export type MutationCreateNotaryDateRuleArgs = {
+  data: NotaryDateRuleInput
+}
+
 export type MutationCreateProceedingArgs = {
   data: CreateProceedingInput
 }
@@ -286,6 +293,10 @@ export type MutationDeleteBeneficiariesArgs = {
 
 export type MutationDeleteNotaryArgs = {
   id: Scalars['Int']['input']
+}
+
+export type MutationDeleteNotaryDateRulesArgs = {
+  ids: Scalars['Int']['input']
 }
 
 export type MutationDeleteProceedingsByIdsArgs = {
@@ -345,6 +356,11 @@ export type MutationUpdateBeneficiaryArgs = {
   id: Scalars['Int']['input']
 }
 
+export type MutationUpdateNotaryDateRuleArgs = {
+  data: NotaryDateRuleInput
+  id: Scalars['Int']['input']
+}
+
 export type MutationUpdateProfileArgs = {
   profileInput: ProfileInput
 }
@@ -362,6 +378,24 @@ export type Notary = {
   id: Scalars['ID']['output']
   postalCode?: Maybe<Scalars['String']['output']>
   user?: Maybe<User>
+}
+
+export type NotaryDateRule = {
+  __typename?: 'NotaryDateRule'
+  endDay: Scalars['Float']['output']
+  endMonth: Scalars['Float']['output']
+  id: Scalars['ID']['output']
+  notaryId: Scalars['ID']['output']
+  startDay: Scalars['Float']['output']
+  startMonth: Scalars['Float']['output']
+}
+
+export type NotaryDateRuleInput = {
+  endDay: Scalars['Float']['input']
+  endMonth: Scalars['Float']['input']
+  notaryId: Scalars['ID']['input']
+  startDay: Scalars['Float']['input']
+  startMonth: Scalars['Float']['input']
 }
 
 export type Proceeding = {
@@ -417,6 +451,8 @@ export type Query = {
   getBeneficiaryById?: Maybe<Beneficiary>
   getBeneficiaryProceedingsForUser: Array<Proceeding>
   getNotaryById?: Maybe<Notary>
+  getNotaryDateRuleById?: Maybe<NotaryDateRule>
+  getNotaryDateRulesByNotary: Array<NotaryDateRule>
   getNotaryProceedingsForUser: Array<Proceeding>
   getProceedingById?: Maybe<Proceeding>
   getUserByEmail?: Maybe<User>
@@ -490,6 +526,14 @@ export type QueryGetBeneficiaryProceedingsForUserArgs = {
 
 export type QueryGetNotaryByIdArgs = {
   id: Scalars['Int']['input']
+}
+
+export type QueryGetNotaryDateRuleByIdArgs = {
+  id: Scalars['Int']['input']
+}
+
+export type QueryGetNotaryDateRulesByNotaryArgs = {
+  notaryId: Scalars['Int']['input']
 }
 
 export type QueryGetNotaryProceedingsForUserArgs = {
@@ -582,6 +626,7 @@ export type GetUsersQuery = {
     addressId?: string | null
     type: string
     confirmed: boolean
+    notaryId?: string | null
     address?: {
       __typename?: 'Address'
       id: string
@@ -934,6 +979,7 @@ export type GetProceedingByIdQuery = {
         name: string
         surname: string
         confirmed: boolean
+        type: string
       } | null
     } | null
     beneficiaries?: Array<{
@@ -948,6 +994,7 @@ export type GetProceedingByIdQuery = {
         name: string
         surname: string
         confirmed: boolean
+        type: string
       } | null
     }> | null
     notary?: {
@@ -961,6 +1008,7 @@ export type GetProceedingByIdQuery = {
         phone?: string | null
         id: string
         confirmed: boolean
+        type: string
         address?: {
           __typename?: 'Address'
           id: string
@@ -982,6 +1030,31 @@ export type ChangePasswordMutationVariables = Exact<{
 export type ChangePasswordMutation = {
   __typename?: 'Mutation'
   changePassword: boolean
+}
+
+export type GetNotaryDateRulesQueryVariables = Exact<{
+  notaryId: Scalars['Int']['input']
+}>
+
+export type GetNotaryDateRulesQuery = {
+  __typename?: 'Query'
+  getNotaryDateRulesByNotary: Array<{
+    __typename?: 'NotaryDateRule'
+    id: string
+    startDay: number
+    startMonth: number
+    endDay: number
+    endMonth: number
+  }>
+}
+
+export type GetNotaryAddressRulesQueryVariables = Exact<{
+  getNotaryByIdId: Scalars['Int']['input']
+}>
+
+export type GetNotaryAddressRulesQuery = {
+  __typename?: 'Query'
+  getNotaryById?: { __typename?: 'Notary'; postalCode?: string | null } | null
 }
 
 export type GetUserByIdQueryVariables = Exact<{
@@ -1096,6 +1169,7 @@ export type SignInMutation = {
       sendNotifications: boolean
       surname: string
       type: string
+      notaryId?: string | null
       address?: {
         __typename?: 'Address'
         id: string
@@ -1331,6 +1405,7 @@ export const GetUsersDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'addressId' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'type' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'confirmed' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'notaryId' } },
               ],
             },
           },
@@ -2657,6 +2732,10 @@ export const GetProceedingByIdDocument = {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'confirmed' },
                             },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'type' },
+                            },
                           ],
                         },
                       },
@@ -2703,6 +2782,10 @@ export const GetProceedingByIdDocument = {
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'confirmed' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'type' },
                             },
                           ],
                         },
@@ -2805,6 +2888,10 @@ export const GetProceedingByIdDocument = {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'confirmed' },
                             },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'type' },
+                            },
                           ],
                         },
                       },
@@ -2891,6 +2978,112 @@ export const ChangePasswordDocument = {
 } as unknown as DocumentNode<
   ChangePasswordMutation,
   ChangePasswordMutationVariables
+>
+export const GetNotaryDateRulesDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetNotaryDateRules' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'notaryId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getNotaryDateRulesByNotary' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'notaryId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'notaryId' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'startDay' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'startMonth' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'endDay' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'endMonth' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetNotaryDateRulesQuery,
+  GetNotaryDateRulesQueryVariables
+>
+export const GetNotaryAddressRulesDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetNotaryAddressRules' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'getNotaryByIdId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getNotaryById' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'id' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'getNotaryByIdId' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'postalCode' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetNotaryAddressRulesQuery,
+  GetNotaryAddressRulesQueryVariables
 >
 export const GetUserByIdDocument = {
   kind: 'Document',
@@ -3367,6 +3560,10 @@ export const SignInDocument = {
                         name: { kind: 'Name', value: 'surname' },
                       },
                       { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'notaryId' },
+                      },
                     ],
                   },
                 },
