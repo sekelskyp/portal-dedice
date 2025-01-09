@@ -210,7 +210,7 @@ export const notaryDateRule = mysqlTable(
   {
     id: int('id').primaryKey().autoincrement(),
     notaryId: int('notary_id')
-      .references(() => notary.id)
+      .references(() => notary.id, { onDelete: 'cascade' })
       .notNull(), // Foreign Key to Notary
     startDay: int('start_day').notNull(),
     endDay: int('end_day').notNull(),
