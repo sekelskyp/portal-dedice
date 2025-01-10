@@ -13,7 +13,7 @@ import { useWizard } from './useWizard'
 
 const assetTypeCollection = createListCollection({
   items: [
-    { value: 'Běžný účet', label: 'Běžný účet' },
+    { value: 'Běžný účet', label: 'Běžný účet'},
     { value: 'Spořící účet', label: 'Spořící účet' },
     { value: 'Termínovaný vklad', label: 'Termínovaný vklad' },
     { value: 'Stavební spoření', label: 'Stavební spoření' },

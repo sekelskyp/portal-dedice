@@ -83,8 +83,9 @@ Vložené informace a data se nijak neukládají ani nezaznamenávají."
           )}
           {currentStep === 3 && (
             <StepLayout
-              title="Návrh rozdělení"
+              title="Návrh rozdělení majetku mezi dědice"
               description="Navrhněte rozdělení majetku mezi dědice"
+              tooltip="Jak postupovat?"
             >
               <StepThree onPrevious={handlePrevious} onNext={handleNext} />
             </StepLayout>
