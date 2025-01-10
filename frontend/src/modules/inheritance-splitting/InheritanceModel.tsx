@@ -32,6 +32,24 @@ const InheritanceModel = () => {
     mode: 'onChange',
   })
 
+  const stepTwoItems = [
+    'Přidávejte položky majetku zůstavitele/ky pomocí ikony +',
+    'Název položky majetku slouží k Vaší orientaci, nenípovinný',
+    'V případě, že zůstavitel/ka má uzavřené manželství, je potřeba uvést též majetek pozůstalé/ho manžela/manželky,který spadá do SJM. Výlučný majetek pozůstalé/homanžela/manželky zde neuvádějte.',
+    'SJM (Společné Jmění Manželů): v případě, že majetek nabyli manželé za trvání manželství, tak spadá do SJM. To platí i pro účty, které jsou vedené na jméno jednoho z manželů. Majetek nepatří do SJM pouze v případě, že jej zůstavitel/ka získal/a před uzavřením manželství, nebo během manželství např. darem, nebo dědictvím. Použijte pole ve sloupci SJM k určení či je položka výlučným majetkem zůstavitele/zůstavitelky.',
+  ]
+
+  const stepThreeItems = [
+    'V prvním kroku je potřeba vypořádat SJM (Společné jmění manželů). Pozůstalý/á manžel/ka má nárok 1/2 hodnoty SJM. Druhá polovina se hodnotově musí objevit v pozůstalostním řízení. Součty hodnot jsou přehledně v níže uvedené části.',
+    'Doporučujeme pozůstalé/mu manželce/manželovi přidělit primárně položky, které jsou již psané na její/jeho jméno. Tím se minimalizuje nutnost zařizovat přepis položek nového majitele.',
+    'Doporučujeme sledovat sloupec “Dělitelnost” který indikuje, zda je položku vhodné dělit či nikoliv. Vysvětlivky naleznete přímo v záhlaví tohoto sloupce.',
+    'Pro určení komu půjde majetek, využijte sloupec “Návrh na vypořádání SJM”. Pokud vyberete “manželka” znamená to, že položku z titulu vypořádání SJM přejde na ní. Zbylé položky automaticky přejou do pozůstalostního vypořádání.',
+    'Jakmile máte vypořadné SJM, systém Vás automaticky pustí k pořádání pozůstalosti.',
+    'Postupujte setejným způsobem, avšak za využití sloupce “Návrh vypořádání pozůstalosti”.',
+    'Pokud některý z dědiců dostává více/méně, než kolik indikuje jeho zákonná část, tak to nevadí, pakliže s tím účastníci řízení souhlasí a je to jejich výslovné přání. Notář by měl takovou dohodu respektovat. Pro zcela spravedlivý výsledek je možné založit mezi dědici povinnosti vyplatit ostatní, tak aby každý dědic získal z pozůstalosti hodnotu, která mu náleží dle zákona. Viz poslední sloupec, kde je indikace kolik je částka výplaty a kdo jí činí.',
+    'V pozůstalostním řízení samotném je ale možné aby k vyrovnávacím výplatám nedošlo, anebo aby nakonec měly i jinou částku, než jak je v této modelaci uvedeno. Opět, pokud je to přání dědiců a všichni s tím souhlasí, pak by měl notář takové dohodě vyhovět.',
+  ]
+
   const formData = methods.watch()
 
   const onSubmit = (data: FormData) => {
@@ -77,6 +95,8 @@ Vložené informace a data se nijak neukládají ani nezaznamenávají."
             <StepLayout
               title="Soupis majetku"
               description="Zadejte jednotlivé položky majetku zůstavitele"
+              popoverTitle="Jak postupovat?"
+              popoverItems={stepTwoItems}
             >
               <StepTwo onPrevious={handlePrevious} onNext={handleNext} />
             </StepLayout>
@@ -85,7 +105,8 @@ Vložené informace a data se nijak neukládají ani nezaznamenávají."
             <StepLayout
               title="Návrh rozdělení majetku mezi dědice"
               description="Navrhněte rozdělení majetku mezi dědice"
-              tooltip="Jak postupovat?"
+              popoverTitle="Jak postupovat?"
+              popoverItems={stepThreeItems}
             >
               <StepThree onPrevious={handlePrevious} onNext={handleNext} />
             </StepLayout>
