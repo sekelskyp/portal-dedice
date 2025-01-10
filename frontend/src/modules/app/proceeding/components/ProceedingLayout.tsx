@@ -27,6 +27,7 @@ export interface IProceedingContext {
   error: ApolloError | undefined
   removeBeneficiary: (beneficiaryId: number) => Promise<void>
   addBeneficiaries: (userIds: number[]) => Promise<void>
+  isEditable: boolean
 }
 
 export const ProceedingContext = createContext<IProceedingContext | null>(null)

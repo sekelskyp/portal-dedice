@@ -12,9 +12,9 @@ import { UserBadge } from '../components/UserBadge'
 import { UserBadgeAssignButton } from '../components/UserBadgeAssignButton'
 
 export const ProceedingDetail = () => {
-  const user = useAuth()
+  const { user } = useAuth()
 
-  const { proceeding, removeBeneficiary } = useProceedingContext()
+  const { proceeding, isEditable, removeBeneficiary } = useProceedingContext()
 
   const assets = proceeding?.procedureAssets
   const totalAssetsValue = assets?.reduce((sum, asset) => sum + asset.value, 0)
@@ -35,7 +35,7 @@ export const ProceedingDetail = () => {
             <UserBadge
               user={proceeding.mainBeneficiary?.user}
               issueText="Dědic bez kontaktních údajů."
-              removable={user.user?.type === 'Notary'}
+              removable={isEditable}
               onRemoveClick={() => {
                 toaster.success({
                   title: 'Dědic byl odebrán z hlavních kontaktů.',
@@ -72,12 +72,13 @@ export const ProceedingDetail = () => {
               key={beneficiary.id}
               user={beneficiary.user}
               issueText="Dědic bez kontaktních údajů."
-              removable={true}
+              removable={isEditable}
               onRemoveClick={() => {
                 removeBeneficiary(+beneficiary.id)
               }}
             />
           ))}
+          {isEditable && <UserBadgeAssignButton text="Přidat dědice" />}
         </Grid>
       </Stack>
       <Heading
@@ -110,7 +111,7 @@ export const ProceedingDetail = () => {
         Tuto hodnotu zatím neznáme.
       </Text>
       <Stack direction={{ base: 'column', lg: 'row' }} justifyContent="center">
-        {user.user?.type === 'User' ? (
+        {user?.type === 'User' ? (
           <>
             <Button as={Link} disabled rounded="full">
               Modelace vyrovnaní

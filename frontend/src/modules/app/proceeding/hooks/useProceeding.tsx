@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client'
 
 import { gql } from '@frontend/gql'
+import { useAuth } from '@frontend/modules/auth'
 import { toaster } from '@frontend/shared/design-system'
 
 export const GET_PROCEEDING_QUERY = gql(/* GraphQL */ `
@@ -141,11 +142,15 @@ export function useProceeding(proceedingId: number) {
         toaster.error({ title: 'Nepodařilo se přidat dědice.' })
       })
 
+  const auth = useAuth()
+  const isEditable = ['Notary', 'Admin'].includes(auth.user?.type ?? 'User')
+
   return {
     proceeding: data?.getProceedingById,
     loading,
     error,
     removeBeneficiary,
     addBeneficiaries,
+    isEditable,
   }
 }

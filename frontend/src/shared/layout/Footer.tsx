@@ -21,7 +21,13 @@ export const Footer = () => {
   const isDark = theme.resolvedTheme === 'dark'
 
   return (
-    <Box bg="bg.panel" pb={4}>
+    <Box
+      bg="bg.panel"
+      boxShadow="0px 0px 16px 0px rgba(0, 0, 0, 0.06)"
+      borderTop="1px solid"
+      borderColor="bg.muted"
+      pb={4}
+    >
       <Container as={Stack} px={2}>
         <Stack
           direction={{ base: 'column', md: 'row' }}

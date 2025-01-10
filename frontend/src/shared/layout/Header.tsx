@@ -15,7 +15,7 @@ export const Header = () => {
       bg="bg.panel"
       boxShadow="0px 0px 12px 0px rgba(0, 0, 0, 0.06)"
       borderBottom="1px solid"
-      borderColor="bg.emphasized"
+      borderColor="bg.muted"
     >
       <Container
         maxW="container.xl"
