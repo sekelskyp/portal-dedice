@@ -145,6 +145,7 @@ type Mutation {
   createBeneficiaries(data: [BeneficiaryInput!]!): [Beneficiary!]!
   createBeneficiary(data: BeneficiaryInput!): Beneficiary!
   createNotary(data: CreateNotaryInput!): Notary!
+  createNotaryDateRule(data: NotaryDateRuleInput!): NotaryDateRule!
   createProceeding(data: CreateProceedingInput!): Int!
   deleteAddress(id: Int!): Boolean!
   deleteArticles(ids: [Int!]!): Boolean!
@@ -152,6 +153,7 @@ type Mutation {
   deleteAttachmentsByIds(ids: [ID!]!): Boolean!
   deleteBeneficiaries(id: Int!): Boolean!
   deleteNotary(id: Int!): Boolean!
+  deleteNotaryDateRules(ids: Int!): Boolean!
   deleteProceedingsByIds(ids: [Int!]!): Boolean!
   notifyProcedureBeneficiaries(
     html: String!
@@ -171,6 +173,7 @@ type Mutation {
   updateArticle(data: UpdateArticleInput!, id: Int!): Article
   updateAsset(data: AssetInput!, id: Int!): Asset
   updateBeneficiary(data: BeneficiaryInput!, id: Int!): Beneficiary!
+  updateNotaryDateRule(data: NotaryDateRuleInput!, id: Int!): NotaryDateRule
   updateProfile(profileInput: ProfileInput!): User!
   updateSendNotifications(sendNotifications: Boolean!): User!
   uploadAttachmentToProceeding(data: UploadFileToProceedingInput!): ID!
@@ -180,6 +183,23 @@ type Notary {
   id: ID!
   postalCode: String
   user: User
+}
+
+type NotaryDateRule {
+  endDay: Float!
+  endMonth: Float!
+  id: ID!
+  notaryId: ID!
+  startDay: Float!
+  startMonth: Float!
+}
+
+input NotaryDateRuleInput {
+  endDay: Float!
+  endMonth: Float!
+  notaryId: ID!
+  startDay: Float!
+  startMonth: Float!
 }
 
 type Proceeding {
@@ -233,6 +253,8 @@ type Query {
   getBeneficiaryById(id: Int!): Beneficiary
   getBeneficiaryProceedingsForUser(userId: Int!): [Proceeding!]!
   getNotaryById(id: Int!): Notary
+  getNotaryDateRuleById(id: Int!): NotaryDateRule
+  getNotaryDateRulesByNotary(notaryId: Int!): [NotaryDateRule!]!
   getNotaryProceedingsForUser(userId: Int!): [Proceeding!]!
   getProceedingById(id: Int!): Proceeding
   getUserByEmail(email: String!): User

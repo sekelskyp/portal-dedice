@@ -25,16 +25,5 @@ export function useNotaryProcedures() {
     },
   })
 
-  /*
-  const cleanData = data
-    ? {
-        ...data,
-        getProceduresByNotaryId: data.getAllProceedings.map(
-          ({ __typename, ...procedure }) => procedure
-        ),
-      }
-    : null
-  */
-
   return { data, loading, error }
 }

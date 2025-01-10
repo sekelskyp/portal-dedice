@@ -31,7 +31,7 @@ const columnHelper = createColumnHelper<ProceedingsItem>()
 export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
   const { toggleDialog, isOpen, selectedId } = useActionDialog()
   const { user } = useAuth()
-  const isNotary = user?.type === 'Notary'
+  const hasPrivileges = user?.type === 'Notary' || user?.type === 'Admin'
   const [deleteProcedureRequest] = useDeleteProceeding()
 
   const { pagination, setPagination } = useTablePagination()
@@ -105,7 +105,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
           const id = info.row.original.id
           return (
             <Stack direction="row" alignItems="center">
-              {isNotary && (
+              {hasPrivileges && (
                 <IconButton
                   borderRadius="xl"
                   bg="red.600"
@@ -134,7 +134,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
     )
 
     return columns
-  }, [isMobile, isNotary, toggleDialog])
+  }, [isMobile, hasPrivileges, toggleDialog])
 
   const table = useReactTable({
     columns,

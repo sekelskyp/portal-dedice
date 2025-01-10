@@ -8,7 +8,7 @@ import { Alert } from '@frontend/shared/design-system'
 import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
 
-import { BeneficiaryBadge } from '../../proceeding/components/BeneficiaryBadge'
+import { UserBadge } from '../../../../shared/components/UserBadge'
 import { useProceeding } from '../../proceeding/hooks/useProceeding'
 import { NotaryEmailForm } from '../components/NotaryEmailForm'
 import { useNotifyBeneficiaries } from '../hooks/useNotifyBeneficiaries'
@@ -91,7 +91,7 @@ export function NotaryEmailPage() {
         <Stack alignItems="start">
           <Heading>Notář</Heading>
           {proceeding.notary?.user ? (
-            <BeneficiaryBadge beneficiaryContact={proceeding.notary?.user} />
+            <UserBadge details={proceeding.notary?.user} />
           ) : (
             <Alert status="warning">Notář bez kontaktních údajů.</Alert>
           )}
@@ -99,9 +99,9 @@ export function NotaryEmailPage() {
           <Stack direction={{ base: 'column', md: 'row' }} alignItems="start">
             {proceeding.beneficiaries?.map((beneficiary) =>
               !!beneficiary.user ? (
-                <BeneficiaryBadge
+                <UserBadge
                   key={beneficiary.id}
-                  beneficiaryContact={{
+                  details={{
                     ...beneficiary.user,
                   }}
                 />

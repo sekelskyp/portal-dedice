@@ -4,11 +4,12 @@ import { Link } from 'react-router-dom'
 
 import { GetProceedingByIdQuery } from '@frontend/gql/graphql'
 import { useAuth } from '@frontend/modules/auth'
+import { UserBadge } from '@frontend/shared/components/UserBadge'
 import { Alert } from '@frontend/shared/design-system'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { route } from '@shared/route'
 
-import { BeneficiaryBadge } from '../components/BeneficiaryBadge'
+//TODO: přidat link na modelaci vyrovnaní (rozdělení majetku)
 
 export const ProceedingDetail = ({
   proceeding,
@@ -30,9 +31,7 @@ export const ProceedingDetail = ({
           </Heading>
 
           {proceeding.mainBeneficiary?.user ? (
-            <BeneficiaryBadge
-              beneficiaryContact={proceeding.mainBeneficiary.user}
-            />
+            <UserBadge details={proceeding.mainBeneficiary.user} />
           ) : (
             <Alert status="warning">Dědic bez kontaktních údajů.</Alert>
           )}
@@ -45,7 +44,7 @@ export const ProceedingDetail = ({
             Přiřazený notář
           </Heading>
           {proceeding.notary?.user ? (
-            <BeneficiaryBadge beneficiaryContact={proceeding.notary?.user} />
+            <UserBadge details={proceeding.notary?.user} />
           ) : (
             <Alert status="warning">Notář bez kontaktních údajů.</Alert>
           )}
@@ -58,18 +57,23 @@ export const ProceedingDetail = ({
         >
           Seznam dědiců
         </Heading>
+        {proceeding.beneficiaries?.length === 0 && (
+          <Alert status="warning" title="Nebyl nalezen žádn dědic." />
+        )}
         {proceeding.beneficiaries?.map((beneficiary) =>
           !!beneficiary.user ? (
-            <BeneficiaryBadge
+            <UserBadge
               key={beneficiary.id}
-              beneficiaryContact={{
+              details={{
                 ...beneficiary.user,
               }}
             />
           ) : (
-            <Alert status="warning" key={beneficiary.id}>
-              Dědic bez kontaktních údajů.
-            </Alert>
+            <Alert
+              status="warning"
+              key={beneficiary.id}
+              title="Dědic bez kontaktních údajů."
+            />
           )
         )}
       </Stack>
