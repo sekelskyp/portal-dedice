@@ -2,22 +2,23 @@ import { Button, Grid, Heading, Spinner, Stack, Text } from '@chakra-ui/react'
 import { CalculatorIcon, MessageSquareTextIcon, SendIcon } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
-import { GetProceedingByIdQuery } from '@frontend/gql/graphql'
 import { useAuth } from '@frontend/modules/auth'
+import { toaster } from '@frontend/shared/design-system'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { route } from '@shared/route'
 
+import { useProceedingContext } from '../components/ProceedingLayout'
 import { UserBadge } from '../components/UserBadge'
 import { UserBadgeAssignButton } from '../components/UserBadgeAssignButton'
 
-export const ProceedingDetail = ({
-  proceeding,
-}: {
-  proceeding: GetProceedingByIdQuery['getProceedingById']
-}) => {
+export const ProceedingDetail = () => {
   const user = useAuth()
+
+  const { proceeding, removeBeneficiary } = useProceedingContext()
+
   const assets = proceeding?.procedureAssets
   const totalAssetsValue = assets?.reduce((sum, asset) => sum + asset.value, 0)
+
   return proceeding ? (
     <Stack gap={6}>
       <Grid gap={4} templateColumns={{ base: '1fr', lg: '1fr 1fr' }}>
@@ -30,12 +31,20 @@ export const ProceedingDetail = ({
             Hlavní kontaktní osoba
           </Heading>
 
-          <UserBadge
-            user={proceeding.mainBeneficiary?.user}
-            issueText="Dědic bez kontaktních údajů."
-            editable={user.user?.type === 'Notary'}
-          />
-          <UserBadgeAssignButton text="Nastavit hlavní kontaktní osobu" />
+          {proceeding.mainBeneficiary?.user ? (
+            <UserBadge
+              user={proceeding.mainBeneficiary?.user}
+              issueText="Dědic bez kontaktních údajů."
+              removable={user.user?.type === 'Notary'}
+              onRemoveClick={() => {
+                toaster.success({
+                  title: 'Dědic byl odebrán z hlavních kontaktů.',
+                })
+              }}
+            />
+          ) : (
+            <UserBadgeAssignButton text="Nastavit hlavní kontaktní osobu" />
+          )}
         </Stack>
         <Stack gap={4}>
           <Heading
@@ -63,8 +72,10 @@ export const ProceedingDetail = ({
               key={beneficiary.id}
               user={beneficiary.user}
               issueText="Dědic bez kontaktních údajů."
-              editable={true}
-              onRemoveClick={() => {}}
+              removable={true}
+              onRemoveClick={() => {
+                removeBeneficiary(+beneficiary.id)
+              }}
             />
           ))}
         </Grid>

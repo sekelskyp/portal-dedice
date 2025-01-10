@@ -74,7 +74,7 @@ export const RewardCalculator = () => {
           </Form>
         </Box>
         {reward ? (
-          <Card.Root w="full" bg={'bg.emphasized'}>
+          <Card.Root w="full" bg={'bg.emphasized/75'}>
             <Card.Body>
               <Stack gap={6}>
                 <StatRoot>

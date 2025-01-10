@@ -23,12 +23,12 @@ interface UserBadgeProps {
   user?: User | null
   loading?: boolean
   issueText?: string
-  editable?: boolean
+  removable?: boolean
   onRemoveClick?: () => void
 }
 
 export function UserBadge(props: UserBadgeProps) {
-  const { user, loading, editable, issueText, onRemoveClick } = props
+  const { user, loading, removable: editable, issueText, onRemoveClick } = props
 
   if (!user && loading) return UserBadgeSkeleton()
 
@@ -53,6 +53,9 @@ const UserBadgeFilled = ({
     px={3}
     py={2}
     bg="bg.emphasized/75"
+    border="1px solid"
+    borderColor="bg.emphasized"
+    boxShadow="card"
   >
     <UserAvatar {...user} />
     <Stack gap="0" h={10}>

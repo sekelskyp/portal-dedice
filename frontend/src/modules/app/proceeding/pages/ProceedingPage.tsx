@@ -84,7 +84,7 @@ export const ProceedingPage = () => {
                 </Tabs.Trigger>
               </Tabs.List>
               <Tabs.Content value="detail">
-                <ProceedingDetail proceeding={proceeding} />
+                <ProceedingDetail />
               </Tabs.Content>
               <Tabs.Content value="documents">
                 <Documents id={proceeding.id} />

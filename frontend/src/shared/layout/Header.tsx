@@ -11,7 +11,12 @@ import { UserMenu } from './components/UserMenu'
 
 export const Header = () => {
   return (
-    <Box bg="bg.panel">
+    <Box
+      bg="bg.panel"
+      boxShadow="0px 0px 12px 0px rgba(0, 0, 0, 0.06)"
+      borderBottom="1px solid"
+      borderColor="bg.emphasized"
+    >
       <Container
         maxW="container.xl"
         py={4}

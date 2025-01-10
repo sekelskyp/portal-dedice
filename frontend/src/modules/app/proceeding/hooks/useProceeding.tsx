@@ -1,6 +1,7 @@
-import { useQuery } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
 
 import { gql } from '@frontend/gql'
+import { toaster } from '@frontend/shared/design-system'
 
 export const GET_PROCEEDING_QUERY = gql(/* GraphQL */ `
   query GetProceedingById($getProceedingByIdId: Int!) {
@@ -74,16 +75,77 @@ export const GET_PROCEEDING_QUERY = gql(/* GraphQL */ `
   }
 `)
 
+export const REMOVE_BENEFICIARY_MUTATION = gql(/* GraphQL */ `
+  mutation RemoveBeneficiaryFromProceeding(
+    $beneficiaryId: Int!
+    $proceedingId: Int!
+  ) {
+    removeBeneficiaryFromProceeding(
+      beneficiaryId: $beneficiaryId
+      proceedingId: $proceedingId
+    )
+  }
+`)
+
+export const ADD_BENEFICIARIES_MUTATION = gql(/* GraphQL */ `
+  mutation AddBeneficiariesToProceeding(
+    $userIds: [Int!]!
+    $proceedingId: Int!
+  ) {
+    addBeneficiariesToProceeding(userIds: $userIds, proceedingId: $proceedingId)
+  }
+`)
+
 export function useProceeding(proceedingId: number) {
-  const { data, loading, error } = useQuery(GET_PROCEEDING_QUERY, {
+  const { data, loading, error, refetch } = useQuery(GET_PROCEEDING_QUERY, {
     variables: {
       getProceedingByIdId: proceedingId,
     },
   })
 
+  const [removeBeneficiaryFromProceeding] = useMutation(
+    REMOVE_BENEFICIARY_MUTATION
+  )
+
+  const removeBeneficiary = (beneficiaryId: number) =>
+    removeBeneficiaryFromProceeding({
+      variables: {
+        beneficiaryId,
+        proceedingId,
+      },
+    })
+      .then(() =>
+        refetch().then(() => {
+          toaster.success({ title: 'Dědic byl odebrán.' })
+        })
+      )
+      .catch(() => {
+        toaster.error({ title: 'Nepodařilo se odebrat dědice.' })
+      })
+
+  const [addBeneficiariesToProceeding] = useMutation(ADD_BENEFICIARIES_MUTATION)
+
+  const addBeneficiaries = (userIds: number[]) =>
+    addBeneficiariesToProceeding({
+      variables: {
+        userIds,
+        proceedingId,
+      },
+    })
+      .then(() => {
+        refetch().then(() => {
+          toaster.success({ title: 'Dědic byl přidán.' })
+        })
+      })
+      .catch(() => {
+        toaster.error({ title: 'Nepodařilo se přidat dědice.' })
+      })
+
   return {
-    data,
+    proceeding: data?.getProceedingById,
     loading,
     error,
+    removeBeneficiary,
+    addBeneficiaries,
   }
 }

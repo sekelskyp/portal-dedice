@@ -25,6 +25,8 @@ export interface IProceedingContext {
   loading: boolean
   proceeding: GetProceedingByIdQuery['getProceedingById'] | undefined
   error: ApolloError | undefined
+  removeBeneficiary: (beneficiaryId: number) => Promise<void>
+  addBeneficiaries: (userIds: number[]) => Promise<void>
 }
 
 export const ProceedingContext = createContext<IProceedingContext | null>(null)
@@ -37,15 +39,13 @@ export const ProceedingProvider = ({
   id: number
   children: React.ReactNode
 }) => {
-  const { data, loading, error } = useProceeding(id)
+  const ctx = useProceeding(id)
 
   return (
     <ProceedingContext.Provider
       value={{
         proceedingId: id,
-        proceeding: data?.getProceedingById,
-        loading,
-        error,
+        ...ctx,
       }}
     >
       {children}
