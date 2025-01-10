@@ -7,7 +7,7 @@ import { useAuth } from '@frontend/modules/auth'
 import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
 
-import { UserBadge } from '../../proceeding/components/UserBadge'
+import { UserBadge } from '../../../../shared/components/UserBadge'
 import { useProceeding } from '../../proceeding/hooks/useProceeding'
 import { NotaryEmailForm } from '../components/NotaryEmailForm'
 import { useNotifyBeneficiaries } from '../hooks/useNotifyBeneficiaries'

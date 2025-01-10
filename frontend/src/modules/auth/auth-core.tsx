@@ -34,11 +34,11 @@ export type AuthUser = {
   gender?: string | null | undefined
   id: string
   name: string
-  //notaryId: string
   phone?: string | null | undefined
   sendNotifications: boolean
   surname: string
   type: string
+  notaryId: string | null
 }
 
 const LOCAL_STORAGE_AUTH_KEY = 'project-auth'

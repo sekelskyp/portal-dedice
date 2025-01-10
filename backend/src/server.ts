@@ -37,6 +37,7 @@ import { EmptyResolver } from '@backend/graphql/modules/empty/emptyResolver'
 import { getNotaryRepository } from '@backend/graphql/modules/notary/notaryRepository'
 import { NotaryResolver } from '@backend/graphql/modules/notary/notaryResolver'
 import { getNotaryDateRuleRepository } from '@backend/graphql/modules/notaryDateRule/notaryDateRuleRepository'
+import { NotaryDateRuleResolver } from '@backend/graphql/modules/notaryDateRule/notaryDateRuleResolver'
 import { getPasswordResetTokenRepository } from '@backend/graphql/modules/passwordResetToken/passwordResetTokenRepository'
 import { getProceedingRepository } from '@backend/graphql/modules/proceeding/proceedingRepository'
 import { InheritanceProcedureResolver } from '@backend/graphql/modules/proceeding/proceedingResolver'
@@ -71,6 +72,7 @@ const init = async () => {
       ArticleResolver,
       AddressSuggestionResolver,
       AttachmentResolver,
+      NotaryDateRuleResolver,
     ],
     pubSub,
     emitSchemaFile: true,
@@ -196,7 +198,7 @@ const init = async () => {
   }
 
   // Add routes for serving files
-  app.use(resolveContext, fileRoutes)
+  app.use(cors<cors.CorsRequest>(), resolveContext, fileRoutes)
 
   httpServer.listen({ port: PORT }, () => {
     console.log('Server listening on port: ' + PORT)

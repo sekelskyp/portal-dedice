@@ -40,7 +40,7 @@ export async function loginUser(
   context: CustomContext
 ): Promise<AuthResponse> {
   const { userRepository } = context
-  const errorMessage = 'Neplatný e-mail nebo heslo'
+  const errorMessage = 'Neplatný e-mail nebo heslo.'
 
   // Find user by email
   const foundUser = await userRepository.getUserByEmail(login.toLowerCase())
@@ -54,7 +54,9 @@ export async function loginUser(
 
   // Check if user is confirmed
   if (!foundUser.confirmed)
-    throw new Error('Pro login je nutné ověřit e-mail uživatele')
+    throw new Error(
+      'Váš učet je momentálně deaktivován. Pro login je potřeba aktivovat účet.'
+    )
 
   // Generate a JWT token for the user
   const token = createToken({ userId: foundUser.id })
@@ -72,7 +74,7 @@ export async function registerUser(
   const existingUser = await userRepository.getUserByEmail(
     data.email.toLowerCase()
   )
-  if (existingUser) throw new Error('Uživatel s tímto emailem již existuje')
+  if (existingUser) throw new Error('Uživatel s tímto emailem již existuje.')
 
   // Hash the password and create the user
   const hashedPassword = await hashPassword(data.password)
@@ -87,7 +89,7 @@ export async function registerUser(
   })
   const newUser = await userRepository.getUserById(userId)
   if (!newUser) {
-    throw new Error('Failed to retrieve the newly created user')
+    throw new Error('Nepodařilo se načíst nového uživatele.')
   }
   await sendEmailVerification(newUser.id, data.email, context)
   return newUser

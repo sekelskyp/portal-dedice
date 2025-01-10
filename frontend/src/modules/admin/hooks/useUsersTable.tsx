@@ -8,6 +8,8 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 
+import { useGetNotaryAddressRuleById } from '@frontend/modules/app/settings/hooks/useGetNotaryRules'
+import { getPlaceByPostalCode } from '@frontend/modules/app/utils/addressUtils'
 import { useActionDialog } from '@frontend/shared/hooks/useActionDialog'
 import { useTableFilters } from '@frontend/shared/hooks/useTableFilters'
 import { useTablePagination } from '@frontend/shared/hooks/useTablePagination'
@@ -43,6 +45,10 @@ export function useUsersTable({ data }: { data: UserItem[] }) {
     }
   }, [changeUserStatusRequest, selectedId])
 
+  const GetNotaryAddressRuleById = (id: number) => {
+    return useGetNotaryAddressRuleById({ id }).data?.getNotaryById?.postalCode
+  }
+
   const columns = useMemo(
     () => [
       columnHelper.accessor('id', {
@@ -52,7 +58,16 @@ export function useUsersTable({ data }: { data: UserItem[] }) {
       }),
       columnHelper.accessor('displayName', {
         header: () => 'Jméno a přijmení',
-        cell: (info) => info.getValue(),
+        cell: (info) => {
+          const user = info.row.original
+          const displayName = info.getValue()
+          let place = ''
+          if (user.type === 'Notary') {
+            const postalCode = GetNotaryAddressRuleById(Number(user.notaryId))
+            place = ' – ' + getPlaceByPostalCode(postalCode ?? '')
+          }
+          return displayName + place
+        },
         meta: {
           filterVariant: 'text',
         },

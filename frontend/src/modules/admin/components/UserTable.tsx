@@ -16,6 +16,7 @@ export type UserItem = {
   address: string
   type: string
   confirmed: boolean
+  notaryId: string
 }
 
 export function UserTable({ data }: { data: UserItem[] }) {
