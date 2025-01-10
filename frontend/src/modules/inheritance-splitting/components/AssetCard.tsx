@@ -8,18 +8,19 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { createListCollection } from '@chakra-ui/react/collection'
-import {
-  Banknote,
-  Building2,
-  Car,
-  Clock,
-  CreditCard,
-  Gem,
-  Home,
-  LineChart,
-  PiggyBank,
-} from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
+import {
+  BsBuildings,
+  BsCarFront,
+  BsCashStack,
+  BsClockHistory,
+  BsCreditCard,
+  BsGem,
+  BsGraphUp,
+  BsHouseDoor,
+  BsLightningCharge,
+  BsPiggyBank,
+} from 'react-icons/bs'
 
 import { SelectFormControl } from '@frontend/shared/forms'
 
@@ -45,16 +46,17 @@ interface IconMap {
 }
 
 const assetTypeToIcon: IconMap = {
-  'běžný účet': <CreditCard size={32} />,
-  'spořící účet': <PiggyBank size={32} />,
-  'termínovaný vklad': <Clock size={32} />,
-  'spoření na nemovitost': <Building2 size={32} />,
-  'cenné papíry': <LineChart size={32} />,
-  cennosti: <Gem size={32} />,
-  hotovost: <Banknote size={32} />,
-  vozidlo: <Car size={32} />,
-  nemovitost: <Home size={32} />,
-}
+  'běžný účet': <BsCreditCard size={32} />, 
+  'spořící účet': <BsPiggyBank size={32} />,
+  'termínovaný vklad': <BsClockHistory size={32} />,
+  'stavební spoření': <BsBuildings size={32} />,
+  'cenné papíry': <BsGraphUp size={32} />,
+  'cennosti': <BsGem size={32} />,
+  'hotovost': <BsCashStack size={32} />,
+  'vozidlo': <BsCarFront size={32} />,
+  'nemovitost': <BsHouseDoor size={32} />,
+  'přeplatky energií': <BsLightningCharge size={32}/>
+} 
 
 interface AssetIconProps {
   type: string
