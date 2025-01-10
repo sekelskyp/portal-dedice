@@ -1,17 +1,19 @@
 import { ReactNode } from 'react'
 import {
   Box,
-  Button,
   Container,
   Heading,
+  IconButton,
   List,
   PopoverArrow,
   PopoverBody,
   PopoverContent,
   PopoverRoot,
   PopoverTrigger,
+  Text,
   VStack,
 } from '@chakra-ui/react'
+import { BsInfoCircle } from 'react-icons/bs'
 
 interface StepLayoutProps {
   children: ReactNode
@@ -39,19 +41,20 @@ export const StepLayout = ({
           border="1px"
           borderColor="gray.200"
         >
-          <VStack align="start" gap={4} mb={6}>
+          <VStack align="start" gap={6} mb={6}>
             <Heading size="lg">{title}</Heading>
-            {/*
             {description && (
               <Text color="gray.600" fontSize="md">
-              {description}
+                {description}
               </Text>
-              )}
-              */}
+            )}
             {popoverTitle && popoverItems && (
               <PopoverRoot size="lg">
                 <PopoverTrigger asChild>
-                  <Button variant="outline">{popoverTitle}</Button>
+                  <IconButton variant="subtle" p={4}>
+                    <BsInfoCircle />
+                    {popoverTitle}
+                  </IconButton>
                 </PopoverTrigger>
                 <PopoverContent minW={{ base: '100%' }}>
                   <PopoverArrow />

@@ -93,7 +93,7 @@ Vložené informace a data se nijak neukládají ani nezaznamenávají."
           )}
           {currentStep === 2 && (
             <StepLayout
-              title="Soupis majetku"
+              title="Stanovení majetku zůstavitele"
               description="Zadejte jednotlivé položky majetku zůstavitele"
               popoverTitle="Jak postupovat?"
               popoverItems={stepTwoItems}

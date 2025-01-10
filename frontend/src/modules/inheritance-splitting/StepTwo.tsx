@@ -114,7 +114,7 @@ export const StepTwo = ({ onPrevious, onNext }: StepProps) => {
         p={4}
       >
         <FaPlus />
-        Přidat položku
+        Přidat položku majetku
       </IconButton>
       <StepNavigation
         onPrevious={onPrevious}
