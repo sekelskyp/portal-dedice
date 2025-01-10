@@ -26,8 +26,10 @@ export interface IProceedingContext {
   proceeding: GetProceedingByIdQuery['getProceedingById'] | undefined
   error: ApolloError | undefined
   removeBeneficiary: (beneficiaryId: number) => Promise<void>
-  addBeneficiaries: (userIds: number[]) => Promise<void>
+  addBeneficiaries: (userIds: string[]) => Promise<void>
   isEditable: boolean
+  removeMainBeneficiary: () => Promise<void>
+  addMainBeneficiary: (beneficiaryId: number) => Promise<void>
 }
 
 export const ProceedingContext = createContext<IProceedingContext | null>(null)

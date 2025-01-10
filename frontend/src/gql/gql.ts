@@ -63,6 +63,10 @@ const documents = {
     types.RemoveBeneficiaryFromProceedingDocument,
   '\n  mutation AddBeneficiariesToProceeding(\n    $userIds: [Int!]!\n    $proceedingId: Int!\n  ) {\n    addBeneficiariesToProceeding(userIds: $userIds, proceedingId: $proceedingId)\n  }\n':
     types.AddBeneficiariesToProceedingDocument,
+  '\n  mutation RemoveMainBeneficiary($proceedingId: Int!) {\n    removeMainBeneficiary(proceedingId: $proceedingId)\n  }\n':
+    types.RemoveMainBeneficiaryDocument,
+  '\n  mutation AssignMainBeneficiary($beneficiaryId: Int!, $proceedingId: Int!) {\n    assignMainBeneficiary(\n      beneficiaryId: $beneficiaryId\n      proceedingId: $proceedingId\n    )\n  }\n':
+    types.AssignMainBeneficiaryDocument,
   '\n  mutation ChangePassword($newPassword: String!, $oldPassword: String!) {\n    changePassword(newPassword: $newPassword, oldPassword: $oldPassword)\n  }\n':
     types.ChangePasswordDocument,
   '\n  query GetNotaryDateRules($notaryId: Int!) {\n    getNotaryDateRulesByNotary(notaryId: $notaryId) {\n      id\n      startDay\n      startMonth\n      endDay\n      endMonth\n    }\n  }\n':
@@ -263,6 +267,18 @@ export function gql(
 export function gql(
   source: '\n  mutation AddBeneficiariesToProceeding(\n    $userIds: [Int!]!\n    $proceedingId: Int!\n  ) {\n    addBeneficiariesToProceeding(userIds: $userIds, proceedingId: $proceedingId)\n  }\n'
 ): (typeof documents)['\n  mutation AddBeneficiariesToProceeding(\n    $userIds: [Int!]!\n    $proceedingId: Int!\n  ) {\n    addBeneficiariesToProceeding(userIds: $userIds, proceedingId: $proceedingId)\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  mutation RemoveMainBeneficiary($proceedingId: Int!) {\n    removeMainBeneficiary(proceedingId: $proceedingId)\n  }\n'
+): (typeof documents)['\n  mutation RemoveMainBeneficiary($proceedingId: Int!) {\n    removeMainBeneficiary(proceedingId: $proceedingId)\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  mutation AssignMainBeneficiary($beneficiaryId: Int!, $proceedingId: Int!) {\n    assignMainBeneficiary(\n      beneficiaryId: $beneficiaryId\n      proceedingId: $proceedingId\n    )\n  }\n'
+): (typeof documents)['\n  mutation AssignMainBeneficiary($beneficiaryId: Int!, $proceedingId: Int!) {\n    assignMainBeneficiary(\n      beneficiaryId: $beneficiaryId\n      proceedingId: $proceedingId\n    )\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

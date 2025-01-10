@@ -140,6 +140,7 @@ input FindNotaryInput {
 type Mutation {
   addBeneficiariesToProceeding(proceedingId: Int!, userIds: [Int!]!): Boolean!
   addChatMessage(body: String!, proceedingId: Int!, userId: Int!): ChatMessage!
+  assignMainBeneficiary(beneficiaryId: Int!, proceedingId: Int!): Boolean!
   assignNotary(proceedingId: Int!): Boolean!
   changePassword(newPassword: String!, oldPassword: String!): Boolean!
   closeProceeding(proceedingId: Int!): Boolean!
@@ -162,6 +163,7 @@ type Mutation {
   deleteProceedingsByIds(ids: [Int!]!): Boolean!
   notifyProcedureBeneficiaries(html: String!, proceedingId: Int!, subject: String!): Boolean!
   removeBeneficiaryFromProceeding(beneficiaryId: Int!, proceedingId: Int!): Boolean!
+  removeMainBeneficiary(proceedingId: Int!): Boolean!
   requestPasswordReset(email: String!): Boolean!
   resetPassword(newPassword: String!, token: String!): Boolean!
   signIn(login: String!, password: String!): SignInResponse!

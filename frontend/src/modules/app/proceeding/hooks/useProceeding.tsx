@@ -97,6 +97,21 @@ export const ADD_BENEFICIARIES_MUTATION = gql(/* GraphQL */ `
   }
 `)
 
+export const REMOVE_MAIN_BENEFICIARY_MUTATION = gql(/* GraphQL */ `
+  mutation RemoveMainBeneficiary($proceedingId: Int!) {
+    removeMainBeneficiary(proceedingId: $proceedingId)
+  }
+`)
+
+export const ADD_MAIN_BENEFICIARY_MUTATION = gql(/* GraphQL */ `
+  mutation AssignMainBeneficiary($beneficiaryId: Int!, $proceedingId: Int!) {
+    assignMainBeneficiary(
+      beneficiaryId: $beneficiaryId
+      proceedingId: $proceedingId
+    )
+  }
+`)
+
 export function useProceeding(proceedingId: number) {
   const { data, loading, error, refetch } = useQuery(GET_PROCEEDING_QUERY, {
     variables: {
@@ -126,10 +141,10 @@ export function useProceeding(proceedingId: number) {
 
   const [addBeneficiariesToProceeding] = useMutation(ADD_BENEFICIARIES_MUTATION)
 
-  const addBeneficiaries = (userIds: number[]) =>
+  const addBeneficiaries = (userIds: string[]) =>
     addBeneficiariesToProceeding({
       variables: {
-        userIds,
+        userIds: userIds.map((id) => parseInt(id)),
         proceedingId,
       },
     })
@@ -142,6 +157,44 @@ export function useProceeding(proceedingId: number) {
         toaster.error({ title: 'Nepodařilo se přidat dědice.' })
       })
 
+  const [removeMainBeneficiaryMutation] = useMutation(
+    REMOVE_MAIN_BENEFICIARY_MUTATION,
+    {
+      variables: {
+        proceedingId,
+      },
+    }
+  )
+
+  const removeMainBeneficiary = () =>
+    removeMainBeneficiaryMutation()
+      .then(() => refetch())
+      .then(() => {
+        toaster.success({ title: 'Kontaktní osoba byla odebrána.' })
+      })
+      .catch(() => {
+        toaster.error({ title: 'Nepodařilo se odebrat kontaktní osobu.' })
+      })
+
+  const [addMainBeneficiaryMutation] = useMutation(
+    ADD_MAIN_BENEFICIARY_MUTATION
+  )
+
+  const addMainBeneficiary = (beneficiaryId: number) =>
+    addMainBeneficiaryMutation({
+      variables: {
+        beneficiaryId,
+        proceedingId,
+      },
+    })
+      .then(() => refetch())
+      .then(() => {
+        toaster.success({ title: 'Kontaktní osoba byla přidána.' })
+      })
+      .catch(() => {
+        toaster.error({ title: 'Nepodařilo se přidat kontaktní osobu.' })
+      })
+
   const auth = useAuth()
   const isEditable = ['Notary', 'Admin'].includes(auth.user?.type ?? 'User')
 
@@ -150,7 +203,9 @@ export function useProceeding(proceedingId: number) {
     loading,
     error,
     removeBeneficiary,
+    removeMainBeneficiary,
     addBeneficiaries,
+    addMainBeneficiary,
     isEditable,
   }
 }

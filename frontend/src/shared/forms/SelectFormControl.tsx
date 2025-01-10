@@ -36,7 +36,7 @@ export const SelectFormControl = (props: SelectControlProps) => {
               {(items) => items.map((i) => i.label).join(', ')}
             </SelectValueText>
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent zIndex="popover">
             {rest.collection.items.map((item) => (
               <SelectItem item={item} key={item.value}>
                 {item.label}

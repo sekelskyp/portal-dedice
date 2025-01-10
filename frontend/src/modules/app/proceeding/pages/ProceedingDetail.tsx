@@ -3,10 +3,10 @@ import { CalculatorIcon, MessageSquareTextIcon, SendIcon } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import { useAuth } from '@frontend/modules/auth'
-import { toaster } from '@frontend/shared/design-system'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { route } from '@shared/route'
 
+import { AddBeneficiaryModal } from '../components/AddBeneficiaryModal'
 import { useProceedingContext } from '../components/ProceedingLayout'
 import { UserBadge } from '../components/UserBadge'
 import { UserBadgeAssignButton } from '../components/UserBadgeAssignButton'
@@ -14,7 +14,8 @@ import { UserBadgeAssignButton } from '../components/UserBadgeAssignButton'
 export const ProceedingDetail = () => {
   const { user } = useAuth()
 
-  const { proceeding, isEditable, removeBeneficiary } = useProceedingContext()
+  const { proceeding, isEditable, removeBeneficiary, removeMainBeneficiary } =
+    useProceedingContext()
 
   const assets = proceeding?.procedureAssets
   const totalAssetsValue = assets?.reduce((sum, asset) => sum + asset.value, 0)
@@ -36,11 +37,7 @@ export const ProceedingDetail = () => {
               user={proceeding.mainBeneficiary?.user}
               issueText="Dědic bez kontaktních údajů."
               removable={isEditable}
-              onRemoveClick={() => {
-                toaster.success({
-                  title: 'Dědic byl odebrán z hlavních kontaktů.',
-                })
-              }}
+              onRemoveClick={() => removeMainBeneficiary()}
             />
           ) : (
             <UserBadgeAssignButton text="Nastavit hlavní kontaktní osobu" />
@@ -78,7 +75,7 @@ export const ProceedingDetail = () => {
               }}
             />
           ))}
-          {isEditable && <UserBadgeAssignButton text="Přidat dědice" />}
+          {isEditable && <AddBeneficiaryModal />}
         </Grid>
       </Stack>
       <Heading

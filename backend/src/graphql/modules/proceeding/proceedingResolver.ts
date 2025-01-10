@@ -145,6 +145,29 @@ export class InheritanceProcedureResolver {
     return true
   }
 
+  @Mutation(() => Boolean)
+  async assignMainBeneficiary(
+    @Arg('proceedingId', () => Int) proceedingId: number,
+    @Arg('beneficiaryId', () => Int) beneficiaryId: number,
+    @Ctx() context: CustomContext
+  ): Promise<boolean> {
+    await context.proceedingRepository.updateProceeding(proceedingId, {
+      mainBeneficiaryId: beneficiaryId,
+    })
+    return true
+  }
+
+  @Mutation(() => Boolean)
+  async removeMainBeneficiary(
+    @Arg('proceedingId', () => Int) proceedingId: number,
+    @Ctx() context: CustomContext
+  ): Promise<boolean> {
+    await context.proceedingRepository.updateProceeding(proceedingId, {
+      mainBeneficiaryId: null,
+    })
+    return true
+  }
+
   // Mutation to delete proceedings by IDs
   @Mutation(() => Boolean)
   async deleteProceedingsByIds(
