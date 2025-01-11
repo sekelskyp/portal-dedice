@@ -24,6 +24,7 @@ import {
 } from '../../../services/proceedingService'
 import { CustomContext } from '../../../types/types'
 import { Attachment } from '../attachment/attachmentType'
+import { BeneficiaryEntity } from '../beneficiary/beneficiaryRepository'
 import { Beneficiary } from '../beneficiary/beneficiaryType'
 import { Notary } from '../notary/notaryType'
 
@@ -114,14 +115,18 @@ export class InheritanceProcedureResolver {
   }
 
   // Mutation to add beneficiaries to a proceeding
-  @Mutation(() => Boolean)
+  @Mutation(() => [Beneficiary])
   async addBeneficiariesToProceeding(
     @Arg('proceedingId', () => Int) proceedingId: number,
     @Arg('userIds', () => [Int]) userIds: number[],
     @Ctx() context: CustomContext
-  ): Promise<boolean> {
-    await addBeneficiariesToProceeding(proceedingId, userIds, context)
-    return true
+  ): Promise<BeneficiaryEntity[]> {
+    const beneficiaryIds = await addBeneficiariesToProceeding(
+      proceedingId,
+      userIds,
+      context
+    )
+    return beneficiaryIds
   }
 
   // Mutation to remove a beneficiary from a proceeding

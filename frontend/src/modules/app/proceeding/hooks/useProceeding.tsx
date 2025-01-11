@@ -1,8 +1,10 @@
+import { useState } from 'react'
 import { useMutation, useQuery } from '@apollo/client'
 
 import { gql } from '@frontend/gql'
 import { useAuth } from '@frontend/modules/auth'
 import { toaster } from '@frontend/shared/design-system'
+import { Proceeding } from '@frontend/shared/types/proceeding'
 
 export const GET_PROCEEDING_QUERY = gql(/* GraphQL */ `
   query GetProceedingById($getProceedingByIdId: Int!) {
@@ -21,6 +23,7 @@ export const GET_PROCEEDING_QUERY = gql(/* GraphQL */ `
         cin
       }
       mainBeneficiary {
+        id
         user {
           id
           displayName
@@ -54,6 +57,7 @@ export const GET_PROCEEDING_QUERY = gql(/* GraphQL */ `
       state
       notaryId
       notary {
+        id
         user {
           address {
             id
@@ -93,7 +97,22 @@ export const ADD_BENEFICIARIES_MUTATION = gql(/* GraphQL */ `
     $userIds: [Int!]!
     $proceedingId: Int!
   ) {
-    addBeneficiariesToProceeding(userIds: $userIds, proceedingId: $proceedingId)
+    addBeneficiariesToProceeding(
+      userIds: $userIds
+      proceedingId: $proceedingId
+    ) {
+      id
+      user {
+        id
+        displayName
+        email
+        phone
+        name
+        surname
+        confirmed
+        type
+      }
+    }
   }
 `)
 
@@ -113,9 +132,15 @@ export const ADD_MAIN_BENEFICIARY_MUTATION = gql(/* GraphQL */ `
 `)
 
 export function useProceeding(proceedingId: number) {
-  const { data, loading, error, refetch } = useQuery(GET_PROCEEDING_QUERY, {
+  const [proceeding, setProceeding] = useState<Proceeding | undefined>(
+    undefined
+  )
+  const { loading, error, refetch } = useQuery(GET_PROCEEDING_QUERY, {
     variables: {
       getProceedingByIdId: proceedingId,
+    },
+    onCompleted: (data) => {
+      setProceeding(data.getProceedingById ?? undefined)
     },
   })
 
@@ -130,11 +155,16 @@ export function useProceeding(proceedingId: number) {
         proceedingId,
       },
     })
-      .then(() =>
-        refetch().then(() => {
-          toaster.success({ title: 'Dědic byl odebrán.' })
-        })
-      )
+      .then(() => {
+        setProceeding((prev) => ({
+          ...prev!,
+          beneficiaries: prev?.beneficiaries?.filter(
+            (b) => b.id !== beneficiaryId.toString()
+          ),
+        }))
+
+        toaster.success({ title: 'Dědic byl odebrán.' })
+      })
       .catch(() => {
         toaster.error({ title: 'Nepodařilo se odebrat dědice.' })
       })
@@ -144,14 +174,22 @@ export function useProceeding(proceedingId: number) {
   const addBeneficiaries = (userIds: string[]) =>
     addBeneficiariesToProceeding({
       variables: {
-        userIds: userIds.map((id) => parseInt(id)),
+        userIds: userIds.map(parseInt),
         proceedingId,
       },
     })
-      .then(() => {
-        refetch().then(() => {
-          toaster.success({ title: 'Dědic byl přidán.' })
-        })
+      .then((res) => {
+        setProceeding(
+          (prev) =>
+            prev && {
+              ...prev,
+              beneficiaries: [
+                ...(prev.beneficiaries ?? []),
+                ...(res.data?.addBeneficiariesToProceeding ?? []),
+              ],
+            }
+        )
+        toaster.success({ title: 'Dědic byl přidán.' })
       })
       .catch(() => {
         toaster.error({ title: 'Nepodařilo se přidat dědice.' })
@@ -199,7 +237,7 @@ export function useProceeding(proceedingId: number) {
   const isEditable = ['Notary', 'Admin'].includes(auth.user?.type ?? 'User')
 
   return {
-    proceeding: data?.getProceedingById,
+    proceeding,
     loading,
     error,
     removeBeneficiary,

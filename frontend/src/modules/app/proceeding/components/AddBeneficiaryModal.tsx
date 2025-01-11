@@ -23,17 +23,20 @@ import { UserBadgeAssignButton } from './UserBadgeAssignButton'
 export const AddBeneficiaryModal = () => {
   const { addBeneficiaries } = useProceedingContext()
   const [open, setOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const handleAddBeneficiaries = ({ userIds }: { userIds: string[] }) => {
+    setLoading(true)
     setOpen(false)
-    addBeneficiaries(userIds)
+    addBeneficiaries(userIds).finally(() => setLoading(false))
   }
 
   return (
     <>
       <UserBadgeAssignButton
-        text="Přidat dědice"
+        text={loading ? 'Přidávání dědiců...' : 'Přidat dědice'}
         onClick={() => setOpen(true)}
+        loading={loading}
       />
       <DialogRoot
         lazyMount

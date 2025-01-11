@@ -2,7 +2,7 @@ import { createContext, useContext } from 'react'
 import { ApolloError } from '@apollo/client'
 import { Outlet, useParams } from 'react-router-dom'
 
-import { GetProceedingByIdQuery } from '@frontend/gql/graphql'
+import { Proceeding } from '@frontend/shared/types/proceeding'
 
 import { useProceeding } from '../hooks/useProceeding'
 
@@ -23,7 +23,7 @@ export const ProceedingLayout = () => {
 export interface IProceedingContext {
   proceedingId: number
   loading: boolean
-  proceeding: GetProceedingByIdQuery['getProceedingById'] | undefined
+  proceeding: Proceeding | undefined
   error: ApolloError | undefined
   removeBeneficiary: (beneficiaryId: number) => Promise<void>
   addBeneficiaries: (userIds: string[]) => Promise<void>

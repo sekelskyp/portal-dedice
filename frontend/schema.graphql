@@ -133,7 +133,10 @@ input FindNotaryInput {
 }
 
 type Mutation {
-  addBeneficiariesToProceeding(proceedingId: Int!, userIds: [Int!]!): Boolean!
+  addBeneficiariesToProceeding(
+    proceedingId: Int!
+    userIds: [Int!]!
+  ): [Beneficiary!]!
   addChatMessage(body: String!, proceedingId: Int!, userId: Int!): ChatMessage!
   assignMainBeneficiary(beneficiaryId: Int!, proceedingId: Int!): Boolean!
   assignNotary(proceedingId: Int!): Boolean!

@@ -58,7 +58,8 @@ export class BeneficiaryResolver {
     @Arg('data') data: BeneficiaryInput,
     @Ctx() { beneficiaryRepository }: CustomContext
   ): Promise<Beneficiary> {
-    const beneficiaryId = await beneficiaryRepository.createBeneficiary(data)
+    const { id: beneficiaryId } =
+      await beneficiaryRepository.createBeneficiary(data)
     if (!beneficiaryId) {
       throw new Error('Failed to create beneficiary')
     }
@@ -75,8 +76,10 @@ export class BeneficiaryResolver {
     @Arg('data', () => [BeneficiaryInput]) data: BeneficiaryInput[],
     @Ctx() { beneficiaryRepository }: CustomContext
   ): Promise<Beneficiary[]> {
-    const ids = await beneficiaryRepository.createBeneficiaries(data)
-    const beneficiaries = beneficiaryRepository.getBeneficiariesByIds(ids)
+    const res = await beneficiaryRepository.createBeneficiaries(data)
+    const beneficiaries = beneficiaryRepository.getBeneficiariesByIds(
+      res.map((r) => r.id)
+    )
     return beneficiaries
   }
 

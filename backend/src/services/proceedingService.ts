@@ -1,3 +1,5 @@
+import { BeneficiaryEntity } from '@backend/graphql/modules/beneficiary/beneficiaryRepository'
+
 import { CustomContext } from '../types/types'
 
 import { createAttachment } from './attachmentService'
@@ -110,7 +112,7 @@ export async function createProceeding(
   })
   // set main beneficiary TODO slightly change DB schema -> this is very clunky
   if (data.mainBeneficiaryUserId) {
-    const mainBeneficiaryId =
+    const { id: mainBeneficiaryId } =
       await context.beneficiaryRepository.createBeneficiary({
         userId: data.mainBeneficiaryUserId,
         proceedingId: proceedingId,
@@ -150,7 +152,7 @@ async function createBeneficiariesForProceeding(
   proceedingId: number,
   userIds: number[],
   context: CustomContext
-): Promise<number[]> {
+): Promise<BeneficiaryEntity[]> {
   const { beneficiaryRepository } = context
   const beneficiaryCreateData = userIds.map((userId) => ({
     userId,
@@ -164,7 +166,7 @@ export async function addBeneficiariesToProceeding(
   proceedingId: number,
   userIds: number[],
   context: CustomContext
-): Promise<number[]> {
+): Promise<BeneficiaryEntity[]> {
   // Step 1: Get current beneficiaries for the proceeding
   const currentBeneficiaries =
     await context.beneficiaryRepository.getBeneficiariesByProceedingId(

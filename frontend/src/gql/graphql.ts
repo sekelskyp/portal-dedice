@@ -172,7 +172,7 @@ export type FindNotaryInput = {
 
 export type Mutation = {
   __typename?: 'Mutation'
-  addBeneficiariesToProceeding: Scalars['Boolean']['output']
+  addBeneficiariesToProceeding: Array<Beneficiary>
   addChatMessage: ChatMessage
   assignMainBeneficiary: Scalars['Boolean']['output']
   assignNotary: Scalars['Boolean']['output']
@@ -981,6 +981,7 @@ export type GetProceedingByIdQuery = {
     }> | null
     mainBeneficiary?: {
       __typename?: 'Beneficiary'
+      id: string
       user?: {
         __typename?: 'User'
         id: string
@@ -1010,6 +1011,7 @@ export type GetProceedingByIdQuery = {
     }> | null
     notary?: {
       __typename?: 'Notary'
+      id: string
       user?: {
         __typename?: 'User'
         displayName: string
@@ -1050,7 +1052,21 @@ export type AddBeneficiariesToProceedingMutationVariables = Exact<{
 
 export type AddBeneficiariesToProceedingMutation = {
   __typename?: 'Mutation'
-  addBeneficiariesToProceeding: boolean
+  addBeneficiariesToProceeding: Array<{
+    __typename?: 'Beneficiary'
+    id: string
+    user?: {
+      __typename?: 'User'
+      id: string
+      displayName: string
+      email: string
+      phone?: string | null
+      name: string
+      surname: string
+      confirmed: boolean
+      type: string
+    } | null
+  }>
 }
 
 export type RemoveMainBeneficiaryMutationVariables = Exact<{
@@ -2748,6 +2764,7 @@ export const GetProceedingByIdDocument = {
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'user' },
@@ -2869,6 +2886,7 @@ export const GetProceedingByIdDocument = {
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'user' },
@@ -3087,6 +3105,38 @@ export const AddBeneficiariesToProceedingDocument = {
                 },
               },
             ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'user' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'displayName' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'phone' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'surname' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'confirmed' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                    ],
+                  },
+                },
+              ],
+            },
           },
         ],
       },
