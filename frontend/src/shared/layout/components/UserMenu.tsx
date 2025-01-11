@@ -7,9 +7,9 @@ import {
   Users2Icon,
 } from 'lucide-react'
 
+import { UserAvatar } from '@frontend/modules/app/components/UserAvatar'
 import { useAuth } from '@frontend/modules/auth'
 import {
-  Avatar,
   Button,
   MenuContent,
   MenuItem,
@@ -25,8 +25,6 @@ export const UserMenu = () => {
   const isMobile = breakpoint === 'base'
   const isAdmin = user?.type === 'Admin'
 
-  const name = user?.displayName
-
   if (!user) return null
 
   return (
@@ -40,12 +38,12 @@ export const UserMenu = () => {
           gap={{ base: 0, sm: 2 }}
           borderRadius={'full'}
         >
-          <Avatar name={name} size="xs" />
+          <UserAvatar {...user} size="xs" />
           {!isMobile && (
             <Stack gap={0} lineHeight={1.25}>
-              {name && (
+              {user?.displayName && (
                 <Text fontSize="xs" fontWeight="medium">
-                  {name}
+                  {user?.displayName}
                 </Text>
               )}
               <Text color="fg.muted" fontSize="xs">

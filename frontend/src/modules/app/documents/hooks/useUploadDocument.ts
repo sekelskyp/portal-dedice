@@ -18,7 +18,7 @@ export function useUploadDocument() {
     UPDATE_DOCUMENT_MUTATION,
     {
       onCompleted: () => {
-        navigate(route.inheritanceProcedure(id))
+        navigate(route.proceeding(id))
       },
       onError: (error) => {
         console.error('Error uploading document:', error)

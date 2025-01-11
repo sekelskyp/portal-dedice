@@ -21,11 +21,14 @@ export const route = {
     `/portal/chat/${proceedingId}/history`,
   emailVerification: () => `/auth/email-verification`,
   confirmEmail: () => `/auth/confirm-email`,
-  inheritanceProcedure: (id = ':id') => `/portal/inheritance-procedure/${id}`,
-  newDocument: (id = ':id') =>
-    `/portal/inheritance-procedure/${id}/new-document`,
-  newAsset: (id = ':id') => `/portal/inheritance-procedure/${id}/assets`,
-  newEmail: (id = ':id') => `/portal/inheritance-procedure/${id}/new-email`,
+  proceeding: (proceedingId = ':proceedingId') =>
+    `/portal/proceeding/${proceedingId}`,
+  newDocument: (proceedingId = ':proceedingId') =>
+    `/portal/proceeding/${proceedingId}/new-document`,
+  newAsset: (proceedingId = ':proceedingId') =>
+    `/portal/proceeding/${proceedingId}/assets`,
+  newEmail: (proceedingId = ':proceedingId') =>
+    `/portal/proceeding/${proceedingId}/new-email`,
   profile: () => `/portal/profile`,
   downloadFile: (fileUuid: string = ':fileUuid') =>
     `/files/download/${fileUuid}`,

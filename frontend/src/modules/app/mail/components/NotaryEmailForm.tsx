@@ -53,7 +53,7 @@ export function NotaryEmailForm({
         justifyContent={{ base: 'center', md: 'start' }}
       >
         <RouterNavLink
-          to={route.inheritanceProcedure(procedureId.toString())}
+          to={route.proceeding(procedureId.toString())}
           bg="gray.500"
           _hover={{ bg: 'gray.700' }}
         >

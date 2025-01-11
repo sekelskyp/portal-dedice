@@ -43,18 +43,20 @@ export function getBeneficiaryRepository(db: Db) {
   // Create a new beneficiary
   async function createBeneficiary(
     data: BeneficiaryInsertInput
-  ): Promise<number> {
+  ): Promise<BeneficiaryEntity> {
     const [result] = await db.insert(beneficiary).values(data).$returningId()
-    return result.id
+    return {
+      id: result.id,
+      userId: data.userId,
+      proceedingId: data.proceedingId!,
+    }
   }
 
   // Create multiple beneficiaries
   async function createBeneficiaries(
     data: BeneficiaryInsertInput[]
-  ): Promise<number[]> {
-    const results = await db.insert(beneficiary).values(data).$returningId()
-
-    return results.map((result) => result.id)
+  ): Promise<BeneficiaryEntity[]> {
+    return Promise.all(data.map(createBeneficiary))
   }
 
   // Update an existing beneficiary by ID

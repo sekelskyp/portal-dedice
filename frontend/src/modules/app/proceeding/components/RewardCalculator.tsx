@@ -74,7 +74,7 @@ export const RewardCalculator = () => {
           </Form>
         </Box>
         {reward ? (
-          <Card.Root w="full" bg={'bg.emphasized'}>
+          <Card.Root w="full" bg={'bg.emphasized/75'}>
             <Card.Body>
               <Stack gap={6}>
                 <StatRoot>
@@ -97,14 +97,18 @@ export const RewardCalculator = () => {
                   </StatRoot>
                 </HStack>
                 <Stack>
-                  <Alert bg="none" p={0}>
-                    Výpočet je zaokrouhlen na celé koruny.
-                  </Alert>
-                  <Alert bg="none" p={0}>
-                    Tento výpočet je orientační, konečná částka se může lišit
+                  <Alert
+                    bg="none"
+                    p={0}
+                    title="Výpočet je zaokrouhlen na celé koruny."
+                  />
+                  <Alert
+                    bg="none"
+                    p={0}
+                    title="Tento výpočet je orientační, konečná částka se může lišit
                     v&nbsp;závislosti na dalších požadovaných či potřebných
-                    úkonech.
-                  </Alert>
+                    úkonech."
+                  />
                 </Stack>
               </Stack>
             </Card.Body>
@@ -202,7 +206,7 @@ const VATPercentage = 0.21
 // Calculates the reward from given value according to the limits
 const calculateReward = (value: number) => {
   let remainingValue = value
-  let processedValue = 0
+  // let processedValue = 0
   let reward = 0
 
   for (const [min, max, percentage] of limits) {
@@ -211,18 +215,8 @@ const calculateReward = (value: number) => {
     const rewardInThisRange = valueInThisRange * percentage
 
     reward += rewardInThisRange
-    processedValue += valueInThisRange
+    // processedValue += valueInThisRange
     remainingValue -= valueInThisRange
-
-    console.log({
-      min,
-      max,
-      percentage,
-      valueInThisRange,
-      rewardInThisRange,
-      processedValue,
-      remainingValue,
-    })
 
     if (remainingValue <= 0) break
   }

@@ -172,8 +172,9 @@ export type FindNotaryInput = {
 
 export type Mutation = {
   __typename?: 'Mutation'
-  addBeneficiariesToProceeding: Scalars['Boolean']['output']
+  addBeneficiariesToProceeding: Array<Beneficiary>
   addChatMessage: ChatMessage
+  assignMainBeneficiary: Scalars['Boolean']['output']
   assignNotary: Scalars['Boolean']['output']
   changePassword: Scalars['Boolean']['output']
   closeProceeding: Scalars['Boolean']['output']
@@ -196,6 +197,7 @@ export type Mutation = {
   deleteProceedingsByIds: Scalars['Boolean']['output']
   notifyProcedureBeneficiaries: Scalars['Boolean']['output']
   removeBeneficiaryFromProceeding: Scalars['Boolean']['output']
+  removeMainBeneficiary: Scalars['Boolean']['output']
   requestPasswordReset: Scalars['Boolean']['output']
   resetPassword: Scalars['Boolean']['output']
   signIn: SignInResponse
@@ -220,6 +222,11 @@ export type MutationAddChatMessageArgs = {
   body: Scalars['String']['input']
   proceedingId: Scalars['Int']['input']
   userId: Scalars['Int']['input']
+}
+
+export type MutationAssignMainBeneficiaryArgs = {
+  beneficiaryId: Scalars['Int']['input']
+  proceedingId: Scalars['Int']['input']
 }
 
 export type MutationAssignNotaryArgs = {
@@ -311,6 +318,10 @@ export type MutationNotifyProcedureBeneficiariesArgs = {
 
 export type MutationRemoveBeneficiaryFromProceedingArgs = {
   beneficiaryId: Scalars['Int']['input']
+  proceedingId: Scalars['Int']['input']
+}
+
+export type MutationRemoveMainBeneficiaryArgs = {
   proceedingId: Scalars['Int']['input']
 }
 
@@ -970,6 +981,7 @@ export type GetProceedingByIdQuery = {
     }> | null
     mainBeneficiary?: {
       __typename?: 'Beneficiary'
+      id: string
       user?: {
         __typename?: 'User'
         id: string
@@ -999,6 +1011,7 @@ export type GetProceedingByIdQuery = {
     }> | null
     notary?: {
       __typename?: 'Notary'
+      id: string
       user?: {
         __typename?: 'User'
         displayName: string
@@ -1020,6 +1033,59 @@ export type GetProceedingByIdQuery = {
       } | null
     } | null
   } | null
+}
+
+export type RemoveBeneficiaryFromProceedingMutationVariables = Exact<{
+  beneficiaryId: Scalars['Int']['input']
+  proceedingId: Scalars['Int']['input']
+}>
+
+export type RemoveBeneficiaryFromProceedingMutation = {
+  __typename?: 'Mutation'
+  removeBeneficiaryFromProceeding: boolean
+}
+
+export type AddBeneficiariesToProceedingMutationVariables = Exact<{
+  userIds: Array<Scalars['Int']['input']> | Scalars['Int']['input']
+  proceedingId: Scalars['Int']['input']
+}>
+
+export type AddBeneficiariesToProceedingMutation = {
+  __typename?: 'Mutation'
+  addBeneficiariesToProceeding: Array<{
+    __typename?: 'Beneficiary'
+    id: string
+    user?: {
+      __typename?: 'User'
+      id: string
+      displayName: string
+      email: string
+      phone?: string | null
+      name: string
+      surname: string
+      confirmed: boolean
+      type: string
+    } | null
+  }>
+}
+
+export type RemoveMainBeneficiaryMutationVariables = Exact<{
+  proceedingId: Scalars['Int']['input']
+}>
+
+export type RemoveMainBeneficiaryMutation = {
+  __typename?: 'Mutation'
+  removeMainBeneficiary: boolean
+}
+
+export type AssignMainBeneficiaryMutationVariables = Exact<{
+  beneficiaryId: Scalars['Int']['input']
+  proceedingId: Scalars['Int']['input']
+}>
+
+export type AssignMainBeneficiaryMutation = {
+  __typename?: 'Mutation'
+  assignMainBeneficiary: boolean
 }
 
 export type ChangePasswordMutationVariables = Exact<{
@@ -2698,6 +2764,7 @@ export const GetProceedingByIdDocument = {
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'user' },
@@ -2819,6 +2886,7 @@ export const GetProceedingByIdDocument = {
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'user' },
@@ -2908,6 +2976,284 @@ export const GetProceedingByIdDocument = {
 } as unknown as DocumentNode<
   GetProceedingByIdQuery,
   GetProceedingByIdQueryVariables
+>
+export const RemoveBeneficiaryFromProceedingDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'RemoveBeneficiaryFromProceeding' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'beneficiaryId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'proceedingId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'removeBeneficiaryFromProceeding' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'beneficiaryId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'beneficiaryId' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'proceedingId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'proceedingId' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  RemoveBeneficiaryFromProceedingMutation,
+  RemoveBeneficiaryFromProceedingMutationVariables
+>
+export const AddBeneficiariesToProceedingDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'AddBeneficiariesToProceeding' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'userIds' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'ListType',
+              type: {
+                kind: 'NonNullType',
+                type: {
+                  kind: 'NamedType',
+                  name: { kind: 'Name', value: 'Int' },
+                },
+              },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'proceedingId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'addBeneficiariesToProceeding' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'userIds' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'userIds' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'proceedingId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'proceedingId' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'user' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'displayName' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'phone' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'surname' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'confirmed' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  AddBeneficiariesToProceedingMutation,
+  AddBeneficiariesToProceedingMutationVariables
+>
+export const RemoveMainBeneficiaryDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'RemoveMainBeneficiary' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'proceedingId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'removeMainBeneficiary' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'proceedingId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'proceedingId' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  RemoveMainBeneficiaryMutation,
+  RemoveMainBeneficiaryMutationVariables
+>
+export const AssignMainBeneficiaryDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'AssignMainBeneficiary' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'beneficiaryId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'proceedingId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'assignMainBeneficiary' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'beneficiaryId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'beneficiaryId' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'proceedingId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'proceedingId' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  AssignMainBeneficiaryMutation,
+  AssignMainBeneficiaryMutationVariables
 >
 export const ChangePasswordDocument = {
   kind: 'Document',

@@ -2,80 +2,83 @@ import { Button, Grid, Heading, Spinner, Stack, Text } from '@chakra-ui/react'
 import { CalculatorIcon, MessageSquareTextIcon, SendIcon } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
-import { GetProceedingByIdQuery } from '@frontend/gql/graphql'
 import { useAuth } from '@frontend/modules/auth'
-import { UserBadge } from '@frontend/shared/components/UserBadge'
-import { Alert } from '@frontend/shared/design-system'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { route } from '@shared/route'
 
-//TODO: přidat link na modelaci vyrovnaní (rozdělení majetku)
+import { AddBeneficiaryButton } from '../components/AddBeneficiaryButton'
+import { AssignMainBeneficiaryButton } from '../components/AssignMainBeneficiaryButton'
+import { useProceedingContext } from '../components/ProceedingLayout'
+import { UserBadge } from '../components/UserBadge'
 
-export const ProceedingDetail = ({
-  proceeding,
-}: {
-  proceeding: GetProceedingByIdQuery['getProceedingById']
-}) => {
-  const user = useAuth()
+export const ProceedingDetail = () => {
+  const { user } = useAuth()
+
+  const { proceeding, isEditable, removeBeneficiary, removeMainBeneficiary } =
+    useProceedingContext()
+
   const assets = proceeding?.procedureAssets
   const totalAssetsValue = assets?.reduce((sum, asset) => sum + asset.value, 0)
-  return proceeding ? (
-    <Stack gap={4}>
-      <Grid gap={4} templateColumns={{ base: '1fr', lg: '1fr 1fr' }}>
-        <Stack>
-          <Heading
-            size={{ base: 'lg', lg: 'xl' }}
-            textAlign={{ base: 'center', lg: 'left' }}
-          >
-            Hlavní kontaktní osoba
-          </Heading>
 
-          {proceeding.mainBeneficiary?.user ? (
-            <UserBadge details={proceeding.mainBeneficiary.user} />
-          ) : (
-            <Alert status="warning">Dědic bez kontaktních údajů.</Alert>
-          )}
-        </Stack>
-        <Stack>
+  return proceeding ? (
+    <Stack gap={6}>
+      <Grid gap={4} templateColumns={{ base: '1fr', lg: '1fr 1fr' }}>
+        {(proceeding.mainBeneficiary || isEditable) && (
+          <Stack gap={4}>
+            <Heading
+              size={{ base: 'lg', lg: 'xl' }}
+              textAlign={{ base: 'center', lg: 'left' }}
+              alignItems={'end'}
+            >
+              Hlavní kontaktní osoba
+            </Heading>
+
+            {proceeding.mainBeneficiary?.user ? (
+              <UserBadge
+                user={proceeding.mainBeneficiary?.user}
+                issueText="Dědic bez kontaktních údajů."
+                removable={isEditable}
+                onRemoveClick={() => removeMainBeneficiary()}
+              />
+            ) : (
+              <AssignMainBeneficiaryButton />
+            )}
+          </Stack>
+        )}
+        <Stack gap={4}>
           <Heading
             size={{ base: 'lg', lg: 'xl' }}
             textAlign={{ base: 'center', lg: 'left' }}
           >
             Přiřazený notář
           </Heading>
-          {proceeding.notary?.user ? (
-            <UserBadge details={proceeding.notary?.user} />
-          ) : (
-            <Alert status="warning">Notář bez kontaktních údajů.</Alert>
-          )}
+          <UserBadge
+            user={proceeding.notary?.user}
+            issueText="Notář bez kontaktních údajů."
+          />
         </Stack>
       </Grid>
-      <Stack>
+      <Stack gap={4}>
         <Heading
           size={{ base: 'lg', lg: 'xl' }}
           textAlign={{ base: 'center', lg: 'left' }}
         >
           Seznam dědiců
         </Heading>
-        {proceeding.beneficiaries?.length === 0 && (
-          <Alert status="warning" title="Nebyl nalezen žádn dědic." />
-        )}
-        {proceeding.beneficiaries?.map((beneficiary) =>
-          !!beneficiary.user ? (
+        <Grid gap={4} templateColumns={{ base: '1fr', lg: '1fr 1fr' }}>
+          {proceeding.beneficiaries?.map((beneficiary) => (
             <UserBadge
               key={beneficiary.id}
-              details={{
-                ...beneficiary.user,
+              user={beneficiary.user}
+              issueText="Dědic bez kontaktních údajů."
+              removable={isEditable}
+              onRemoveClick={() => {
+                removeBeneficiary(+beneficiary.id)
               }}
             />
-          ) : (
-            <Alert
-              status="warning"
-              key={beneficiary.id}
-              title="Dědic bez kontaktních údajů."
-            />
-          )
-        )}
+          ))}
+          {isEditable && <AddBeneficiaryButton />}
+        </Grid>
       </Stack>
       <Heading
         size={{ base: 'lg', lg: 'xl' }}
@@ -107,7 +110,7 @@ export const ProceedingDetail = ({
         Tuto hodnotu zatím neznáme.
       </Text>
       <Stack direction={{ base: 'column', lg: 'row' }} justifyContent="center">
-        {user.user?.type === 'User' ? (
+        {user?.type === 'User' ? (
           <>
             <Button as={Link} disabled rounded="full">
               Modelace vyrovnaní

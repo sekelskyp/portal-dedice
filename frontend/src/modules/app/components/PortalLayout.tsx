@@ -24,7 +24,14 @@ export const PortalLayout = () => {
           <GridItem colSpan={1}>
             <SideBar />
           </GridItem>
-          <GridItem colSpan={{ base: 1, md: 4, xl: 5 }}>
+          <GridItem
+            colSpan={{ base: 1, md: 4, xl: 5 }}
+            bg="bg.panel"
+            border="1px solid"
+            borderColor="bg.muted"
+            borderRadius="md"
+            boxShadow="card"
+          >
             <Outlet />
           </GridItem>
         </Grid>
