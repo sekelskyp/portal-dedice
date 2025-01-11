@@ -23,26 +23,28 @@ export const ProceedingDetail = () => {
   return proceeding ? (
     <Stack gap={6}>
       <Grid gap={4} templateColumns={{ base: '1fr', lg: '1fr 1fr' }}>
-        <Stack gap={4}>
-          <Heading
-            size={{ base: 'lg', lg: 'xl' }}
-            textAlign={{ base: 'center', lg: 'left' }}
-            alignItems={'end'}
-          >
-            Hlavní kontaktní osoba
-          </Heading>
+        {(proceeding.mainBeneficiary || isEditable) && (
+          <Stack gap={4}>
+            <Heading
+              size={{ base: 'lg', lg: 'xl' }}
+              textAlign={{ base: 'center', lg: 'left' }}
+              alignItems={'end'}
+            >
+              Hlavní kontaktní osoba
+            </Heading>
 
-          {proceeding.mainBeneficiary?.user ? (
-            <UserBadge
-              user={proceeding.mainBeneficiary?.user}
-              issueText="Dědic bez kontaktních údajů."
-              removable={isEditable}
-              onRemoveClick={() => removeMainBeneficiary()}
-            />
-          ) : (
-            <AssignMainBeneficiaryButton />
-          )}
-        </Stack>
+            {proceeding.mainBeneficiary?.user ? (
+              <UserBadge
+                user={proceeding.mainBeneficiary?.user}
+                issueText="Dědic bez kontaktních údajů."
+                removable={isEditable}
+                onRemoveClick={() => removeMainBeneficiary()}
+              />
+            ) : (
+              <AssignMainBeneficiaryButton />
+            )}
+          </Stack>
+        )}
         <Stack gap={4}>
           <Heading
             size={{ base: 'lg', lg: 'xl' }}
