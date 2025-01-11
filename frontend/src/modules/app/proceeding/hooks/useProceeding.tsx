@@ -135,7 +135,7 @@ export function useProceeding(proceedingId: number) {
   const [proceeding, setProceeding] = useState<Proceeding | undefined>(
     undefined
   )
-  const { loading, error, refetch } = useQuery(GET_PROCEEDING_QUERY, {
+  const { loading, error } = useQuery(GET_PROCEEDING_QUERY, {
     variables: {
       getProceedingByIdId: proceedingId,
     },
@@ -210,12 +210,17 @@ export function useProceeding(proceedingId: number) {
 
   const removeMainBeneficiary = () =>
     removeMainBeneficiaryMutation()
-      .then(() => refetch())
       .then(() => {
-        toaster.success({ title: 'Kontaktní osoba byla odebrána.' })
+        setProceeding((prev) => ({
+          ...prev!,
+          mainBeneficiary: undefined,
+        }))
+        toaster.success({ title: 'Hlavní kontaktní osoba byla odebrána.' })
       })
       .catch(() => {
-        toaster.error({ title: 'Nepodařilo se odebrat kontaktní osobu.' })
+        toaster.error({
+          title: 'Nepodařilo se odebrat hlavní kontaktní osobu.',
+        })
       })
 
   const [addMainBeneficiary] = useMutation(ADD_MAIN_BENEFICIARY_MUTATION)

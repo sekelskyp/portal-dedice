@@ -26,7 +26,6 @@ export const AddBeneficiaryButton = () => {
   const [loading, setLoading] = useState(false)
 
   const handleAddBeneficiaries = ({ userIds }: { userIds: string[] }) => {
-    console.log(userIds)
     setLoading(true)
     setOpen(false)
     addBeneficiaries(userIds).finally(() => setLoading(false))
@@ -85,8 +84,6 @@ const AddBeneficiaryForm = ({
           value: user.id,
         })) || [],
   })
-
-  console.log(otherUsers)
 
   if (otherUsers.items.length === 0) {
     return (
