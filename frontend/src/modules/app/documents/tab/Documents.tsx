@@ -12,7 +12,7 @@ import { UnauthorizedPage } from '@frontend/shared/navigation/pages/Unauthorized
 import { route } from '@shared/route'
 
 import { ActionDialog } from '../../../../shared/components/ActionDialog'
-import { useProceeding } from '../../proceeding/hooks/useProceeding'
+import { useProceedingContext } from '../../proceeding/components/ProceedingLayout'
 import { useDeleteDocument } from '../hooks/useDeleteDocument'
 import { useGetAttachments } from '../hooks/useGetDocuments'
 import { downloadDocument } from '../utils/downloadDocument'
@@ -28,7 +28,7 @@ interface DocumentType {
 export function Documents({ id }: { id: string }) {
   const { user, token } = useAuth()
   const isUser = user?.type === 'User'
-  const procedure = useProceeding(parseInt(id))
+  const { proceeding } = useProceedingContext()
   const [documents, setDocuments] = useState<DocumentType[]>([])
   const [deleteDocumentRequest] = useDeleteDocument()
   const { toggleDialog, isOpen, selectedId } = useActionDialog()
@@ -128,7 +128,7 @@ export function Documents({ id }: { id: string }) {
                     <Text color="gray" fontSize={{ base: 'sm', sm: 'md' }}>
                       {new Date(document.uploadDate).toLocaleString('cs-CZ')}
                     </Text>
-                    {procedure?.data?.getProceedingById?.beneficiaries?.some(
+                    {proceeding?.beneficiaries?.some(
                       (item) => item.user?.id === user?.id?.toString()
                     ) && (
                       <IconButton
