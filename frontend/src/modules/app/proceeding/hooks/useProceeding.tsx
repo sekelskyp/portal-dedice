@@ -178,7 +178,7 @@ export function useProceeding(proceedingId: number) {
   const addBeneficiaries = (userIds: string[]) =>
     addBeneficiariesToProceeding({
       variables: {
-        userIds: userIds.map(parseInt),
+        userIds: userIds.map((id) => parseInt(id)),
         proceedingId,
       },
     })
