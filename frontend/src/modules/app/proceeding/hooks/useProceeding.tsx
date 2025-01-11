@@ -214,19 +214,22 @@ export function useProceeding(proceedingId: number) {
         toaster.error({ title: 'Nepodařilo se odebrat kontaktní osobu.' })
       })
 
-  const [addMainBeneficiaryMutation] = useMutation(
-    ADD_MAIN_BENEFICIARY_MUTATION
-  )
+  const [addMainBeneficiary] = useMutation(ADD_MAIN_BENEFICIARY_MUTATION)
 
-  const addMainBeneficiary = (beneficiaryId: number) =>
-    addMainBeneficiaryMutation({
+  const assignMainBeneficiary = (beneficiaryId: number) =>
+    addMainBeneficiary({
       variables: {
         beneficiaryId,
         proceedingId,
       },
     })
-      .then(() => refetch())
       .then(() => {
+        setProceeding((prev) => ({
+          ...prev!,
+          mainBeneficiary: prev?.beneficiaries?.find(
+            (b) => b.id === beneficiaryId.toString()
+          ),
+        }))
         toaster.success({ title: 'Kontaktní osoba byla přidána.' })
       })
       .catch(() => {
@@ -243,7 +246,7 @@ export function useProceeding(proceedingId: number) {
     removeBeneficiary,
     removeMainBeneficiary,
     addBeneficiaries,
-    addMainBeneficiary,
+    assignMainBeneficiary,
     isEditable,
   }
 }

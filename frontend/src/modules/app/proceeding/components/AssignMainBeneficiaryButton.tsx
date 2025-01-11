@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { createListCollection, Fieldset } from '@chakra-ui/react'
+import { createListCollection, Fieldset, Stack } from '@chakra-ui/react'
 
-import { useAuth } from '@frontend/modules/auth'
 import {
   DialogBackdrop,
   DialogBody,
@@ -11,30 +10,35 @@ import {
   DialogRoot,
   DialogTitle,
   DialogTrigger,
-  Stack,
 } from '@frontend/shared/design-system'
 import { Form, SelectFormControl, SubmitButton } from '@frontend/shared/forms'
-
-import { useGetUsers } from '../hooks/useGetUsers'
 
 import { useProceedingContext } from './ProceedingLayout'
 import { UserBadgeAssignButton } from './UserBadgeAssignButton'
 
-export const AddBeneficiaryModal = () => {
-  const { addBeneficiaries } = useProceedingContext()
+export const AssignMainBeneficiaryButton = () => {
+  const { assignMainBeneficiary } = useProceedingContext()
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const handleAddBeneficiaries = ({ userIds }: { userIds: string[] }) => {
+  const handleAssignMainBeneficiary = ({
+    beneficiaryId,
+  }: {
+    beneficiaryId: number
+  }) => {
     setLoading(true)
     setOpen(false)
-    addBeneficiaries(userIds).finally(() => setLoading(false))
+    assignMainBeneficiary(beneficiaryId).finally(() => setLoading(false))
   }
 
   return (
     <>
       <UserBadgeAssignButton
-        text={loading ? 'Přidávání dědiců...' : 'Přidat dědice'}
+        text={
+          loading
+            ? 'Nastavování hlavní kontaktní osoby...'
+            : 'Nastavit hlavní kontaktní osobu'
+        }
         onClick={() => setOpen(true)}
         loading={loading}
       />
@@ -49,10 +53,10 @@ export const AddBeneficiaryModal = () => {
         <DialogContent>
           <DialogCloseTrigger />
           <DialogHeader>
-            <DialogTitle>Přidat dědice</DialogTitle>
+            <DialogTitle>Nastavit hlavní kontaktní osobu</DialogTitle>
           </DialogHeader>
           <DialogBody>
-            <AddBeneficiaryForm onSubmit={handleAddBeneficiaries} />
+            <AssignMainBeneficiaryForm onSubmit={handleAssignMainBeneficiary} />
           </DialogBody>
         </DialogContent>
       </DialogRoot>
@@ -60,37 +64,29 @@ export const AddBeneficiaryModal = () => {
   )
 }
 
-const AddBeneficiaryForm = ({
+const AssignMainBeneficiaryForm = ({
   onSubmit,
 }: {
-  onSubmit: (variables: { userIds: string[] }) => void
+  onSubmit: (variables: { beneficiaryId: number }) => void
 }) => {
-  const { user } = useAuth()
-
-  const { data } = useGetUsers({ type: 'User' })
-
   const { proceeding } = useProceedingContext()
 
-  const otherUsers = createListCollection({
+  const beneficiariesList = createListCollection({
     items:
-      data?.getAllUserByType
-        ?.filter(
-          (u) =>
-            u.id !== user?.id &&
-            !proceeding?.beneficiaries?.some((b) => b.user?.id === u.id)
-        )
-        .map((user) => ({
-          label: `${user.name} ${user.surname}`,
-          value: user.id,
-        })) || [],
+      proceeding?.beneficiaries?.map((b) => {
+        return {
+          label: `${b.user?.name} ${b.user?.surname}`,
+          value: +b.id,
+        }
+      }) ?? [],
   })
 
-  if (otherUsers.items.length === 0) {
+  if (beneficiariesList.items.length === 0) {
     return (
       <Stack gap={6}>
         <Fieldset.Root size="lg">
           <Fieldset.Content>
-            <p>Nejsou k dispozici žádní další uživatelé.</p>
+            <p>Nejsou k dispozici žádní dědicové.</p>
           </Fieldset.Content>
         </Fieldset.Root>
       </Stack>
@@ -98,21 +94,14 @@ const AddBeneficiaryForm = ({
   }
 
   return (
-    <Form
-      onSubmit={onSubmit}
-      noValidate
-      defaultValues={{
-        userIds: [],
-      }}
-    >
+    <Form onSubmit={onSubmit} noValidate>
       <Stack gap={6}>
         <Fieldset.Root size="lg">
           <Fieldset.Content>
             <SelectFormControl
-              name="userIds"
-              collection={otherUsers}
+              name="beneficiaryId"
+              collection={beneficiariesList}
               label="Další dědicové"
-              multiple
             />
           </Fieldset.Content>
         </Fieldset.Root>

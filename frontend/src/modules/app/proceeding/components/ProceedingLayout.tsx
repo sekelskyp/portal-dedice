@@ -29,7 +29,7 @@ export interface IProceedingContext {
   addBeneficiaries: (userIds: string[]) => Promise<void>
   isEditable: boolean
   removeMainBeneficiary: () => Promise<void>
-  addMainBeneficiary: (beneficiaryId: number) => Promise<void>
+  assignMainBeneficiary: (beneficiaryId: number) => Promise<void>
 }
 
 export const ProceedingContext = createContext<IProceedingContext | null>(null)

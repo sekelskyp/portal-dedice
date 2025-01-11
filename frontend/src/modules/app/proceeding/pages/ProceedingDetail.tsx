@@ -6,10 +6,10 @@ import { useAuth } from '@frontend/modules/auth'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { route } from '@shared/route'
 
-import { AddBeneficiaryModal } from '../components/AddBeneficiaryModal'
+import { AddBeneficiaryButton } from '../components/AddBeneficiaryButton'
+import { AssignMainBeneficiaryButton } from '../components/AssignMainBeneficiaryButton'
 import { useProceedingContext } from '../components/ProceedingLayout'
 import { UserBadge } from '../components/UserBadge'
-import { UserBadgeAssignButton } from '../components/UserBadgeAssignButton'
 
 export const ProceedingDetail = () => {
   const { user } = useAuth()
@@ -40,7 +40,7 @@ export const ProceedingDetail = () => {
               onRemoveClick={() => removeMainBeneficiary()}
             />
           ) : (
-            <UserBadgeAssignButton text="Nastavit hlavní kontaktní osobu" />
+            <AssignMainBeneficiaryButton />
           )}
         </Stack>
         <Stack gap={4}>
@@ -75,7 +75,7 @@ export const ProceedingDetail = () => {
               }}
             />
           ))}
-          {isEditable && <AddBeneficiaryModal />}
+          {isEditable && <AddBeneficiaryButton />}
         </Grid>
       </Stack>
       <Heading
