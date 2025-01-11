@@ -7,8 +7,9 @@ import { useAuth } from '@frontend/modules/auth'
 import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
 
-import { UserBadge } from '../../../../shared/components/UserBadge'
-import { useProceeding } from '../../proceeding/hooks/useProceeding'
+// import { UserBadge } from '../../../../shared/components/UserBadge'
+import { useProceedingContext } from '../../proceeding/components/ProceedingLayout'
+import { UserBadge } from '../../proceeding/components/UserBadge'
 import { NotaryEmailForm } from '../components/NotaryEmailForm'
 import { useNotifyBeneficiaries } from '../hooks/useNotifyBeneficiaries'
 
@@ -22,7 +23,7 @@ export function NotaryEmailPage() {
     notifyProceedingBeneficiariesRequestState,
   ] = useNotifyBeneficiaries()
 
-  const { data, loading, error } = useProceeding(parseInt(id ?? '0', 10))
+  const { proceeding, loading, error } = useProceedingContext()
 
   const handleNotaryEmailFormSubmit = useCallback(
     (variables: { html: string; subject: string }) => {
@@ -48,8 +49,6 @@ export function NotaryEmailPage() {
   if (!isNotary) {
     return <NotFoundPage />
   }
-
-  const proceeding = data?.getProceedingById
 
   if (!proceeding) {
     return <NotFoundPage />

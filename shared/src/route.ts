@@ -23,11 +23,12 @@ export const route = {
   confirmEmail: () => `/auth/confirm-email`,
   proceeding: (proceedingId = ':proceedingId') =>
     `/portal/proceeding/${proceedingId}`,
-  newDocument: (id = ':proceedingId') =>
-    `/portal/proceeding/${id}/new-document`,
+  newDocument: (proceedingId = ':proceedingId') =>
+    `/portal/proceeding/${proceedingId}/new-document`,
   newAsset: (proceedingId = ':proceedingId') =>
     `/portal/proceeding/${proceedingId}/assets`,
-  newEmail: (id = ':proceedingId') => `/portal/proceeding/${id}/new-email`,
+  newEmail: (proceedingId = ':proceedingId') =>
+    `/portal/proceeding/${proceedingId}/new-email`,
   profile: () => `/portal/profile`,
   downloadFile: (fileUuid: string = ':fileUuid') =>
     `/files/download/${fileUuid}`,

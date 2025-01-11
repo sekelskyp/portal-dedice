@@ -13,6 +13,8 @@ interface UserDetails {
   type: string
 }
 
+// TODO: Zmergovat do vícestavového UserBadge
+
 export function UserBadge({ details }: { details: UserDetails }) {
   const role = details.type === 'User' ? 'Uživatel' : 'Notář'
 

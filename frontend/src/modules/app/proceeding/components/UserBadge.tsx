@@ -47,19 +47,22 @@ const UserBadgeFilled = ({
   onRemoveClick?: () => void
 }) => (
   <HStack
-    gap={4}
+    gap={3}
     justifyContent={{ base: 'center', lg: 'left' }}
     borderRadius={6}
     px={3}
     py={2}
-    bg="bg.emphasized/75"
-    border="1px solid"
+    bg={editable ? 'bg.emphasized/75' : 'none'}
+    border={editable ? '1px solid' : 'none'}
     borderColor="bg.emphasized"
-    boxShadow="card"
+    boxShadow={editable ? 'card' : 'none'}
+    _hover={{
+      bg: editable ? 'bg.emphasized' : 'none',
+    }}
   >
     <UserAvatar {...user} />
     <Stack gap="0" h={10}>
-      <Text fontSize="md" fontWeight="bold">
+      <Text fontSize="md" mt={-0.5} fontWeight="bold">
         {!!user.displayName.trim()
           ? user.displayName
           : `${user.name} ${user.surname}`}
