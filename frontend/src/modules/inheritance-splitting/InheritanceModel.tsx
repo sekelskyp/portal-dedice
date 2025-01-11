@@ -67,13 +67,13 @@ const stepOneSchema = z
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: 'Prosím vyberte jestli zůstavitel/ka s nekym zila',
-          path: ['hasLivedWithDeceased'], 
-        })  
+          path: ['hasLivedWithDeceased'],
+        })
       }
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: 'Prosím vyberte jestli zůstavitel/ka s nekym zila',
-        path: ['hasLivedWithDeceased'], 
+        path: ['hasLivedWithDeceased'],
       })
     }
   }) satisfies z.ZodType<FormData>
