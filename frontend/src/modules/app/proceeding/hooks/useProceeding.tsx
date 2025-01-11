@@ -161,6 +161,10 @@ export function useProceeding(proceedingId: number) {
           beneficiaries: prev?.beneficiaries?.filter(
             (b) => b.id !== beneficiaryId.toString()
           ),
+          mainBeneficiary:
+            prev?.mainBeneficiary?.id === beneficiaryId.toString()
+              ? undefined
+              : prev?.mainBeneficiary,
         }))
 
         toaster.success({ title: 'Dědic byl odebrán.' })
