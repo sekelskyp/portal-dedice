@@ -9,7 +9,6 @@ import {
   DialogHeader,
   DialogRoot,
   DialogTitle,
-  DialogTrigger,
 } from '@frontend/shared/design-system'
 import { Form, SelectFormControl, SubmitButton } from '@frontend/shared/forms'
 
@@ -49,7 +48,6 @@ export const AssignMainBeneficiaryButton = () => {
         placement="center"
       >
         <DialogBackdrop />
-        <DialogTrigger />
         <DialogContent>
           <DialogCloseTrigger />
           <DialogHeader>

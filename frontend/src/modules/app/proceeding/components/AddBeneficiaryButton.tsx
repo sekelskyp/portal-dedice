@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Box, createListCollection, Fieldset } from '@chakra-ui/react'
+import { Box, createListCollection, Fieldset, Stack } from '@chakra-ui/react'
 
 import { useAuth } from '@frontend/modules/auth'
 import {
@@ -10,8 +10,6 @@ import {
   DialogHeader,
   DialogRoot,
   DialogTitle,
-  DialogTrigger,
-  Stack,
 } from '@frontend/shared/design-system'
 import { Form, SelectFormControl, SubmitButton } from '@frontend/shared/forms'
 
@@ -45,7 +43,6 @@ export const AddBeneficiaryButton = () => {
         placement="center"
       >
         <DialogBackdrop />
-        <DialogTrigger />
         <DialogContent>
           <DialogCloseTrigger />
           <DialogHeader>
