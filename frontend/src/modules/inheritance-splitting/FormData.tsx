@@ -14,17 +14,17 @@ export interface Heir {
 }
 
 export interface FormData {
-  childrenCount: string
+  childrenCount?: string
   hasChildren: string
   hasSpouse: string
-  hasParents: string
-  hasMother: boolean
-  hasFather: boolean
-  hasSiblings: string
-  siblingsCount: string
-  heirs: Array<Heir>
-  assets: Array<Asset>
-  hasLivedWithDeceased: string
+  hasParents?: string
+  hasMother?: boolean
+  hasFather?: boolean
+  hasSiblings?: string
+  siblingsCount?: string
+  heirs?: Array<Heir>
+  assets?: Array<Asset>
+  hasLivedWithDeceased?: string
 }
 
 export interface StepProps {

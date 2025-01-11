@@ -46,17 +46,17 @@ interface IconMap {
 }
 
 const assetTypeToIcon: IconMap = {
-  'běžný účet': <BsCreditCard size={32} />, 
+  'běžný účet': <BsCreditCard size={32} />,
   'spořící účet': <BsPiggyBank size={32} />,
   'termínovaný vklad': <BsClockHistory size={32} />,
   'stavební spoření': <BsBuildings size={32} />,
   'cenné papíry': <BsGraphUp size={32} />,
-  'cennosti': <BsGem size={32} />,
   'hotovost': <BsCashStack size={32} />,
   'vozidlo': <BsCarFront size={32} />,
   'nemovitost': <BsHouseDoor size={32} />,
-  'přeplatky energií': <BsLightningCharge size={32}/>
-} 
+  'přeplatky energií': <BsLightningCharge size={32} />,
+  'cennosti': <BsGem size={32} />
+}
 
 interface AssetIconProps {
   type: string

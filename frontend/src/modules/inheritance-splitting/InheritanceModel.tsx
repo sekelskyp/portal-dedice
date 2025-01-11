@@ -1,16 +1,82 @@
 import { useState } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, useForm } from 'react-hook-form'
+import { z } from 'zod'
 
 import { Form } from '@frontend/shared/forms/Form'
 
 import { InheritanceProgress } from './components/InheritanceProgress'
 import { StepLayout } from './components/StepLayout'
-import { FormData } from './FormData'
+import { Asset, FormData, Heir } from './FormData'
 import { StepFour } from './StepFour'
 import { StepOne } from './StepOne'
 import { StepThree } from './StepThree'
 import { StepTwo } from './StepTwo'
 import { WizardProvider } from './WizardContext'
+
+const assetSchema = z.object({
+  heir: z.string().optional(),
+  isShared: z.boolean(),
+  name: z.string().min(1, 'Name is required'),
+  type: z.string().min(1, 'Type is required'),
+  value: z.string().min(1, 'Value is required'),
+  sharedOwner: z.enum(['manžel/ka', 'pozůstalost']).optional(),
+}) satisfies z.ZodType<Asset>
+
+const heirSchema = z.object({
+  id: z.string().optional(),
+  label: z.string().min(1, 'Label is required'),
+  type: z
+    .enum(['spouse', 'child', 'parent', 'sibling', 'cohabitant'])
+    .optional(),
+}) satisfies z.ZodType<Heir>
+
+const stepOneSchema = z
+  .object({
+    hasChildren: z
+      .string({ required_error: 'Prosím zvolte, zda má zůstavitel/ka potomky' })
+      .min(1),
+    childrenCount: z.string().optional(),
+    hasSpouse: z
+      .string({
+        required_error: 'Prosím zvolte, zda má zůstavitel/ka manžela/ku',
+      })
+      .min(1),
+    hasParents: z.string().min(1, 'This field is required').optional(),
+    hasMother: z.boolean().optional(),
+    hasFather: z.boolean().optional(),
+    hasSiblings: z.string().min(1, 'This field is required').optional(),
+    siblingsCount: z.string().optional(),
+    hasLivedWithDeceased: z
+      .string()
+      .min(1, 'This field is required')
+      .optional(),
+    heirs: z.array(heirSchema).default([]).optional(),
+    assets: z.array(assetSchema).default([]).optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.hasChildren === 'ano' && !data.childrenCount) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Prosím vyberte počet dětí',
+        path: ['childrenCount'],
+      })
+    }
+    if (data.hasSpouse === 'ne' && !data.hasLivedWithDeceased) {
+      if (!data.hasLivedWithDeceased) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Prosím vyberte jestli zůstavitel/ka s nekym zila',
+          path: ['hasLivedWithDeceased'], 
+        })  
+      }
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Prosím vyberte jestli zůstavitel/ka s nekym zila',
+        path: ['hasLivedWithDeceased'], 
+      })
+    }
+  }) satisfies z.ZodType<FormData>
 
 const InheritanceModel = () => {
   const [currentStep, setCurrentStep] = useState(1)
@@ -80,7 +146,11 @@ const InheritanceModel = () => {
       }}
     >
       <FormProvider {...methods}>
-        <Form onSubmit={onSubmit}>
+        <Form
+          onSubmit={onSubmit}
+          resolver={zodResolver(stepOneSchema)}
+          noValidate
+        >
           <InheritanceProgress currentStep={currentStep} />
           {currentStep === 1 && (
             <StepLayout

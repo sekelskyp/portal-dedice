@@ -17,12 +17,16 @@ export const StepFour = ({ onPrevious, onNext }: StepProps) => {
   const heirs = watch('heirs') || []
 
   const spouse = heirs.find((heir) => heir.type === 'spouse')
+  //Najdem SJM assety
   const sharedAssets = assets.filter((asset) => asset.isShared)
+  //Vypocitam celkovu hodnotu
   const sharedTotal = sharedAssets.reduce(
     (sum, asset) => sum + (Number(asset.value) || 0),
     0
   )
+  //Manzel/ka ma ocakavany podiel 50%
   const expectedSpouseShare = sharedTotal / 2
+
   const sharedHalf = sharedAssets
     .filter(
       (asset) => asset.sharedOwner === 'manžel/ka' && asset.heir === spouse?.id
@@ -43,6 +47,7 @@ export const StepFour = ({ onPrevious, onNext }: StepProps) => {
                 {
                   name: 'Podíl ze SJM',
                   value: sharedHalf,
+                  //Toto nemoze byt hardcoded hodnota
                   percentage: 50,
                 },
               ]
@@ -129,6 +134,9 @@ export const StepFour = ({ onPrevious, onNext }: StepProps) => {
           actualShare={sharedHalf}
         />
       )}
+      <Text>{`Hodnota SJM: ${sharedTotal}`}</Text>
+      <Text>{`Hodnota pozustalosti: ${sharedTotal}`}</Text>
+      <Text>{`Celkova hodnota dedictvi: ${sharedTotal}`}</Text>
 
       <Box p={4} bg="gray.50" borderRadius="md" boxShadow="sm">
         <Text fontSize="lg" fontWeight="bold">

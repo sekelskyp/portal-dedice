@@ -13,7 +13,7 @@ import { useWizard } from './useWizard'
 
 const assetTypeCollection = createListCollection({
   items: [
-    { value: 'Běžný účet', label: 'Běžný účet'},
+    { value: 'Běžný účet', label: 'Běžný účet' },
     { value: 'Spořící účet', label: 'Spořící účet' },
     { value: 'Termínovaný vklad', label: 'Termínovaný vklad' },
     { value: 'Stavební spoření', label: 'Stavební spoření' },
@@ -27,18 +27,25 @@ const assetTypeCollection = createListCollection({
 })
 
 export const StepTwo = ({ onPrevious, onNext }: StepProps) => {
-  const { watch, setValue } = useFormContext<FormData>()
+  const { watch, setValue, getValues } = useFormContext<FormData>()
   const { setCurrentStep } = useWizard()
   const hasSpouse = watch('hasSpouse')
-  const heirs = watch('heirs') || []
+  //const heirs = watch('heirs') || []
+  const assets = watch('assets')
+
+  const data = getValues()
+  //const assets = data.assets
+  const heirs = data.heirs
+
+  console.log('Data entered into step two: ', data)
 
   const handleNext = () => {
-    if (heirs.length === 1) {
+    if (heirs && heirs.length === 1) {
       // If there's only one heir, assign all assets to them and skip to step 4
-      const assets = watch('assets') || []
-      assets.forEach((_, index) => {
-        setValue(`assets.${index}.heir`, heirs[0].id)
-      })
+      if (assets)
+        assets.forEach((_, index) => {
+          setValue(`assets.${index}.heir`, heirs[0].id)
+        })
       setCurrentStep(4)
     } else {
       onNext()
@@ -47,12 +54,12 @@ export const StepTwo = ({ onPrevious, onNext }: StepProps) => {
 
   useEffect(() => {
     if (hasSpouse === 'ne') {
-      const assets = watch('assets') || []
-      assets.forEach((_, index) => {
-        setValue(`assets.${index}.isShared`, false)
-      })
+      if (assets)
+        assets.forEach((_, index) => {
+          setValue(`assets.${index}.isShared`, false)
+        })
     }
-  }, [hasSpouse, setValue, watch])
+  }, [assets, hasSpouse, setValue])
 
   return (
     <VStack gap={8} align="stretch" width="100%">

@@ -17,7 +17,12 @@ const countCollection = createListCollection({
 })
 
 export const StepOne = ({ onPrevious, onNext }: StepProps) => {
-  const { control, trigger, setValue, getValues } = useFormContext<FormData>()
+  const {
+    control,
+    trigger,
+    setValue,
+    getValues,
+  } = useFormContext<FormData>()
 
   const [hasChildren, hasParents, hasSiblings] = useWatch({
     control,
@@ -114,7 +119,6 @@ export const StepOne = ({ onPrevious, onNext }: StepProps) => {
         label="Má zůstavitel/ka potomky?"
         required
       />
-
       {hasChildren === 'ano' && (
         <SelectFormControl
           name="childrenCount"

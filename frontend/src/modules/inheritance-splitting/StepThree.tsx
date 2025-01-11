@@ -6,11 +6,13 @@ import { useFormContext, useWatch } from 'react-hook-form'
 import { AssetCard } from './components/AssetCard'
 import { FormData, StepProps } from './FormData'
 import { StepNavigation } from './StepNavigation'
-import { useWizard } from './useWizard'
 
 export const StepThree = ({ onPrevious, onNext }: StepProps) => {
-  const { formData } = useWizard()
-  const { watch, control } = useFormContext<FormData>()
+  //const { formData } = useWizard()
+  const { watch, control, getValues } = useFormContext<FormData>()
+
+  const formData = getValues()
+  //console.log(allValues)
 
   const watchedHeirs = useWatch({ control, name: 'heirs' })
   const heirs = useMemo(() => {
