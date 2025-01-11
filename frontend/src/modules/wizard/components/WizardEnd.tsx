@@ -46,6 +46,17 @@ export const WizardEnd: React.FC<WizardEndProps> = ({
           >
             <Link to={route.signIn()}>Přihlašte se</Link>
           </Button>
+          <Text fontSize="xl">Chcete vyzkoušet modelaci řízení?</Text>
+          <Button
+            colorScheme="teal"
+            fontSize={{ base: 'sm', sm: 'md' }}
+            size={{ base: 'sm', sm: 'lg' }}
+            asChild
+          >
+            <Link to={route.inheritance()}>
+              Vypořádání pozůstalosti nanečisto
+            </Link>
+          </Button>
         </VStack>
       </Container>
       <Container justifyItems={'left'}>

@@ -2,6 +2,7 @@
 export * from './AddressFormControl'
 export * from './AddressGroupFormControl'
 export * from './BaseFieldControl'
+export * from './CheckboxFormControl'
 export * from './DateFormControl'
 export * from './FileUploadFormControl'
 export * from './Form'

@@ -24,6 +24,11 @@ export function HomePage() {
         <Button asChild>
           <Link to={route.wizard()}>Pojďme na to!</Link>
         </Button>
+        <Button asChild>
+          <Link to={route.inheritance()}>
+            Vypořádání pozůstalosti nanečisto
+          </Link>
+        </Button>
       </SplitWithImage>
       {!user && (
         <SimpleCentered bgColor="blue.bg">

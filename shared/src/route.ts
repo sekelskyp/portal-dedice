@@ -12,6 +12,7 @@ export const route = {
   editArticle: (id = ':id') => `/blog/article/edit/${id}`,
   detailArticle: (id = ':id') => `/blog/article/${id}`,
   wizard: () => `/wizard`,
+  inheritance: () => `/inheritance`,
   portal: () => `/portal/proceedings`,
   newProceeding: () => `/portal/newProceeding`,
   settings: () => `/portal/settings`,
