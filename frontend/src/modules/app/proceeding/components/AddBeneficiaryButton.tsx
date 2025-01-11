@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { createListCollection, Fieldset } from '@chakra-ui/react'
+import { Box, createListCollection, Fieldset } from '@chakra-ui/react'
 
 import { useAuth } from '@frontend/modules/auth'
 import {
@@ -32,7 +32,7 @@ export const AddBeneficiaryButton = () => {
   }
 
   return (
-    <>
+    <Box>
       <UserBadgeAssignButton
         text={loading ? 'Přidávání dědiců...' : 'Přidat dědice'}
         onClick={() => setOpen(true)}
@@ -56,7 +56,7 @@ export const AddBeneficiaryButton = () => {
           </DialogBody>
         </DialogContent>
       </DialogRoot>
-    </>
+    </Box>
   )
 }
 
