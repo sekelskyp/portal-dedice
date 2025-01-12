@@ -91,20 +91,26 @@ export function Proceedings() {
                 borderRadius="xl"
               />
             )}
+            {isUser && (
+              <Stack
+                gap={4}
+                alignItems={{ base: 'center', sm: 'start' }}
+                pt={8}
+              >
+                <Heading size={{ base: 'xl', sm: '2xl' }}>
+                  Další možnosti
+                </Heading>
+                {proceedingsNavigation.map((item) => (
+                  <Link key={item.link} to={item.link}>
+                    <Button width="fit-content" rounded="full">
+                      {item.text} {item.icon}
+                    </Button>
+                  </Link>
+                ))}
+              </Stack>
+            )}
           </Card.Body>
         </Card.Root>
-        {isUser && (
-          <Stack gap={4} alignItems={{ base: 'center', sm: 'start' }}>
-            <Heading size={{ base: 'xl', sm: '2xl' }}>Další možnosti</Heading>
-            {proceedingsNavigation.map((item) => (
-              <Link key={item.link} to={item.link}>
-                <Button width="fit-content" rounded="full">
-                  {item.text} {item.icon}
-                </Button>
-              </Link>
-            ))}
-          </Stack>
-        )}
       </Stack>
     )
   } else {

@@ -23,8 +23,8 @@ export const footerLinks = [
       },
       {
         id: 4,
-        title: 'Blog',
-        link: route.blog(),
+        title: 'Modelace',
+        link: route.inheritance(),
       },
     ],
   },
@@ -34,23 +34,23 @@ export const footerLinks = [
     links: [
       {
         id: 1,
+        title: 'Blog',
+        link: route.blog(),
+      },
+      {
+        id: 2,
         title: 'O nás',
         link: route.about(),
       },
       {
-        id: 2,
+        id: 3,
         title: 'Jak to funguje',
         link: route.guide(),
       },
       {
-        id: 3,
+        id: 4,
         title: 'Podmínky užívání',
         link: route.termOfService(),
-      },
-      {
-        id: 4,
-        title: 'Kontakt',
-        link: route.home(),
       },
     ],
   },

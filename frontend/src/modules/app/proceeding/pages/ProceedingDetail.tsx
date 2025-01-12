@@ -1,6 +1,5 @@
-import { Button, Grid, Heading, Spinner, Stack, Text } from '@chakra-ui/react'
-import { CalculatorIcon, MessageSquareTextIcon, SendIcon } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Grid, Heading, Spinner, Stack } from '@chakra-ui/react'
+import { MessageSquareTextIcon, SendIcon } from 'lucide-react'
 
 import { useAuth } from '@frontend/modules/auth'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
@@ -16,9 +15,6 @@ export const ProceedingDetail = () => {
 
   const { proceeding, isEditable, removeBeneficiary, removeMainBeneficiary } =
     useProceedingContext()
-
-  const assets = proceeding?.procedureAssets
-  const totalAssetsValue = assets?.reduce((sum, asset) => sum + asset.value, 0)
 
   return proceeding ? (
     <Stack gap={6}>
@@ -65,7 +61,7 @@ export const ProceedingDetail = () => {
         >
           Seznam dědiců
         </Heading>
-        <Grid gap={4} templateColumns={{ base: '1fr', lg: '1fr 1fr' }}>
+        <Grid gap={4} templateColumns={{ base: '1fr', lg: '1fr 1fr' }} mb={8}>
           {proceeding.beneficiaries?.map((beneficiary) => (
             <UserBadge
               key={beneficiary.id}
@@ -80,42 +76,9 @@ export const ProceedingDetail = () => {
           {isEditable && <AddBeneficiaryButton />}
         </Grid>
       </Stack>
-      <Heading
-        size={{ base: 'lg', lg: 'xl' }}
-        textAlign={{ base: 'center', lg: 'left' }}
-      >
-        Celková hodnota majetku
-      </Heading>
-      {assets?.length === 0 ? (
-        <Stack alignItems={{ base: 'center', lg: 'start' }}>
-          <Text fontSize="md">Tuto hodnotu zatím neznáme.</Text>
-          <Button as={Link} disabled width="fit-content" rounded="full">
-            Modelace
-            <CalculatorIcon />
-          </Button>
-        </Stack>
-      ) : (
-        <Text fontSize="lg" textAlign={{ base: 'center', lg: 'left' }}>
-          {totalAssetsValue},- Kč
-        </Text>
-      )}
-
-      <Heading
-        size={{ base: 'lg', lg: 'xl' }}
-        textAlign={{ base: 'center', lg: 'left' }}
-      >
-        Návrh vypořádaní ze strany zůstavitele
-      </Heading>
-      <Text fontSize="md" textAlign={{ base: 'center', lg: 'left' }}>
-        Tuto hodnotu zatím neznáme.
-      </Text>
       <Stack direction={{ base: 'column', lg: 'row' }} justifyContent="center">
         {user?.type === 'User' ? (
           <>
-            <Button as={Link} disabled rounded="full">
-              Modelace vyrovnaní
-              <CalculatorIcon />
-            </Button>
             <RouterNavLink to={route.chatId(proceeding.id)} rounded="full">
               Chat s notářem
               <MessageSquareTextIcon />

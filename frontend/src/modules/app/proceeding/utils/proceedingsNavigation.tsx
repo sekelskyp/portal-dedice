@@ -10,7 +10,7 @@ const proceedingsNavigation = [
     icon: <MdQueuePlayNext />,
   },
   {
-    link: route.home(),
+    link: route.inheritance(),
     text: 'Chci si zkusit modelaci dědění',
     icon: <FaCalculator />,
   },
