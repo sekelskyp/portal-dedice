@@ -137,6 +137,12 @@ export const UPDATE_PROCEEDING_NAME = gql(/* GraphQL */ `
   }
 `)
 
+export const CLOSE_PROCEEDING = gql(/* GraphQL */ `
+  mutation CloseProceeding($proceedingId: Int!) {
+    closeProceeding(proceedingId: $proceedingId)
+  }
+`)
+
 export interface UseProceedingReturn {
   loading: boolean
   proceeding: Proceeding | undefined
@@ -147,6 +153,7 @@ export interface UseProceedingReturn {
   removeMainBeneficiary: () => Promise<void>
   assignMainBeneficiary: (beneficiaryId: number) => Promise<void>
   setName: (name: string) => Promise<void>
+  close: () => Promise<void>
 }
 
 export function useProceeding(proceedingId: number): UseProceedingReturn {
@@ -288,6 +295,25 @@ export function useProceeding(proceedingId: number): UseProceedingReturn {
           })
       : Promise.resolve()
 
+  const [closeProceeding] = useMutation(CLOSE_PROCEEDING)
+
+  const close = () =>
+    closeProceeding({
+      variables: {
+        proceedingId,
+      },
+    })
+      .then(() => {
+        setProceeding((prev) => ({
+          ...prev!,
+          state: 'Closed',
+        }))
+        toaster.success({ title: 'Řízení bylo uzavřeno.' })
+      })
+      .catch(() => {
+        toaster.error({ title: 'Nepodařilo se uzavřít řízení.' })
+      })
+
   return {
     proceeding,
     loading,
@@ -298,5 +324,6 @@ export function useProceeding(proceedingId: number): UseProceedingReturn {
     assignMainBeneficiary,
     isEditable,
     setName,
+    close,
   }
 }
