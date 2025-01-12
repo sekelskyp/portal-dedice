@@ -46,7 +46,7 @@ export const StepThree = ({ onPrevious, onNext }: StepProps) => {
   )
 
   return (
-    <VStack gap={6} align="stretch" w="full">
+    <VStack gap={[4, 6]} align="stretch" w="full" px={[2, 0]}>
       {assets.length > 0 ? (
         assets.map((asset, index) => (
           <AssetCard
@@ -57,7 +57,7 @@ export const StepThree = ({ onPrevious, onNext }: StepProps) => {
           />
         ))
       ) : (
-        <Box p={4} bg="gray.50" borderRadius="md">
+        <Box p={[3, 4]} bg="gray.50" borderRadius="md">
           <Text>Nebyly přidány žádné položky majetku.</Text>
         </Box>
       )}
