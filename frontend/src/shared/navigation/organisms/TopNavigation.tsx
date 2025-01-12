@@ -27,12 +27,12 @@ export function TopNavigation() {
 
   const navItems: NavItem[] = [
     {
-      label: 'Jak to funguje',
-      to: route.guide(),
+      label: 'Nachytřovadlo',
+      to: route.wizard(),
     },
     {
-      label: 'O nás',
-      to: route.about(),
+      label: 'Modelace',
+      to: route.inheritance(),
     },
     {
       label: 'Blog',
