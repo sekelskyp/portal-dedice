@@ -1,28 +1,20 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import { Box, Text, VStack } from '@chakra-ui/react'
 import { createListCollection } from '@chakra-ui/react/collection'
-import { useFormContext, useWatch } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 
 import { AssetCard } from './components/AssetCard'
 import { FormData, StepProps } from './FormData'
 import { StepNavigation } from './StepNavigation'
 
 export const StepThree = ({ onPrevious, onNext }: StepProps) => {
-  //const { formData } = useWizard()
-  const { watch, control, getValues } = useFormContext<FormData>()
-
-  const formData = getValues()
-  //console.log(allValues)
-
-  const watchedHeirs = useWatch({ control, name: 'heirs' })
-  const heirs = useMemo(() => {
-    return watchedHeirs || formData.heirs || []
-  }, [watchedHeirs, formData.heirs])
-  const assets = watch('assets') || []
+  const { getValues } = useFormContext<FormData>()
+  const heirs = getValues().heirs
+  const assets = getValues().assets
 
   const getHeirCollection = useCallback(
     (isIndivisible: boolean) => {
-      if (!heirs.length) {
+      if (!heirs) {
         console.warn('No heirs available for collection')
         return createListCollection({ items: [] })
       }
@@ -47,7 +39,7 @@ export const StepThree = ({ onPrevious, onNext }: StepProps) => {
 
   return (
     <VStack gap={6} align="stretch" w="full">
-      {assets.length > 0 ? (
+      {assets ? (
         assets.map((asset, index) => (
           <AssetCard
             key={index}

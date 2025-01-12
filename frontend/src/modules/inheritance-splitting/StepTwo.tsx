@@ -30,14 +30,9 @@ export const StepTwo = ({ onPrevious, onNext }: StepProps) => {
   const { watch, setValue, getValues } = useFormContext<FormData>()
   const { setCurrentStep } = useWizard()
   const hasSpouse = watch('hasSpouse')
-  //const heirs = watch('heirs') || []
   const assets = watch('assets')
 
-  const data = getValues()
-  //const assets = data.assets
-  const heirs = data.heirs
-
-  console.log('Data entered into step two: ', data)
+  const heirs = getValues().heirs
 
   const handleNext = () => {
     if (heirs && heirs.length === 1) {
@@ -76,7 +71,6 @@ export const StepTwo = ({ onPrevious, onNext }: StepProps) => {
             <InputFormControl
               label="Název položky"
               name={`assets.${index}.name`}
-              required
             />
             <InputFormControl
               label="Hodnota položky (Kč)"

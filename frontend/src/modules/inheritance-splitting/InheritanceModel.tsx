@@ -17,9 +17,9 @@ import { WizardProvider } from './WizardContext'
 const assetSchema = z.object({
   heir: z.string().optional(),
   isShared: z.boolean(),
-  name: z.string().min(1, 'Name is required'),
-  type: z.string().min(1, 'Type is required'),
-  value: z.string().min(1, 'Value is required'),
+  name: z.string().optional(),
+  type: z.string({ required_error: 'Typ je povinny udaj' }).min(1),
+  value: z.string({ required_error: 'Hodnota je povinny udaj' }).min(1),
   sharedOwner: z.enum(['manžel/ka', 'pozůstalost']).optional(),
 }) satisfies z.ZodType<Asset>
 
@@ -62,21 +62,38 @@ const stepOneSchema = z
         path: ['childrenCount'],
       })
     }
-    if (data.hasSpouse === 'ne' && !data.hasLivedWithDeceased) {
+    if (data.hasSpouse === 'ne') {
       if (!data.hasLivedWithDeceased) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: 'Prosím vyberte jestli zůstavitel/ka s nekym zila',
           path: ['hasLivedWithDeceased'],
         })
+      } else if (!data.hasParents) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Prosím vyberte jestli zůstavitel/ka ma rodice',
+          path: ['hasParents'],
+        })
+      } else if (data.hasParents === 'ne' && !data.hasSiblings) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Prosím vyberte jestli zůstavitel/ka ma sourozence',
+          path: ['hasSiblings'],
+        })
+      } else if (data.hasSiblings === 'ano' && !data.siblingsCount) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Prosím zvolte pocet sourozencu',
+          path: ['siblingsCount'],
+        })
       }
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'Prosím vyberte jestli zůstavitel/ka s nekym zila',
-        path: ['hasLivedWithDeceased'],
-      })
     }
   }) satisfies z.ZodType<FormData>
+
+const stepTwoSchema = z.object({
+  assets: z.array(assetSchema).min(1, 'Musite pridat alespon jeden majetek'),
+})
 
 const InheritanceModel = () => {
   const [currentStep, setCurrentStep] = useState(1)
@@ -148,7 +165,7 @@ const InheritanceModel = () => {
       <FormProvider {...methods}>
         <Form
           onSubmit={onSubmit}
-          resolver={zodResolver(stepOneSchema)}
+          resolver={zodResolver(currentStep === 1 ? stepOneSchema : stepTwoSchema)}
           noValidate
         >
           <InheritanceProgress currentStep={currentStep} />

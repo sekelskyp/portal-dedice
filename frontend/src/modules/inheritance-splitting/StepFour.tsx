@@ -11,22 +11,32 @@ import { FormData, StepProps } from './FormData'
 import { StepNavigation } from './StepNavigation'
 
 export const StepFour = ({ onPrevious, onNext }: StepProps) => {
-  const { watch } = useFormContext<FormData>()
-
-  const assets = watch('assets') || []
-  const heirs = watch('heirs') || []
+  const { getValues } = useFormContext<FormData>()
+  const assets = getValues().assets || []
+  const heirs = getValues().heirs || []
 
   const spouse = heirs.find((heir) => heir.type === 'spouse')
   //Najdem SJM assety
   const sharedAssets = assets.filter((asset) => asset.isShared)
+
+  //Najdem nie SJM assety === tie ktore idu do pozostalosti
+  const notSharedAsssets = assets.filter((a) => a.sharedOwner === 'pozůstalost')
+
   //Vypocitam celkovu hodnotu
   const sharedTotal = sharedAssets.reduce(
     (sum, asset) => sum + (Number(asset.value) || 0),
     0
   )
+
+  //Zobrat rozdiel SJM a pozostalosti a do posiela manzelka
+  const pozostalostTotal =
+    notSharedAsssets.reduce((sum, a) => sum + (Number(a.value) || 0), 0) +
+    sharedTotal * 0.5
+
   //Manzel/ka ma ocakavany podiel 50%
   const expectedSpouseShare = sharedTotal / 2
 
+  //To co naozaj dostane manzelka podla toho co som zaklikal
   const sharedHalf = sharedAssets
     .filter(
       (asset) => asset.sharedOwner === 'manžel/ka' && asset.heir === spouse?.id
@@ -47,8 +57,7 @@ export const StepFour = ({ onPrevious, onNext }: StepProps) => {
                 {
                   name: 'Podíl ze SJM',
                   value: sharedHalf,
-                  //Toto nemoze byt hardcoded hodnota
-                  percentage: 50,
+                  percentage: (sharedHalf / sharedTotal) * 100,
                 },
               ]
             : [],
@@ -66,7 +75,7 @@ export const StepFour = ({ onPrevious, onNext }: StepProps) => {
           if (share) {
             share.totalValue += shareValue
             share.assets.push({
-              name: asset.name,
+              name: asset.name || '',
               value: shareValue,
               percentage: 100 / heirs.length,
             })
@@ -77,7 +86,7 @@ export const StepFour = ({ onPrevious, onNext }: StepProps) => {
         if (share) {
           share.totalValue += value
           share.assets.push({
-            name: asset.name,
+            name: asset.name || '',
             value: value,
             percentage: 100,
           })
@@ -134,13 +143,9 @@ export const StepFour = ({ onPrevious, onNext }: StepProps) => {
           actualShare={sharedHalf}
         />
       )}
-      <Text>{`Hodnota SJM: ${sharedTotal}`}</Text>
-      <Text>{`Hodnota pozustalosti: ${sharedTotal}`}</Text>
-      <Text>{`Celkova hodnota dedictvi: ${sharedTotal}`}</Text>
-
       <Box p={4} bg="gray.50" borderRadius="md" boxShadow="sm">
         <Text fontSize="lg" fontWeight="bold">
-          Celková hodnota pozůstalosti: {totalEstate.toLocaleString()} Kč
+          Celková hodnota pozůstalosti: {pozostalostTotal.toLocaleString()} Kč
         </Text>
       </Box>
 
