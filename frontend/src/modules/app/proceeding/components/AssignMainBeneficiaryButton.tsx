@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { createListCollection, Fieldset, Stack } from '@chakra-ui/react'
+import { Box, createListCollection, Fieldset, Stack } from '@chakra-ui/react'
 
 import {
   DialogBackdrop,
@@ -31,7 +31,7 @@ export const AssignMainBeneficiaryButton = () => {
   }
 
   return (
-    <>
+    <Box>
       <UserBadgeAssignButton
         text={
           loading
@@ -45,6 +45,7 @@ export const AssignMainBeneficiaryButton = () => {
         lazyMount
         open={open}
         onOpenChange={(e) => setOpen(e.open)}
+        closeOnInteractOutside={false} // This is workaround for issue on mobile devices
         placement="center"
       >
         <DialogBackdrop />
@@ -58,7 +59,7 @@ export const AssignMainBeneficiaryButton = () => {
           </DialogBody>
         </DialogContent>
       </DialogRoot>
-    </>
+    </Box>
   )
 }
 
@@ -92,7 +93,7 @@ const AssignMainBeneficiaryForm = ({
   }
 
   return (
-    <Form onSubmit={onSubmit} noValidate>
+    <Form onSubmit={onSubmit} noValidate defaultValues={{}}>
       <Stack gap={6}>
         <Fieldset.Root size="lg">
           <Fieldset.Content>
@@ -100,10 +101,11 @@ const AssignMainBeneficiaryForm = ({
               name="beneficiaryId"
               collection={beneficiariesList}
               label="Další dědicové"
+              multiple={false}
             />
           </Fieldset.Content>
         </Fieldset.Root>
-        <SubmitButton>Přidat dědice</SubmitButton>
+        <SubmitButton>Nastavit dědice jako hlavní kontaktní osobu</SubmitButton>
       </Stack>
     </Form>
   )
