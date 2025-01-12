@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { HStack, IconButton, VStack } from '@chakra-ui/react'
 import { createListCollection } from '@chakra-ui/react/collection'
 import { useFormContext } from 'react-hook-form'
-import { FaPlus } from 'react-icons/fa'
+import { FaPlus, FaTrash } from 'react-icons/fa'
 
 import { Checkbox } from '@frontend/shared/design-system/atoms/chakra/checkbox'
 import { InputFormControl, SelectFormControl } from '@frontend/shared/forms'
@@ -50,6 +50,14 @@ export const StepTwo = ({ onPrevious, onNext }: StepProps) => {
     } else {
       onNext()
     }
+  }
+
+  const handleRemoveAsset = (indexToRemove: number) => {
+    const assets = watch('assets') || []
+    setValue(
+      'assets',
+      assets.filter((_, index) => index !== indexToRemove)
+    )
   }
 
   useEffect(() => {
@@ -103,26 +111,38 @@ export const StepTwo = ({ onPrevious, onNext }: StepProps) => {
           </Checkbox>
         </VStack>
       ))}
-      <IconButton
-        alignSelf="flex-start"
-        onClick={() => {
-          const assets = watch('assets') || []
-          setValue('assets', [
-            ...assets,
-            {
-              type: '',
-              name: '',
-              value: '',
-              isShared: true,
-              sharedOwner: 'pozůstalost',
-            },
-          ])
-        }}
-        p={4}
-      >
-        <FaPlus />
-        Přidat položku majetku
-      </IconButton>
+      <HStack width="100%" justify="space-between" alignItems="center">
+        <IconButton
+          aria-label="Přidat položku"
+          onClick={() => {
+            const assets = watch('assets') || []
+            setValue('assets', [
+              ...assets,
+              {
+                type: '',
+                name: '',
+                value: '',
+                isShared: true,
+                sharedOwner: 'pozůstalost',
+              },
+            ])
+          }}
+          colorScheme="blue"
+          size="md"
+        >
+          <FaPlus />
+        </IconButton>
+        {(watch('assets') || []).length > 0 && (
+          <IconButton
+            aria-label="Odstranit položku"
+            onClick={() => handleRemoveAsset(watch('assets')!.length - 1)}
+            bg="red.500"
+            size="md"
+          >
+            <FaTrash />
+          </IconButton>
+        )}
+      </HStack>
       <StepNavigation
         onPrevious={onPrevious}
         onNext={handleNext}
