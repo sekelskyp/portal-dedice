@@ -173,6 +173,18 @@ export class InheritanceProcedureResolver {
     return true
   }
 
+  @Mutation(() => Boolean)
+  async updateName(
+    @Arg('name') name: string,
+    @Arg('proceedingId', () => Int) proceedingId: number,
+    @Ctx() context: CustomContext
+  ): Promise<boolean> {
+    await context.proceedingRepository.updateProceeding(proceedingId, {
+      name,
+    })
+    return true
+  }
+
   // Mutation to delete proceedings by IDs
   @Mutation(() => Boolean)
   async deleteProceedingsByIds(

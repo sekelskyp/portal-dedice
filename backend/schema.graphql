@@ -173,6 +173,7 @@ type Mutation {
   updateArticle(data: UpdateArticleInput!, id: Int!): Article
   updateAsset(data: AssetInput!, id: Int!): Asset
   updateBeneficiary(data: BeneficiaryInput!, id: Int!): Beneficiary!
+  updateName(name: String!, proceedingId: Int!): Boolean!
   updateNotaryDateRule(data: NotaryDateRuleInput!, id: Int!): NotaryDateRule
   updateProfile(profileInput: ProfileInput!): User!
   updateSendNotifications(sendNotifications: Boolean!): User!

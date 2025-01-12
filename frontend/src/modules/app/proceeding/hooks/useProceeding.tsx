@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useMutation, useQuery } from '@apollo/client'
+import { ApolloError, useMutation, useQuery } from '@apollo/client'
 
 import { gql } from '@frontend/gql'
 import { useAuth } from '@frontend/modules/auth'
@@ -131,7 +131,25 @@ export const ADD_MAIN_BENEFICIARY_MUTATION = gql(/* GraphQL */ `
   }
 `)
 
-export function useProceeding(proceedingId: number) {
+export const UPDATE_PROCEEDING_NAME = gql(/* GraphQL */ `
+  mutation UpdateProceedingName($name: String!, $proceedingId: Int!) {
+    updateName(name: $name, proceedingId: $proceedingId)
+  }
+`)
+
+export interface UseProceedingReturn {
+  loading: boolean
+  proceeding: Proceeding | undefined
+  error: ApolloError | undefined
+  removeBeneficiary: (beneficiaryId: number) => Promise<void>
+  addBeneficiaries: (userIds: string[]) => Promise<void>
+  isEditable: boolean
+  removeMainBeneficiary: () => Promise<void>
+  assignMainBeneficiary: (beneficiaryId: number) => Promise<void>
+  setName: (name: string) => Promise<void>
+}
+
+export function useProceeding(proceedingId: number): UseProceedingReturn {
   const [proceeding, setProceeding] = useState<Proceeding | undefined>(
     undefined
   )
@@ -248,6 +266,26 @@ export function useProceeding(proceedingId: number) {
   const auth = useAuth()
   const isEditable = ['Notary', 'Admin'].includes(auth.user?.type ?? 'User')
 
+  const [updateProceedingName] = useMutation(UPDATE_PROCEEDING_NAME)
+
+  const setName = (name: string) =>
+    updateProceedingName({
+      variables: {
+        name,
+        proceedingId,
+      },
+    })
+      .then(() => {
+        setProceeding((prev) => ({
+          ...prev!,
+          name,
+        }))
+        toaster.success({ title: 'Název byl změněn.' })
+      })
+      .catch(() => {
+        toaster.error({ title: 'Nepodařilo se změnit název.' })
+      })
+
   return {
     proceeding,
     loading,
@@ -257,5 +295,6 @@ export function useProceeding(proceedingId: number) {
     addBeneficiaries,
     assignMainBeneficiary,
     isEditable,
+    setName,
   }
 }

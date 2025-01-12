@@ -207,6 +207,7 @@ export type Mutation = {
   updateArticle?: Maybe<Article>
   updateAsset?: Maybe<Asset>
   updateBeneficiary: Beneficiary
+  updateName: Scalars['Boolean']['output']
   updateNotaryDateRule?: Maybe<NotaryDateRule>
   updateProfile: User
   updateSendNotifications: User
@@ -365,6 +366,11 @@ export type MutationUpdateAssetArgs = {
 export type MutationUpdateBeneficiaryArgs = {
   data: BeneficiaryInput
   id: Scalars['Int']['input']
+}
+
+export type MutationUpdateNameArgs = {
+  name: Scalars['String']['input']
+  proceedingId: Scalars['Int']['input']
 }
 
 export type MutationUpdateNotaryDateRuleArgs = {
@@ -1086,6 +1092,16 @@ export type AssignMainBeneficiaryMutationVariables = Exact<{
 export type AssignMainBeneficiaryMutation = {
   __typename?: 'Mutation'
   assignMainBeneficiary: boolean
+}
+
+export type UpdateProceedingNameMutationVariables = Exact<{
+  name: Scalars['String']['input']
+  proceedingId: Scalars['Int']['input']
+}>
+
+export type UpdateProceedingNameMutation = {
+  __typename?: 'Mutation'
+  updateName: boolean
 }
 
 export type ChangePasswordMutationVariables = Exact<{
@@ -3254,6 +3270,70 @@ export const AssignMainBeneficiaryDocument = {
 } as unknown as DocumentNode<
   AssignMainBeneficiaryMutation,
   AssignMainBeneficiaryMutationVariables
+>
+export const UpdateProceedingNameDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'UpdateProceedingName' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'name' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'proceedingId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'updateName' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'name' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'name' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'proceedingId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'proceedingId' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  UpdateProceedingNameMutation,
+  UpdateProceedingNameMutationVariables
 >
 export const ChangePasswordDocument = {
   kind: 'Document',

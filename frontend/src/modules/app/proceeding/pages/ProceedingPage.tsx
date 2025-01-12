@@ -1,14 +1,17 @@
+import { useEffect, useState } from 'react'
 import {
   Box,
   Card,
+  Editable,
   Heading,
   HStack,
+  IconButton,
   Spinner,
   Stack,
   Tabs,
   Text,
 } from '@chakra-ui/react'
-import { LuFile } from 'react-icons/lu'
+import { LuCheck, LuFile, LuPencilLine, LuX } from 'react-icons/lu'
 
 import { Alert } from '@frontend/shared/design-system'
 
@@ -21,7 +24,18 @@ import { StatusBadge } from '../components/StatusBadge'
 import { ProceedingDetail } from './ProceedingDetail'
 
 export const ProceedingPage = () => {
-  const { loading, proceeding, error } = useProceedingContext()
+  const {
+    loading,
+    proceeding,
+    error,
+    isEditable,
+    setName: commitName,
+  } = useProceedingContext()
+  const [name, setName] = useState(proceeding?.name ?? '')
+
+  useEffect(() => {
+    setName(proceeding?.name ?? '')
+  }, [proceeding, setName])
 
   if (loading) {
     return (
@@ -45,7 +59,38 @@ export const ProceedingPage = () => {
         <Card.Root w="full">
           <Card.Header as={HStack} gap={4}>
             <LuFile size={24} />
-            <Heading>{proceeding?.name}</Heading>
+            {isEditable ? (
+              <Editable.Root
+                value={name}
+                onValueChange={(e) => setName(e.value)}
+                onValueCommit={(e) => commitName(e.value)}
+                placeholder="Click to edit"
+                fontSize="xl"
+                fontWeight="bold"
+              >
+                <Editable.Preview />
+                <Editable.Input />
+                <Editable.Control>
+                  <Editable.EditTrigger asChild>
+                    <IconButton variant="ghost" size="xs">
+                      <LuPencilLine />
+                    </IconButton>
+                  </Editable.EditTrigger>
+                  <Editable.CancelTrigger asChild>
+                    <IconButton variant="outline" size="xs">
+                      <LuX />
+                    </IconButton>
+                  </Editable.CancelTrigger>
+                  <Editable.SubmitTrigger asChild>
+                    <IconButton variant="outline" size="xs">
+                      <LuCheck />
+                    </IconButton>
+                  </Editable.SubmitTrigger>
+                </Editable.Control>
+              </Editable.Root>
+            ) : (
+              <Heading>{proceeding.name}</Heading>
+            )}
             <StatusBadge ml="auto" state={proceeding.state} />
           </Card.Header>
           <Card.Body gap={4}>

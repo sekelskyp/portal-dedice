@@ -1,10 +1,7 @@
 import { createContext, useContext } from 'react'
-import { ApolloError } from '@apollo/client'
 import { Outlet, useParams } from 'react-router-dom'
 
-import { Proceeding } from '@frontend/shared/types/proceeding'
-
-import { useProceeding } from '../hooks/useProceeding'
+import { useProceeding, UseProceedingReturn } from '../hooks/useProceeding'
 
 export const ProceedingLayout = () => {
   const { proceedingId } = useParams()
@@ -20,16 +17,8 @@ export const ProceedingLayout = () => {
   )
 }
 
-export interface IProceedingContext {
+export interface IProceedingContext extends UseProceedingReturn {
   proceedingId: number
-  loading: boolean
-  proceeding: Proceeding | undefined
-  error: ApolloError | undefined
-  removeBeneficiary: (beneficiaryId: number) => Promise<void>
-  addBeneficiaries: (userIds: string[]) => Promise<void>
-  isEditable: boolean
-  removeMainBeneficiary: () => Promise<void>
-  assignMainBeneficiary: (beneficiaryId: number) => Promise<void>
 }
 
 export const ProceedingContext = createContext<IProceedingContext | null>(null)
