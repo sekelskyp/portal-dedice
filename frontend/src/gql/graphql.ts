@@ -1104,6 +1104,15 @@ export type UpdateProceedingNameMutation = {
   updateName: boolean
 }
 
+export type CloseProceedingMutationVariables = Exact<{
+  proceedingId: Scalars['Int']['input']
+}>
+
+export type CloseProceedingMutation = {
+  __typename?: 'Mutation'
+  closeProceeding: boolean
+}
+
 export type ChangePasswordMutationVariables = Exact<{
   newPassword: Scalars['String']['input']
   oldPassword: Scalars['String']['input']
@@ -3334,6 +3343,51 @@ export const UpdateProceedingNameDocument = {
 } as unknown as DocumentNode<
   UpdateProceedingNameMutation,
   UpdateProceedingNameMutationVariables
+>
+export const CloseProceedingDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'CloseProceeding' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'proceedingId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'closeProceeding' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'proceedingId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'proceedingId' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CloseProceedingMutation,
+  CloseProceedingMutationVariables
 >
 export const ChangePasswordDocument = {
   kind: 'Document',

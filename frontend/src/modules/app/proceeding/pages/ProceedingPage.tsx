@@ -11,9 +11,10 @@ import {
   Tabs,
   Text,
 } from '@chakra-ui/react'
+import { LockIcon } from 'lucide-react'
 import { LuCheck, LuFile, LuPencilLine, LuX } from 'react-icons/lu'
 
-import { Alert } from '@frontend/shared/design-system'
+import { Alert, Button } from '@frontend/shared/design-system'
 
 import { Assets } from '../../assets/tab/Assets'
 import { Documents } from '../../documents/tab/Documents'
@@ -30,6 +31,7 @@ export const ProceedingPage = () => {
     error,
     isEditable,
     setName: commitName,
+    close,
   } = useProceedingContext()
   const [name, setName] = useState(proceeding?.name ?? '')
 
@@ -57,7 +59,7 @@ export const ProceedingPage = () => {
     <Stack display="flex" alignItems="center" justifyContent="center">
       {proceeding ? (
         <Card.Root w="full">
-          <Card.Header as={HStack} gap={4}>
+          <Card.Header as={HStack} gap={3}>
             <LuFile size={24} />
             {isEditable ? (
               <Editable.Root
@@ -92,6 +94,20 @@ export const ProceedingPage = () => {
               <Heading>{proceeding.name}</Heading>
             )}
             <StatusBadge ml="auto" state={proceeding.state} />
+            {isEditable && proceeding.state !== 'Closed' && (
+              <Button
+                borderRadius="full"
+                size="xs"
+                px={4}
+                fontSize="sm"
+                gap={2}
+                bg="fg.error"
+                color="bg.error"
+                onClick={() => close()}
+              >
+                <LockIcon /> Uzavřít
+              </Button>
+            )}
           </Card.Header>
           <Card.Body gap={4}>
             <Tabs.Root

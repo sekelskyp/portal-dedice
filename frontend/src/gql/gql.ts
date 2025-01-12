@@ -69,6 +69,8 @@ const documents = {
     types.AssignMainBeneficiaryDocument,
   '\n  mutation UpdateProceedingName($name: String!, $proceedingId: Int!) {\n    updateName(name: $name, proceedingId: $proceedingId)\n  }\n':
     types.UpdateProceedingNameDocument,
+  '\n  mutation CloseProceeding($proceedingId: Int!) {\n    closeProceeding(proceedingId: $proceedingId)\n  }\n':
+    types.CloseProceedingDocument,
   '\n  mutation ChangePassword($newPassword: String!, $oldPassword: String!) {\n    changePassword(newPassword: $newPassword, oldPassword: $oldPassword)\n  }\n':
     types.ChangePasswordDocument,
   '\n  query GetNotaryDateRules($notaryId: Int!) {\n    getNotaryDateRulesByNotary(notaryId: $notaryId) {\n      id\n      startDay\n      startMonth\n      endDay\n      endMonth\n    }\n  }\n':
@@ -287,6 +289,12 @@ export function gql(
 export function gql(
   source: '\n  mutation UpdateProceedingName($name: String!, $proceedingId: Int!) {\n    updateName(name: $name, proceedingId: $proceedingId)\n  }\n'
 ): (typeof documents)['\n  mutation UpdateProceedingName($name: String!, $proceedingId: Int!) {\n    updateName(name: $name, proceedingId: $proceedingId)\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  mutation CloseProceeding($proceedingId: Int!) {\n    closeProceeding(proceedingId: $proceedingId)\n  }\n'
+): (typeof documents)['\n  mutation CloseProceeding($proceedingId: Int!) {\n    closeProceeding(proceedingId: $proceedingId)\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
