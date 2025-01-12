@@ -269,22 +269,24 @@ export function useProceeding(proceedingId: number): UseProceedingReturn {
   const [updateProceedingName] = useMutation(UPDATE_PROCEEDING_NAME)
 
   const setName = (name: string) =>
-    updateProceedingName({
-      variables: {
-        name,
-        proceedingId,
-      },
-    })
-      .then(() => {
-        setProceeding((prev) => ({
-          ...prev!,
-          name,
-        }))
-        toaster.success({ title: 'Název byl změněn.' })
-      })
-      .catch(() => {
-        toaster.error({ title: 'Nepodařilo se změnit název.' })
-      })
+    name !== proceeding?.name
+      ? updateProceedingName({
+          variables: {
+            name,
+            proceedingId,
+          },
+        })
+          .then(() => {
+            setProceeding((prev) => ({
+              ...prev!,
+              name,
+            }))
+            toaster.success({ title: 'Název byl změněn.' })
+          })
+          .catch(() => {
+            toaster.error({ title: 'Nepodařilo se změnit název.' })
+          })
+      : Promise.resolve()
 
   return {
     proceeding,
