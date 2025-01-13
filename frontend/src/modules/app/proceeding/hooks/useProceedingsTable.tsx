@@ -18,7 +18,7 @@ import { useTablePagination } from '@frontend/shared/hooks/useTablePagination'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import {
   fuzzyFilter,
-  INITIAL_SORTING_STATE,
+  INITIAL_SORTING_STATE_PROCEEDINGS,
 } from '@frontend/shared/utils/table-utils'
 import { route } from '@shared/route'
 
@@ -147,7 +147,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
       pagination,
     },
     initialState: {
-      sorting: INITIAL_SORTING_STATE,
+      sorting: INITIAL_SORTING_STATE_PROCEEDINGS,
     },
     globalFilterFn: fuzzyFilter<ProceedingsItem>(),
     onPaginationChange: setPagination,

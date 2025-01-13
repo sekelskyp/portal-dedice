@@ -2,6 +2,7 @@ import { useMutation } from '@apollo/client'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { gql } from '@frontend/gql'
+import { toaster } from '@frontend/shared/design-system'
 import { route } from '@shared/route'
 
 const UPDATE_DOCUMENT_MUTATION = gql(/* GraphQL */ `
@@ -20,8 +21,12 @@ export function useUploadDocument() {
       onCompleted: () => {
         navigate(route.proceeding(id))
       },
-      onError: (error) => {
-        console.error('Error uploading document:', error)
+      onError: () => {
+        toaster.create({
+          title: 'Při nahrání dokumentu došlo k chybě.',
+          type: 'error',
+          duration: 5000,
+        })
       },
     }
   )

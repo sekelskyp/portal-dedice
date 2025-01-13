@@ -1,10 +1,17 @@
 import { rankItem } from '@tanstack/match-sorter-utils'
 import { FilterFn } from '@tanstack/react-table'
 
-export const INITIAL_SORTING_STATE = [
+export const INITIAL_SORTING_STATE_PROCEEDINGS = [
   {
     id: 'state',
     desc: true,
+  },
+]
+
+export const INITIAL_SORTING_STATE_USERS = [
+  {
+    id: 'id',
+    desc: false,
   },
 ]
 

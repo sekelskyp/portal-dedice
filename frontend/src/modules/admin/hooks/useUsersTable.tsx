@@ -15,7 +15,7 @@ import { useTableFilters } from '@frontend/shared/hooks/useTableFilters'
 import { useTablePagination } from '@frontend/shared/hooks/useTablePagination'
 import {
   fuzzyFilter,
-  INITIAL_SORTING_STATE,
+  INITIAL_SORTING_STATE_USERS,
 } from '@frontend/shared/utils/table-utils'
 
 import { UserActionButton } from '../components/UserActionButton'
@@ -127,7 +127,7 @@ export function useUsersTable({ data }: { data: UserItem[] }) {
       columnFilters,
     },
     initialState: {
-      sorting: INITIAL_SORTING_STATE,
+      sorting: INITIAL_SORTING_STATE_USERS,
     },
     globalFilterFn: fuzzyFilter<UserItem>(),
     onPaginationChange: setPagination,
