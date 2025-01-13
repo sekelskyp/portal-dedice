@@ -7,6 +7,10 @@ import { NotaryDateRule } from './notaryDateRuleType'
 
 @Resolver(() => NotaryDateRule)
 export class NotaryDateRuleResolver {
+  // ===============================
+  // QUERIES
+  // ===============================
+
   // Query to get an notaryDateRule by ID
   @Query(() => NotaryDateRule, { nullable: true })
   async getNotaryDateRuleById(
@@ -15,6 +19,19 @@ export class NotaryDateRuleResolver {
   ): Promise<NotaryDateRule | null> {
     return await notaryDateRuleRepository.getNotaryDateRuleById(id)
   }
+
+  // Query to get notaryDateRules by notary ID
+  @Query(() => [NotaryDateRule])
+  async getNotaryDateRulesByNotary(
+    @Arg('notaryId', () => Int) notaryId: number,
+    @Ctx() { notaryDateRuleRepository }: CustomContext
+  ): Promise<NotaryDateRule[]> {
+    return await notaryDateRuleRepository.getNotaryDateRulesByNotaryId(notaryId)
+  }
+
+  // ===============================
+  // MUTATIONS
+  // ===============================
 
   // Mutation to create a new notaryDateRule
   @Mutation(() => NotaryDateRule)
@@ -30,15 +47,6 @@ export class NotaryDateRuleResolver {
       throw new Error('Vytvořené pravidlo se nepodařilo najít')
     }
     return notaryDateRule
-  }
-
-  // Query to get notaryDateRules by notary ID
-  @Query(() => [NotaryDateRule])
-  async getNotaryDateRulesByNotary(
-    @Arg('notaryId', () => Int) notaryId: number,
-    @Ctx() { notaryDateRuleRepository }: CustomContext
-  ): Promise<NotaryDateRule[]> {
-    return await notaryDateRuleRepository.getNotaryDateRulesByNotaryId(notaryId)
   }
 
   // Mutation to update an existing notaryDateRule

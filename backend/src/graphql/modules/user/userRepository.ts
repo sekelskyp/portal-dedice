@@ -59,8 +59,6 @@ export function getUserRepository(db: Db) {
       .select()
       .from(user)
       .where(eq(user.notaryId, notaryId))
-    console.log('repository notaryId', notaryId)
-    console.log('repository result', result)
     return result || null
   }
 

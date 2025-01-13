@@ -1,16 +1,20 @@
 import { AddressInsertInput } from '@backend/graphql/modules/address/addressRepository'
 import { UserEntity } from '@backend/graphql/modules/user/userRepository'
-import { GenderEnumType } from '@shared/enums'
-
-import { createToken } from '../libs/jwt'
-import { CustomContext } from '../types/types'
-
+import { createToken } from '@backend/libs/jwt'
 import {
   requestEmailVerification,
   verifyEmail,
-} from './emailConfirmationService'
-import { comparePassword, hashPassword } from './passwordHashService'
-import { requestPasswordReset, resetPassword } from './passwordResetService'
+} from '@backend/services/emailConfirmationService'
+import {
+  comparePassword,
+  hashPassword,
+} from '@backend/services/passwordHashService'
+import {
+  requestPasswordReset,
+  resetPassword,
+} from '@backend/services/passwordResetService'
+import { CustomContext } from '@backend/types/types'
+import { GenderEnumType } from '@shared/enums'
 
 export interface AuthResponse {
   userId: number
@@ -44,12 +48,10 @@ export async function loginUser(
 
   // Find user by email
   const foundUser = await userRepository.getUserByEmail(login.toLowerCase())
-  console.log('foundUser', foundUser)
   if (!foundUser) throw new Error(errorMessage)
 
   // Validate password
   const isPasswordValid = await comparePassword(password, foundUser.password)
-  console.log('isPasswordValid', isPasswordValid)
   if (!isPasswordValid) throw new Error(errorMessage)
 
   // Check if user is confirmed
@@ -79,6 +81,7 @@ export async function registerUser(
   // Hash the password and create the user
   const hashedPassword = await hashPassword(data.password)
   const displayName = `${data.name} ${data.surname}`
+
   const userId = await userRepository.createUser({
     email: data.email,
     password: hashedPassword,
@@ -87,6 +90,7 @@ export async function registerUser(
     displayName,
     type: 'User',
   })
+
   const newUser = await userRepository.getUserById(userId)
   if (!newUser) {
     throw new Error('Nepodařilo se načíst nového uživatele.')

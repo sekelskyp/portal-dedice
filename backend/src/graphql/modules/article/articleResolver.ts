@@ -10,18 +10,18 @@ import {
 } from 'type-graphql'
 
 import { Article } from '@backend/graphql/modules/article/articleType'
+import { getAttachmentById } from '@backend/graphql/modules/attachment/attachmentService'
+import { CustomContext } from '@backend/types/types'
+
+import { Attachment } from '../attachment/attachmentType'
+
 import {
   createArticle,
   deleteArticlesByIds,
   getAllArticles,
   getArticleById,
   updateArticle,
-} from '@backend/services/articleService'
-import { getAttachmentById } from '@backend/services/attachmentService'
-import { CustomContext } from '@backend/types/types'
-
-import { Attachment } from '../attachment/attachmentType'
-
+} from './articleService'
 import { CreateArticleInput } from './createArticleInput'
 import { UpdateArticleInput } from './updateArticleInput'
 

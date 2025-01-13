@@ -11,7 +11,14 @@ import {
 } from 'type-graphql'
 
 import { Asset } from '@backend/graphql/modules/asset/assetType'
+import { CustomContext } from '@backend/types/types'
 
+import { Attachment } from '../attachment/attachmentType'
+import { BeneficiaryEntity } from '../beneficiary/beneficiaryRepository'
+import { Beneficiary } from '../beneficiary/beneficiaryType'
+import { Notary } from '../notary/notaryType'
+
+import { CreateProceedingInput } from './createProceedingInput'
 import {
   addBeneficiariesToProceeding,
   assignNotaryToProcedure,
@@ -21,14 +28,7 @@ import {
   deleteProceedingsByIds,
   notifyProceedingBeneficiaries,
   uploadFileToProceeding,
-} from '../../../services/proceedingService'
-import { CustomContext } from '../../../types/types'
-import { Attachment } from '../attachment/attachmentType'
-import { BeneficiaryEntity } from '../beneficiary/beneficiaryRepository'
-import { Beneficiary } from '../beneficiary/beneficiaryType'
-import { Notary } from '../notary/notaryType'
-
-import { CreateProceedingInput } from './createProceedingInput'
+} from './proceedingService'
 import { Proceeding } from './proceedingType'
 import { UploadFileToProceedingInput } from './uploadFileToProceedingInput'
 

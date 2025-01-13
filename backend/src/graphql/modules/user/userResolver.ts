@@ -18,7 +18,7 @@ import {
   loginUser,
   registerUser,
   updateProfile,
-} from '@backend/services/userService'
+} from '@backend/graphql/modules/user/userService'
 import { CustomContext } from '@backend/types/types'
 import { UserTypeEnumType } from '@shared/enums'
 

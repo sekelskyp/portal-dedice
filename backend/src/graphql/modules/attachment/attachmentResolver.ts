@@ -4,22 +4,16 @@ import {
   deleteAttachmentsByIds,
   getAttachmentById,
   getAttachmentsByIds,
-} from '@backend/services/attachmentService'
+} from '@backend/graphql/modules/attachment/attachmentService'
 import { CustomContext } from '@backend/types/types'
 
 import { Attachment } from './attachmentType'
 
 @Resolver()
 export class AttachmentResolver {
-  @Mutation(() => Boolean)
-  async deleteAttachmentsByIds(
-    @Arg('ids', () => [ID]) ids: number[],
-    @Ctx() context: CustomContext
-  ): Promise<boolean> {
-    await deleteAttachmentsByIds(ids, context)
-    return true
-  }
-
+  // ----------------------------------
+  // QUERIES
+  // ----------------------------------
   @Query(() => Attachment, { nullable: true })
   async getAttachmentById(
     @Arg('id', () => ID) id: number,
@@ -34,5 +28,18 @@ export class AttachmentResolver {
     @Ctx() context: CustomContext
   ): Promise<Attachment[]> {
     return await getAttachmentsByIds(ids, context)
+  }
+
+  // ----------------------------------
+  // MUTATIONS
+  // ----------------------------------
+
+  @Mutation(() => Boolean)
+  async deleteAttachmentsByIds(
+    @Arg('ids', () => [ID]) ids: number[],
+    @Ctx() context: CustomContext
+  ): Promise<boolean> {
+    await deleteAttachmentsByIds(ids, context)
+    return true
   }
 }

@@ -99,6 +99,7 @@ build-frontend:
     <<: *cache_config
     policy: pull
   script:
+    - yarn install --frozen-lockfile --ignore-engines
     - yarn frontend build
   needs:
     - test-frontend
@@ -114,6 +115,7 @@ build-backend:
     <<: *cache_config
     policy: pull
   script:
+    - yarn install --frozen-lockfile --ignore-engines
     - yarn backend build
   needs:
     - lint

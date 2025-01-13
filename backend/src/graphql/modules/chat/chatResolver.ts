@@ -13,7 +13,7 @@ import {
 import { notifyUsersNewMessage } from '@backend/services/chatNotificationService'
 import { CustomContext } from '@backend/types/types'
 
-import { ChatMessage } from './chatMessage'
+import { ChatMessage } from './chatMessageType'
 import { Chat } from './chatType'
 
 const NEW_CHAT_MESSAGE = 'NEW_CHAT_MESSAGE'
@@ -107,7 +107,6 @@ export class ChatResolver {
   @Subscription(() => ChatMessage, {
     topics: NEW_CHAT_MESSAGE,
     filter: ({ payload, args }) => {
-      console.log('payload', payload)
       return payload.proceedingId === args.proceedingId
     },
   })
@@ -115,7 +114,6 @@ export class ChatResolver {
     @Arg('proceedingId', () => Int) proceedingId: number,
     @Root() payload: { newChatMessage: ChatMessage }
   ): ChatMessage {
-    console.log('payload.newMessage', payload.newChatMessage)
     return payload.newChatMessage
   }
 }

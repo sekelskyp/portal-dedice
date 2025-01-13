@@ -1,11 +1,10 @@
 import { BeneficiaryEntity } from '@backend/graphql/modules/beneficiary/beneficiaryRepository'
+import { sendEmail } from '@backend/services/emailService'
+import { findAvailableNotary } from '@backend/services/notaryAssignmentService'
+import { renderTemplate } from '@backend/services/templateService'
+import { CustomContext } from '@backend/types/types'
 
-import { CustomContext } from '../types/types'
-
-import { createAttachment } from './attachmentService'
-import { sendEmail } from './emailService'
-import { findAvailableNotary } from './notaryAssignmentService'
-import { renderTemplate } from './templateService'
+import { createAttachment } from '../attachment/attachmentService'
 
 const PROCEEDING_ATTACHMENT_LIMIT = 10
 
@@ -76,7 +75,6 @@ export async function createProceeding(
     municipality: data.deceasedPerson.addressMunicipality,
     postalCode: data.deceasedPerson.addressPostCode,
   })
-  console.log('before proceeding')
   // 4) create proceeding
   const proceedingData = {
     name: proceedingName,
@@ -239,6 +237,22 @@ export async function deleteProceedingsByIds(
   await context.proceedingRepository.deleteProceedingsByIds(ids)
 }
 
+// Private helper function to determine the sender's name and email
+function getEmailSender(
+  notaryUser: { displayName?: string; email?: string } | null
+): { senderName: string; senderEmail: string } {
+  if (notaryUser?.email) {
+    return {
+      senderName: notaryUser.displayName || 'Notary',
+      senderEmail: notaryUser.email,
+    }
+  }
+  return {
+    senderName: 'Portál dědice',
+    senderEmail: process.env.EMAIL_USERNAME || 'noreply@portal-dedice.cz',
+  }
+}
+
 // Remove a beneficiary from a procedure
 export async function notifyProceedingBeneficiaries(
   proceedingId: number,
@@ -273,41 +287,34 @@ export async function notifyProceedingBeneficiaries(
   )
   const beneficiaryUsers =
     await context.userRepository.getUsersByIds(beneficiaryUserIds)
-  // Determine the sender's name and email (we prefer the notary's details and fallback to the system email)
-  const emailSender = notaryUser?.email
-    ? {
-        senderName: notaryUser.displayName,
-        senderEmail: notaryUser.email,
-      }
-    : {
-        senderName: 'Portál dědice',
-        senderEmail: process.env.EMAIL_USERNAME,
-      }
-  // Loop through beneficiaries and send notifications
-  for (const user of beneficiaryUsers) {
-    if (!user.sendNotifications || !user.email) continue
+  // Determine the sender's name and email
+  const emailSender = getEmailSender(notaryUser)
+  // Loop through beneficiaries and send notifications in parallel
+  await Promise.all(
+    beneficiaryUsers
+      .filter((user) => user.sendNotifications && user.email) // Filter valid users
+      .map(async (user) => {
+        try {
+          // Render the template
+          const html = await renderTemplate('notification', {
+            recipientName: user.displayName,
+            messageBody,
+            procedureName: proceeding.name,
+            senderName: emailSender.senderName,
+            senderEmail: emailSender.senderEmail,
+          })
 
-    try {
-      // Render the template
-      const html = await renderTemplate('notification', {
-        recipientName: user.displayName,
-        messageBody,
-        procedureName: proceeding.name,
-        senderName: emailSender.senderName,
-        senderEmail: emailSender.senderEmail,
+          // Send the email
+          await sendEmail({
+            to: user.email,
+            subject,
+            html,
+          })
+        } catch (error) {
+          // Ignore errors and continue with other beneficiaries
+        }
       })
-
-      // Send the email
-      await sendEmail({
-        to: user.email,
-        subject,
-        html,
-      })
-    } catch (error) {
-      console.error(`Failed to notify beneficiary ID: ${user.id}:`, error)
-      continue // Continue notifying other beneficiaries
-    }
-  }
+  )
 }
 
 export async function assignNotaryToProcedure(

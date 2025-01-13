@@ -83,22 +83,6 @@ const init = async () => {
     path: '/graphql',
   })
 
-  wsServer.on('connection', (socket) => {
-    console.log('WebSocket connected')
-
-    socket.on('message', (message) => {
-      console.log('Received:', message.toString())
-    })
-
-    socket.on('close', () => {
-      console.log('WebSocket disconnected')
-    })
-
-    socket.on('error', (error) => {
-      console.error('WebSocket error:', error)
-    })
-  })
-
   // useServer is not react hook so disable eslint for next line
   // eslint-disable-next-line
   const wsServerCleanUp = useServer(

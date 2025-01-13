@@ -1,7 +1,10 @@
 import { ArticleEntity } from '@backend/graphql/modules/article/articleRepository'
 import { CustomContext } from '@backend/types/types'
 
-import { createAttachment, deleteAttachmentsByIds } from './attachmentService'
+import {
+  createAttachment,
+  deleteAttachmentsByIds,
+} from '../attachment/attachmentService'
 
 export interface FileData {
   stream: NodeJS.ReadableStream
@@ -109,8 +112,6 @@ export async function deleteArticlesByIds(
   if (userRecord.type !== 'Admin') {
     throw new Error('Not authorized')
   }
-  // For the purpose of MVP this is enough, but for improvement we could only mark files for deletion
-  // and delete them in a separate process with CRON later.
 
   // delete the attachment (cover image)
   await deleteAttachmentsByIds(ids, context)

@@ -1,7 +1,5 @@
-import * as fs from 'fs'
-
 import { AttachmentEntity } from '@backend/graphql/modules/attachment/attachmentRepository'
-import { storeFile } from '@backend/services/fileStorageService'
+import { deleteFiles, storeFile } from '@backend/services/fileStorageService'
 import { CustomContext } from '@backend/types/types'
 
 export interface CreateAttachmentInput {
@@ -51,21 +49,16 @@ export async function deleteAttachmentsByIds(
   ids: number[],
   context: CustomContext
 ): Promise<void> {
-  // For the purpose of MVP this is enough, but for improvement we could only mark files for deletion
-  // and delete them in a separate process with CRON later.
-
   // Get the attachment records
   const attachments =
     await context.attachmentRepository.getAttachmentsByIds(ids)
-  // Delete the files from the file system
-  attachments.forEach((attachment) => {
-    // Delete the file from the file system
-    fs.unlink(attachment.filepath, (err) => {
-      if (err) {
-        console.error(`Error deleting file: ${err}`)
-      }
-    })
-  })
+
+  // Extract file UUIDs from attachments
+  const fileUuids = attachments.map((attachment) => attachment.fileUuid)
+
+  // Use the `deleteFiles` function to delete files
+  await deleteFiles(fileUuids)
+
   // Delete the attachment records from the database
   await context.attachmentRepository.deleteAttachmentsByIds(ids)
 }
