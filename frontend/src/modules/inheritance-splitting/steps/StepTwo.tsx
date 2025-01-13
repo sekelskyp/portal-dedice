@@ -2,14 +2,14 @@ import { useEffect } from 'react'
 import { HStack, IconButton, VStack } from '@chakra-ui/react'
 import { createListCollection } from '@chakra-ui/react/collection'
 import { useFormContext } from 'react-hook-form'
-import { FaPlus } from 'react-icons/fa'
+import { FaPlus, FaTrash } from 'react-icons/fa'
 
 import { Checkbox } from '@frontend/shared/design-system/atoms/chakra/checkbox'
 import { InputFormControl, SelectFormControl } from '@frontend/shared/forms'
 
-import { FormData, StepProps } from './FormData'
-import { StepNavigation } from './StepNavigation'
-import { useWizard } from './useWizard'
+import { StepNavigation } from '../components/StepNavigation'
+import { useWizard } from '../context/useWizard'
+import { FormData, StepProps } from '../data/FormData'
 
 const assetTypeCollection = createListCollection({
   items: [
@@ -30,14 +30,9 @@ export const StepTwo = ({ onPrevious, onNext }: StepProps) => {
   const { watch, setValue, getValues } = useFormContext<FormData>()
   const { setCurrentStep } = useWizard()
   const hasSpouse = watch('hasSpouse')
-  //const heirs = watch('heirs') || []
   const assets = watch('assets')
 
-  const data = getValues()
-  //const assets = data.assets
-  const heirs = data.heirs
-
-  console.log('Data entered into step two: ', data)
+  const heirs = getValues().heirs
 
   const handleNext = () => {
     if (heirs && heirs.length === 1) {
@@ -50,6 +45,14 @@ export const StepTwo = ({ onPrevious, onNext }: StepProps) => {
     } else {
       onNext()
     }
+  }
+
+  const handleRemoveAsset = (indexToRemove: number) => {
+    const assets = watch('assets') || []
+    setValue(
+      'assets',
+      assets.filter((_, index) => index !== indexToRemove)
+    )
   }
 
   useEffect(() => {
@@ -76,7 +79,6 @@ export const StepTwo = ({ onPrevious, onNext }: StepProps) => {
             <InputFormControl
               label="Název položky"
               name={`assets.${index}.name`}
-              required
             />
             <InputFormControl
               label="Hodnota položky (Kč)"
@@ -103,26 +105,38 @@ export const StepTwo = ({ onPrevious, onNext }: StepProps) => {
           </Checkbox>
         </VStack>
       ))}
-      <IconButton
-        alignSelf="flex-start"
-        onClick={() => {
-          const assets = watch('assets') || []
-          setValue('assets', [
-            ...assets,
-            {
-              type: '',
-              name: '',
-              value: '',
-              isShared: true,
-              sharedOwner: 'pozůstalost',
-            },
-          ])
-        }}
-        p={4}
-      >
-        <FaPlus />
-        Přidat položku majetku
-      </IconButton>
+      <HStack width="100%" justify="space-between" alignItems="center">
+        <IconButton
+          aria-label="Přidat položku"
+          onClick={() => {
+            const assets = watch('assets') || []
+            setValue('assets', [
+              ...assets,
+              {
+                type: '',
+                name: '',
+                value: '',
+                isShared: true,
+                sharedOwner: 'pozůstalost',
+              },
+            ])
+          }}
+          colorScheme="blue"
+          size="md"
+        >
+          <FaPlus />
+        </IconButton>
+        {(watch('assets') || []).length > 0 && (
+          <IconButton
+            aria-label="Odstranit položku"
+            onClick={() => handleRemoveAsset(watch('assets')!.length - 1)}
+            bg="red.500"
+            size="md"
+          >
+            <FaTrash />
+          </IconButton>
+        )}
+      </HStack>
       <StepNavigation
         onPrevious={onPrevious}
         onNext={handleNext}

@@ -1,7 +1,7 @@
 export interface Asset {
   heir?: string
   isShared: boolean
-  name: string
+  name?: string
   type: string
   value: string
   sharedOwner?: 'manžel/ka' | 'pozůstalost'

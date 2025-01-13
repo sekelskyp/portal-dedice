@@ -5,9 +5,9 @@ import { useFormContext, useWatch } from 'react-hook-form'
 
 import { CheckboxFormControl, SelectFormControl } from '@frontend/shared/forms'
 
-import { BinaryRadioGroup } from './components/BinaryRadioGroup'
-import { FormData, Heir, StepProps } from './FormData'
-import { StepNavigation } from './StepNavigation'
+import { BinaryRadioGroup } from '../components/BinaryRadioGroup'
+import { StepNavigation } from '../components/StepNavigation'
+import { FormData, Heir, StepProps } from '../data/FormData'
 
 const countCollection = createListCollection({
   items: Array.from({ length: 10 }, (_, i) => ({
@@ -101,7 +101,6 @@ export const StepOne = ({ onPrevious, onNext }: StepProps) => {
     const isValid = await trigger()
     if (isValid) {
       const newHeirs = calculateHeirs()
-      console.log('Setting heirs:', newHeirs)
       setValue('heirs', newHeirs, { shouldValidate: true })
       onNext()
     }
