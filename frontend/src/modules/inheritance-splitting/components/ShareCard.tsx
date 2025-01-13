@@ -49,10 +49,10 @@ export const HeirShare = ({
           >
             <VStack align="start" gap={1}>
               <Text fontSize="lg" fontWeight="bold" color="green.600">
-                Celkem: {share.totalValue.toLocaleString()} Kč
+                Celkem získavá: {share.totalValue.toLocaleString()} Kč
               </Text>
               <Text fontSize="sm" color="gray.600">
-                Současný podíl:{' '}
+                Současný podíl:
                 {((share.totalValue / totalEstate) * 100).toFixed(1)}%
               </Text>
               <Text fontSize="sm" color="blue.600">
@@ -142,13 +142,15 @@ export const SjmShare = ({
             Celková hodnota: {totalValue.toLocaleString()} Kč
           </Text>
           <Text fontSize="sm" color="blue.600">
-            Očekávaný podíl manžela/ky: {expectedShare.toLocaleString()} Kč
+            Manžel/ka by z titulu vypořádaní SJM měla získat 1/2 hodnoty tedy:{' '}
+            {expectedShare.toLocaleString()} Kč
           </Text>
           <Text
             fontSize="sm"
             color={actualShare === expectedShare ? 'green.600' : 'orange.600'}
           >
-            Skutečný podíl manžela/ky: {actualShare.toLocaleString()} Kč
+            Manžel/ka z titulu vyspořádaní SJM dle modelace získala:{' '}
+            {actualShare.toLocaleString()} Kč
           </Text>
         </VStack>
       </Box>
