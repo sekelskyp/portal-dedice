@@ -41,7 +41,6 @@ export const useDeleteAsset = (proceedingId: number) => {
 
       return response.data.deleteAsset
     } catch (error) {
-      console.error('Delete asset error:', error)
       throw error
     }
   }

@@ -45,7 +45,6 @@ export const useUpdateAsset = () => {
       })
       return response.data.updateAsset
     } catch (err) {
-      console.error('Error updating asset:', err)
       throw err
     }
   }

@@ -151,7 +151,7 @@ export const AssetForm: React.FC<{
       await onSubmit(filteredData)
       methods.reset(filteredData)
     } catch (error) {
-      console.error('Form submission error:', error)
+      throw error
     } finally {
       setIsSubmitting(false)
     }

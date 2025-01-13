@@ -16,14 +16,11 @@ export const useAssetSection = (
 
   useEffect(() => {
     if (!selected && fields.length === 0) {
-      console.log(`Initializing ${name} with:`, defaultValue)
       append(defaultValue, { shouldFocus: false })
     }
   }, [selected, fields.length, append, defaultValue, name])
 
   const clearFields = () => {
-    console.log(`Clearing fields for ${name}`)
-    console.log('test123')
     if (Array.isArray(defaultValue)) {
       setValue(name, [], { shouldValidate: true })
     } else {

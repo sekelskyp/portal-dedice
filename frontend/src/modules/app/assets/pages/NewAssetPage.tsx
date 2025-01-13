@@ -42,7 +42,7 @@ export const NewAssetPage = () => {
 
         navigate(route.proceeding(proceedingId.toString()))
       } catch (error) {
-        console.error('Error managing assets:', error)
+        throw error
       }
     },
     [createAssetRequest, removeAsset, proceedingId, navigate, existingAssets]

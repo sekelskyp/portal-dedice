@@ -60,7 +60,6 @@ export const useAddAsset = () => {
       })
       return response.data.createAsset
     } catch (err) {
-      console.error('Error creating asset:', err)
       throw err
     }
   }
