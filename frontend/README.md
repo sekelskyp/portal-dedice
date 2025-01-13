@@ -1,47 +1,40 @@
-# 4IT580: Frontend
+# Frontend
 
-This app was created using [Vite](https://vitejs.dev/).
+## System Requirements
 
-## Local Installation
+- **Node.js**: v22.0 or higher
+- **Package Manager**: yarn v1.0 or higher
 
-Run `yarn install` in root folder of the monorepo:
+## Installation
 
-```bash
-cd ..
-yarn install
-cd frontend
+0. Enable YARN package manager
+
+   ```sh
+   corepack enable
+   ```
+
+1. Install dependencies:
+
+   ```sh
+   yarn install
+   ```
+
+2. Run the local development server:
+   ```sh
+   yarn workspace frontend dev
+   ```
+
+## Environment Variables
+
+Create a `.env` file in the root directory and add the following variables:
+
+- `VITE_GRAPHQL_API`: URL for the GraphQL API endpoint. You can set it to the appropriate endpoint for your environment.
+
+Example `.env` file:
+
+```
+VITE_GRAPHQL_API=http://localhost:4000/graphql
+
 ```
 
-## Available Scripts
-
-In the project directory, you can run:
-
-### `yarn dev`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-## Edit ENV Variables
-
-Create `./.env.local` inspired by [`./.env`](./.env).
-
-Any variable defined in `.env.local` has priority over `.env`.
-
-Any custom ENV variable that should be accessible in frontend needs an `VITE_` prefix (this is for security).
-
-More about [ENV variables in Vite documentation](https://vitejs.dev/guide/env-and-mode)
+For more advanced configuration, refer to the `.env.example` file provided in the repository.
