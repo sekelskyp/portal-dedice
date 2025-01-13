@@ -101,7 +101,6 @@ export const StepOne = ({ onPrevious, onNext }: StepProps) => {
     const isValid = await trigger()
     if (isValid) {
       const newHeirs = calculateHeirs()
-      console.log('Setting heirs:', newHeirs)
       setValue('heirs', newHeirs, { shouldValidate: true })
       onNext()
     }

@@ -44,11 +44,11 @@ const assetTypeToIcon: IconMap = {
   'termínovaný vklad': <BsClockHistory size={32} />,
   'stavební spoření': <BsBuildings size={32} />,
   'cenné papíry': <BsGraphUp size={32} />,
-  hotovost: <BsCashStack size={32} />,
-  vozidlo: <BsCarFront size={32} />,
-  nemovitost: <BsHouseDoor size={32} />,
+  'hotovost': <BsCashStack size={32} />,
+  'vozidlo': <BsCarFront size={32} />,
+  'nemovitost': <BsHouseDoor size={32} />,
   'přeplatky energií': <BsLightningCharge size={32} />,
-  cennosti: <BsGem size={32} />,
+  'cennosti': <BsGem size={32} />,
 }
 
 interface AssetIconProps {
@@ -124,7 +124,7 @@ export const AssetCard = ({
               mt={[2, 0]}
             >
               <Text whiteSpace="nowrap" color="gray.600" minW="fit-content">
-                Přiřadit k:
+                Vypořádání SJM:
               </Text>
               <Box flex="1">
                 <SelectFormControl
@@ -145,7 +145,7 @@ export const AssetCard = ({
             mt={[2, 0]}
           >
             <Text whiteSpace="nowrap" color="gray.600" minW="fit-content">
-              * Návrh rozdělení:
+              * Rozdělení v pozůstalosti:
             </Text>
             <Box flex="1">
               <SelectFormControl

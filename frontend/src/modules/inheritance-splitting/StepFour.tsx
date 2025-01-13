@@ -16,27 +16,19 @@ export const StepFour = ({ onPrevious, onNext }: StepProps) => {
   const heirs = getValues().heirs || []
 
   const spouse = heirs.find((heir) => heir.type === 'spouse')
-  //Najdem SJM assety
   const sharedAssets = assets.filter((asset) => asset.isShared)
-
-  //Najdem nie SJM assety === tie ktore idu do pozostalosti
   const notSharedAsssets = assets.filter((a) => a.sharedOwner === 'pozůstalost')
 
-  //Vypocitam celkovu hodnotu
   const sharedTotal = sharedAssets.reduce(
     (sum, asset) => sum + (Number(asset.value) || 0),
     0
   )
+  const pozostalostTotal = notSharedAsssets.reduce(
+    (sum, a) => sum + (Number(a.value) || 0),
+    0
+  )
 
-  //Zobrat rozdiel SJM a pozostalosti a do posiela manzelka
-  const pozostalostTotal =
-    notSharedAsssets.reduce((sum, a) => sum + (Number(a.value) || 0), 0) +
-    sharedTotal * 0.5
-
-  //Manzel/ka ma ocakavany podiel 50%
   const expectedSpouseShare = sharedTotal / 2
-
-  //To co naozaj dostane manzelka podla toho co som zaklikal
   const sharedHalf = sharedAssets
     .filter(
       (asset) => asset.sharedOwner === 'manžel/ka' && asset.heir === spouse?.id
@@ -51,16 +43,7 @@ export const StepFour = ({ onPrevious, onNext }: StepProps) => {
         heirId: heir.id || '',
         heirLabel: heir.label,
         totalValue: heir.type === 'spouse' ? sharedHalf : 0,
-        assets:
-          heir.type === 'spouse'
-            ? [
-                {
-                  name: 'Podíl ze SJM',
-                  value: sharedHalf,
-                  percentage: (sharedHalf / sharedTotal) * 100,
-                },
-              ]
-            : [],
+        assets: [],
       }
     })
 

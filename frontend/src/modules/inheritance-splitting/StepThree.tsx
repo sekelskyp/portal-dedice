@@ -15,7 +15,6 @@ export const StepThree = ({ onPrevious, onNext }: StepProps) => {
   const getHeirCollection = useCallback(
     (isIndivisible: boolean) => {
       if (!heirs) {
-        console.warn('No heirs available for collection')
         return createListCollection({ items: [] })
       }
 

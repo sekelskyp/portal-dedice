@@ -66,25 +66,25 @@ const stepOneSchema = z
       if (!data.hasLivedWithDeceased) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: 'Prosím vyberte jestli zůstavitel/ka s nekym zila',
+          message: 'Prosím zvolte jestli zůstavitel/ka s někým žila',
           path: ['hasLivedWithDeceased'],
         })
       } else if (!data.hasParents) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: 'Prosím vyberte jestli zůstavitel/ka ma rodice',
+          message: 'Prosím zvolte jestli zůstavitel/ka má rodiče',
           path: ['hasParents'],
         })
       } else if (data.hasParents === 'ne' && !data.hasSiblings) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: 'Prosím vyberte jestli zůstavitel/ka ma sourozence',
+          message: 'Prosím vyberte jestli zůstavitel/ka má sourozence',
           path: ['hasSiblings'],
         })
       } else if (data.hasSiblings === 'ano' && !data.siblingsCount) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: 'Prosím zvolte pocet sourozencu',
+          message: 'Prosím zvolte počet sourozenců',
           path: ['siblingsCount'],
         })
       }
@@ -92,7 +92,7 @@ const stepOneSchema = z
   }) satisfies z.ZodType<FormData>
 
 const stepTwoSchema = z.object({
-  assets: z.array(assetSchema).min(1, 'Musite pridat alespon jeden majetek'),
+  assets: z.array(assetSchema).min(1, 'Přidejte alespoň jeden majetek'),
 })
 
 const InheritanceModel = () => {
@@ -191,7 +191,7 @@ Vložené informace a data se nijak neukládají ani nezaznamenávají."
           {currentStep === 3 && (
             <StepLayout
               title="Návrh rozdělení majetku mezi dědice"
-              description="Navrhněte rozdělení majetku mezi dědice"
+              description="Navrhněte rozdělení v souladu s pokyny níže."
               popoverTitle="Jak postupovat?"
               popoverItems={stepThreeItems}
             >
@@ -201,7 +201,7 @@ Vložené informace a data se nijak neukládají ani nezaznamenávají."
           {currentStep === 4 && (
             <StepLayout
               title="Výsledek dědického řízení"
-              description="Přehled rozdělení majetku mezi dědice"
+              description="Rekapitulace vypořádaní SJM a rozdělení pozůstalosti mezi dědice"
             >
               <StepFour onPrevious={handlePrevious} onNext={handleNext} />
             </StepLayout>
