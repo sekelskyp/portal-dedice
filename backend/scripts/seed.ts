@@ -13,8 +13,8 @@ import {
   proceeding,
   user,
 } from '../src/db/schema'
+import { generateProceedingName } from '../src/graphql/modules/proceeding/proceedingService'
 import { hashPassword } from '../src/services/passwordHashService'
-import { generateProceedingName } from '../src/services/proceedingService'
 
 import { seedNotariesAndDateRules } from './seedNotaries'
 
