@@ -13,6 +13,7 @@ import {
 import { Asset } from '@backend/graphql/modules/asset/assetType'
 import { CustomContext } from '@backend/types/types'
 
+import { Address } from '../address/adressType'
 import { Attachment } from '../attachment/attachmentType'
 import { BeneficiaryEntity } from '../beneficiary/beneficiaryRepository'
 import { Beneficiary } from '../beneficiary/beneficiaryType'
@@ -273,5 +274,17 @@ export class InheritanceProcedureResolver {
     @Ctx() { assetRepository }: CustomContext
   ): Promise<Asset[]> {
     return await assetRepository.getAssetsByProcedureId(proceeding.id)
+  }
+
+  // Field Resolver to fetch address
+  @FieldResolver(() => Address, { nullable: true })
+  async deceasedAddress(
+    @Root() proceeding: Proceeding,
+    @Ctx() { addressRepository }: CustomContext
+  ): Promise<Address | null> {
+    if (!proceeding.deceasedAddressId) {
+      return null
+    }
+    return await addressRepository.getAddressById(proceeding.deceasedAddressId)
   }
 }

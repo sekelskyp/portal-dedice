@@ -12,7 +12,6 @@ import {} from '@frontend/shared/design-system/atoms/chakra'
 import { UserAvatar } from '../../components/UserAvatar'
 
 interface User {
-  id: string
   name: string
   surname: string
   email: string

@@ -418,6 +418,7 @@ export type NotaryDateRuleInput = {
 export type Proceeding = {
   __typename?: 'Proceeding'
   beneficiaries?: Maybe<Array<Beneficiary>>
+  deceasedAddress?: Maybe<Address>
   deceasedAddressId?: Maybe<Scalars['ID']['output']>
   deceasedDateOfBirth: Scalars['DateTimeISO']['output']
   deceasedDateOfDeath: Scalars['DateTimeISO']['output']
@@ -1015,6 +1016,14 @@ export type GetProceedingByIdQuery = {
         type: string
       } | null
     }> | null
+    deceasedAddress?: {
+      __typename?: 'Address'
+      id: string
+      street: string
+      streetNumber: string
+      municipality: string
+      postalCode: string
+    } | null
     notary?: {
       __typename?: 'Notary'
       id: string
@@ -2901,6 +2910,32 @@ export const GetProceedingByIdDocument = {
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'deceasedAddressId' },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'deceasedAddress' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'street' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'streetNumber' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'municipality' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'postalCode' },
+                      },
+                    ],
+                  },
                 },
                 { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'state' } },

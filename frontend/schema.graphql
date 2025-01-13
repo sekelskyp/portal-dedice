@@ -210,6 +210,7 @@ input NotaryDateRuleInput {
 
 type Proceeding {
   beneficiaries: [Beneficiary!]
+  deceasedAddress: Address
   deceasedAddressId: ID
   deceasedDateOfBirth: DateTimeISO!
   deceasedDateOfDeath: DateTimeISO!

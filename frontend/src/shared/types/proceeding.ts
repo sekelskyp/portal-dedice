@@ -1,3 +1,5 @@
+import { Address } from '@frontend/gql/graphql'
+
 import { Asset } from './asset'
 import { Beneficiary } from './beneficiary'
 import { Notary } from './notary'
@@ -8,6 +10,7 @@ export interface Proceeding {
   deceasedDateOfDeath: Date
   deceasedDateOfBirth: Date
   deceasedAddressId?: string | null
+  deceasedAddress?: Address | null
   id: string
   state: string
   notaryId?: string | null

@@ -53,6 +53,13 @@ export const GET_PROCEEDING_QUERY = gql(/* GraphQL */ `
       deceasedDateOfDeath
       deceasedDateOfBirth
       deceasedAddressId
+      deceasedAddress {
+        id
+        street
+        streetNumber
+        municipality
+        postalCode
+      }
       id
       state
       notaryId

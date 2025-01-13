@@ -10,6 +10,7 @@ interface WizardContextType {
   formMethods: UseFormReturn<FormData>
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const WizardContext = createContext<WizardContextType | undefined>(
   undefined
 )

@@ -30,6 +30,7 @@
     "@tanstack/react-table": "^8.20.5",
     "apollo-upload-client": "^18.0.1",
     "cross-fetch": "^4.0.0",
+    "date-fns": "^4.1.0",
     "graphql-tag": "^2.12.6",
     "lucide-react": "^0.460.0",
     "next-themes": "^0.3.0",
