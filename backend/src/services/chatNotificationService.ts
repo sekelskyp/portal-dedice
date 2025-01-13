@@ -1,16 +1,17 @@
 import { CustomContext } from '@backend/types/types'
 
+import { getUsersForProceeding } from '../graphql/modules/proceeding/proceedingService'
+
 import { sendEmail } from './emailService'
-import { getUsersForProceeding } from './proceedingService'
 import { renderTemplate } from './templateService'
 
 export const notifyUsersNewMessage = async ({
   chatId,
   senderId,
-  context,
   senderDisplayName,
   messageBody,
   senderEmail,
+  context,
 }: {
   chatId: number
   senderId: number
@@ -19,18 +20,24 @@ export const notifyUsersNewMessage = async ({
   senderEmail: string
   context: CustomContext
 }) => {
+  // Fetch chat and validate
   const chat = await context.chatRepository.getChatById(chatId)
   if (!chat) {
     throw new Error('Chat not found')
   }
+
+  // Fetch proceeding and validate
   const proceeding = await context.proceedingRepository.getProceedingById(
     chat.proceedingId
   )
   if (!proceeding) {
     throw new Error('Proceeding not found')
   }
+
+  // Get users to notify
   const usersToNotify = await getUsersForProceeding(proceeding.id, context)
 
+  // Render the email template once
   const html = await renderTemplate('chatNotification', {
     proceedingName: proceeding.name,
     senderName: senderDisplayName,
@@ -38,35 +45,33 @@ export const notifyUsersNewMessage = async ({
     messageBody,
   })
 
-  for (const user of usersToNotify) {
-    if (user.id === senderId) {
-      console.log(
-        `Skipping email notification for user ${user.id} for procedure ${proceeding.id}`
-      )
-      continue
-    }
+  // Filter users to notify (exclude sender and those without notifications enabled)
+  const filteredUsers = usersToNotify.filter(
+    (user) => user.id !== senderId && user.sendNotifications
+  )
 
-    if (!user.sendNotifications) {
-      // console.log(
-      //   `Skipping email notification, notifications disabled for user ${user.id} for procedure ${proceeding.id}`
-      // )
-      continue
-    }
+  // Notify users
+  await Promise.all(
+    filteredUsers.map((user) =>
+      sendNotificationEmail(user, html, proceeding.name)
+    )
+  )
+}
 
-    // console.log(
-    //   `Sending email notification to user ${user.id} for procedure ${proceeding.id}`
-    // )
-
-    try {
-      await sendEmail({
-        to: user.email,
-        subject: `Nová zpráva v dědickém řízení ${proceeding.name}`,
-        html,
-      })
-    } catch (error) {
-      console.error(
-        `Error sending email notification to user ${user.id} for procedure ${proceeding.id}`
-      )
-    }
+// Private function for sending notification emails
+async function sendNotificationEmail(
+  user: { id: number; email: string; sendNotifications: boolean },
+  html: string,
+  proceedingName: string
+): Promise<void> {
+  try {
+    await sendEmail({
+      to: user.email,
+      subject: `Nová zpráva v dědickém řízení ${proceedingName}`,
+      html,
+    })
+  } catch {
+    // Log error without interrupting other notifications
+    console.error(`Error sending email notification to user ${user.id}`)
   }
 }

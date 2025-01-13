@@ -15,6 +15,18 @@ export interface StoreFileResult {
   filePath: string
 }
 
+// Define custom error for file operations
+export class FileError extends Error {
+  constructor(
+    message: string,
+    public readonly details?: Record<string, unknown>
+  ) {
+    super(message)
+    this.name = 'FileError'
+  }
+}
+
+// Function to store a file
 export async function storeFile(input: FileInput): Promise<StoreFileResult> {
   const fileUuid = uuidv4()
   const filePath = path.join(FILE_UPLOADS_DIR, fileUuid)
@@ -29,20 +41,21 @@ export async function storeFile(input: FileInput): Promise<StoreFileResult> {
 
     await new Promise<void>((resolve, reject) => {
       writeStream.on('finish', resolve)
-      writeStream.on('error', (error) => {
-        console.error(`Error writing file: ${error}`)
-        reject(new Error('Error writing file'))
-      })
+      writeStream.on('error', (err: NodeJS.ErrnoException) =>
+        reject(new FileError('Error writing file', { error: err }))
+      )
     })
 
-    console.log(`File saved successfully: ${filePath}`)
     return { fileUuid, filePath }
   } catch (error) {
-    console.error(`Error storing file: ${error}`)
-    throw new Error('Failed to store file')
+    if (error instanceof Error) {
+      throw new FileError('Failed to store file', { originalError: error })
+    }
+    throw error // Ensure untyped errors are still propagated
   }
 }
 
+// Function to retrieve a file
 export async function retrieveFile(
   fileUuid: string
 ): Promise<NodeJS.ReadableStream> {
@@ -55,16 +68,20 @@ export async function retrieveFile(
     // Return the file as a readable stream
     return fs.createReadStream(filePath)
   } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-      console.error(`File not found: ${filePath}`)
-      throw new Error('File not found')
-    } else {
-      console.error(`Error retrieving file: ${error}`)
-      throw new Error('Failed to retrieve file')
+    if (
+      error instanceof Error &&
+      (error as NodeJS.ErrnoException).code === 'ENOENT'
+    ) {
+      throw new FileError('File not found', { fileUuid })
     }
+    if (error instanceof Error) {
+      throw new FileError('Failed to retrieve file', { originalError: error })
+    }
+    throw error
   }
 }
 
+// Function to delete files
 export async function deleteFiles(uuids: string[]): Promise<void> {
   const filePaths = uuids.map((uuid) => path.join(FILE_UPLOADS_DIR, uuid))
 
@@ -73,13 +90,21 @@ export async function deleteFiles(uuids: string[]): Promise<void> {
       try {
         // Delete file asynchronously
         await fs.promises.unlink(filePath)
-        console.log(`Deleted file: ${filePath}`)
       } catch (error) {
-        if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-          console.warn(`File not found: ${filePath}`)
-        } else {
-          console.error(`Error deleting file ${filePath}:`, error)
+        if (
+          error instanceof Error &&
+          (error as NodeJS.ErrnoException).code === 'ENOENT'
+        ) {
+          // File not found, ignore
+          return
         }
+        if (error instanceof Error) {
+          throw new FileError('Failed to delete file', {
+            filePath,
+            originalError: error,
+          })
+        }
+        throw error
       }
     })
   )

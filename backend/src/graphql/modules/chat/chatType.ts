@@ -1,6 +1,6 @@
 import { Field, ID, ObjectType } from 'type-graphql'
 
-import { ChatMessage } from './chatMessage'
+import { ChatMessage } from './chatMessageType'
 
 @ObjectType()
 export class Chat {
