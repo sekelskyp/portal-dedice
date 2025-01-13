@@ -142,13 +142,15 @@ export const SjmShare = ({
             Celková hodnota: {totalValue.toLocaleString()} Kč
           </Text>
           <Text fontSize="sm" color="blue.600">
-            Manžel/ka by z titulu vypořádaní SJM měla získat 1/2 hodnoty tedy: {expectedShare.toLocaleString()} Kč
+            Manžel/ka by z titulu vypořádaní SJM měla získat 1/2 hodnoty tedy:{' '}
+            {expectedShare.toLocaleString()} Kč
           </Text>
           <Text
             fontSize="sm"
             color={actualShare === expectedShare ? 'green.600' : 'orange.600'}
           >
-            Manžel/ka z titulu vyspořádaní SJM dle modelace získala: {actualShare.toLocaleString()} Kč
+            Manžel/ka z titulu vyspořádaní SJM dle modelace získala:{' '}
+            {actualShare.toLocaleString()} Kč
           </Text>
         </VStack>
       </Box>
