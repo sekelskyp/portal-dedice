@@ -34,8 +34,12 @@ export default function ChatHeader({
         <Text>Načítání...</Text>
       ) : (
         <>
-          <Heading as="h2">Chat s uživateli: {allNames} </Heading>
-          <Text fontSize="lg">Řízení: {proceedingName}</Text>
+          <Heading size={['md', 'lg', 'xl']}>
+            Chat s uživateli: {allNames}{' '}
+          </Heading>
+          <Text fontSize={{ base: 'md', md: 'lg' }} pt={2}>
+            Řízení: {proceedingName}
+          </Text>
         </>
       )}
     </Box>
