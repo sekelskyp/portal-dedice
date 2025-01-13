@@ -19,8 +19,6 @@ import { UserItem, UserTable } from '../components/UserTable'
 import { useGetAllUsers } from '../hooks/useGetAllUsers'
 import { loadUsers } from '../utils/user-utils'
 
-//TODO: add routing to invite page when it's ready
-
 export function UserManagement() {
   const { user, token } = useAuth()
   const { data, loading, error } = useGetAllUsers()

@@ -74,7 +74,7 @@ export function useProceedingsTable({ data }: { data: ProceedingsItem[] }) {
           header: () => 'Datum zahájení',
           cell: (info) => {
             const date = info.getValue()
-            const formattedDate = date ? date.split('T')[0] : ''
+            const formattedDate = new Date(date).toLocaleDateString()
             return formattedDate
           },
           enableColumnFilter: false,

@@ -52,6 +52,4 @@ export {
   toaster,
   Tooltip,
 } from './chakra/index'
-// export { Link, type LinkProps } from './Link'
-// export { NavLink, type NavLinkProps } from './NavLink'
 export { Box, type BoxProps, Stack, type StackProps } from '@chakra-ui/react'

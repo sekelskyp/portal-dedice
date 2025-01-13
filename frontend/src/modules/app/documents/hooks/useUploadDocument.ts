@@ -13,13 +13,13 @@ const UPDATE_DOCUMENT_MUTATION = gql(/* GraphQL */ `
 
 export function useUploadDocument() {
   const navigate = useNavigate()
-  const { id } = useParams()
+  const { proceedingId } = useParams<{ proceedingId: string }>()
 
   const [uploadDocumentRequest, uploadDocumentRequestState] = useMutation(
     UPDATE_DOCUMENT_MUTATION,
     {
       onCompleted: () => {
-        navigate(route.proceeding(id))
+        navigate(route.proceeding(proceedingId))
       },
       onError: () => {
         toaster.create({

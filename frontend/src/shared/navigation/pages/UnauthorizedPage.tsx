@@ -1,5 +1,5 @@
 import { Center, Icon, Stack, Text } from '@chakra-ui/react'
-import { FiAlertCircle } from 'react-icons/fi'
+import { CircleAlert } from 'lucide-react'
 
 import { Page } from '@frontend/shared/layout'
 import { route } from '@shared/route'
@@ -14,7 +14,7 @@ export function UnauthorizedPage() {
           boxSize={{ base: '48px', sm: '64px', md: '72px' }}
           color="red.500"
         >
-          <FiAlertCircle />
+          <CircleAlert />
         </Icon>
         <Text fontSize={{ sm: 'xl', md: '2xl', lg: '3xl' }} fontWeight="bold">
           Přístup zamítnut.
