@@ -8,6 +8,12 @@
 
 ## Installation
 
+0. Enable YARN package manager
+
+   ```sh
+   corepack enable
+   ```
+
 1. Install dependencies:
 
    ```sh
