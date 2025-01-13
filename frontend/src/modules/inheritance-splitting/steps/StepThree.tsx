@@ -3,9 +3,9 @@ import { Box, Text, VStack } from '@chakra-ui/react'
 import { createListCollection } from '@chakra-ui/react/collection'
 import { useFormContext } from 'react-hook-form'
 
-import { AssetCard } from './components/AssetCard'
-import { FormData, StepProps } from './FormData'
-import { StepNavigation } from './StepNavigation'
+import { AssetCard } from '../components/AssetCard'
+import { StepNavigation } from '../components/StepNavigation'
+import { FormData, StepProps } from '../data/FormData'
 
 export const StepThree = ({ onPrevious, onNext }: StepProps) => {
   const { getValues } = useFormContext<FormData>()

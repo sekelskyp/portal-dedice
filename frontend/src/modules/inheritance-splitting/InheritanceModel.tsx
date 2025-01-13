@@ -7,12 +7,12 @@ import { Form } from '@frontend/shared/forms/Form'
 
 import { InheritanceProgress } from './components/InheritanceProgress'
 import { StepLayout } from './components/StepLayout'
-import { Asset, FormData, Heir } from './FormData'
-import { StepFour } from './StepFour'
-import { StepOne } from './StepOne'
-import { StepThree } from './StepThree'
-import { StepTwo } from './StepTwo'
-import { WizardProvider } from './WizardContext'
+import { WizardProvider } from './context/WizardContext'
+import { Asset, FormData, Heir } from './data/FormData'
+import { StepFour } from './steps/StepFour'
+import { StepOne } from './steps/StepOne'
+import { StepThree } from './steps/StepThree'
+import { StepTwo } from './steps/StepTwo'
 
 const assetSchema = z.object({
   heir: z.string().optional(),
@@ -137,7 +137,6 @@ const InheritanceModel = () => {
 
   const onSubmit = (data: FormData) => {
     if (currentStep === 4) {
-      console.log('Final submission:', data)
     } else if (currentStep === 2 && data.heirs?.length === 1) {
       setCurrentStep(4)
     } else {
@@ -165,7 +164,9 @@ const InheritanceModel = () => {
       <FormProvider {...methods}>
         <Form
           onSubmit={onSubmit}
-          resolver={zodResolver(currentStep === 1 ? stepOneSchema : stepTwoSchema)}
+          resolver={zodResolver(
+            currentStep === 1 ? stepOneSchema : stepTwoSchema
+          )}
           noValidate
         >
           <InheritanceProgress currentStep={currentStep} />

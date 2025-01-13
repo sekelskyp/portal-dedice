@@ -6,9 +6,9 @@ import {
   InheritanceShare,
   SjmShare,
   Transfer,
-} from './components/ShareCard'
-import { FormData, StepProps } from './FormData'
-import { StepNavigation } from './StepNavigation'
+} from '../components/ShareCard'
+import { StepNavigation } from '../components/StepNavigation'
+import { FormData, StepProps } from '../data/FormData'
 
 export const StepFour = ({ onPrevious, onNext }: StepProps) => {
   const { getValues } = useFormContext<FormData>()

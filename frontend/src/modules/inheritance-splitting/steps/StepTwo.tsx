@@ -7,9 +7,9 @@ import { FaPlus, FaTrash } from 'react-icons/fa'
 import { Checkbox } from '@frontend/shared/design-system/atoms/chakra/checkbox'
 import { InputFormControl, SelectFormControl } from '@frontend/shared/forms'
 
-import { FormData, StepProps } from './FormData'
-import { StepNavigation } from './StepNavigation'
-import { useWizard } from './useWizard'
+import { StepNavigation } from '../components/StepNavigation'
+import { useWizard } from '../context/useWizard'
+import { FormData, StepProps } from '../data/FormData'
 
 const assetTypeCollection = createListCollection({
   items: [

@@ -1,7 +1,7 @@
 import { createContext, ReactNode } from 'react'
 import { UseFormReturn } from 'react-hook-form'
 
-import { FormData } from './FormData'
+import { FormData } from './data/FormData'
 
 interface WizardContextType {
   formData: FormData
