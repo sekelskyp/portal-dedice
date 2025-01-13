@@ -6,8 +6,6 @@ import { route } from '@shared/route'
 
 import { useAuth } from '../auth-core'
 
-//TODO: fix query and components
-
 const SIGNIN_MUTATION = gql(/* GraphQL */ `
   mutation SignIn($login: String!, $password: String!) {
     signIn(login: $login, password: $password) {
@@ -30,6 +28,7 @@ const SIGNIN_MUTATION = gql(/* GraphQL */ `
         sendNotifications
         surname
         type
+        notaryId
       }
       token
     }
@@ -42,7 +41,14 @@ export function useSignIn() {
 
   const [signInRequest, signInRequestState] = useMutation(SIGNIN_MUTATION, {
     onCompleted: ({ signIn: { user, token } }) => {
-      auth.signIn({ token, user: { ...user, addressId: user.addressId ?? '' } })
+      auth.signIn({
+        token,
+        user: {
+          ...user,
+          addressId: user.addressId ?? '',
+          notaryId: user.notaryId ?? '',
+        },
+      })
       navigate(route.portal())
     },
     onError: () => {},

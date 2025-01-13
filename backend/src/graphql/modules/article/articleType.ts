@@ -14,6 +14,6 @@ export class Article {
   @Field(() => String)
   content!: string
 
-  @Field(() => String)
-  coverImage!: string
+  @Field(() => ID, { nullable: true })
+  coverImageAttachmentId!: number | null
 }

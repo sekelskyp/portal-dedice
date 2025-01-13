@@ -9,6 +9,14 @@ export default defineConfig({
   plugins: [react(), tsconfigPaths()],
   server: {
     port: 3000,
+    proxy: {
+      // Proxy `/files` to the backend on port 4000
+      '/files': {
+        target: 'http://localhost:4000', // Backend server
+        changeOrigin: true, // Adjust the origin to match the target
+        secure: false, // For development only (disable SSL verification)
+      },
+    },
   },
   build: {
     outDir: 'build',

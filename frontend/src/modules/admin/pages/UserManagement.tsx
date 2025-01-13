@@ -1,4 +1,12 @@
-import { Card, Heading, HStack, Spinner, Stack, Text } from '@chakra-ui/react'
+import {
+  Card,
+  Container,
+  Heading,
+  HStack,
+  Spinner,
+  Stack,
+  Text,
+} from '@chakra-ui/react'
 import { IoPersonAddSharp } from 'react-icons/io5'
 
 import { useAuth } from '@frontend/modules/auth'
@@ -35,7 +43,7 @@ export function UserManagement() {
 
   if (token && isAdmin) {
     return (
-      <Stack gap={8} p={{ base: 4, md: 8 }} mx={{ base: 0, sm: 4, md: 8 }}>
+      <Container gap={8} maxW="container.xl" py={16} px={0}>
         <Card.Root>
           <Card.Header
             as={HStack}
@@ -61,7 +69,7 @@ export function UserManagement() {
             )}
           </Card.Body>
         </Card.Root>
-      </Stack>
+      </Container>
     )
   } else {
     return <UnauthorizedPage />

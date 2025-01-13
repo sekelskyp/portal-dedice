@@ -6,7 +6,10 @@ import { Button } from '@frontend/shared/design-system'
 import { SimpleCentered } from '@frontend/shared/design-system/atoms/CTA/SimpleCentered'
 import { SplitWithImage } from '@frontend/shared/design-system/atoms/CTA/SplitWithImage'
 import { Page } from '@frontend/shared/layout'
+import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { route } from '@shared/route'
+
+import { HomePageShowcase } from '../components/HomePageShowcase'
 
 export function HomePage() {
   const { user } = useAuth()
@@ -18,17 +21,25 @@ export function HomePage() {
         imageAlt="Ilustrace dvou lidí držících se za ruce."
       >
         <Heading as="h3" size="4xl">
-          Hledáte pomoc při dědickém řízení?
+          Portál Dědice
         </Heading>
-        <Text>Využijte náš interaktivní nástroj pro řízení pozůstalosti.</Text>
-        <Button asChild>
-          <Link to={route.wizard()}>Pojďme na to!</Link>
-        </Button>
-        <Button asChild>
-          <Link to={route.inheritance()}>
-            Vypořádání pozůstalosti nanečisto
-          </Link>
-        </Button>
+        <Heading size="xl">
+          Váš průvodce pozůstalostním řízením.{' '}
+          <Text as="span" color="primary.600">
+            Přehledně a online.
+          </Text>
+        </Heading>
+        <Text mr={16} textAlign="justify" lineHeight={1.8}>
+          Potřebujete poradit s pozůstalostním řízením? Nebo chcete vyřešit
+          předběžné šetření online? Portál dědice vám srozumitelně vysvětlí vše,
+          co potřebujete vědět a pomůze vám vyřešit předběžné šetření online.
+        </Text>
+        <Stack direction={{ base: 'column', md: 'row' }} gap={4}>
+          <RouterNavLink to={route.wizard()}>Průvodce řízením</RouterNavLink>
+          <RouterNavLink to={route.signUp()}>
+            Předběžné šetření online
+          </RouterNavLink>
+        </Stack>
       </SplitWithImage>
       {!user && (
         <SimpleCentered bgColor="blue.bg">
@@ -36,14 +47,18 @@ export function HomePage() {
             Řešíte předběžné šetření?
           </Heading>
           <Text>
-            Komunikujte s notářem a ostatními dědici v řešení pro předběžné
-            šetření. Zaregistujte se a získejte přístup k nástroji.
+            Komunikujte s notářem a ostatními dědici v portálu pro předběžné
+            šetření. Zaregistujte se a získejte přístup k portálu.
           </Text>
           <Button size="lg" asChild>
-            <Link to={route.signIn()}>Přihlásit se</Link>
+            <Link to={route.signUp()}>Registrovat se</Link>
           </Button>
         </SimpleCentered>
       )}
+      <Heading size="3xl" textAlign="center">
+        Služby Portálu Dědice
+      </Heading>
+      <HomePageShowcase />
     </Page>
   )
 }

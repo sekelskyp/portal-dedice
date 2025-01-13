@@ -1,35 +1,43 @@
-import React from 'react'
+import { useEffect, useState } from 'react'
 import {
   Box,
   Card,
+  Editable,
   Heading,
   HStack,
+  IconButton,
   Spinner,
   Stack,
   Tabs,
   Text,
 } from '@chakra-ui/react'
-import { LuFile } from 'react-icons/lu'
-import { useParams } from 'react-router-dom'
+import { LockIcon } from 'lucide-react'
+import { LuCheck, LuFile, LuPencilLine, LuX } from 'react-icons/lu'
 
-import { useAuth } from '@frontend/modules/auth'
-import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
+import { Alert, Button } from '@frontend/shared/design-system'
 
 import { Assets } from '../../assets/tab/Assets'
 import { Documents } from '../../documents/tab/Documents'
+import { useProceedingContext } from '../components/ProceedingLayout'
 import { RewardCalculator } from '../components/RewardCalculator'
 import { StatusBadge } from '../components/StatusBadge'
-import { useProceeding } from '../hooks/useProceeding'
 
 import { ProceedingDetail } from './ProceedingDetail'
 
-const InheritanceProcedureDetail: React.FC = () => {
-  const user = useAuth()
-  const { id } = useParams()
+export const ProceedingPage = () => {
+  const {
+    loading,
+    proceeding,
+    error,
+    isEditable,
+    setName: commitName,
+    close,
+  } = useProceedingContext()
+  const [name, setName] = useState(proceeding?.name ?? '')
 
-  const { data, loading, error } = useProceeding(+id!)
-
-  const proceeding = data?.getProceedingById
+  useEffect(() => {
+    setName(proceeding?.name ?? '')
+  }, [proceeding, setName])
 
   if (loading) {
     return (
@@ -39,82 +47,121 @@ const InheritanceProcedureDetail: React.FC = () => {
     )
   }
 
-  if (error) {
+  if (error)
     return (
-      <Box textAlign="center" py={10} px={6}>
-        <Text>{error.message}</Text>
-      </Box>
+      <Alert
+        status="error"
+        title={error?.message || 'Chyba při načítání řízení.'}
+      />
     )
-  }
 
-  if (!user.token) {
-    return <UnauthorizedPage />
-  } else {
-    return (
-      <Stack display="flex" alignItems="center" justifyContent="center">
-        {proceeding ? (
-          <Card.Root w="full">
-            <Card.Header as={HStack} gap={4}>
-              <LuFile size={24} />
-              <Heading>{proceeding?.name}</Heading>
-              <StatusBadge ml="auto" state={proceeding.state} />
-            </Card.Header>
-            <Card.Body gap={4}>
-              <Tabs.Root
-                defaultValue="detail"
-                size={{ base: 'sm', md: 'lg' }}
-                orientation="horizontal"
+  return (
+    <Stack display="flex" alignItems="center" justifyContent="center">
+      {proceeding ? (
+        <Card.Root w="full">
+          <Card.Header as={HStack} gap={3}>
+            <LuFile size={24} />
+            {isEditable ? (
+              <Editable.Root
+                value={name}
+                onValueChange={(e) => setName(e.value)}
+                onValueCommit={(e) => commitName(e.value)}
+                placeholder="Click to edit"
+                fontSize="xl"
+                fontWeight="bold"
               >
-                <Tabs.List
+                <Editable.Preview />
+                <Editable.Input />
+                <Editable.Control>
+                  <Editable.EditTrigger asChild>
+                    <IconButton variant="ghost" size="xs">
+                      <LuPencilLine />
+                    </IconButton>
+                  </Editable.EditTrigger>
+                  <Editable.CancelTrigger asChild>
+                    <IconButton variant="outline" size="xs">
+                      <LuX />
+                    </IconButton>
+                  </Editable.CancelTrigger>
+                  <Editable.SubmitTrigger asChild>
+                    <IconButton variant="outline" size="xs">
+                      <LuCheck />
+                    </IconButton>
+                  </Editable.SubmitTrigger>
+                </Editable.Control>
+              </Editable.Root>
+            ) : (
+              <Heading>{proceeding.name}</Heading>
+            )}
+            <StatusBadge ml="auto" state={proceeding.state} />
+            {isEditable && proceeding.state !== 'Closed' && (
+              <Button
+                borderRadius="full"
+                size="xs"
+                px={4}
+                fontSize="sm"
+                gap={2}
+                bg="fg.error"
+                color="bg.error"
+                onClick={() => close()}
+              >
+                <LockIcon /> Uzavřít
+              </Button>
+            )}
+          </Card.Header>
+          <Card.Body gap={4}>
+            <Tabs.Root
+              defaultValue="detail"
+              size={{ base: 'sm', md: 'lg' }}
+              orientation="horizontal"
+            >
+              <Tabs.List
+                width={{ base: 'full', md: 'auto' }}
+                flexDirection={{ base: 'column', md: 'row' }}
+              >
+                <Tabs.Trigger
+                  value="detail"
                   width={{ base: 'full', md: 'auto' }}
-                  flexDirection={{ base: 'column', md: 'row' }}
                 >
-                  <Tabs.Trigger
-                    value="detail"
-                    width={{ base: 'full', md: 'auto' }}
-                  >
-                    Detail řízení
-                  </Tabs.Trigger>
-                  <Tabs.Trigger
-                    value="documents"
-                    width={{ base: 'full', md: 'auto' }}
-                  >
-                    Dokumenty
-                  </Tabs.Trigger>
-                  <Tabs.Trigger
-                    value="assets"
-                    width={{ base: 'full', md: 'auto' }}
-                  >
-                    Majetek
-                  </Tabs.Trigger>
-                  <Tabs.Trigger
-                    value="reward"
-                    width={{ base: 'full', md: 'auto' }}
-                  >
-                    Výpočet odměny notáře
-                  </Tabs.Trigger>
-                </Tabs.List>
-                <Tabs.Content value="detail">
-                  <ProceedingDetail proceeding={proceeding} />
-                </Tabs.Content>
-                <Tabs.Content value="documents">
-                  <Documents id={id ?? ''} />
-                </Tabs.Content>
-                <Tabs.Content value="assets">
-                  <Assets id={id ?? ''} />
-                </Tabs.Content>
-                <Tabs.Content value="reward">
-                  <RewardCalculator />
-                </Tabs.Content>
-              </Tabs.Root>
-            </Card.Body>
-          </Card.Root>
-        ) : (
-          <Text>Řízení nebylo nalezeno.</Text>
-        )}
-      </Stack>
-    )
-  }
+                  Detail řízení
+                </Tabs.Trigger>
+                <Tabs.Trigger
+                  value="documents"
+                  width={{ base: 'full', md: 'auto' }}
+                >
+                  Dokumenty
+                </Tabs.Trigger>
+                <Tabs.Trigger
+                  value="assets"
+                  width={{ base: 'full', md: 'auto' }}
+                >
+                  Majetek
+                </Tabs.Trigger>
+                <Tabs.Trigger
+                  value="reward"
+                  width={{ base: 'full', md: 'auto' }}
+                >
+                  Výpočet odměny notáře
+                </Tabs.Trigger>
+              </Tabs.List>
+              <Tabs.Content value="detail">
+                <ProceedingDetail />
+              </Tabs.Content>
+              <Tabs.Content value="documents">
+                <Documents id={proceeding.id} />
+              </Tabs.Content>
+              <Tabs.Content value="assets">
+                <Assets id={proceeding.id} />
+              </Tabs.Content>
+              <Tabs.Content value="reward">
+                <RewardCalculator />
+              </Tabs.Content>
+            </Tabs.Root>
+          </Card.Body>
+        </Card.Root>
+      ) : (
+        <Text>Řízení nebylo nalezeno.</Text>
+      )}
+    </Stack>
+  )
 }
-
-export default InheritanceProcedureDetail

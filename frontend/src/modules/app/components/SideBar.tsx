@@ -36,7 +36,16 @@ export default function SideBar() {
   }, [isMobile, isDesktop, isTablet, onClose, onOpen])
 
   return !isMobile ? (
-    <VStack align="left" gap={0} bg="bg.panel" borderRadius="md" p={2}>
+    <VStack
+      align="left"
+      gap={0}
+      bg="bg.panel"
+      border="1px solid"
+      borderColor="bg.muted"
+      borderRadius="md"
+      boxShadow="card"
+      p={2}
+    >
       {sideBarItems.map(({ to, label, icon, ...rest }, index) => (
         <React.Fragment key={to}>
           <RouterNavLink

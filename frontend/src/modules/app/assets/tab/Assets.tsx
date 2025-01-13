@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useQuery } from '@apollo/client'
 import { Box, Heading, HStack, Stack, Text, VStack } from '@chakra-ui/react'
 import { FaMoneyBill, FaTimes } from 'react-icons/fa'
-import { useParams } from 'react-router-dom'
 
 import { useAuth } from '@frontend/modules/auth'
 import { ActionDialog } from '@frontend/shared/components/ActionDialog'
@@ -12,11 +11,9 @@ import { toaster } from '@frontend/shared/design-system/atoms/chakra/toaster'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { route } from '@shared/route'
 
-import { useProceeding } from '../../proceeding/hooks/useProceeding'
+import { useProceedingContext } from '../../proceeding/components/ProceedingLayout'
 import { useDeleteAsset } from '../hooks/useDeleteAsset'
 import { GET_ASSETS } from '../hooks/useGetAsset'
-
-//TODO: fix query and components
 
 interface Asset {
   id: number
@@ -40,9 +37,8 @@ const AssetGroup = ({
   type: string
   onDelete: (id: number) => void
 }) => {
-  const { id } = useParams()
   const { user } = useAuth()
-  const { data: procedureData } = useProceeding(parseInt(id ?? '0', 10))
+  const { proceeding } = useProceedingContext()
 
   if (assets.length === 0) return null
 
@@ -93,7 +89,7 @@ const AssetGroup = ({
                 </Text>
                 {getAssetDetails(asset)}
               </VStack>
-              {procedureData?.getProceedingById?.beneficiaries?.some(
+              {proceeding?.beneficiaries?.some(
                 (item) => item.user?.id === user?.id?.toString()
               ) && (
                 <Button
@@ -116,7 +112,7 @@ const AssetGroup = ({
 
 export function Assets({ id }: { id: string }) {
   const { user } = useAuth()
-  const isNotary = user?.type === 'Notary'
+  const isUser = user?.type === 'User'
   const { data, loading, error } = useQuery(GET_ASSETS, {
     variables: { procedureId: +id },
   })
@@ -178,7 +174,7 @@ export function Assets({ id }: { id: string }) {
         onConfirm={handleDelete}
         selectedId={selectedAssetId}
       />
-      <Heading mb={4}>Majetek v řízení</Heading>
+      <Heading>Majetek v řízení</Heading>
       {assets.length === 0 ? (
         <Alert
           width={'fit-content'}
@@ -197,7 +193,7 @@ export function Assets({ id }: { id: string }) {
           ))}
         </Stack>
       )}
-      {!isNotary && (
+      {isUser && (
         <Stack alignItems={'center'}>
           <RouterNavLink
             to={route.newAsset(id)}

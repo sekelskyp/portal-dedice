@@ -1,7 +1,6 @@
 import { useCallback, useState } from 'react'
 import { Box, FileUploadFileChangeDetails, Stack } from '@chakra-ui/react'
 import { FaFileUpload } from 'react-icons/fa'
-import { useParams } from 'react-router-dom'
 
 import {
   Alert,
@@ -12,15 +11,14 @@ import {
   toaster,
 } from '@frontend/shared/design-system/atoms/chakra'
 
-import { useProceeding } from '../../proceeding/hooks/useProceeding'
-import { useCreateDocument } from '../hooks/useCreateDocument'
+import { useProceedingContext } from '../../proceeding/components/ProceedingLayout'
 import { useDocumentUpload } from '../hooks/useDocumentUpload'
+import { useUploadDocument } from '../hooks/useUploadDocument'
 
 export function DocumentUpload() {
-  const { id } = useParams()
   const [showEmptyFilesAlert, setShowEmptyFilesAlert] = useState(false)
 
-  const { data } = useProceeding(parseInt(id ?? '0', 10))
+  const { proceedingId } = useProceedingContext()
 
   const {
     files,
@@ -32,7 +30,7 @@ export function DocumentUpload() {
   } = useDocumentUpload()
 
   const [createDocumentRequest, createDocumentRequestState] =
-    useCreateDocument()
+    useUploadDocument()
 
   const handleDataChange = useCallback(
     (details: FileUploadFileChangeDetails) => {
@@ -65,13 +63,12 @@ export function DocumentUpload() {
         variables: {
           data: {
             file: file,
-            inheritanceProcedureId:
-              data?.getProceedingById?.id?.toString() ?? '',
+            proceedingId: proceedingId.toString(),
           },
         },
       })
     }
-  }, [createDocumentRequest, data, files, createDocumentRequestState])
+  }, [createDocumentRequest, proceedingId, files, createDocumentRequestState])
 
   return (
     <Box width="100%">

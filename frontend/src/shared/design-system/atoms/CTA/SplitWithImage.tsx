@@ -48,7 +48,7 @@ export const SplitWithImage = ({
         }}
         bg="gray.100"
         loading="lazy"
-        opacity={0.4}
+        opacity={0.8}
         borderRadius={'lg'}
       />
     </Flex>

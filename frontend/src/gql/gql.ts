@@ -15,7 +15,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
   '\n  mutation ChangeUserStatus($userId: Float!) {\n    toggleUserConfirmation(userId: $userId) {\n      confirmed\n    }\n  }\n':
     types.ChangeUserStatusDocument,
-  '\n  query GetUsers {\n    getAllUsers {\n      id\n      name\n      surname\n      displayName\n      address {\n        id\n        municipality\n        postalCode\n        street\n        streetNumber\n      }\n      addressId\n      type\n      confirmed\n    }\n  }\n':
+  '\n  query GetUsers {\n    getAllUsers {\n      id\n      name\n      surname\n      displayName\n      address {\n        id\n        municipality\n        postalCode\n        street\n        streetNumber\n      }\n      addressId\n      type\n      confirmed\n      notaryId\n    }\n  }\n':
     types.GetUsersDocument,
   '\n  mutation createAsset($data: AssetInput!) {\n    createAsset(data: $data) {\n      id\n      proceedingId\n      type\n      name\n      value\n      description\n      bankName\n      carMakeName\n      carRegistrationDate\n      carType\n      cin\n    }\n  }\n':
     types.CreateAssetDocument,
@@ -37,14 +37,12 @@ const documents = {
     types.NewChatMessageDocument,
   '\n  query GetChatHeader($getProceedingByIdId: Int!) {\n    getProceedingById(id: $getProceedingByIdId) {\n      beneficiaries {\n        user {\n          displayName\n          id\n        }\n      }\n      notary {\n        user {\n          displayName\n          id\n        }\n      }\n      name\n    }\n  }\n':
     types.GetChatHeaderDocument,
-  '\n  mutation CreateDocument($data: UploadDocumentInput!) {\n    createDocument(data: $data)\n  }\n':
-    types.CreateDocumentDocument,
-  '\n  mutation DeleteDocument($id: ID!) {\n    deleteDocumentsByIds(ids: [$id])\n  }\n':
-    types.DeleteDocumentDocument,
-  '\n  query GetDocumentById($id: ID!) {\n    getDocumentById(id: $id) {\n      fileData\n      fileType\n      fileName\n      createDate\n    }\n  }\n':
-    types.GetDocumentByIdDocument,
-  '\n  query GetDocumentsByProceedingId($proceedingId: Int!) {\n    getDocumentsByProceedingId(proceedingId: $proceedingId) {\n      id\n      fileName\n      createDate\n      fileType\n    }\n  }\n':
-    types.GetDocumentsByProceedingIdDocument,
+  '\n  mutation DeleteAttachment($id: ID!) {\n    deleteAttachmentsByIds(ids: [$id])\n  }\n':
+    types.DeleteAttachmentDocument,
+  '\n  query GetAttachmentsByProceedingId($proceedingId: Int!) {\n    getAttachmentsByProceedingId(proceedingId: $proceedingId) {\n      fileUuid\n      filename\n      id\n      mimetype\n      uploadDate\n    }\n  }\n':
+    types.GetAttachmentsByProceedingIdDocument,
+  '\n  mutation UploadDocument($data: UploadFileToProceedingInput!) {\n    uploadAttachmentToProceeding(data: $data)\n  }\n':
+    types.UploadDocumentDocument,
   '\n  mutation NotifyProcedureBeneficiaries(\n    $html: String!\n    $subject: String!\n    $proceedingId: Int!\n  ) {\n    notifyProcedureBeneficiaries(\n      html: $html\n      subject: $subject\n      proceedingId: $proceedingId\n    )\n  }\n':
     types.NotifyProcedureBeneficiariesDocument,
   '\n  query GetProceedingsByBeneficiaryId($userId: Int!) {\n    getBeneficiaryProceedingsForUser(userId: $userId) {\n      id\n      name\n      startDate\n      state\n      deceasedDisplayName\n    }\n  }\n':
@@ -53,21 +51,43 @@ const documents = {
     types.CreateProceedingDocument,
   '\n  mutation DeleteProceeding($ids: [Int!]!) {\n    deleteProceedingsByIds(ids: $ids)\n  }\n':
     types.DeleteProceedingDocument,
+  '\n  query GetAllProceedings {\n    getAllProceedings {\n      id\n      name\n      startDate\n      state\n      deceasedDisplayName\n    }\n  }\n':
+    types.GetAllProceedingsDocument,
   '\n  query GetAllUsers($type: String!) {\n    getAllUserByType(type: $type) {\n      id\n      name\n      surname\n      displayName\n    }\n  }\n':
     types.GetAllUsersDocument,
   '\n  query GetProceedingsByNotaryId($userId: Int!) {\n    getNotaryProceedingsForUser(userId: $userId) {\n      id\n      name\n      startDate\n      state\n      deceasedDisplayName\n    }\n  }\n':
     types.GetProceedingsByNotaryIdDocument,
-  '\n  query GetProceedingById($getProceedingByIdId: Int!) {\n    getProceedingById(id: $getProceedingByIdId) {\n      procedureAssets {\n        id\n        proceedingId\n        value\n        name\n        description\n        type\n        bankName\n        carMakeName\n        carRegistrationDate\n        carType\n        cin\n      }\n      mainBeneficiary {\n        user {\n          id\n          displayName\n          email\n          phone\n          name\n          surname\n        }\n      }\n      beneficiaries {\n        id\n        user {\n          displayName\n          email\n          phone\n          id\n          name\n          surname\n        }\n      }\n      name\n      deceasedDisplayName\n      deceasedDateOfDeath\n      deceasedDateOfBirth\n      deceasedAddressId\n      documents {\n        id\n        fileData\n        fileName\n        fileType\n        createDate\n        proceedingId\n      }\n      id\n      state\n      notaryId\n      notary {\n        user {\n          address {\n            id\n            street\n            streetNumber\n            municipality\n            postalCode\n          }\n          displayName\n          email\n          name\n          surname\n          phone\n          id\n        }\n      }\n    }\n  }\n':
+  '\n  query GetProceedingById($getProceedingByIdId: Int!) {\n    getProceedingById(id: $getProceedingByIdId) {\n      procedureAssets {\n        id\n        proceedingId\n        value\n        name\n        description\n        type\n        bankName\n        carMakeName\n        carRegistrationDate\n        carType\n        cin\n      }\n      mainBeneficiary {\n        id\n        user {\n          id\n          displayName\n          email\n          phone\n          name\n          surname\n          confirmed\n          type\n        }\n      }\n      beneficiaries {\n        id\n        user {\n          displayName\n          email\n          phone\n          id\n          name\n          surname\n          confirmed\n          type\n        }\n      }\n      name\n      deceasedDisplayName\n      deceasedDateOfDeath\n      deceasedDateOfBirth\n      deceasedAddressId\n      id\n      state\n      notaryId\n      notary {\n        id\n        user {\n          address {\n            id\n            street\n            streetNumber\n            municipality\n            postalCode\n          }\n          displayName\n          email\n          name\n          surname\n          phone\n          id\n          confirmed\n          type\n        }\n      }\n    }\n  }\n':
     types.GetProceedingByIdDocument,
+  '\n  mutation RemoveBeneficiaryFromProceeding(\n    $beneficiaryId: Int!\n    $proceedingId: Int!\n  ) {\n    removeBeneficiaryFromProceeding(\n      beneficiaryId: $beneficiaryId\n      proceedingId: $proceedingId\n    )\n  }\n':
+    types.RemoveBeneficiaryFromProceedingDocument,
+  '\n  mutation AddBeneficiariesToProceeding(\n    $userIds: [Int!]!\n    $proceedingId: Int!\n  ) {\n    addBeneficiariesToProceeding(\n      userIds: $userIds\n      proceedingId: $proceedingId\n    ) {\n      id\n      user {\n        id\n        displayName\n        email\n        phone\n        name\n        surname\n        confirmed\n        type\n      }\n    }\n  }\n':
+    types.AddBeneficiariesToProceedingDocument,
+  '\n  mutation RemoveMainBeneficiary($proceedingId: Int!) {\n    removeMainBeneficiary(proceedingId: $proceedingId)\n  }\n':
+    types.RemoveMainBeneficiaryDocument,
+  '\n  mutation AssignMainBeneficiary($beneficiaryId: Int!, $proceedingId: Int!) {\n    assignMainBeneficiary(\n      beneficiaryId: $beneficiaryId\n      proceedingId: $proceedingId\n    )\n  }\n':
+    types.AssignMainBeneficiaryDocument,
+  '\n  mutation UpdateProceedingName($name: String!, $proceedingId: Int!) {\n    updateName(name: $name, proceedingId: $proceedingId)\n  }\n':
+    types.UpdateProceedingNameDocument,
+  '\n  mutation CloseProceeding($proceedingId: Int!) {\n    closeProceeding(proceedingId: $proceedingId)\n  }\n':
+    types.CloseProceedingDocument,
   '\n  mutation ChangePassword($newPassword: String!, $oldPassword: String!) {\n    changePassword(newPassword: $newPassword, oldPassword: $oldPassword)\n  }\n':
     types.ChangePasswordDocument,
+  '\n  query GetNotaryDateRules($notaryId: Int!) {\n    getNotaryDateRulesByNotary(notaryId: $notaryId) {\n      id\n      startDay\n      startMonth\n      endDay\n      endMonth\n    }\n  }\n':
+    types.GetNotaryDateRulesDocument,
+  '\n  query GetNotaryAddressRules($getNotaryByIdId: Int!) {\n    getNotaryById(id: $getNotaryByIdId) {\n      postalCode\n    }\n  }\n':
+    types.GetNotaryAddressRulesDocument,
   '\n  query GetUserById($getUserByIdId: Float!) {\n    getUserById(id: $getUserByIdId) {\n      id\n      email\n      password\n      confirmed\n      type\n      notaryId\n      sendNotifications\n      name\n      surname\n      displayName\n      gender\n      phone\n      addressId\n      address {\n        id\n        street\n        streetNumber\n        municipality\n        postalCode\n      }\n    }\n  }\n':
     types.GetUserByIdDocument,
   '\n  mutation UpdateProfile($profileInput: ProfileInput!) {\n    updateProfile(profileInput: $profileInput) {\n      id\n      email\n      password\n      confirmed\n      type\n      notaryId\n      sendNotifications\n      name\n      surname\n      displayName\n      gender\n      phone\n      addressId\n      address {\n        id\n        street\n        streetNumber\n        municipality\n        postalCode\n      }\n    }\n  }\n':
     types.UpdateProfileDocument,
   '\n  mutation EmailVerification($token: String!) {\n    confirmEmailVerification(token: $token)\n  }\n':
     types.EmailVerificationDocument,
-  '\n  mutation SignIn($login: String!, $password: String!) {\n    signIn(login: $login, password: $password) {\n      user {\n        addressId\n        address {\n          id\n          municipality\n          postalCode\n          street\n          streetNumber\n        }\n        confirmed\n        displayName\n        email\n        gender\n        id\n        name\n        phone\n        sendNotifications\n        surname\n        type\n      }\n      token\n    }\n  }\n':
+  '\n  mutation RequestPasswordReset($email: String!) {\n    requestPasswordReset(email: $email)\n  }\n':
+    types.RequestPasswordResetDocument,
+  '\n  mutation xdd($newPassword: String!, $token: String!) {\n    resetPassword(newPassword: $newPassword, token: $token)\n  }\n':
+    types.XddDocument,
+  '\n  mutation SignIn($login: String!, $password: String!) {\n    signIn(login: $login, password: $password) {\n      user {\n        addressId\n        address {\n          id\n          municipality\n          postalCode\n          street\n          streetNumber\n        }\n        confirmed\n        displayName\n        email\n        gender\n        id\n        name\n        phone\n        sendNotifications\n        surname\n        type\n        notaryId\n      }\n      token\n    }\n  }\n':
     types.SignInDocument,
   '\n  mutation SignUp($registerInput: RegisterInput!) {\n    signUp(registerInput: $registerInput) {\n      id\n    }\n  }\n':
     types.SignUpDocument,
@@ -75,9 +95,9 @@ const documents = {
     types.CreateArticleDocument,
   '\n  mutation DeleteArticle($ids: [Int!]!) {\n    deleteArticles(ids: $ids)\n  }\n':
     types.DeleteArticleDocument,
-  '\n  query GetArticleById($getArticleByIdId: Int!) {\n    getArticleById(id: $getArticleByIdId) {\n      id\n      date\n      title\n      content\n      coverImage\n    }\n  }\n':
+  '\n  query GetArticleById($getArticleByIdId: Int!) {\n    getArticleById(id: $getArticleByIdId) {\n      id\n      date\n      title\n      content\n      coverImageAttachmentId\n      attachment {\n        id\n        fileUuid\n        mimetype\n      }\n    }\n  }\n':
     types.GetArticleByIdDocument,
-  '\n  query GetAllArticles {\n    getAllArticles {\n      id\n      date\n      title\n      content\n      coverImage\n    }\n  }\n':
+  '\n  query GetAllArticles {\n    getAllArticles {\n      id\n      date\n      title\n      content\n      coverImageAttachmentId\n      attachment {\n        id\n        fileUuid\n        mimetype\n      }\n    }\n  }\n':
     types.GetAllArticlesDocument,
   '\n  mutation UpdateArticle($data: UpdateArticleInput!, $updateArticleId: Int!) {\n    updateArticle(data: $data, id: $updateArticleId) {\n      id\n    }\n  }\n':
     types.UpdateArticleDocument,
@@ -111,8 +131,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query GetUsers {\n    getAllUsers {\n      id\n      name\n      surname\n      displayName\n      address {\n        id\n        municipality\n        postalCode\n        street\n        streetNumber\n      }\n      addressId\n      type\n      confirmed\n    }\n  }\n'
-): (typeof documents)['\n  query GetUsers {\n    getAllUsers {\n      id\n      name\n      surname\n      displayName\n      address {\n        id\n        municipality\n        postalCode\n        street\n        streetNumber\n      }\n      addressId\n      type\n      confirmed\n    }\n  }\n']
+  source: '\n  query GetUsers {\n    getAllUsers {\n      id\n      name\n      surname\n      displayName\n      address {\n        id\n        municipality\n        postalCode\n        street\n        streetNumber\n      }\n      addressId\n      type\n      confirmed\n      notaryId\n    }\n  }\n'
+): (typeof documents)['\n  query GetUsers {\n    getAllUsers {\n      id\n      name\n      surname\n      displayName\n      address {\n        id\n        municipality\n        postalCode\n        street\n        streetNumber\n      }\n      addressId\n      type\n      confirmed\n      notaryId\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -177,26 +197,20 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  mutation CreateDocument($data: UploadDocumentInput!) {\n    createDocument(data: $data)\n  }\n'
-): (typeof documents)['\n  mutation CreateDocument($data: UploadDocumentInput!) {\n    createDocument(data: $data)\n  }\n']
+  source: '\n  mutation DeleteAttachment($id: ID!) {\n    deleteAttachmentsByIds(ids: [$id])\n  }\n'
+): (typeof documents)['\n  mutation DeleteAttachment($id: ID!) {\n    deleteAttachmentsByIds(ids: [$id])\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  mutation DeleteDocument($id: ID!) {\n    deleteDocumentsByIds(ids: [$id])\n  }\n'
-): (typeof documents)['\n  mutation DeleteDocument($id: ID!) {\n    deleteDocumentsByIds(ids: [$id])\n  }\n']
+  source: '\n  query GetAttachmentsByProceedingId($proceedingId: Int!) {\n    getAttachmentsByProceedingId(proceedingId: $proceedingId) {\n      fileUuid\n      filename\n      id\n      mimetype\n      uploadDate\n    }\n  }\n'
+): (typeof documents)['\n  query GetAttachmentsByProceedingId($proceedingId: Int!) {\n    getAttachmentsByProceedingId(proceedingId: $proceedingId) {\n      fileUuid\n      filename\n      id\n      mimetype\n      uploadDate\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query GetDocumentById($id: ID!) {\n    getDocumentById(id: $id) {\n      fileData\n      fileType\n      fileName\n      createDate\n    }\n  }\n'
-): (typeof documents)['\n  query GetDocumentById($id: ID!) {\n    getDocumentById(id: $id) {\n      fileData\n      fileType\n      fileName\n      createDate\n    }\n  }\n']
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function gql(
-  source: '\n  query GetDocumentsByProceedingId($proceedingId: Int!) {\n    getDocumentsByProceedingId(proceedingId: $proceedingId) {\n      id\n      fileName\n      createDate\n      fileType\n    }\n  }\n'
-): (typeof documents)['\n  query GetDocumentsByProceedingId($proceedingId: Int!) {\n    getDocumentsByProceedingId(proceedingId: $proceedingId) {\n      id\n      fileName\n      createDate\n      fileType\n    }\n  }\n']
+  source: '\n  mutation UploadDocument($data: UploadFileToProceedingInput!) {\n    uploadAttachmentToProceeding(data: $data)\n  }\n'
+): (typeof documents)['\n  mutation UploadDocument($data: UploadFileToProceedingInput!) {\n    uploadAttachmentToProceeding(data: $data)\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -225,6 +239,12 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
+  source: '\n  query GetAllProceedings {\n    getAllProceedings {\n      id\n      name\n      startDate\n      state\n      deceasedDisplayName\n    }\n  }\n'
+): (typeof documents)['\n  query GetAllProceedings {\n    getAllProceedings {\n      id\n      name\n      startDate\n      state\n      deceasedDisplayName\n    }\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
   source: '\n  query GetAllUsers($type: String!) {\n    getAllUserByType(type: $type) {\n      id\n      name\n      surname\n      displayName\n    }\n  }\n'
 ): (typeof documents)['\n  query GetAllUsers($type: String!) {\n    getAllUserByType(type: $type) {\n      id\n      name\n      surname\n      displayName\n    }\n  }\n']
 /**
@@ -237,14 +257,62 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query GetProceedingById($getProceedingByIdId: Int!) {\n    getProceedingById(id: $getProceedingByIdId) {\n      procedureAssets {\n        id\n        proceedingId\n        value\n        name\n        description\n        type\n        bankName\n        carMakeName\n        carRegistrationDate\n        carType\n        cin\n      }\n      mainBeneficiary {\n        user {\n          id\n          displayName\n          email\n          phone\n          name\n          surname\n        }\n      }\n      beneficiaries {\n        id\n        user {\n          displayName\n          email\n          phone\n          id\n          name\n          surname\n        }\n      }\n      name\n      deceasedDisplayName\n      deceasedDateOfDeath\n      deceasedDateOfBirth\n      deceasedAddressId\n      documents {\n        id\n        fileData\n        fileName\n        fileType\n        createDate\n        proceedingId\n      }\n      id\n      state\n      notaryId\n      notary {\n        user {\n          address {\n            id\n            street\n            streetNumber\n            municipality\n            postalCode\n          }\n          displayName\n          email\n          name\n          surname\n          phone\n          id\n        }\n      }\n    }\n  }\n'
-): (typeof documents)['\n  query GetProceedingById($getProceedingByIdId: Int!) {\n    getProceedingById(id: $getProceedingByIdId) {\n      procedureAssets {\n        id\n        proceedingId\n        value\n        name\n        description\n        type\n        bankName\n        carMakeName\n        carRegistrationDate\n        carType\n        cin\n      }\n      mainBeneficiary {\n        user {\n          id\n          displayName\n          email\n          phone\n          name\n          surname\n        }\n      }\n      beneficiaries {\n        id\n        user {\n          displayName\n          email\n          phone\n          id\n          name\n          surname\n        }\n      }\n      name\n      deceasedDisplayName\n      deceasedDateOfDeath\n      deceasedDateOfBirth\n      deceasedAddressId\n      documents {\n        id\n        fileData\n        fileName\n        fileType\n        createDate\n        proceedingId\n      }\n      id\n      state\n      notaryId\n      notary {\n        user {\n          address {\n            id\n            street\n            streetNumber\n            municipality\n            postalCode\n          }\n          displayName\n          email\n          name\n          surname\n          phone\n          id\n        }\n      }\n    }\n  }\n']
+  source: '\n  query GetProceedingById($getProceedingByIdId: Int!) {\n    getProceedingById(id: $getProceedingByIdId) {\n      procedureAssets {\n        id\n        proceedingId\n        value\n        name\n        description\n        type\n        bankName\n        carMakeName\n        carRegistrationDate\n        carType\n        cin\n      }\n      mainBeneficiary {\n        id\n        user {\n          id\n          displayName\n          email\n          phone\n          name\n          surname\n          confirmed\n          type\n        }\n      }\n      beneficiaries {\n        id\n        user {\n          displayName\n          email\n          phone\n          id\n          name\n          surname\n          confirmed\n          type\n        }\n      }\n      name\n      deceasedDisplayName\n      deceasedDateOfDeath\n      deceasedDateOfBirth\n      deceasedAddressId\n      id\n      state\n      notaryId\n      notary {\n        id\n        user {\n          address {\n            id\n            street\n            streetNumber\n            municipality\n            postalCode\n          }\n          displayName\n          email\n          name\n          surname\n          phone\n          id\n          confirmed\n          type\n        }\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query GetProceedingById($getProceedingByIdId: Int!) {\n    getProceedingById(id: $getProceedingByIdId) {\n      procedureAssets {\n        id\n        proceedingId\n        value\n        name\n        description\n        type\n        bankName\n        carMakeName\n        carRegistrationDate\n        carType\n        cin\n      }\n      mainBeneficiary {\n        id\n        user {\n          id\n          displayName\n          email\n          phone\n          name\n          surname\n          confirmed\n          type\n        }\n      }\n      beneficiaries {\n        id\n        user {\n          displayName\n          email\n          phone\n          id\n          name\n          surname\n          confirmed\n          type\n        }\n      }\n      name\n      deceasedDisplayName\n      deceasedDateOfDeath\n      deceasedDateOfBirth\n      deceasedAddressId\n      id\n      state\n      notaryId\n      notary {\n        id\n        user {\n          address {\n            id\n            street\n            streetNumber\n            municipality\n            postalCode\n          }\n          displayName\n          email\n          name\n          surname\n          phone\n          id\n          confirmed\n          type\n        }\n      }\n    }\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  mutation RemoveBeneficiaryFromProceeding(\n    $beneficiaryId: Int!\n    $proceedingId: Int!\n  ) {\n    removeBeneficiaryFromProceeding(\n      beneficiaryId: $beneficiaryId\n      proceedingId: $proceedingId\n    )\n  }\n'
+): (typeof documents)['\n  mutation RemoveBeneficiaryFromProceeding(\n    $beneficiaryId: Int!\n    $proceedingId: Int!\n  ) {\n    removeBeneficiaryFromProceeding(\n      beneficiaryId: $beneficiaryId\n      proceedingId: $proceedingId\n    )\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  mutation AddBeneficiariesToProceeding(\n    $userIds: [Int!]!\n    $proceedingId: Int!\n  ) {\n    addBeneficiariesToProceeding(\n      userIds: $userIds\n      proceedingId: $proceedingId\n    ) {\n      id\n      user {\n        id\n        displayName\n        email\n        phone\n        name\n        surname\n        confirmed\n        type\n      }\n    }\n  }\n'
+): (typeof documents)['\n  mutation AddBeneficiariesToProceeding(\n    $userIds: [Int!]!\n    $proceedingId: Int!\n  ) {\n    addBeneficiariesToProceeding(\n      userIds: $userIds\n      proceedingId: $proceedingId\n    ) {\n      id\n      user {\n        id\n        displayName\n        email\n        phone\n        name\n        surname\n        confirmed\n        type\n      }\n    }\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  mutation RemoveMainBeneficiary($proceedingId: Int!) {\n    removeMainBeneficiary(proceedingId: $proceedingId)\n  }\n'
+): (typeof documents)['\n  mutation RemoveMainBeneficiary($proceedingId: Int!) {\n    removeMainBeneficiary(proceedingId: $proceedingId)\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  mutation AssignMainBeneficiary($beneficiaryId: Int!, $proceedingId: Int!) {\n    assignMainBeneficiary(\n      beneficiaryId: $beneficiaryId\n      proceedingId: $proceedingId\n    )\n  }\n'
+): (typeof documents)['\n  mutation AssignMainBeneficiary($beneficiaryId: Int!, $proceedingId: Int!) {\n    assignMainBeneficiary(\n      beneficiaryId: $beneficiaryId\n      proceedingId: $proceedingId\n    )\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  mutation UpdateProceedingName($name: String!, $proceedingId: Int!) {\n    updateName(name: $name, proceedingId: $proceedingId)\n  }\n'
+): (typeof documents)['\n  mutation UpdateProceedingName($name: String!, $proceedingId: Int!) {\n    updateName(name: $name, proceedingId: $proceedingId)\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  mutation CloseProceeding($proceedingId: Int!) {\n    closeProceeding(proceedingId: $proceedingId)\n  }\n'
+): (typeof documents)['\n  mutation CloseProceeding($proceedingId: Int!) {\n    closeProceeding(proceedingId: $proceedingId)\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
   source: '\n  mutation ChangePassword($newPassword: String!, $oldPassword: String!) {\n    changePassword(newPassword: $newPassword, oldPassword: $oldPassword)\n  }\n'
 ): (typeof documents)['\n  mutation ChangePassword($newPassword: String!, $oldPassword: String!) {\n    changePassword(newPassword: $newPassword, oldPassword: $oldPassword)\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  query GetNotaryDateRules($notaryId: Int!) {\n    getNotaryDateRulesByNotary(notaryId: $notaryId) {\n      id\n      startDay\n      startMonth\n      endDay\n      endMonth\n    }\n  }\n'
+): (typeof documents)['\n  query GetNotaryDateRules($notaryId: Int!) {\n    getNotaryDateRulesByNotary(notaryId: $notaryId) {\n      id\n      startDay\n      startMonth\n      endDay\n      endMonth\n    }\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  query GetNotaryAddressRules($getNotaryByIdId: Int!) {\n    getNotaryById(id: $getNotaryByIdId) {\n      postalCode\n    }\n  }\n'
+): (typeof documents)['\n  query GetNotaryAddressRules($getNotaryByIdId: Int!) {\n    getNotaryById(id: $getNotaryByIdId) {\n      postalCode\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -267,8 +335,20 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  mutation SignIn($login: String!, $password: String!) {\n    signIn(login: $login, password: $password) {\n      user {\n        addressId\n        address {\n          id\n          municipality\n          postalCode\n          street\n          streetNumber\n        }\n        confirmed\n        displayName\n        email\n        gender\n        id\n        name\n        phone\n        sendNotifications\n        surname\n        type\n      }\n      token\n    }\n  }\n'
-): (typeof documents)['\n  mutation SignIn($login: String!, $password: String!) {\n    signIn(login: $login, password: $password) {\n      user {\n        addressId\n        address {\n          id\n          municipality\n          postalCode\n          street\n          streetNumber\n        }\n        confirmed\n        displayName\n        email\n        gender\n        id\n        name\n        phone\n        sendNotifications\n        surname\n        type\n      }\n      token\n    }\n  }\n']
+  source: '\n  mutation RequestPasswordReset($email: String!) {\n    requestPasswordReset(email: $email)\n  }\n'
+): (typeof documents)['\n  mutation RequestPasswordReset($email: String!) {\n    requestPasswordReset(email: $email)\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  mutation xdd($newPassword: String!, $token: String!) {\n    resetPassword(newPassword: $newPassword, token: $token)\n  }\n'
+): (typeof documents)['\n  mutation xdd($newPassword: String!, $token: String!) {\n    resetPassword(newPassword: $newPassword, token: $token)\n  }\n']
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: '\n  mutation SignIn($login: String!, $password: String!) {\n    signIn(login: $login, password: $password) {\n      user {\n        addressId\n        address {\n          id\n          municipality\n          postalCode\n          street\n          streetNumber\n        }\n        confirmed\n        displayName\n        email\n        gender\n        id\n        name\n        phone\n        sendNotifications\n        surname\n        type\n        notaryId\n      }\n      token\n    }\n  }\n'
+): (typeof documents)['\n  mutation SignIn($login: String!, $password: String!) {\n    signIn(login: $login, password: $password) {\n      user {\n        addressId\n        address {\n          id\n          municipality\n          postalCode\n          street\n          streetNumber\n        }\n        confirmed\n        displayName\n        email\n        gender\n        id\n        name\n        phone\n        sendNotifications\n        surname\n        type\n        notaryId\n      }\n      token\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -291,14 +371,14 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query GetArticleById($getArticleByIdId: Int!) {\n    getArticleById(id: $getArticleByIdId) {\n      id\n      date\n      title\n      content\n      coverImage\n    }\n  }\n'
-): (typeof documents)['\n  query GetArticleById($getArticleByIdId: Int!) {\n    getArticleById(id: $getArticleByIdId) {\n      id\n      date\n      title\n      content\n      coverImage\n    }\n  }\n']
+  source: '\n  query GetArticleById($getArticleByIdId: Int!) {\n    getArticleById(id: $getArticleByIdId) {\n      id\n      date\n      title\n      content\n      coverImageAttachmentId\n      attachment {\n        id\n        fileUuid\n        mimetype\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query GetArticleById($getArticleByIdId: Int!) {\n    getArticleById(id: $getArticleByIdId) {\n      id\n      date\n      title\n      content\n      coverImageAttachmentId\n      attachment {\n        id\n        fileUuid\n        mimetype\n      }\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: '\n  query GetAllArticles {\n    getAllArticles {\n      id\n      date\n      title\n      content\n      coverImage\n    }\n  }\n'
-): (typeof documents)['\n  query GetAllArticles {\n    getAllArticles {\n      id\n      date\n      title\n      content\n      coverImage\n    }\n  }\n']
+  source: '\n  query GetAllArticles {\n    getAllArticles {\n      id\n      date\n      title\n      content\n      coverImageAttachmentId\n      attachment {\n        id\n        fileUuid\n        mimetype\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query GetAllArticles {\n    getAllArticles {\n      id\n      date\n      title\n      content\n      coverImageAttachmentId\n      attachment {\n        id\n        fileUuid\n        mimetype\n      }\n    }\n  }\n']
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

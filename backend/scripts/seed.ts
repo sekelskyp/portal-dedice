@@ -26,7 +26,7 @@ async function populateDatabase(
   // insert test notaries
   const [notaryId1, notaryId2] = await db
     .insert(notary)
-    .values([{ postalCode: '150 00' }, { postalCode: '120 00' }])
+    .values([{ postalCode: '15000' }, { postalCode: '12000' }])
     .$returningId()
 
   // addresses for users
@@ -185,6 +185,16 @@ async function populateDatabase(
         confirmed: true,
         type: 'Notary',
         notaryId: notaryId2.id,
+      },
+      // admin account
+      {
+        name: 'Admin',
+        surname: 'Admin',
+        displayName: 'Admin Admin',
+        email: 'admin@portal.com',
+        password: await hashPassword('heslo123'),
+        confirmed: true,
+        type: 'Admin',
       },
     ])
     .$returningId()

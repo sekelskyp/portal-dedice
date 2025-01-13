@@ -1,16 +1,20 @@
 import { AddressInsertInput } from '@backend/graphql/modules/address/addressRepository'
 import { UserEntity } from '@backend/graphql/modules/user/userRepository'
-import { GenderEnumType } from '@shared/enums'
-
-import { createToken } from '../libs/jwt'
-import { CustomContext } from '../types/types'
-
+import { createToken } from '@backend/libs/jwt'
 import {
   requestEmailVerification,
   verifyEmail,
-} from './emailConfirmationService'
-import { comparePassword, hashPassword } from './passwordHashService'
-import { requestPasswordReset, resetPassword } from './passwordResetService'
+} from '@backend/services/emailConfirmationService'
+import {
+  comparePassword,
+  hashPassword,
+} from '@backend/services/passwordHashService'
+import {
+  requestPasswordReset,
+  resetPassword,
+} from '@backend/services/passwordResetService'
+import { CustomContext } from '@backend/types/types'
+import { GenderEnumType } from '@shared/enums'
 
 export interface AuthResponse {
   userId: number
@@ -40,21 +44,21 @@ export async function loginUser(
   context: CustomContext
 ): Promise<AuthResponse> {
   const { userRepository } = context
-  const errorMessage = 'Neplatný e-mail nebo heslo'
+  const errorMessage = 'Neplatný e-mail nebo heslo.'
 
   // Find user by email
   const foundUser = await userRepository.getUserByEmail(login.toLowerCase())
-  console.log('foundUser', foundUser)
   if (!foundUser) throw new Error(errorMessage)
 
   // Validate password
   const isPasswordValid = await comparePassword(password, foundUser.password)
-  console.log('isPasswordValid', isPasswordValid)
   if (!isPasswordValid) throw new Error(errorMessage)
 
   // Check if user is confirmed
   if (!foundUser.confirmed)
-    throw new Error('Pro login je nutné ověřit e-mail uživatele')
+    throw new Error(
+      'Váš učet je momentálně deaktivován. Pro login je potřeba aktivovat účet.'
+    )
 
   // Generate a JWT token for the user
   const token = createToken({ userId: foundUser.id })
@@ -72,11 +76,12 @@ export async function registerUser(
   const existingUser = await userRepository.getUserByEmail(
     data.email.toLowerCase()
   )
-  if (existingUser) throw new Error('Uživatel s tímto emailem již existuje')
+  if (existingUser) throw new Error('Uživatel s tímto emailem již existuje.')
 
   // Hash the password and create the user
   const hashedPassword = await hashPassword(data.password)
   const displayName = `${data.name} ${data.surname}`
+
   const userId = await userRepository.createUser({
     email: data.email,
     password: hashedPassword,
@@ -85,9 +90,10 @@ export async function registerUser(
     displayName,
     type: 'User',
   })
+
   const newUser = await userRepository.getUserById(userId)
   if (!newUser) {
-    throw new Error('Failed to retrieve the newly created user')
+    throw new Error('Nepodařilo se načíst nového uživatele.')
   }
   await sendEmailVerification(newUser.id, data.email, context)
   return newUser

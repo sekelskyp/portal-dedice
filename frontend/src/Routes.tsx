@@ -13,13 +13,15 @@ import NewChatPage from './modules/app/chat/components/NewChatPage'
 import { PortalLayout } from './modules/app/components/PortalLayout'
 import { NewDocumentPage } from './modules/app/documents/pages/NewDocumentPage'
 import { NotaryEmailPage } from './modules/app/mail/pages/NotaryEmailPage'
+import { ProceedingLayout } from './modules/app/proceeding/components/ProceedingLayout'
 import { NewProceedingPage } from './modules/app/proceeding/pages/NewProceedingPage'
-import InheritanceProcedureDetail from './modules/app/proceeding/pages/ProceedingPage'
+import { ProceedingPage } from './modules/app/proceeding/pages/ProceedingPage'
 import { Proceedings } from './modules/app/proceeding/pages/Proceedings'
 import { ProfilePage } from './modules/app/settings/pages/ProfilePage'
 import { SettingsPage } from './modules/app/settings/pages/SettingsPage'
 import { ConfirmEmailPage } from './modules/auth/pages/ConfirmEmailPage'
 import { EmailVerification } from './modules/auth/pages/EmailVerification'
+import { PasswordChangePage } from './modules/auth/pages/PasswordChangePage'
 import { PasswordResetPage } from './modules/auth/pages/PasswordResetPage'
 import InheritanceModel from './modules/inheritance-splitting/InheritanceModel'
 import { ArticleDetail } from './modules/static-pages/blog/pages/ArticleDetail'
@@ -27,6 +29,7 @@ import { BlogPage } from './modules/static-pages/blog/pages/BlogPage'
 import { NewArticlePage } from './modules/static-pages/blog/pages/NewArticlePage'
 import { AboutPage } from './modules/static-pages/pages/AboutPage'
 import { GuidePage } from './modules/static-pages/pages/GuidePage'
+import { TermsOfService } from './modules/static-pages/pages/TermsOfService'
 import { WizardPage } from './modules/wizard/pages/WizardStepPage'
 import { Layout } from './shared/layout'
 
@@ -41,12 +44,14 @@ export function Routes() {
           <Route path={route.portal()} element={<Proceedings />} />
           <Route path={route.newProceeding()} element={<NewProceedingPage />} />
           <Route
-            path={route.inheritanceProcedure()}
-            element={<InheritanceProcedureDetail />}
-          />
-          <Route path={route.newDocument()} element={<NewDocumentPage />} />
-          <Route path={route.newEmail()} element={<NotaryEmailPage />} />
-          <Route path={route.newAsset()} element={<NewAssetPage />} />
+            path="/portal/proceeding/:proceedingId"
+            element={<ProceedingLayout />}
+          >
+            <Route path={route.proceeding()} element={<ProceedingPage />} />
+            <Route path={route.newDocument()} element={<NewDocumentPage />} />
+            <Route path={route.newAsset()} element={<NewAssetPage />} />
+            <Route path={route.newEmail()} element={<NotaryEmailPage />} />
+          </Route>
           <Route path={route.chat()} element={<NewChatPage />} />
           <Route path={route.chatId()} element={<NewChatPage />} />
           <Route path={route.chatIdHistory()} element={<ChatHistoryPage />} />
@@ -55,6 +60,7 @@ export function Routes() {
         </Route>
         <Route path={route.users()} element={<UserManagement />} />
         <Route path={route.about()} element={<AboutPage />} />
+        <Route path={route.termOfService()} element={<TermsOfService />} />
         <Route path={route.guide()} element={<GuidePage />} />
         <Route path={route.blog()} element={<BlogPage />} />
         <Route path={route.newArticle()} element={<NewArticlePage />} />
@@ -64,6 +70,7 @@ export function Routes() {
         <Route path={route.inheritance()} element={<InheritanceModel />} />
         <Route path={route.confirmEmail()} element={<ConfirmEmailPage />} />
         <Route path={route.resetPassword()} element={<PasswordResetPage />} />
+        <Route path={route.changePassword()} element={<PasswordChangePage />} />
         <Route
           path={route.emailVerification()}
           element={<EmailVerification />}

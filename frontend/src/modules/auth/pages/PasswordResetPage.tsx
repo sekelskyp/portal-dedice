@@ -1,18 +1,35 @@
+import { useCallback } from 'react'
 import { Box, Container, Flex, Image, Stack } from '@chakra-ui/react'
 
+import { Alert } from '@frontend/shared/design-system'
 import { Page } from '@frontend/shared/layout'
 
 import { PasswordResetForm } from '../components/PasswordResetForm'
+import { useRequestPasswordReset } from '../hooks/useResetPassword'
 
 export function PasswordResetPage() {
-  const handlePasswordResetFormSubmit = (data: { email: string }) =>
-    console.log(data)
+  const [resetPasswordRequest, resetPasswordRequestState] =
+    useRequestPasswordReset()
+
+  const handlePasswordResetFormSubmit = useCallback(
+    (variables: { email: string }) => {
+      resetPasswordRequest({
+        variables: {
+          email: variables.email,
+        },
+      })
+    },
+    [resetPasswordRequest]
+  )
 
   return (
     <Page
       px={{ base: 4, sm: 16, lg: 20, xl: 24 }}
       py={{ base: 8, sm: 16, lg: 24 }}
     >
+      {resetPasswordRequestState.error ? (
+        <Alert status="error" title={resetPasswordRequestState.error.message} />
+      ) : null}
       <Flex
         alignItems="center"
         direction={{
@@ -34,7 +51,8 @@ export function PasswordResetPage() {
             <Container maxW="lg" as={Stack} gap={4}>
               <PasswordResetForm
                 onSubmit={handlePasswordResetFormSubmit}
-              ></PasswordResetForm>
+                loading={resetPasswordRequestState.loading}
+              />
             </Container>
           </Box>
         </Box>

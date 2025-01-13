@@ -5,14 +5,18 @@ import { z } from 'zod'
 import { Form, InputFormControl, SubmitButton } from '@frontend/shared/forms'
 
 const schema = z.object({
-  email: z.string().email('Zadejte validní emailovou adresu'),
+  email: z.string().email('Zadejte validní emailovou adresu.'),
 })
 
 export type PasswordResetFormProps = {
   onSubmit: (data: { email: string }) => void
+  loading?: boolean
 }
 
-export function PasswordResetForm({ onSubmit }: PasswordResetFormProps) {
+export function PasswordResetForm({
+  onSubmit,
+  loading,
+}: PasswordResetFormProps) {
   return (
     <Form onSubmit={onSubmit} resolver={zodResolver(schema)} noValidate>
       <Container p={0}>
@@ -25,7 +29,9 @@ export function PasswordResetForm({ onSubmit }: PasswordResetFormProps) {
             my Vám na ní zašleme odkaz na obnovení hesla.
           </Text>
           <InputFormControl name="email" label="E-mail" required />
-          <SubmitButton>Zaslat odkaz</SubmitButton>
+          <SubmitButton loading={loading} loadingText="E-mail se odesílá...">
+            Zaslat odkaz
+          </SubmitButton>
         </Stack>
       </Container>
     </Form>

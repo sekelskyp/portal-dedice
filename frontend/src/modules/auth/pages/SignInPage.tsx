@@ -102,6 +102,7 @@ export function SignInPage() {
               <SignInForm
                 onSubmit={handleSignInFormSubmit}
                 error={signInRequestState.error}
+                loading={signInRequestState.loading}
               />
               <Box>
                 <Text as="b">{resources.auth.pages.signIn.noAccount}</Text>{' '}

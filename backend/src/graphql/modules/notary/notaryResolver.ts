@@ -89,24 +89,11 @@ export class NotaryResolver {
   // Field Resolvers
   // ----------------------------------
 
-  // @FieldResolver(() => [Proceeding])
-  // async inheritanceProcedures(
-  //   @Root() user: User,
-  //   @Ctx() { proceedingRepository }: CustomContext
-  // ): Promise<Proceeding[]> {
-  //   const notaries = await proceedingRepository.getProceedingsByNotaryId(
-  //     user.id
-  //   )
-  //   return notaries || []
-  // }
-
   @FieldResolver(() => User, { nullable: true })
   async user(
     @Root() notary: Notary,
     @Ctx() { userRepository }: CustomContext
   ): Promise<User | null> {
-    const result = await userRepository.getUserByNotaryId(notary.id)
-    console.log('user result', result)
     return await userRepository.getUserByNotaryId(notary.id)
   }
 }

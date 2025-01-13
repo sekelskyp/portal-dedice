@@ -12,6 +12,7 @@ import { Db } from '@backend/types/types'
 
 export interface EmailConfirmationTokenEntity
   extends InferSelectModel<typeof emailConfirmationToken> {}
+
 export interface EmailConfirmationTokenInsertInput
   extends InferInsertModel<Omit<typeof emailConfirmationToken, 'id'>> {}
 

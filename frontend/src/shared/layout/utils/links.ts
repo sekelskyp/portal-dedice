@@ -21,6 +21,11 @@ export const footerLinks = [
         title: 'Nachytřovadlo',
         link: route.wizard(),
       },
+      {
+        id: 4,
+        title: 'Modelace',
+        link: route.inheritance(),
+      },
     ],
   },
   {
@@ -29,39 +34,23 @@ export const footerLinks = [
     links: [
       {
         id: 1,
+        title: 'Blog',
+        link: route.blog(),
+      },
+      {
+        id: 2,
         title: 'O nás',
         link: route.about(),
       },
       {
-        id: 2,
+        id: 3,
         title: 'Jak to funguje',
         link: route.guide(),
       },
       {
-        id: 3,
-        title: 'FAQ',
-        link: route.home(),
-      },
-    ],
-  },
-  {
-    id: 3,
-    title: 'Ostatní',
-    links: [
-      {
-        id: 1,
+        id: 4,
         title: 'Podmínky užívání',
-        link: route.home(),
-      },
-      {
-        id: 2,
-        title: 'Kontakt',
-        link: route.home(),
-      },
-      {
-        id: 3,
-        title: 'Blog',
-        link: route.blog(),
+        link: route.termOfService(),
       },
     ],
   },
