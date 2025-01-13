@@ -29,7 +29,14 @@ export default function ChatBody({ proceedingId, isHistory }: ChatBodyProps) {
   }, [messages])
 
   const renderMessages = () => (
-    <Grid templateColumns="1fr" gap={4} width="100%" px={4}>
+    <Grid
+      templateColumns="1fr"
+      gap={4}
+      width="100%"
+      px={4}
+      maxH={'lg'}
+      overflowY={'scroll'}
+    >
       {messages.map((message) => {
         const isCurrent = message.userId === loggedUserId
 

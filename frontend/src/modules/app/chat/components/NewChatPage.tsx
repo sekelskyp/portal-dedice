@@ -42,8 +42,10 @@ export default function NewChatPage() {
             isHistory={false}
           ></ChatHeader>
           <ChatBody proceedingId={+proceedingId!} isHistory={false}></ChatBody>
-          <ChatInput onSubmit={handleChatMessageSubmit}></ChatInput>
         </ChatGroups>
+      </Container>
+      <Container maxW={'4xl'} pt={8}>
+        <ChatInput onSubmit={handleChatMessageSubmit}></ChatInput>
       </Container>
     </Page>
   )
