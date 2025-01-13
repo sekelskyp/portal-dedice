@@ -80,7 +80,7 @@
   {
     "id": 9,
     "heading": "Během tohoto jednání jsou přítomni všichni dědicové, vč. pozůstalé manželky. Cílem je mezi aby se tito účastníci dohodli na rozdělení majetku v pozůstalosti",
-    "button": "OK.",
+    "button": "OK",
     "question": [
       {
         "title": "Je možné nechat se zastoupit na plnou moc?",
@@ -91,6 +91,6 @@
   {
     "id": 10,
     "heading": "Chcete vědět víc o možnostech rozdělení pozůstalosti?",
-    "button": "Ano."
+    "button": "Ano"
   }
 ]

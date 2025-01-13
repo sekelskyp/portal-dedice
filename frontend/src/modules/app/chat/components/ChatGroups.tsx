@@ -3,6 +3,7 @@ import { Tabs, Text } from '@chakra-ui/react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { useAuth } from '@frontend/modules/auth/auth-core'
+import { Alert } from '@frontend/shared/design-system'
 
 import { useGetBeneficiaryGroups } from '../hooks/useGetBeneficiaryGroups'
 import { useGetNotaryGroups } from '../hooks/useGetNotaryGroups'
@@ -55,6 +56,12 @@ export default function ChatGroups({ children }: ChatGroupProps) {
   const currentGroupId =
     location.pathname.split('/')[3] ||
     (chatGroups.length > 0 ? chatGroups[0].id : undefined)
+
+  if (chatGroups.length === 0) {
+    return (
+      <Alert status="info" title="Momentálně nejste v žádném aktivním chatu." />
+    )
+  }
 
   return (
     <Tabs.Root
