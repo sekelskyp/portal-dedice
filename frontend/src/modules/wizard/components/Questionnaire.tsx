@@ -53,13 +53,8 @@ export const QuestionnaireStep: React.FC<QuestionnaireStepProps> = ({
 
   const canShowStep = (step: Step): boolean => {
     if (!step.dependencies || step.dependencies.length === 0) return true
-    console.log('Checking dependencies for step:', step.id)
-    console.log('Current answers:', answers)
     return step.dependencies.every((dependency) => {
       const dependentAnswer = answers[dependency.questionId]
-      console.log(
-        `Dependency - Question ID: ${dependency.questionId}, Answer ID: ${dependency.answerId}, Selected Answer: ${dependentAnswer}`
-      )
       return dependentAnswer === dependency.answerId
     })
   }
