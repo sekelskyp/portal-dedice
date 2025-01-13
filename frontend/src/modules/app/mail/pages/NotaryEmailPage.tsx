@@ -7,7 +7,6 @@ import { useAuth } from '@frontend/modules/auth'
 import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
 
-// import { UserBadge } from '../../../../shared/components/UserBadge'
 import { useProceedingContext } from '../../proceeding/components/ProceedingLayout'
 import { UserBadge } from '../../proceeding/components/UserBadge'
 import { NotaryEmailForm } from '../components/NotaryEmailForm'
@@ -15,7 +14,7 @@ import { useNotifyBeneficiaries } from '../hooks/useNotifyBeneficiaries'
 
 export function NotaryEmailPage() {
   const { user, token } = useAuth()
-  const { id } = useParams()
+  const { proceedingId } = useParams<{ proceedingId: string }>()
   const isNotary = user?.type === 'Notary'
 
   const [
@@ -31,11 +30,11 @@ export function NotaryEmailPage() {
         variables: {
           html: variables.html,
           subject: variables.subject,
-          proceedingId: parseInt(id ?? '0', 10),
+          proceedingId: parseInt(proceedingId ?? '0', 10),
         },
       })
     },
-    [notifyProceedingBeneficiariesRequest, id]
+    [notifyProceedingBeneficiariesRequest, proceedingId]
   )
 
   if (loading) {
@@ -105,7 +104,7 @@ export function NotaryEmailPage() {
         </Stack>
         <NotaryEmailForm
           onSubmit={handleNotaryEmailFormSubmit}
-          procedureId={parseInt(id ?? '0', 10)}
+          procedureId={parseInt(proceedingId ?? '0', 10)}
           requestState={notifyProceedingBeneficiariesRequestState}
         />
       </Stack>

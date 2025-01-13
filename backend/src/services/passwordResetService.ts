@@ -52,7 +52,7 @@ export const requestPasswordReset = async (
   // Send the email with the reset link
   await sendEmail({
     to: userRecord.email,
-    subject: 'Password Reset Request',
+    subject: 'Požadavek na změnu hesla',
     html,
   })
 }

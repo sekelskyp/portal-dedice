@@ -21,7 +21,8 @@ const NOTIFY_PROCEEDING_BENEFICIARIES = gql(/* GraphQL */ `
 
 export function useNotifyBeneficiaries() {
   const navigate = useNavigate()
-  const { id } = useParams()
+  const { proceedingId } = useParams<{ proceedingId: string }>()
+  console.log(proceedingId)
 
   const [
     notifyProceedingBeneficiariesRequest,
@@ -33,7 +34,7 @@ export function useNotifyBeneficiaries() {
         type: 'success',
         duration: 5000,
       })
-      navigate(route.proceeding(id))
+      navigate(route.proceeding(proceedingId))
     },
     onError: (error) => {
       toaster.create({

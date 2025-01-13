@@ -75,7 +75,6 @@ export const NewArticlePage = () => {
         if (!data.image) {
           throw new Error('Obrázek je povinný.')
         }
-        console.log(data)
         await createArticle({
           variables: {
             data: {

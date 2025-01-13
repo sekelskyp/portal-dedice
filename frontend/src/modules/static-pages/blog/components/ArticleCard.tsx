@@ -35,7 +35,7 @@ export function ArticleCard({
       <Card.Body gap="2">
         <Card.Title>{title}</Card.Title>
         <Text color="gray" fontSize="sm" py={1}>
-          {createDate}
+          {new Date(createDate).toLocaleDateString()}
         </Text>
         <Card.Description
           textAlign="justify"

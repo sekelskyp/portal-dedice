@@ -26,20 +26,6 @@ export const useGetAssets = (proceedingId?: number) => {
     skip: !proceedingId,
   })
 
-  console.log(
-    'Assets by type:',
-    data?.getAssetsByProceedingId?.reduce(
-      (
-        acc: Record<string, typeof data.getAssetsByProceedingId>,
-        asset: (typeof data.getAssetsByProceedingId)[0]
-      ) => {
-        acc[asset.type] = [...(acc[asset.type] || []), asset]
-        return acc
-      },
-      {}
-    )
-  )
-
   return { data, loading, error }
 }
 

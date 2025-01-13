@@ -150,7 +150,7 @@ export function ProceedingForm({ onSubmit }: ProceedingFormProps) {
           <Fieldset.Content>
             <SelectFormControl
               name="mainBeneficiary"
-              collection={otherUsers} // Use allUsers here
+              collection={otherUsers}
               label="Hlavní kontaktní osoba"
               clearable
               required
