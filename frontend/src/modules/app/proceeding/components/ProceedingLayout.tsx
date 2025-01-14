@@ -21,6 +21,7 @@ export interface IProceedingContext extends UseProceedingReturn {
   proceedingId: number
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const ProceedingContext = createContext<IProceedingContext | null>(null)
 
 // A proceeding context provider
