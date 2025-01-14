@@ -70,5 +70,5 @@ First download and install [Node.js](https://nodejs.org/en/download/) version de
 
 ## Domains
 
-- [dev-frontend-team03-vse.handson.pro](http://dev-frontend-username-vse.handson.pro)
-- [dev-backend-team03-vse.handson.pro](http://dev-backend-username-vse.handson.pro)
+- [dev-frontend-team03-vse.handson.pro](http://dev-frontend-team03-vse.handson.pro)
+- [dev-backend-team03-vse.handson.pro](http://dev-backend-team03-vse.handson.pro)
