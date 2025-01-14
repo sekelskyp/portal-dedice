@@ -60,20 +60,15 @@ export const AddressAutoComplete = forwardRef(
         <Combobox.Root
           collection={collection}
           inputValue={value ?? ''}
-          onInputValueChange={(e) => {
-            if (e.inputValue === value) return
-
-            onChange(e.inputValue)
-          }}
           onValueChange={(e) => {
             if (e.value.length !== 0) {
               const suggestion = e.value[0] as unknown as AddressSuggestion
+              onChange(suggestion.street)
               onSuggestionSelected?.(suggestion)
-              onChange(suggestion.street + ' ' + suggestion.streetNumber)
             }
           }}
-          allowCustomValue
           disabled={disabled}
+          allowCustomValue
           {...props}
         >
           <Combobox.Control>
@@ -87,7 +82,7 @@ export const AddressAutoComplete = forwardRef(
                       variant="ghost"
                       px={1}
                       onClick={() => {
-                        onChange?.('')
+                        onChange('')
                         onSuggestionSelected?.(undefined)
                       }}
                     >
@@ -102,7 +97,10 @@ export const AddressAutoComplete = forwardRef(
                 </HStack>
               }
             >
-              <Combobox.Input asChild>
+              <Combobox.Input
+                asChild
+                onChange={(e) => onChange(e.target.value)}
+              >
                 <Input disabled={disabled} />
               </Combobox.Input>
             </InputGroup>
