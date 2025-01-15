@@ -34,6 +34,7 @@ const defaultTestatorData: TestatorDataContextProps = {
   setTestatorData: () => {},
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const TestatorDataContext =
   createContext<TestatorDataContextProps>(defaultTestatorData)
 
