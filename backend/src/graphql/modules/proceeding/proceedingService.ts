@@ -4,7 +4,10 @@ import { findAvailableNotary } from '@backend/services/notaryAssignmentService'
 import { renderTemplate } from '@backend/services/templateService'
 import { CustomContext } from '@backend/types/types'
 
-import { createAttachment } from '../attachment/attachmentService'
+import {
+  createAttachment,
+  deleteAttachmentsByIds,
+} from '../attachment/attachmentService'
 
 const PROCEEDING_ATTACHMENT_LIMIT = 10
 
@@ -232,6 +235,16 @@ export async function deleteProceedingsByIds(
   // Step 4: Delete the associated addresses in bulk
   if (addressIdsToDelete.length > 0) {
     await context.addressRepository.deleteAddressesByIds(addressIdsToDelete)
+  }
+
+  // delete attachments using the attachment service
+  const proceedingsAttachments =
+    await context.attachmentRepository.getAttachmentsByProceedingIds(ids)
+  if (proceedingsAttachments.length > 0) {
+    const attachmentIds = proceedingsAttachments.map(
+      (attachment) => attachment.id
+    )
+    await deleteAttachmentsByIds(attachmentIds, context)
   }
   // Step 3: Delete the procedures
   await context.proceedingRepository.deleteProceedingsByIds(ids)
