@@ -1,24 +1,32 @@
 import { route } from '@shared/route'
 
-export const CTAButtons = [
+export interface LandingPageFeature {
+  id: number
+  title: string
+  text: string
+  buttonText: string
+  to: string
+}
+
+export const landingPageFeatures: LandingPageFeature[] = [
   {
     id: 1,
-    title: 'Nachytřovadlo',
-    text: 'Chcete se dozvědět více o pozůstalostním řízení a zjistit, jaké jsou možnosti rozdělení pozůstalosti?',
+    title: 'Určení notáře',
+    text: 'Zjistěte, který notář bude mít na starost dědické řízení po konkrétním zůstaviteli.',
     buttonText: 'Jdeme na to',
     to: route.wizard(),
   },
   {
     id: 2,
-    title: 'Předběžné šetření',
-    text: 'Chcete vyřešit předběžné šetření online?',
-    buttonText: 'Předběžné šetření online',
-    to: route.signIn(),
+    title: 'Výpočet odměny',
+    text: 'Pomocí naší kalkulačky a návodu zjistíte, kolik bude vyřízení pozůstalostního řízení stát.',
+    buttonText: 'Registrace do portálu',
+    to: route.signUp(),
   },
   {
     id: 3,
-    title: 'Vypořádání pozůstalosti',
-    text: 'Vyzkoušejte si vypořádání pozůstalosti nanečisto. Náš nástroj umožňuje vypořádat pozůstalost bez nutnosti kontaktovat notáře.',
+    title: 'Vypořádání pozůstalosti nanečisto',
+    text: 'Nevíte, na jaký podíl z pozůstalosti máte ze zákona nárok? Naše aplikace Vám poradí nejen s určením výše podílu, ale pomůže namodelovat situaci přidáním konkrétních položek majetku, čímž uvidíte i nejen podíl, ale i částky, které budou dědit konkrétní dědicové.',
     buttonText: 'Vypořádání pozůstalosti nanečisto',
     to: route.inheritance(),
   },

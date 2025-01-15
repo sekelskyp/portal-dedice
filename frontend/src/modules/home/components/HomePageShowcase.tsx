@@ -3,9 +3,9 @@ import { Card, For } from '@chakra-ui/react'
 import { Stack } from '@frontend/shared/design-system'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 
-import { CTAButtons } from '../utils/homepage-buttons'
+import { LandingPageFeature } from '../utils/homepage-buttons'
 
-export function HomePageShowcase() {
+export function HomePageShowcase({ data }: { data: LandingPageFeature[] }) {
   return (
     <Stack
       gap={8}
@@ -14,7 +14,7 @@ export function HomePageShowcase() {
       justifyContent={{ base: 'center', md: 'flex-start' }}
       mb={16}
     >
-      <For each={CTAButtons}>
+      <For each={data}>
         {(item) => (
           <Card.Root
             key={item.id}
