@@ -59,55 +59,68 @@ export const ProceedingPage = () => {
     <Stack display="flex" alignItems="center" justifyContent="center">
       {proceeding ? (
         <Card.Root w="full">
-          <Card.Header as={HStack} gap={3}>
-            <LuFile size={24} />
-            {isEditable ? (
-              <Editable.Root
-                value={name}
-                onValueChange={(e) => setName(e.value)}
-                onValueCommit={(e) => commitName(e.value)}
-                placeholder="Click to edit"
-                fontSize="xl"
-                fontWeight="bold"
+          <Card.Header as={Stack} gap={3}>
+            <Stack
+              direction={{ base: 'column', md: 'row' }}
+              gap={3}
+              width="full"
+            >
+              <HStack flex="1" gap={3}>
+                <LuFile size={24} />
+                {isEditable ? (
+                  <Editable.Root
+                    value={name}
+                    onValueChange={(e) => setName(e.value)}
+                    onValueCommit={(e) => commitName(e.value)}
+                    placeholder="Click to edit"
+                    fontSize="xl"
+                    fontWeight="bold"
+                  >
+                    <Editable.Preview />
+                    <Editable.Input />
+                    <Editable.Control>
+                      <Editable.EditTrigger asChild>
+                        <IconButton variant="ghost" size="xs">
+                          <LuPencilLine />
+                        </IconButton>
+                      </Editable.EditTrigger>
+                      <Editable.CancelTrigger asChild>
+                        <IconButton variant="outline" size="xs">
+                          <LuX />
+                        </IconButton>
+                      </Editable.CancelTrigger>
+                      <Editable.SubmitTrigger asChild>
+                        <IconButton variant="outline" size="xs">
+                          <LuCheck />
+                        </IconButton>
+                      </Editable.SubmitTrigger>
+                    </Editable.Control>
+                  </Editable.Root>
+                ) : (
+                  <Heading>{proceeding.name}</Heading>
+                )}
+              </HStack>
+              <HStack
+                gap={3}
+                justifyContent={{ base: 'flex-start', md: 'flex-end' }}
               >
-                <Editable.Preview />
-                <Editable.Input />
-                <Editable.Control>
-                  <Editable.EditTrigger asChild>
-                    <IconButton variant="ghost" size="xs">
-                      <LuPencilLine />
-                    </IconButton>
-                  </Editable.EditTrigger>
-                  <Editable.CancelTrigger asChild>
-                    <IconButton variant="outline" size="xs">
-                      <LuX />
-                    </IconButton>
-                  </Editable.CancelTrigger>
-                  <Editable.SubmitTrigger asChild>
-                    <IconButton variant="outline" size="xs">
-                      <LuCheck />
-                    </IconButton>
-                  </Editable.SubmitTrigger>
-                </Editable.Control>
-              </Editable.Root>
-            ) : (
-              <Heading>{proceeding.name}</Heading>
-            )}
-            <StatusBadge ml="auto" state={proceeding.state} />
-            {isEditable && proceeding.state !== 'Closed' && (
-              <Button
-                borderRadius="full"
-                size="xs"
-                px={4}
-                fontSize="sm"
-                gap={2}
-                bg="fg.error"
-                color="bg.error"
-                onClick={() => close()}
-              >
-                <LockIcon /> Uzavřít
-              </Button>
-            )}
+                <StatusBadge state={proceeding.state} />
+                {isEditable && proceeding.state !== 'Closed' && (
+                  <Button
+                    borderRadius="full"
+                    size="xs"
+                    px={4}
+                    fontSize="sm"
+                    gap={2}
+                    bg="fg.error"
+                    color="bg.error"
+                    onClick={() => close()}
+                  >
+                    <LockIcon /> Uzavřít
+                  </Button>
+                )}
+              </HStack>
+            </Stack>
           </Card.Header>
           <Card.Body gap={4}>
             <Tabs.Root
