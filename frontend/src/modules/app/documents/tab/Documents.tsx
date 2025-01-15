@@ -121,7 +121,7 @@ export function Documents({ id }: { id: string }) {
                       fontSize={{ base: 'sm', sm: 'md' }}
                       cursor="pointer"
                     >
-                      {decodeURIComponent(escape(document.fileName))}
+                      {document.fileName}
                     </Link>
                   </Stack>
                   <Stack direction="row" gap={4} alignItems="center">

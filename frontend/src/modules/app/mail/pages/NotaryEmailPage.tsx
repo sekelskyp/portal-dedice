@@ -92,7 +92,11 @@ export function NotaryEmailPage() {
             issueText="Notář bez kontaktních údajů."
           />
           <Heading>Dědici</Heading>
-          <Stack direction={{ base: 'column', md: 'row' }} alignItems="start">
+          <Stack
+            direction={{ base: 'column', md: 'row' }}
+            alignItems="start"
+            flexWrap="wrap"
+          >
             {proceeding.beneficiaries?.map((beneficiary, index) => (
               <UserBadge
                 key={beneficiary?.id ?? index}
