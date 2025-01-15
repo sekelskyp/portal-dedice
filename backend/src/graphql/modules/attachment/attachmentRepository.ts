@@ -71,6 +71,16 @@ export function getAttachmentRepository(db: Db) {
     return results
   }
 
+  async function getAttachmentsByProceedingIds(
+    proceedingIds: number[]
+  ): Promise<AttachmentEntity[]> {
+    const results = await db
+      .select()
+      .from(attachment)
+      .where(inArray(attachment.proceedingId, proceedingIds))
+    return results
+  }
+
   // Get Attachmentes by their IDs
   async function getAttachmentsByIds(
     ids: number[]
@@ -100,6 +110,7 @@ export function getAttachmentRepository(db: Db) {
     updateAttachmentById,
     getAttachmentCountByProceedingId,
     getAttachmentsByProceedingId,
+    getAttachmentsByProceedingIds,
     getAttachmentByUuid,
   }
 }
