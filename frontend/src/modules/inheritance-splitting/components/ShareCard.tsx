@@ -52,7 +52,7 @@ export const HeirShare = ({
                 Celkem získavá: {share.totalValue.toLocaleString()} Kč
               </Text>
               <Text fontSize="sm" color="gray.600">
-                Současný podíl:
+                Současný podíl:{' '}
                 {((share.totalValue / totalEstate) * 100).toFixed(1)}%
               </Text>
               <Text fontSize="sm" color="blue.600">

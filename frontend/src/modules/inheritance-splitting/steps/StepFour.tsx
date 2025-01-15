@@ -42,14 +42,12 @@ export const StepFour = ({ onPrevious, onNext }: StepProps) => {
       shares[heir.id || ''] = {
         heirId: heir.id || '',
         heirLabel: heir.label,
-        totalValue: heir.type === 'spouse' ? sharedHalf : 0,
+        totalValue: 0,
         assets: [],
       }
     })
 
-    assets.forEach((asset) => {
-      if (asset.isShared && asset.sharedOwner === 'manžel/ka') return
-
+    notSharedAsssets.forEach((asset) => {
       const value = Number(asset.value) || 0
       if (asset.heir === 'all') {
         const shareValue = value / heirs.length
