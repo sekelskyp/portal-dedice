@@ -20,7 +20,6 @@ interface WizardProviderProps {
   value: WizardContextType
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const WizardProvider = ({ children, value }: WizardProviderProps) => {
   return (
     <WizardContext.Provider value={value}>{children}</WizardContext.Provider>
