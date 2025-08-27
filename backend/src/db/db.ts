@@ -17,6 +17,7 @@ export const getConnection = async (): Promise<{
     port: DB_PORT,
     multipleStatements: true,
   })
+
   const db = drizzle(connection, { schema, mode: 'default', logger: true })
 
   return { db, connection }

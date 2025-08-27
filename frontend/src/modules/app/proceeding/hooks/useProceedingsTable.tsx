@@ -20,7 +20,7 @@ import {
   fuzzyFilter,
   INITIAL_SORTING_STATE_PROCEEDINGS,
 } from '@frontend/shared/utils/table-utils'
-import { route } from '@shared/route'
+import { route } from '@lib/route'
 
 import { ProceedingsItem } from '../components/ProceedingsTable'
 import { StatusBadge } from '../components/StatusBadge'

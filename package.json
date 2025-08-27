@@ -3,8 +3,7 @@
   "license": "MIT",
   "workspaces": [
     "backend",
-    "frontend",
-    "shared"
+    "frontend"
   ],
   "scripts": {
     "backend": "yarn workspace backend",

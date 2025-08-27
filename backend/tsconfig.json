@@ -3,7 +3,7 @@
     "rootDir": "..",
     "paths": {
       "@backend/*": ["./src/*"],
-      "@shared/*": ["../shared/src/*"]
+      "@libs/*": ["./src/libs/*"]
     },
     "target": "ES2017",
     "lib": ["es2021"],

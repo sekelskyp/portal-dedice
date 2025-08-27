@@ -10,7 +10,7 @@ import { Alert } from '@frontend/shared/design-system'
 import { Form, InputFormControl, SubmitButton } from '@frontend/shared/forms'
 import { TextAreaFormControl } from '@frontend/shared/forms/TextAreaFormControl'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
-import { route } from '@shared/route'
+import { route } from '@lib/route'
 
 const schema = z.object({
   subject: z

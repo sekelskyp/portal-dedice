@@ -6,7 +6,7 @@ import {
 } from 'lucide-react'
 
 import resources from '@frontend/resources'
-import { route } from '@shared/route'
+import { route } from '@lib/route'
 
 import { SideBarItem } from '../components/SideBar'
 

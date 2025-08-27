@@ -1,6 +1,6 @@
 import { Field, ID, ObjectType } from 'type-graphql'
 
-import { GenderEnumType, UserTypeEnumType } from '@shared/enums'
+import { GenderEnumType, UserTypeEnumType } from '@libs/enums'
 
 @ObjectType()
 export class User {

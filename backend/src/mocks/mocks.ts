@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker'
 import { IMockStore } from '@graphql-tools/mock'
 
 import { createToken } from '@backend/libs/jwt'
-import { formatDate } from '@shared/date'
+import { formatDate } from '@libs/date'
 
 faker.seed(42)
 

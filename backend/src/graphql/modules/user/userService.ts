@@ -14,7 +14,7 @@ import {
   resetPassword,
 } from '@backend/services/passwordResetService'
 import { CustomContext } from '@backend/types/types'
-import { GenderEnumType } from '@shared/enums'
+import { GenderEnumType } from '@libs/enums'
 
 export interface AuthResponse {
   userId: number

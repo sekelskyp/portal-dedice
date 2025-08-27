@@ -20,7 +20,7 @@ import {
   updateProfile,
 } from '@backend/graphql/modules/user/userService'
 import { CustomContext } from '@backend/types/types'
-import { UserTypeEnumType } from '@shared/enums'
+import { UserTypeEnumType } from '@libs/enums'
 
 import { ProfileInput } from './profileInput'
 import { RegisterInput } from './registerInput'

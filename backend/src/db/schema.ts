@@ -20,7 +20,7 @@ import {
   genderEnum,
   proceedingStateEnum,
   userTypeEnum,
-} from '@shared/enums'
+} from '@libs/enums'
 
 // Define User Table
 export const user = mysqlTable(

@@ -4,7 +4,7 @@ import { MdDelete, MdEdit } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
 
 import { useAuth } from '@frontend/modules/auth'
-import { route } from '@shared/route'
+import { route } from '@lib/route'
 
 interface ArticleAdminPanelProps {
   onDelete: () => void

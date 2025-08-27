@@ -1,4 +1,4 @@
-import { route } from '@shared/route'
+import { route } from '@lib/route'
 
 export const downloadDocument = (fileUuid: string, fileName: string) => {
   const url = route.downloadFile(fileUuid)

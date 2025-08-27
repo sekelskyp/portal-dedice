@@ -4,7 +4,7 @@ import { SignInPage } from '@frontend/modules/auth/pages/SignInPage'
 import { SignUpPage } from '@frontend/modules/auth/pages/SignUpPage'
 import { HomePage } from '@frontend/modules/home/pages/HomePage'
 import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
-import { route } from '@shared/route'
+import { route } from '@lib/route'
 
 import { UserManagement } from './modules/admin/pages/UserManagement'
 import { NewAssetPage } from './modules/app/assets/pages/NewAssetPage'

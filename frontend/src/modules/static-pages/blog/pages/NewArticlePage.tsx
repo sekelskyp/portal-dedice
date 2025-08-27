@@ -14,7 +14,7 @@ import { QuillFormControl } from '@frontend/shared/forms/QuillFormControl'
 import { SubmitButton } from '@frontend/shared/forms/SubmitButton'
 import { Page } from '@frontend/shared/layout'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
-import { route } from '@shared/route'
+import { route } from '@lib/route'
 
 import { useCoverUpload } from '../hooks/useCoverUpload'
 import { useCreateArticle } from '../hooks/useCreateArticle'

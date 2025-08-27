@@ -2,7 +2,7 @@ import { Icon, Text } from '@chakra-ui/react'
 import { CircleAlert } from 'lucide-react'
 
 import { Box } from '@frontend/shared/design-system'
-import { route } from '@shared/route'
+import { route } from '@lib/route'
 
 import { RouterLink } from '../atoms'
 

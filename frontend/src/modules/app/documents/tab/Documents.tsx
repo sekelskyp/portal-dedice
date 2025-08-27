@@ -9,7 +9,7 @@ import { Alert } from '@frontend/shared/design-system'
 import { useActionDialog } from '@frontend/shared/hooks/useActionDialog'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
-import { route } from '@shared/route'
+import { route } from '@lib/route'
 
 import { ActionDialog } from '../../../../shared/components/ActionDialog'
 import { useProceedingContext } from '../../proceeding/components/ProceedingLayout'

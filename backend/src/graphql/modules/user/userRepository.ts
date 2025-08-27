@@ -2,7 +2,7 @@ import { eq, inArray, InferInsertModel, InferSelectModel } from 'drizzle-orm'
 
 import { user } from '@backend/db/schema'
 import { type Db } from '@backend/types/types'
-import { UserTypeEnumType } from '@shared/enums'
+import { UserTypeEnumType } from '@libs/enums'
 
 export interface UserEntity extends InferSelectModel<typeof user> {}
 export interface UserInsertInput

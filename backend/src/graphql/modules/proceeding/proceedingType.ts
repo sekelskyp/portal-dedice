@@ -1,6 +1,6 @@
 import { Field, ID, ObjectType } from 'type-graphql'
 
-import { ProceedingStateEnumType } from '@shared/enums'
+import { ProceedingStateEnumType } from '@libs/enums'
 
 @ObjectType()
 export class Proceeding {

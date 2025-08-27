@@ -9,7 +9,7 @@ import {
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 
 import { toaster } from '@frontend/shared/design-system'
-import { route } from '@shared/route'
+import { route } from '@lib/route'
 
 type AuthState = {
   token: string | null

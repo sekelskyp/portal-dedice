@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 import { Page } from '@frontend/shared/layout'
 import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
-import { route } from '@shared/route'
+import { route } from '@lib/route'
 
 import { useEmailToken } from '../hooks/useEmailToken'
 

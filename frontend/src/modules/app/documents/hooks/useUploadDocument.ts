@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { gql } from '@frontend/gql'
 import { toaster } from '@frontend/shared/design-system'
-import { route } from '@shared/route'
+import { route } from '@lib/route'
 
 const UPDATE_DOCUMENT_MUTATION = gql(/* GraphQL */ `
   mutation UploadDocument($data: UploadFileToProceedingInput!) {

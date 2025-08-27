@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
     "rootDir": "..",
+    "baseUrl": "./src",
     "paths": {
-      "@frontend/*": ["./src/*"],
-      "@shared/*": ["../shared/src/*"]
+      "@frontend/*": ["./*"],
+      "@lib/*": ["./lib/*"]
     },
     "target": "ES2020",
     "useDefineForClassFields": true,

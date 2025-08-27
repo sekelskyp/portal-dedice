@@ -1,4 +1,4 @@
-import { route } from '@shared/route'
+import { route } from '@lib/route'
 
 export interface LandingPageFeature {
   id: number

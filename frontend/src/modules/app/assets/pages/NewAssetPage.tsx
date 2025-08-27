@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { Asset } from '@frontend/gql/graphql'
 import { Page } from '@frontend/shared/layout/Page'
-import { route } from '@shared/route'
+import { route } from '@lib/route'
 
 import { useProceedingContext } from '../../proceeding/components/ProceedingLayout'
 import { AssetForm, AssetFormData } from '../components/AssetForm'

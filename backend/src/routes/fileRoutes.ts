@@ -4,7 +4,7 @@ import path from 'path'
 
 import { FILE_UPLOADS_DIR } from '@backend/config'
 import { CustomContext } from '@backend/types/types'
-import { route } from '@shared/route'
+import { route } from '@libs/route'
 
 const router = Router()
 

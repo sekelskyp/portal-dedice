@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { gql } from '@frontend/gql'
 import { toaster } from '@frontend/shared/design-system'
-import { route } from '@shared/route'
+import { route } from '@lib/route'
 
 const REQUEST_PASSWORD_RESET = gql(/* GraphQL */ `
   mutation RequestPasswordReset($email: String!) {

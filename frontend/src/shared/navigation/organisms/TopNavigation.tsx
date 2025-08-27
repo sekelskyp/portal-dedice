@@ -10,7 +10,7 @@ import {
   MenuTrigger,
   Stack,
 } from '@frontend/shared/design-system'
-import { route } from '@shared/route'
+import { route } from '@lib/route'
 
 import { RouterMenuItem, RouterNavLink } from '../atoms'
 
