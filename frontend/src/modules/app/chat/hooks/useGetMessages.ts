@@ -1,6 +1,6 @@
 import { useQuery, useSubscription } from '@apollo/client'
 
-import { ChatMessage } from '@frontend/gql/graphql'
+import { ChatMessage } from '@src/gql/graphql'
 
 import { GET_MESSAGES, MESSAGE_SUBSCRIPTION } from '../utils/chatOperations'
 

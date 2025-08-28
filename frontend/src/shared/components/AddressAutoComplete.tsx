@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react'
 import { FiChevronDown, FiX } from 'react-icons/fi'
 
-import { AddressSuggestion } from '@frontend/gql/graphql'
+import { AddressSuggestion } from '@src/gql/graphql'
 
 import { Button, InputGroup } from '../design-system'
 import useAddressSuggestions from '../hooks/useAddressSuggestions'

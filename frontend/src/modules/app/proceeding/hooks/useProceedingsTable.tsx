@@ -12,7 +12,7 @@ import {
 import { SquareArrowOutUpRight as SquareArrowOutUpRightIcon } from 'lucide-react'
 import { MdDelete } from 'react-icons/md'
 
-import { useAuth } from '@frontend/modules/auth'
+import { useAuth } from '@src/modules/auth'
 import { useActionDialog } from '@shared/hooks/useActionDialog'
 import { useTableFilters } from '@shared/hooks/useTableFilters'
 import { useTablePagination } from '@shared/hooks/useTablePagination'

@@ -3,7 +3,7 @@ import { route } from '@lib/route'
 import { useTheme } from 'next-themes'
 import { Link } from 'react-router-dom'
 
-import { useAuth } from '@frontend/modules/auth'
+import { useAuth } from '@src/modules/auth'
 
 import { TopNavigation } from '../navigation/organisms/TopNavigation'
 

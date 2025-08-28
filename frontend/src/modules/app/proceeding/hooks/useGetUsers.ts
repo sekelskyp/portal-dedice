@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client'
 
-import { gql } from '@frontend/gql'
+import { gql } from '@src/gql'
 
 const GET_USERS = gql(/* GraphQL */ `
   query GetAllUsers($type: String!) {

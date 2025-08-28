@@ -1,4 +1,4 @@
-import { gql } from '@frontend/gql'
+import { gql } from '@src/gql'
 
 export const ADD_MESSAGE = gql(/* GraphQL */ `
   mutation addMessage($body: String!, $proceedingId: Int!, $userId: Int!) {

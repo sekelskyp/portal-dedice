@@ -3,8 +3,8 @@ import { Heading, Stack, Text } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { ChangePasswordMutation } from '@frontend/gql/graphql'
-import { passwordSchema } from '@frontend/modules/auth/passwordSchema'
+import { ChangePasswordMutation } from '@src/gql/graphql'
+import { passwordSchema } from '@src/modules/auth/passwordSchema'
 import { Form, SubmitButton } from '@shared/forms'
 import { PasswordFormControl } from '@shared/forms/PasswordFormControl'
 

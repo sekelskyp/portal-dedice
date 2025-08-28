@@ -2,7 +2,7 @@ import { HStack } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { useAuth } from '@frontend/modules/auth'
+import { useAuth } from '@src/modules/auth'
 import { Radio, Stack } from '@shared/design-system'
 import {
   AddressGroupFormControl,

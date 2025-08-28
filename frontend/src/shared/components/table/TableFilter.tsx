@@ -4,7 +4,7 @@ import { Column } from '@tanstack/react-table'
 import { FaSearch } from 'react-icons/fa'
 import { MdOutlineCancel } from 'react-icons/md'
 
-import { USER_TYPE_MAPPING } from '@frontend/modules/admin/utils/user-mapping'
+import { USER_TYPE_MAPPING } from '@src/modules/admin/utils/user-mapping'
 import {
   InputGroup,
   NativeSelectField,

@@ -4,7 +4,7 @@ import { Box, Heading, HStack, Stack, Text, VStack } from '@chakra-ui/react'
 import { route } from '@lib/route'
 import { FaMoneyBill, FaTimes } from 'react-icons/fa'
 
-import { useAuth } from '@frontend/modules/auth'
+import { useAuth } from '@src/modules/auth'
 import { ActionDialog } from '@shared/components/ActionDialog'
 import { Alert } from '@shared/design-system/atoms/chakra/alert'
 import { Button } from '@shared/design-system/atoms/chakra/button'

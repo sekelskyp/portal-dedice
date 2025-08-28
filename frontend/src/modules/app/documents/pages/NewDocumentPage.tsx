@@ -1,8 +1,8 @@
 import { Heading, Spinner, Stack, Text } from '@chakra-ui/react'
 import { LuFile } from 'react-icons/lu'
 
-import { useAuth } from '@frontend/modules/auth'
-import { AccordionHelper } from '@frontend/modules/wizard/components/accordion/AccordionHelper'
+import { useAuth } from '@src/modules/auth'
+import { AccordionHelper } from '@src/modules/wizard/components/accordion/AccordionHelper'
 import { Alert } from '@shared/design-system'
 import { UnauthorizedPage } from '@shared/navigation/pages/UnauthorizedPage'
 

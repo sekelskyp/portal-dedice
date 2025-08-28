@@ -8,8 +8,8 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 
-import { useGetNotaryAddressRuleById } from '@frontend/modules/app/settings/hooks/useGetNotaryRules'
-import { getPlaceByPostalCode } from '@frontend/modules/app/utils/addressUtils'
+import { useGetNotaryAddressRuleById } from '@src/modules/app/settings/hooks/useGetNotaryRules'
+import { getPlaceByPostalCode } from '@src/modules/app/utils/addressUtils'
 import { useActionDialog } from '@shared/hooks/useActionDialog'
 import { useTableFilters } from '@shared/hooks/useTableFilters'
 import { useTablePagination } from '@shared/hooks/useTablePagination'

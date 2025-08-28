@@ -3,7 +3,7 @@ import { Card, Center, Container, Stack, Text } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import resources from '@frontend/resources'
+import resources from '@src/resources'
 import { Radio } from '@shared/design-system'
 import {
   AddressGroupFormControl,

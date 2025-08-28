@@ -4,7 +4,7 @@ import { createListCollection } from '@chakra-ui/react/collection'
 import { Controller } from 'react-hook-form'
 import { FaTimes } from 'react-icons/fa'
 
-import resources from '@frontend/resources'
+import resources from '@src/resources'
 import { SelectFormControl } from '@shared/forms/SelectFormControl'
 
 import { useAssetSection } from '../hooks/useAssetSection'

@@ -1,4 +1,4 @@
-import { AddressSuggestion } from '@frontend/gql/graphql'
+import { AddressSuggestion } from '@src/gql/graphql'
 
 import { AddressAutoComplete } from '../components/AddressAutoComplete'
 

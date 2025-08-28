@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client/react/hooks/useQuery'
 
-import { gql } from '@frontend/gql'
+import { gql } from '@src/gql'
 
 const GET_BENEFICIARY_GROUPS = gql(/* GraphQL */ `
   query GetBeneficiaryGroups($userId: Int!) {

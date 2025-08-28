@@ -6,7 +6,7 @@ import {
   User2Icon,
 } from 'lucide-react'
 
-import resources from '@frontend/resources'
+import resources from '@src/resources'
 
 import { SideBarItem } from '../components/SideBar'
 

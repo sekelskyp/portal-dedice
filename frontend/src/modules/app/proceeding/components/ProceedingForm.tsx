@@ -9,8 +9,8 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { useAuth } from '@frontend/modules/auth'
-import resources from '@frontend/resources'
+import { useAuth } from '@src/modules/auth'
+import resources from '@src/resources'
 import { Field } from '@shared/design-system'
 import {
   AddressGroupFormControl,

@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client'
 
-import { gql } from '@frontend/gql'
-import { useAuth } from '@frontend/modules/auth'
+import { gql } from '@src/gql'
+import { useAuth } from '@src/modules/auth'
 import { toaster } from '@shared/design-system'
 
 const GET_PROFILE_QUERY = gql(/* GraphQL */ `

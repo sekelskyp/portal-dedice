@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client'
 
-import { gql } from '@frontend/gql'
+import { gql } from '@src/gql'
 
 const GET_ALL_ARTICLES = gql(/* GraphQL */ `
   query GetAllArticles {

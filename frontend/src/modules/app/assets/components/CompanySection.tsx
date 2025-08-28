@@ -3,7 +3,7 @@ import { Button, HStack, VStack } from '@chakra-ui/react'
 import { Controller } from 'react-hook-form'
 import { FaPlus, FaTrash } from 'react-icons/fa'
 
-import resources from '@frontend/resources'
+import resources from '@src/resources'
 import { InputFormControl } from '@shared/forms/InputFormControl'
 
 import { useAssetSection } from '../hooks/useAssetSection'

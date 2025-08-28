@@ -5,7 +5,7 @@ import { FaCloudUploadAlt } from 'react-icons/fa'
 import { IoDocumentTextOutline } from 'react-icons/io5'
 import { MdDelete } from 'react-icons/md'
 
-import { useAuth } from '@frontend/modules/auth'
+import { useAuth } from '@src/modules/auth'
 import { Alert } from '@shared/design-system'
 import { useActionDialog } from '@shared/hooks/useActionDialog'
 import { RouterNavLink } from '@shared/navigation/atoms'

@@ -2,7 +2,7 @@ import { type ReactNode, useEffect } from 'react'
 import { Tabs, Text } from '@chakra-ui/react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import { useAuth } from '@frontend/modules/auth/auth-core'
+import { useAuth } from '@src/modules/auth/auth-core'
 import { Alert } from '@shared/design-system'
 
 import { useGetBeneficiaryGroups } from '../hooks/useGetBeneficiaryGroups'

@@ -1,5 +1,5 @@
-import { GetUsersQuery } from '@frontend/gql/graphql'
-import { AuthUser } from '@frontend/modules/auth/auth-core'
+import { GetUsersQuery } from '@src/gql/graphql'
+import { AuthUser } from '@src/modules/auth/auth-core'
 
 export const loadUsers = ({
   data,

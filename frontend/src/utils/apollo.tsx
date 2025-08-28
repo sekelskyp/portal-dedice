@@ -17,8 +17,8 @@ import createUploadLink from 'apollo-upload-client/createUploadLink.mjs'
 import { GraphQLFormattedError } from 'graphql'
 import { createClient } from 'graphql-ws'
 
-import { config } from '@frontend/config'
-import { useAuth } from '@frontend/modules/auth'
+import { config } from '@src/config'
+import { useAuth } from '@src/modules/auth'
 
 type Props = {
   children: ReactNode

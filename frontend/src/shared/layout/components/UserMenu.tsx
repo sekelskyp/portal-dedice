@@ -8,8 +8,8 @@ import {
   Users2Icon,
 } from 'lucide-react'
 
-import { UserAvatar } from '@frontend/modules/app/components/UserAvatar'
-import { useAuth } from '@frontend/modules/auth'
+import { UserAvatar } from '@src/modules/app/components/UserAvatar'
+import { useAuth } from '@src/modules/auth'
 import {
   Button,
   MenuContent,

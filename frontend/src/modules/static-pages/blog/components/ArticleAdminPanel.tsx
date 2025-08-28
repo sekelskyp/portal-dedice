@@ -4,7 +4,7 @@ import { LuArrowLeft } from 'react-icons/lu'
 import { MdDelete, MdEdit } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
 
-import { useAuth } from '@frontend/modules/auth'
+import { useAuth } from '@src/modules/auth'
 
 interface ArticleAdminPanelProps {
   onDelete: () => void

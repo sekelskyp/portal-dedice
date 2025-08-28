@@ -1,4 +1,4 @@
-import { Address } from '@frontend/gql/graphql'
+import { Address } from '@src/gql/graphql'
 
 import { Asset } from './asset'
 import { Beneficiary } from './beneficiary'

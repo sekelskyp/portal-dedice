@@ -6,7 +6,7 @@ import { FaTrash } from 'react-icons/fa'
 import { FiSend } from 'react-icons/fi'
 import { z } from 'zod'
 
-import { NotifyProcedureBeneficiariesMutation } from '@frontend/gql/graphql'
+import { NotifyProcedureBeneficiariesMutation } from '@src/gql/graphql'
 import { Alert } from '@shared/design-system'
 import { Form, InputFormControl, SubmitButton } from '@shared/forms'
 import { TextAreaFormControl } from '@shared/forms/TextAreaFormControl'

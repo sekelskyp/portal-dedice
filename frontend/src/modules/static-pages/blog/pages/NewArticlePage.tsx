@@ -6,7 +6,7 @@ import { LuArrowLeft } from 'react-icons/lu'
 import { useNavigate, useParams } from 'react-router-dom'
 import { z } from 'zod'
 
-import { useAuth } from '@frontend/modules/auth'
+import { useAuth } from '@src/modules/auth'
 import { DateFormControl } from '@shared/forms/DateFormControl'
 import { FileUploadFormControl } from '@shared/forms/FileUploadFormControl'
 import { Form } from '@shared/forms/Form'

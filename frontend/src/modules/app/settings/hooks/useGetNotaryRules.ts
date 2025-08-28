@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client'
 
-import { gql } from '@frontend/gql'
-import { useAuth } from '@frontend/modules/auth'
+import { gql } from '@src/gql'
+import { useAuth } from '@src/modules/auth'
 
 export const GET_NOTARY_DATE_RULES = gql(/* GraphQL */ `
   query GetNotaryDateRules($notaryId: Int!) {

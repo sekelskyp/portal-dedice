@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client'
 
-import { gql } from '@frontend/gql'
+import { gql } from '@src/gql'
 
 const GET_ATTACHMENTS_BY_PROCEEDING_ID = gql(/* GraphQL */ `
   query GetAttachmentsByProceedingId($proceedingId: Int!) {

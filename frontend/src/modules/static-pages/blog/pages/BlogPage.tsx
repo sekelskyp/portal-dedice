@@ -3,7 +3,7 @@ import { route } from '@lib/route'
 import { FaPlus } from 'react-icons/fa'
 import { RiSortAsc, RiSortDesc } from 'react-icons/ri'
 
-import { useAuth } from '@frontend/modules/auth'
+import { useAuth } from '@src/modules/auth'
 import { Alert } from '@shared/design-system'
 import { Page } from '@shared/layout'
 import { RouterNavLink } from '@shared/navigation/atoms/RouterNavLink'

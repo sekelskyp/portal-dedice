@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Box, Flex, Grid, GridItem, Text } from '@chakra-ui/react'
 
-import { useAuth } from '@frontend/modules/auth/auth-core'
+import { useAuth } from '@src/modules/auth/auth-core'
 
 import { useGetMessages } from '../hooks/useGetMessages'
 

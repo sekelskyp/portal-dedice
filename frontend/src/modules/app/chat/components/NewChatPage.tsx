@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { Container } from '@chakra-ui/react'
 import { useParams } from 'react-router-dom'
 
-import { useAuth } from '@frontend/modules/auth/auth-core'
+import { useAuth } from '@src/modules/auth/auth-core'
 import { Page } from '@shared/layout'
 
 import { useAddMessage } from '../hooks/useAddMessage'

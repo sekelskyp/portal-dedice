@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { Container, Flex, Heading, Stack, Text } from '@chakra-ui/react'
 import { route } from '@lib/route'
 
-import resources from '@frontend/resources'
+import resources from '@src/resources'
 import { Alert, Box } from '@shared/design-system'
 import { Page } from '@shared/layout'
 import { RouterLink } from '@shared/navigation/atoms'

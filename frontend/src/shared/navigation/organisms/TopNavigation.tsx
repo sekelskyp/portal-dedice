@@ -3,7 +3,7 @@ import { route } from '@lib/route'
 import { Menu as MenuIcon } from 'lucide-react'
 import { useMediaQuery } from 'usehooks-ts'
 
-import { useAuth } from '@frontend/modules/auth'
+import { useAuth } from '@src/modules/auth'
 import {
   Button,
   MenuContent,

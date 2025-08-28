@@ -1,6 +1,6 @@
 import { Box, Container } from '@chakra-ui/react'
 
-import { StepperCategory } from '@frontend/modules/wizard/components/stepper/StepperCategory'
+import { StepperCategory } from '@src/modules/wizard/components/stepper/StepperCategory'
 
 import { InheritanceProgressBar } from './InheritanceProgressBar'
 
