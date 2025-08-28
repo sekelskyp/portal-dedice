@@ -1,10 +1,10 @@
 import React from 'react'
 import { Box, Button, HStack, Stack, VStack } from '@chakra-ui/react'
 import { createListCollection } from '@chakra-ui/react/collection'
+import resources from '@src/resources'
 import { Controller } from 'react-hook-form'
 import { FaPlus, FaTimes, FaTrash } from 'react-icons/fa'
 
-import resources from '@src/resources'
 import { InputFormControl } from '@shared/forms/InputFormControl'
 import { SelectFormControl } from '@shared/forms/SelectFormControl'
 

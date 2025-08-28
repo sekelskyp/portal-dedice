@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { ApolloError, useMutation, useQuery } from '@apollo/client'
-
 import { gql } from '@src/gql'
 import { useAuth } from '@src/modules/auth'
+
 import { toaster } from '@shared/design-system'
 import { Proceeding } from '@shared/types/proceeding'
 

@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client'
-
 import { gql } from '@src/gql'
+
 import { toaster } from '@shared/design-system'
 
 const DELETE_ATTACHMENT_MUTATION = gql(/* GraphQL */ `

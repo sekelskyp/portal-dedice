@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
 import { Input, Stack } from '@chakra-ui/react'
+import { USER_TYPE_MAPPING } from '@src/modules/admin/utils/user-mapping'
 import { Column } from '@tanstack/react-table'
 import { FaSearch } from 'react-icons/fa'
 import { MdOutlineCancel } from 'react-icons/md'
 
-import { USER_TYPE_MAPPING } from '@src/modules/admin/utils/user-mapping'
 import {
   InputGroup,
   NativeSelectField,

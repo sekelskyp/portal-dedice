@@ -1,12 +1,11 @@
 import { route } from '@lib/route'
+import resources from '@src/resources'
 import {
   ArchiveIcon,
   MessagesSquareIcon,
   SettingsIcon,
   User2Icon,
 } from 'lucide-react'
-
-import resources from '@src/resources'
 
 import { SideBarItem } from '../components/SideBar'
 

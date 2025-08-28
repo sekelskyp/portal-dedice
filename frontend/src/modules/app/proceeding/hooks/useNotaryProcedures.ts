@@ -1,5 +1,4 @@
 import { useQuery } from '@apollo/client'
-
 import { gql } from '@src/gql'
 import { useAuth } from '@src/modules/auth'
 

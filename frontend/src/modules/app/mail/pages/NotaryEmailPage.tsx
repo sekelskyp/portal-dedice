@@ -1,9 +1,9 @@
 import { useCallback } from 'react'
 import { Heading, Spinner, Stack, Text } from '@chakra-ui/react'
+import { useAuth } from '@src/modules/auth'
 import { LuFile } from 'react-icons/lu'
 import { useParams } from 'react-router-dom'
 
-import { useAuth } from '@src/modules/auth'
 import { NotFoundPage } from '@shared/navigation/pages/NotFoundPage'
 import { UnauthorizedPage } from '@shared/navigation/pages/UnauthorizedPage'
 

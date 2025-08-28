@@ -1,5 +1,7 @@
 import { HStack, Icon, Stack, Text, useBreakpoint } from '@chakra-ui/react'
 import { route } from '@lib/route'
+import { UserAvatar } from '@src/modules/app/components/UserAvatar'
+import { useAuth } from '@src/modules/auth'
 import {
   ArchiveIcon,
   ChevronDown as ChevronDownIcon,
@@ -8,8 +10,6 @@ import {
   Users2Icon,
 } from 'lucide-react'
 
-import { UserAvatar } from '@src/modules/app/components/UserAvatar'
-import { useAuth } from '@src/modules/auth'
 import {
   Button,
   MenuContent,

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Box, createListCollection, Fieldset, Stack } from '@chakra-ui/react'
-
 import { useAuth } from '@src/modules/auth'
+
 import {
   DialogBackdrop,
   DialogBody,

@@ -1,5 +1,4 @@
 import { useQuery } from '@apollo/client'
-
 import { gql } from '@src/gql'
 
 const GET_ATTACHMENTS_BY_PROCEEDING_ID = gql(/* GraphQL */ `

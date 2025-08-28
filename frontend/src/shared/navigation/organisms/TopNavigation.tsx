@@ -1,9 +1,9 @@
 import { Flex, Icon } from '@chakra-ui/react'
 import { route } from '@lib/route'
+import { useAuth } from '@src/modules/auth'
 import { Menu as MenuIcon } from 'lucide-react'
 import { useMediaQuery } from 'usehooks-ts'
 
-import { useAuth } from '@src/modules/auth'
 import {
   Button,
   MenuContent,

@@ -13,12 +13,11 @@ import { NetworkError } from '@apollo/client/errors'
 import { onError } from '@apollo/client/link/error'
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { getMainDefinition } from '@apollo/client/utilities'
+import { config } from '@src/config'
+import { useAuth } from '@src/modules/auth'
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs'
 import { GraphQLFormattedError } from 'graphql'
 import { createClient } from 'graphql-ws'
-
-import { config } from '@src/config'
-import { useAuth } from '@src/modules/auth'
 
 type Props = {
   children: ReactNode

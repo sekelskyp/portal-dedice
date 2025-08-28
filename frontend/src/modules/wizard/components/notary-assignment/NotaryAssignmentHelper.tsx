@@ -1,6 +1,6 @@
 import { Flex, Heading, Text } from '@chakra-ui/react'
-
 import resources from '@src/resources'
+
 import { Button, Tooltip } from '@shared/design-system'
 import { SimpleCentered } from '@shared/design-system/atoms/CTA/SimpleCentered'
 

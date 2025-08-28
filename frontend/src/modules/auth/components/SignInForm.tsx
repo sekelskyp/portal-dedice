@@ -1,8 +1,8 @@
 import { Stack } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import resources from '@src/resources'
 import { z } from 'zod'
 
-import resources from '@src/resources'
 import { Form, InputFormControl, SubmitButton } from '@shared/forms'
 import { PasswordFormControl } from '@shared/forms/PasswordFormControl'
 

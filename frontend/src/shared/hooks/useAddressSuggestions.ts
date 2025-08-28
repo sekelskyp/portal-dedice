@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useQuery } from '@apollo/client'
-import { useDebounceValue } from 'usehooks-ts'
-
 import { gql } from '@src/gql'
 import { AddressSuggestion } from '@src/gql/graphql'
+import { useDebounceValue } from 'usehooks-ts'
 
 const GET_ADDRESS_SUGGESTIONS = gql(`
   query GetAddressSuggestions($query: String!) {

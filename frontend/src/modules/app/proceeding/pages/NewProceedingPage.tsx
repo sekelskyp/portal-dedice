@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
 import { Card, Heading, Text } from '@chakra-ui/react'
-
 import { useCreateProceeding } from '@src/modules/app/proceeding/hooks/useCreateProceeding'
 import resources from '@src/resources'
+
 import { Alert } from '@shared/design-system'
 
 import { ProceedingForm } from '../components/ProceedingForm'

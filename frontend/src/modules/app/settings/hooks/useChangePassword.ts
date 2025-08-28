@@ -1,8 +1,8 @@
 import { useMutation } from '@apollo/client'
 import { route } from '@lib/route'
+import { gql } from '@src/gql'
 import { useNavigate } from 'react-router-dom'
 
-import { gql } from '@src/gql'
 import { toaster } from '@shared/design-system'
 
 const CHANGE_PASSWORD = gql(/* GraphQL */ `

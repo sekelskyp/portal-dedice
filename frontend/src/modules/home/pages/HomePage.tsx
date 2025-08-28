@@ -1,14 +1,14 @@
 import { Heading, Stack, Text } from '@chakra-ui/react'
 import { route } from '@lib/route'
-
 import { SplitWithImage } from '@src/shared/design-system/atoms/CTA/SplitWithImage'
 import { Page } from '@src/shared/layout'
+
 import { RouterNavLink } from '@shared/navigation/atoms'
+
+import holdingHands from '/holding-hands.jpg'
 
 import { HomePageShowcase } from '../components/HomePageShowcase'
 import { landingPageFeatures } from '../utils/homepage-buttons'
-
-import holdingHands from '/holding-hands.jpg'
 
 export function HomePage() {
   return (

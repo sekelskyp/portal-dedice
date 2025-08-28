@@ -1,8 +1,7 @@
 import { useMutation } from '@apollo/client'
 import { route } from '@lib/route'
-import { useNavigate } from 'react-router-dom'
-
 import { gql } from '@src/gql'
+import { useNavigate } from 'react-router-dom'
 
 const PROCEEDING_MUTATION = gql(/* GraphQL */ `
   mutation createProceeding($data: CreateProceedingInput!) {

@@ -8,9 +8,9 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { route } from '@lib/route'
+import { useAuth } from '@src/modules/auth'
 import { IoPersonAddSharp } from 'react-icons/io5'
 
-import { useAuth } from '@src/modules/auth'
 import { Alert } from '@shared/design-system'
 import { RouterNavLink } from '@shared/navigation/atoms'
 import { UnauthorizedPage } from '@shared/navigation/pages/UnauthorizedPage'

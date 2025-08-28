@@ -1,5 +1,4 @@
 import { useQuery } from '@apollo/client'
-
 import { gql } from '@src/gql'
 
 export const GET_ARTICLE_BY_ID = gql(/* GraphQL */ `

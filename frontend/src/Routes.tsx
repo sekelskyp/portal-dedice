@@ -1,9 +1,9 @@
 import { route } from '@lib/route'
-import { Route, Routes as RouterRoutes } from 'react-router-dom'
-
 import { SignInPage } from '@src/modules/auth/pages/SignInPage'
 import { SignUpPage } from '@src/modules/auth/pages/SignUpPage'
 import { HomePage } from '@src/modules/home/pages/HomePage'
+import { Route, Routes as RouterRoutes } from 'react-router-dom'
+
 import { NotFoundPage } from '@shared/navigation/pages/NotFoundPage'
 
 import { UserManagement } from './modules/admin/pages/UserManagement'

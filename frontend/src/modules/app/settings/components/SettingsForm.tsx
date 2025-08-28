@@ -1,10 +1,10 @@
 import { MutationResult } from '@apollo/client'
 import { Heading, Stack, Text } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-
 import { ChangePasswordMutation } from '@src/gql/graphql'
 import { passwordSchema } from '@src/modules/auth/passwordSchema'
+import { z } from 'zod'
+
 import { Form, SubmitButton } from '@shared/forms'
 import { PasswordFormControl } from '@shared/forms/PasswordFormControl'
 

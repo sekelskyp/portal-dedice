@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import { Flex, Icon, IconButton, Stack, useBreakpoint } from '@chakra-ui/react'
 import { route } from '@lib/route'
+import { useAuth } from '@src/modules/auth'
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -12,7 +13,6 @@ import {
 import { SquareArrowOutUpRight as SquareArrowOutUpRightIcon } from 'lucide-react'
 import { MdDelete } from 'react-icons/md'
 
-import { useAuth } from '@src/modules/auth'
 import { useActionDialog } from '@shared/hooks/useActionDialog'
 import { useTableFilters } from '@shared/hooks/useTableFilters'
 import { useTablePagination } from '@shared/hooks/useTablePagination'

@@ -1,8 +1,7 @@
 import { Grid, GridItem } from '@chakra-ui/react'
-import { Outlet } from 'react-router-dom'
-
 import SideBar from '@src/modules/app/components/SideBar'
 import { useAuth } from '@src/modules/auth'
+import { Outlet } from 'react-router-dom'
 
 import { Page } from '../../../shared/layout/Page'
 import { UnauthorizedPage } from '../../../shared/navigation/pages/UnauthorizedPage'

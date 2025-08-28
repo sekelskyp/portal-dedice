@@ -1,12 +1,7 @@
 import { HStack, Stack, Text } from '@chakra-ui/react'
 import { Trash2Icon } from 'lucide-react'
 
-import {
-  Alert,
-  Button,
-  Skeleton,
-  SkeletonCircle,
-} from '@shared/design-system'
+import { Alert, Button, Skeleton, SkeletonCircle } from '@shared/design-system'
 import {} from '@shared/design-system/atoms/chakra'
 
 import { UserAvatar } from '../../components/UserAvatar'

@@ -4,10 +4,10 @@ import { Box, Container, Flex, Image, Stack } from '@chakra-ui/react'
 import { Alert } from '@shared/design-system'
 import { Page } from '@shared/layout'
 
+import resetPassword from '/reset-password.png'
+
 import { PasswordResetForm } from '../components/PasswordResetForm'
 import { useRequestPasswordReset } from '../hooks/useResetPassword'
-
-import resetPassword from '/reset-password.png'
 
 export function PasswordResetPage() {
   const [resetPasswordRequest, resetPasswordRequestState] =

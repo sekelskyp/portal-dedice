@@ -1,9 +1,9 @@
 import { Box, Card, Heading, HStack, Image, Text } from '@chakra-ui/react'
 import { LuNewspaper } from 'react-icons/lu'
 
-import { getArticleImageUrl } from '../utils/articleUtils'
-
 import coverFallback from '/cover-fallback.png'
+
+import { getArticleImageUrl } from '../utils/articleUtils'
 
 export function ArticleDetailCard({
   title,

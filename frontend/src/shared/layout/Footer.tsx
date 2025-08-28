@@ -11,13 +11,13 @@ import {
 } from '@chakra-ui/react'
 import { useTheme } from 'next-themes'
 
+import logo from '/logo.png'
+import logoDark from '/logo-dark.png'
+
 import { ColorModeButton } from '../design-system/atoms/chakra'
 
 import { FooterList } from './components/FooterList'
 import { footerLinks } from './utils/links'
-
-import logo from '/logo.png'
-import logoDark from '/logo-dark.png'
 
 export const Footer = () => {
   const theme = useTheme()

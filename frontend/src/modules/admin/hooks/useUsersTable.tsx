@@ -1,4 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
+import { useGetNotaryAddressRuleById } from '@src/modules/app/settings/hooks/useGetNotaryRules'
+import { getPlaceByPostalCode } from '@src/modules/app/utils/addressUtils'
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -8,8 +10,6 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 
-import { useGetNotaryAddressRuleById } from '@src/modules/app/settings/hooks/useGetNotaryRules'
-import { getPlaceByPostalCode } from '@src/modules/app/utils/addressUtils'
 import { useActionDialog } from '@shared/hooks/useActionDialog'
 import { useTableFilters } from '@shared/hooks/useTableFilters'
 import { useTablePagination } from '@shared/hooks/useTablePagination'

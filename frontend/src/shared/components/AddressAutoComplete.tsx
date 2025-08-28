@@ -10,9 +10,8 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react'
-import { FiChevronDown, FiX } from 'react-icons/fi'
-
 import { AddressSuggestion } from '@src/gql/graphql'
+import { FiChevronDown, FiX } from 'react-icons/fi'
 
 import { Button, InputGroup } from '../design-system'
 import useAddressSuggestions from '../hooks/useAddressSuggestions'
