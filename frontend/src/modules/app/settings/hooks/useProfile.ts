@@ -2,7 +2,7 @@ import { useMutation, useQuery } from '@apollo/client'
 
 import { gql } from '@frontend/gql'
 import { useAuth } from '@frontend/modules/auth'
-import { toaster } from '@frontend/shared/design-system'
+import { toaster } from '@shared/design-system'
 
 const GET_PROFILE_QUERY = gql(/* GraphQL */ `
   query GetUserById($getUserByIdId: Float!) {

@@ -25,8 +25,10 @@ export default defineConfig({
   resolve: {
     alias: {
       // These must be kept in sync with tsconfig.json!
-      '@frontend': resolve(__dirname, './src'),
+      '@src': resolve(__dirname, './src'),
+      '@shared': resolve(__dirname, './src/shared'),
       '@lib': resolve(__dirname, './src/lib'),
+      '@public': resolve(__dirname, './public')
     },
   },
   test: {

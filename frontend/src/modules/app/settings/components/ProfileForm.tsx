@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 import { useAuth } from '@frontend/modules/auth'
-import { Radio, Stack } from '@frontend/shared/design-system'
+import { Radio, Stack } from '@shared/design-system'
 import {
   AddressGroupFormControl,
   Form,
@@ -11,7 +11,7 @@ import {
   RadioGroupFormControl,
   SubmitButton,
   SwitchFormControl,
-} from '@frontend/shared/forms'
+} from '@shared/forms'
 
 import { NameGroupFormControl } from './NameGroupFormControl'
 import { NotaryRulesDisplay } from './NotaryRulesDisplay'

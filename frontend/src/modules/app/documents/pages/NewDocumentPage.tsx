@@ -3,8 +3,8 @@ import { LuFile } from 'react-icons/lu'
 
 import { useAuth } from '@frontend/modules/auth'
 import { AccordionHelper } from '@frontend/modules/wizard/components/accordion/AccordionHelper'
-import { Alert } from '@frontend/shared/design-system'
-import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
+import { Alert } from '@shared/design-system'
+import { UnauthorizedPage } from '@shared/navigation/pages/UnauthorizedPage'
 
 import { useProceedingContext } from '../../proceeding/components/ProceedingLayout'
 import { DocumentUpload } from '../components/DocumentUpload'

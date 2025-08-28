@@ -1,7 +1,7 @@
 import { Button, Icon, Text } from '@chakra-ui/react'
 import { FiAlertCircle } from 'react-icons/fi'
 
-import { Box } from '@frontend/shared/design-system'
+import { Box } from '@shared/design-system'
 
 interface ErrorTreePageProps {
   onGoBack: (questionIndex: number) => void

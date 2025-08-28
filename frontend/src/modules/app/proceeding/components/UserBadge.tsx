@@ -6,8 +6,8 @@ import {
   Button,
   Skeleton,
   SkeletonCircle,
-} from '@frontend/shared/design-system'
-import {} from '@frontend/shared/design-system/atoms/chakra'
+} from '@shared/design-system'
+import {} from '@shared/design-system/atoms/chakra'
 
 import { UserAvatar } from '../../components/UserAvatar'
 

@@ -9,7 +9,7 @@ import {
   FileUploadList,
   FileUploadRoot,
   toaster,
-} from '@frontend/shared/design-system/atoms/chakra'
+} from '@shared/design-system/atoms/chakra'
 
 import { useProceedingContext } from '../../proceeding/components/ProceedingLayout'
 import { useDocumentUpload } from '../hooks/useDocumentUpload'

@@ -3,7 +3,7 @@ import { Card, Heading, Text } from '@chakra-ui/react'
 
 import { useCreateProceeding } from '@frontend/modules/app/proceeding/hooks/useCreateProceeding'
 import resources from '@frontend/resources'
-import { Alert } from '@frontend/shared/design-system'
+import { Alert } from '@shared/design-system'
 
 import { ProceedingForm } from '../components/ProceedingForm'
 

@@ -5,6 +5,7 @@
   "type": "module",
   "main": "./vite-entry.cjs",
   "scripts": {
+    "start": "yarn run build",
     "dev": "vite",
     "build": "run-s \"build:*\"",
     "build:tsc": "tsc",

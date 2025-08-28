@@ -1,7 +1,7 @@
 import { createContext, Dispatch, SetStateAction, useState } from 'react'
 import { Box, Heading, Stack } from '@chakra-ui/react'
 
-import { Page } from '@frontend/shared/layout'
+import { Page } from '@shared/layout'
 
 import { NotaryAssignment } from '../components/notary-assignment/NotaryAssignment'
 import { QuestionnaireStep } from '../components/Questionnaire'

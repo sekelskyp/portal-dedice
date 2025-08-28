@@ -3,7 +3,7 @@ import { Container } from '@chakra-ui/react'
 import { useParams } from 'react-router-dom'
 
 import { useAuth } from '@frontend/modules/auth/auth-core'
-import { Page } from '@frontend/shared/layout'
+import { Page } from '@shared/layout'
 
 import { useAddMessage } from '../hooks/useAddMessage'
 

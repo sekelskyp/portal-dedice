@@ -1,7 +1,7 @@
 import { Card, For } from '@chakra-ui/react'
 
-import { Stack } from '@frontend/shared/design-system'
-import { RouterNavLink } from '@frontend/shared/navigation/atoms'
+import { Stack } from '@shared/design-system'
+import { RouterNavLink } from '@shared/navigation/atoms'
 
 import { LandingPageFeature } from '../utils/homepage-buttons'
 

@@ -1,7 +1,7 @@
 import { HStack, Icon, Text } from '@chakra-ui/react'
 import { AsteriskIcon, MapPinIcon } from 'lucide-react'
 
-import { Stack } from '@frontend/shared/design-system'
+import { Stack } from '@shared/design-system'
 
 import { formatDate } from '../../utils/dateUtils'
 

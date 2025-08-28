@@ -10,13 +10,13 @@ import {
 
 import { useGetNotaryAddressRuleById } from '@frontend/modules/app/settings/hooks/useGetNotaryRules'
 import { getPlaceByPostalCode } from '@frontend/modules/app/utils/addressUtils'
-import { useActionDialog } from '@frontend/shared/hooks/useActionDialog'
-import { useTableFilters } from '@frontend/shared/hooks/useTableFilters'
-import { useTablePagination } from '@frontend/shared/hooks/useTablePagination'
+import { useActionDialog } from '@shared/hooks/useActionDialog'
+import { useTableFilters } from '@shared/hooks/useTableFilters'
+import { useTablePagination } from '@shared/hooks/useTablePagination'
 import {
   fuzzyFilter,
   INITIAL_SORTING_STATE_USERS,
-} from '@frontend/shared/utils/table-utils'
+} from '@shared/utils/table-utils'
 
 import { UserActionButton } from '../components/UserActionButton'
 import { UserItem } from '../components/UserTable'

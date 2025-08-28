@@ -1,5 +1,5 @@
-import { Radio } from '@frontend/shared/design-system'
-import { RadioGroupFormControl } from '@frontend/shared/forms'
+import { Radio } from '@shared/design-system'
+import { RadioGroupFormControl } from '@shared/forms'
 
 interface BinaryRadioGroupProps {
   name: string

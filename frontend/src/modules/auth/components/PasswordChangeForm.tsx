@@ -2,7 +2,7 @@ import { Stack } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { Form, PasswordFormControl, SubmitButton } from '@frontend/shared/forms'
+import { Form, PasswordFormControl, SubmitButton } from '@shared/forms'
 
 import { passwordSchema } from '../passwordSchema'
 

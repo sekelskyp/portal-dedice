@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { Form } from '@frontend/shared/forms/Form'
+import { Form } from '@shared/forms/Form'
 
 import { InheritanceProgress } from './components/InheritanceProgress'
 import { StepLayout } from './components/StepLayout'

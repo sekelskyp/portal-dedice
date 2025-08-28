@@ -13,14 +13,14 @@ import { SquareArrowOutUpRight as SquareArrowOutUpRightIcon } from 'lucide-react
 import { MdDelete } from 'react-icons/md'
 
 import { useAuth } from '@frontend/modules/auth'
-import { useActionDialog } from '@frontend/shared/hooks/useActionDialog'
-import { useTableFilters } from '@frontend/shared/hooks/useTableFilters'
-import { useTablePagination } from '@frontend/shared/hooks/useTablePagination'
-import { RouterNavLink } from '@frontend/shared/navigation/atoms'
+import { useActionDialog } from '@shared/hooks/useActionDialog'
+import { useTableFilters } from '@shared/hooks/useTableFilters'
+import { useTablePagination } from '@shared/hooks/useTablePagination'
+import { RouterNavLink } from '@shared/navigation/atoms'
 import {
   fuzzyFilter,
   INITIAL_SORTING_STATE_PROCEEDINGS,
-} from '@frontend/shared/utils/table-utils'
+} from '@shared/utils/table-utils'
 
 import { ProceedingsItem } from '../components/ProceedingsTable'
 import { StatusBadge } from '../components/StatusBadge'

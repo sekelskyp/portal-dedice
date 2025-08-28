@@ -4,7 +4,7 @@ import { Table } from '@tanstack/react-table'
 import {
   NativeSelectField,
   NativeSelectRoot,
-} from '@frontend/shared/design-system/atoms/chakra'
+} from '@shared/design-system/atoms/chakra'
 
 import { TablePagination } from './TablePagination'
 

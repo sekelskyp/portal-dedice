@@ -4,8 +4,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { Form } from '@frontend/shared/forms/Form'
-import { SubmitButton } from '@frontend/shared/forms/SubmitButton'
+import { Form } from '@shared/forms/Form'
+import { SubmitButton } from '@shared/forms/SubmitButton'
 
 import { useAssetSections } from '../hooks/useAssetSections'
 

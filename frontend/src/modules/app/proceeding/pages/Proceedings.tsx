@@ -12,9 +12,9 @@ import { MdNoteAdd } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 
 import { useAuth } from '@frontend/modules/auth'
-import { Alert } from '@frontend/shared/design-system'
-import { RouterNavLink } from '@frontend/shared/navigation/atoms'
-import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
+import { Alert } from '@shared/design-system'
+import { RouterNavLink } from '@shared/navigation/atoms'
+import { UnauthorizedPage } from '@shared/navigation/pages/UnauthorizedPage'
 
 import {
   ProceedingsItem,

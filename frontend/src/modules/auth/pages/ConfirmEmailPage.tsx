@@ -2,8 +2,8 @@ import { Box, Icon, Text } from '@chakra-ui/react'
 import { FaCheckCircle } from 'react-icons/fa'
 import { useLocation } from 'react-router-dom'
 
-import { Page } from '@frontend/shared/layout'
-import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
+import { Page } from '@shared/layout'
+import { NotFoundPage } from '@shared/navigation/pages/NotFoundPage'
 
 export function ConfirmEmailPage() {
   const location = useLocation()

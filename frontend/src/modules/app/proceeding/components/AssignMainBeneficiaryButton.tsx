@@ -9,8 +9,8 @@ import {
   DialogHeader,
   DialogRoot,
   DialogTitle,
-} from '@frontend/shared/design-system'
-import { Form, SelectFormControl, SubmitButton } from '@frontend/shared/forms'
+} from '@shared/design-system'
+import { Form, SelectFormControl, SubmitButton } from '@shared/forms'
 
 import { useProceedingContext } from './ProceedingLayout'
 import { UserBadgeAssignButton } from './UserBadgeAssignButton'

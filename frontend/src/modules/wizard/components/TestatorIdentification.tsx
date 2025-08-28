@@ -4,14 +4,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 import resources from '@frontend/resources'
-import { Radio } from '@frontend/shared/design-system'
+import { Radio } from '@shared/design-system'
 import {
   AddressGroupFormControl,
   DateFormControl,
   Form,
   RadioGroupFormControl,
   SubmitButton,
-} from '@frontend/shared/forms'
+} from '@shared/forms'
 
 import { TestatorDataContext } from '../pages/WizardStepPage'
 

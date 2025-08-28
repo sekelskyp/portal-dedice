@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react'
 import { ChevronsLeft, ChevronsRight } from 'lucide-react'
 
-import { RouterNavLink } from '@frontend/shared/navigation/atoms/RouterNavLink'
+import { RouterNavLink } from '@shared/navigation/atoms/RouterNavLink'
 
 import { sideBarItems } from '../utils/sideBarItems'
 

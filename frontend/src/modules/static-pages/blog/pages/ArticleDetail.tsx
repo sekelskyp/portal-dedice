@@ -2,9 +2,9 @@ import React, { useMemo, useState } from 'react'
 import { Heading, Spinner, Stack } from '@chakra-ui/react'
 import { useParams } from 'react-router-dom'
 
-import { ActionDialog } from '@frontend/shared/components/ActionDialog'
-import { Alert } from '@frontend/shared/design-system'
-import { Page } from '@frontend/shared/layout/Page'
+import { ActionDialog } from '@shared/components/ActionDialog'
+import { Alert } from '@shared/design-system'
+import { Page } from '@shared/layout/Page'
 
 import { ArticleAdminPanel } from '../components/ArticleAdminPanel'
 import { ArticleCard } from '../components/ArticleCard'

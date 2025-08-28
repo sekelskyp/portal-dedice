@@ -4,7 +4,7 @@ import { Table } from '@tanstack/react-table'
 import { FaSearch } from 'react-icons/fa'
 import { MdOutlineCancel } from 'react-icons/md'
 
-import { InputGroup } from '@frontend/shared/design-system'
+import { InputGroup } from '@shared/design-system'
 
 export function TableSearchBar<TData>({
   table,

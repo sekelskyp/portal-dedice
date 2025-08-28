@@ -3,8 +3,8 @@ import { ApolloError, useMutation, useQuery } from '@apollo/client'
 
 import { gql } from '@frontend/gql'
 import { useAuth } from '@frontend/modules/auth'
-import { toaster } from '@frontend/shared/design-system'
-import { Proceeding } from '@frontend/shared/types/proceeding'
+import { toaster } from '@shared/design-system'
+import { Proceeding } from '@shared/types/proceeding'
 
 export const GET_PROCEEDING_QUERY = gql(/* GraphQL */ `
   query GetProceedingById($getProceedingByIdId: Int!) {

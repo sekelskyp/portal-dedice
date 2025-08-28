@@ -1,6 +1,6 @@
 import { Heading, List, Stack } from '@chakra-ui/react'
 
-import { RouterLink } from '@frontend/shared/navigation/atoms'
+import { RouterLink } from '@shared/navigation/atoms'
 
 type FooterListProps = {
   title: string

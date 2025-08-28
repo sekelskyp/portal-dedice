@@ -5,8 +5,8 @@ import { Controller } from 'react-hook-form'
 import { FaPlus, FaTimes, FaTrash } from 'react-icons/fa'
 
 import resources from '@frontend/resources'
-import { InputFormControl } from '@frontend/shared/forms/InputFormControl'
-import { SelectFormControl } from '@frontend/shared/forms/SelectFormControl'
+import { InputFormControl } from '@shared/forms/InputFormControl'
+import { SelectFormControl } from '@shared/forms/SelectFormControl'
 
 import { useAssetSection } from '../hooks/useAssetSection'
 

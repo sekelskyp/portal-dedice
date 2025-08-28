@@ -1,6 +1,6 @@
 import { NavLink as ReactRouterNavLink } from 'react-router-dom'
 
-import { Button, ButtonProps } from '@frontend/shared/design-system'
+import { Button, ButtonProps } from '@shared/design-system'
 
 export interface RouterNavLinkProps extends ButtonProps {
   to: string

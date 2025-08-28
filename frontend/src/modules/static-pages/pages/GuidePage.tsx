@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 import { Heading, Separator, Text, VStack } from '@chakra-ui/react'
 
-import { Box } from '@frontend/shared/design-system'
+import { Box } from '@shared/design-system'
 
 const GuideText = ({ children }: { children: ReactNode }) => (
   <Text textAlign="justify" fontSize={['md', 'lg']}>

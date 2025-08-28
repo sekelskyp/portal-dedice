@@ -1,8 +1,8 @@
 import { Flex, Heading, Text } from '@chakra-ui/react'
 
 import resources from '@frontend/resources'
-import { Button, Tooltip } from '@frontend/shared/design-system'
-import { SimpleCentered } from '@frontend/shared/design-system/atoms/CTA/SimpleCentered'
+import { Button, Tooltip } from '@shared/design-system'
+import { SimpleCentered } from '@shared/design-system/atoms/CTA/SimpleCentered'
 
 interface NotaryAssignmentHelperProps {
   nextStep: () => void

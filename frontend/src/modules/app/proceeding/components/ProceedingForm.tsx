@@ -11,7 +11,7 @@ import { z } from 'zod'
 
 import { useAuth } from '@frontend/modules/auth'
 import resources from '@frontend/resources'
-import { Field } from '@frontend/shared/design-system'
+import { Field } from '@shared/design-system'
 import {
   AddressGroupFormControl,
   DateFormControl,
@@ -19,7 +19,7 @@ import {
   InputFormControl,
   SelectFormControl,
   SubmitButton,
-} from '@frontend/shared/forms'
+} from '@shared/forms'
 
 import { useGetUsers } from '../hooks/useGetUsers'
 

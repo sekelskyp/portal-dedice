@@ -3,7 +3,7 @@ import { route } from '@lib/route'
 import { useNavigate } from 'react-router-dom'
 
 import { gql } from '@frontend/gql'
-import { toaster } from '@frontend/shared/design-system'
+import { toaster } from '@shared/design-system'
 
 const CHANGE_PASSWORD = gql(/* GraphQL */ `
   mutation ChangePassword($newPassword: String!, $oldPassword: String!) {

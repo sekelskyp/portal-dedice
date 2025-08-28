@@ -5,8 +5,8 @@ import { z } from 'zod'
 
 import { ChangePasswordMutation } from '@frontend/gql/graphql'
 import { passwordSchema } from '@frontend/modules/auth/passwordSchema'
-import { Form, SubmitButton } from '@frontend/shared/forms'
-import { PasswordFormControl } from '@frontend/shared/forms/PasswordFormControl'
+import { Form, SubmitButton } from '@shared/forms'
+import { PasswordFormControl } from '@shared/forms/PasswordFormControl'
 
 const schema = z
   .object({

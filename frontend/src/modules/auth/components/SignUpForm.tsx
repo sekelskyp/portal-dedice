@@ -3,8 +3,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 import resources from '@frontend/resources'
-import { Form, InputFormControl, SubmitButton } from '@frontend/shared/forms'
-import { PasswordFormControl } from '@frontend/shared/forms/PasswordFormControl'
+import { Form, InputFormControl, SubmitButton } from '@shared/forms'
+import { PasswordFormControl } from '@shared/forms/PasswordFormControl'
 
 import { passwordSchema } from '../passwordSchema'
 

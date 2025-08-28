@@ -1,6 +1,6 @@
 import { Box, Flex, Text } from '@chakra-ui/react'
 
-import { Avatar } from '@frontend/shared/design-system'
+import { Avatar } from '@shared/design-system'
 
 interface MessageProps {
   body: string

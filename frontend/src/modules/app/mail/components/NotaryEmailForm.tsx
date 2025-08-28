@@ -7,10 +7,10 @@ import { FiSend } from 'react-icons/fi'
 import { z } from 'zod'
 
 import { NotifyProcedureBeneficiariesMutation } from '@frontend/gql/graphql'
-import { Alert } from '@frontend/shared/design-system'
-import { Form, InputFormControl, SubmitButton } from '@frontend/shared/forms'
-import { TextAreaFormControl } from '@frontend/shared/forms/TextAreaFormControl'
-import { RouterNavLink } from '@frontend/shared/navigation/atoms'
+import { Alert } from '@shared/design-system'
+import { Form, InputFormControl, SubmitButton } from '@shared/forms'
+import { TextAreaFormControl } from '@shared/forms/TextAreaFormControl'
+import { RouterNavLink } from '@shared/navigation/atoms'
 
 const schema = z.object({
   subject: z

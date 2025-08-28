@@ -3,7 +3,7 @@ import {
   type NavLinkProps as ReactRouterNavLinkProps,
 } from 'react-router-dom'
 
-import { MenuItem, MenuItemProps } from '@frontend/shared/design-system'
+import { MenuItem, MenuItemProps } from '@shared/design-system'
 
 type Props = Omit<MenuItemProps, 'as'> & ReactRouterNavLinkProps
 

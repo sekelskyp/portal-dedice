@@ -14,7 +14,7 @@ import {
 import { LockIcon } from 'lucide-react'
 import { LuCheck, LuFile, LuPencilLine, LuX } from 'react-icons/lu'
 
-import { Alert, Button } from '@frontend/shared/design-system'
+import { Alert, Button } from '@shared/design-system'
 
 import { Assets } from '../../assets/tab/Assets'
 import { Documents } from '../../documents/tab/Documents'

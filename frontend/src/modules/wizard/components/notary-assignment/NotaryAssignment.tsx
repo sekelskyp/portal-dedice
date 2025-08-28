@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react'
 
 import resources from '@frontend/resources'
-import { Avatar } from '@frontend/shared/design-system'
+import { Avatar } from '@shared/design-system'
 
 import { useTooltip } from '../../../../shared/hooks/useTooltip'
 import { useGetNotary } from '../../hooks/useFindNotary'

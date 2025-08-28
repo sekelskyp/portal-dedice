@@ -3,9 +3,9 @@ import { Container, Flex, Heading, Stack, Text } from '@chakra-ui/react'
 import { route } from '@lib/route'
 
 import resources from '@frontend/resources'
-import { Alert, Box } from '@frontend/shared/design-system'
-import { Page } from '@frontend/shared/layout'
-import { RouterLink } from '@frontend/shared/navigation/atoms'
+import { Alert, Box } from '@shared/design-system'
+import { Page } from '@shared/layout'
+import { RouterLink } from '@shared/navigation/atoms'
 
 import { SignInForm } from '../components/SignInForm'
 import { useSignIn } from '../hooks/useSignIn'

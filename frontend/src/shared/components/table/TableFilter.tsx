@@ -9,7 +9,7 @@ import {
   InputGroup,
   NativeSelectField,
   NativeSelectRoot,
-} from '@frontend/shared/design-system'
+} from '@shared/design-system'
 
 interface TableFilterProps<TData> {
   column: Column<TData, unknown>

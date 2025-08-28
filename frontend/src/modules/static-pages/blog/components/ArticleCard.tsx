@@ -1,7 +1,7 @@
 import { Card, Image, Text } from '@chakra-ui/react'
 import { route } from '@lib/route'
 
-import { RouterNavLink } from '@frontend/shared/navigation/atoms'
+import { RouterNavLink } from '@shared/navigation/atoms'
 
 export type Article = {
   id: number

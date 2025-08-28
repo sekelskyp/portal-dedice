@@ -3,7 +3,7 @@ import { VStack } from '@chakra-ui/react'
 import { createListCollection } from '@chakra-ui/react/collection'
 import { useFormContext, useWatch } from 'react-hook-form'
 
-import { CheckboxFormControl, SelectFormControl } from '@frontend/shared/forms'
+import { CheckboxFormControl, SelectFormControl } from '@shared/forms'
 
 import { BinaryRadioGroup } from '../components/BinaryRadioGroup'
 import { StepNavigation } from '../components/StepNavigation'

@@ -16,8 +16,8 @@ import {
   MenuItem,
   MenuRoot,
   MenuTrigger,
-} from '@frontend/shared/design-system'
-import { RouterMenuItem } from '@frontend/shared/navigation/atoms'
+} from '@shared/design-system'
+import { RouterMenuItem } from '@shared/navigation/atoms'
 
 export const UserMenu = () => {
   const { user, signOut } = useAuth()

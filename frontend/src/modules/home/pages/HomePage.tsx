@@ -1,18 +1,20 @@
 import { Heading, Stack, Text } from '@chakra-ui/react'
 import { route } from '@lib/route'
 
-import { SplitWithImage } from '@frontend/shared/design-system/atoms/CTA/SplitWithImage'
-import { Page } from '@frontend/shared/layout'
-import { RouterNavLink } from '@frontend/shared/navigation/atoms'
+import { SplitWithImage } from '@src/shared/design-system/atoms/CTA/SplitWithImage'
+import { Page } from '@src/shared/layout'
+import { RouterNavLink } from '@shared/navigation/atoms'
 
 import { HomePageShowcase } from '../components/HomePageShowcase'
 import { landingPageFeatures } from '../utils/homepage-buttons'
+
+import holdingHands from '@public/holding-hands.jpg'
 
 export function HomePage() {
   return (
     <Page as={Stack} gap={10} justifyContent={'space-between'} h={'full'}>
       <SplitWithImage
-        imageSrc="/holding-hands.jpg"
+        imageSrc={holdingHands}
         imageAlt="Ilustrace dvou lidí držících se za ruce."
       >
         <Heading as="h3" size={{ base: '2xl', md: '4xl' }}>

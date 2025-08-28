@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client'
 
 import { gql } from '@frontend/gql'
-import { toaster } from '@frontend/shared/design-system'
+import { toaster } from '@shared/design-system'
 
 const UPDATE_ARTICLE = gql(/* GraphQL */ `
   mutation UpdateArticle($data: UpdateArticleInput!, $updateArticleId: Int!) {

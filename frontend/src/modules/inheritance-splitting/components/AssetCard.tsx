@@ -15,7 +15,7 @@ import {
   BsPiggyBank,
 } from 'react-icons/bs'
 
-import { SelectFormControl } from '@frontend/shared/forms'
+import { SelectFormControl } from '@shared/forms'
 
 import { Asset, FormData, Heir } from '../data/FormData'
 

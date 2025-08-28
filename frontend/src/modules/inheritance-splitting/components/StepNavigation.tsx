@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { route } from '@lib/route'
 
-import { RouterNavLink } from '@frontend/shared/navigation/atoms/RouterNavLink'
+import { RouterNavLink } from '@shared/navigation/atoms/RouterNavLink'
 
 interface StepNavigationProps {
   onPrevious: () => void

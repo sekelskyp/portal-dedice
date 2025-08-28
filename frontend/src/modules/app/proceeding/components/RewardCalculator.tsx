@@ -21,8 +21,8 @@ import {
   StatRoot,
   StatValueText,
   Tooltip,
-} from '@frontend/shared/design-system'
-import { Form, InputFormControl, SubmitButton } from '@frontend/shared/forms'
+} from '@shared/design-system'
+import { Form, InputFormControl, SubmitButton } from '@shared/forms'
 
 const numberFormat = Intl.NumberFormat('cs-CZ', {
   style: 'currency',

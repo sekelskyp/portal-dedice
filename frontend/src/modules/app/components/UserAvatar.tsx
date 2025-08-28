@@ -1,5 +1,5 @@
-import { Avatar } from '@frontend/shared/design-system'
-import { AvatarProps } from '@frontend/shared/design-system/atoms/chakra'
+import { Avatar } from '@shared/design-system'
+import { AvatarProps } from '@shared/design-system/atoms/chakra'
 
 export const UserAvatar = ({
   name,

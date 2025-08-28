@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
 import { Box, Flex, Heading, Text } from '@chakra-ui/react'
 
-import { Alert } from '@frontend/shared/design-system'
-import { Page } from '@frontend/shared/layout'
+import { Alert } from '@shared/design-system'
+import { Page } from '@shared/layout'
 
 import { SignUpForm } from '../components/SignUpForm'
 import { useSignUp } from '../hooks/useSignUp'

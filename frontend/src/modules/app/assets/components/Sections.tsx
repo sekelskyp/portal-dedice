@@ -1,8 +1,8 @@
 import { Separator } from '@chakra-ui/react/separator'
 import { Heading } from '@chakra-ui/react/typography'
 
-import { Box } from '@frontend/shared/design-system/atoms'
-import { Switch } from '@frontend/shared/design-system/atoms/chakra/switch'
+import { Box } from '@shared/design-system/atoms'
+import { Switch } from '@shared/design-system/atoms/chakra/switch'
 
 interface SectionProps {
   title: string

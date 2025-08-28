@@ -4,8 +4,8 @@ import { LuFile } from 'react-icons/lu'
 import { useParams } from 'react-router-dom'
 
 import { useAuth } from '@frontend/modules/auth'
-import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
-import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
+import { NotFoundPage } from '@shared/navigation/pages/NotFoundPage'
+import { UnauthorizedPage } from '@shared/navigation/pages/UnauthorizedPage'
 
 import { useProceedingContext } from '../../proceeding/components/ProceedingLayout'
 import { UserBadge } from '../../proceeding/components/UserBadge'
