@@ -1,7 +1,6 @@
+import { route } from '@lib/route'
 import { FaCalculator } from 'react-icons/fa'
 import { MdQueuePlayNext } from 'react-icons/md'
-
-import { route } from '@lib/route'
 
 const proceedingsNavigation = [
   {

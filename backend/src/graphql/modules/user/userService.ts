@@ -1,3 +1,5 @@
+import { GenderEnumType } from '@libs/enums'
+
 import { AddressInsertInput } from '@backend/graphql/modules/address/addressRepository'
 import { UserEntity } from '@backend/graphql/modules/user/userRepository'
 import { createToken } from '@backend/libs/jwt'
@@ -14,7 +16,6 @@ import {
   resetPassword,
 } from '@backend/services/passwordResetService'
 import { CustomContext } from '@backend/types/types'
-import { GenderEnumType } from '@libs/enums'
 
 export interface AuthResponse {
   userId: number

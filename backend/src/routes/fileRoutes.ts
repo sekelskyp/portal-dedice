@@ -1,10 +1,10 @@
+import { route } from '@libs/route'
 import { Request, Response, Router } from 'express'
 import fs from 'fs/promises'
 import path from 'path'
 
 import { FILE_UPLOADS_DIR } from '@backend/config'
 import { CustomContext } from '@backend/types/types'
-import { route } from '@libs/route'
 
 const router = Router()
 

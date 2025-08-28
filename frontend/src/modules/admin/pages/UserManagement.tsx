@@ -7,13 +7,13 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react'
+import { route } from '@lib/route'
 import { IoPersonAddSharp } from 'react-icons/io5'
 
 import { useAuth } from '@frontend/modules/auth'
 import { Alert } from '@frontend/shared/design-system'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
-import { route } from '@lib/route'
 
 import { UserItem, UserTable } from '../components/UserTable'
 import { useGetAllUsers } from '../hooks/useGetAllUsers'

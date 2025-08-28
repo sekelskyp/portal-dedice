@@ -1,8 +1,8 @@
+import { formatDate } from '@libs/date'
 import { GraphQLError } from 'graphql'
 import { Ctx, Query, Resolver } from 'type-graphql'
 
 import { CustomContext } from '@backend/types/types'
-import { formatDate } from '@libs/date'
 
 @Resolver()
 export class EmptyResolver {

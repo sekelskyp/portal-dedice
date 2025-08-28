@@ -1,8 +1,7 @@
 import React from 'react'
 import { Box, Button, Container, Text, VStack } from '@chakra-ui/react'
-import { Link } from 'react-router-dom'
-
 import { route } from '@lib/route'
+import { Link } from 'react-router-dom'
 
 interface WizardEndProps {
   setStep: (step: number) => void

@@ -1,8 +1,8 @@
 import { useMutation } from '@apollo/client'
+import { route } from '@lib/route'
 import { useNavigate } from 'react-router-dom'
 
 import { gql } from '@frontend/gql'
-import { route } from '@lib/route'
 
 import { useAuth } from '../auth-core'
 

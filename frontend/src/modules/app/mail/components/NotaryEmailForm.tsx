@@ -1,6 +1,7 @@
 import { MutationResult } from '@apollo/client'
 import { Stack } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { route } from '@lib/route'
 import { FaTrash } from 'react-icons/fa'
 import { FiSend } from 'react-icons/fi'
 import { z } from 'zod'
@@ -10,7 +11,6 @@ import { Alert } from '@frontend/shared/design-system'
 import { Form, InputFormControl, SubmitButton } from '@frontend/shared/forms'
 import { TextAreaFormControl } from '@frontend/shared/forms/TextAreaFormControl'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
-import { route } from '@lib/route'
 
 const schema = z.object({
   subject: z

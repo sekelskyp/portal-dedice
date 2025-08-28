@@ -1,6 +1,5 @@
-import { Field, InputType } from 'type-graphql'
-
 import { GenderEnumType } from '@libs/enums'
+import { Field, InputType } from 'type-graphql'
 
 import { AddressInput } from '../address/addressInput'
 

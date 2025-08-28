@@ -1,9 +1,9 @@
 import { useMutation } from '@apollo/client'
+import { route } from '@lib/route'
 import { useNavigate } from 'react-router-dom'
 
 import { gql } from '@frontend/gql'
 import { toaster } from '@frontend/shared/design-system'
-import { route } from '@lib/route'
 
 const CHANGE_PASSWORD = gql(/* GraphQL */ `
   mutation ChangePassword($newPassword: String!, $oldPassword: String!) {

@@ -14,9 +14,9 @@ import {
   Portal,
   VStack,
 } from '@chakra-ui/react'
+import { route } from '@lib/route'
 
 import { RouterNavLink } from '@frontend/shared/navigation/atoms/RouterNavLink'
-import { route } from '@lib/route'
 
 interface StepNavigationProps {
   onPrevious: () => void

@@ -1,8 +1,8 @@
 import { Center, Icon, Stack, Text } from '@chakra-ui/react'
+import { route } from '@lib/route'
 import { CircleAlert } from 'lucide-react'
 
 import { Page } from '@frontend/shared/layout'
-import { route } from '@lib/route'
 
 import { RouterNavLink } from '../atoms'
 

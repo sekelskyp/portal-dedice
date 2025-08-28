@@ -1,6 +1,5 @@
-import { Field, Float, ID, InputType } from 'type-graphql'
-
 import { AssetTypeEnumType } from '@libs/enums'
+import { Field, Float, ID, InputType } from 'type-graphql'
 
 @InputType()
 export class AssetInput {

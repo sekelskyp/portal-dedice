@@ -1,9 +1,9 @@
 import { Heading, Stack, Text } from '@chakra-ui/react'
+import { route } from '@lib/route'
 
 import { SplitWithImage } from '@frontend/shared/design-system/atoms/CTA/SplitWithImage'
 import { Page } from '@frontend/shared/layout'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
-import { route } from '@lib/route'
 
 import { HomePageShowcase } from '../components/HomePageShowcase'
 import { landingPageFeatures } from '../utils/homepage-buttons'

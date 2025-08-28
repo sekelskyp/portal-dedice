@@ -1,11 +1,11 @@
 import { useEffect } from 'react'
 import { Box, Button, Icon, Spinner, Text } from '@chakra-ui/react'
+import { route } from '@lib/route'
 import { FaCheckCircle } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 
 import { Page } from '@frontend/shared/layout'
 import { NotFoundPage } from '@frontend/shared/navigation/pages/NotFoundPage'
-import { route } from '@lib/route'
 
 import { useEmailToken } from '../hooks/useEmailToken'
 

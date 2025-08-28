@@ -1,9 +1,9 @@
 import { Box, Container, Flex, Heading, HStack, Image } from '@chakra-ui/react'
+import { route } from '@lib/route'
 import { useTheme } from 'next-themes'
 import { Link } from 'react-router-dom'
 
 import { useAuth } from '@frontend/modules/auth'
-import { route } from '@lib/route'
 
 import { TopNavigation } from '../navigation/organisms/TopNavigation'
 

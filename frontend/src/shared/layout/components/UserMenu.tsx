@@ -1,4 +1,5 @@
 import { HStack, Icon, Stack, Text, useBreakpoint } from '@chakra-ui/react'
+import { route } from '@lib/route'
 import {
   ArchiveIcon,
   ChevronDown as ChevronDownIcon,
@@ -17,7 +18,6 @@ import {
   MenuTrigger,
 } from '@frontend/shared/design-system'
 import { RouterMenuItem } from '@frontend/shared/navigation/atoms'
-import { route } from '@lib/route'
 
 export const UserMenu = () => {
   const { user, signOut } = useAuth()

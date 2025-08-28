@@ -7,6 +7,7 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react'
+import { route } from '@lib/route'
 import { MdNoteAdd } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 
@@ -14,7 +15,6 @@ import { useAuth } from '@frontend/modules/auth'
 import { Alert } from '@frontend/shared/design-system'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
 import { UnauthorizedPage } from '@frontend/shared/navigation/pages/UnauthorizedPage'
-import { route } from '@lib/route'
 
 import {
   ProceedingsItem,

@@ -1,8 +1,8 @@
 import { useMutation } from '@apollo/client'
+import { route } from '@lib/route'
 import { useNavigate } from 'react-router-dom'
 
 import { gql } from '@frontend/gql'
-import { route } from '@lib/route'
 
 const SIGNUP_MUTATION = gql(/* GraphQL */ `
   mutation SignUp($registerInput: RegisterInput!) {

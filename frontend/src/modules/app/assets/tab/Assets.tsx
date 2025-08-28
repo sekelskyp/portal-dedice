@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useQuery } from '@apollo/client'
 import { Box, Heading, HStack, Stack, Text, VStack } from '@chakra-ui/react'
+import { route } from '@lib/route'
 import { FaMoneyBill, FaTimes } from 'react-icons/fa'
 
 import { useAuth } from '@frontend/modules/auth'
@@ -9,7 +10,6 @@ import { Alert } from '@frontend/shared/design-system/atoms/chakra/alert'
 import { Button } from '@frontend/shared/design-system/atoms/chakra/button'
 import { toaster } from '@frontend/shared/design-system/atoms/chakra/toaster'
 import { RouterNavLink } from '@frontend/shared/navigation/atoms'
-import { route } from '@lib/route'
 
 import { useProceedingContext } from '../../proceeding/components/ProceedingLayout'
 import { useDeleteAsset } from '../hooks/useDeleteAsset'

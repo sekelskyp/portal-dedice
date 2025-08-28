@@ -1,4 +1,5 @@
 import { Flex, Icon } from '@chakra-ui/react'
+import { route } from '@lib/route'
 import { Menu as MenuIcon } from 'lucide-react'
 import { useMediaQuery } from 'usehooks-ts'
 
@@ -10,7 +11,6 @@ import {
   MenuTrigger,
   Stack,
 } from '@frontend/shared/design-system'
-import { route } from '@lib/route'
 
 import { RouterMenuItem, RouterNavLink } from '../atoms'
 

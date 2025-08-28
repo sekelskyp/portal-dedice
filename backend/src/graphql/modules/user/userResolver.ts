@@ -1,3 +1,4 @@
+import { UserTypeEnumType } from '@libs/enums'
 import {
   Arg,
   Ctx,
@@ -20,7 +21,6 @@ import {
   updateProfile,
 } from '@backend/graphql/modules/user/userService'
 import { CustomContext } from '@backend/types/types'
-import { UserTypeEnumType } from '@libs/enums'
 
 import { ProfileInput } from './profileInput'
 import { RegisterInput } from './registerInput'

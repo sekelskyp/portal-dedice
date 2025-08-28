@@ -1,3 +1,9 @@
+import {
+  assetTypeEnum,
+  genderEnum,
+  proceedingStateEnum,
+  userTypeEnum,
+} from '@libs/enums'
 import { SQL, sql } from 'drizzle-orm'
 import {
   AnyMySqlColumn,
@@ -14,13 +20,6 @@ import {
   uniqueIndex,
   varchar,
 } from 'drizzle-orm/mysql-core'
-
-import {
-  assetTypeEnum,
-  genderEnum,
-  proceedingStateEnum,
-  userTypeEnum,
-} from '@libs/enums'
 
 // Define User Table
 export const user = mysqlTable(
