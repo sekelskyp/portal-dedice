@@ -3,6 +3,8 @@ import { LuNewspaper } from 'react-icons/lu'
 
 import { getArticleImageUrl } from '../utils/articleUtils'
 
+import coverFallback from '/cover-fallback.png'
+
 export function ArticleDetailCard({
   title,
   date,
@@ -30,7 +32,7 @@ export function ArticleDetailCard({
               ? getArticleImageUrl({
                   fileUuid: fileUuid,
                 })
-              : '/cover-fallback.png'
+              : coverFallback
           }
           alt={title}
           borderRadius="lg"

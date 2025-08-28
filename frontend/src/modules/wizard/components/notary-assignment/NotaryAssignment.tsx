@@ -8,7 +8,7 @@ import {
   Text,
 } from '@chakra-ui/react'
 
-import resources from '@frontend/resources'
+import resources from '@src/resources'
 import { Avatar } from '@shared/design-system'
 
 import { useTooltip } from '../../../../shared/hooks/useTooltip'
@@ -19,6 +19,9 @@ import { ContactInfo } from '../contact/ContactInfo'
 
 import { NotaryAssignmentError } from './NotaryAssignmentError'
 import { NotaryAssignmentHelper } from './NotaryAssignmentHelper'
+
+import manAvatar from '/man-avatar.png'
+import womanAvatar from '/woman-avatar.png'
 
 interface NotaryAssignmentProps {
   nextStep: () => void
@@ -65,7 +68,7 @@ export function NotaryAssignment({
         <Avatar
           size={{ base: 'xl', sm: '2xl' }}
           src={
-            notary.gender === 'Female' ? '/woman-avatar.png' : '/man-avatar.png'
+            notary.gender === 'Female' ? womanAvatar : manAvatar
           }
           aria-label="Female and Male icons created by Prosymbols Premium - Flaticon"
         />

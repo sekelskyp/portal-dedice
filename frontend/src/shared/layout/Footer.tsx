@@ -16,6 +16,9 @@ import { ColorModeButton } from '../design-system/atoms/chakra'
 import { FooterList } from './components/FooterList'
 import { footerLinks } from './utils/links'
 
+import logo from '/logo.png'
+import logoDark from '/logo-dark.png'
+
 export const Footer = () => {
   const theme = useTheme()
   const isDark = theme.resolvedTheme === 'dark'
@@ -38,7 +41,7 @@ export const Footer = () => {
           <HStack py={0} maxW={{ base: 'full', md: '2xs', lg: 'full' }}>
             <Image
               h={{ base: 12, lg: 16 }}
-              src={isDark ? '/logo-dark.png' : '/logo.png'}
+              src={isDark ? logoDark : logo}
               opacity={isDark ? 0.8 : 1}
               alt="logo"
             />

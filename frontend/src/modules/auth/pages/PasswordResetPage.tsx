@@ -7,6 +7,8 @@ import { Page } from '@shared/layout'
 import { PasswordResetForm } from '../components/PasswordResetForm'
 import { useRequestPasswordReset } from '../hooks/useResetPassword'
 
+import resetPassword from '/reset-password.png'
+
 export function PasswordResetPage() {
   const [resetPasswordRequest, resetPasswordRequestState] =
     useRequestPasswordReset()
@@ -44,7 +46,7 @@ export function PasswordResetPage() {
             lg: 'left',
           }}
         >
-          <Image src="/reset-password.png" />
+          <Image src={resetPassword} />
         </Box>
         <Box flex={{ base: 1, lg: 4 }} w={'full'}>
           <Box rounded="xl">

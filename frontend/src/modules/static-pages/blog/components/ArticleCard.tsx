@@ -3,6 +3,8 @@ import { route } from '@lib/route'
 
 import { RouterNavLink } from '@shared/navigation/atoms'
 
+import coverFallback from '/cover-fallback.png'
+
 export type Article = {
   id: number
   title: string
@@ -27,7 +29,7 @@ export function ArticleCard({
       variant="elevated"
     >
       <Image
-        src={imageUrl ? imageUrl : '/cover-fallback.png'}
+        src={imageUrl ? imageUrl : coverFallback}
         borderTopRadius="xl"
         height="250px"
         objectFit="cover"

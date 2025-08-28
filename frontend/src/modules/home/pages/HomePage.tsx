@@ -8,7 +8,7 @@ import { RouterNavLink } from '@shared/navigation/atoms'
 import { HomePageShowcase } from '../components/HomePageShowcase'
 import { landingPageFeatures } from '../utils/homepage-buttons'
 
-import holdingHands from '@public/holding-hands.jpg'
+import holdingHands from '/holding-hands.jpg'
 
 export function HomePage() {
   return (
