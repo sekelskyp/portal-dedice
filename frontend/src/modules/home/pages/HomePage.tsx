@@ -34,13 +34,15 @@ export function HomePage() {
           mr={{ base: 8, md: 16 }}
           textAlign="justify"
           lineHeight={{ base: 1.4, md: 1.8 }}
+          letterSpacing={'tight'}
           fontSize="md"
+          mt={4}
         >
           Potřebujete poradit s pozůstalostním řízením? Nebo chcete vyřešit
           předběžné šetření online? Portál dědice vám srozumitelně vysvětlí vše,
           co potřebujete vědět a pomůze vám vyřešit předběžné šetření online.
         </Text>
-        <Stack direction={{ base: 'column', md: 'row' }} gap={4}>
+        <Stack direction={{ base: 'column', md: 'row' }} gap={4} mt={8}>
           <RouterNavLink to={route.wizard()}>Průvodce řízením</RouterNavLink>
           <RouterNavLink to={route.signUp()}>
             Předběžné šetření online
