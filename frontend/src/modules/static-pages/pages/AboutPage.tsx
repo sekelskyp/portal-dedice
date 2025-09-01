@@ -17,7 +17,7 @@ export function AboutPage() {
       </Heading>
       <Flex justifyContent="center" mt={4}>
         <Image
-          src={'/holding-hands.jpg'}
+          src={'/holding-hands.webp'}
           fit="cover"
           w={{ base: 32, md: 64 }}
           h={{ base: 32, md: 64 }}

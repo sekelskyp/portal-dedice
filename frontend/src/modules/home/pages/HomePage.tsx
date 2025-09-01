@@ -5,7 +5,7 @@ import { Page } from '@src/shared/layout'
 
 import { RouterNavLink } from '@shared/navigation/atoms'
 
-import holdingHands from '/holding-hands.jpg'
+import holdingHands from '/holding-hands.webp'
 
 import { HomePageShowcase } from '../components/HomePageShowcase'
 import { landingPageFeatures } from '../utils/homepage-buttons'
