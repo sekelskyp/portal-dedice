@@ -29,7 +29,7 @@ export const Footer = () => {
       boxShadow="0px 0px 16px 0px rgba(0, 0, 0, 0.06)"
       borderTop="1px solid"
       borderColor="bg.muted"
-      pb={4}
+      p={8}
     >
       <Container as={Stack} px={2}>
         <Stack
@@ -62,6 +62,7 @@ export const Footer = () => {
             }}
             alignItems={'end'}
             gap={{ base: 4, md: 8, lg: 12 }}
+            py={6}
           >
             {footerLinks.map((footerLink) => (
               <FooterList key={footerLink.id} {...footerLink} />
