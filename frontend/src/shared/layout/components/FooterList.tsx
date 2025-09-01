@@ -9,9 +9,9 @@ type FooterListProps = {
 
 export function FooterList({ title, links }: FooterListProps) {
   return (
-    <Stack>
+    <Stack gap={4}>
       <Heading size={{ base: 'sm', md: 'md' }}>{title}</Heading>
-      <List.Root listStyleType={'none'}>
+      <List.Root listStyleType={'none'} gap={4}>
         {links.map((link) => (
           <List.Item key={link.id} whiteSpace="nowrap">
             <RouterLink to={link.link}>{link.title}</RouterLink>
