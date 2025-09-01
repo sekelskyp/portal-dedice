@@ -22,7 +22,7 @@ export function HomePageShowcase({ data }: { data: LandingPageFeature[] }) {
             borderRadius="xl"
             variant="elevated"
           >
-            <Card.Body gap="2">
+            <Card.Body gap="2" p={8}>
               <Card.Title mb={2} fontSize="xl">
                 {item.title}
               </Card.Title>
