@@ -3,7 +3,7 @@ import { Card, For } from '@chakra-ui/react'
 import { Stack } from '@shared/design-system'
 import { RouterNavLink } from '@shared/navigation/atoms'
 
-import { LandingPageFeature } from '../utils/homepage-buttons'
+import { LandingPageFeature } from '../utils/landingpage-features'
 
 export function HomePageShowcase({ data }: { data: LandingPageFeature[] }) {
   return (

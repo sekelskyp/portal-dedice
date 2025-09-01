@@ -26,7 +26,7 @@ export const landingPageFeatures: LandingPageFeature[] = [
   {
     id: 3,
     title: 'Vypořádání pozůstalosti nanečisto',
-    text: 'Nevíte, na jaký podíl z pozůstalosti máte ze zákona nárok? Naše aplikace Vám poradí nejen s určením výše podílu, ale pomůže namodelovat situaci přidáním konkrétních položek majetku, čímž uvidíte i nejen podíl, ale i částky, které budou dědit konkrétní dědicové.',
+    text: 'Nevíte, na jaký podíl z pozůstalosti máte ze zákona nárok? Naše aplikace Vám poradí s určením výše podílu a pomůže namodelovat situaci přidáním konkrétních položek majetku a jejich dědiců.',
     buttonText: 'Vypořádání pozůstalosti nanečisto',
     to: route.inheritance(),
   },

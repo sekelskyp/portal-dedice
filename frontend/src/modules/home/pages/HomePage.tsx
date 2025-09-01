@@ -8,7 +8,7 @@ import { RouterNavLink } from '@shared/navigation/atoms'
 import holdingHands from '/holding-hands.webp'
 
 import { HomePageShowcase } from '../components/HomePageShowcase'
-import { landingPageFeatures } from '../utils/homepage-buttons'
+import { landingPageFeatures } from '../utils/landingpage-features'
 
 export function HomePage() {
   return (
