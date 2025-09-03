@@ -1,9 +1,8 @@
 import { useMutation } from '@apollo/client'
+import { toaster } from '@components/ui/toaster'
 import { route } from '@lib/route'
 import { gql } from '@src/gql'
 import { useNavigate } from 'react-router-dom'
-
-import { toaster } from '@shared/design-system'
 
 const REQUEST_PASSWORD_RESET = gql(/* GraphQL */ `
   mutation RequestPasswordReset($email: String!) {

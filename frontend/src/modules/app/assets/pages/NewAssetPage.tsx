@@ -1,10 +1,9 @@
 import { useCallback, useMemo } from 'react'
 import { Container, Heading, Spinner, Text, VStack } from '@chakra-ui/react'
+import { Page } from '@components/layout/page'
 import { route } from '@lib/route'
 import { Asset } from '@src/gql/graphql'
 import { useNavigate } from 'react-router-dom'
-
-import { Page } from '@shared/layout/Page'
 
 import { useProceedingContext } from '../../proceeding/components/ProceedingLayout'
 import { AssetForm, AssetFormData } from '../components/AssetForm'

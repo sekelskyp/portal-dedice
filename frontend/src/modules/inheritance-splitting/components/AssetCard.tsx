@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Box, Card, Flex, Grid, ListCollection, Text } from '@chakra-ui/react'
 import { createListCollection } from '@chakra-ui/react/collection'
+import { SelectFormControl } from '@components/form'
 import { useFormContext } from 'react-hook-form'
 import {
   BsBuildings,
@@ -14,8 +15,6 @@ import {
   BsLightningCharge,
   BsPiggyBank,
 } from 'react-icons/bs'
-
-import { SelectFormControl } from '@shared/forms'
 
 import { Asset, FormData, Heir } from '../data/FormData'
 

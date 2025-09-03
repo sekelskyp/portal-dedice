@@ -1,10 +1,8 @@
 import React, { useMemo, useState } from 'react'
 import { Heading, Spinner, Stack } from '@chakra-ui/react'
+import { Page } from '@components/layout/page'
+import { ActionDialog, Alert } from '@components/ui'
 import { useParams } from 'react-router-dom'
-
-import { ActionDialog } from '@shared/components/ActionDialog'
-import { Alert } from '@shared/design-system'
-import { Page } from '@shared/layout/Page'
 
 import { ArticleAdminPanel } from '../components/ArticleAdminPanel'
 import { ArticleCard } from '../components/ArticleCard'

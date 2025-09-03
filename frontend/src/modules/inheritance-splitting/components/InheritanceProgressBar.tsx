@@ -1,6 +1,5 @@
 import { Box } from '@chakra-ui/react'
-
-import { ProgressBar, ProgressRoot } from '@shared/design-system'
+import { ProgressBar, ProgressRoot } from '@components/ui'
 
 export function InheritanceProgressBar({ progress }: { progress: number }) {
   return (

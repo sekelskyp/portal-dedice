@@ -1,9 +1,8 @@
 import { useMutation } from '@apollo/client'
+import { toaster } from '@components/ui/toaster'
 import { route } from '@lib/route'
 import { gql } from '@src/gql'
 import { useNavigate } from 'react-router-dom'
-
-import { toaster } from '@shared/design-system'
 
 const CREATE_ARTICLE = gql(/* GraphQL */ `
   mutation CreateArticle($data: CreateArticleInput!) {

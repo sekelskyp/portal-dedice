@@ -1,8 +1,7 @@
 import { useMutation } from '@apollo/client'
+import { toaster } from '@components/ui/toaster'
 import { gql } from '@src/gql'
 import { useAuth } from '@src/modules/auth'
-
-import { toaster } from '@shared/design-system'
 
 import { GET_ALL_PROCEEDINGS } from './useGetAllProceedings'
 import { GET_PROCEEDINGS_BY_NOTARY_ID } from './useNotaryProcedures'

@@ -1,16 +1,19 @@
 import { MutationResult } from '@apollo/client'
 import { Stack } from '@chakra-ui/react'
+import {
+  Form,
+  InputFormControl,
+  SubmitButton,
+  TextAreaFormControl,
+} from '@components/form'
+import { Alert } from '@components/ui'
+import { RouterNavLink } from '@components/ui/router-nav-link'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { route } from '@lib/route'
 import { NotifyProcedureBeneficiariesMutation } from '@src/gql/graphql'
 import { FaTrash } from 'react-icons/fa'
 import { FiSend } from 'react-icons/fi'
 import { z } from 'zod'
-
-import { Alert } from '@shared/design-system'
-import { Form, InputFormControl, SubmitButton } from '@shared/forms'
-import { TextAreaFormControl } from '@shared/forms/TextAreaFormControl'
-import { RouterNavLink } from '@shared/navigation/atoms'
 
 const schema = z.object({
   subject: z

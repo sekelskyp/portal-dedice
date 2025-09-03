@@ -9,9 +9,8 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
+import { RouterNavLink } from '@components/ui/router-nav-link'
 import { ChevronsLeft, ChevronsRight } from 'lucide-react'
-
-import { RouterNavLink } from '@shared/navigation/atoms/RouterNavLink'
 
 import { sideBarItems } from '../utils/sideBarItems'
 

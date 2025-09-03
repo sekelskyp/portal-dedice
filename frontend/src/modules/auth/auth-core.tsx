@@ -6,10 +6,9 @@ import {
   useMemo,
   useState,
 } from 'react'
+import { toaster } from '@components/ui/toaster'
 import { route } from '@lib/route'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
-
-import { toaster } from '@shared/design-system'
 
 type AuthState = {
   token: string | null

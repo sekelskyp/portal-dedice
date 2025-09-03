@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { VStack } from '@chakra-ui/react'
+import { Form } from '@components/form/form'
+import { SubmitButton } from '@components/form/submit-button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
-
-import { Form } from '@shared/forms/Form'
-import { SubmitButton } from '@shared/forms/SubmitButton'
 
 import { useAssetSections } from '../hooks/useAssetSections'
 

@@ -1,4 +1,8 @@
 import { useCallback, useMemo, useState } from 'react'
+import { useActionDialog } from '@src/hooks/useActionDialog'
+import { useTableFilters } from '@src/hooks/useTableFilters'
+import { useTablePagination } from '@src/hooks/useTablePagination'
+import { fuzzyFilter, INITIAL_SORTING_STATE_USERS } from '@src/lib/table-utils'
 import { useGetNotaryAddressRuleById } from '@src/modules/app/settings/hooks/useGetNotaryRules'
 import { getPlaceByPostalCode } from '@src/modules/app/utils/addressUtils'
 import {
@@ -9,14 +13,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-
-import { useActionDialog } from '@shared/hooks/useActionDialog'
-import { useTableFilters } from '@shared/hooks/useTableFilters'
-import { useTablePagination } from '@shared/hooks/useTablePagination'
-import {
-  fuzzyFilter,
-  INITIAL_SORTING_STATE_USERS,
-} from '@shared/utils/table-utils'
 
 import { UserActionButton } from '../components/UserActionButton'
 import { UserItem } from '../components/UserTable'

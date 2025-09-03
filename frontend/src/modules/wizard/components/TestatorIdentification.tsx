@@ -1,17 +1,16 @@
 import { useContext } from 'react'
 import { Card, Center, Container, Stack, Text } from '@chakra-ui/react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import resources from '@src/resources'
-import { z } from 'zod'
-
-import { Radio } from '@shared/design-system'
 import {
   AddressGroupFormControl,
   DateFormControl,
   Form,
   RadioGroupFormControl,
   SubmitButton,
-} from '@shared/forms'
+} from '@components/form'
+import { Radio } from '@components/ui/radio'
+import { zodResolver } from '@hookform/resolvers/zod'
+import resources from '@src/resources'
+import { z } from 'zod'
 
 import { TestatorDataContext } from '../pages/WizardStepPage'
 

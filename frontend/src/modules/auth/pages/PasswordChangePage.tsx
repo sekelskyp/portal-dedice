@@ -1,9 +1,8 @@
 import { useCallback } from 'react'
 import { Box, Flex, Heading, Text } from '@chakra-ui/react'
+import { NotFoundPage } from '@components/layout/fallback/not-found-page'
+import { Page } from '@components/layout/page'
 import { useLocation } from 'react-router-dom'
-
-import { Page } from '@shared/layout'
-import { NotFoundPage } from '@shared/navigation/pages/NotFoundPage'
 
 import { PasswordChangeForm } from '../components/PasswordChangeForm'
 import { useResetPassword } from '../hooks/useResetPassword'

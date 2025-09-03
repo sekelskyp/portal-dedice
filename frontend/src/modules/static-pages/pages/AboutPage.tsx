@@ -1,7 +1,5 @@
 import { ReactNode } from 'react'
-import { Flex, Heading, Image, Text, VStack } from '@chakra-ui/react'
-
-import { Box } from '@shared/design-system'
+import { Box, Flex, Heading, Image, Text, VStack } from '@chakra-ui/react'
 
 const CustomText = ({ children }: { children: ReactNode }) => (
   <Text textAlign="justify" mt={4} fontSize={['md', 'lg']}>

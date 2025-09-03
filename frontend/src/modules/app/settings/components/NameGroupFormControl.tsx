@@ -1,8 +1,7 @@
 import { HStack } from '@chakra-ui/react'
+import { InputFormControl } from '@components/form'
 import { ProfileInput } from '@src/gql/graphql'
 import { useFormContext } from 'react-hook-form'
-
-import { InputFormControl } from '@shared/forms'
 
 const calculateDisplayName = (name?: string, surname?: string) => {
   let displayName = ''

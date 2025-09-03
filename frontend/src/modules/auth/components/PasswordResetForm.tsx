@@ -1,8 +1,7 @@
 import { Container, Heading, Stack, Text } from '@chakra-ui/react'
+import { Form, InputFormControl, SubmitButton } from '@components/form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-
-import { Form, InputFormControl, SubmitButton } from '@shared/forms'
 
 const schema = z.object({
   email: z.string().email('Zadejte validní emailovou adresu.'),

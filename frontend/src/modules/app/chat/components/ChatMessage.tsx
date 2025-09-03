@@ -1,6 +1,5 @@
 import { Box, Flex, Text } from '@chakra-ui/react'
-
-import { Avatar } from '@shared/design-system'
+import { Avatar } from '@components/ui/avatar'
 
 interface MessageProps {
   body: string

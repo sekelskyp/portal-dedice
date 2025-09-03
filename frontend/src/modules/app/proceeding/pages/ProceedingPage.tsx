@@ -11,10 +11,9 @@ import {
   Tabs,
   Text,
 } from '@chakra-ui/react'
+import { Alert, Button } from '@components/ui'
 import { LockIcon } from 'lucide-react'
 import { LuCheck, LuFile, LuPencilLine, LuX } from 'react-icons/lu'
-
-import { Alert, Button } from '@shared/design-system'
 
 import { Assets } from '../../assets/tab/Assets'
 import { Documents } from '../../documents/tab/Documents'

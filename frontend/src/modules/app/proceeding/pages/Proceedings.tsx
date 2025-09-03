@@ -7,14 +7,12 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react'
+import { UnauthorizedPage } from '@components/layout/fallback/unauthorized-page'
+import { Alert, RouterNavLink } from '@components/ui'
 import { route } from '@lib/route'
 import { useAuth } from '@src/modules/auth'
 import { MdNoteAdd } from 'react-icons/md'
 import { Link } from 'react-router-dom'
-
-import { Alert } from '@shared/design-system'
-import { RouterNavLink } from '@shared/navigation/atoms'
-import { UnauthorizedPage } from '@shared/navigation/pages/UnauthorizedPage'
 
 import {
   ProceedingsItem,

@@ -1,6 +1,14 @@
 import { useCallback, useMemo } from 'react'
 import { Flex, Icon, IconButton, Stack, useBreakpoint } from '@chakra-ui/react'
+import { RouterNavLink } from '@components/ui/router-nav-link'
 import { route } from '@lib/route'
+import { useActionDialog } from '@src/hooks/useActionDialog'
+import { useTableFilters } from '@src/hooks/useTableFilters'
+import { useTablePagination } from '@src/hooks/useTablePagination'
+import {
+  fuzzyFilter,
+  INITIAL_SORTING_STATE_PROCEEDINGS,
+} from '@src/lib/table-utils'
 import { useAuth } from '@src/modules/auth'
 import {
   createColumnHelper,
@@ -12,15 +20,6 @@ import {
 } from '@tanstack/react-table'
 import { SquareArrowOutUpRight as SquareArrowOutUpRightIcon } from 'lucide-react'
 import { MdDelete } from 'react-icons/md'
-
-import { useActionDialog } from '@shared/hooks/useActionDialog'
-import { useTableFilters } from '@shared/hooks/useTableFilters'
-import { useTablePagination } from '@shared/hooks/useTablePagination'
-import { RouterNavLink } from '@shared/navigation/atoms'
-import {
-  fuzzyFilter,
-  INITIAL_SORTING_STATE_PROCEEDINGS,
-} from '@shared/utils/table-utils'
 
 import { ProceedingsItem } from '../components/ProceedingsTable'
 import { StatusBadge } from '../components/StatusBadge'

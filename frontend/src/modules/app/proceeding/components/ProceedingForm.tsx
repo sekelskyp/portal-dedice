@@ -6,12 +6,6 @@ import {
   Input,
   Stack,
 } from '@chakra-ui/react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useAuth } from '@src/modules/auth'
-import resources from '@src/resources'
-import { z } from 'zod'
-
-import { Field } from '@shared/design-system'
 import {
   AddressGroupFormControl,
   DateFormControl,
@@ -19,7 +13,12 @@ import {
   InputFormControl,
   SelectFormControl,
   SubmitButton,
-} from '@shared/forms'
+} from '@components/form'
+import { Field } from '@components/ui/field'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useAuth } from '@src/modules/auth'
+import resources from '@src/resources'
+import { z } from 'zod'
 
 import { useGetUsers } from '../hooks/useGetUsers'
 

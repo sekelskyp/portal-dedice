@@ -1,7 +1,5 @@
 import { useCallback, useState } from 'react'
 import { Box, FileUploadFileChangeDetails, Stack } from '@chakra-ui/react'
-import { FaFileUpload } from 'react-icons/fa'
-
 import {
   Alert,
   Button,
@@ -9,7 +7,8 @@ import {
   FileUploadList,
   FileUploadRoot,
   toaster,
-} from '@shared/design-system/atoms/chakra'
+} from '@components/ui'
+import { FaFileUpload } from 'react-icons/fa'
 
 import { useProceedingContext } from '../../proceeding/components/ProceedingLayout'
 import { useDocumentUpload } from '../hooks/useDocumentUpload'

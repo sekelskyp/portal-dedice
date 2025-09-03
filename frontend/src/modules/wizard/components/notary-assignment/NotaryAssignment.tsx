@@ -7,14 +7,13 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react'
+import { Avatar } from '@components/ui/avatar'
 import resources from '@src/resources'
-
-import { Avatar } from '@shared/design-system'
 
 import manAvatar from '/man-avatar.png'
 import womanAvatar from '/woman-avatar.png'
 
-import { useTooltip } from '../../../../shared/hooks/useTooltip'
+import { useTooltip } from '../../../../hooks/useTooltip'
 import { useGetNotary } from '../../hooks/useFindNotary'
 import { TestatorDataContext } from '../../pages/WizardStepPage'
 import { AccordionHelper } from '../accordion/AccordionHelper'

@@ -7,13 +7,11 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react'
+import { UnauthorizedPage } from '@components/layout/fallback/unauthorized-page'
+import { Alert, RouterNavLink } from '@components/ui'
 import { route } from '@lib/route'
 import { useAuth } from '@src/modules/auth'
 import { IoPersonAddSharp } from 'react-icons/io5'
-
-import { Alert } from '@shared/design-system'
-import { RouterNavLink } from '@shared/navigation/atoms'
-import { UnauthorizedPage } from '@shared/navigation/pages/UnauthorizedPage'
 
 import { UserItem, UserTable } from '../components/UserTable'
 import { useGetAllUsers } from '../hooks/useGetAllUsers'

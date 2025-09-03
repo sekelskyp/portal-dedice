@@ -1,8 +1,7 @@
 import React from 'react'
+import { InputFormControl } from '@components/form/input-form-control'
 import resources from '@src/resources'
 import { Controller, useFormContext } from 'react-hook-form'
-
-import { InputFormControl } from '@shared/forms/InputFormControl'
 
 import { Section } from '../../assets/components/Sections'
 

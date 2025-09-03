@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { FileUploadFileChangeDetails } from '@chakra-ui/react'
-
-import { toaster } from '@shared/design-system'
+import { toaster } from '@components/ui/toaster'
 
 const MAX_FILE_SIZE = 10000000
 const TOAST_DURATION = 5000

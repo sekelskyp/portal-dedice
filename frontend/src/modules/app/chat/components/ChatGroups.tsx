@@ -1,9 +1,8 @@
 import { type ReactNode, useEffect } from 'react'
 import { Tabs, Text } from '@chakra-ui/react'
+import { Alert } from '@components/ui/alert'
 import { useAuth } from '@src/modules/auth/auth-core'
 import { useLocation, useNavigate } from 'react-router-dom'
-
-import { Alert } from '@shared/design-system'
 
 import { useGetBeneficiaryGroups } from '../hooks/useGetBeneficiaryGroups'
 import { useGetNotaryGroups } from '../hooks/useGetNotaryGroups'

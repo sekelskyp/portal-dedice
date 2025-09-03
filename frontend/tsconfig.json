@@ -6,7 +6,8 @@
       "@src/*": ["src/*"],
       "@shared/*": ["src/shared/*"],
       "@lib/*": ["src/lib/*"],
-      "@public/*": ["public/*"]
+      "@public/*": ["public/*"],
+      "@components/*": ["src/components/*"]
     },
     "target": "ES2020",
     "useDefineForClassFields": true,

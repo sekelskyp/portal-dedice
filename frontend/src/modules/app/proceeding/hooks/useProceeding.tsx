@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import { ApolloError, useMutation, useQuery } from '@apollo/client'
+import { toaster } from '@components/ui/toaster'
 import { gql } from '@src/gql'
 import { useAuth } from '@src/modules/auth'
-
-import { toaster } from '@shared/design-system'
-import { Proceeding } from '@shared/types/proceeding'
+import { Proceeding } from '@src/types/proceeding'
 
 export const GET_PROCEEDING_QUERY = gql(/* GraphQL */ `
   query GetProceedingById($getProceedingByIdId: Int!) {

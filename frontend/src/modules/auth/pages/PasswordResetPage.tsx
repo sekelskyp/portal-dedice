@@ -1,8 +1,7 @@
 import { useCallback } from 'react'
 import { Box, Container, Flex, Image, Stack } from '@chakra-ui/react'
-
-import { Alert } from '@shared/design-system'
-import { Page } from '@shared/layout'
+import { Page } from '@components/layout/page'
+import { Alert } from '@components/ui'
 
 import resetPassword from '/reset-password.png'
 

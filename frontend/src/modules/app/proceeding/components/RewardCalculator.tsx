@@ -13,16 +13,15 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react'
-import { InfoIcon, PlusIcon } from 'lucide-react'
-
+import { Form, InputFormControl, SubmitButton } from '@components/form'
 import {
   Alert,
   StatLabel,
   StatRoot,
   StatValueText,
   Tooltip,
-} from '@shared/design-system'
-import { Form, InputFormControl, SubmitButton } from '@shared/forms'
+} from '@components/ui'
+import { InfoIcon, PlusIcon } from 'lucide-react'
 
 const numberFormat = Intl.NumberFormat('cs-CZ', {
   style: 'currency',

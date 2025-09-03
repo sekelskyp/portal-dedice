@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Box, createListCollection, Fieldset, Stack } from '@chakra-ui/react'
-import { useAuth } from '@src/modules/auth'
-
+import { Form, SelectFormControl, SubmitButton } from '@components/form'
 import {
   DialogBackdrop,
   DialogBody,
@@ -10,8 +9,8 @@ import {
   DialogHeader,
   DialogRoot,
   DialogTitle,
-} from '@shared/design-system'
-import { Form, SelectFormControl, SubmitButton } from '@shared/forms'
+} from '@components/ui'
+import { useAuth } from '@src/modules/auth'
 
 import { useGetUsers } from '../hooks/useGetUsers'
 

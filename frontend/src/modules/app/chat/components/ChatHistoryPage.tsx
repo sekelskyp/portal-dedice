@@ -1,7 +1,6 @@
 import { Container, Flex } from '@chakra-ui/react'
+import { Page } from '@components/layout/page'
 import { useParams } from 'react-router-dom'
-
-import { Page } from '@shared/layout'
 
 import ChatBody from './ChatBody'
 import ChatHeader from './ChatHeader'

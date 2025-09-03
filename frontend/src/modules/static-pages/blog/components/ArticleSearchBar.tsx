@@ -1,8 +1,7 @@
 import { Input } from '@chakra-ui/react'
+import { InputGroup } from '@components/ui/input-group'
 import { FaSearch } from 'react-icons/fa'
 import { MdOutlineCancel } from 'react-icons/md'
-
-import { InputGroup } from '@shared/design-system'
 
 interface ArticleSearchBarProps {
   value: string

@@ -1,10 +1,9 @@
 import { Heading, Spinner, Stack, Text } from '@chakra-ui/react'
+import { UnauthorizedPage } from '@components/layout/fallback/unauthorized-page'
+import { Alert } from '@components/ui'
 import { useAuth } from '@src/modules/auth'
 import { AccordionHelper } from '@src/modules/wizard/components/accordion/AccordionHelper'
 import { LuFile } from 'react-icons/lu'
-
-import { Alert } from '@shared/design-system'
-import { UnauthorizedPage } from '@shared/navigation/pages/UnauthorizedPage'
 
 import { useProceedingContext } from '../../proceeding/components/ProceedingLayout'
 import { DocumentUpload } from '../components/DocumentUpload'

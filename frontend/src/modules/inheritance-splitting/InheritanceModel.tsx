@@ -1,9 +1,8 @@
 import { useState } from 'react'
+import { Form } from '@components/form/form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, useForm } from 'react-hook-form'
 import { z } from 'zod'
-
-import { Form } from '@shared/forms/Form'
 
 import { InheritanceProgress } from './components/InheritanceProgress'
 import { StepLayout } from './components/StepLayout'

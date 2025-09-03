@@ -1,11 +1,10 @@
 import { useCallback } from 'react'
 import { Heading, Spinner, Stack, Text } from '@chakra-ui/react'
+import { NotFoundPage } from '@components/layout/fallback/not-found-page'
+import { UnauthorizedPage } from '@components/layout/fallback/unauthorized-page'
 import { useAuth } from '@src/modules/auth'
 import { LuFile } from 'react-icons/lu'
 import { useParams } from 'react-router-dom'
-
-import { NotFoundPage } from '@shared/navigation/pages/NotFoundPage'
-import { UnauthorizedPage } from '@shared/navigation/pages/UnauthorizedPage'
 
 import { useProceedingContext } from '../../proceeding/components/ProceedingLayout'
 import { UserBadge } from '../../proceeding/components/UserBadge'

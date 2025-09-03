@@ -1,10 +1,9 @@
 import React from 'react'
 import { Button, HStack, VStack } from '@chakra-ui/react'
+import { InputFormControl } from '@components/form/input-form-control'
 import resources from '@src/resources'
 import { Controller } from 'react-hook-form'
 import { FaPlus, FaTrash } from 'react-icons/fa'
-
-import { InputFormControl } from '@shared/forms/InputFormControl'
 
 import { useAssetSection } from '../hooks/useAssetSection'
 

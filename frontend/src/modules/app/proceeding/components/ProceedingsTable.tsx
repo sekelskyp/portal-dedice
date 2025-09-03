@@ -1,11 +1,10 @@
 import { Stack, Table } from '@chakra-ui/react'
-
-import { ActionDialog } from '@shared/components/ActionDialog'
-import { TableBody } from '@shared/components/table/TableBody'
-import { TableFooter } from '@shared/components/table/TableFooter'
-import { TableHeader } from '@shared/components/table/TableHeader'
-import { TableSearchBar } from '@shared/components/table/TableSearchBar'
-import { TableWrapper } from '@shared/components/table/TableWrapper'
+import { TableBody } from '@components/table/table-body'
+import { TableFooter } from '@components/table/table-footer'
+import { TableHeader } from '@components/table/table-header'
+import { TableSearchBar } from '@components/table/table-search-bar'
+import { TableWrapper } from '@components/table/table-wrapper'
+import { ActionDialog } from '@components/ui/action-dialog'
 
 import { useProceedingsTable } from '../hooks/useProceedingsTable'
 

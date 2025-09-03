@@ -1,7 +1,6 @@
 import { Box, Button, Icon, Text } from '@chakra-ui/react'
+import { Alert } from '@components/ui/alert'
 import { FiAlertCircle } from 'react-icons/fi'
-
-import { Alert } from '@shared/design-system'
 
 export function NotaryAssignmentError({
   errorMessage,

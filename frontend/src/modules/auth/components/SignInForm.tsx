@@ -1,10 +1,9 @@
 import { Stack } from '@chakra-ui/react'
+import { Form, InputFormControl, SubmitButton } from '@components/form'
+import { PasswordFormControl } from '@components/form/password-form-control'
 import { zodResolver } from '@hookform/resolvers/zod'
 import resources from '@src/resources'
 import { z } from 'zod'
-
-import { Form, InputFormControl, SubmitButton } from '@shared/forms'
-import { PasswordFormControl } from '@shared/forms/PasswordFormControl'
 
 const schema = z.object({
   email: z

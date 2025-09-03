@@ -1,9 +1,8 @@
 import { useMutation } from '@apollo/client'
+import { toaster } from '@components/ui/toaster'
 import { route } from '@lib/route'
 import { gql } from '@src/gql'
 import { useNavigate, useParams } from 'react-router-dom'
-
-import { toaster } from '@shared/design-system'
 
 const UPDATE_DOCUMENT_MUTATION = gql(/* GraphQL */ `
   mutation UploadDocument($data: UploadFileToProceedingInput!) {

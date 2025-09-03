@@ -1,11 +1,9 @@
 import { useCallback } from 'react'
-import { Container, Flex, Heading, Stack, Text } from '@chakra-ui/react'
+import { Box, Container, Flex, Heading, Stack, Text } from '@chakra-ui/react'
+import { Page } from '@components/layout/page'
+import { Alert, RouterLink } from '@components/ui/'
 import { route } from '@lib/route'
 import resources from '@src/resources'
-
-import { Alert, Box } from '@shared/design-system'
-import { Page } from '@shared/layout'
-import { RouterLink } from '@shared/navigation/atoms'
 
 import { SignInForm } from '../components/SignInForm'
 import { useSignIn } from '../hooks/useSignIn'

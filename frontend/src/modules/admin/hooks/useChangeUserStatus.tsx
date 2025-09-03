@@ -1,7 +1,6 @@
 import { useMutation } from '@apollo/client'
+import { toaster } from '@components/ui/toaster'
 import { gql } from '@src/gql'
-
-import { toaster } from '@shared/design-system'
 
 import { GET_ALL_USERS } from './useGetAllUsers'
 

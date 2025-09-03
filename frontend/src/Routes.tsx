@@ -1,10 +1,10 @@
+import { NotFoundPage } from '@components/layout/fallback/not-found-page'
+import { Layout } from '@components/layout/layout'
 import { route } from '@lib/route'
 import { SignInPage } from '@src/modules/auth/pages/SignInPage'
 import { SignUpPage } from '@src/modules/auth/pages/SignUpPage'
 import { HomePage } from '@src/modules/home/pages/HomePage'
 import { Route, Routes as RouterRoutes } from 'react-router-dom'
-
-import { NotFoundPage } from '@shared/navigation/pages/NotFoundPage'
 
 import { UserManagement } from './modules/admin/pages/UserManagement'
 import { NewAssetPage } from './modules/app/assets/pages/NewAssetPage'
@@ -31,7 +31,6 @@ import { AboutPage } from './modules/static-pages/pages/AboutPage'
 import { GuidePage } from './modules/static-pages/pages/GuidePage'
 import { TermsOfService } from './modules/static-pages/pages/TermsOfService'
 import { WizardPage } from './modules/wizard/pages/WizardStepPage'
-import { Layout } from './shared/layout'
 
 export function Routes() {
   return (

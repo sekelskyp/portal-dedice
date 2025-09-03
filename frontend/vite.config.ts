@@ -28,6 +28,7 @@ export default defineConfig({
       '@shared': resolve(__dirname, './src/shared'),
       '@lib': resolve(__dirname, './src/lib'),
       '@public': resolve(__dirname, './public'),
+      '@components': resolve(__dirname, './src/components'),
     },
   },
   test: {

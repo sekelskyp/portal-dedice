@@ -1,10 +1,10 @@
 import { Grid, GridItem } from '@chakra-ui/react'
+import { UnauthorizedPage } from '@components/layout/fallback/unauthorized-page'
 import SideBar from '@src/modules/app/components/SideBar'
 import { useAuth } from '@src/modules/auth'
 import { Outlet } from 'react-router-dom'
 
-import { Page } from '../../../shared/layout/Page'
-import { UnauthorizedPage } from '../../../shared/navigation/pages/UnauthorizedPage'
+import { Page } from '../../../components/layout/page'
 
 export const PortalLayout = () => {
   const user = useAuth()

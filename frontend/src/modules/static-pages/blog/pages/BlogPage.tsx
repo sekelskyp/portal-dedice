@@ -1,12 +1,11 @@
 import { Box, Heading, IconButton, Spinner, Stack } from '@chakra-ui/react'
+import { Page } from '@components/layout/page'
+import { Alert } from '@components/ui/alert'
+import { RouterNavLink } from '@components/ui/router-nav-link'
 import { route } from '@lib/route'
 import { useAuth } from '@src/modules/auth'
 import { FaPlus } from 'react-icons/fa'
 import { RiSortAsc, RiSortDesc } from 'react-icons/ri'
-
-import { Alert } from '@shared/design-system'
-import { Page } from '@shared/layout'
-import { RouterNavLink } from '@shared/navigation/atoms/RouterNavLink'
 
 import { ArticleCard } from '../components/ArticleCard'
 import { ArticleSearchBar } from '../components/ArticleSearchBar'

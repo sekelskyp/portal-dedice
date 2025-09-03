@@ -1,9 +1,8 @@
 import { Grid, Heading, Separator, Spinner, Stack } from '@chakra-ui/react'
+import { RouterNavLink } from '@components/ui/router-nav-link'
 import { route } from '@lib/route'
 import { useAuth } from '@src/modules/auth'
 import { MessageSquareTextIcon, SendIcon } from 'lucide-react'
-
-import { RouterNavLink } from '@shared/navigation/atoms'
 
 import { AddBeneficiaryButton } from '../components/AddBeneficiaryButton'
 import { AssignMainBeneficiaryButton } from '../components/AssignMainBeneficiaryButton'

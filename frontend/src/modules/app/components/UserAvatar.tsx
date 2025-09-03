@@ -1,5 +1,4 @@
-import { Avatar } from '@shared/design-system'
-import { AvatarProps } from '@shared/design-system/atoms/chakra'
+import { Avatar, AvatarProps } from '@components/ui'
 
 export const UserAvatar = ({
   name,

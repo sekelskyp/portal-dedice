@@ -1,7 +1,6 @@
 import { Card, Image, Text } from '@chakra-ui/react'
+import { RouterNavLink } from '@components/ui/router-nav-link'
 import { route } from '@lib/route'
-
-import { RouterNavLink } from '@shared/navigation/atoms'
 
 import coverFallback from '/cover-fallback.png'
 

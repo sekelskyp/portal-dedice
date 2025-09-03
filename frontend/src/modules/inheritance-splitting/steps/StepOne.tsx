@@ -1,9 +1,8 @@
 import { useEffect } from 'react'
 import { VStack } from '@chakra-ui/react'
 import { createListCollection } from '@chakra-ui/react/collection'
+import { CheckboxFormControl, SelectFormControl } from '@components/form'
 import { useFormContext, useWatch } from 'react-hook-form'
-
-import { CheckboxFormControl, SelectFormControl } from '@shared/forms'
 
 import { BinaryRadioGroup } from '../components/BinaryRadioGroup'
 import { StepNavigation } from '../components/StepNavigation'

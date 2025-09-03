@@ -1,11 +1,9 @@
+import { Provider } from '@components/ui/provider'
+import { ScrollToTop } from '@components/ui/scroll-to-top'
+import { EnhancedApolloProvider } from '@src/lib/apollo'
 import { AuthProvider } from '@src/modules/auth'
 import { Routes } from '@src/Routes'
-import { EnhancedApolloProvider } from '@src/utils/apollo.tsx'
 import { BrowserRouter } from 'react-router-dom'
-
-import { ScrollToTop } from '@shared/navigation/atoms/ScrollToTop'
-
-import { Provider } from './shared/design-system/atoms/chakra/provider'
 
 export function App() {
   return (

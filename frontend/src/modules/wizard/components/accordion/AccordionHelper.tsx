@@ -3,7 +3,7 @@ import {
   AccordionItemContent,
   AccordionItemTrigger,
   AccordionRoot,
-} from '@shared/design-system'
+} from '@components/ui'
 
 interface AccordionHelperProps {
   items: {

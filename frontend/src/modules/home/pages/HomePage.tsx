@@ -1,9 +1,8 @@
 import { Heading, Stack, Text } from '@chakra-ui/react'
+import { Page } from '@components/layout/page'
+import { SplitWithImage } from '@components/layout/split-with-image'
+import { RouterNavLink } from '@components/ui/router-nav-link'
 import { route } from '@lib/route'
-import { SplitWithImage } from '@src/shared/design-system/atoms/CTA/SplitWithImage'
-import { Page } from '@src/shared/layout'
-
-import { RouterNavLink } from '@shared/navigation/atoms'
 
 import holdingHands from '/holding-hands.webp'
 

@@ -1,11 +1,10 @@
 import { useEffect } from 'react'
 import { HStack, IconButton, VStack } from '@chakra-ui/react'
 import { createListCollection } from '@chakra-ui/react/collection'
+import { InputFormControl, SelectFormControl } from '@components/form'
+import { Checkbox } from '@components/ui/checkbox'
 import { useFormContext } from 'react-hook-form'
 import { FaPlus, FaTrash } from 'react-icons/fa'
-
-import { Checkbox } from '@shared/design-system/atoms/chakra/checkbox'
-import { InputFormControl, SelectFormControl } from '@shared/forms'
 
 import { StepNavigation } from '../components/StepNavigation'
 import { useWizard } from '../context/useWizard'

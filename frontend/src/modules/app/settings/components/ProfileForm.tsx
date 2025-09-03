@@ -1,9 +1,4 @@
-import { HStack } from '@chakra-ui/react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useAuth } from '@src/modules/auth'
-import { z } from 'zod'
-
-import { Radio, Stack } from '@shared/design-system'
+import { HStack, Stack } from '@chakra-ui/react'
 import {
   AddressGroupFormControl,
   Form,
@@ -11,7 +6,11 @@ import {
   RadioGroupFormControl,
   SubmitButton,
   SwitchFormControl,
-} from '@shared/forms'
+} from '@components/form'
+import { Radio } from '@components/ui/radio'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useAuth } from '@src/modules/auth'
+import { z } from 'zod'
 
 import { NameGroupFormControl } from './NameGroupFormControl'
 import { NotaryRulesDisplay } from './NotaryRulesDisplay'
