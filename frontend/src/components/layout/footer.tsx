@@ -15,7 +15,7 @@ import { useTheme } from 'next-themes'
 import logo from '/logo.png'
 import logoDark from '/logo-dark.png'
 
-import { footerLinks } from '../../lib/footer-links'
+import { footerLinks } from '@src/lib/footer-links'
 
 import { FooterList } from './footer-list'
 

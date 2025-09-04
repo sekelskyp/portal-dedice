@@ -1,5 +1,5 @@
-import { Icon, Text } from '@chakra-ui/react'
-import { Box, RouterLink } from '@components/ui'
+import { Box, Icon, Text } from '@chakra-ui/react'
+import { RouterLink } from '@components/ui'
 import { route } from '@lib/route'
 import { CircleAlert } from 'lucide-react'
 

@@ -5,8 +5,8 @@ import {
   MenuItem,
   MenuRoot,
   MenuTrigger,
+  RouterMenuItem
 } from '@components/ui'
-import { RouterMenuItem } from '@components/ui/router-menu-item'
 import { route } from '@lib/route'
 import { UserAvatar } from '@src/modules/app/components/UserAvatar'
 import { useAuth } from '@src/modules/auth'

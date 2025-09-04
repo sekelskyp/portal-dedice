@@ -14,7 +14,7 @@ import { Button, InputGroup } from '@components/ui'
 import { AddressSuggestion } from '@src/gql/graphql'
 import { FiChevronDown, FiX } from 'react-icons/fi'
 
-import useAddressSuggestions from '../../hooks/useAddressSuggestions'
+import useAddressSuggestions from '@src/hooks/useAddressSuggestions'
 
 type PlacesAutoCompleteProps = {
   value?: string

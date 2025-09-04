@@ -1,4 +1,3 @@
-export { Box, type BoxProps, Stack, type StackProps } from '@chakra-ui/react'
 export {
   AccordionItem,
   AccordionItemContent,
@@ -47,6 +46,7 @@ export {
   type RadioGroupProps,
   type RadioProps,
   RouterLink,
+  RouterMenuItem,
   RouterNavLink,
   SelectContent,
   SelectItem,

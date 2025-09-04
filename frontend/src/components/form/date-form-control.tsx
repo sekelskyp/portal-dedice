@@ -1,4 +1,4 @@
-import { DateInput, DateInputProps } from '../ui/date-input'
+import { DateInput, DateInputProps } from '@components/ui/date-input'
 
 import { BaseFieldControl, BaseFieldControlProps } from './base-field-control'
 
